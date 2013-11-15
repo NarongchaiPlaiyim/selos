@@ -311,6 +311,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call online!",e);
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
@@ -318,6 +319,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call online!",e);
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
@@ -325,6 +327,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (NCBInterfaceException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call online!",e);
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
@@ -332,6 +335,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call online!",e);
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
@@ -420,6 +424,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call offline!",e);
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
@@ -431,6 +436,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call offline!",e);
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
@@ -442,6 +448,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (NCBInterfaceException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call offline!",e);
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
@@ -453,6 +460,7 @@ public class NCRSImp implements NCRS, Serializable {
         } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
+            log.debug("Exception while call offline!",e);
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
@@ -476,7 +484,7 @@ public class NCRSImp implements NCRS, Serializable {
                     log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
                     throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 } else {
-                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //No error
+                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //Error
                         StringBuilder exception = new StringBuilder("TUEF Error");
                         TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
                         ArrayList<ErrorModel> arrayList = error.getError();
@@ -486,8 +494,8 @@ public class NCRSImp implements NCRS, Serializable {
                         }
                         resultDesc = exception.toString();
                         log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
-
-                        //TODO: save NCBI and throw exception.
+                        log.debug("save data to NCBI Export");
+                        saveNCBI(responseModel);
                         throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                     } else if (null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
                         return responseModel;
@@ -522,7 +530,7 @@ public class NCRSImp implements NCRS, Serializable {
                     log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
                     throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 } else {
-                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //No error
+                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //Error
                         StringBuilder exception = new StringBuilder("TUEF Error");
                         TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
                         ArrayList<ErrorModel> arrayList = error.getError();
@@ -532,8 +540,8 @@ public class NCRSImp implements NCRS, Serializable {
                         }
                         resultDesc = exception.toString();
                         log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
-
-                        //TODO: save NCBI and throw exception.
+                        log.debug("save data to NCBI Export");
+                        saveNCBI(responseModel);
                         throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                     } else if (null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
                         return responseModel;
@@ -557,7 +565,7 @@ public class NCRSImp implements NCRS, Serializable {
     }
 
     private NCRSResponseModel checkOfflineResponseModelTracking(NCRSResponseModel responseModel) throws Exception {
-        log.debug("NCRS Call : checkOfflineFindResponseModel()");
+        log.debug("NCRS Call : checkOfflineResponseModelTracking()");
         if (responseModel != null) {
             String resultDesc = responseModel.getHeaderModel().getCommand();
             log.debug("NCRS Result desc {}", resultDesc);
