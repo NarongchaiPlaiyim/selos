@@ -372,7 +372,7 @@ public class NCRSImp implements NCRS, Serializable {
         String action = this.action + " " + FIND;
         try {
             actionDate = new Date();
-            responseModel = checkOfflineResponseModel(request(ncrsModel, FIND));
+            responseModel = checkOfflineResponseModelTracking(request(ncrsModel, FIND));
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
@@ -470,14 +470,13 @@ public class NCRSImp implements NCRS, Serializable {
             String resultDesc = responseModel.getHeaderModel().getCommand();
             log.debug("NCRS Result desc {}", resultDesc);
             if (!ERROR.equals(resultDesc)) {
-                if (null == responseModel.getBodyModel().getTransaction().getTueferror()) {
-                    return responseModel;
+                if(responseModel.getBodyModel().getErrormsg()!=null){
+                    //Link down
+                    resultDesc = responseModel.getBodyModel().getErrormsg();
+                    log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
+                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 } else {
-                    if(null != responseModel.getBodyModel().getErrormsg()){
-                        resultDesc = responseModel.getBodyModel().getErrormsg();
-                        log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
-                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
-                    } else {
+                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //No error
                         StringBuilder exception = new StringBuilder("TUEF Error");
                         TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
                         ArrayList<ErrorModel> arrayList = error.getError();
@@ -487,10 +486,17 @@ public class NCRSImp implements NCRS, Serializable {
                         }
                         resultDesc = exception.toString();
                         log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
-                        return responseModel;
-                    }
 
-//                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                        //TODO: save NCBI and throw exception.
+                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    } else if (null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
+                        return responseModel;
+                    } else {
+                        //unexpected result;
+                        resultDesc = "Unexpected Result From NCRS";
+                        log.error("NCRS NCB Exception {}", resultDesc);
+                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    }
                 }
             } else {
                 resultDesc = responseModel.getBodyModel().getErrormsg();
@@ -507,10 +513,65 @@ public class NCRSImp implements NCRS, Serializable {
     private NCRSResponseModel checkOfflineResponseModel(NCRSResponseModel responseModel) throws Exception {
         log.debug("NCRS Call : checkOfflineFindResponseModel()");
         if (responseModel != null) {
-            if (!ERROR.equals(responseModel.getHeaderModel().getCommand())) {
-                return responseModel;
+            String resultDesc = responseModel.getHeaderModel().getCommand();
+            log.debug("NCRS Result desc {}", resultDesc);
+            if (!ERROR.equals(resultDesc)) {
+                if(responseModel.getBodyModel().getErrormsg()!=null){
+                    //Link down
+                    resultDesc = responseModel.getBodyModel().getErrormsg();
+                    log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
+                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                } else {
+                    if (null != responseModel.getBodyModel().getTransaction().getTueferror()) { //No error
+                        StringBuilder exception = new StringBuilder("TUEF Error");
+                        TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
+                        ArrayList<ErrorModel> arrayList = error.getError();
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            ErrorModel errorModel = arrayList.get(i);
+                            exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
+                        }
+                        resultDesc = exception.toString();
+                        log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
+
+                        //TODO: save NCBI and throw exception.
+                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    } else if (null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
+                        return responseModel;
+                    } else {
+                        //unexpected result;
+                        resultDesc = "Unexpected Result From NCRS";
+                        log.error("NCRS NCB Exception {}", resultDesc);
+                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    }
+                }
             } else {
-                String resultDesc = responseModel.getBodyModel().getErrormsg();
+                resultDesc = responseModel.getBodyModel().getErrormsg();
+                log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
+                throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+            }
+        } else {
+            String resultDesc = "NCRS Response model is null";
+            log.error("NCRS Response model is null");
+            throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+        }
+    }
+
+    private NCRSResponseModel checkOfflineResponseModelTracking(NCRSResponseModel responseModel) throws Exception {
+        log.debug("NCRS Call : checkOfflineFindResponseModel()");
+        if (responseModel != null) {
+            String resultDesc = responseModel.getHeaderModel().getCommand();
+            log.debug("NCRS Result desc {}", resultDesc);
+            if (!ERROR.equals(responseModel.getHeaderModel().getCommand())) {
+                if(responseModel.getBodyModel().getErrormsg()!=null){
+                    //Link down
+                    resultDesc = responseModel.getBodyModel().getErrormsg();
+                    log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
+                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                } else {
+                    return responseModel;
+                }
+            } else {
+                resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
             }
