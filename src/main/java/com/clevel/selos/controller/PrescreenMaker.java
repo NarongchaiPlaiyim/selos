@@ -1959,7 +1959,7 @@ public class PrescreenMaker implements Serializable {
                 enableCitizenId = true;
                 enableSearchForm = false;
 
-                messageHeader = "Customer search failed.";
+                messageHeader = "Customer search complete.";
                 message = customerInfoResultView.getReason();
 
             }

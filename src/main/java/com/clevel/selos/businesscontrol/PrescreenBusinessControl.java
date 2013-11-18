@@ -247,13 +247,14 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenResultView;
     }
 
-    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId){
+    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId, User user){
         Prescreen prescreen = prescreenTransform.getPrescreen(prescreenResultView, getCurrentUser());
         prescreen.setModifyFlag(0);
         prescreenDAO.persist(prescreen);
 
         try{
             existingCreditControl.saveExistingCredit(prescreenResultView.getExistingCreditView(), getWorkCase(workCasePrescreenId));
+            bankStmtControl.saveBankStmtSummary(prescreenResultView.getBankStmtSummaryView(), 0, workCasePrescreenId, user.getId());
 
         } catch(Exception ex){
             log.error("cannot get workcase prescreen id", ex);

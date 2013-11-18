@@ -32,7 +32,10 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.transaction.Transaction;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -167,6 +170,7 @@ public class NCRSImp implements NCRS, Serializable {
             nameModelArrayList.add(nameModel);
             try {
                 inquiryDate = new Date();
+                log.debug("add logging before call NCB...");
                 resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SENDING, "", memberref);
                 responseModel = callOnline(ncrsModel);
                 reason = "";

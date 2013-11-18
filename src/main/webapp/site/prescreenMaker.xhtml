@@ -139,6 +139,7 @@
                                 <td>
                                     <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
                                                     yearRange="1950:2100"
+                                                    defaultdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     mindate="#{prescreenMaker.currentDateDDMMYY}"
                                                     pattern="dd/MM/yyyy"
                                                     value="#{prescreenMaker.prescreenView.expectedSubmitDate}"
@@ -429,6 +430,7 @@
                                 <td>
                                     <clv:BECalendar id="registerDate" showOn="button" showButtonPanel="true" navigator="true"
                                                     yearRange="1950:2100"
+                                                    defaultdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     mindate="01/01/1950"
                                                     maxdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     pattern="dd/MM/yyyy"
