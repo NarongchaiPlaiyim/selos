@@ -11,30 +11,26 @@ import java.util.List;
 public class GuarantorDetailView implements Serializable {
 
     private String guarantorName;
-    private String tcgLgNo ;
+    private String tcgLgNo;
     private BigDecimal guaranteeAmount;
-
-    private List<CreditTypeDetailView> creditTypeDetailViewList ;
+    
+    private List<CreditTypeDetailView> creditTypeDetailViewList;        
 
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
 
-
     public GuarantorDetailView() {
         reset();
     }
 
     public void reset() {
-
         this.guarantorName = "";
         this.tcgLgNo = "";
         this.guaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
     }
-
-
 
     public Date getCreateDate() {
         return createDate;
@@ -99,7 +95,5 @@ public class GuarantorDetailView implements Serializable {
     public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
         this.guaranteeAmount = guaranteeAmount;
     }
-
-
 
 }

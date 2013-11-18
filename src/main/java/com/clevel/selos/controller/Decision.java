@@ -55,7 +55,8 @@ public class Decision implements Serializable {
 
     //View
     private ExistingCreditView existingCreditView;
-    private ConditionDetailView existingConditionCommCredit;
+    private List<ConditionDetailView> existingConditionCommCrdList;
+    private List<GuarantorDetailView> existingGuarantorList;
 
     private CreditFacProposeView creditFacProposeView;
 
@@ -64,7 +65,10 @@ public class Decision implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        //========================================= Existing =========================================//
+
+        //========================================= Propose =========================================//
+        List<CreditInfoDetailView> proposeCreditDetailViewList = new ArrayList<CreditInfoDetailView>();
 
         ProductProgram productProgram = new ProductProgram();
         productProgram.setDescription("TMB SME SmartBiz");
@@ -83,7 +87,7 @@ public class Decision implements Serializable {
         tierDetailView1.setTenor(BigDecimal.valueOf(3));
         tierDetailViewList1.add(tierDetailView1);
 
-        ProposeCreditDetailView proposeCreditDetailView1 = new ProposeCreditDetailView();
+        CreditInfoDetailView proposeCreditDetailView1 = new CreditInfoDetailView();
         proposeCreditDetailView1.setProductProgram(productProgram);
         proposeCreditDetailView1.setCreditType(creditType);
         proposeCreditDetailView1.setProductCode("EAC1");
@@ -123,7 +127,7 @@ public class Decision implements Serializable {
         tierDetailView2_3.setTenor(BigDecimal.valueOf(24));
         tierDetailViewList2.add(tierDetailView2_3);
 
-        ProposeCreditDetailView proposeCreditDetailView2 = new ProposeCreditDetailView();
+        CreditInfoDetailView proposeCreditDetailView2 = new CreditInfoDetailView();
         proposeCreditDetailView2.setProductProgram(productProgram);
         proposeCreditDetailView2.setCreditType(creditType);
         proposeCreditDetailView2.setProductCode("EAC2");
@@ -138,7 +142,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView2.setHoldLimitAmount(BigDecimal.valueOf(1234567.89));
 
         //----------------------------------------- 3 ---------------------------------------//
-        ProposeCreditDetailView proposeCreditDetailView3 = new ProposeCreditDetailView();
+        CreditInfoDetailView proposeCreditDetailView3 = new CreditInfoDetailView();
         proposeCreditDetailView3.setProductProgram(productProgram);
         proposeCreditDetailView3.setCreditType(creditType);
         proposeCreditDetailView3.setProductCode("EAC3");
@@ -153,7 +157,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView3.setHoldLimitAmount(BigDecimal.valueOf(1234567.89));
 
         //----------------------------------------- 4 ---------------------------------------//
-        ProposeCreditDetailView proposeCreditDetailView4 = new ProposeCreditDetailView();
+        CreditInfoDetailView proposeCreditDetailView4 = new CreditInfoDetailView();
         proposeCreditDetailView4.setProductProgram(productProgram);
         proposeCreditDetailView4.setCreditType(creditType);
         proposeCreditDetailView4.setProductCode("EAC4");
@@ -174,9 +178,7 @@ public class Decision implements Serializable {
         proposeCreditDetailViewList.add(proposeCreditDetailView4);
 
         creditFacProposeView = new CreditFacProposeView();
-        creditFacProposeView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
-
-        log.debug("onCreation() proposeCreditDetailViewList: {}", creditFacProposeView.getProposeCreditDetailViewList());
+        creditFacProposeView.setCreditInfoDetailViewList(proposeCreditDetailViewList);
     }
 
     public ExistingCreditView getExistingCreditView() {
@@ -185,6 +187,14 @@ public class Decision implements Serializable {
 
     public void setExistingCreditView(ExistingCreditView existingCreditView) {
         this.existingCreditView = existingCreditView;
+    }
+
+    public List<ConditionDetailView> getExistingConditionCommCrdList() {
+        return existingConditionCommCrdList;
+    }
+
+    public void setExistingConditionCommCrdList(List<ConditionDetailView> existingConditionCommCrdList) {
+        this.existingConditionCommCrdList = existingConditionCommCrdList;
     }
 
     public CreditFacProposeView getCreditFacProposeView() {
