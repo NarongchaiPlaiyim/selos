@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -49,9 +50,9 @@ public class BankStmtDetailView implements Serializable {
         this.timesOfAvgCreditBDM = BigDecimal.ZERO;
         this.timesOfAvgCreditUW = BigDecimal.ZERO;
         this.debitAmount = BigDecimal.ZERO;
-        this.dateOfMaxBalance = new Date();
+        this.dateOfMaxBalance = DateTimeUtil.getCurrentDateTH();
         this.maxBalance = BigDecimal.ZERO;
-        this.dateOfMinBalance = new Date();
+        this.dateOfMinBalance = DateTimeUtil.getCurrentDateTH();
         this.minBalance = BigDecimal.ZERO;
         this.monthBalance = BigDecimal.ZERO;
         this.chequeReturnAmount = BigDecimal.ZERO;
