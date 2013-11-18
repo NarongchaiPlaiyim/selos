@@ -7,7 +7,7 @@ import java.io.Serializable;
 @XStreamAlias("criteria")
 public class CriteriaModel implements Serializable {
     private String enquirydatefrom;
-    private String enquirydateto;
+    private String enquirydateto = "";
     private String enquiryuser;
     private String enquirystatus = "IQ";
     private String registid;
