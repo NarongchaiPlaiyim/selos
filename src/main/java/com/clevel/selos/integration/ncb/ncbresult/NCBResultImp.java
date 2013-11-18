@@ -96,6 +96,14 @@ public class NCBResultImp implements Serializable {
         log.debug("Call updateSUCCEED({}, {}) has updated", appRefNumber, customerId);
     }
 
+    public void updateStatus(String appRefNumber, String customerId, String trackingId, ActionResult actionResult) {
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        model.setResult(actionResult.toString());
+        model.setReason(trackingId);
+        ncbResult.save(model);
+        log.debug("Call updateStatus({}, {}) has updated, status: {}", appRefNumber, customerId, actionResult.toString());
+    }
+
     public void checkStatus(String appRefNumber, String customerId, String trackingId) {
         log.debug("Call checkStatus({}, {})", appRefNumber, customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
