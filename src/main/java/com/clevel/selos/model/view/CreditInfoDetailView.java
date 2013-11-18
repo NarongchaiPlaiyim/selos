@@ -43,7 +43,6 @@ public class CreditInfoDetailView implements Serializable {
     // master
 //    private loanPurpose
 
-
     private List<CreditTierDetailView> creditTierDetailViewList;
 
     public CreditInfoDetailView(){
