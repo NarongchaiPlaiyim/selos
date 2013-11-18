@@ -284,15 +284,32 @@
                          process="@form"
                          update=":creditInfoDlgForm,:frmMain"
                          oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
-        <p:commandButton type="button" styleClass="small"
+        <p:commandButton type="button"
+                         styleClass="small"
+                         action="#{creditFacPropose.onSaveCreditInfo}"
                          value="#{msg.get('app.button.cancel')}"
                          onclick="PF('creditInfoDlg').hide()"
-                         update=":creditInfoDlgForm"/>
+                         update=":creditInfoDlgForm,:frmMain"/>
     </td>
 </tr>
 </table>
 </h:form>
 </p:panel>
+
+
+<!--<p:dialog id="proposeTierDialog" header="Tier Information" widgetVar="proposeTierDlg"
+          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="180">
+    <ui:include src="proposeTierInfoDialog.xhtml"/>
+</p:dialog>
+
+<ui:include src="confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteTierInfoDialog"/>
+    <ui:param name="name" value="confirmDeleteTierInfoDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteTierInfo"/>
+    <ui:param name="controller" value="#{creditFacPropose}"/>
+    <ui:param name="action" value="onDeleteProposeTierInfo"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>-->
 
  <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:dlgSaveCreditBtn">
      LOADING<br/>
