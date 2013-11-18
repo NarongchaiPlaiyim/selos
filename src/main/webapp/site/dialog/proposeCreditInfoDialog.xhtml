@@ -43,9 +43,11 @@
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.productProgramList}"
                            var="prodProgramItem"
-                           itemLabel="#{prodProgramItem.description}"
+                           itemLabel="#{prodProgramItem.name}"
                            itemValue="#{prodProgramItem.id}"/>
-
+            <p:ajax event="change"
+                    listener="#{creditFacPropose.onChangeProductProgram}"
+                    update=":creditInfoDlgForm"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -60,10 +62,10 @@
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="true">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.creditTypeList}"
+            <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeList}"
                            var="creditTypeItem"
-                           itemLabel="#{creditTypeItem.description}"
-                           itemValue="#{creditTypeItem.id}"/>
+                           itemLabel="#{creditTypeItem.creditType.name}"
+                           itemValue="#{creditTypeItem.creditType.id}"/>
 
         </p:selectOneMenu>
     </td>
