@@ -12,10 +12,9 @@ public class GuarantorDetailView implements Serializable {
 
     private String guarantorName;
     private String tcgLgNo ;
+    private BigDecimal guaranteeAmount;
 
     private List<CreditTypeDetailView> creditTypeDetailViewList ;
-    private BigDecimal guaranteeAmount;
-    private BigDecimal totalGuaranteeAmount;
 
     private Date createDate;
     private Date modifyDate;
@@ -32,7 +31,6 @@ public class GuarantorDetailView implements Serializable {
         this.guarantorName = "";
         this.tcgLgNo = "";
         this.guaranteeAmount = BigDecimal.ZERO;
-        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
     }
 
@@ -102,12 +100,6 @@ public class GuarantorDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
-    public BigDecimal getTotalGuaranteeAmount() {
-        return totalGuaranteeAmount;
-    }
 
-    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
-        this.totalGuaranteeAmount = totalGuaranteeAmount;
-    }
 
 }
