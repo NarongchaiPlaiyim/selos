@@ -20,7 +20,7 @@ public class TUEFEnquiryHeaderModel implements Serializable {
     private String consent;
 
     @XStreamAlias("disputeenquiry")
-    private String disputeenquiry;
+    private String disputeenquiry = "Y";
 
     public TUEFEnquiryHeaderModel(String memberref, String enqpurpose, String enqamount, String consent, String disputeenquiry) {
         this.memberref = memberref;

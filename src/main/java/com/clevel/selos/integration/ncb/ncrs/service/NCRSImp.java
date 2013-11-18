@@ -166,32 +166,33 @@ public class NCRSImp implements NCRS, Serializable {
             nameModel = new TUEFEnquiryNameModel(ncrsModel.getLastName(), ncrsModel.getFirstName());
             nameModelArrayList.add(nameModel);
             try {
-                responseModel = callOnline(ncrsModel);
                 inquiryDate = new Date();
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SENDING, "", memberref);
+                responseModel = callOnline(ncrsModel);
                 reason = "";
                 if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
                     reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                     log.debug("NCRS Tracking Id is {}", reason);
                 }
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCESS, reason, memberref);
+                resultImp.updateSUCCEED(appRefNumber, customerId, reason);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
+                resultImp.updateStatus(appRefNumber,customerId,reason,ActionResult.FAILED);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
+                resultImp.updateStatus(appRefNumber,customerId,reason,ActionResult.FAILED);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS EXCEPTION {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.EXCEPTION, reason, memberref);
+                resultImp.updateStatus(appRefNumber,customerId,reason,ActionResult.EXCEPTION);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel, ncrsModel));
             }
         }
