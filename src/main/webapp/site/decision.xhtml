@@ -51,10 +51,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <!-- Borrower Commercial Credit -->
+                                <!-- Existing Credit - Borrower Commercial Credit -->
                                 <p:dataTable id="dtExtCrdBorrowerCommCredit"
-                                             var="item" value="#{decision.existingCreditView.borrowerComExistingCredit}"
-                                             paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                             var="extBrwComCrd" value="#{decision.existingCreditView.borrowerComExistingCredit}"
+                                             paginator="false" rowKey="#{extBrwComCrd}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -74,66 +74,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extBrwComCrd.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extBrwComCrd.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extBrwComCrd.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extBrwComCrd.accountStatusID}&#8211;#{extBrwComCrd.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extBrwComCrd.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extBrwComCrd.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extBrwComCrd.productCode or not empty extBrwComCrd.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extBrwComCrd.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extBrwComCrd.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.productCode and empty extBrwComCrd.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extBrwComCrd.limit}" rendered="#{not empty extBrwComCrd.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extBrwComCrd.outstanding}" rendered="#{not empty extBrwComCrd.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extBrwComCrd.installment}" rendered="#{not empty extBrwComCrd.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extBrwComCrd.intFeePercent}" rendered="#{not empty extBrwComCrd.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extBrwComCrd.tenor}" rendered="#{not empty extBrwComCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwComCrd.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -168,8 +162,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
+                                <!-- Existing Credit - Condition Commercial Credit -->
                                 <p:dataTable id="dtExtCrdConditionCommCredit"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extCondition" value="#{decision.existingConditionCommCrdList}"
+                                             paginator="false" rowKey="#{extCondition}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -179,9 +175,9 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
+                                    <p:column styleClass="left">#{extCondition.loanType}</p:column>
+                                    <p:column styleClass="left">#{extCondition.conditionDesc}</p:column>
 
                                 </p:dataTable>
                             </td>
@@ -191,10 +187,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <!-- Borrower Retail Credit -->
+                                <!-- Existing Credit - Borrower Retail Credit -->
                                 <p:dataTable id="dtExtCrdRetailCredit"
-                                             var="item" value="#{decision.existingCreditView.borrowerRetailExistingCredit}"
-                                             paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                             var="extBrwRetCrd" value="#{decision.existingCreditView.borrowerRetailExistingCredit}"
+                                             paginator="false" rowKey="#{extBrwRetCrd}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -214,66 +210,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extBrwRetCrd.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extBrwRetCrd.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extBrwRetCrd.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extBrwRetCrd.accountStatusID}&#8211;#{extBrwRetCrd.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extBrwRetCrd.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extBrwRetCrd.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extBrwRetCrd.productCode or not empty extBrwRetCrd.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extBrwRetCrd.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extBrwRetCrd.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.productCode and empty extBrwRetCrd.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extBrwRetCrd.limit}" rendered="#{not empty extBrwRetCrd.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extBrwRetCrd.outstanding}" rendered="#{not empty extBrwRetCrd.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extBrwRetCrd.installment}" rendered="#{not empty extBrwRetCrd.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extBrwRetCrd.intFeePercent}" rendered="#{not empty extBrwRetCrd.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extBrwRetCrd.tenor}" rendered="#{not empty extBrwRetCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extBrwRetCrd.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -305,8 +295,8 @@
                             <td colspan="2">
                                 <!-- Borrower App in RLOS -->
                                 <p:dataTable id="dtExtCrdAppInRLOS"
-                                             var="item" value="#{decision.existingCreditView.borrowerAppInRLOSCredit}"
-                                             paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                             var="extAppInRlos" value="#{decision.existingCreditView.borrowerAppInRLOSCredit}"
+                                             paginator="false" rowKey="#{extAppInRlos}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -326,66 +316,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extAppInRlos.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extAppInRlos.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extAppInRlos.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extAppInRlos.accountStatusID}&#8211;#{extAppInRlos.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extAppInRlos.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extAppInRlos.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extAppInRlos.productCode or not empty extAppInRlos.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extAppInRlos.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extAppInRlos.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.productCode and empty extAppInRlos.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extAppInRlos.limit}" rendered="#{not empty extAppInRlos.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extAppInRlos.outstanding}" rendered="#{not empty extAppInRlos.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extAppInRlos.installment}" rendered="#{not empty extAppInRlos.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extAppInRlos.intFeePercent}" rendered="#{not empty extAppInRlos.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extAppInRlos.tenor}" rendered="#{not empty extAppInRlos.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extAppInRlos.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -483,10 +467,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <!-- Related Person Commercial Credit -->
+                                <!-- Existing Credit - Related Person Commercial Credit -->
                                 <p:dataTable id="dtExtCrdRelatedPersonCommCredit"
-                                             var="item" value="#{decision.existingCreditView.relatedComExistingCredit}"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extRelatedComCrd" value="#{decision.existingCreditView.relatedComExistingCredit}"
+                                             paginator="false" rowKey="#{extRelatedComCrd}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -506,66 +490,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extRelatedComCrd.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extRelatedComCrd.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extRelatedComCrd.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extRelatedComCrd.accountStatusID}&#8211;#{extRelatedComCrd.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extRelatedComCrd.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extRelatedComCrd.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extRelatedComCrd.productCode or not empty extRelatedComCrd.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extRelatedComCrd.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extRelatedComCrd.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.productCode and empty extRelatedComCrd.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extRelatedComCrd.limit}" rendered="#{not empty extRelatedComCrd.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extRelatedComCrd.outstanding}" rendered="#{not empty extRelatedComCrd.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extRelatedComCrd.installment}" rendered="#{not empty extRelatedComCrd.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extRelatedComCrd.intFeePercent}" rendered="#{not empty extRelatedComCrd.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extRelatedComCrd.tenor}" rendered="#{not empty extRelatedComCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedComCrd.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -595,10 +573,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <!-- Related Person Retail Credit -->
+                                <!-- Existing Credit - Related Person Retail Credit -->
                                 <p:dataTable id="dtExtCrdRelatedPersonRetailCredit"
-                                             var="item" value="#{decision.existingCreditView.relatedRetailExistingCredit}"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extRelatedRetCrd" value="#{decision.existingCreditView.relatedRetailExistingCredit}"
+                                             paginator="false" rowKey="#{extRelatedRetCrd}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -618,66 +596,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extRelatedRetCrd.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extRelatedRetCrd.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extRelatedRetCrd.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extRelatedRetCrd.accountStatusID}&#8211;#{extRelatedRetCrd.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extRelatedRetCrd.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extRelatedRetCrd.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extRelatedRetCrd.productCode or not empty extRelatedRetCrd.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extRelatedRetCrd.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extRelatedRetCrd.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.productCode and empty extRelatedRetCrd.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extRelatedRetCrd.limit}" rendered="#{not empty extRelatedRetCrd.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extRelatedRetCrd.outstanding}" rendered="#{not empty extRelatedRetCrd.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extRelatedRetCrd.installment}" rendered="#{not empty extRelatedRetCrd.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extRelatedRetCrd.intFeePercent}" rendered="#{not empty extRelatedRetCrd.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extRelatedRetCrd.tenor}" rendered="#{not empty extRelatedRetCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedRetCrd.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -707,9 +679,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <!-- Related Person App in RLOS -->
+                                <!-- Existing Credit - Related Person App in RLOS -->
                                 <p:dataTable id="dtExtCrdRelatedPersonAppInRLOS"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extRelatedAppInRlos" value="#{decision.existingCreditView.relatedAppInRLOSCredit}"
+                                             paginator="false" rowKey="#{extRelatedAppInRlos}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -729,66 +702,60 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center">
-                                        <h:outputText value="#{rowIndex + 1}"/>
-                                    </p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.accountName}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accNo')} #{item.accountNumber}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.suf')} #{item.accountSuf}"/><br/>
-                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.accStatus')} #{item.accountStatusID}-#{item.accountStatus.description}"/>
+                                        #{extRelatedAppInRlos.accountName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extRelatedAppInRlos.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extRelatedAppInRlos.accountSuf}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;#{extRelatedAppInRlos.accountStatusID}&#8211;#{extRelatedAppInRlos.accountStatus.description}
                                     </p:column>
 
-                                    <p:column styleClass="left">
-                                        <h:outputText value="#{item.productProgram}"/>
-                                    </p:column>
+                                    <p:column styleClass="left">#{extRelatedAppInRlos.productProgram}</p:column>
+
+                                    <p:column styleClass="left">#{extRelatedAppInRlos.creditType}</p:column>
 
                                     <p:column styleClass="left">
-                                        <h:outputText value="#{item.creditType}"/>
-                                    </p:column>
-
-                                    <p:column styleClass="left">
-                                        <h:panelGroup rendered="#{not empty item.productCode or not empty item.projectCode}">
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.product')} #{item.productCode}"/><br/>
-                                            <h:outputText value="#{msg.get('app.decision.tb.td.label.project')} #{item.projectCode}"/>
+                                        <h:panelGroup rendered="#{not empty extRelatedAppInRlos.productCode or not empty extRelatedAppInRlos.projectCode}">
+                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extRelatedAppInRlos.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extRelatedAppInRlos.projectCode}
                                         </h:panelGroup>
-                                        <h:outputText value="-" rendered="#{empty item.productCode and empty item.projectCode}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.productCode and empty extRelatedAppInRlos.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.limit}" rendered="#{not empty item.limit}">
+                                        <h:outputText value="#{extRelatedAppInRlos.limit}" rendered="#{not empty extRelatedAppInRlos.limit}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.limit}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.limit}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.outstanding}" rendered="#{not empty item.outstanding}">
+                                        <h:outputText value="#{extRelatedAppInRlos.outstanding}" rendered="#{not empty extRelatedAppInRlos.outstanding}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.outstanding}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.installment}" rendered="#{not empty item.installment}">
+                                        <h:outputText value="#{extRelatedAppInRlos.installment}" rendered="#{not empty extRelatedAppInRlos.installment}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.installment}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.intFeePercent}" rendered="#{not empty item.intFeePercent}">
+                                        <h:outputText value="#{extRelatedAppInRlos.intFeePercent}" rendered="#{not empty extRelatedAppInRlos.intFeePercent}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.intFeePercent}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right">
-                                        <h:outputText value="#{item.tenor}" rendered="#{not empty item.tenor}">
+                                        <h:outputText value="#{extRelatedAppInRlos.tenor}" rendered="#{not empty extRelatedAppInRlos.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
-                                        <h:outputText value="-" rendered="#{empty item.tenor}"/>
+                                        <h:outputText value="-" rendered="#{empty extRelatedAppInRlos.tenor}"/>
                                     </p:column>
 
                                     <p:columnGroup type="footer">
@@ -944,8 +911,6 @@
                                 <div class="separate"></div>
                             </td>
                         </tr>
-
-                        <!-- Existing Collateral -->
                         <tr>
                             <td colspan="2" class="title">
                                 <h:outputText value="#{msg.get('app.decision.existingCollateral')}"/>
@@ -958,7 +923,9 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:dataTable id="dtExtCltrBorrower"
+                                <!-- Existing Credit - Collateral Borrower -->
+                                <p:dataTable id="dtExtColBorrower"
+                                             var="extColBrw" value="#{}"
                                              paginator="false" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">

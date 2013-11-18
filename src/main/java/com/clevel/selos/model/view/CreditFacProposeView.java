@@ -54,9 +54,10 @@ public class CreditFacProposeView implements Serializable {
     private String reasonForReduction;
 
     private List<ProposeFeeDetailView> proposeFeeDetailViewList;
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<CreditInfoDetailView> creditInfoDetailViewList;
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
     private List<GuarantorDetailView> guarantorDetailViewList;
+    private BigDecimal totalGuaranteeAmount;
     private List<ConditionDetailView> conditionDetailViewList;
 
     private int relatedTMBLending;
@@ -114,9 +115,10 @@ public class CreditFacProposeView implements Serializable {
         this.reasonForReduction = "";
 
         this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
-        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.creditInfoDetailViewList = new ArrayList<CreditInfoDetailView>();
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
         this.guarantorDetailViewList = new ArrayList<GuarantorDetailView>();
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.conditionDetailViewList = new ArrayList<ConditionDetailView>();
 
         this.relatedTMBLending = 0;
@@ -254,12 +256,12 @@ public class CreditFacProposeView implements Serializable {
         this.case3WcDebitCoreWc = case3WcDebitCoreWc;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
+    public List<CreditInfoDetailView> getCreditInfoDetailViewList() {
+        return creditInfoDetailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    public void setCreditInfoDetailViewList(List<CreditInfoDetailView> creditInfoDetailViewList) {
+        this.creditInfoDetailViewList = creditInfoDetailViewList;
     }
 
     public List<ProposeCollateralInfoView> getProposeCollateralInfoViewList() {
@@ -510,6 +512,11 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
 
-
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
 }
