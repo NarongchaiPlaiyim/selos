@@ -1935,7 +1935,7 @@ public class PrescreenMaker implements Serializable {
                     //Assign value after search not found
 
 
-                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    messageHeader = "Customer search complete.";
                     message = "Search customer not found.";
                 }
             } else {
