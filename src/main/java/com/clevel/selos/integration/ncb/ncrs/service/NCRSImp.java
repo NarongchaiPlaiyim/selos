@@ -238,25 +238,13 @@ public class NCRSImp implements NCRS, Serializable {
             nameModel = new TUEFEnquiryNameModel(ncrsModel.getLastName(), ncrsModel.getFirstName());
             nameModelArrayList.add(nameModel);
             try {
-                if (resultImp.isFAILED(appRefNumber, customerId) || resultImp.isSUCCEED(appRefNumber, customerId)) {
-                    responseModel = callOffline(ncrsModel);
-                    reason = "";
-                    if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
-                        reason = responseModel.getBodyModel().getTransaction().getTrackingid();
-                        log.debug("NCRS Tracking Id is {}", reason);
-                    }
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
-                } else if (resultImp.isEXCEPTION(appRefNumber, customerId)) {
-                    responseModel = callOnline(ncrsModel);
-                    reason = "";
-                    if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
-                        reason = responseModel.getBodyModel().getTransaction().getTrackingid();
-                        log.debug("NCRS Tracking Id is {}", reason);
-                    }
-                    resultImp.updateSUCCEED(appRefNumber, customerId, reason);
-                    saveNCBI(responseModel);
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
+                responseModel = callOffline(ncrsModel);
+                reason = "";
+                if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
+                    reason = responseModel.getBodyModel().getTransaction().getTrackingid();
+                    log.debug("NCRS Tracking Id is {}", reason);
                 }
+                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 log.error("NCRS FAILED {}", e);
@@ -404,13 +392,13 @@ public class NCRSImp implements NCRS, Serializable {
                             TUEFEnquiryIdModel idModel = idModelArrayList.get(0);
                             customerId = idModel.getIdnumber();
                         }
-                        responseModel = checkOnlineResponseModel(responseModel);
+                        //responseModel = checkOnlineResponseModel(responseModel);
                         resultDate = new Date();
                         log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                                 linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, customerId, trackingId);
-                        saveNCBI(responseModel);
+                        saveNCBI(responseModel); //TODO: to confirm, need to reconcile or not?
                         return responseModel;
                     } else {
                         resultDesc = "NCRS NCB Exception Transaction is null";
@@ -418,13 +406,26 @@ public class NCRSImp implements NCRS, Serializable {
                         throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
                     }
                 } else {
-                    return checkOnlineResponseModel(callOnline(ncrsModel));
+                    log.debug("Tracking did not found");
+                    responseModel = callOnline(ncrsModel);
+                    String reason = "";
+                    if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
+                        reason = responseModel.getBodyModel().getTransaction().getTrackingid();
+                        log.debug("NCRS Tracking Id is {}", reason);
+                    }
+                    resultImp.updateSUCCEED(appRefNumber, customerId, reason);
+                    return responseModel;
                 }
             } else {
-//                resultDesc = "Matched transaction did not found";
-                log.debug("transaction did not found");
-                return checkOnlineResponseModel(callOnline(ncrsModel));
-//                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
+                log.debug("Tracking did not found");
+                responseModel = callOnline(ncrsModel);
+                String reason = "";
+                if (!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())) {
+                    reason = responseModel.getBodyModel().getTransaction().getTrackingid();
+                    log.debug("NCRS Tracking Id is {}", reason);
+                }
+                resultImp.updateSUCCEED(appRefNumber, customerId, reason);
+                return responseModel;
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
@@ -546,7 +547,7 @@ public class NCRSImp implements NCRS, Serializable {
                         resultDesc = exception.toString();
                         log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
                         log.debug("save data to NCBI Export");
-                        saveNCBI(responseModel);
+                        saveNCBI(responseModel); //TODO: to confirm, need to reconcile or not?
                         throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                     } else if (null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
                         return responseModel;
