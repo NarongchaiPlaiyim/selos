@@ -22,6 +22,14 @@ public class DateTimeUtil {
     public static final String defaultDateFormat = "dd/MM/yyyy";
 
     private static final Locale THAI_LOCALE = new Locale("th", "TH");
+    private static SimpleDateFormat viewDateFormatWT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.UK);
+
+    public static String dateToStringWT(Date date){
+        if(date != null)
+            return viewDateFormatWT.format(date);
+        else
+            return "";
+    }
 
     public static int compareDate(Date targetDate,Date referenceDate) {
         DateTime referenceDateTime = new DateTime(getOnlyDate(referenceDate));

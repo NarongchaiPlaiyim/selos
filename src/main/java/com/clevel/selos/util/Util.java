@@ -36,18 +36,6 @@ public class Util {
         return createDateString(date, "yyyy-MM-dd");
     }
 
-    public static Date convertStringToDateBuddhist(String dateStr) {
-        Date dateD = new Date();
-        try {
-            DateFormat formatter;
-            formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            dateD = (Date) formatter.parse(dateStr);
-
-        } catch (ParseException e) {
-            log.error("", e);
-        }
-        return dateD;
-    }
 
     public static Date strYYYYMMDDtoDateFormat(String dateStr) {
         Date date = new Date();
