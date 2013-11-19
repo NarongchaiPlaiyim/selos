@@ -112,7 +112,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         } catch (SELOSBPMException e) {
             success = false;
             caseCreationHistory.setStatus(ActionResult.FAILED);
-            caseCreationHistory.setStatusDetail(e.getMessage());
+            caseCreationHistory.setStatusDetail(msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION));
             log.error("[{}] {}", linkKey, msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), e);
             bpmAuditor.add(bpmUsername, "createCase", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
         }
@@ -135,7 +135,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
             log.error("[{}] Exception while authentication with BPM!", linkKey, e);
-            bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED, userName));
         } catch (Exception e) {
             log.error("[{}] Exception while authentication with BPM!", linkKey, e);
@@ -178,7 +178,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
             log.error("[{}] Exception while dispatch case in BPM!", linkKey, e);
-            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_DISPATCH_EXCEPTION, msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
         }
     }
@@ -195,7 +195,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
             log.error("[{}] Exception while locking case in BPM!", linkKey, e);
-            bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_LOCK_CASE_EXCEPTION), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_LOCK_CASE_EXCEPTION, msg.get(ExceptionMapping.BPM_LOCK_CASE_EXCEPTION));
         }
     }
@@ -212,7 +212,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (SELOSBPMException e) {
             log.error("[{}] Exception while unlocking case in BPM!", linkKey, e);
-            bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION, msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION));
         }
     }
