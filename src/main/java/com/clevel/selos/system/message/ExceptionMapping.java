@@ -33,6 +33,7 @@ public interface ExceptionMapping {
     public static final String RLOS_DATA_NOT_FOUND = "032";
     public static final String RLOS_INVALID_INPUT = "033";
     public static final String RLOS_CSI_CONNECT_ERROR = "034";
+    public static final String RLOS_CSI_GETDATA_ERROR = "035";
 
     //DWH exception
     public static final String DWH_OBLIGATION_EXCEPTION = "040";
