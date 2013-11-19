@@ -108,6 +108,8 @@ public class PrescreenTransform extends Transform {
             prescreenView.setBorrowingType(new BorrowingType());
         }
 
+        prescreenView.setGroupExposure(prescreen.getGroupExposure());
+        prescreenView.setGroupIncome(prescreen.getGroupIncome());
         prescreenView.setCreateDate(prescreen.getCreateDate());
         prescreenView.setCreateBy(prescreen.getCreateBy());
         prescreenView.setModifyDate(prescreen.getModifyDate());

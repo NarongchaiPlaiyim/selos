@@ -197,24 +197,13 @@ public class NCCRSImp implements NCCRS, Serializable {
             juristicType = nccrsModel.getJuristicType();
             if (memberRef != null && !Util.isEmpty(memberRef)) {
                 try {
-                    if (resultImp.isFAILED(appRefNumber, registId) || resultImp.isSUCCEED(appRefNumber, registId)) {
-                        responseModel = callOffline(nccrsModel);
-                        reason = "";
-                        if (!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())) {
-                            reason = responseModel.getBody().getTransaction().getTrackingid();
-                            log.debug("NCCRS Tracking Id is {}", reason);
-                        }
-                        outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel, nccrsModel));
-                    } else if (resultImp.isEXCEPTION(appRefNumber, registId)) {
-                        responseModel = callOnline(nccrsModel);
-                        reason = "";
-                        if (!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())) {
-                            reason = responseModel.getBody().getTransaction().getTrackingid();
-                            log.debug("NCCRS Tracking Id is {}", reason);
-                        }
-                        resultImp.updateSUCCEED(appRefNumber, registId, reason);
-                        outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel, nccrsModel));
+                    responseModel = callOffline(nccrsModel);
+                    reason = "";
+                    if (!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())) {
+                        reason = responseModel.getBody().getTransaction().getTrackingid();
+                        log.debug("NCCRS Tracking Id is {}", reason);
                     }
+                    outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel, nccrsModel));
                 } catch (HttpHostConnectException e) {
                     reason = e.getMessage();
                     log.error("NCCRS FAILED ", e);
@@ -342,13 +331,13 @@ public class NCCRSImp implements NCCRS, Serializable {
                     if (null != responseModel.getBody().getTransaction().getUser()) {
                         log.debug("NCCRS get response offline");
                         String registId = nccrsModel.getRegistId();
-                        responseModel = checkOnlineResponseModel(responseModel);
+                        //responseModel = checkOnlineResponseModel(responseModel);
                         resultDate = new Date();
                         log.debug("[{}] NCCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                                 linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, registId, trackingId);
-                        saveNCBI(responseModel);
+                        saveNCBI(responseModel); //TODO: to confirm, need to reconcile or not?
                         return responseModel;
                     } else {
                         resultDesc = "NCCRS NCB Exception Transaction is null";
@@ -356,13 +345,24 @@ public class NCCRSImp implements NCCRS, Serializable {
                         throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
                     }
                 } else {
-                    return checkOnlineResponseModel(callOnline(nccrsModel));
+                    responseModel = callOnline(nccrsModel);
+                    String reason = "";
+                    if (!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())) {
+                        reason = responseModel.getBody().getTransaction().getTrackingid();
+                        log.debug("NCCRS Tracking Id is {}", reason);
+                    }
+                    resultImp.updateSUCCEED(appRefNumber, registId, reason);
+                    return responseModel;
                 }
             } else {
-//                resultDesc = "transaction did not found";
-                log.error("transaction did not found");
-                return checkOnlineResponseModel(callOnline(nccrsModel));
-//                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
+                responseModel = callOnline(nccrsModel);
+                String reason = "";
+                if (!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())) {
+                    reason = responseModel.getBody().getTransaction().getTrackingid();
+                    log.debug("NCCRS Tracking Id is {}", reason);
+                }
+                resultImp.updateSUCCEED(appRefNumber, registId, reason);
+                return responseModel;
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
