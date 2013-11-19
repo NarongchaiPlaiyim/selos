@@ -1,15 +1,18 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
+import com.clevel.selos.dao.master.AuthorizationDOADAO;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.ExSummaryView;
-import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -65,13 +68,23 @@ public class ExecutiveSummary implements Serializable {
     UserDAO userDAO;
     @Inject
     CustomerDAO customerDAO;
+    @Inject
+    ReasonDAO reasonDAO;
+    @Inject
+    AuthorizationDOADAO authorizationDOADAO;
 
     @Inject
-    CustomerInfoControl customerInfoControl;
-    @Inject
-    NCBInfoControl ncbInfoControl;
+    ExSummaryControl exSummaryControl;
 
-    public ExecutiveSummary() {}
+    //*** Drop down List ***//
+    private List<AuthorizationDOA> authorizationDOAList;
+    private List<Reason> reasonList;
+
+    //
+    private ExSumReasonView reason;
+
+    public ExecutiveSummary() {
+    }
 
     public void preRender(){
 //        HttpSession session = FacesUtil.getSession(false);
@@ -116,13 +129,32 @@ public class ExecutiveSummary implements Serializable {
             }
         }
 
+        exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
+
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
         }
 
-        getBorrower();
+        /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
+        ec.reset();
+        exSummaryView.setExSumCharacteristicView(ec);
 
-        getNCBRecord();
+        ExSumBusinessInfoView eb = new ExSumBusinessInfoView();
+        eb.reset();
+        exSummaryView.setExSumBusinessInfoView(eb);
+
+        ExSumAccountMovementView ea = new ExSumAccountMovementView();
+        ea.reset();
+        exSummaryView.setExSumAccMovementView(ea);
+
+        ExSumCollateralView ecc = new ExSumCollateralView();
+        ecc.reset();
+        exSummaryView.setExSumCollateralView(ecc);*/
+
+        reasonList = reasonDAO.getRejectList();
+        authorizationDOAList = authorizationDOADAO.findAll();
+
+        reason = new ExSumReasonView();
     }
 
     public void onSaveExecutiveSummary() {
@@ -154,22 +186,10 @@ public class ExecutiveSummary implements Serializable {
         onCreation();
     }
 
-    public void getBorrower(){
-        List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
-        if(cusListView != null && cusListView.size() > 0){
-            exSummaryView.setBorrowerViewList(cusListView);
-        } else {
-            exSummaryView.setBorrowerViewList(null);
-        }
-    }
-
-    public void getNCBRecord(){
-        List<NCBInfoView> ncbInfoViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
-        if(ncbInfoViewList != null && ncbInfoViewList.size() > 0){
-            exSummaryView.setNcbInfoViewList(ncbInfoViewList);
-        } else {
-            exSummaryView.setNcbInfoViewList(null);
-        }
+    public void onAddReason() {
+        ExSumReasonView exSumReasonView = new ExSumReasonView();
+        exSumReasonView.setCode(reason.getCode());
+        exSummaryView.getDeviateCode().add(exSumReasonView);
     }
 
     public boolean isMessageErr() {
@@ -210,6 +230,30 @@ public class ExecutiveSummary implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Reason> getReasonList() {
+        return reasonList;
+    }
+
+    public void setReasonList(List<Reason> reasonList) {
+        this.reasonList = reasonList;
+    }
+
+    public List<AuthorizationDOA> getAuthorizationDOAList() {
+        return authorizationDOAList;
+    }
+
+    public void setAuthorizationDOAList(List<AuthorizationDOA> authorizationDOAList) {
+        this.authorizationDOAList = authorizationDOAList;
+    }
+
+    public ExSumReasonView getReason() {
+        return reason;
+    }
+
+    public void setReason(ExSumReasonView reason) {
+        this.reason = reason;
     }
 }
 
