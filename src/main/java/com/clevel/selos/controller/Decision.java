@@ -56,7 +56,8 @@ public class Decision implements Serializable {
     //View
     private ExistingCreditView existingCreditView;
     private List<ConditionDetailView> existingConditionCommCrdList;
-    private List<GuarantorDetailView> existingGuarantorList;
+    private ExistingCollateralView existingColBorrower;
+    private ExistingCollateralView existingColRelated;
 
     private CreditFacProposeView creditFacProposeView;
 

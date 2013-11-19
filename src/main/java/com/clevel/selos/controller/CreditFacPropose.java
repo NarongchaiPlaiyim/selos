@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
@@ -120,6 +121,8 @@ public class CreditFacPropose implements Serializable {
     @Inject
     CreditTypeDAO creditTypeDAO;
     @Inject
+    PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
+    @Inject
     DisbursementDAO disbursementDAO;
     @Inject
     CustomerDAO customerDAO;
@@ -215,7 +218,7 @@ public class CreditFacPropose implements Serializable {
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         productProgramList = productProgramDAO.findAll();
-        creditTypeList = creditTypeDAO.findAll();
+//        creditTypeList = creditTypeDAO.findAll();
         disbursementList = disbursementDAO.findAll();
         subCollateralTypeList = subCollateralTypeDAO.findAll();
         collateralTypeList = collateralTypeDAO.findAll();
@@ -223,6 +226,7 @@ public class CreditFacPropose implements Serializable {
 
         modeEdit = true;
     }
+
 
     //Call  BRMS to get data Propose Credit Info
     public void onCallRetrieveProposeCreditInfo() {
@@ -277,8 +281,21 @@ public class CreditFacPropose implements Serializable {
     }
 
     //  Start Propose Credit Information  //
+
+    public void onChangeProductProgram(){
+        ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
+        log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
+
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        if(prdProgramToCreditTypeList == null){
+            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        }
+        log.debug("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
+    }
+
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
+        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         creditInfoDetailView = new CreditInfoDetailView();
         modeForButton = ModeForButton.ADD;
     }
@@ -289,6 +306,7 @@ public class CreditFacPropose implements Serializable {
         log.info("rowIndex :: {}", rowIndex);
         log.info("creditFacProposeView.creditInfoDetailViewList :: {}", creditFacProposeView.getCreditInfoDetailViewList());
         ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
         CreditType creditType = proposeCreditDetailSelected.getCreditType();
 
         if (rowIndex < creditFacProposeView.getCreditInfoDetailViewList().size()) {
@@ -502,7 +520,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onEditGuarantorInfo() {
-
+        log.info("onEditGuarantorInfo ::: {}",rowIndex);
     }
 
     public void onSaveGuarantorInfoDlg() {
@@ -521,15 +539,21 @@ public class CreditFacPropose implements Serializable {
                 creditFacProposeView.getGuarantorDetailViewList().add(guarantorDetailAdd);
             } else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
 
+            } else {
+                log.info("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
+                complete = false;
             }
-        }else{
-
         }
+
+        complete = true;
+        log.info("  complete >>>>  :  {}", complete);
+        context.addCallbackParam("functionComplete", complete);
 
     }
 
     public void onDeleteGuarantorInfo() {
-
+        log.info("onDeleteGuarantorInfo ::: ");
+       creditFacProposeView.getGuarantorDetailViewList().remove(guarantorDetailViewItem);
     }
     //  END Guarantor //
 
@@ -847,6 +871,14 @@ public class CreditFacPropose implements Serializable {
 
     public void setCreditTypeDetailList(List<CreditTypeDetailView> creditTypeDetailList) {
         this.creditTypeDetailList = creditTypeDetailList;
+    }
+
+    public List<PrdProgramToCreditType> getPrdProgramToCreditTypeList() {
+        return prdProgramToCreditTypeList;
+    }
+
+    public void setPrdProgramToCreditTypeList(List<PrdProgramToCreditType> prdProgramToCreditTypeList) {
+        this.prdProgramToCreditTypeList = prdProgramToCreditTypeList;
     }
 }
 

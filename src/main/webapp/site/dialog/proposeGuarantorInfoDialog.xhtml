@@ -99,9 +99,10 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.guaranteeAmount}">
+                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                            </h:outputText>
+                                                <p:ajax event="blur" update="@this"/>
+                                            </p:inputText>
                                         </p:column>
 
                                     </p:dataTable>
@@ -117,7 +118,7 @@
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
-                                actionListener="#{creditFacPropose.onSaveGuarantorInfoDlg()}"
+                                action="#{creditFacPropose.onSaveGuarantorInfoDlg}"
                                 process=":guarantorDlgForm"
                                 update=":guarantorDlgForm,:frmMain"
                                 oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
@@ -125,6 +126,7 @@
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                                 styleClass="small"
+                                action="#{creditFacPropose.onDeleteGuarantorInfo}"
                                 onclick="PF('guanrantorInfoDlg').hide()"
                                 update=":guarantorDlgForm"/>
                     </td>
