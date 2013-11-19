@@ -663,8 +663,8 @@
                                              target="#{creditFacPropose.rowIndex}"/>
             </p:commandButton>
             <p:commandButton icon="ui-icon-trash"
-                             action="#{creditFacPropose.onDeleteCreditInfo()}"
-                             process="@this">
+                             process="@this"
+                             onsuccess="confirmDeleteCreditInfoDlg.show();">
                 <f:setPropertyActionListener value="#{proposeCredit}"
                                              target="#{creditFacPropose.proposeCreditDetailSelected}"/>
             </p:commandButton>
@@ -672,7 +672,7 @@
     </tr>
 
     <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-    <ui:repeat value="#{proposeCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="i" offset="1">
+    <ui:repeat value="#{proposeCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
         <tr>
             <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.standardPrice}">
@@ -985,10 +985,10 @@
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.creditFacProposeView.guarantorBA}"
                                  style="text-align: right;">
-                        <!-- <f:convertNumber pattern="#,##0"
+                         <f:convertNumber pattern="#,##0"
                                           minFractionDigits="2"
                                           maxFractionDigits="2"
-                                          maxIntegerDigits="14"/>-->
+                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -1442,7 +1442,7 @@
                 actionListener="#{creditFacPropose.onAddGuarantorInfo()}"
                 process="@this"
                 update=":guarantorDlgForm"
-                oncomplete="guanrantorInfoDlg.show();">
+                oncomplete="guarantorInfoDlg.show();">
             <p:resetInput target=":guarantorDlgForm"/>
         </p:commandButton>
 
@@ -1520,7 +1520,7 @@
                                              update=":guarantorDlgForm"
                                              process=":frmMain"
                                              oncomplete="guanrantorInfoDlg.show();">
-                                <f:setPropertyActionListener value="#{creditFacPropose.guarantorItem}"
+                                <f:setPropertyActionListener value="#{guarantorDetailView}"
                                                              target="#{creditFacPropose.guarantorDetailViewItem}"/>
                                 <f:setPropertyActionListener value="#{g.index}"
                                                              target="#{creditFacPropose.rowIndex}"/>
@@ -1528,7 +1528,7 @@
                             <p:commandButton icon="ui-icon-trash"
                                              process="@this"
                                              oncomplete="confirmDeleteGuarantorInfoDlg.show()">
-                                <f:setPropertyActionListener value="#{creditFacPropose.guarantorItem}"
+                                <f:setPropertyActionListener value="#{guarantorDetailView}"
                                                              target="#{creditFacPropose.guarantorDetailViewItem}"/>
                             </p:commandButton>
                         </td>
@@ -1554,74 +1554,6 @@
                     <td style="background-color:#f4f8b6;"></td>
                 </tr>
 
-            <!--
-            <ui:repeat value="#{creditFacPropose.creditFacProposeView.guarantorDetailViewList}"
-                       var="guarantorDetailView">
-                <table style="width: 100%">
-                    <colgroup>
-                        <col style="width:250px"/>
-                        <col style="width:250px"/>
-                    </colgroup>
-                    <tr>
-                        <td>
-                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.titleDeed')}"/>
-                        </td>
-                        <td>
-                            <p:outputLabel value="#{guarantorDetailView.guarantorName}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h:outputText value="#{msg.get('app.credit.facility.propose.label.address')}"/>
-                        </td>
-                        <td>
-                            <p:outputLabel value="#{guarantorDetailView.tcgLgNo}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <p:dataTable style="width: auto"
-                                         id="subCollateralDetailViewTable"
-                                         var="subCollateralDetailView"
-                                         value="#{collateralHeaderDetailView.subCollateralDetailViewList}"
-                                         paginator="false"
-                                         rowKey="#{subCollateralDetailView.id}"
-                                         rowIndexVar="rowIndex">
-                                <p:columnGroup type="header">
-                                    <p:row>
-                                        <p:column/>
-                                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.tb.subCollType')}"/>
-                                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.tb.titleDeed')}"/>
-                                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.tb.CollateralOwner')}"/>
-                                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.tb.appraisalValue')}"/>
-                                    </p:row>
-                                </p:columnGroup>
-                                <p:column styleClass="center" style="width: 50px">
-                                    <p:outputLabel value="#{subCollateralDetailView.no}"/>
-                                </p:column>
-                                <p:column styleClass="left" style="width: 500px">
-                                    <p:outputLabel value="#{subCollateralDetailView.subCollateralType.code}"/> <br/>
-                                    <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
-                                    <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
-                                </p:column>
-                                <p:column styleClass="left" style="width: 150px">
-                                    <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
-                                </p:column>
-                                <p:column styleClass="left" style="width: 250px">
-                                    <p:outputLabel value="#{subCollateralDetailView.collateralOwner}"/>
-                                </p:column>
-                                <p:column styleClass="right" style="width: 150px">
-                                    <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                    </p:outputLabel>
-                                </p:column>
-                            </p:dataTable>
-                        </td>
-                    </tr>
-
-                </table>
-            </ui:repeat>
-    -->
 
              </tbody>
         </table>
@@ -1697,6 +1629,7 @@
             <p:column styleClass="center">
                 <p:commandButton title="Remove"
                                  icon="ui-icon-trash"
+                                 process="@this"
                                  oncomplete="confirmDeleteConditionInfoDlg.show()">
                     <f:setPropertyActionListener value="#{conditionInfoItem}"
                                                  target="#{creditFacPropose.selectConditionItem}"/>
@@ -1836,7 +1769,7 @@
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->
-<p:dialog id="guarantorDialog" header="Propose Guarantor Information" widgetVar="guanrantorInfoDlg"
+<p:dialog id="guarantorDialog" header="Propose Guarantor Information" widgetVar="guarantorInfoDlg"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="200">
     <ui:include src="dialog/proposeGuarantorInfoDialog.xhtml"/>
 </p:dialog>

@@ -2,12 +2,15 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
+import com.clevel.selos.model.db.working.BasicInfo;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CollateralHeaderDetailView;
 import com.clevel.selos.model.view.ProposeCollateralInfoView;
 import com.clevel.selos.model.view.SubCollateralDetailView;
@@ -29,6 +32,8 @@ public class CreditFacProposeControl extends BusinessControl {
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     CollateralTypeDAO collateralTypeDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
 
     public CreditFacProposeControl(){}
@@ -118,5 +123,22 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("convertSubCollateral end");
         return subCollateralDetailView;
     }
+
+    public List<Customer> getListOfGuarantor(long workCaseId){
+        log.info("workCaseId :: {}",workCaseId);
+
+        List<Customer> customerList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+
+        return  customerList;
+    }
+
+    public BasicInfo getBasicByWorkCaseId(long workCaseId){
+        log.info("workCaseId :: {}",workCaseId);
+
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+
+        return  basicInfo;
+    }
+
 
 }

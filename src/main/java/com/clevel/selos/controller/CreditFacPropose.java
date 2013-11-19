@@ -3,14 +3,18 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -73,10 +77,14 @@ public class CreditFacPropose implements Serializable {
     private Country countrySelected;
     private List<ProductProgram> productProgramList;
     private List<CreditType> creditTypeList;
+    private ProductGroup productGroup;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
+    private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
     private List<Disbursement> disbursementList;
 
     private CreditFacProposeView creditFacProposeView;
+
+    private BasicInfo basicInfo;
 
     //for control Propose Credit
     private CreditInfoDetailView creditInfoDetailView;
@@ -117,6 +125,8 @@ public class CreditFacPropose implements Serializable {
     @Inject
     CountryDAO countryDAO;
     @Inject
+    PrdGroupToPrdProgramDAO prdGroupToPrdProgramDAO;
+    @Inject
     ProductProgramDAO productProgramDAO;
     @Inject
     CreditTypeDAO creditTypeDAO;
@@ -131,9 +141,12 @@ public class CreditFacPropose implements Serializable {
     @Inject
     CollateralTypeDAO collateralTypeDAO;
     @Inject
-    CreditFacProposeControl creditFacProposeControl;
-    @Inject
     PotentialCollateralDAO potentialCollateralDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
+
 
     public CreditFacPropose() {
     }
@@ -155,7 +168,15 @@ public class CreditFacPropose implements Serializable {
         if (workCaseId != null) {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
-//                guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+                guarantorList = creditFacProposeControl.getListOfGuarantor(workCaseId);
+            }
+
+            if(productGroup == null){
+                basicInfo = creditFacProposeControl.getBasicByWorkCaseId(workCaseId);
+
+                if(basicInfo != null){
+                    productGroup = basicInfo.getProductGroup();
+                }
             }
         }
 
@@ -215,10 +236,17 @@ public class CreditFacPropose implements Serializable {
             potentialCollateralList = new ArrayList<PotentialCollateral>();
         }
 
+        if(prdGroupToPrdProgramList == null){
+            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        }
+
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
-        productProgramList = productProgramDAO.findAll();
-//        creditTypeList = creditTypeDAO.findAll();
+
+        if(productGroup != null){
+            prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+        }
+
         disbursementList = disbursementDAO.findAll();
         subCollateralTypeList = subCollateralTypeDAO.findAll();
         collateralTypeList = collateralTypeDAO.findAll();
@@ -503,7 +531,6 @@ public class CreditFacPropose implements Serializable {
         creditTypeDetailView.setCreditFacility("OD");
         creditTypeDetailView.setType("New");
         creditTypeDetailView.setLimit(BigDecimal.valueOf(200000));
-        creditTypeDetailView.setGuaranteeAmount(BigDecimal.valueOf(200000));
         creditTypeDetailList.add(creditTypeDetailView);
 
         creditTypeDetailView = new CreditTypeDetailView();
@@ -513,7 +540,6 @@ public class CreditFacPropose implements Serializable {
         creditTypeDetailView.setCreditFacility("Loan");
         creditTypeDetailView.setType("Change");
         creditTypeDetailView.setLimit(BigDecimal.valueOf(990000));
-        creditTypeDetailView.setGuaranteeAmount(BigDecimal.valueOf(700000));
         creditTypeDetailList.add(creditTypeDetailView);
 
         guarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
@@ -552,8 +578,9 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteGuarantorInfo() {
-        log.info("onDeleteGuarantorInfo ::: ");
+        log.info("onDeleteGuarantorInfo ::: {}",guarantorDetailViewItem.getTcgLgNo());
        creditFacProposeView.getGuarantorDetailViewList().remove(guarantorDetailViewItem);
+        log.info("delete success");
     }
     //  END Guarantor //
 
@@ -879,6 +906,14 @@ public class CreditFacPropose implements Serializable {
 
     public void setPrdProgramToCreditTypeList(List<PrdProgramToCreditType> prdProgramToCreditTypeList) {
         this.prdProgramToCreditTypeList = prdProgramToCreditTypeList;
+    }
+
+    public List<PrdGroupToPrdProgram> getPrdGroupToPrdProgramList() {
+        return prdGroupToPrdProgramList;
+    }
+
+    public void setPrdGroupToPrdProgramList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
+        this.prdGroupToPrdProgramList = prdGroupToPrdProgramList;
     }
 }
 

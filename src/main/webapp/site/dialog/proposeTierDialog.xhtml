@@ -71,13 +71,13 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveTier"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 binding="#{addDlgData}"
                                 styleClass="small"
                                 actionListener="#{creditFacPropose.onAddTierInfo}"
                                 process=":proposeTierDlgForm"
-                                update=":proposeTierDlgForm,:frmMain:creditInfoDlg"
+                                update=":proposeTierDlgForm"
                                 oncomplete="handleTierDlgRequest(xhr, status, args)"/>
 
                         <p:commandButton
@@ -91,7 +91,7 @@
         </h:form>
     </p:panel>
 
-    <p:blockUI widgetVar="blockProposeTierDlgForm" block="proposeTierDlgPanel" trigger=":proposeTierDlgForm:save">
+    <p:blockUI widgetVar="blockProposeTierDlgForm" block="proposeTierDlgPanel" trigger=":proposeTierDlgForm:saveTier">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

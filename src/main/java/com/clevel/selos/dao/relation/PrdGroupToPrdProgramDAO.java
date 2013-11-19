@@ -47,4 +47,19 @@ public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram, In
         return list;
 
     }
+
+
+    @SuppressWarnings("unchecked")
+    public List<PrdGroupToPrdProgram> getListPrdGroupToPrdProgramPropose(ProductGroup productGroup) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("productGroup", productGroup));
+        criteria.add(Restrictions.eq("addProposeCredit", 1));
+        criteria.addOrder(Order.asc("productProgram.id"));
+        List<PrdGroupToPrdProgram> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+
+        return list;
+
+    }
 }
