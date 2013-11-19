@@ -72,12 +72,14 @@ public class BankStmtControl extends BusinessControl {
                 if (!Util.isEmpty(customerInfoView.getTmbCustomerId())) {
                     log.info("Finding Account Number List for TMB Cus ID: {}", customerInfoView.getTmbCustomerId());
                     CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+                    log.debug("Account Number List : {}", customerAccountResult);
                     //CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
                     if (customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)) {
                         List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
                         log.info("Finding account {}", accountListModelList);
                         for (CustomerAccountListModel customerAccountListModel : accountListModelList) {
                             DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
+                            log.debug("DWHBankStatementResult : {}", dwhBankStatementResult);
 
                             if (dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)) {
                                 List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
@@ -462,8 +464,14 @@ public class BankStmtControl extends BusinessControl {
     public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId, String userId) {
         log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}, userId: {}",
                 bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId, userId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        WorkCase workCase = null;
+        if(workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+        }
+        WorkCasePrescreen workCasePrescreen = null;
+        if(workCasePrescreenId != 0){
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        }
         User user = userDAO.findById(userId);
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);

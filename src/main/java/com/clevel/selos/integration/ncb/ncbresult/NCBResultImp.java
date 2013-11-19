@@ -9,6 +9,8 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Date;
@@ -28,6 +30,7 @@ public class NCBResultImp implements Serializable {
     public NCBResultImp() {
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void add(String appRefNumber, String customerType, String customerId, Date inquiryDate, ActionResult actionResult, String reason, String requestNo) {
         log.debug("Call add (appRefNumber : {} customerType : {} customerId : {} inquiryDate : {} actionResult : {} reason : {})",
                 appRefNumber, customerType, customerId, inquiryDate, actionResult.toString(), reason, requestNo);
@@ -94,6 +97,14 @@ public class NCBResultImp implements Serializable {
         model.setReason(trackingId);
         ncbResult.save(model);
         log.debug("Call updateSUCCEED({}, {}) has updated", appRefNumber, customerId);
+    }
+
+    public void updateStatus(String appRefNumber, String customerId, String trackingId, ActionResult actionResult) {
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        model.setResult(actionResult.toString());
+        model.setReason(trackingId);
+        ncbResult.save(model);
+        log.debug("Call updateStatus({}, {}) has updated, status: {}", appRefNumber, customerId, actionResult.toString());
     }
 
     public void checkStatus(String appRefNumber, String customerId, String trackingId) {

@@ -122,7 +122,7 @@ public class PrescreenResult implements Serializable {
 
     public void onSave() {
         log.info("Start onSave {}", prescreenResultView);
-        prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId);
+        prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId, user);
 
         messageHeader = "Save PreScreen Result Success.";
         message = "Save PreScreen Result data success.";

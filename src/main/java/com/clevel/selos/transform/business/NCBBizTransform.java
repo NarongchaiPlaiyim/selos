@@ -1242,7 +1242,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             if (accountModel.getCreditinfo() != null) {
                                                 CreditInfoModel creditInfoModel = accountModel.getCreditinfo();
                                                 //set accountType
-                                                AccountType accountType = accountTypeDAO.getJuristicByCode(creditInfoModel.getCredittype());
+                                                AccountType accountType = accountTypeDAO.getJuristicByName(creditInfoModel.getCredittype());
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(0);
@@ -1326,11 +1326,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(creditType) && creditType.equals(ACCOUNT_TYPE_OD_JUR)) {
                                                     if (isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), TWELVE_MONTH)) {
                                                         for (CreditHistModel creditHistModel : creditHistModelList) {
-                                                            //TODO: how to get over limit
-                                                            //cannot get number of over limit
-                                                            /*if(isOverLimit(subjectAccountModel.getPaymt01())){
+                                                            if(isOverLimit(creditHistModel.getDaypastdue())){
                                                                 numberOfOverLimit++;
-                                                            }*/
+                                                            }
 
                                                             //get worstCode
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), SIX_MONTH)) {
@@ -1378,10 +1376,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     if (isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), TWELVE_MONTH)) {
                                                         for (CreditHistModel creditHistModel : creditHistModelList) {
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), TWELVE_MONTH)) {
-                                                                //cannot get number of over limit
-                                                            /*if(isOverLimit(subjectAccountModel.getPaymt01())){
-                                                                numberOfOverLimit++;
-                                                            }*/
+                                                                if(isOverLimit(creditHistModel.getDaypastdue())){
+                                                                    numberOfOverLimit++;
+                                                                }
 
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
                                                                 log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
@@ -1442,7 +1439,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             //set number of outstanding payment
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
                                             //set number of over limit
-                                            ncbDetailView.setNoOfOverLimit(numberOfOverLimit); //todo: how to get number of OverLimit
+                                            ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
                                             //add ncbDetailView to ncbDetailViewList
                                             log.debug("Add ncbDetailView to list : {}", ncbDetailView);
@@ -1455,7 +1452,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             if (accountModel.getCreditinfo() != null) {
                                                 CreditInfoModel creditInfoModel = accountModel.getCreditinfo();
                                                 //set accountType
-                                                AccountType accountType = accountTypeDAO.getJuristicByCode(creditInfoModel.getCredittype());
+                                                AccountType accountType = accountTypeDAO.getJuristicByName(creditInfoModel.getCredittype());
                                                 ncbDetailView.setAccountType(accountType);
                                                 //set tmb account
                                                 ncbDetailView.setTMBAccount(0);
@@ -1539,10 +1536,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(creditType) && creditType.equals(ACCOUNT_TYPE_OD_JUR)) {
                                                     if (isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), TWELVE_MONTH)) {
                                                         for (CreditHistModel creditHistModel : creditHistModelList) {
-                                                            //cannot get number of over limit
-                                                            /*if(isOverLimit(subjectAccountModel.getPaymt01())){
+                                                            if(isOverLimit(creditHistModel.getDaypastdue())){
                                                                 numberOfOverLimit++;
-                                                            }*/
+                                                            }
 
                                                             //get worstCode
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), SIX_MONTH)) {
@@ -1590,10 +1586,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     if (isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), TWELVE_MONTH)) {
                                                         for (CreditHistModel creditHistModel : creditHistModelList) {
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), TWELVE_MONTH)) {
-                                                                //cannot get number of over limit
-                                                            /*if(isOverLimit(subjectAccountModel.getPaymt01())){
-                                                                numberOfOverLimit++;
-                                                            }*/
+                                                                if(isOverLimit(creditHistModel.getDaypastdue())){
+                                                                    numberOfOverLimit++;
+                                                                }
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
                                                                 log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
@@ -1652,7 +1647,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             //set number of outstanding payment
                                             ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
                                             //set number of over limit
-                                            ncbDetailView.setNoOfOverLimit(numberOfOverLimit); //todo: how to get number of OverLimit
+                                            ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
                                             //add ncbDetailView to ncbDetailViewList
                                             ncbDetailViews.add(ncbDetailView);
