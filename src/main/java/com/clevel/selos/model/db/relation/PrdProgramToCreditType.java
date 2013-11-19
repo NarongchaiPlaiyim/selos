@@ -20,6 +20,13 @@ public class PrdProgramToCreditType implements Serializable {
     @OneToOne
     @JoinColumn(name = "credittype_id")
     private CreditType creditType;
+
+    @Column(name = "add_existing_credit")
+    private int addExistingCredit;
+
+    @Column(name = "add_propose_credit")
+    private int addProposeCredit;
+
     @Column(name = "active")
     private int active;
 
@@ -50,6 +57,22 @@ public class PrdProgramToCreditType implements Serializable {
         this.creditType = creditType;
     }
 
+    public int getAddExistingCredit() {
+        return addExistingCredit;
+    }
+
+    public void setAddExistingCredit(int addExistingCredit) {
+        this.addExistingCredit = addExistingCredit;
+    }
+
+    public int getAddProposeCredit() {
+        return addProposeCredit;
+    }
+
+    public void setAddProposeCredit(int addProposeCredit) {
+        this.addProposeCredit = addProposeCredit;
+    }
+
     public int getActive() {
         return active;
     }
@@ -60,11 +83,13 @@ public class PrdProgramToCreditType implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("productProgram", productProgram).
-                append("creditType", creditType).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .append("addExistingCredit", addExistingCredit)
+                .append("addProposeCredit", addProposeCredit)
+                .append("active", active)
+                .toString();
     }
 }
