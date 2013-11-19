@@ -306,11 +306,19 @@ public class BankStmtTransform extends Transform {
 
             bankStatement.setBank(bankDAO.findById(bankStmtView.getBankView().getCode()));
             bankStatement.setBranch(bankStmtView.getBranchName());
-            bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
+            if(!Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId())) && bankStmtView.getBankAccountTypeView().getId() != 0){
+                bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
+            } else {
+                bankStatement.setBankAccountType(null);
+            }
             bankStatement.setAccountNo(bankStmtView.getAccountNumber());
             bankStatement.setAccountName(bankStmtView.getAccountName());
             bankStatement.setOtherAccountType(bankStmtView.getOtherAccountType());
-            bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
+            if(!Util.isEmpty(bankStmtView.getAccountStatusView().getId())){
+                bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
+            } else {
+                bankStatement.setAccountStatus(null);
+            }
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
             bankStatement.setLimit(bankStmtView.getLimit());

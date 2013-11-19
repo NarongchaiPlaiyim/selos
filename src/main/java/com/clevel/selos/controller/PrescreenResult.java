@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
@@ -22,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -115,9 +117,32 @@ public class PrescreenResult implements Serializable {
     public void onRetrieveInterfaceInfo() {
         log.info("Start on Retrieve Interface Info");
 
-        List<CustomerInfoView> customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        if(customerInfoViews != null){
+            customerInfoViewList = generateCustomerInfoList(customerInfoViews);
+        }
         prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
 
+    }
+
+    public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
+        List<CustomerInfoView> customerInfoList = new ArrayList<CustomerInfoView>();
+        for(CustomerInfoView item : customerInfoViews){
+            customerInfoList.add(item);
+            if(item.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse = item.getSpouse();
+                    if(spouse != null){
+                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                            customerInfoList.add(spouse);
+                        }
+                    }
+                }
+            }
+        }
+        return customerInfoList;
     }
 
     public void onSave() {
