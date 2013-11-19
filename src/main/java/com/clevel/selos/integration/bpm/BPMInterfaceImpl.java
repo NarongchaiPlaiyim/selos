@@ -114,7 +114,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             caseCreationHistory.setStatus(ActionResult.FAILED);
             caseCreationHistory.setStatusDetail(msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION));
             log.error("[{}] {}", linkKey, msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), e);
-            bpmAuditor.add(bpmUsername, "createCase", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            bpmAuditor.add(bpmUsername, "createCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), linkKey);
         }
 
         wsDataPersist.addNewCase(caseCreationHistory);
