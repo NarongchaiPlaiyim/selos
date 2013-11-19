@@ -22,6 +22,8 @@ public class ExistingCreditView implements Serializable {
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
     private BigDecimal totalGroupExposure;
+    private BigDecimal totalGuaranteeAmount;
+
 
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
@@ -124,6 +126,14 @@ public class ExistingCreditView implements Serializable {
 
     public void setTotalGroupExposure(BigDecimal totalGroupExposure) {
         this.totalGroupExposure = totalGroupExposure;
+    }
+
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
+
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 
     public List<ExistingCreditDetailView> getBorrowerComExistingCredit() {
