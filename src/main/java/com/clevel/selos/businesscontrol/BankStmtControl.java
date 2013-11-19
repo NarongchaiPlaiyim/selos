@@ -73,6 +73,17 @@ public class BankStmtControl extends BusinessControl {
                     log.info("Finding Account Number List for TMB Cus ID: {}", customerInfoView.getTmbCustomerId());
                     CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
                     log.debug("Account Number List : {}", customerAccountResult);
+
+                    //*** FOR TEST ***//
+                    //TODO REMOVE WHEN DEPLOY
+                    customerAccountResult = new CustomerAccountResult();
+                    customerAccountResult.setActionResult(ActionResult.SUCCESS);
+                    CustomerAccountListModel customerAccountListModels = new CustomerAccountListModel();
+                    customerAccountListModels.setAccountNo("3417619677");
+                    List<CustomerAccountListModel> accountListModels = new ArrayList<CustomerAccountListModel>();
+                    accountListModels.add(customerAccountListModels);
+                    customerAccountResult.setAccountListModels(accountListModels);
+
                     //CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
                     if (customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)) {
                         List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
