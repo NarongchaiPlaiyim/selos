@@ -39,6 +39,7 @@ public class Post implements Serializable {
 
     private final String required = ValidationMapping.NCB_DATA_REQUIRED;
     private final String exception = ExceptionMapping.NCB_EXCEPTION;
+    private final String connectError = ExceptionMapping.NCB_CONNECT_ERROR;
 
     public Post() {
     }
@@ -92,7 +93,7 @@ public class Post implements Serializable {
         } else {
             String reason = catchStatus(resCode);
             log.error("The request has failed, Error code is {} = {}", resCode, reason);
-            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode + " = " + reason), exception, exceptionMessage.get(exception, "" + resCode+" = "+ reason));
+            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode + " = " + reason), connectError, exceptionMessage.get(connectError));
         }
     }
 

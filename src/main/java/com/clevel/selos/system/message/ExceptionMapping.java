@@ -53,6 +53,7 @@ public interface ExceptionMapping {
     public static final String NCB_FAILED = "602";
     public static final String NCB_HTTPHOSTCONNECTEXCEPTION = "603";
     public static final String NCB_CONNECTTIMEOUTEXCEPTION = "604";
+    public static final String NCB_CONNECT_ERROR = "605";
 
     //DB Inteface
     public static final String INVALID_SYSTEM_PARAM = "701";
