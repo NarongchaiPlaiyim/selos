@@ -293,9 +293,16 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     }
 }
 
+// Credit Facility Propose Credit Dialog
 function handleDlgCreditProposeRequest(xhr, status, args) {
     if (args.functionComplete) {
         creditInfoDlg.hide();
+    }
+}
+
+function handleTierDlgRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        proposeTierDlg.hide();
     }
 }
 
@@ -319,7 +326,15 @@ function handleSubCollateralInfoRequest(xhr, status, args) {
         subCollateralInfoDlg.hide();
     }
 }
+
 // Credit Facility Propose Guarantor Dialog
+function handleGuarantorInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        guanrantorInfoDlg.hide();
+    }
+}
 
-// Credit Facility Propose Credit Dialog
 
+function onSave(buttonID, isDisable){
+     document.getElementById(buttonID).disabled=isDisable;
+}

@@ -214,7 +214,7 @@ public class PrescreenChecker implements Serializable {
     public void onReturnToMaker(){
         returnReason = new Reason();
         reasonList = new ArrayList<Reason>();
-        reasonList = reasonDAO.getCancleList();
+        reasonList = reasonDAO.getCancelList();
 
         bdmMakerName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
     }

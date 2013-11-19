@@ -11,34 +11,26 @@ import java.util.List;
 public class GuarantorDetailView implements Serializable {
 
     private String guarantorName;
-    private String tcgLgNo ;
-
-    private List<CreditTypeDetailView> creditTypeDetailViewList ;
+    private String tcgLgNo;
     private BigDecimal guaranteeAmount;
-    private BigDecimal totalGuaranteeAmount;
+    
+    private List<CreditTypeDetailView> creditTypeDetailViewList;        
 
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
 
-    //test
-    private CreditTypeDetailView creditTypeDetailView;
-
     public GuarantorDetailView() {
         reset();
     }
 
     public void reset() {
-
         this.guarantorName = "";
         this.tcgLgNo = "";
         this.guaranteeAmount = BigDecimal.ZERO;
-        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
     }
-
-
 
     public Date getCreateDate() {
         return createDate;
@@ -104,21 +96,4 @@ public class GuarantorDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
-    public BigDecimal getTotalGuaranteeAmount() {
-        return totalGuaranteeAmount;
-    }
-
-    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
-        this.totalGuaranteeAmount = totalGuaranteeAmount;
-    }
-
-
-    // test
-    public CreditTypeDetailView getCreditTypeDetailView() {
-        return creditTypeDetailView;
-    }
-
-    public void setCreditTypeDetailView(CreditTypeDetailView creditTypeDetailView) {
-        this.creditTypeDetailView = creditTypeDetailView;
-    }
 }

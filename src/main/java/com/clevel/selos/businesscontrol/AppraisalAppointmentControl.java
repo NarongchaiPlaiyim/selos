@@ -135,7 +135,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             List<ContactRecordDetail>   contactRecordDetailListDel = contactRecordDetailDAO.findByAppraisal(appraisal);
             contactRecordDetailDAO.delete(contactRecordDetailListDel);
         }
-        contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, appraisal);
+        contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, appraisal,workCase);
         contactRecordDetailDAO.persist(contactRecordDetailList);
         log.info( "contactRecordDetailDAO persist end" );
 

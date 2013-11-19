@@ -20,11 +20,10 @@ import com.clevel.selos.util.ValidationUtil;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class BankStmtControl extends BusinessControl {
@@ -145,7 +144,7 @@ public class BankStmtControl extends BusinessControl {
      */
     public Date getLastMonthDateBankStmt(Date expectedSubmissionDate) {
         if (expectedSubmissionDate != null) {
-            int days = Util.getDayOfDate(expectedSubmissionDate);
+            int days = DateTimeUtil.getDayOfDate(expectedSubmissionDate);
             int retrieveMonth = days < 15 ? 2 : 1;
             return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
         }
@@ -297,19 +296,8 @@ public class BankStmtControl extends BusinessControl {
             BigDecimal sumUtilPctOfLastSixM = BigDecimal.ZERO;
             BigDecimal sumChqRetAmtOfLastSixM = BigDecimal.ZERO;
 
-            // Average var
-            BigDecimal avgIncomeGross = BigDecimal.ZERO;
-            BigDecimal avgIncomeNetBDM = BigDecimal.ZERO;
-            BigDecimal avgIncomeNetUW = BigDecimal.ZERO;
-            BigDecimal avgWithDrawAmount = BigDecimal.ZERO;
-            BigDecimal avgSwingPercent = BigDecimal.ZERO;
-            BigDecimal avgUtilizationPercent = BigDecimal.ZERO;
-            BigDecimal avgGrossInflowPerLimit = BigDecimal.ZERO;
-
-            // Number var
             int numMonthOvrLmtAmtOfLastSixM = 0;
             int numMonthNonOvrLmtAmt = 0;
-
             int sumNumChqRetOfLastSixM = 0;
             int sumOvrLmtTimesOfLastSixM = 0;
             int maxOvrLmtDaysOfLastSixM = 0;
@@ -352,10 +340,10 @@ public class BankStmtControl extends BusinessControl {
                 sumGrossInflowPerLimit = sumGrossInflowPerLimit.add(detailView.getGrossInflowPerLimit());
             }
             // Calculate Average all months
-            avgIncomeGross = calAvgAmount(seasonalFlag, sumGrossCreditBalance);
-            avgIncomeNetBDM = calAvgAmount(seasonalFlag, sumCreditAmountBDM);
-            avgIncomeNetUW = calAvgAmount(seasonalFlag, sumCreditAmountUW);
-            avgWithDrawAmount = calAvgAmount(seasonalFlag, sumDebitAmount);
+            BigDecimal avgIncomeGross = calAvgAmount(seasonalFlag, sumGrossCreditBalance);
+            BigDecimal avgIncomeNetBDM = calAvgAmount(seasonalFlag, sumCreditAmountBDM);
+            BigDecimal avgIncomeNetUW = calAvgAmount(seasonalFlag, sumCreditAmountUW);
+            BigDecimal avgWithDrawAmount = calAvgAmount(seasonalFlag, sumDebitAmount);
 
             // ---------- timesOfAvgCredit(BDM/UW) ---------- //
             for (BankStmtDetailView detailView : bankStmtDetailViewList) {
@@ -381,9 +369,9 @@ public class BankStmtControl extends BusinessControl {
                 }
             }
             // Calculate Average from The last six months
-            avgSwingPercent = Util.divide(sumSwingPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
-            avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
-            avgGrossInflowPerLimit = Util.divide(sumGrossInflowPerLimit, numMonthNonOvrLmtAmt);
+            BigDecimal avgSwingPercent = Util.divide(sumSwingPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
+            BigDecimal avgUtilizationPercent = Util.divide(sumUtilPctOfLastSixM, numMonthOvrLmtAmtOfLastSixM);
+            BigDecimal avgGrossInflowPerLimit = Util.divide(sumGrossInflowPerLimit, numMonthNonOvrLmtAmt);
 
             // set summary Bank statement
             bankStmtView.setAvgIncomeGross(avgIncomeGross);
@@ -441,7 +429,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = tmbTotalIncomeNetBDM.add(othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = tmbTotalIncomeNetUW.add(othTotalIncomeNetUW);
 
-        // if (grdTotalIncomeNetUW = 0)
+        // if (grdTotalIncomeNetUW = Blank)
         //      grdTotalTrdChqRetPercent = [ grdTotalTrdChqRetAmount / grdTotalIncomeNetBDM ]
         // else
         //      grdTotalTrdChqRetPercent = [ grdTotalTrdChqRetAmount / grdTotalIncomeNetUW ]
@@ -509,6 +497,7 @@ public class BankStmtControl extends BusinessControl {
             }
             bankStmtView.setSrcOfCollateralProofViewList(srcOfCollateralProofViewList);
         }
+        // todo: check Bank account type before calculate average
         bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView) );
     }
 
@@ -519,4 +508,19 @@ public class BankStmtControl extends BusinessControl {
         else
             return false;
     }
+
+    public void sortAsOfDateBankStmtDetails(List<BankStmtDetailView> detailViews, final SortOrder order) {
+        Collections.sort(detailViews, new Comparator<BankStmtDetailView>() {
+            public int compare(BankStmtDetailView o1, BankStmtDetailView o2) {
+                if (o1.getAsOfDate() == null || o2.getAsOfDate() == null)
+                    return 0;
+                switch (order) {
+                    case ASCENDING: return o1.getAsOfDate().compareTo(o2.getAsOfDate());
+                    case DESCENDING: return o2.getAsOfDate().compareTo(o1.getAsOfDate());
+                    default: return 0;
+                }
+            }
+        });
+    }
+
 }

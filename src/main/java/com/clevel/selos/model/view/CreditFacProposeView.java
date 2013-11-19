@@ -54,12 +54,11 @@ public class CreditFacProposeView implements Serializable {
     private String reasonForReduction;
 
     private List<ProposeFeeDetailView> proposeFeeDetailViewList;
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<CreditInfoDetailView> creditInfoDetailViewList;
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
     private List<GuarantorDetailView> guarantorDetailViewList;
-    private List<ConditionInfoDetailView> conditionInfoDetailViewList;
-
-    private ProposeCollateralInfoView collateralDetailView;
+    private BigDecimal totalGuaranteeAmount;
+    private List<ConditionDetailView> conditionDetailViewList;
 
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
@@ -116,15 +115,17 @@ public class CreditFacProposeView implements Serializable {
         this.reasonForReduction = "";
 
         this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
-        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.creditInfoDetailViewList = new ArrayList<CreditInfoDetailView>();
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
         this.guarantorDetailViewList = new ArrayList<GuarantorDetailView>();
-        this.conditionInfoDetailViewList = new ArrayList<ConditionInfoDetailView>();
-        this.collateralDetailView = new ProposeCollateralInfoView();
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
+        this.conditionDetailViewList = new ArrayList<ConditionDetailView>();
 
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
+
+
     }
 
     public BigDecimal getWCNeed() {
@@ -255,12 +256,12 @@ public class CreditFacProposeView implements Serializable {
         this.case3WcDebitCoreWc = case3WcDebitCoreWc;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
+    public List<CreditInfoDetailView> getCreditInfoDetailViewList() {
+        return creditInfoDetailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    public void setCreditInfoDetailViewList(List<CreditInfoDetailView> creditInfoDetailViewList) {
+        this.creditInfoDetailViewList = creditInfoDetailViewList;
     }
 
     public List<ProposeCollateralInfoView> getProposeCollateralInfoViewList() {
@@ -479,12 +480,12 @@ public class CreditFacProposeView implements Serializable {
         this.guarantorDetailViewList = guarantorDetailViewList;
     }
 
-    public List<ConditionInfoDetailView> getConditionInfoDetailViewList() {
-        return conditionInfoDetailViewList;
+    public List<ConditionDetailView> getConditionDetailViewList() {
+        return conditionDetailViewList;
     }
 
-    public void setConditionInfoDetailViewList(List<ConditionInfoDetailView> conditionInfoDetailViewList) {
-        this.conditionInfoDetailViewList = conditionInfoDetailViewList;
+    public void setConditionDetailViewList(List<ConditionDetailView> conditionDetailViewList) {
+        this.conditionDetailViewList = conditionDetailViewList;
     }
 
     public int getSingleLendingLimit() {
@@ -511,11 +512,11 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
-    public ProposeCollateralInfoView getCollateralDetailView() {
-        return collateralDetailView;
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
     }
 
-    public void setCollateralDetailView(ProposeCollateralInfoView collateralDetailView) {
-        this.collateralDetailView = collateralDetailView;
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 }

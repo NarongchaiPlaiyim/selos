@@ -34,8 +34,8 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         return list;
     }
 
-    public List<Reason> getCancleList() {
-        log.debug("getCancleList");
+    public List<Reason> getCancelList() {
+        log.debug("getCancelList");
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", 1));
@@ -43,7 +43,7 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         criteria.addOrder(Order.asc("id"));
 
         List<Reason> list = criteria.list();
-        log.debug("getCancleList. (result size: {})", list.size());
+        log.debug("getCancelList. (result size: {})", list.size());
         return list;
     }
 

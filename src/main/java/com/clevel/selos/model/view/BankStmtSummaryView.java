@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -38,7 +39,7 @@ public class BankStmtSummaryView implements Serializable {
     }
 
     public void reset() {
-        this.expectedSubmitDate = new Date();
+        this.expectedSubmitDate = DateTimeUtil.getCurrentDateTH();
         this.TMBTotalIncomeGross = BigDecimal.ZERO;
         this.TMBTotalIncomeNetBDM = BigDecimal.ZERO;
         this.TMBTotalIncomeNetUW = BigDecimal.ZERO;

@@ -19,6 +19,12 @@ public class ProductGroup implements Serializable {
     private String name;
     @Column(name = "description", length = 100)
     private String description;
+    @Column(name = "brms_code", length = 5)
+    private String brmsCode;
+    @Column(name = "add_existing_credit")
+    private int addExistingCredit;
+    @Column(name = "add_propose_credit")
+    private int addProposeCredit;
     @Column(name = "active")
     private int active;
 
@@ -49,6 +55,14 @@ public class ProductGroup implements Serializable {
         this.description = description;
     }
 
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
+    }
+
     public int getActive() {
         return active;
     }
@@ -59,11 +73,12 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("brmsCode", brmsCode)
+                .append("active", active)
+                .toString();
     }
 }

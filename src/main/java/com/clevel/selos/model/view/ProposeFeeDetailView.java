@@ -14,7 +14,6 @@ public class ProposeFeeDetailView implements Serializable {
     private String prepaymentFee;
     private String cancellationFee;
 
-
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -25,7 +24,6 @@ public class ProposeFeeDetailView implements Serializable {
     }
 
     public void reset() {
-
         this.productProgram = "";
         this.standardFrontEndFee = "";
         this.commitmentFee = "";
@@ -33,8 +31,6 @@ public class ProposeFeeDetailView implements Serializable {
         this.prepaymentFee = "";
         this.cancellationFee = "";
     }
-
-
 
     public Date getCreateDate() {
         return createDate;

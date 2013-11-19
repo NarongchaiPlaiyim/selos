@@ -155,26 +155,6 @@ public class Util {
         return userId + "_" + System.currentTimeMillis();
     }
 
-    public static int getDayOfDate(Date date) {
-        int day = 0;
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        day = cal.get(Calendar.DAY_OF_MONTH);
-
-        return day;
-    }
-
-    public static int getMonthOfDate(Date date) {
-        int month = 0;
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        month = cal.get(Calendar.MONTH) + 1;
-
-        return month;
-    }
-
     public static String getDateOrTime(String date, boolean flag) {
         if (15 == date.length()) {
             if (flag) {
@@ -269,5 +249,10 @@ public class Util {
 
     public static <T> List<T> safetyList(List<T> list) {
         return list == null ? Collections.<T>emptyList() : list;
+    }
+
+    public static String removeNonDigit(String s) {
+        if (s == null) return "";
+        return s.replaceAll("\\D", "");
     }
 }
