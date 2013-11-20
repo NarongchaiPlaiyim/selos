@@ -21,6 +21,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.ProposeCollateralInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -146,7 +147,8 @@ public class CreditFacPropose implements Serializable {
     BasicInfoDAO basicInfoDAO;
     @Inject
     CreditFacProposeControl creditFacProposeControl;
-
+    @Inject
+    ProposeCollateralInfoTransform collateralInfoTransform;
 
     public CreditFacPropose() {
     }
@@ -286,7 +288,7 @@ public class CreditFacPropose implements Serializable {
         subCollateralData.setLandOffice("ขอนแก่น");
         subCollateralData.setAddress("ถนน ข้าวแนว จ ขอนแก่น");
         subCollateralData.setTitleDeed("กค 126");
-        subCollateralData.setCollateralOwner("AAAA");
+        subCollateralData.setCollateralOwner("AAA");
         subCollateralData.setAppraisalValue(new BigDecimal(3810000));
         subCollateralDataList.add(subCollateralData);
 
@@ -301,7 +303,7 @@ public class CreditFacPropose implements Serializable {
 
         appraisalData.setSubCollateralDataList(subCollateralDataList);
 
-        proposeCollateralInfoView = creditFacProposeControl.transformsCOMSToModelView(appraisalData);
+        proposeCollateralInfoView = collateralInfoTransform.transformsCOMSToModelView(appraisalData);
 
 
         log.info("onCallRetrieveAppraisalReportInfo End");
@@ -314,7 +316,7 @@ public class CreditFacPropose implements Serializable {
         ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         if(prdProgramToCreditTypeList == null){
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
@@ -334,7 +336,7 @@ public class CreditFacPropose implements Serializable {
         log.info("rowIndex :: {}", rowIndex);
         log.info("creditFacProposeView.creditInfoDetailViewList :: {}", creditFacProposeView.getCreditInfoDetailViewList());
         ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         CreditType creditType = proposeCreditDetailSelected.getCreditType();
 
         if (rowIndex < creditFacProposeView.getCreditInfoDetailViewList().size()) {
@@ -361,7 +363,7 @@ public class CreditFacPropose implements Serializable {
 
         if ((creditInfoDetailView.getProductProgram().getId() != 0) && (creditInfoDetailView.getCreditType().getId() != 0)) {
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-//                rowSpanNumber = 1;
+
                 ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
                 CreditType creditType = creditTypeDAO.findById(creditInfoDetailView.getCreditType().getId());
 
@@ -401,7 +403,6 @@ public class CreditFacPropose implements Serializable {
                 creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setPCEPercent(creditInfoDetailView.getPCEPercent());
                 creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setPCEAmount(creditInfoDetailView.getPCEAmount());
 
-
             } else {
                 log.info("onSaveNcbRecord ::: Undefined modeForButton !!");
             }
@@ -425,6 +426,7 @@ public class CreditFacPropose implements Serializable {
         log.info("proposeCreditDetailSelected.getCreditTierDetailViewList() :: {}", proposeCreditDetailSelected.getCreditTierDetailViewList());
         creditFacProposeView.getCreditInfoDetailViewList().remove(proposeCreditDetailSelected);
     }
+
     //  END Propose Credit Information  //
 
     //  Start Tier Dialog //

@@ -33,4 +33,19 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
         return list;
 
     }
+
+    @SuppressWarnings("unchecked")
+    public List<PrdProgramToCreditType> getListCreditProposeByPrdprogram(ProductProgram productProgram) {
+        log.info("getListCreditProposeByPrdprogram. (ProductProgram: {})", productProgram);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("productProgram", productProgram));
+        criteria.add(Restrictions.eq("addProposeCredit", 1));
+        criteria.addOrder(Order.asc("creditType.id"));
+        List<PrdProgramToCreditType> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+
+        return list;
+
+    }
 }
