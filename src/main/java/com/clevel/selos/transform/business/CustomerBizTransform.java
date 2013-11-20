@@ -489,11 +489,13 @@ public class CustomerBizTransform extends BusinessTransform {
                 customerAccountView.setCustomerId(customerAccountResult.getCustomerId());
                 if (customerAccountResult.getAccountListModels() != null && customerAccountResult.getAccountListModels().size() > 0) {
                     List<String> accountList = new ArrayList<String>();
+                    int resultRow=0;
                     for (CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()) {
                         if (!Util.isEmpty(customerAccountListModel.getAccountNo())) {
                             //check Appl = IM
                             if (customerAccountListModel.getAppl() != null) {
                                 if (customerAccountListModel.getAppl().equals("IM")) {
+                                    resultRow++;
                                     log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
                                     accountList.add(customerAccountListModel.getAccountNo());
                                 }
@@ -502,12 +504,14 @@ public class CustomerBizTransform extends BusinessTransform {
                                     if (customerAccountListModel.getCtl4() != null) {
                                         if (customerAccountListModel.getCtl4().equals("0200")) {
                                             if (customerAccountListModel.getAccountNo().length() >= 4) {
+                                                resultRow++;
                                                 log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
                                                 accountList.add(customerAccountListModel.getAccountNo().substring(4));
                                             }
                                         }
                                     }
                                 }
+                                log.debug("TransformAccountListSize: {}",resultRow);
                             }
                         }
                     }
