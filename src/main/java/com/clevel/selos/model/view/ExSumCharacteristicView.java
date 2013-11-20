@@ -6,8 +6,8 @@ import java.util.Date;
 public class ExSumCharacteristicView {
 
     private String customer;
-    private Double currentDBR;
-    private Double finalDBR;
+    private BigDecimal currentDBR;
+    private BigDecimal finalDBR;
     private BigDecimal income;
     private BigDecimal recommendedWCNeed;
     private BigDecimal actualWC;
@@ -26,20 +26,19 @@ public class ExSumCharacteristicView {
 
     public void reset() {
         this.customer = "";
-        this.currentDBR = 0.00;
-        this.finalDBR = 0.00;
-        this.income = new BigDecimal(0);
-        this.recommendedWCNeed = new BigDecimal(0);
-        this.actualWC = new BigDecimal(0);
-        this.salePerYearBDM = new BigDecimal(0);
-        this.salePerYearUW = new BigDecimal(0);
-        this.groupSaleBDM = new BigDecimal(0);
-        this.groupSaleUW = new BigDecimal(0);
-        this.groupExposureBDM = new BigDecimal(0);
-        this.groupExposureUW = new BigDecimal(0);
+        this.currentDBR = BigDecimal.ZERO;
+        this.finalDBR = BigDecimal.ZERO;
+        this.income = BigDecimal.ZERO;
+        this.recommendedWCNeed = BigDecimal.ZERO;
+        this.actualWC = BigDecimal.ZERO;
         this.startBusinessDate = new Date();
         this.yearInBusiness = "";
-
+        this.salePerYearBDM = BigDecimal.ZERO;
+        this.salePerYearUW = BigDecimal.ZERO;
+        this.groupSaleBDM = BigDecimal.ZERO;
+        this.groupSaleUW = BigDecimal.ZERO;
+        this.groupExposureBDM = BigDecimal.ZERO;
+        this.groupExposureUW = BigDecimal.ZERO;
     }
 
 
@@ -51,19 +50,19 @@ public class ExSumCharacteristicView {
         this.customer = customer;
     }
 
-    public Double getCurrentDBR() {
+    public BigDecimal getCurrentDBR() {
         return currentDBR;
     }
 
-    public void setCurrentDBR(Double currentDBR) {
+    public void setCurrentDBR(BigDecimal currentDBR) {
         this.currentDBR = currentDBR;
     }
 
-    public Double getFinalDBR() {
+    public BigDecimal getFinalDBR() {
         return finalDBR;
     }
 
-    public void setFinalDBR(Double finalDBR) {
+    public void setFinalDBR(BigDecimal finalDBR) {
         this.finalDBR = finalDBR;
     }
 

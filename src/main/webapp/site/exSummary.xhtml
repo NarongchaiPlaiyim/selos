@@ -45,6 +45,7 @@
                 <!-- start content -->
                 <table class="content_table_form">
 
+                <!-- Borrower -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -56,7 +57,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="borrower" var="item" value="#{executiveSummary.exSummaryView.borrowerViewList}"
+                                    <p:dataTable id="borrower" var="item" value="#{executiveSummary.exSummaryView.borrowerListView}"
                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
                                         <p:columnGroup type="header">
                                             <p:row>
@@ -225,6 +226,7 @@
                     </td>
                 </tr>
 
+                <!-- Trade Finance -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -304,6 +306,7 @@
                     </td>
                 </tr>
 
+                <!-- Borrower Characteristic -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -315,11 +318,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="borrowerCharacteristic" var="itemBorrower"
-                                                 value="#{executiveSummary.exSummaryView.exCharacteristicListView}"
-                                                 paginator="false" rowKey="#{itemBorrower.ExSumCharacteristicView}"
-                                                 rowIndexVar="rowIndex" style="width: 100%">
-
+                                    <p:dataTable id="borrowerCharacteristic" var="itemBorCha"
+                                                 value="#{executiveSummary.exSummaryView.exSumCharacteristicView}" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column rowspan="2" style="width:200px;"
@@ -362,81 +362,77 @@
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
+                                            <h:outputText value="#{itemBorCha.customer}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.customer}"/>
+                                            <h:outputText value="#{itemBorCha.currentDBR}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.currentDBR}"/>
+                                            <h:outputText value="#{itemBorCha.finalDBR}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.finalDBR}"/>
-                                        </p:column>
-
-                                        <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.income}">
+                                            <h:outputText value="#{itemBorCha.income}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.recommendedWCNeed}">
+                                            <h:outputText value="#{itemBorCha.recommendedWCNeed}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.actualWC}">
+                                            <h:outputText value="#{itemBorCha.actualWC}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.startBusinessDate}">
+                                            <h:outputText value="#{itemBorCha.startBusinessDate}">
                                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.yearInBusiness}"/>
+                                            <h:outputText value="#{itemBorCha.yearInBusiness}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.salePerYearBDM}">
+                                            <h:outputText value="#{itemBorCha.salePerYearBDM}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.salePerYearUW}">
+                                            <h:outputText value="#{itemBorCha.salePerYearUW}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.groupSaleBDM}">
+                                            <h:outputText value="#{itemBorCha.groupSaleBDM}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.groupSaleUW}">
+                                            <h:outputText value="#{itemBorCha.groupSaleUW}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.groupExposureBDM}">
+                                            <h:outputText value="#{itemBorCha.groupExposureBDM}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBorrower.groupExposureUW}">
+                                            <h:outputText value="#{itemBorCha.groupExposureUW}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
@@ -460,10 +456,7 @@
                             <tr>
                                 <td colspan="2">
                                     <p:dataTable id="businessInfoSum" var="itemBusinessInfo"
-                                                 value="#{executiveSummary.exSummaryView.exSumBusinessInfoListView}"
-                                                 paginator="false" rowKey="#{itemBusinessInfo.ExSumBusinessInfoView}"
-                                                 rowIndexVar="rowIndex" style="width: 100%">
-
+                                                 value="#{executiveSummary.exSummaryView.exSumBusinessInfoView}" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column rowspan="2" style="width:200px;"
@@ -500,10 +493,6 @@
                                                           headerText="#{msg.get('app.exSummary.businessInfoSum.tb.label.incomeFactorPercentUW')}"/>
                                             </p:row>
                                         </p:columnGroup>
-
-                                        <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
-                                        </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{itemBusinessInfo.netFixAsset}">
@@ -546,25 +535,34 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBusinessInfo.BDM}"/>
+                                            <h:outputText value="#{itemBusinessInfo.BDM}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBusinessInfo.UW}"/>
+                                            <h:outputText value="#{itemBusinessInfo.UW}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBusinessInfo.AR}"/>
+                                            <h:outputText value="#{itemBusinessInfo.AR}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBusinessInfo.AP}"/>
+                                            <h:outputText value="#{itemBusinessInfo.AP}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{itemBusinessInfo.INV}"/>
+                                            <h:outputText value="#{itemBusinessInfo.INV}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
-
                                     </p:dataTable>
                                 </td>
                             </tr>
@@ -595,7 +593,6 @@
                                     <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}"/>
                                 </td>
                             </tr>
-
                         </table>
                         <!-- end content -->
                     </td>
@@ -607,6 +604,7 @@
                     </td>
                 </tr>
 
+                <!-- NCB Record -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -618,7 +616,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="ncbRecord" value="#{executiveSummary.exSummaryView.ncbInfoViewList}"
+                                    <p:dataTable id="ncbRecord" value="#{executiveSummary.exSummaryView.ncbInfoListView}"
                                                  var="ncbItem" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
@@ -686,6 +684,7 @@
                     </td>
                 </tr>
 
+                <!-- Account Movement -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -697,8 +696,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="accountMovement" var="item" style="width: 100%">
-
+                                    <p:dataTable id="accountMovement" value="#{executiveSummary.exSummaryView.exSumAccMovementView}"
+                                                 var="accItem" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column colspan="8" style="width:200px;"
@@ -736,43 +735,63 @@
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
+                                            <h:outputText value="#{accItem.odLimit}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.utilization}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.swing}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.overLimitTimes}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.overLimitDays}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.chequeReturn}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.cashFlow}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.cashFlowLimit}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.tradeChequeReturnAmount}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{accItem.tradeChequeReturnPercent}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
@@ -788,6 +807,7 @@
                     </td>
                 </tr>
 
+                <!-- Collateral -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -799,8 +819,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="collateral" var="item" style="width: 100%">
-
+                                    <p:dataTable id="collateral" value="#{executiveSummary.exSummaryView.exSumCollateralView}"
+                                                 var="colItem" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column colspan="3" style="width:200px;"
@@ -825,25 +845,34 @@
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
+                                            <h:outputText value="#{colItem.cashCollateralValue}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{colItem.coreAssetValue}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{colItem.noneCoreAssetValue}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{colItem.limitApprove}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{colItem.percentLTV}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
                                         </p:column>
-
                                     </p:dataTable>
                                 </td>
                             </tr>
@@ -858,6 +887,7 @@
                     </td>
                 </tr>
 
+                <!-- Credit Risk Information -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -938,6 +968,7 @@
                     </td>
                 </tr>
 
+                <!-- Deviate -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -976,29 +1007,26 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable style="width: 100%"
-                                                 id="decisionTable"
-                                                 var="itemDecision"
-                                                 value="#{executiveSummary.exSummaryView.exSumDecisionListView}"
-                                                 paginator="false" rowKey="#{itemDecision.ExSumDecisionView}"
+                                    <p:dataTable style="width: 100%" id="decisionTable"
+                                                 var="itemDecision" value="#{executiveSummary.exSummaryView.exSumDecisionListView}"
+                                                 paginator="false" rowKey="#{itemDecision}"
                                                  rowIndexVar="rowIndex">
 
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column style="width:200px;"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:30px;"/>
+                                                <p:column style="width:80px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.flag')}"/>
-                                                <p:column style="width:500px;"
+                                                <p:column style="width:130px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.group')}"/>
-                                                <p:column style="width:500px;"
+                                                <p:column style="width:150px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.ruleName')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:150px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.cusName')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:700px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.deviationReason')}"/>
-                                                <p:column style="width:200px;"/>
+                                                <p:column style="width:50px;"/>
                                             </p:row>
-
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
@@ -1043,6 +1071,7 @@
                     </td>
                 </tr>
 
+                <!-- Business Overview and Support Decision -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -1186,6 +1215,7 @@
                     </td>
                 </tr>
 
+                <!-- UW Decision and Explanation -->
                 <tr>
                     <td>
                         <!-- start content -->
@@ -1200,17 +1230,14 @@
                                     <h:outputText value="#{msg.get('app.exSummary.label.approveAuthority')}"/>
                                 </td>
                                 <td style="text-align: left;width:200px;">
-                                    <h:outputText value="combo approveAuthority"/>
-                                    <!--       <p:selectOneMenu id=""
-                                                            value=""
-                                                            styleClass="largest"
-                                                            size="1" >
-                                               <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                               <f:selectItems value="#{ncbInfo.accountStatusList}"
-                                                              var="dlgAccountStatusList"
-                                                              itemLabel="#{dlgAccountStatusList.name}"
-                                                              itemValue="#{dlgAccountStatusList.id}"/>
-                                           </p:selectOneMenu>-->
+                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                     value="#{executiveSummary.exSummaryView.approveAuthority.id}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{executiveSummary.authorizationDOAList}"
+                                                       var="authoriz"
+                                                       itemLabel="#{authoriz.name}"
+                                                       itemValue="#{authoriz.id}"/>
+                                    </p:selectOneMenu>
                                 </td>
                                 <td style="text-align: right;width:100px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.uwCode')}"/>
@@ -1229,39 +1256,34 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="text-align: left">
-                                    <h:outputText value="combo decisionCode"/>
-                                    <!--   <p:selectOneMenu id=""
-                                                        value=""
-                                                        styleClass="largest"
-                                                        size="1" >
-                                           <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                             <f:selectItems value="#{ncbInfo.accountStatusList}"
-                                                          var="dlgAccountStatusList"
-                                                          itemLabel="#{dlgAccountStatusList.name}"
-                                                          itemValue="#{dlgAccountStatusList.id}"/>
-                                       </p:selectOneMenu>-->
+                                <td style="text-align: left;" colspan="2">
+                                    <p:selectOneMenu styleClass="largest" size="1" style="width: 400px;"
+                                                     value="#{executiveSummary.reason.code}" >
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{executiveSummary.reasonList}"
+                                                       var="reason"
+                                                       itemLabel="#{reason.code} - #{reason.description}"
+                                                       itemValue="#{reason.code}"/>
+                                    </p:selectOneMenu>
                                 </td>
                                 <td colspan="2" style="text-align: left">
-                                    <p:commandButton
-                                            value="#{msg.get('app.addButton')}"
-                                            styleClass="smaller"
-                                            process="@this"
-                                            update=":frmMain">
-                                    </p:commandButton>
+                                    <p:commandButton value="#{msg.get('app.addButton')}" styleClass="small" process="@form"
+                                                     action="#{executiveSummary.onAddReason()}" update=":frmMain"/>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td colspan="4">
-                                    <p:dataTable id="UWDecisionTable" var="itemUWDecision" style="width: 100%">
-
+                                    <p:dataTable id="UWDecisionTable" value="#{executiveSummary.exSummaryView.deviateCode}"
+                                                 var="itemUWDecision" style="width: 100%"
+                                                 paginator="false" rowKey="#{itemUWDecision}"
+                                                 rowIndexVar="rowIndex">
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column style="width:200px;"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:50px;"/>
+                                                <p:column style="width:400px;"
                                                           headerText="#{msg.get('app.exSummary.label.tb.label.reasonCode')}"/>
-                                                <p:column style="width:200px;"/>
+                                                <p:column style="width:50px;"/>
                                             </p:row>
 
                                         </p:columnGroup>
@@ -1271,13 +1293,12 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{itemUWDecision.code}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value=""/>
                                         </p:column>
-
                                     </p:dataTable>
                                 </td>
                             </tr>
@@ -1292,6 +1313,7 @@
                     </td>
                 </tr>
 
+                <!-- UW Comment -->
                 <tr>
                     <td colspan="2" style="text-align: left" class="title">
                         <h:outputText
