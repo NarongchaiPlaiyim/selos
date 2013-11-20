@@ -575,7 +575,7 @@
 </thead>
 
 <tbody class="ui-datatable-data ui-widget-content">
-<ui:repeat value="#{creditFacPropose.creditFacProposeView.creditInfoDetailViewList}"
+<ui:repeat value="#{creditFacPropose.creditFacProposeView.proposeCreditDetailViewList}"
            var="proposeCredit" varStatus="i" >
     <tr>
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
@@ -586,18 +586,18 @@
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
-            #{proposeCredit.productProgram.description}
+            #{proposeCredit.productProgram.name}
         </td>
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
-            #{proposeCredit.creditType.description}
+            #{proposeCredit.creditType.name}
         </td>
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
-            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{creditInfoDetailView.productCode}"/><br/>
-            <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{creditInfoDetailView.projectCode}"/>
+            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{proposeCreditDetailView.productCode}"/><br/>
+            <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{proposeCreditDetailView.projectCode}"/>
         </td>
         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
@@ -736,7 +736,7 @@
 
 </ui:repeat>
 
-<h:panelGroup rendered="#{empty creditFacPropose.creditFacProposeView.creditInfoDetailViewList}">
+<h:panelGroup rendered="#{empty creditFacPropose.creditFacProposeView.proposeCreditDetailViewList}">
     <tr>
         <td colspan="12">No records found.</td>
     </tr>
@@ -1467,23 +1467,23 @@
 
             <tbody class="ui-datatable-data ui-widget-content">
 
-                <ui:repeat value="#{creditFacPropose.creditFacProposeView.guarantorDetailViewList}"
-                           var="guarantorDetailView"  varStatus="g">
+                <ui:repeat value="#{creditFacPropose.creditFacProposeView.proposeGuarantorDetailViewList}"
+                           var="proposeGuarantorDetailView"  varStatus="g">
                     <tr>
                         <td class="center top" style="width: 50px;#{g.odd ? 'background-color:#e6e6e6' : ''}"  >
                             <h:outputText value="#{g.index+1}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{guarantorDetailView.guarantorName}"/>
+                            <h:outputText value="#{proposeGuarantorDetailView.guarantorName}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{guarantorDetailView.tcgLgNo}"/>
+                            <h:outputText value="#{proposeGuarantorDetailView.tcgLgNo}"/>
                         </td>
 
                         <td class="center top" style="width: 500px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <ui:repeat value="#{guarantorDetailView.creditTypeDetailViewList}"
+                            <ui:repeat value="#{proposeGuarantorDetailView.creditTypeDetailViewList}"
                                        var="creditTypeDetail"  varStatus="c">
                                 <table class="table_noborder">
                                      <tr>
@@ -1510,7 +1510,7 @@
                             </ui:repeat>
                         </td>
                         <td  class="right top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{guarantorDetailView.guaranteeAmount}">
+                            <h:outputText value="#{proposeGuarantorDetailView.guaranteeAmount}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
                         </td>
@@ -1520,22 +1520,22 @@
                                              update=":guarantorDlgForm"
                                              process=":frmMain"
                                              oncomplete="guanrantorInfoDlg.show();">
-                                <f:setPropertyActionListener value="#{guarantorDetailView}"
-                                                             target="#{creditFacPropose.guarantorDetailViewItem}"/>
+                                <f:setPropertyActionListener value="#{proposeGuarantorDetailView}"
+                                                             target="#{creditFacPropose.proposeGuarantorDetailViewItem}"/>
                                 <f:setPropertyActionListener value="#{g.index}"
                                                              target="#{creditFacPropose.rowIndex}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
                                              process="@this"
                                              oncomplete="confirmDeleteGuarantorInfoDlg.show()">
-                                <f:setPropertyActionListener value="#{guarantorDetailView}"
-                                                             target="#{creditFacPropose.guarantorDetailViewItem}"/>
+                                <f:setPropertyActionListener value="#{proposeGuarantorDetailView}"
+                                                             target="#{creditFacPropose.proposeGuarantorDetailViewItem}"/>
                             </p:commandButton>
                         </td>
 
                     </tr>
                 </ui:repeat>
-                <h:panelGroup rendered="#{empty creditFacPropose.creditFacProposeView.guarantorDetailViewList}">
+                <h:panelGroup rendered="#{empty creditFacPropose.creditFacProposeView.proposeGuarantorDetailViewList}">
                     <tr>
                         <td colspan="6">No records found.</td>
                     </tr>
@@ -1596,7 +1596,7 @@
         <p:dataTable
                 id="conditionInfoDetailTable"
                 var="conditionInfoItem"
-                value="#{creditFacPropose.creditFacProposeView.conditionDetailViewList}"
+                value="#{creditFacPropose.creditFacProposeView.proposeConditionDetailViewList}"
                 paginator="false"
                 rowKey="#{conditionInfoItem.ConditionInfoDetailView}"
                 rowIndexVar="rowIndex"

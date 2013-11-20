@@ -88,8 +88,8 @@ public class CreditFacPropose implements Serializable {
     private BasicInfo basicInfo;
 
     //for control Propose Credit
-    private CreditInfoDetailView creditInfoDetailView;
-    private CreditInfoDetailView proposeCreditDetailSelected;
+    private ProposeCreditDetailView proposeCreditDetailView;
+    private ProposeCreditDetailView proposeCreditDetailSelected;
     CreditTierDetailView creditTierDetailView;
     List<CreditTierDetailView> creditTierDetailViewList;
     private int rowSpanNumber;
@@ -105,14 +105,14 @@ public class CreditFacPropose implements Serializable {
     private List<PotentialCollateral> potentialCollateralList;
 
     // for  control Guarantor Information Dialog
-    private GuarantorDetailView guarantorDetailView;
-    private GuarantorDetailView guarantorDetailViewItem;
+    private ProposeGuarantorDetailView proposeGuarantorDetailView;
+    private ProposeGuarantorDetailView proposeGuarantorDetailViewItem;
     private List<Customer> guarantorList;
     List<CreditTypeDetailView> creditTypeDetailList;
     CreditTypeDetailView creditTypeDetailView;
     // for  control Condition Information Dialog
-    private ConditionDetailView conditionDetailView;
-    private ConditionDetailView selectConditionItem;
+    private ProposeConditionDetailView proposeConditionDetailView;
+    private ProposeConditionDetailView selectConditionItem;
 
     AppraisalData appraisalData;
     HeadCollateralData headCollateralData;
@@ -194,8 +194,8 @@ public class CreditFacPropose implements Serializable {
             countryList = new ArrayList<Country>();
         }
 
-        if (creditInfoDetailView == null) {
-            creditInfoDetailView = new CreditInfoDetailView();
+        if (proposeCreditDetailView == null) {
+            proposeCreditDetailView = new ProposeCreditDetailView();
         }
 
         if (productProgramList == null) {
@@ -210,12 +210,12 @@ public class CreditFacPropose implements Serializable {
             disbursementList = new ArrayList<Disbursement>();
         }
 
-        if (conditionDetailView == null) {
-            conditionDetailView = new ConditionDetailView();
+        if (proposeConditionDetailView == null) {
+            proposeConditionDetailView = new ProposeConditionDetailView();
         }
 
-        if (guarantorDetailView == null) {
-            guarantorDetailView = new GuarantorDetailView();
+        if (proposeGuarantorDetailView == null) {
+            proposeGuarantorDetailView = new ProposeGuarantorDetailView();
         }
 
         if (proposeCollateralInfoView == null) {
@@ -254,7 +254,7 @@ public class CreditFacPropose implements Serializable {
         collateralTypeList = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
 
-        modeEdit = true;
+        modeEdit = false;
     }
 
 
@@ -313,7 +313,7 @@ public class CreditFacPropose implements Serializable {
     //  Start Propose Credit Information  //
 
     public void onChangeProductProgram(){
-        ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
+        ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
@@ -326,7 +326,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
-        creditInfoDetailView = new CreditInfoDetailView();
+        proposeCreditDetailView = new ProposeCreditDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
@@ -334,25 +334,25 @@ public class CreditFacPropose implements Serializable {
         modeEdit = false;
         modeForButton = ModeForButton.EDIT;
         log.info("rowIndex :: {}", rowIndex);
-        log.info("creditFacProposeView.creditInfoDetailViewList :: {}", creditFacProposeView.getCreditInfoDetailViewList());
+        log.info("creditFacProposeView.creditInfoDetailViewList :: {}", creditFacProposeView.getProposeCreditDetailViewList());
         ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         CreditType creditType = proposeCreditDetailSelected.getCreditType();
 
-        if (rowIndex < creditFacProposeView.getCreditInfoDetailViewList().size()) {
-            creditInfoDetailView = new CreditInfoDetailView();
-            creditInfoDetailView.setProductProgram(productProgram);
-            creditInfoDetailView.setCreditType(creditType);
-            creditInfoDetailView.setRequestType(proposeCreditDetailSelected.getRequestType());
-            creditInfoDetailView.setRefinance(proposeCreditDetailSelected.getRefinance());
-            creditInfoDetailView.setProductCode(proposeCreditDetailSelected.getProductCode());
-            creditInfoDetailView.setProjectCode(proposeCreditDetailSelected.getProjectCode());
-            creditInfoDetailView.setLimit(proposeCreditDetailSelected.getLimit());
-            creditInfoDetailView.setPCEPercent(proposeCreditDetailSelected.getPCEPercent());
-            creditInfoDetailView.setPCEAmount(proposeCreditDetailSelected.getPCEAmount());
+        if (rowIndex < creditFacProposeView.getProposeCreditDetailViewList().size()) {
+            proposeCreditDetailView = new ProposeCreditDetailView();
+            proposeCreditDetailView.setProductProgram(productProgram);
+            proposeCreditDetailView.setCreditType(creditType);
+            proposeCreditDetailView.setRequestType(proposeCreditDetailSelected.getRequestType());
+            proposeCreditDetailView.setRefinance(proposeCreditDetailSelected.getRefinance());
+            proposeCreditDetailView.setProductCode(proposeCreditDetailSelected.getProductCode());
+            proposeCreditDetailView.setProjectCode(proposeCreditDetailSelected.getProjectCode());
+            proposeCreditDetailView.setLimit(proposeCreditDetailSelected.getLimit());
+            proposeCreditDetailView.setPCEPercent(proposeCreditDetailSelected.getPCEPercent());
+            proposeCreditDetailView.setPCEAmount(proposeCreditDetailSelected.getPCEAmount());
 
             creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
-            creditInfoDetailView.setCreditTierDetailViewList(proposeCreditDetailSelected.getCreditTierDetailViewList());
+            proposeCreditDetailView.setCreditTierDetailViewList(proposeCreditDetailSelected.getCreditTierDetailViewList());
         }
     }
 
@@ -361,22 +361,22 @@ public class CreditFacPropose implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if ((creditInfoDetailView.getProductProgram().getId() != 0) && (creditInfoDetailView.getCreditType().getId() != 0)) {
+        if ((proposeCreditDetailView.getProductProgram().getId() != 0) && (proposeCreditDetailView.getCreditType().getId() != 0)) {
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-                ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
-                CreditType creditType = creditTypeDAO.findById(creditInfoDetailView.getCreditType().getId());
+                ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
+                CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
 
-                CreditInfoDetailView creditDetailAdd = new CreditInfoDetailView();
-                creditDetailAdd.setRequestType(creditInfoDetailView.getRequestType());
-                creditDetailAdd.setRefinance(creditInfoDetailView.getRefinance());
+                ProposeCreditDetailView creditDetailAdd = new ProposeCreditDetailView();
+                creditDetailAdd.setRequestType(proposeCreditDetailView.getRequestType());
+                creditDetailAdd.setRefinance(proposeCreditDetailView.getRefinance());
                 creditDetailAdd.setProductProgram(productProgram);
                 creditDetailAdd.setCreditType(creditType);
-                creditDetailAdd.setProductCode(creditInfoDetailView.getProductCode());
-                creditDetailAdd.setProjectCode(creditInfoDetailView.getProjectCode());
-                creditDetailAdd.setLimit(creditInfoDetailView.getLimit());
-                creditDetailAdd.setPCEPercent(creditInfoDetailView.getPCEPercent());
-                creditDetailAdd.setPCEAmount(creditInfoDetailView.getPCEAmount());
+                creditDetailAdd.setProductCode(proposeCreditDetailView.getProductCode());
+                creditDetailAdd.setProjectCode(proposeCreditDetailView.getProjectCode());
+                creditDetailAdd.setLimit(proposeCreditDetailView.getLimit());
+                creditDetailAdd.setPCEPercent(proposeCreditDetailView.getPCEPercent());
+                creditDetailAdd.setPCEAmount(proposeCreditDetailView.getPCEAmount());
 
                 creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
                 creditTierDetailView = new CreditTierDetailView();
@@ -386,22 +386,22 @@ public class CreditFacPropose implements Serializable {
                 creditTierDetailViewList.add(creditTierDetailView);
                 creditDetailAdd.setCreditTierDetailViewList(creditTierDetailViewList);
 
-                creditFacProposeView.getCreditInfoDetailViewList().add(creditDetailAdd);
+                creditFacProposeView.getProposeCreditDetailViewList().add(creditDetailAdd);
 
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
-                ProductProgram productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
-                CreditType creditType = creditTypeDAO.findById(creditInfoDetailView.getCreditType().getId());
+                ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
+                CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
 
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setProductProgram(productProgram);
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setCreditType(creditType);
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setRequestType(creditInfoDetailView.getRequestType());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setRefinance(creditInfoDetailView.getRefinance());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setProductCode(creditInfoDetailView.getProductCode());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setProjectCode(creditInfoDetailView.getProjectCode());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setLimit(creditInfoDetailView.getLimit());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setPCEPercent(creditInfoDetailView.getPCEPercent());
-                creditFacProposeView.getCreditInfoDetailViewList().get(rowIndex).setPCEAmount(creditInfoDetailView.getPCEAmount());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setProductProgram(productProgram);
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setCreditType(creditType);
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setRequestType(proposeCreditDetailView.getRequestType());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setRefinance(proposeCreditDetailView.getRefinance());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setProductCode(proposeCreditDetailView.getProductCode());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setProjectCode(proposeCreditDetailView.getProjectCode());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setLimit(proposeCreditDetailView.getLimit());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setPCEPercent(proposeCreditDetailView.getPCEPercent());
+                creditFacProposeView.getProposeCreditDetailViewList().get(rowIndex).setPCEAmount(proposeCreditDetailView.getPCEAmount());
 
             } else {
                 log.info("onSaveNcbRecord ::: Undefined modeForButton !!");
@@ -424,7 +424,7 @@ public class CreditFacPropose implements Serializable {
     public void onDeleteCreditInfo() {
         log.info("delete :: rowIndex :: {}", rowIndex);
         log.info("proposeCreditDetailSelected.getCreditTierDetailViewList() :: {}", proposeCreditDetailSelected.getCreditTierDetailViewList());
-        creditFacProposeView.getCreditInfoDetailViewList().remove(proposeCreditDetailSelected);
+        creditFacProposeView.getProposeCreditDetailViewList().remove(proposeCreditDetailSelected);
     }
 
     //  END Propose Credit Information  //
@@ -520,7 +520,7 @@ public class CreditFacPropose implements Serializable {
 
     //  Start Guarantor //
     public void onAddGuarantorInfo() {
-        guarantorDetailView = new GuarantorDetailView();
+        proposeGuarantorDetailView = new ProposeGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
 
        // find list  creditTypeDetailList of guarantor  :: test
@@ -544,7 +544,7 @@ public class CreditFacPropose implements Serializable {
         creditTypeDetailView.setLimit(BigDecimal.valueOf(990000));
         creditTypeDetailList.add(creditTypeDetailView);
 
-        guarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
+        proposeGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
     }
 
     public void onEditGuarantorInfo() {
@@ -556,15 +556,15 @@ public class CreditFacPropose implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if(guarantorDetailView.getGuarantorName() != null){
+        if(proposeGuarantorDetailView.getGuarantorName() != null){
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
-                GuarantorDetailView guarantorDetailAdd = new GuarantorDetailView();
-                guarantorDetailAdd.setGuarantorName(guarantorDetailView.getGuarantorName());
-                guarantorDetailAdd.setTcgLgNo(guarantorDetailView.getTcgLgNo());
-                guarantorDetailAdd.setGuaranteeAmount(guarantorDetailView.getGuaranteeAmount());
+                ProposeGuarantorDetailView guarantorDetailAdd = new ProposeGuarantorDetailView();
+                guarantorDetailAdd.setGuarantorName(proposeGuarantorDetailView.getGuarantorName());
+                guarantorDetailAdd.setTcgLgNo(proposeGuarantorDetailView.getTcgLgNo());
+                guarantorDetailAdd.setGuaranteeAmount(proposeGuarantorDetailView.getGuaranteeAmount());
 
-                guarantorDetailAdd.setCreditTypeDetailViewList(guarantorDetailView.getCreditTypeDetailViewList());
-                creditFacProposeView.getGuarantorDetailViewList().add(guarantorDetailAdd);
+                guarantorDetailAdd.setCreditTypeDetailViewList(proposeGuarantorDetailView.getCreditTypeDetailViewList());
+                creditFacProposeView.getProposeGuarantorDetailViewList().add(guarantorDetailAdd);
             } else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
 
             } else {
@@ -580,8 +580,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onDeleteGuarantorInfo() {
-        log.info("onDeleteGuarantorInfo ::: {}",guarantorDetailViewItem.getTcgLgNo());
-       creditFacProposeView.getGuarantorDetailViewList().remove(guarantorDetailViewItem);
+        log.info("onDeleteGuarantorInfo ::: {}", proposeGuarantorDetailViewItem.getTcgLgNo());
+       creditFacProposeView.getProposeGuarantorDetailViewList().remove(proposeGuarantorDetailViewItem);
         log.info("delete success");
     }
     //  END Guarantor //
@@ -589,7 +589,7 @@ public class CreditFacPropose implements Serializable {
     //Start Condition Information //
     public void onAddConditionInfo() {
         log.info("onAddConditionInfo ::: ");
-        conditionDetailView = new ConditionDetailView();
+        proposeConditionDetailView = new ProposeConditionDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
@@ -601,10 +601,10 @@ public class CreditFacPropose implements Serializable {
 
         if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-            ConditionDetailView conditionDetailViewAdd = new ConditionDetailView();
-            conditionDetailViewAdd.setLoanType(conditionDetailView.getLoanType());
-            conditionDetailViewAdd.setConditionDesc(conditionDetailView.getConditionDesc());
-            creditFacProposeView.getConditionDetailViewList().add(conditionDetailViewAdd);
+            ProposeConditionDetailView proposeConditionDetailViewAdd = new ProposeConditionDetailView();
+            proposeConditionDetailViewAdd.setLoanType(proposeConditionDetailView.getLoanType());
+            proposeConditionDetailViewAdd.setConditionDesc(proposeConditionDetailView.getConditionDesc());
+            creditFacProposeView.getProposeConditionDetailViewList().add(proposeConditionDetailViewAdd);
             complete = true;
 
         } else {
@@ -620,7 +620,7 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteConditionInfo() {
         log.info("onDeleteConditionInfo :: ");
-        creditFacProposeView.getConditionDetailViewList().remove(selectConditionItem);
+        creditFacProposeView.getProposeConditionDetailViewList().remove(selectConditionItem);
     }
 
     // END Condition Information //
@@ -734,12 +734,12 @@ public class CreditFacPropose implements Serializable {
         this.user = user;
     }
 
-    public CreditInfoDetailView getCreditInfoDetailView() {
-        return creditInfoDetailView;
+    public ProposeCreditDetailView getProposeCreditDetailView() {
+        return proposeCreditDetailView;
     }
 
-    public void setCreditInfoDetailView(CreditInfoDetailView creditInfoDetailView) {
-        this.creditInfoDetailView = creditInfoDetailView;
+    public void setProposeCreditDetailView(ProposeCreditDetailView proposeCreditDetailView) {
+        this.proposeCreditDetailView = proposeCreditDetailView;
     }
 
     public List<ProductProgram> getProductProgramList() {
@@ -766,36 +766,36 @@ public class CreditFacPropose implements Serializable {
         this.disbursementList = disbursementList;
     }
 
-    public ConditionDetailView getConditionDetailView() {
-        return conditionDetailView;
+    public ProposeConditionDetailView getProposeConditionDetailView() {
+        return proposeConditionDetailView;
     }
 
-    public void setConditionDetailView(ConditionDetailView conditionDetailView) {
-        this.conditionDetailView = conditionDetailView;
+    public void setProposeConditionDetailView(ProposeConditionDetailView proposeConditionDetailView) {
+        this.proposeConditionDetailView = proposeConditionDetailView;
     }
 
-    public ConditionDetailView getSelectConditionItem() {
+    public ProposeConditionDetailView getSelectConditionItem() {
         return selectConditionItem;
     }
 
-    public void setSelectConditionItem(ConditionDetailView selectConditionItem) {
+    public void setSelectConditionItem(ProposeConditionDetailView selectConditionItem) {
         this.selectConditionItem = selectConditionItem;
     }
 
-    public GuarantorDetailView getGuarantorDetailViewItem() {
-        return guarantorDetailViewItem;
+    public ProposeGuarantorDetailView getProposeGuarantorDetailViewItem() {
+        return proposeGuarantorDetailViewItem;
     }
 
-    public void setGuarantorDetailViewItem(GuarantorDetailView guarantorDetailViewItem) {
-        this.guarantorDetailViewItem = guarantorDetailViewItem;
+    public void setProposeGuarantorDetailViewItem(ProposeGuarantorDetailView proposeGuarantorDetailViewItem) {
+        this.proposeGuarantorDetailViewItem = proposeGuarantorDetailViewItem;
     }
 
-    public GuarantorDetailView getGuarantorDetailView() {
-        return guarantorDetailView;
+    public ProposeGuarantorDetailView getProposeGuarantorDetailView() {
+        return proposeGuarantorDetailView;
     }
 
-    public void setGuarantorDetailView(GuarantorDetailView guarantorDetailView) {
-        this.guarantorDetailView = guarantorDetailView;
+    public void setProposeGuarantorDetailView(ProposeGuarantorDetailView proposeGuarantorDetailView) {
+        this.proposeGuarantorDetailView = proposeGuarantorDetailView;
     }
 
     public List<Customer> getGuarantorList() {
@@ -870,11 +870,11 @@ public class CreditFacPropose implements Serializable {
         this.modeEdit = modeEdit;
     }
 
-    public CreditInfoDetailView getProposeCreditDetailSelected() {
+    public ProposeCreditDetailView getProposeCreditDetailSelected() {
         return proposeCreditDetailSelected;
     }
 
-    public void setProposeCreditDetailSelected(CreditInfoDetailView proposeCreditDetailSelected) {
+    public void setProposeCreditDetailSelected(ProposeCreditDetailView proposeCreditDetailSelected) {
         this.proposeCreditDetailSelected = proposeCreditDetailSelected;
     }
 
