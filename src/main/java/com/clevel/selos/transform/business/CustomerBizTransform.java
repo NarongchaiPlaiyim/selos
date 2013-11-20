@@ -480,6 +480,7 @@ public class CustomerBizTransform extends BusinessTransform {
     }
 
     public CustomerAccountView transformCustomerAccount(CustomerAccountResult customerAccountResult) {
+        log.debug("transformCustomerAccount()");
         CustomerAccountView customerAccountView = null;
         if (customerAccountResult != null) {
             customerAccountView = new CustomerAccountView();
@@ -488,11 +489,14 @@ public class CustomerBizTransform extends BusinessTransform {
                 customerAccountView.setCustomerId(customerAccountResult.getCustomerId());
                 if (customerAccountResult.getAccountListModels() != null && customerAccountResult.getAccountListModels().size() > 0) {
                     List<String> accountList = new ArrayList<String>();
+                    int resultRow=0;
                     for (CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()) {
                         if (!Util.isEmpty(customerAccountListModel.getAccountNo())) {
                             //check Appl = IM
                             if (customerAccountListModel.getAppl() != null) {
                                 if (customerAccountListModel.getAppl().equals("IM")) {
+                                    resultRow++;
+                                    log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
                                     accountList.add(customerAccountListModel.getAccountNo());
                                 }
                                 //check Appl = ST
@@ -500,6 +504,8 @@ public class CustomerBizTransform extends BusinessTransform {
                                     if (customerAccountListModel.getCtl4() != null) {
                                         if (customerAccountListModel.getCtl4().equals("0200")) {
                                             if (customerAccountListModel.getAccountNo().length() >= 4) {
+                                                resultRow++;
+                                                log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
                                                 accountList.add(customerAccountListModel.getAccountNo().substring(4));
                                             }
                                         }
@@ -508,6 +514,7 @@ public class CustomerBizTransform extends BusinessTransform {
                             }
                         }
                     }
+                    log.debug("TransformAccountListSize: {}",resultRow);
                     customerAccountView.setAccountList(accountList);
                 }
             } else {
