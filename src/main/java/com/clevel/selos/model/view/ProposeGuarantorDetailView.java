@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class GuarantorDetailView implements Serializable {
+public class ProposeGuarantorDetailView implements Serializable {
 
     private String guarantorName;
     private String tcgLgNo;
@@ -21,7 +21,7 @@ public class GuarantorDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public GuarantorDetailView() {
+    public ProposeGuarantorDetailView() {
         reset();
     }
 

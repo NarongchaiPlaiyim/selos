@@ -330,7 +330,7 @@ function handleSubCollateralInfoRequest(xhr, status, args) {
 // Credit Facility Propose Guarantor Dialog
 function handleGuarantorInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
-        guanrantorInfoDlg.hide();
+        guarantorInfoDlg.hide();
     }
 }
 

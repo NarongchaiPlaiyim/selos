@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CreditInfoDetailView implements Serializable {
+public class ProposeCreditDetailView implements Serializable {
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -45,7 +45,7 @@ public class CreditInfoDetailView implements Serializable {
 
     private List<CreditTierDetailView> creditTierDetailViewList;
 
-    public CreditInfoDetailView(){
+    public ProposeCreditDetailView(){
         reset();
     }
 

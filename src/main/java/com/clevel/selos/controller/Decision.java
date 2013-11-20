@@ -55,7 +55,7 @@ public class Decision implements Serializable {
 
     //View
     private ExistingCreditView existingCreditView;
-    private List<ConditionDetailView> existingConditionCommCrdList;
+    private List<ProposeConditionDetailView> existingConditionCommCrdList;
     private ExistingCollateralView existingColBorrower;
     private ExistingCollateralView existingColRelated;
 
@@ -69,7 +69,7 @@ public class Decision implements Serializable {
         //========================================= Existing =========================================//
 
         //========================================= Propose =========================================//
-        List<CreditInfoDetailView> proposeCreditDetailViewList = new ArrayList<CreditInfoDetailView>();
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
 
         ProductProgram productProgram = new ProductProgram();
         productProgram.setDescription("TMB SME SmartBiz");
@@ -88,7 +88,7 @@ public class Decision implements Serializable {
         tierDetailView1.setTenor(BigDecimal.valueOf(3));
         tierDetailViewList1.add(tierDetailView1);
 
-        CreditInfoDetailView proposeCreditDetailView1 = new CreditInfoDetailView();
+        ProposeCreditDetailView proposeCreditDetailView1 = new ProposeCreditDetailView();
         proposeCreditDetailView1.setProductProgram(productProgram);
         proposeCreditDetailView1.setCreditType(creditType);
         proposeCreditDetailView1.setProductCode("EAC1");
@@ -128,7 +128,7 @@ public class Decision implements Serializable {
         tierDetailView2_3.setTenor(BigDecimal.valueOf(24));
         tierDetailViewList2.add(tierDetailView2_3);
 
-        CreditInfoDetailView proposeCreditDetailView2 = new CreditInfoDetailView();
+        ProposeCreditDetailView proposeCreditDetailView2 = new ProposeCreditDetailView();
         proposeCreditDetailView2.setProductProgram(productProgram);
         proposeCreditDetailView2.setCreditType(creditType);
         proposeCreditDetailView2.setProductCode("EAC2");
@@ -143,7 +143,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView2.setHoldLimitAmount(BigDecimal.valueOf(1234567.89));
 
         //----------------------------------------- 3 ---------------------------------------//
-        CreditInfoDetailView proposeCreditDetailView3 = new CreditInfoDetailView();
+        ProposeCreditDetailView proposeCreditDetailView3 = new ProposeCreditDetailView();
         proposeCreditDetailView3.setProductProgram(productProgram);
         proposeCreditDetailView3.setCreditType(creditType);
         proposeCreditDetailView3.setProductCode("EAC3");
@@ -158,7 +158,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView3.setHoldLimitAmount(BigDecimal.valueOf(1234567.89));
 
         //----------------------------------------- 4 ---------------------------------------//
-        CreditInfoDetailView proposeCreditDetailView4 = new CreditInfoDetailView();
+        ProposeCreditDetailView proposeCreditDetailView4 = new ProposeCreditDetailView();
         proposeCreditDetailView4.setProductProgram(productProgram);
         proposeCreditDetailView4.setCreditType(creditType);
         proposeCreditDetailView4.setProductCode("EAC4");
@@ -179,7 +179,7 @@ public class Decision implements Serializable {
         proposeCreditDetailViewList.add(proposeCreditDetailView4);
 
         creditFacProposeView = new CreditFacProposeView();
-        creditFacProposeView.setCreditInfoDetailViewList(proposeCreditDetailViewList);
+        creditFacProposeView.setProposeCreditDetailViewList(proposeCreditDetailViewList);
     }
 
     public ExistingCreditView getExistingCreditView() {
@@ -190,11 +190,11 @@ public class Decision implements Serializable {
         this.existingCreditView = existingCreditView;
     }
 
-    public List<ConditionDetailView> getExistingConditionCommCrdList() {
+    public List<ProposeConditionDetailView> getExistingConditionCommCrdList() {
         return existingConditionCommCrdList;
     }
 
-    public void setExistingConditionCommCrdList(List<ConditionDetailView> existingConditionCommCrdList) {
+    public void setExistingConditionCommCrdList(List<ProposeConditionDetailView> existingConditionCommCrdList) {
         this.existingConditionCommCrdList = existingConditionCommCrdList;
     }
 
