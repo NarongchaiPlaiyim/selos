@@ -88,7 +88,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setTmbCustomerId(customer.getTmbCustomerId());
         customerInfoView.setDocumentExpiredDate(customer.getDocumentExpiredDate());
-        customerInfoView.setTitleTh(customer.getTitleTh());
+        customerInfoView.setTitleTh(customer.getTitle());
         if(customerInfoView.getTitleTh() == null){
             customerInfoView.setTitleTh(new Title());
         }
@@ -98,7 +98,7 @@ public class CustomerTransform extends Transform {
             customerInfoView.setLastNameTh("");
         }
 
-        customerInfoView.setTitleEn(customer.getTitleEn());
+        customerInfoView.setTitleEn(customer.getTitle());
         if(customerInfoView.getTitleEn() == null){
             customerInfoView.setTitleEn(new Title());
         }
@@ -376,18 +376,18 @@ public class CustomerTransform extends Transform {
         customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
 
         if(customerInfoView.getTitleTh() != null && customerInfoView.getTitleTh().getId() != 0){
-            customer.setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()));
+            customer.setTitle(titleDAO.findById(customerInfoView.getTitleTh().getId()));
         } else {
-            customer.setTitleTh(null);
+            customer.setTitle(null);
         }
         customer.setNameTh(customerInfoView.getFirstNameTh());
         customer.setLastNameTh(customerInfoView.getLastNameTh());
 
-        if(customerInfoView.getTitleEn() != null && customerInfoView.getTitleEn().getId() != 0){
-            customer.setTitleEn(titleDAO.findById(customerInfoView.getTitleEn().getId()));
-        } else {
-            customer.setTitleEn(null);
-        }
+//        if(customerInfoView.getTitleEn() != null && customerInfoView.getTitleEn().getId() != 0){
+//            customer.setTitleEn(titleDAO.findById(customerInfoView.getTitleEn().getId()));
+//        } else {
+//            customer.setTitleEn(null);
+//        }
         customer.setNameEn(customerInfoView.getFirstNameEn());
         customer.setLastNameEn(customerInfoView.getLastNameEn());
 

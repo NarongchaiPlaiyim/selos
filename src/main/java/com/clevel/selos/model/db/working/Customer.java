@@ -57,12 +57,8 @@ public class Customer implements Serializable {
     private Date documentExpiredDate;
 
     @OneToOne
-    @JoinColumn(name="title_th_id")
-    private Title titleTh;
-
-    @OneToOne
-    @JoinColumn(name="title_en_id")
-    private Title titleEn;
+    @JoinColumn(name = "title_id")
+    private Title title;
 
     @Column(name="name_en")
     private String nameEn;
@@ -274,14 +270,6 @@ public class Customer implements Serializable {
 
     public void setDocumentExpiredDate(Date expireDate) {
         this.documentExpiredDate = expireDate;
-    }
-
-    public Title getTitleTh() {
-        return titleTh;
-    }
-
-    public void setTitleTh(Title title) {
-        this.titleTh = title;
     }
 
     public String getNameEn() {
@@ -516,14 +504,6 @@ public class Customer implements Serializable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public Title getTitleEn() {
-        return titleEn;
-    }
-
-    public void setTitleEn(Title titleEn) {
-        this.titleEn = titleEn;
-    }
-
     public int getSearchBy() {
         return searchBy;
     }
@@ -580,6 +560,14 @@ public class Customer implements Serializable {
         this.csiFlag = csiFlag;
     }
 
+    public Title getTitle() {
+        return title;
+    }
+
+    public void setTitle(Title title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -595,14 +583,14 @@ public class Customer implements Serializable {
                 append("approxIncome", approxIncome).
                 append("tmbCustomerId", tmbCustomerId).
                 append("documentExpiredDate", documentExpiredDate).
-                append("titleTh", titleTh).
-                append("titleEn", titleEn).
+                append("title", title).
                 append("nameEn", nameEn).
                 append("nameTh", nameTh).
                 append("lastNameTh", lastNameTh).
                 append("lastNameEn", lastNameEn).
                 append("age", age).
                 append("ncbFlag", ncbFlag).
+                append("csiFlag", csiFlag).
                 append("individual", individual).
                 append("juristic", juristic).
                 append("addressesList", addressesList).

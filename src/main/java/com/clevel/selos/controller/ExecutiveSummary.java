@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
@@ -36,7 +37,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "executiveSummary")
-public class ExecutiveSummary implements Serializable {
+public class ExecutiveSummary extends MandatoryFieldsControl {
 
     @Inject
     @SELOS
@@ -63,6 +64,8 @@ public class ExecutiveSummary implements Serializable {
     private boolean messageErr;
 
     private ExSummaryView exSummaryView;
+
+    private ExSumReasonView selectDeviate;
 
     @Inject
     UserDAO userDAO;
@@ -115,7 +118,8 @@ public class ExecutiveSummary implements Serializable {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", 101);    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-        user = (User) session.getAttribute("user");
+//        user = (User) session.getAttribute("user");
+        user = getCurrentUser();
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -128,6 +132,11 @@ public class ExecutiveSummary implements Serializable {
                 log.info("Exception :: {}",ex);
             }
         }
+
+        reasonList = reasonDAO.getRejectList();
+        authorizationDOAList = authorizationDOADAO.findAll();
+
+        reason = new ExSumReasonView();
 
         exSummaryView = exSummaryControl.getExSummaryViewByWorkCaseId(workCaseId);
 
@@ -150,19 +159,17 @@ public class ExecutiveSummary implements Serializable {
         ExSumCollateralView ecc = new ExSumCollateralView();
         ecc.reset();
         exSummaryView.setExSumCollateralView(ecc);*/
-
-        reasonList = reasonDAO.getRejectList();
-        authorizationDOAList = authorizationDOADAO.findAll();
-
-        reason = new ExSumReasonView();
     }
 
     public void onSaveExecutiveSummary() {
         log.info("onSaveExecutiveSummary ::: ModeForDB  {}", modeForDB);
 
         try {
+            exSummaryControl.saveExSummary(exSummaryView,workCaseId,user);
+
             messageHeader = msg.get("app.header.save.success");
-            message = msg.get("");
+//            message = msg.get("Save Ex Summary data success.");
+            message = "Save Ex Summary data success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
@@ -170,9 +177,11 @@ public class ExecutiveSummary implements Serializable {
             messageHeader = msg.get("app.header.save.failed");
 
             if (ex.getCause() != null) {
-                message = msg.get("") + " cause : " + ex.getCause().toString();
+//                message = msg.get("")+ ex.getCause().toString();
+                message = "Save Ex Summary data failed. Cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("") + ex.getMessage();
+//                message = msg.get("") + ex.getMessage();
+                message = "Save Ex Summary data failed. Cause : " + ex.getMessage();
             }
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -190,6 +199,10 @@ public class ExecutiveSummary implements Serializable {
         ExSumReasonView exSumReasonView = new ExSumReasonView();
         exSumReasonView.setCode(reason.getCode());
         exSummaryView.getDeviateCode().add(exSumReasonView);
+    }
+
+    public void onDeleteDeviate(){
+        exSummaryView.getDeviateCode().remove(selectDeviate);
     }
 
     public boolean isMessageErr() {
@@ -254,6 +267,14 @@ public class ExecutiveSummary implements Serializable {
 
     public void setReason(ExSumReasonView reason) {
         this.reason = reason;
+    }
+
+    public ExSumReasonView getSelectDeviate() {
+        return selectDeviate;
+    }
+
+    public void setSelectDeviate(ExSumReasonView selectDeviate) {
+        this.selectDeviate = selectDeviate;
     }
 }
 

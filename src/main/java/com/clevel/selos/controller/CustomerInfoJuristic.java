@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
@@ -56,6 +57,8 @@ public class CustomerInfoJuristic implements Serializable {
     private DocumentTypeDAO documentTypeDAO;
     @Inject
     private RelationDAO relationDAO;
+    @Inject
+    private RelationCustomerDAO relationCustomerDAO;
     @Inject
     private ReferenceDAO referenceDAO;
     @Inject
@@ -305,8 +308,11 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
 
+        caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
+
         documentTypeList = documentTypeDAO.findAll();
-        relationList = relationDAO.getOtherRelationList();
+//        relationList = relationDAO.getOtherRelationList();
+        relationList = relationCustomerDAO.getListRelationWithOutBorrower(2,caseBorrowerTypeId,0);
 
         titleEnList = titleDAO.getListByCustomerEntityId(2);
         titleThList = titleDAO.getListByCustomerEntityId(2);
@@ -316,8 +322,6 @@ public class CustomerInfoJuristic implements Serializable {
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
 
         countryList = countryDAO.findAll();
-
-        caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
         referenceList = new ArrayList<Reference>();
 
@@ -355,9 +359,11 @@ public class CustomerInfoJuristic implements Serializable {
 
         if(customerInfoView.getRelation().getId() == 1){
             isEditBorrower = true;
-            relationList = relationDAO.findAll();
+//            relationList = relationDAO.findAll();
+            relationList = relationCustomerDAO.getListRelation(2, caseBorrowerTypeId, 0);
         }else{
-            relationList = relationDAO.getOtherRelationList();
+//            relationList = relationDAO.getOtherRelationList();
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(2,caseBorrowerTypeId,0);
         }
     }
 
@@ -386,7 +392,8 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeRelation(){
-        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
+//        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
+        referenceList = referenceDAO.findReferenceByFlag(2, caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
     }
 
     public void onChangeProvinceForm1() {
@@ -628,6 +635,14 @@ public class CustomerInfoJuristic implements Serializable {
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public void onChangeTitleTh(){
+        customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
+    }
+
+    public void onChangeTitleEn(){
+        customerInfoView.getTitleTh().setId(customerInfoView.getTitleEn().getId());
     }
 
     public void onDeleteIndividual(){

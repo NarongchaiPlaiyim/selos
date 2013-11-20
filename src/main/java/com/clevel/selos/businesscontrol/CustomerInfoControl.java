@@ -40,6 +40,8 @@ public class CustomerInfoControl extends BusinessControl {
     JuristicDAO juristicDAO;
     @Inject
     CustomerCSIDAO customerCSIDAO;
+    @Inject
+    NCBDAO ncbDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -213,6 +215,7 @@ public class CustomerInfoControl extends BusinessControl {
 
     public void deleteCustomerIndividual(long customerId){
         Customer customer = customerDAO.findById(customerId);
+
         if(customer.getSpouseId() != 0){ // have spouse
             Customer cus = customerDAO.findById(customer.getSpouseId());
             if(cus != null){
@@ -228,6 +231,10 @@ public class CustomerInfoControl extends BusinessControl {
                 if(customerCSIList != null && customerCSIList.size() > 0){
                     customerCSIDAO.delete(customerCSIList);
                 }
+
+                //for check customer ncb
+                NCB ncbSpouse = ncbDAO.findNcbByCustomer(cus.getId());
+                ncbDAO.delete(ncbSpouse);
 
                 customerDAO.delete(cus);
             }
@@ -252,6 +259,10 @@ public class CustomerInfoControl extends BusinessControl {
             customerCSIDAO.delete(customerCSIList);
         }
 
+        //for check customer ncb
+        NCB ncb = ncbDAO.findNcbByCustomer(customer.getId());
+        ncbDAO.delete(ncb);
+
         customerDAO.delete(customer);
     }
 
@@ -272,10 +283,14 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         //for check customer CSI
-        List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
+        List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customer.getId());
         if(customerCSIList != null && customerCSIList.size() > 0){
             customerCSIDAO.delete(customerCSIList);
         }
+
+        //for check customer ncb
+        NCB ncb = ncbDAO.findNcbByCustomer(customer.getId());
+        ncbDAO.delete(ncb);
 
         customerDAO.delete(customer);
     }
