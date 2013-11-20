@@ -39,7 +39,6 @@ public class NCBDetailView implements Serializable {
 //    private BigDecimal month4;
 //    private BigDecimal month5;
 //    private BigDecimal month6;
-    private boolean canToEdit;
     private boolean monthFlagPage;
 
     private boolean TMB;
@@ -79,7 +78,6 @@ public class NCBDetailView implements Serializable {
 //        this.month5 = BigDecimal.ZERO;
 //        this.month6 = BigDecimal.ZERO;
 //        this.wcFlag = -1;
-        this.canToEdit = false;
         this.monthFlagPage = false;
         this.loanAccountTypeView = new LoanAccountTypeView();
         this.accountName = "";
@@ -378,14 +376,6 @@ public class NCBDetailView implements Serializable {
 
     public void setMonthsPaymentFlag(boolean monthsPaymentFlag) {
         this.monthsPaymentFlag = monthsPaymentFlag;
-    }
-
-    public boolean isCanToEdit() {
-        return canToEdit;
-    }
-
-    public void setCanToEdit(boolean canToEdit) {
-        this.canToEdit = canToEdit;
     }
 
     public boolean isMonthFlagPage() {
