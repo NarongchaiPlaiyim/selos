@@ -4,7 +4,6 @@ import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
 import java.util.Date;
 public class AppraisalDetailView {
     private long id;

@@ -130,18 +130,201 @@ function formatNumber(obj) {
  *  94=^       95=_    123={       125=}
  */
 
-function checkSpecialCharacter(evt){
-    if( (evt.keyCode == 33 && evt.charCode == 33) || (evt.keyCode == 34 && evt.charCode == 34) || (evt.keyCode == 35 && evt.charCode == 35)
-        || (evt.keyCode == 36 && evt.charCode == 36) || (evt.keyCode == 37 && evt.charCode == 37) || (evt.keyCode == 38 && evt.charCode == 38)
-        || (evt.keyCode == 39 && evt.charCode == 39) || (evt.keyCode == 40 && evt.charCode == 40) || (evt.keyCode == 41 && evt.charCode == 41)
-        || (evt.keyCode == 42 && evt.charCode == 42) || (evt.keyCode == 45 && evt.charCode == 45) || (evt.keyCode == 47 && evt.charCode == 47)
-        || (evt.keyCode == 58 && evt.charCode == 58) || (evt.keyCode == 59 && evt.charCode == 59) || (evt.keyCode == 60 && evt.charCode == 60)
-        || (evt.keyCode == 62 && evt.charCode == 62) || (evt.keyCode == 63 && evt.charCode == 63) || (evt.keyCode == 64 && evt.charCode == 64)
-        || (evt.keyCode == 91 && evt.charCode == 93) || (evt.keyCode == 95 && evt.charCode == 95) || (evt.keyCode == 123 && evt.charCode == 123)
-        || (evt.keyCode == 125 && evt.charCode == 125) ){
+function checkAllowKeyNumber(keyCode){
+    var validChar = '0123456789';
+    var keyChar = String.fromCharCode(keyCode);
+    validChar += String.fromCharCode(8);
+    if (validChar.indexOf(keyChar) < 0) {
         return false;
     }
+    return true;
 }
+function onKeyPressNumber(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
+     *  41=)       42=*    45=-        47=/
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9) */
+    if (keyCode > 95 && keyCode < 106) {
+        return true;
+    } else {
+        return checkAllowKeyNumber(keyCode);
+    }
+}
+function onKeyDownNumber(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+        return true;
+    }
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9) */
+    if (keyCode > 95 && keyCode < 106) {
+        return true;
+    } else {
+        return checkAllowKeyNumber(keyCode);
+    }
+}
+
+function checkAllowKeyMoney(keyCode){
+    var validChar = '0123456789.,';
+    var keyChar = String.fromCharCode(keyCode);
+    validChar += String.fromCharCode(8);
+    if (validChar.indexOf(keyChar) < 0) {
+        return false;
+    }
+    return true;
+}
+function onKeyPressMoney(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
+     *  41=)       42=*    45=-        47=/
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9)
+     *  44=comma    188=comma
+     *  46=period   190=period
+     */
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 46 || keyCode == 190 ) {
+        return true;
+    } else {
+        return checkAllowKeyMoney(keyCode);
+    }
+}
+function onKeyDownMoney(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+        return true;
+    }
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9)
+     *  44=comma    188=comma
+     *  46=period   190=period
+     */
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 46 || keyCode == 190 ) {
+        return true;
+    } else {
+        return checkAllowKeyMoney(keyCode);
+    }
+}
+
+function onKeyPressText(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
+     *  41=)       42=*    45=-        47=/
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    return true;
+}
+function onKeyDownText(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+        return true;
+    }
+
+    return false;
+}
+
+function onKeyPressAddress(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
+     *  41=)       42=*
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    return true;
+}
+function onKeyDownAddress(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+        return true;
+    }
+
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function onKeyNumber(evt) {
     var validNums = '0123456789';
@@ -157,14 +340,15 @@ function onKeyNumber(evt) {
      *  63=?       64=@    91=[        93=]
      *  94=^       95=_    123={       125=}
      */
-    if( (evt.keyCode == 33 && evt.charCode == 33) || (evt.keyCode == 34 && evt.charCode == 34) || (evt.keyCode == 35 && evt.charCode == 35)
-        || (evt.keyCode == 36 && evt.charCode == 36) || (evt.keyCode == 37 && evt.charCode == 37) || (evt.keyCode == 38 && evt.charCode == 38)
-        || (evt.keyCode == 39 && evt.charCode == 39) || (evt.keyCode == 40 && evt.charCode == 40) || (evt.keyCode == 41 && evt.charCode == 41)
-        || (evt.keyCode == 42 && evt.charCode == 42) || (evt.keyCode == 45 && evt.charCode == 45) || (evt.keyCode == 47 && evt.charCode == 47)
-        || (evt.keyCode == 58 && evt.charCode == 58) || (evt.keyCode == 59 && evt.charCode == 59) || (evt.keyCode == 60 && evt.charCode == 60)
-        || (evt.keyCode == 62 && evt.charCode == 62) || (evt.keyCode == 63 && evt.charCode == 63) || (evt.keyCode == 64 && evt.charCode == 64)
-        || (evt.keyCode == 91 && evt.charCode == 93) || (evt.keyCode == 95 && evt.charCode == 95) || (evt.keyCode == 123 && evt.charCode == 123)
-        || (evt.keyCode == 125 && evt.charCode == 125) ){
+
+    if( evt.keyCode == 33 || evt.keyCode == 34 || evt.keyCode == 35
+        || evt.keyCode == 36
+         || evt.keyCode == 41
+        || evt.keyCode == 42 || evt.keyCode == 45 || evt.keyCode == 47
+        || evt.keyCode == 58 || evt.keyCode == 59 || evt.keyCode == 60
+        || evt.keyCode == 62 || evt.keyCode == 63 || evt.keyCode == 64
+        || evt.keyCode == 91 || evt.keyCode == 95 || evt.keyCode == 123
+        || evt.keyCode == 125  ){
         return false;
     }
 
@@ -175,11 +359,18 @@ function onKeyNumber(evt) {
      *  35(0)=end               36(0)=home          37(0)=left arrow
      *  38(0)=up arrow          39(0)=right arrow   40(0)=down arrow
      */
-    if ( (evt.keyCode == 8 && evt.charCode == 0) || (evt.keyCode == 9 && evt.charCode == 0) || (evt.keyCode == 46 && evt.charCode ==0)
+    if ( evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 35 || evt.keyCode == 36 || evt.keyCode == 37 || evt.keyCode == 38 || evt.keyCode == 39 || evt.keyCode == 40 || evt.keyCode == 46 ){
+        keychar = String.fromCharCode(nbr);
+        if (validNums.indexOf(keychar) < 0) {
+            return false;
+        }
+        return true;
+    }
+    /*if ( (evt.keyCode == 8 && evt.charCode == 0) || (evt.keyCode == 9 && evt.charCode == 0) || (evt.keyCode == 46 && evt.charCode ==0)
         || (evt.keyCode == 35 && evt.charCode == 0) || (evt.keyCode == 36 && evt.charCode == 0) || (evt.keyCode == 37 && evt.charCode == 0)
         || (evt.keyCode == 38 && evt.charCode == 0) || (evt.keyCode == 39 && evt.charCode == 0) || (evt.keyCode == 40 && evt.charCode == 0) ) {
         return true;
-    }
+    }*/
 
     if (evt.keyCode > 95 && evt.keyCode < 106) {
         return true;

@@ -1,27 +1,24 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
-import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Bank;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.BankStmtDetailView;
+import com.clevel.selos.model.view.BankStmtSummaryView;
+import com.clevel.selos.model.view.BankStmtView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
-import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;

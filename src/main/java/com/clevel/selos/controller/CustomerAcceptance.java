@@ -2,10 +2,10 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.system.message.ExceptionMessage;

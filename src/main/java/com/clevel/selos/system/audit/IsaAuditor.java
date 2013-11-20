@@ -1,12 +1,10 @@
 package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.IsaActivityDAO;
-import com.clevel.selos.dao.audit.UserActivityDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.db.audit.IsaActivity;
-import com.clevel.selos.model.db.audit.UserActivity;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 

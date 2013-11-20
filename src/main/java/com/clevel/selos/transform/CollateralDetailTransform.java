@@ -1,9 +1,7 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.CollateralDetail;
-import com.clevel.selos.model.view.AccountTypeView;
 import com.clevel.selos.model.view.CollateralDetailView;
 import org.joda.time.DateTime;
 

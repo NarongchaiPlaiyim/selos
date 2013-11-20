@@ -1,9 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.CustomerEntityDAO;
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BAPaymentMethod;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.User;
@@ -14,7 +12,6 @@ import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.transform.BasicInfoAccPurposeTransform;
 import com.clevel.selos.transform.BasicInfoAccountTransform;
 import com.clevel.selos.transform.BasicInfoTransform;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -28,8 +25,6 @@ public class BasicInfoControl extends BusinessControl {
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     OpenAccountDAO openAccountDAO;
     @Inject

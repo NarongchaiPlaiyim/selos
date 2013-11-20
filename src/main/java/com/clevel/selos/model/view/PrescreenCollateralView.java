@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class PrescreenCollateralView implements Serializable {
     @Inject

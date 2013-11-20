@@ -32,10 +32,7 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.transaction.Transaction;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;

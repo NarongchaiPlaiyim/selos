@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;

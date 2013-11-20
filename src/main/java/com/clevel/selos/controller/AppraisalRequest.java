@@ -6,14 +6,15 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.AppraisalContactDetailView;
+import com.clevel.selos.model.view.AppraisalDetailView;
+import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 

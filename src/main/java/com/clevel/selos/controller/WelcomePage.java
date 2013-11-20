@@ -1,9 +1,9 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
@@ -31,7 +31,6 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.criterion.Restrictions;
-import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -40,7 +39,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "welcomePage")

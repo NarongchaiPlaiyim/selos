@@ -1,6 +1,5 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
@@ -20,10 +19,8 @@ import com.clevel.selos.model.db.working.BankStmtSrcOfCollateralProof;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

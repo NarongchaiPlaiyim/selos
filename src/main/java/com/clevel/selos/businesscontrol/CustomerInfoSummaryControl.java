@@ -3,13 +3,11 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

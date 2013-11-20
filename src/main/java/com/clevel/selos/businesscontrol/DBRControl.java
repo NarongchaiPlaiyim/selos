@@ -1,11 +1,9 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.DBRDAO;
 import com.clevel.selos.dao.working.DBRDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BizInfoSummary;
@@ -17,7 +15,6 @@ import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.transform.DBRDetailTransform;
 import com.clevel.selos.transform.DBRTransform;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -113,11 +113,13 @@
                         <p:inputText id="dlgInputBrCitizenText" value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkBorrowerThaiID(this)"
+                                     onclick="onClickReadonlyField(this,'#{not prescreenMaker.enableCitizenId}')"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id != 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onclick="onClickReadonlyField(this,'#{not prescreenMaker.enableCitizenId}')"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                     </td>
@@ -126,13 +128,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText id="dlgBorrowerCustomerID" value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true" />
                     </td>
                 </tr>
@@ -351,7 +353,7 @@
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small right"
                                      maxlength="10" readonly="#{not prescreenMaker.enableCustomerForm}"
-                                     onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);" onfocus="removeComma(this)">
+                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
                             <p:ajax event="blur" update="customerDlgForm" process="@form"/>
                         </p:inputText>
@@ -415,13 +417,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true"/>
                     </td>
                 </tr>
@@ -651,13 +653,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, true)"
+                                     onclick="onClickReadonlyField(this, 0)"
                                      readonly="true"/>
                     </td>
                 </tr>

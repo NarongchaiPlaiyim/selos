@@ -3,7 +3,6 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -11,7 +10,6 @@ import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.transform.ContactRecordDetailTransform;
 import com.clevel.selos.transform.CustomerAcceptanceTransform;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

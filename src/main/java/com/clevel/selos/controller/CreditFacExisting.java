@@ -1,10 +1,6 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.DBRDetailView;
-import com.clevel.selos.model.view.DBRView;
-import com.clevel.selos.model.view.LoanAccountTypeView;
-import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
@@ -16,8 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 
 @ViewScoped

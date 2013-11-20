@@ -1,8 +1,5 @@
 package com.clevel.selos.model.db.ext.map;
 
-import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.Title;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

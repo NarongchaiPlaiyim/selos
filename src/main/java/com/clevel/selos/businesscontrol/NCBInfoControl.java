@@ -4,7 +4,6 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -14,9 +13,7 @@ import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
