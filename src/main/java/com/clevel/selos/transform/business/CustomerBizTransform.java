@@ -511,10 +511,10 @@ public class CustomerBizTransform extends BusinessTransform {
                                         }
                                     }
                                 }
-                                log.debug("TransformAccountListSize: {}",resultRow);
                             }
                         }
                     }
+                    log.debug("TransformAccountListSize: {}",resultRow);
                     customerAccountView.setAccountList(accountList);
                 }
             } else {
