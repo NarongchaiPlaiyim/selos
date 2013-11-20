@@ -85,7 +85,7 @@ public class Decision implements Serializable {
         tierDetailView1.setSuggestPrice(BigDecimal.valueOf(2.00));
         tierDetailView1.setFinalPriceRate(BigDecimal.valueOf(2.00));
         tierDetailView1.setInstallment(BigDecimal.valueOf(123456.78));
-        tierDetailView1.setTenor(BigDecimal.valueOf(3));
+        tierDetailView1.setTenor(3);
         tierDetailViewList1.add(tierDetailView1);
 
         ProposeCreditDetailView proposeCreditDetailView1 = new ProposeCreditDetailView();
@@ -109,7 +109,7 @@ public class Decision implements Serializable {
         tierDetailView2_1.setSuggestPrice(BigDecimal.valueOf(1.50));
         tierDetailView2_1.setFinalPriceRate(BigDecimal.valueOf(1.50));
         tierDetailView2_1.setInstallment(BigDecimal.valueOf(123456.78));
-        tierDetailView2_1.setTenor(BigDecimal.valueOf(6));
+        tierDetailView2_1.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_1);
 
         CreditTierDetailView tierDetailView2_2 = new CreditTierDetailView();
@@ -117,7 +117,7 @@ public class Decision implements Serializable {
         tierDetailView2_2.setSuggestPrice(BigDecimal.valueOf(2.00));
         tierDetailView2_2.setFinalPriceRate(BigDecimal.valueOf(2.00));
         tierDetailView2_2.setInstallment(BigDecimal.valueOf(123456.78));
-        tierDetailView2_2.setTenor(BigDecimal.valueOf(6));
+        tierDetailView2_2.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_2);
 
         CreditTierDetailView tierDetailView2_3 = new CreditTierDetailView();
@@ -125,7 +125,7 @@ public class Decision implements Serializable {
         tierDetailView2_3.setSuggestPrice(BigDecimal.valueOf(2.50));
         tierDetailView2_3.setFinalPriceRate(BigDecimal.valueOf(2.50));
         tierDetailView2_3.setInstallment(BigDecimal.valueOf(123456.78));
-        tierDetailView2_3.setTenor(BigDecimal.valueOf(24));
+        tierDetailView2_3.setTenor(24);
         tierDetailViewList2.add(tierDetailView2_3);
 
         ProposeCreditDetailView proposeCreditDetailView2 = new ProposeCreditDetailView();

@@ -9,7 +9,7 @@ import java.util.Date;
 public class CreditTierDetailView implements Serializable {
 
     private BigDecimal finalPriceRate;
-    private BigDecimal tenor;
+    private int tenor;
     private BigDecimal installment;
     private BigDecimal standardPrice;
     private BigDecimal suggestPrice;
@@ -25,7 +25,7 @@ public class CreditTierDetailView implements Serializable {
     public void reset() {
 
         this.finalPriceRate = BigDecimal.ZERO;
-        this.tenor = BigDecimal.ZERO;
+        this.tenor = 0;
         this.installment = BigDecimal.ZERO;
         this.standardPrice = BigDecimal.ZERO;
         this.suggestPrice = BigDecimal.ZERO;
@@ -39,11 +39,11 @@ public class CreditTierDetailView implements Serializable {
         this.finalPriceRate = finalPriceRate;
     }
 
-    public BigDecimal getTenor() {
+    public int getTenor() {
         return tenor;
     }
 
-    public void setTenor(BigDecimal tenor) {
+    public void setTenor(int tenor) {
         this.tenor = tenor;
     }
 
