@@ -93,6 +93,8 @@ public class NCBDetail implements Serializable {
     @Column(name = "wcFlag")
     private int wcFlag;
 
+    @Column(name = "can_edit")
+    private boolean canToEdit;
 
     public long getId() {
         return id;
@@ -286,6 +288,13 @@ public class NCBDetail implements Serializable {
         this.accountTMBFlag = accountTMBFlag;
     }
 
+    public boolean isCanToEdit() {
+        return canToEdit;
+    }
+
+    public void setCanToEdit(boolean canToEdit) {
+        this.canToEdit = canToEdit;
+    }
 
     @Override
     public String toString() {
@@ -314,6 +323,7 @@ public class NCBDetail implements Serializable {
                 .append("month5", month5)
                 .append("month6", month6)
                 .append("wcFlag", wcFlag)
+                .append("canToEdit", canToEdit)
                 .toString();
     }
 }
