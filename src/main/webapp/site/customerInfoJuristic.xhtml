@@ -213,7 +213,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleTh"
                                                                  value="#{custInfoSumJuris.customerInfoView.titleTh.id}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqIndTitTh}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -221,6 +221,9 @@
                                                                    var="titleTh"
                                                                    itemLabel="#{titleTh.titleTh}"
                                                                    itemValue="#{titleTh.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumJuris.onChangeTitleTh()}"
+                                                            update=":frmMain:titleEn"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
@@ -239,7 +242,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleEn"
                                                                  value="#{custInfoSumJuris.customerInfoView.titleEn.id}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqIndTitEn}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -247,6 +250,9 @@
                                                                    var="titleEn"
                                                                    itemLabel="#{titleEn.titleEn}"
                                                                    itemValue="#{titleEn.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumJuris.onChangeTitleEn()}"
+                                                            update=":frmMain:titleTh"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>

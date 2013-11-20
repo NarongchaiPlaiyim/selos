@@ -413,9 +413,9 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView = customerInfoControl.getCustomerIndividualById(customerId);
         }
 
+        onChangeMaritalStatus();
         onChangeRelation();
         onChangeReference();
-        onChangeMaritalStatus();
         onChangeProvinceEditForm1();
         onChangeDistrictEditForm1();
         onChangeProvinceEditForm2();
@@ -467,11 +467,12 @@ public class CustomerInfoIndividual implements Serializable {
 //        referenceIndividualList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
         referenceIndividualList = referenceDAO.findReferenceByFlag(1, caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
 
-        onChangeRelationSpouse();
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
+            onChangeRelationSpouse();
+        }
     }
 
     public void onChangeRelationSpouse(){
-        System.out.println("onChangeRelationSpouse");
 //        referenceSpouseList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId());
         referenceSpouseList = referenceDAO.findReferenceByFlag(1, caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
 
@@ -788,8 +789,9 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeReference(){
-        //
-        onChangeRelationSpouse();
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
+            onChangeRelationSpouse();
+        }
 
         //Mandate only
         reqIndRelation = true;
@@ -1200,6 +1202,22 @@ public class CustomerInfoIndividual implements Serializable {
         map.put("customerInfoView", cusInfoJuristic);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
+    }
+
+    public void onChangeTitleTh(){
+        customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
+    }
+
+    public void onChangeTitleEn(){
+        customerInfoView.getTitleTh().setId(customerInfoView.getTitleEn().getId());
+    }
+
+    public void onChangeTitleThSpouse(){
+        customerInfoView.getSpouse().getTitleEn().setId(customerInfoView.getSpouse().getTitleTh().getId());
+    }
+
+    public void onChangeTitleEnSpouse(){
+        customerInfoView.getSpouse().getTitleTh().setId(customerInfoView.getSpouse().getTitleEn().getId());
     }
 
     //Get Set

@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
+import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.ExSumDeviate;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ExSummaryTransform extends Transform {
     @Inject
     AuthorizationDOADAO authorizationDOADAO;
+    @Inject
+    ReasonDAO reasonDAO;
 
     @Inject
     public ExSummaryTransform() {
@@ -261,5 +264,25 @@ public class ExSummaryTransform extends Transform {
         exSummaryView.setUwComment(exSummary.getUwComment());
 
         return exSummaryView;
+    }
+
+    public List<ExSumDeviate> transformDeviateToModel(List<ExSumReasonView> exSumReasonViewList,long exSummaryId){
+        List<ExSumDeviate> exSumDeviateList = new ArrayList<ExSumDeviate>();
+        for(ExSumReasonView ed : exSumReasonViewList){
+            ExSumDeviate deviate = new ExSumDeviate();
+
+//            Add New Only
+//            deviate.setId(ed.getId());
+
+            Reason reason = reasonDAO.getByCode(ed.getCode());
+            deviate.setDeviateCode(reason);
+
+            ExSummary exSummary = new ExSummary();
+            exSummary.setId(exSummaryId);
+            deviate.setExSummary(exSummary);
+
+            exSumDeviateList.add(deviate);
+        }
+        return exSumDeviateList;
     }
 }

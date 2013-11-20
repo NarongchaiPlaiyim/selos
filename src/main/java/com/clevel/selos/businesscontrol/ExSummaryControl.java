@@ -27,6 +27,8 @@ public class ExSummaryControl extends BusinessControl {
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    ExSumDeviateDAO exSumDeviateDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -35,11 +37,12 @@ public class ExSummaryControl extends BusinessControl {
     CustomerInfoControl customerInfoControl;
     @Inject
     NCBInfoControl ncbInfoControl;
+    @Inject
+    BankStmtControl bankStmtControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-//        WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         if (exSummary == null) {
             exSummary = new ExSummary();
@@ -61,8 +64,26 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setNcbInfoListView(null);
         }
 
+//        List<BankStmtSummaryView> bankStmtSummaryViewList =
+
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
 
         return exSummaryView;
+    }
+
+    public void saveExSummary(ExSummaryView exSummaryView, long workCaseId, User user) {
+        log.info("saveExSummary ::: exSummaryView : {}", exSummaryView);
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
+        exSummaryDAO.persist(exSummary);
+
+        //Delete Deviate
+        List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
+        exSumDeviateDAO.delete(esdList);
+        //Save Deviate
+        List<ExSumDeviate> exSumDeviateList = exSummaryTransform.transformDeviateToModel(exSummaryView.getDeviateCode(),exSummary.getId());
+        exSumDeviateDAO.persist(exSumDeviateList);
     }
 }

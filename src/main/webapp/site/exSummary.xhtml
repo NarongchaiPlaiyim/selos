@@ -1274,30 +1274,36 @@
 
                             <tr>
                                 <td colspan="4">
-                                    <p:dataTable id="UWDecisionTable" value="#{executiveSummary.exSummaryView.deviateCode}"
+                                    <p:dataTable id="deviateTable" value="#{executiveSummary.exSummaryView.deviateCode}"
                                                  var="itemUWDecision" style="width: 100%"
                                                  paginator="false" rowKey="#{itemUWDecision}"
                                                  rowIndexVar="rowIndex">
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column style="width:50px;"/>
-                                                <p:column style="width:400px;"
+                                                <p:column style="width:20px;"/>
+                                                <p:column style="width:600px;"
                                                           headerText="#{msg.get('app.exSummary.label.tb.label.reasonCode')}"/>
-                                                <p:column style="width:50px;"/>
+                                                <p:column style="width:20px;"/>
                                             </p:row>
-
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
-                                        <p:column styleClass="center">
-                                            <h:outputText value="#{itemUWDecision.code}"/>
+                                        <p:column styleClass="left">
+                                            <h:outputText value="#{itemUWDecision.code} - #{itemUWDecision.description}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteDeviateDlg.show()"
+                                                             update=":frmMain:deviateTable"
+                                                             process="@form">
+                                                <f:setPropertyActionListener value="#{itemUWDecision}"
+                                                                             target="#{executiveSummary.selectDeviate}"/>
+                                            </p:commandButton>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
@@ -1337,9 +1343,9 @@
 
                 <tr>
                     <td colspan="4" class="center">
-                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller"
-                                         process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
-                                         actionListener="#{executiveSummary.onSaveExecutiveSummary}"/>
+                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                         process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
+                                         actionListener="#{executiveSummary.onSaveExecutiveSummary}" binding="#{saveBtn}"/>
                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                          process="@form" update=":frmMain"
                                          actionListener="#{executiveSummary.onCreation}"/>
@@ -1358,23 +1364,31 @@
             </div>
         </h:form>
 
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
 
     </p:panel>
 
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteDeviateDialog"/>
+        <ui:param name="name" value="confirmDeleteDeviateDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteDeviate"/>
+        <ui:param name="controller" value="#{executiveSummary}"/>
+        <ui:param name="action" value="onDeleteDeviate"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
-<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{executiveSummary.messageHeader}" message="#{executiveSummary.message}">
-        <p:commandButton value="OK"
-                         process="@this"
-                         update="frmMain"
-                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
-    </p:confirmDialog>
-</p:panel>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{executiveSummary.messageHeader}" message="#{executiveSummary.message}">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
 
 </h:body>
 </f:view>
