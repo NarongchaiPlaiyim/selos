@@ -319,7 +319,7 @@ public class NCCRSImp implements NCCRS, Serializable {
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
             if (null != responseModel.getBody().getTrackingid()) {
                 ArrayList<String> arrayList = responseModel.getBody().getTrackingid();
-                if (1 <= arrayList.size()) {
+                if (arrayList.size() > 0) {
                     log.debug("NCCRS The List Tracking ID {}", arrayList);
                     String trackingId = arrayList.get(arrayList.size() - 1);
                     log.debug("NCCRS The maximum value of list Tracking ID is {}", trackingId);
