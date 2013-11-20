@@ -91,6 +91,7 @@ public class NCBResultImp implements Serializable {
         return result;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void updateSUCCEED(String appRefNumber, String customerId, String trackingId) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         model.setResult(ActionResult.SUCCESS.toString());
@@ -99,6 +100,7 @@ public class NCBResultImp implements Serializable {
         log.debug("Call updateSUCCEED({}, {}) has updated", appRefNumber, customerId);
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void updateStatus(String appRefNumber, String customerId, String trackingId, ActionResult actionResult) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         model.setResult(actionResult.toString());

@@ -388,8 +388,8 @@ public class NCRSImp implements NCRS, Serializable {
                     if (null != responseModel.getBodyModel().getTransaction().getUser()) {
                         log.debug("NCRS get response offline");
                         String customerId = "";
-                        if (1 <= idModelArrayList.size()) {
-                            TUEFEnquiryIdModel idModel = idModelArrayList.get(0);
+                        if (idModelArrayList.size() > 0) {
+                            TUEFEnquiryIdModel idModel = idModelArrayList.get(idModelArrayList.size()-1);
                             customerId = idModel.getIdnumber();
                         }
                         //responseModel = checkOnlineResponseModel(responseModel);
@@ -657,7 +657,7 @@ public class NCRSImp implements NCRS, Serializable {
         return new NCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
-                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), listModel.getIdtype(), listModel.getIdnumber(), id)));
+                        new CriteriaModel(/*Util.createDateString(new Date(), "yyyyMMdd")*/"", listModel.getIdtype(), listModel.getIdnumber(), id, memberref)));
     }
 
     private NCRSRequestModel createReadModel(String trackingId, String command) {
