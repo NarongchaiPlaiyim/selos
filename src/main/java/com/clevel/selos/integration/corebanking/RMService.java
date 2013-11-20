@@ -755,9 +755,11 @@ public class RMService implements Serializable {
                 log.debug("responseHeaderData : {}", resSearchCustomerAccount.getHeader().toString());
                 if (resSearchCustomerAccount.getBody() != null && resSearchCustomerAccount.getBody().getAccountList() != null) {
                     log.debug("accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
-                }
+
                 for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
+                }
+
                 }
                 customerAccountResult = new CustomerAccountResult();
                 customerAccountResult.setActionResult(ActionResult.SUCCESS);
@@ -796,6 +798,7 @@ public class RMService implements Serializable {
                             customerAccountListModel.setCitizenId(resSearchCustomerAccount.getBody().getAccountList().get(i).getCitizenId());
                             customerAccountListModel.setCurr(resSearchCustomerAccount.getBody().getAccountList().get(i).getCurr());
                             listModelList.add(customerAccountListModel);
+                            log.debug("");
                         }
 
                     }
