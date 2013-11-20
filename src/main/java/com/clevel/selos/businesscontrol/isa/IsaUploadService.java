@@ -86,9 +86,12 @@ public class IsaUploadService extends BusinessControl {
                             System.out.println("LINE : = "+line);
                             try {
                                 List<String> params = getToken(line);
+                                System.out.println("1");
                                 String importResult = executeScript(params);
+                                System.out.println("2");
                                 log.debug("IMPORT RESULT :: {}", importResult);
                                 if (importResult != null && importResult.length() > 0) {
+                                    System.out.println("3");
                                     if (importResult.startsWith(UploadResult.FAILED.getCode())) {
                                         logResult(line, UploadResult.FAILED, importResult.substring((UploadResult.FAILED.getCode().length() + 1)));
                                     } else if (importResult.startsWith(UploadResult.SUCCESS.getCode())) {

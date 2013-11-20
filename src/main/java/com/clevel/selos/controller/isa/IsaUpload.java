@@ -51,7 +51,7 @@ public class IsaUpload implements Serializable {
 
     private List<UserUploadView> userUploadViews;
 
-    private final static String UPLOAD_FOLDER = "_userUpload.csv";
+    private final static String UPLOAD_FOLDER = "_userUpload";
     public final static String RESULT_FILENAME = "UPLOAD_RESULT_";
     private final static String PATH_FILE = "C:\\Users\\sahawat\\Desktop\\test";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -59,12 +59,11 @@ public class IsaUpload implements Serializable {
 
     public void initForm() {
         log.debug("initForm()");
-        System.out.println("LFLFLFLFLFLFLFLFLFLFLF");
 
         FilenameFilter dirFilter = new FilenameFilter() {
 
             public boolean accept(File dir, String name) {
-                if (name.endsWith(UPLOAD_FOLDER))
+                if (name.endsWith(UPLOAD_FOLDER+".csv"))
                     return true;
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
             }
@@ -92,22 +91,26 @@ public class IsaUpload implements Serializable {
                 do {
                     File subFolder = files[index];
                     System.out.println(subFolder.getPath());
-                    File[] subFiles = subFolder.listFiles();
-                    System.out.println(subFiles.length);
+//                    File[] subFiles = subFolder.listFiles();
+                    File[] subFiles = new File(PATH_FILE).listFiles();
+                    System.out.println("subFiles : "+subFiles.length);
                     if (subFiles.length > 0) {
                         System.out.println("o");
                         UserUploadView userUploadView = new UserUploadView();
 
                         userUploadView.setUploadTime(DateTimeUtil.dateToStringWT(new Date(subFolder.lastModified())));
                         for (int subidx = 0; subidx < subFiles.length; subidx++) {
+                            System.out.println("nb "+subFiles[subidx].getName());
                             if (subFiles[subidx].getName().startsWith(IsaUpload.RESULT_FILENAME)) {
                                 userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
-
+//                                System.out.println("1 "+userUploadView.getResultFile());
                             }
+//                            System.out.println("2 " + userUploadView.getResultFile());
                         }
                         if (userUploadView.getResultFile() == null) {
                             userUploadView.setResultFile("");
                         }
+
                         userUploadViews.add(userUploadView);
                     }
                     count++;
@@ -165,7 +168,7 @@ public class IsaUpload implements Serializable {
                       }
                 }
 
-                String filePath = PATH_FILE + prefix+suffix;
+                String filePath = PATH_FILE +"\\"+ prefix+suffix;
 
                 if (new File(PATH_FILE).isDirectory()) {
                     System.out.println("filepAth : "+filePath);
@@ -177,7 +180,7 @@ public class IsaUpload implements Serializable {
 
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
-//                isaUploadService.processUserUploadFiles(PATH_FILE, fileDir.listFiles()[0].getName());
+                isaUploadService.processUserUploadFiles(PATH_FILE, fileDir.listFiles()[0].getName());
 
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
