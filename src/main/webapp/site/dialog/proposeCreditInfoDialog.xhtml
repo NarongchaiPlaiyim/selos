@@ -13,10 +13,10 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
     </td>
     <td colspan="3">
-        <h:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.requestType}">
+        <p:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.requestType}">
             <f:selectItem itemLabel="New" itemValue="1"/>
             <f:selectItem itemLabel="Change" itemValue="0"/>
-        </h:selectOneRadio>
+        </p:selectOneRadio>
     </td>
 </tr>
 <tr>
@@ -24,10 +24,10 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
     </td>
     <td colspan="3">
-        <h:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.refinance}">
-            <f:selectItem itemLabel="Yes" itemValue="1"/>
-            <f:selectItem itemLabel="No" itemValue="0"/>
-        </h:selectOneRadio>
+        <p:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.refinance}">
+            <f:selectItem itemLabel="Yes" itemValue="2"/>
+            <f:selectItem itemLabel="No" itemValue="1"/>
+        </p:selectOneRadio>
     </td>
 </tr>
 <tr>
@@ -41,11 +41,14 @@
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="true">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.productProgramList}"
-                           var="prodProgramItem"
-                           itemLabel="#{prodProgramItem.description}"
-                           itemValue="#{prodProgramItem.id}"/>
-
+            <f:selectItems value="#{creditFacPropose.prdGroupToPrdProgramList}"
+                           var="prdGroupToPrdProgramItem"
+                           itemLabel="#{prdGroupToPrdProgramItem.productProgram.name}"
+                           itemValue="#{prdGroupToPrdProgramItem.productProgram.id}"/>
+            <p:ajax event="change"
+                    listener="#{creditFacPropose.onChangeProductProgram}"
+                    process="@this"
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -60,11 +63,14 @@
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="true">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.creditTypeList}"
+            <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeList}"
                            var="creditTypeItem"
-                           itemLabel="#{creditTypeItem.description}"
-                           itemValue="#{creditTypeItem.id}"/>
-
+                           itemLabel="#{creditTypeItem.creditType.name}"
+                           itemValue="#{creditTypeItem.creditType.id}"/>
+            <p:ajax event="change"
+                    listener="#{creditFacPropose.onChangeCreditType}"
+                    process=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram"
+                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -73,13 +79,13 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.productCode}"/>
+        <h:inputText id="productCode" value="#{creditFacPropose.proposeCreditDetailView.productCode}"/>
     </td>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.projectCode}"/>
+        <h:inputText id="projectCode" value="#{creditFacPropose.proposeCreditDetailView.projectCode}"/>
     </td>
 </tr>
 <tr>
@@ -87,8 +93,11 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.limit}"
-                     style="text-align:right"/>
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.limit}"
+                     style="text-align:right">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
@@ -108,10 +117,11 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEAmount}"
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEAmount}"
                      style="text-align:right">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-        </h:inputText>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -121,17 +131,19 @@
 </tr>
 <tr>
     <td>
-        <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFlag}" disabled="#{creditFacPropose.modeEdit}}">
-        </p:selectBooleanCheckbox>
-        <p:spacer width="20px;"/>
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+        <h:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFlag}"
+                                 disabled="#{creditFacPropose.modeEdit}}" >
+        </h:selectBooleanCheckbox>
+        <p:spacer width="5px;"/>
+        <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
     <td></td>
     <td colspan="2">
-        <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFrontEndFlag}" disabled="#{creditFacPropose.modeEdit}">
-             </p:selectBooleanCheckbox>
-        <p:spacer width="20px;"/>
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+        <h:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFrontEndFlag}"
+                                 disabled="#{creditFacPropose.modeEdit}" >
+             </h:selectBooleanCheckbox>
+        <p:spacer width="5px;"/>
+        <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
     </td>
 </tr>
 <tr>
@@ -163,7 +175,10 @@
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
                 process="@this"
-                update=":frmMain">
+                update=":proposeTierDlgForm"
+                actionListener="#{creditFacPropose.onAddTierInfo()}"
+                oncomplete="proposeTierDlg.show();">
+            <p:resetInput target=":proposeTierDlgForm"/>
         </p:commandButton>
     </td>
 </tr>
@@ -192,17 +207,19 @@
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
 
-            <p:column styleClass="center">
-                <h:outputText value="#{item.finalPriceRate}"/>
+            <p:column styleClass="right">
+                <h:outputText value="#{item.finalPriceRate}">
+                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                </h:outputText>
             </p:column>
 
-            <p:column styleClass="center">
+            <p:column styleClass="right">
                 <h:outputText value="#{item.tenor}"/>
             </p:column>
 
-            <p:column styleClass="center">
+            <p:column styleClass="right">
                 <h:outputText value="#{item.installment}">
-                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                 </h:outputText>
             </p:column>
 
@@ -217,7 +234,8 @@
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.frontEndFee}"
                      style="text-align:right"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+                             integerOnly="true" maxIntegerDigits="14"/>
         </p:inputText>
     </td>
 </tr>
@@ -226,7 +244,15 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.loanPurpose')}"/>
     </td>
     <td colspan="3">
-
+        <p:selectOneMenu id="dlgLoanPurpose"
+                         size="1"
+                         style="min-width: 200px; width: 200px; max-width: 200px;" >
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+         <!--   <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeList}"
+                           var="creditTypeItem"
+                           itemLabel="#{creditTypeItem.creditType.name}"
+                           itemValue="#{creditTypeItem.creditType.id}"/>-->
+        </p:selectOneMenu>
     </td>
 </tr>
 <tr>
@@ -249,7 +275,8 @@
                          value="#{creditFacPropose.proposeCreditDetailView.disbursement.id}"
                          size="1"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
-                         required="true">
+                         required="true"
+                         disabled="#{creditFacPropose.modeEdit}">
             <f:selectItems value="#{creditFacPropose.disbursementList}"
                            var="disbursementItem"
                            itemLabel="#{disbursementItem.disbursement}"
@@ -262,8 +289,10 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.holdLimitAmount}"
-                     style="text-align:right">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEdit}">
+            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+                             integerOnly="true" maxIntegerDigits="14"/>
         </p:inputText>
     </td>
 </tr>
@@ -272,22 +301,39 @@
         <p:commandButton id="dlgSaveCreditBtn"
                          styleClass="small"
                          value="#{msg.get('app.button.ok')}"
-                         action="#{creditFacPropose.onSaveCreditInfoDlg}"
+                         action="#{creditFacPropose.onSaveCreditInfo}"
                          process="@form"
-                         update=":creditInfoDlgForm :frmMain"
+                         update=":creditInfoDlgForm,:frmMain"
                          oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
-        <p:commandButton type="button" styleClass="small"
+        <p:commandButton type="button"
+                         styleClass="small"
+                         action="#{creditFacPropose.onSaveCreditInfo}"
                          value="#{msg.get('app.button.cancel')}"
                          onclick="PF('creditInfoDlg').hide()"
-                         update=":creditInfoDlgForm"/>
+                         update=":creditInfoDlgForm,:frmMain"/>
     </td>
 </tr>
 </table>
 </h:form>
 </p:panel>
-<!-- <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:addDlgCreditButton">
+
+
+<p:dialog id="proposeTierDialog" header="Tier Information" widgetVar="proposeTierDlg" height="180">
+    <ui:include src="proposeTierDialog.xhtml"/>
+</p:dialog>
+
+<ui:include src="confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteTierInfoDialog"/>
+    <ui:param name="name" value="confirmDeleteTierInfoDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteTierInfo"/>
+    <ui:param name="controller" value="#{creditFacPropose}"/>
+    <ui:param name="action" value="onDeleteProposeTierInfo"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
+
+ <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:dlgSaveCreditBtn">
      LOADING<br/>
      <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
- </p:blockUI>-->
+ </p:blockUI>
 
 </ui:composition>

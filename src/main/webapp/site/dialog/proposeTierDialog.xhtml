@@ -1,0 +1,105 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="proposeTierDlgPanel" styleClass="panel-dialog">
+        <h:form id="proposeTierDlgForm">
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
+                    </td>
+                    <td style="width: 200px;">
+                        <p:inputText styleClass="large"
+                                     id="standard"
+                                     value="#{creditFacPropose.creditTierDetailView.standardPrice}"
+                                     required="true"
+                                     style="width:200px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width: 200px;">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
+                    </td>
+                    <td style="width: 200px;">
+                        <p:inputText styleClass="large"
+                                     id="suggest"
+                                     value="#{creditFacPropose.creditTierDetailView.suggestPrice}"
+                                     required="true"
+                                     style="width:200px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.price')}"/>
+                    </td>
+                    <td>
+                        <p:inputText styleClass="large" id="finalPriceRate"
+                                     value="#{creditFacPropose.creditTierDetailView.finalPriceRate}"
+                                     required="true"
+                                     style="width:200px;text-align: right">
+                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update="@this"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.tenor')}"/>
+                    </td>
+                    <td>
+                        <p:inputText styleClass="large"
+                                     id="tenor"
+                                     value="#{creditFacPropose.creditTierDetailView.tenor}"
+                                     required="#{not empty param[addDlgTier.clientId]}"
+                                     style="width:200px;text-align: right" >
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.installment')}"/>
+                    </td>
+                    <td>
+                        <p:inputText styleClass="large"
+                                     id="installment"
+                                     value="#{creditFacPropose.creditTierDetailView.installment}"
+                                     required="#{not empty param[addDlgTier.clientId]}"
+                                     style="width:200px;text-align: right" >
+                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update="@this"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton
+                                id="saveTier"
+                                value="#{msg.get('app.tcg.dlg.button.ok')}"
+                                binding="#{addDlgTier}"
+                                styleClass="small"
+                                actionListener="#{creditFacPropose.onSaveTierInfo()}"
+                                process=":proposeTierDlgForm"
+                                update=":creditInfoDlgForm:resultFinal"
+                                oncomplete="handleTierDlgRequest(xhr, status, args)"/>
+
+                        <p:commandButton
+                                value="#{msg.get('app.tcg.dlg.button.cancel')}"
+                                styleClass="small"
+                                onclick="PF('proposeTierDlg').hide()"
+                                update=":proposeTierDlgForm"/>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:panel>
+
+    <p:blockUI widgetVar="blockProposeTierDlgForm" block="proposeTierDlgPanel" trigger=":proposeTierDlgForm:saveTier">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+
+</ui:composition>

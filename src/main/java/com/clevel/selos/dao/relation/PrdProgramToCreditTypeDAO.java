@@ -2,6 +2,7 @@ package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import org.hibernate.Criteria;
@@ -31,6 +32,34 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
         log.info("getList. (result size: {})", list.size());
 
         return list;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<PrdProgramToCreditType> getListCreditProposeByPrdprogram(ProductProgram productProgram) {
+        log.info("getListCreditProposeByPrdprogram. (ProductProgram: {})", productProgram);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("productProgram", productProgram));
+        criteria.add(Restrictions.eq("addProposeCredit", 1));
+        criteria.addOrder(Order.asc("creditType.id"));
+        List<PrdProgramToCreditType> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+
+        return list;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public PrdProgramToCreditType getPrdProgramToCreditType(CreditType creditType , ProductProgram productProgram) {
+        log.info("getPrdProgramToCreditType. (productProgram: {})",productProgram );
+        log.info("getPrdProgramToCreditType. (creditType: {})", creditType);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("creditType", creditType));
+        criteria.add(Restrictions.eq("productProgram", productProgram));
+        PrdProgramToCreditType  prdProgramToCreditType = (PrdProgramToCreditType)criteria.uniqueResult();
+
+        return prdProgramToCreditType;
 
     }
 }

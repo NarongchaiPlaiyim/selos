@@ -43,10 +43,9 @@ public class ProposeCreditDetailView implements Serializable {
     // master
 //    private loanPurpose
 
-
     private List<CreditTierDetailView> creditTierDetailViewList;
 
-    public  ProposeCreditDetailView(){
+    public ProposeCreditDetailView(){
         reset();
     }
 
@@ -74,6 +73,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+
     }
 
     public int getRequestType() {
@@ -309,4 +309,6 @@ public class ProposeCreditDetailView implements Serializable {
     public void setReduceFrontEndFlag(boolean reduceFrontEndFlag) {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
+
+
 }

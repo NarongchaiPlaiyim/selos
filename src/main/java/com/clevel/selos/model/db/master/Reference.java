@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.master;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -38,6 +41,12 @@ public class Reference implements Serializable {
     private int linkRm;
     @Column(name = "active")
     private int active;
+    @Column(name = "main_customer", nullable = false, columnDefinition = "int default -1")
+    private int mainCustomer;
+    @Column(name = "spouse", nullable = false, columnDefinition = "int default -1")
+    private int spouse;
+    @Column(name = "relation_type", nullable = false, columnDefinition = "int default -1")
+    private int relationType;
 
     public Reference() {
     }
@@ -152,5 +161,52 @@ public class Reference implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public int getMainCustomer() {
+        return mainCustomer;
+    }
+
+    public void setMainCustomer(int mainCustomer) {
+        this.mainCustomer = mainCustomer;
+    }
+
+    public int getSpouse() {
+        return spouse;
+    }
+
+    public void setSpouse(int spouse) {
+        this.spouse = spouse;
+    }
+
+    public int getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(int relationType) {
+        this.relationType = relationType;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("relation", relation).
+                append("customerEntity", customerEntity).
+                append("description", description).
+                append("borrowerType", borrowerType).
+                append("percentShare", percentShare).
+                append("collateralOwner", collateralOwner).
+                append("csi", csi).
+                append("sll", sll).
+                append("groupIncome", groupIncome).
+                append("kycFullScreening", kycFullScreening).
+                append("kycNameScreening", kycNameScreening).
+                append("linkRm", linkRm).
+                append("active", active).
+                append("mainCustomer", mainCustomer).
+                append("spouse", spouse).
+                append("relationType", relationType).
+                toString();
     }
 }

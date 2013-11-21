@@ -314,7 +314,7 @@ public class NCBDetailView implements Serializable {
 
 
     public boolean isRefinance() {
-        if (refinanceFlag == 1) {
+        if (refinanceFlag == 2) {
             this.refinance = true;
         } else {
             this.refinance = false;
@@ -327,7 +327,7 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isWc() {
-        if (wcFlag == 1) {
+        if (wcFlag == 2) {
             this.wc = true;
         } else {
             this.wc = false;
@@ -342,9 +342,9 @@ public class NCBDetailView implements Serializable {
 
     public int getRefinanceFlag() {
         if (refinance == true) {
-            refinanceFlag = 1;
+            refinanceFlag = 2;
         } else  if (refinance == false) {
-            refinanceFlag = 0;
+            refinanceFlag = 1;
         }
         return refinanceFlag;
     }
@@ -356,9 +356,9 @@ public class NCBDetailView implements Serializable {
 
     public int getWcFlag() {
         if (wc == true) {
-            wcFlag = 1;
+            wcFlag = 2;
         } else if (wc == false) {
-            wcFlag = 0;
+            wcFlag = 1;
         }
         return wcFlag;
     }

@@ -57,6 +57,7 @@ public class CreditFacProposeView implements Serializable {
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
     private List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList;
+    private BigDecimal totalGuaranteeAmount;
     private List<ProposeConditionDetailView> proposeConditionDetailViewList;
 
     private int relatedTMBLending;
@@ -117,6 +118,7 @@ public class CreditFacProposeView implements Serializable {
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
         this.proposeGuarantorDetailViewList = new ArrayList<ProposeGuarantorDetailView>();
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.proposeConditionDetailViewList = new ArrayList<ProposeConditionDetailView>();
 
         this.relatedTMBLending = 0;
@@ -510,6 +512,11 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
 
-
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
 }

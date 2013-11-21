@@ -2,35 +2,46 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.BankAccountStatus;
+import com.clevel.selos.model.db.master.CreditType;
+import com.clevel.selos.model.db.master.ProductProgram;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ExistingCreditDetailView implements Serializable {
+
     private long id;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
     private BankAccountStatusView accountStatus;
-
+    private BankAccountStatus existAccountStatus;
+    private String productProgram;
+    private ProductProgram existProductProgram;
+    private String creditType;
+    private CreditType existCreditType;
     private String productCode;
     private String projectCode;
-
-    private String productProgram;
-    private String creditType;
     private CreditCategory creditCategory;
     private CreditRelationType creditRelationType;
     private BigDecimal limit;
+    private BigDecimal notional;
+    private BigDecimal pcePercent;
+    private BigDecimal pceLimit;
     private BigDecimal outstanding;
     private BigDecimal installment;
     private BigDecimal intFeePercent;
     private String source;
     private BigDecimal tenor;
-
     private String accountRef;
+
+    private List<CreditTierDetailView> creditTierDetailViewList;
+    private List<SplitLineDetailView> splitLineDetailViewList;
 
     public long getId() {
         return id;
@@ -80,6 +91,46 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
+    public BankAccountStatus getExistAccountStatus() {
+        return existAccountStatus;
+    }
+
+    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
+        this.existAccountStatus = existAccountStatus;
+    }
+
+    public String getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
+    }
+
+    public ProductProgram getExistProductProgram() {
+        return existProductProgram;
+    }
+
+    public void setExistProductProgram(ProductProgram existProductProgram) {
+        this.existProductProgram = existProductProgram;
+    }
+
+    public String getCreditType() {
+        return creditType;
+    }
+
+    public void setCreditType(String creditType) {
+        this.creditType = creditType;
+    }
+
+    public CreditType getExistCreditType() {
+        return existCreditType;
+    }
+
+    public void setExistCreditType(CreditType existCreditType) {
+        this.existCreditType = existCreditType;
+    }
+
     public String getProductCode() {
         return productCode;
     }
@@ -94,22 +145,6 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setProjectCode(String projectCode) {
         this.projectCode = projectCode;
-    }
-
-    public String getProductProgram() {
-        return productProgram;
-    }
-
-    public void setProductProgram(String productProgram) {
-        this.productProgram = productProgram;
-    }
-
-    public String getCreditType() {
-        return creditType;
-    }
-
-    public void setCreditType(String creditType) {
-        this.creditType = creditType;
     }
 
     public CreditCategory getCreditCategory() {
@@ -134,6 +169,30 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
+    }
+
+    public BigDecimal getNotional() {
+        return notional;
+    }
+
+    public void setNotional(BigDecimal notional) {
+        this.notional = notional;
+    }
+
+    public BigDecimal getPcePercent() {
+        return pcePercent;
+    }
+
+    public void setPcePercent(BigDecimal pcePercent) {
+        this.pcePercent = pcePercent;
+    }
+
+    public BigDecimal getPceLimit() {
+        return pceLimit;
+    }
+
+    public void setPceLimit(BigDecimal pceLimit) {
+        this.pceLimit = pceLimit;
     }
 
     public BigDecimal getOutstanding() {
@@ -184,6 +243,22 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountRef = accountRef;
     }
 
+    public List<CreditTierDetailView> getCreditTierDetailViewList() {
+        return creditTierDetailViewList;
+    }
+
+    public void setCreditTierDetailViewList(List<CreditTierDetailView> creditTierDetailViewList) {
+        this.creditTierDetailViewList = creditTierDetailViewList;
+    }
+
+    public List<SplitLineDetailView> getSplitLineDetailViewList() {
+        return splitLineDetailViewList;
+    }
+
+    public void setSplitLineDetailViewList(List<SplitLineDetailView> splitLineDetailViewList) {
+        this.splitLineDetailViewList = splitLineDetailViewList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -193,17 +268,27 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("accountNumber", accountNumber)
                 .append("accountStatusID", accountStatusID)
                 .append("accountStatus", accountStatus)
+                .append("existAccountStatus", existAccountStatus)
+                .append("productProgram", productProgram)
+                .append("existProductProgram", existProductProgram)
+                .append("creditType", creditType)
+                .append("existCreditType", existCreditType)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
-                .append("productProgram", productProgram)
-                .append("creditType", creditType)
+                .append("creditCategory", creditCategory)
+                .append("creditRelationType", creditRelationType)
                 .append("limit", limit)
+                .append("notional", notional)
+                .append("pcePercent", pcePercent)
+                .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
                 .append("installment", installment)
                 .append("intFeePercent", intFeePercent)
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
+                .append("creditTierDetailViewList", creditTierDetailViewList)
+                .append("splitLineDetailViewList", splitLineDetailViewList)
                 .toString();
     }
 }

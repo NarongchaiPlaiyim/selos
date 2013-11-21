@@ -251,7 +251,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleTh"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleTh.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitTh}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -259,6 +259,9 @@
                                                                    var="titleTh"
                                                                    itemLabel="#{titleTh.titleTh}"
                                                                    itemValue="#{titleTh.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumIndi.onChangeTitleTh()}"
+                                                            update=":frmMain:titleEn"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
@@ -281,7 +284,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleEn"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleEn.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitEn}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -289,6 +292,9 @@
                                                                    var="titleEn"
                                                                    itemLabel="#{titleEn.titleEn}"
                                                                    itemValue="#{titleEn.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumIndi.onChangeTitleEn()}"
+                                                            update=":frmMain:titleTh"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
@@ -1327,13 +1333,16 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleThSpouse"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleTh.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                        var="titleTh"
                                                                        itemLabel="#{titleTh.titleTh}"
                                                                        itemValue="#{titleTh.id}"/>
+                                                        <p:ajax event="change"
+                                                                listener="#{custInfoSumIndi.onChangeTitleThSpouse()}"
+                                                                update=":frmMain:titleEnSpouse"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                                 <td>
@@ -1354,13 +1363,16 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleEnSpouse"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleEn.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                        var="titleEn"
                                                                        itemLabel="#{titleEn.titleEn}"
                                                                        itemValue="#{titleEn.id}"/>
+                                                        <p:ajax event="change"
+                                                                listener="#{custInfoSumIndi.onChangeTitleEnSpouse()}"
+                                                                update=":frmMain:titleThSpouse"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                                 <td>

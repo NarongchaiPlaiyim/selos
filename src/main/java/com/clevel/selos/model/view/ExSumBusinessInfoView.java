@@ -5,40 +5,39 @@ import java.math.BigDecimal;
 public class ExSumBusinessInfoView {
 
     private BigDecimal netFixAsset;
-    private int     noOfEmployee;
-    private String  bizProvince;
-    private String  bizType;
-    private String  bizGroup;
-    private String  bizCode;
-    private String  bizDesc;
-    private String  qualitativeClass;
+    private int noOfEmployee;
+    private String bizProvince;
+    private String bizType;
+    private String bizGroup;
+    private String bizCode;
+    private String bizDesc;
+    private String qualitativeClass;
     private BigDecimal bizSize;
-    private Double BDM;
-    private Double UW;
-    private Double AR;
-    private Double AP;
-    private Double INV;
+    private BigDecimal BDM;
+    private BigDecimal UW;
+    private BigDecimal AR;
+    private BigDecimal AP;
+    private BigDecimal INV;
 
     public ExSumBusinessInfoView() {
         reset();
     }
 
     public void reset() {
-        this.netFixAsset = new BigDecimal(0);
+        this.netFixAsset = BigDecimal.ZERO;
         this.noOfEmployee = 0;
-        this.bizProvince  = "";
-        this.bizType      = "";
-        this.bizGroup     = "";
-        this.bizCode      = "";
-        this.bizDesc      = "";
+        this.bizProvince = "";
+        this.bizType = "";
+        this.bizGroup = "";
+        this.bizCode = "";
+        this.bizDesc = "";
         this.qualitativeClass = "";
-        this.bizSize = new BigDecimal(0);
-        this.BDM = 0.00;
-        this.UW = 0.00;
-        this.AR = 0.00;
-        this.AP = 0.00;
-        this.INV  = 0.00;
-
+        this.bizSize = BigDecimal.ZERO;
+        this.BDM = BigDecimal.ZERO;
+        this.UW = BigDecimal.ZERO;
+        this.AR = BigDecimal.ZERO;
+        this.AP = BigDecimal.ZERO;
+        this.INV = BigDecimal.ZERO;
     }
 
     public BigDecimal getNetFixAsset() {
@@ -113,43 +112,43 @@ public class ExSumBusinessInfoView {
         this.bizSize = bizSize;
     }
 
-    public Double getBDM() {
+    public BigDecimal getBDM() {
         return BDM;
     }
 
-    public void setBDM(Double BDM) {
+    public void setBDM(BigDecimal BDM) {
         this.BDM = BDM;
     }
 
-    public Double getUW() {
+    public BigDecimal getUW() {
         return UW;
     }
 
-    public void setUW(Double UW) {
+    public void setUW(BigDecimal UW) {
         this.UW = UW;
     }
 
-    public Double getAR() {
+    public BigDecimal getAR() {
         return AR;
     }
 
-    public void setAR(Double AR) {
+    public void setAR(BigDecimal AR) {
         this.AR = AR;
     }
 
-    public Double getAP() {
+    public BigDecimal getAP() {
         return AP;
     }
 
-    public void setAP(Double AP) {
+    public void setAP(BigDecimal AP) {
         this.AP = AP;
     }
 
-    public Double getINV() {
+    public BigDecimal getINV() {
         return INV;
     }
 
-    public void setINV(Double INV) {
+    public void setINV(BigDecimal INV) {
         this.INV = INV;
     }
 }

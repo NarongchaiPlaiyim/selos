@@ -254,6 +254,16 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
 
+        basicInfoView.setSpProgram(-1);
+        basicInfoView.setRefIn(-1);
+        basicInfoView.setRefOut(-1);
+        basicInfoView.setApplyBA(-1);
+
+        tmpSpecialProgram = -1;
+        tmpRefinanceIN = -1;
+        tmpRefinanceOUT = -1;
+        tmpApplyBA = -1;
+
         basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 
         if(basicInfoView.getId() == 0){
@@ -268,10 +278,6 @@ public class BasicInfo extends MandatoryFieldsControl {
         basicInfoAccountView = new BasicInfoAccountView();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
-
-        basicInfoView.setSpProgram(-1);
-        basicInfoView.setRefIn(-1);
-        basicInfoView.setRefOut(-1);
 
         onChangeSpecialProgram();
         onChangeRefIn();

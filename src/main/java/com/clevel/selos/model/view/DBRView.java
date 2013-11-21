@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBRView implements Serializable {
@@ -20,6 +21,8 @@ public class DBRView implements Serializable {
     private BigDecimal currentDBR;
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
+    private String modifyBy;
+    private Date modifyDate;
     private long workCaseId;
     private String userId;
 
@@ -139,7 +142,21 @@ public class DBRView implements Serializable {
         this.userId = userId;
     }
 
+    public String getModifyBy() {
+        return modifyBy;
+    }
 
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
 
     @Override
     public String toString() {

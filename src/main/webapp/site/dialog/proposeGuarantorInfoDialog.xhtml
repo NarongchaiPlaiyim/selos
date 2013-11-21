@@ -9,93 +9,106 @@
         <h:form id="guarantorDlgForm">
             <table class="content_form">
                 <tr>
-                    <td class="title" style="width: 250px;">
-                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantor.guarantorName')}"/>
+                    <td class="title" style="width: 150px;">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                     </td>
-                    <td style="width: 200px;">
+                    <td style="width: 400px;">
                         <p:selectOneMenu id="guarantorName"
                                          value="#{creditFacPropose.proposeGuarantorDetailView.guarantorName}"
                                          size="1"
                                          style="width: 200px;">
-                                         <!--required="true"-->
+                            <!--required="true"-->
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacPropose.guarantorList}"
                                            var="guarantorList"
                                            itemLabel="#{guarantorList.nameTh}"
                                            itemValue="#{guarantorList.id}"/>
-                      <!--      <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
-                                    update=":tcgDlgForm"/>-->
+                            <!--      <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
+                                          update=":tcgDlgForm"/>-->
                         </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                     </td>
                     <td>
-                        <h:outputText id="totalGuarantee" value="#{creditFacPropose.proposeGuarantorDetailView.tcgLgNo}"
-                                      style="text-align:right">
-                        </h:outputText>
+                        <p:inputText id="totalGuarantee" value="#{creditFacPropose.proposeGuarantorDetailView.tcgLgNo}"
+                                     style="text-align:right">
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
                     </td>
                     <td class="center">
-                        <p:dataTable style="width: 80%"
-                                     id="creditTypeTable"
-                                     value="#{creditFacPropose.proposeGuarantorDetailView.creditTypeDetailViewList}"
-                                     var="creditTypeItem"
-                                     rowKey="#{creditTypeItem.CreditTypeDetailView}"
-                                     rowIndexVar="rowIndex">
+                        <table class="table_noborder">
+                            <tr>
+                                <td>
+                                    <p:dataTable style="width: 90%"
+                                                 id="creditTypeTable"
+                                                 value="#{creditFacPropose.proposeGuarantorDetailView.creditTypeDetailViewList}"
+                                                 var="creditTypeItem"
+                                                 rowKey="#{creditTypeItem.CreditTypeDetailView}"
+                                                 rowIndexVar="rowIndex">
 
-                            <p:columnGroup type="header">
-                                <p:row>
-                                    <p:column style="width:20px;"/>
-                                    <p:column style="width:150px;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
-                                    <p:column style="width:150px;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
-                                    <p:column style="width:200px;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
-                                    <p:column style="width:200px;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
-                                    <p:column style="width:200px;"
-                                              headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
-                                </p:row>
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column style="width:20px;"/>
+                                                <p:column style="width:150px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
+                                                <p:column style="width:150px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
+                                                <p:column style="width:200px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
+                                                <p:column style="width:200px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
+                                                <p:column style="width:200px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
+                                                <p:column style="width:200px;"
+                                                          headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>
+                                            </p:row>
 
-                            </p:columnGroup>
+                                        </p:columnGroup>
 
-                            <p:column styleClass="center">
-                                <h:selectBooleanCheckbox value="#{creditTypeItem.noFlag}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:selectBooleanCheckbox value="#{creditTypeItem.noFlag}"/>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.account}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:outputText value="#{creditTypeItem.account}"/>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.type}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:outputText value="#{creditTypeItem.type}"/>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.productProgram}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:outputText value="#{creditTypeItem.productProgram}"/>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.creditFacility}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:outputText value="#{creditTypeItem.creditFacility}"/>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.limit}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <h:outputText value="#{creditTypeItem.limit}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
 
-                            <p:column styleClass="center">
-                                <h:outputText value="#{creditTypeItem.guaranteeAmount}"/>
-                            </p:column>
+                                        <p:column styleClass="center">
+                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}">
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <p:ajax event="blur" update="@this"/>
+                                            </p:inputText>
+                                        </p:column>
 
-                        </p:dataTable>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
@@ -105,15 +118,15 @@
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
-                                actionListener="#{creditFacPropose.onSaveGuarantorInfoDlg()}"
+                                action="#{creditFacPropose.onSaveGuarantorInfoDlg}"
                                 process=":guarantorDlgForm"
-                                update=":guarantorDlgForm,:frmMain:conditionInfoDetailTable"
+                                update=":guarantorDlgForm,:frmMain"
                                 oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                                 styleClass="small"
-                                onclick="PF('guarantorDlg').hide()"
+                                onclick="PF('guarantorInfoDlg').hide()"
                                 update=":guarantorDlgForm"/>
                     </td>
                 </tr>

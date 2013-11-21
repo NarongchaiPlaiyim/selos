@@ -4,7 +4,6 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -15,9 +14,7 @@ import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -29,9 +26,6 @@ import java.util.List;
 
 @Stateless
 public class NCBInfoControl extends BusinessControl {
-    @Inject
-    @SELOS
-    Logger log;
     @Inject
     NCBDetailTransform ncbDetailTransform;
     @Inject
@@ -154,7 +148,7 @@ public class NCBInfoControl extends BusinessControl {
                     }
                     ncbDetailView.setDebtForCalculate(debtForCalculate);
                     StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitleTh().getTitleTh())
+                    accountName.append(customer.getTitle().getTitleTh())
                             .append(" ").append(customer.getNameTh())
                             .append(" ").append(customer.getLastNameTh());
                     ncbDetailView.setAccountName(accountName.toString());

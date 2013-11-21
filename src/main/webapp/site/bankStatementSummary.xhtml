@@ -42,10 +42,10 @@
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
                         </td>
                         <td>
-                            <h:selectOneRadio value="#{bankStatementSummary.summaryView.seasonal}">
+                            <p:selectOneRadio value="#{bankStatementSummary.summaryView.seasonal}">
                                 <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
                                 <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                            </h:selectOneRadio>
+                            </p:selectOneRadio>
                         </td>
                     </tr>
                     <tr>
@@ -53,7 +53,7 @@
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
                         </td>
                         <td>
-                            <p:calendar id="calendarId" mindate="#{bankStatementSummary.summaryView.expectedSubmitDate}"
+                            <p:calendar id="calendarId" mindate="#{bankStatementSummary.toDay}"
                                         navigator="true" showButtonPanel="true" showOn="both"
                                         value="#{bankStatementSummary.summaryView.expectedSubmitDate}"
                                         pattern="dd/MM/yyyy"
@@ -64,7 +64,7 @@
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                             </p:calendar>
                             <p:spacer width="10"/>
-                            <p:commandButton value="#{msg.get('app.button.refresh')}"
+                            <p:commandButton id="btnRefresh" value="#{msg.get('app.button.refresh')}"
                                              action="#{bankStatementSummary.onRefresh()}" update=":frmMain"
                                              styleClass="smaller"/>
                         </td>
@@ -80,8 +80,9 @@
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.tmbBankStmtSum')}"/>
                         </td>
                         <td>
-                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                             action="#{bankStatementSummary.onLinkToAddTmbBankDetail()}"
+                            <p:commandButton id="btnAddTmbBank" value="#{msg.get('app.button.add')}"
+                                             action="#{bankStatementSummary.onClickAddTMBBankStmt()}" process="@form"
+                                             update=":frmMain, :confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>
                     </tr>
@@ -247,9 +248,11 @@
                                     </h:outputText>
                                 </p:column>
 
+                                <!-- Edit/Delete Buttons -->
                                 <p:column headerText="" styleClass="option" style="width:54px;">
                                     <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
-                                                     action="#{bankStatementSummary.onEditTmbBankStmt()}">
+                                                     action="#{bankStatementSummary.onEditTmbBankStmt()}"
+                                                     onclick="blockUI.show()" onsuccess="blockUI.hide()">
                                         <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
                                     </p:commandButton>
 
@@ -312,8 +315,9 @@
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.otherBankStmtSum')}"/>
                         </td>
                         <td>
-                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                             action="#{bankStatementSummary.onLinkToAddOthBankDetail()}"
+                            <p:commandButton id="btnAddOthBank" value="#{msg.get('app.button.add')}"
+                                             action="#{bankStatementSummary.onClickAddOtherBankStmt()}" process="@form"
+                                             update=":frmMain, :confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>
                     </tr>
@@ -470,9 +474,11 @@
                         </h:outputText>
                     </p:column>
 
+                    <!-- Edit/Delete Buttons -->
                     <p:column headerText="" styleClass="option" style="width:54px;">
                         <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
-                                         action="#{bankStatementSummary.onEditOthBankStmt()}">
+                                         action="#{bankStatementSummary.onEditOthBankStmt()}"
+                                         onclick="blockUI.show()" onsuccess="blockUI.hide()">
                             <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
                         </p:commandButton>
 
@@ -751,12 +757,24 @@
             </div>
         </h:form>
 
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    <p:blockUI widgetVar="blockUI" block=":frmMain"
+               trigger=":frmMain:btnRefresh,:frmMain:btnAddTmbBank,:frmMain:btnAddOthBank,:frmMain:btnSave">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
 
     </p:panel>
+
+    <ui:include src="dialog/confirmChangeScreenDlg.xhtml">
+        <ui:param name="id" value="confirmChangeScreenBankStmtDialog"/>
+        <ui:param name="name" value="confirmChangeScreenBankStmtDlg"/>
+        <ui:param name="headerMessage" value="#{bankStatementSummary.confirmMessageHeader}"/>
+        <ui:param name="message" value="#{bankStatementSummary.confirmMessage}"/>
+        <ui:param name="formId" value="frmConfirmChangeScreenBankStmt"/>
+        <ui:param name="controller" value="#{bankStatementSummary}"/>
+        <ui:param name="action" value="onRedirectToBankStmtDetail"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteBankStmtDialog"/>

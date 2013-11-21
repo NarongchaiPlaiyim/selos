@@ -131,10 +131,7 @@ public class DateTimeUtil {
     }
 
     public static Date getCurrentDateTH(){
-        Date date = new Date();
-        Date currentDate = convertToDateTH(date);
-
-        return currentDate;
+        return convertToDateTH(new Date());
     }
 
     public static int daysBetween2Dates(Date date1, Date date2) {
@@ -156,18 +153,28 @@ public class DateTimeUtil {
         }
     }
 
+    /**
+     * Return:<br/>
+     * 1: startDate is null<br/>
+     * 2: endDate is null<br/>
+     * 4: startDate is before or equal endDate<br/>
+     * 5: endDate is after now
+     * @param startDate
+     * @param endDate
+     * @return returnValidDateString
+     */
     public static String validDateEdit(Date startDate,Date endDate) {
         String rtnValidDate = "0";
-        if(startDate==null){
+        if(startDate==null) {
             rtnValidDate = "1";
             return rtnValidDate;
-        }else if(endDate==null){
+        } else if(endDate==null) {
             rtnValidDate = "2";
             return rtnValidDate;
-        }else if (daysBetween2Dates(startDate, endDate)<=0) {
+        } else if (daysBetween2Dates(startDate, endDate)<=0) {
             rtnValidDate = "4";
             return rtnValidDate;
-        }else if (daysBetween2Dates(new Date(), endDate)<0) {
+        } else if (daysBetween2Dates(new Date(), endDate)<0) {
             rtnValidDate = "5";
             return rtnValidDate;
         }
@@ -258,5 +265,21 @@ public class DateTimeUtil {
             stringList.add(String.valueOf(year));
         }
         return stringList;
+    }
+
+    public static int getDayOfDate(Date date) {
+        int day;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        return day;
+    }
+
+    public static int getMonthOfDate(Date date) {
+        return dateToCalendar(date).get(Calendar.MONTH) + 1;
+    }
+
+    public static int getYearOfDate(Date date) {
+        return dateToCalendar(date).get(Calendar.YEAR);
     }
 }
