@@ -1,6 +1,7 @@
 package com.clevel.selos.system;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserStatus;
 import org.slf4j.Logger;
@@ -38,6 +39,22 @@ public class Application {
                 if (aRadioValue.name().equalsIgnoreCase(str[i])) {
                     log.debug("assign value: {}", aRadioValue);
                     result[i] = aRadioValue;
+                }
+            }
+        }
+        return result;
+    }
+
+    public CreditCustomerType[] getCreditCustomerTypeValues(String values) {
+        String[] str = values.split("\\|");
+        CreditCustomerType[] result = new CreditCustomerType[str.length];
+        CreditCustomerType[] creditCustomerValue = CreditCustomerType.values();
+        log.debug("creditCustomerValue length: {}",creditCustomerValue.length);
+        for (int i=0;i<str.length;i++) {
+            for (CreditCustomerType aCreditCustomerType : creditCustomerValue) {
+                if (aCreditCustomerType.name().equalsIgnoreCase(str[i])) {
+                    log.debug("assign value: {}", aCreditCustomerType);
+                    result[i] = aCreditCustomerType;
                 }
             }
         }
