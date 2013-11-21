@@ -63,6 +63,27 @@ public class DWHInterfaceImpl implements DWHInterface, Serializable {
     }
 
     @Override
+    public ObligationResult getObligationData(String userId, String tmbCusId) {
+        log.debug("getObligationData (userId : {}, tmbCusId : {})", userId, tmbCusId);
+        ObligationResult obligationResult = new ObligationResult();
+        try {
+            if (tmbCusId != null && tmbCusId.trim().length() > 0) {
+                obligationResult = obligationService.getObligationByTmbCusId(tmbCusId);
+                log.debug("getObligationData result (obligationResult : {})", obligationResult);
+            } else {
+                obligationResult.setActionResult(ActionResult.FAILED);
+                obligationResult.setReason(msg.get(ExceptionMapping.DWH_INVALID_INPUT));
+                obligationResult.setObligationList(new ArrayList<Obligation>());
+            }
+        } catch (Exception e) {
+            log.error("Exception while get obligation data!", e);
+            throw new DWHInterfaceException(e, ExceptionMapping.DWH_OBLIGATION_EXCEPTION, msg.get(ExceptionMapping.DWH_OBLIGATION_EXCEPTION, userId));
+        }
+
+        return obligationResult;
+    }
+
+    @Override
     public DWHBankStatementResult getBankStatementData(String userId, String accountNumber, Date fromDate, int numberOfMonth) {
         log.debug("getBankStatementData (userId : {}, accountNumber : {}, fromDate : {}, numberOfMonth : {})", userId, accountNumber, fromDate, numberOfMonth);
         DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
