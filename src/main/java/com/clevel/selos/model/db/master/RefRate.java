@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "mst_ref_rate")
@@ -19,7 +20,7 @@ public class RefRate implements Serializable {
     @Column(name = "name", length = 10)
     private String name;
     @Column(name = "value")
-    private double  value;
+    private BigDecimal value;
     @Column(name = "active")
     private int active;
 
@@ -39,11 +40,11 @@ public class RefRate implements Serializable {
         this.name = name;
     }
 
-    public double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
