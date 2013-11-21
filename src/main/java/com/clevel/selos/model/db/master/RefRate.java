@@ -19,7 +19,7 @@ public class RefRate implements Serializable {
     @Column(name = "name", length = 10)
     private String name;
     @Column(name = "value")
-    private int value;
+    private double  value;
     @Column(name = "active")
     private int active;
 
@@ -39,11 +39,11 @@ public class RefRate implements Serializable {
         this.name = name;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
