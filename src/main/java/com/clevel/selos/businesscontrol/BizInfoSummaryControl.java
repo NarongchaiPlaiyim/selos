@@ -5,6 +5,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -12,6 +13,7 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,16 +23,25 @@ import java.util.List;
 @Stateless
 public class BizInfoSummaryControl extends BusinessControl {
     @Inject
-    BizInfoDetailTransform bizInfoDetailTransform;
+    @SELOS
+    private Logger log;
 
-    @Inject
-    BizInfoSummaryTransform bizInfoSummaryTransform;
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
+    @Inject
+    BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    BizInfoSummaryTransform bizInfoSummaryTransform;
+
+    @Inject
+    public BizInfoSummaryControl(){
+
+    }
 
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
         BizInfoSummary bizInfoSummary;

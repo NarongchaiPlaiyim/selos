@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.transform.ContactRecordDetailTransform;
 import com.clevel.selos.transform.CustomerAcceptanceTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -18,16 +20,25 @@ import java.util.List;
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     CustomerAcceptanceDAO customerAcceptanceDAO;
     @Inject
     ContactRecordDetailDAO contactRecordDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
     @Inject
     CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
     ContactRecordDetailTransform contactRecordDetailTransform;
 
+    @Inject
+    public CustomerAcceptanceControl(){
+
+    }
 
     public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList, long workCaseId) {
 

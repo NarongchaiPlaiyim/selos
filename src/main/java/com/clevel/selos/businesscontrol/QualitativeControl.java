@@ -3,26 +3,31 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.transform.QualitativeTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-
-
 @Stateless
 public class QualitativeControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
     QualitativeADAO qualitativeADAO;
     @Inject
     QualitativeBDAO qualitativeBDAO;
+
     @Inject
     QualitativeTransform qualitativeTransform;
 

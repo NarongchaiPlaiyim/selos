@@ -2,10 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.BPMInterface;
-import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.RLOSInterface;
-import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
@@ -23,12 +20,14 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -39,6 +38,10 @@ import java.util.List;
 
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject
@@ -62,6 +65,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     NCBDetailTransform ncbDetailTransform;
 
+    @Inject
+    private UserDAO userDAO;
     @Inject
     PrescreenDAO prescreenDAO;
     @Inject
@@ -109,7 +114,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     CustomerAccountNameDAO customerAccountNameDAO;
 
-
     @Inject
     RMInterface rmInterface;
     @Inject
@@ -131,7 +135,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     BankStmtControl bankStmtControl;
 
-
+    @Inject
     public PrescreenBusinessControl(){
 
     }

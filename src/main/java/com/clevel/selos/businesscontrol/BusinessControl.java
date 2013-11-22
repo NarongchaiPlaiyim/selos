@@ -13,9 +13,14 @@ import java.io.Serializable;
 public abstract class BusinessControl implements Serializable {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
+
+    @Inject
+    public BusinessControl(){
+
+    }
 
     protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -32,5 +37,4 @@ public abstract class BusinessControl implements Serializable {
             return null;
         }
     }
-
 }

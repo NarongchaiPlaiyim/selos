@@ -13,16 +13,22 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 
-public class AddressFilterControl implements Serializable {
+public class AddressFilterControl extends BusinessControl {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     ProvinceDAO provinceDAO;
     @Inject
     DistrictDAO districtDAO;
     @Inject
     SubDistrictDAO subDistrictDAO;
+
+    @Inject
+    public AddressFilterControl(){
+
+    }
 
     public List<Province> onGetListOrderByParameter(String parameter) {
 

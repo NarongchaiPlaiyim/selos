@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
@@ -13,6 +15,7 @@ import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,26 +26,27 @@ import java.util.List;
 @Stateless
 public class InboxControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     BPMInterface bpmInterface;
 
     @Inject
+    private UserDAO userDAO;
+    @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
-
     @Inject
     WorkCaseDAO workCaseDAO;
-
     @Inject
     CustomerDAO customerDAO;
-
     @Inject
     PrescreenDAO prescreenDAO;
-
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
 
     @Inject
     InboxBizTransform inboxBizTransform;
-
     @Inject
     CustomerTransform customerTransform;
 
@@ -56,6 +60,7 @@ public class InboxControl extends BusinessControl {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
+        //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
         List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
         /*List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();

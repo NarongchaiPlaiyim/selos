@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
@@ -20,6 +22,7 @@ import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -30,6 +33,10 @@ import java.util.List;
 
 @Stateless
 public class BankStmtControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+
     //Interface
     @Inject
     private RMInterface rmInterface;
@@ -37,6 +44,8 @@ public class BankStmtControl extends BusinessControl {
     DWHInterface dwhInterface;
 
     //DAO
+    @Inject
+    private UserDAO userDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -55,6 +64,11 @@ public class BankStmtControl extends BusinessControl {
     ActionStatusTransform actionStatusTransform;
     @Inject
     BankStmtTransform bankStmtTransform;
+
+    @Inject
+    public BankStmtControl(){
+
+    }
 
     public BankStmtSummaryView retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSumitDate) {
         return retreiveBankStmtInterface(customerInfoViewList, expectedSumitDate, 0);

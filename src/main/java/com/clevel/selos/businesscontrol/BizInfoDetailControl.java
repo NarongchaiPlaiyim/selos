@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
@@ -16,6 +17,7 @@ import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,8 +27,11 @@ import java.util.List;
 @Stateless
 public class BizInfoDetailControl extends BusinessControl {
     @Inject
-    BusinessDescriptionDAO businessDescriptionDAO;
+    @SELOS
+    private Logger log;
 
+    @Inject
+    BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
@@ -34,13 +39,19 @@ public class BizInfoDetailControl extends BusinessControl {
     @Inject
     BizProductDetailDAO bizProductDetailDAO;
     @Inject
+    BizInfoSummaryDAO bizInfoSummaryDAO;
+
+    @Inject
     BizProductDetailTransform bizProductDetailTransform;
     @Inject
     BizStakeHolderDetailTransform bizStakeHolderDetailTransform;
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
+
     @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
+    public BizInfoDetailControl(){
+
+    }
 
     public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId) {
 
