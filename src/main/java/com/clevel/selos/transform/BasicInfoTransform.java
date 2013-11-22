@@ -44,15 +44,15 @@ public class BasicInfoTransform extends Transform {
             basicInfo.setProductGroup(null);
         }
 
-        basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid() ? 1 : 0);
-        basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending() ? 1 : 0);
+        basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid() ? 2 : 1);
+        basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending() ? 2 : 1);
 
-        basicInfo.setConstructionRequestLG(basicInfoView.isCharFCLG() ? 1 : 0);
-        basicInfo.setAbleToGettingGuarantorJob(basicInfoView.isCharFCIns() ? 1 : 0);
-        basicInfo.setNoClaimLGHistory(basicInfoView.isCharFCCom() ? 1 : 0);
-        basicInfo.setNoRevokedLicense(basicInfoView.isCharFCAba() ? 1 : 0);
-        basicInfo.setNoLateWorkDelivery(basicInfoView.isCharFCLate() ? 1 : 0);
-        basicInfo.setAdequateOfCapitalResource(basicInfoView.isCharFCFund() ? 1 : 0);
+        basicInfo.setConstructionRequestLG(basicInfoView.isCharFCLG() ? 2 : 1);
+        basicInfo.setAbleToGettingGuarantorJob(basicInfoView.isCharFCIns() ? 2 : 1);
+        basicInfo.setNoClaimLGHistory(basicInfoView.isCharFCCom() ? 2 : 1);
+        basicInfo.setNoRevokedLicense(basicInfoView.isCharFCAba() ? 2 : 1);
+        basicInfo.setNoLateWorkDelivery(basicInfoView.isCharFCLate() ? 2 : 1);
+        basicInfo.setAdequateOfCapitalResource(basicInfoView.isCharFCFund() ? 2 : 1);
 
         basicInfo.setApplySpecialProgram(basicInfoView.getSpProgram());
         basicInfo.setSpecialProgram(basicInfoView.getSpecialProgram());
@@ -131,15 +131,15 @@ public class BasicInfoTransform extends Transform {
             basicInfoView.setProductGroup(new ProductGroup());
         }
 
-        basicInfoView.setCharUnPaid(basicInfo.getUnpaidFeeInsurance() != 0);
-        basicInfoView.setCharNoPending(basicInfo.getNoPendingClaimLG() != 0);
+        basicInfoView.setCharUnPaid(basicInfo.getUnpaidFeeInsurance() != 1);
+        basicInfoView.setCharNoPending(basicInfo.getNoPendingClaimLG() != 1);
 
-        basicInfoView.setCharFCLG(basicInfo.getConstructionRequestLG() != 0);
-        basicInfoView.setCharFCIns(basicInfo.getAbleToGettingGuarantorJob() != 0);
-        basicInfoView.setCharFCCom(basicInfo.getNoClaimLGHistory() != 0);
-        basicInfoView.setCharFCAba(basicInfo.getNoRevokedLicense() != 0);
-        basicInfoView.setCharFCLate(basicInfo.getNoLateWorkDelivery() != 0);
-        basicInfoView.setCharFCFund(basicInfo.getAdequateOfCapitalResource() != 0);
+        basicInfoView.setCharFCLG(basicInfo.getConstructionRequestLG() != 1);
+        basicInfoView.setCharFCIns(basicInfo.getAbleToGettingGuarantorJob() != 1);
+        basicInfoView.setCharFCCom(basicInfo.getNoClaimLGHistory() != 1);
+        basicInfoView.setCharFCAba(basicInfo.getNoRevokedLicense() != 1);
+        basicInfoView.setCharFCLate(basicInfo.getNoLateWorkDelivery() != 1);
+        basicInfoView.setCharFCFund(basicInfo.getAdequateOfCapitalResource() != 1);
 
         basicInfoView.setSpProgram(basicInfo.getApplySpecialProgram());
 

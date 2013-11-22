@@ -122,8 +122,8 @@
                                 <td colspan="3" style="width: 300px;">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumJuris.customerInfoView.relation.getId() == 3 || custInfoSumJuris.customerInfoView.relation.getId() == 4}">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -958,8 +958,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.convenantFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                                 <td class="title">
@@ -967,8 +967,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.reviewFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -986,8 +986,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.worthiness}" disabled="#{custInfoSumJuris.editBorrower}">
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.pass')}" itemValue="2"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.fail')}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.pass')}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.fail')}" itemValue="4"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.na')}" itemValue="4"/>
                                     </p:selectOneRadio>
                                 </td>

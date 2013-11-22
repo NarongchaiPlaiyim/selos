@@ -122,8 +122,8 @@
                                 <td colspan="3" style="width: 300px;">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3 || custInfoSumIndi.customerInfoView.relation.getId() == 4}">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1050,8 +1050,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                                 <td class="title">
@@ -1059,8 +1059,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1078,9 +1078,9 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.worthiness}" disabled="#{custInfoSumIndi.editBorrower}">
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="2"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="3"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="4"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="4"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="5"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1219,8 +1219,8 @@
                                     <td colspan="3" style="width: 300px;">
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
                                                           disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3 || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4}">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
@@ -2021,8 +2021,8 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" disabled="true">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                     <td class="title">
@@ -2030,8 +2030,8 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" disabled="true">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
@@ -2049,9 +2049,9 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.worthiness}" disabled="#{custInfoSumIndi.editSpouseBorrower}">
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="2"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="3"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="4"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="3"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="4"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="5"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
