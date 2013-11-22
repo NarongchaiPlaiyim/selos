@@ -73,6 +73,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+
     }
 
     public int getRequestType() {
@@ -308,4 +309,6 @@ public class ProposeCreditDetailView implements Serializable {
     public void setReduceFrontEndFlag(boolean reduceFrontEndFlag) {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
+
+
 }

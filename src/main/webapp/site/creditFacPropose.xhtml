@@ -596,8 +596,8 @@
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
-            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{proposeCreditDetailView.productCode}"/><br/>
-            <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{proposeCreditDetailView.projectCode}"/>
+            <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{proposeCredit.productCode}"/><br/>
+            <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{proposeCredit.projectCode}"/>
         </td>
         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?

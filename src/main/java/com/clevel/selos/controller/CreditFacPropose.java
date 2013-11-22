@@ -61,7 +61,7 @@ public class CreditFacPropose implements Serializable {
     private User user;
 
     enum ModeForButton {ADD, EDIT}
-
+    private ModeForButton modeForTier;
     private ModeForButton modeForButton;
 
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
@@ -90,8 +90,7 @@ public class CreditFacPropose implements Serializable {
     //for control Propose Credit
     private ProposeCreditDetailView proposeCreditDetailView;
     private ProposeCreditDetailView proposeCreditDetailSelected;
-    CreditTierDetailView creditTierDetailView;
-    List<CreditTierDetailView> creditTierDetailViewList;
+    private CreditTierDetailView creditTierDetailView;
     private int rowSpanNumber;
     private boolean modeEdit;
 
@@ -134,6 +133,8 @@ public class CreditFacPropose implements Serializable {
     @Inject
     PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;
     @Inject
+    ProductFormulaDAO productFormulaDAO;
+    @Inject
     DisbursementDAO disbursementDAO;
     @Inject
     CustomerDAO customerDAO;
@@ -173,14 +174,15 @@ public class CreditFacPropose implements Serializable {
                 guarantorList = creditFacProposeControl.getListOfGuarantor(workCaseId);
             }
 
-            if(productGroup == null){
+            if (productGroup == null) {
                 basicInfo = creditFacProposeControl.getBasicByWorkCaseId(workCaseId);
 
-                if(basicInfo != null){
+                if (basicInfo != null) {
                     productGroup = basicInfo.getProductGroup();
                 }
             }
         }
+
 
         if (creditFacProposeView == null) {
             creditFacProposeView = new CreditFacProposeView();
@@ -238,14 +240,14 @@ public class CreditFacPropose implements Serializable {
             potentialCollateralList = new ArrayList<PotentialCollateral>();
         }
 
-        if(prdGroupToPrdProgramList == null){
+        if (prdGroupToPrdProgramList == null) {
             prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         }
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
 
-        if(productGroup != null){
+        if (productGroup != null) {
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
         }
 
@@ -312,15 +314,39 @@ public class CreditFacPropose implements Serializable {
 
     //  Start Propose Credit Information  //
 
-    public void onChangeProductProgram(){
+    public void onChangeProductProgram() {
         ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
+        prdProgramToCreditTypeList = null;
+        proposeCreditDetailView.setProductCode("");
+        proposeCreditDetailView.setProjectCode("");
+
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
-        if(prdProgramToCreditTypeList == null){
+        if (prdProgramToCreditTypeList == null) {
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
-        log.debug("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
+        log.debug("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " + prdProgramToCreditTypeList.size());
+    }
+
+    public void onChangeCreditType() {
+        log.debug("onChangeCreditType :::: creditType : {}",proposeCreditDetailView.getCreditType().getId());
+        if ((proposeCreditDetailView.getProductProgram().getId() != 0) && (proposeCreditDetailView.getCreditType().getId() != 0)) {
+            ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
+            CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
+
+            if(productProgram != null && creditType != null){
+                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
+                ProductFormula productFormula = productFormulaDAO.findProductFormula(prdProgramToCreditType);
+                log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
+
+                if(productFormula != null){
+                    proposeCreditDetailView.setProductCode(productFormula.getProductCode());
+                    proposeCreditDetailView.setProjectCode(productFormula.getProjectCode());
+                }
+            }
+        }
+
     }
 
     public void onAddCreditInfo() {
@@ -337,7 +363,7 @@ public class CreditFacPropose implements Serializable {
         log.info("creditFacProposeView.creditInfoDetailViewList :: {}", creditFacProposeView.getProposeCreditDetailViewList());
         ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
-        CreditType creditType = proposeCreditDetailSelected.getCreditType();
+        CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
 
         if (rowIndex < creditFacProposeView.getProposeCreditDetailViewList().size()) {
             proposeCreditDetailView = new ProposeCreditDetailView();
@@ -351,7 +377,6 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetailView.setPCEPercent(proposeCreditDetailSelected.getPCEPercent());
             proposeCreditDetailView.setPCEAmount(proposeCreditDetailSelected.getPCEAmount());
 
-            creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
             proposeCreditDetailView.setCreditTierDetailViewList(proposeCreditDetailSelected.getCreditTierDetailViewList());
         }
     }
@@ -378,13 +403,7 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setPCEPercent(proposeCreditDetailView.getPCEPercent());
                 creditDetailAdd.setPCEAmount(proposeCreditDetailView.getPCEAmount());
 
-                creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
-                creditTierDetailView = new CreditTierDetailView();
-                creditTierDetailView.setStandardPrice(BigDecimal.ONE);
-                creditTierDetailViewList.add(creditTierDetailView);
-                creditTierDetailView = new CreditTierDetailView();
-                creditTierDetailViewList.add(creditTierDetailView);
-                creditDetailAdd.setCreditTierDetailViewList(creditTierDetailViewList);
+                creditDetailAdd.setCreditTierDetailViewList(proposeCreditDetailView.getCreditTierDetailViewList());
 
                 creditFacProposeView.getProposeCreditDetailViewList().add(creditDetailAdd);
 
@@ -431,9 +450,9 @@ public class CreditFacPropose implements Serializable {
 
     //  Start Tier Dialog //
     public void onAddTierInfo() {
-        log.info("onAddCreditInfo ::: ");
+        log.info("onAddTierInfo ::: ");
         creditTierDetailView = new CreditTierDetailView();
-        modeForButton = ModeForButton.ADD;
+        modeForTier = ModeForButton.ADD;
     }
 
     public void onSaveTierInfo() {
@@ -441,13 +460,14 @@ public class CreditFacPropose implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+        if (modeForTier != null && modeForTier.equals(ModeForButton.ADD)) {
             CreditTierDetailView creditTierDetailAdd = new CreditTierDetailView();
             creditTierDetailAdd.setSuggestPrice(creditTierDetailView.getSuggestPrice());
             creditTierDetailAdd.setStandardPrice(creditTierDetailView.getStandardPrice());
             creditTierDetailAdd.setFinalPriceRate(creditTierDetailView.getFinalPriceRate());
             creditTierDetailAdd.setTenor(creditTierDetailView.getTenor());
             creditTierDetailAdd.setInstallment(creditTierDetailView.getInstallment());
+            proposeCreditDetailView.getCreditTierDetailViewList().add(creditTierDetailAdd);
         } else {
             log.info("onSaveNcbRecord ::: Undefined modeForButton !!");
             complete = false;
@@ -523,12 +543,12 @@ public class CreditFacPropose implements Serializable {
         proposeGuarantorDetailView = new ProposeGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
 
-       // find list  creditTypeDetailList of guarantor  :: test
+        // find list  creditTypeDetailList of guarantor  :: test
         creditTypeDetailList = new ArrayList<CreditTypeDetailView>();
 
         creditTypeDetailView = new CreditTypeDetailView();
         creditTypeDetailView.setAccount("Mr. A Example " +
-                                        "Acc No. xx-xxx-xxxx-xxxx");
+                "Acc No. xx-xxx-xxxx-xxxx");
         creditTypeDetailView.setProductProgram("SmartBiz");
         creditTypeDetailView.setCreditFacility("OD");
         creditTypeDetailView.setType("New");
@@ -548,7 +568,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onEditGuarantorInfo() {
-        log.info("onEditGuarantorInfo ::: {}",rowIndex);
+        log.info("onEditGuarantorInfo ::: {}", rowIndex);
     }
 
     public void onSaveGuarantorInfoDlg() {
@@ -556,8 +576,8 @@ public class CreditFacPropose implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if(proposeGuarantorDetailView.getGuarantorName() != null){
-            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
+        if (proposeGuarantorDetailView.getGuarantorName() != null) {
+            if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
                 ProposeGuarantorDetailView guarantorDetailAdd = new ProposeGuarantorDetailView();
                 guarantorDetailAdd.setGuarantorName(proposeGuarantorDetailView.getGuarantorName());
                 guarantorDetailAdd.setTcgLgNo(proposeGuarantorDetailView.getTcgLgNo());
@@ -565,7 +585,7 @@ public class CreditFacPropose implements Serializable {
 
                 guarantorDetailAdd.setCreditTypeDetailViewList(proposeGuarantorDetailView.getCreditTypeDetailViewList());
                 creditFacProposeView.getProposeGuarantorDetailViewList().add(guarantorDetailAdd);
-            } else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
+            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
 
             } else {
                 log.info("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
@@ -581,7 +601,7 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteGuarantorInfo() {
         log.info("onDeleteGuarantorInfo ::: {}", proposeGuarantorDetailViewItem.getTcgLgNo());
-       creditFacProposeView.getProposeGuarantorDetailViewList().remove(proposeGuarantorDetailViewItem);
+        creditFacProposeView.getProposeGuarantorDetailViewList().remove(proposeGuarantorDetailViewItem);
         log.info("delete success");
     }
     //  END Guarantor //
@@ -917,5 +937,7 @@ public class CreditFacPropose implements Serializable {
     public void setPrdGroupToPrdProgramList(List<PrdGroupToPrdProgram> prdGroupToPrdProgramList) {
         this.prdGroupToPrdProgramList = prdGroupToPrdProgramList;
     }
+
+
 }
 

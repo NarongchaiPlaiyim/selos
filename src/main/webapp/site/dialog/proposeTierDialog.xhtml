@@ -13,7 +13,11 @@
                         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
                     </td>
                     <td style="width: 200px;">
-
+                        <p:inputText styleClass="large"
+                                     id="standard"
+                                     value="#{creditFacPropose.creditTierDetailView.standardPrice}"
+                                     required="true"
+                                     style="width:200px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -21,7 +25,11 @@
                         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                     </td>
                     <td style="width: 200px;">
-
+                        <p:inputText styleClass="large"
+                                     id="suggest"
+                                     value="#{creditFacPropose.creditTierDetailView.suggestPrice}"
+                                     required="true"
+                                     style="width:200px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -32,7 +40,7 @@
                         <p:inputText styleClass="large" id="finalPriceRate"
                                      value="#{creditFacPropose.creditTierDetailView.finalPriceRate}"
                                      required="true"
-                                     style="width:200px;">
+                                     style="width:200px;text-align: right">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -46,10 +54,8 @@
                         <p:inputText styleClass="large"
                                      id="tenor"
                                      value="#{creditFacPropose.creditTierDetailView.tenor}"
-                                     required="#{not empty param[addDlgData.clientId]}"
-                                     style="width:200px;" >
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update="@this"/>
+                                     required="#{not empty param[addDlgTier.clientId]}"
+                                     style="width:200px;text-align: right" >
                         </p:inputText>
                     </td>
                 </tr>
@@ -61,8 +67,8 @@
                         <p:inputText styleClass="large"
                                      id="installment"
                                      value="#{creditFacPropose.creditTierDetailView.installment}"
-                                     required="#{not empty param[addDlgData.clientId]}"
-                                     style="width:200px;" >
+                                     required="#{not empty param[addDlgTier.clientId]}"
+                                     style="width:200px;text-align: right" >
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
@@ -73,11 +79,11 @@
                         <p:commandButton
                                 id="saveTier"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
-                                binding="#{addDlgData}"
+                                binding="#{addDlgTier}"
                                 styleClass="small"
-                                actionListener="#{creditFacPropose.onAddTierInfo}"
+                                actionListener="#{creditFacPropose.onSaveTierInfo()}"
                                 process=":proposeTierDlgForm"
-                                update=":proposeTierDlgForm"
+                                update=":creditInfoDlgForm:resultFinal"
                                 oncomplete="handleTierDlgRequest(xhr, status, args)"/>
 
                         <p:commandButton
