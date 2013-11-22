@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
@@ -227,6 +228,9 @@ public class PrescreenMaker implements Serializable {
     private PrescreenTransform prescreenTransform;
     @Inject
     private PrescreenBusinessControl prescreenBusinessControl;
+    @Inject
+    private CustomerInfoSummaryControl customerInfoSummaryControl;
+
     @Inject
     private InboxControl inboxControl;
 
@@ -1872,6 +1876,7 @@ public class PrescreenMaker implements Serializable {
                 if(customerInfoResultView.getCustomerInfoView() != null){
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
+                    borrowerInfo = customerInfoSummaryControl.getInfoForExistingCustomer(borrowerInfo);
 
                     enableCustomerForm = true;
                     enableDocumentType = false;
