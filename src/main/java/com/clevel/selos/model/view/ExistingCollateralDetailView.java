@@ -18,13 +18,14 @@ public class ExistingCollateralDetailView implements Serializable {
     private String cusName;
     private String accountNumber;
     private String accountSuffix;
+    private String productProgram;
     private String creditFacility;//todo: Change creditFacility to view object?
     private BigDecimal limit;
     private String mortgageType;//todo: Change mortgageType to view object?
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
 
-    private List<CreditTypeDetailView> creditTypeDetailViewList;
+//    private List<CreditTypeDetailView> creditTypeDetailViewList;
 
     public long getId() {
         return id;
@@ -122,6 +123,14 @@ public class ExistingCollateralDetailView implements Serializable {
         this.accountSuffix = accountSuffix;
     }
 
+    public String getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
+    }
+
     public String getCreditFacility() {
         return creditFacility;
     }
@@ -160,13 +169,5 @@ public class ExistingCollateralDetailView implements Serializable {
 
     public void setMortgageValue(BigDecimal mortgageValue) {
         this.mortgageValue = mortgageValue;
-    }
-
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
-    }
-
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
     }
 }
