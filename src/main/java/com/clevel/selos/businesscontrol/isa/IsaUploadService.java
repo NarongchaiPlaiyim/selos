@@ -199,21 +199,27 @@ public class IsaUploadService extends BusinessControl {
             log.debug("===== begin getToken =====");
             String _tmp = input;
             List<String> tokens = new ArrayList<String>();
+            System.out.println("11");
             while (_tmp.length() > 0) {
+                System.out.println("22");
                 _tmp = _tmp.trim();
                 String token = null;
                 if (_tmp.charAt(0) == '\"') {
+                    System.out.println("33");
                     int dIdx = _tmp.indexOf('\"', 1);
                     token = _tmp.substring(1, dIdx);
                     int cIdx = _tmp.indexOf(",", dIdx + 1);
                     _tmp = _tmp.substring(cIdx + 1);
 
                 } else {
+                    System.out.println("44");
                     int cIdx = _tmp.indexOf(",");
                     if (cIdx < 0) {
+                        System.out.println("55");
                         token = _tmp;
                         _tmp = "";
                     } else {
+                        System.out.println("66");
                         token = _tmp.substring(0, cIdx);
                         _tmp = _tmp.substring(cIdx + 1);
                     }
@@ -222,6 +228,7 @@ public class IsaUploadService extends BusinessControl {
                 log.debug("_tmp value after subString {}", _tmp);
             }
             while(tokens.size() < 8){
+                System.out.println("77");
                 tokens.add("");
             }
 
