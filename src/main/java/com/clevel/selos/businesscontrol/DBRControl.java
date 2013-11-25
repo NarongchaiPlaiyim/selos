@@ -51,8 +51,6 @@ public class DBRControl extends BusinessControl {
     @Inject
     NCBInfoControl ncbInfoControl;
 
-
-
     public DBRControl() {
 
     }
@@ -154,9 +152,9 @@ public class DBRControl extends BusinessControl {
             switch (loanType){
                 case 1:  //normal
                     if(dbrDetail.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment != 0
-                        debtForCalculate = debtForCalculate.add(dbrDetail.getInstallment());
+                        debtForCalculate = dbrDetail.getInstallment();
                     }else {
-                        debtForCalculate =  dbrDetail.getLimit().multiply(dbr.getDbrInterest());
+                        debtForCalculate = dbrDetail.getLimit().multiply(dbr.getDbrInterest());
                         debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
                         debtForCalculate = debtForCalculate.divide(month, 2, RoundingMode.HALF_UP);
                     }
@@ -176,36 +174,36 @@ public class DBRControl extends BusinessControl {
             totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail
+
         BigDecimal dbrBeforeRequest = BigDecimal.ZERO;
         BigDecimal netMonthlyIncome = BigDecimal.ZERO;
         BigDecimal currentDBR = BigDecimal.ZERO;
-        //DbrInfo
-
+        //**** Begin DBRInfo ****//
         currentDBR = totalMonthDebtBorrower.add(totalMonthDebtRelated);
 
-        if(roleId == RoleUser.UW.getValue()){
-            //todo confirm formula adjusted income Factor
-            netMonthlyIncome = dbr.getMonthlyIncome().multiply(dbr.getIncomeFactor());
-            netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100));
-            if(netMonthlyIncome.compareTo(BigDecimal.ZERO) == 0){
-                netMonthlyIncome = dbr.getMonthlyIncome().multiply(dbr.getIncomeFactor());
-            }
-            netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
-
-        }else if(roleId == RoleUser.BDM.getValue()){
-            //netMonthlyIncome
-            netMonthlyIncome = dbr.getMonthlyIncome().multiply(dbr.getIncomeFactor());
-            netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100));
-            netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
-        }
+        netMonthlyIncome = dbr.getMonthlyIncomeAdjust().multiply(dbr.getIncomeFactor());
+        netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
+
+        //Ex summary Final DBR
+        BigDecimal debt = BigDecimal.ZERO;
+
+        if(roleId == RoleUser.BDM.getValue()){
+
+        }else if(roleId == RoleUser.UW.getValue()){
+
+        }
+        BigDecimal finalDBR = BigDecimal.ZERO;
+        finalDBR = debt.divide(netMonthlyIncome, 2, RoundingMode.HALF_UP);
 
         // update dbr
         dbr.setNetMonthlyIncome(netMonthlyIncome);
         dbr.setCurrentDBR(currentDBR);
         dbr.setDbrBeforeRequest(dbrBeforeRequest);
         dbr.setDbrDetails(dbrDetails);
+        dbr.setFinalDBR(finalDBR);
         log.debug("calculateDBR complete");
         return dbr;
     }
