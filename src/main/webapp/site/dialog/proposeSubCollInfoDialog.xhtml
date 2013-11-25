@@ -1,5 +1,6 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
@@ -7,28 +8,27 @@
 <p:panel id="subCollateralDlgPanel" styleClass="panel-dialog">
 <h:form id="subCollateralDlgForm">
 
-<!--
 <table class="content_form">
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 180px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
     </td>
-    <td style="width: 200px;">
+    <td style="width: 300px;" class="left">
         <p:selectOneMenu id="dlgSubCollateralType"
-                         value="#{creditFacPropose.subCollateralDetailView.subCollateralType}"
+                         value="#{creditFacPropose.subCollateralDetailView.subCollateralType.id}"
                          size="1"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 150px; width: 150px; max-width: 150px;"
                          required="#{not empty param[addSubCollDlg.clientId]}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.subCollateralTypeList}"
                            var="subCollateralTypeItem"
                            itemLabel="#{subCollateralTypeItem.description}"
-                           itemValue="#{subCollateralTypeItem.code}"/>
+                           itemValue="#{subCollateralTypeItem.id}"/>
         </p:selectOneMenu>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
     </td>
     <td>
@@ -36,15 +36,15 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.subCollateralDetailView.address}"/>
+        <p:inputText value="#{creditFacPropose.subCollateralDetailView.address}" style="width:300px;"/>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
     </td>
     <td>
@@ -52,7 +52,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
     </td>
     <td>
@@ -60,10 +60,10 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
     </td>
-    <td>
+   <!-- <td>
         <p:selectOneMenu id="collateralOwnerUW"
                          value="#{creditFacPropose.subCollateralDetailView.collateralOwner}"
                          size="1"
@@ -82,15 +82,15 @@
                 styleClass="smaller"
                 actionListener="#{creditFacPropose.onAddCollateralOwnerUW()}"
                 process="@this"
-                update=":subCollateralDlgForm:CollOwnerUWTb">
+                update=":subCollateralDlgForm">
         </p:commandButton>
-    </td>
+    </td>-->
 </tr>
 <tr>
     <td>
     </td>
     <td>
-        <p:dataTable id="CollOwnerUWTb" var="CollOwnerUWItem">
+       <!-- <p:dataTable id="CollOwnerUWTb" var="CollOwnerUWItem">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;"/>
@@ -111,22 +111,22 @@
             <p:column styleClass="center">
             </p:column>
 
-        </p:dataTable>
+        </p:dataTable>-->
 
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
     </td>
-    <td>
+    <!--<td>
         <p:selectOneMenu id="mortgageType"
                          value="#{creditFacPropose.subCollateralDetailView.mortgageType}"
                          size="1"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="#{not empty param[addSubCollDlg.clientId]}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            &lt;!&ndash; <f:selectItems value="#{creditFacPropose.List}"
+         &lt;!&ndash;   <f:selectItems value="#{creditFacPropose.List}"
                             var="collateralOwnerUWItem"
                             itemLabel="#{collateralOwnerUWItem.description}"
                             itemValue="#{collateralOwnerUWItem.code}"/>&ndash;&gt;
@@ -138,15 +138,15 @@
                 styleClass="smaller"
                 actionListener="#{creditFacPropose.onAddMortgageType()}"
                 process="@this"
-                update=":subCollateralDlgForm:MortgageTb">
+                update=":subCollateralDlgForm">
         </p:commandButton>
-    </td>
+    </td>-->
 </tr>
 <tr>
     <td>
     </td>
     <td>
-        <p:dataTable id="MortgageTb" var="MortgageItem">
+        <!--<p:dataTable id="MortgageTb" var="MortgageItem">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;"/>
@@ -167,21 +167,21 @@
             <p:column styleClass="center">
             </p:column>
 
-        </p:dataTable>
+        </p:dataTable>-->
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
     </td>
     <td>
-        <p:selectOneMenu id="relatedWith"
+       <!-- <p:selectOneMenu id="relatedWith"
                          value="#{creditFacPropose.subCollateralDetailView.relatedWith}"
                          size="1"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          required="#{not empty param[addSubCollDlg.clientId]}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            &lt;!&ndash; <f:selectItems value="#{creditFacPropose.List}"
+            &lt;!&ndash;<f:selectItems value="#{creditFacPropose.List}"
                             var="collateralOwnerUWItem"
                             itemLabel="#{collateralOwnerUWItem.description}"
                             itemValue="#{collateralOwnerUWItem.code}"/>&ndash;&gt;
@@ -193,15 +193,15 @@
                 styleClass="smaller"
                 actionListener="#{creditFacPropose.onAddRelatedWith()}"
                 process="@this"
-                update=":subCollateralDlgForm:RelatedWithTb">
-        </p:commandButton>
+                update=":subCollateralDlgForm">
+        </p:commandButton>-->
     </td>
 </tr>
 <tr>
     <td>
     </td>
     <td>
-        <p:dataTable id="RelatedWithTb" var="RelatedWithItem">
+        <!--<p:dataTable id="RelatedWithTb" var="RelatedWithItem">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;"/>
@@ -222,26 +222,36 @@
             <p:column styleClass="center">
             </p:column>
 
-        </p:dataTable>
+        </p:dataTable>-->
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.subCollateralDetailView.appraisalValue}">
-
+        <p:inputText value="#{creditFacPropose.subCollateralDetailView.appraisalValue}"
+                     style="text-align: right;">
+            <f:convertNumber pattern="#,##0"
+                             minFractionDigits="2"
+                             maxFractionDigits="2"
+                             maxIntegerDigits="14"/>
+            <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.subCollateralDetailView.mortgageValue}">
-
+        <p:inputText value="#{creditFacPropose.subCollateralDetailView.mortgageValue}"
+                     style="text-align: right;">
+            <f:convertNumber pattern="#,##0"
+                             minFractionDigits="2"
+                             maxFractionDigits="2"
+                             maxIntegerDigits="14"/>
+            <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
 </tr>
@@ -254,7 +264,7 @@
                 styleClass="small"
                 actionListener="#{creditFacPropose.onSaveSubCollateral()}"
                 process=":subCollateralDlgForm"
-                update=":subCollateralDlgForm,:collateralDlgForm:subCollateralDetailViewTable"
+                update=":subCollateralDlgForm,:collateralDlgForm"
                 oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
 
         <p:commandButton
@@ -265,14 +275,14 @@
     </td>
 </tr>
 </table>
--->
+
 
 </h:form>
 </p:panel>
 
-<!--<p:blockUI widgetVar="blockSubCollateralDlg" block="subCollateralDlgPanel" trigger=":subCollateralDlgForm:saveSubColl">
+<p:blockUI widgetVar="blockSubCollateralDlg" block="subCollateralDlgPanel" trigger=":subCollateralDlgForm:saveSubColl">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>-->
+</p:blockUI>
 
 </ui:composition>

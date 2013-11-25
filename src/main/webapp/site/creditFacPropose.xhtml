@@ -451,10 +451,13 @@
         <table class="table_noborder" style="width: 100%">
             <tr>
                 <td colspan="2">
-                    <p:selectOneRadio value="">
+                    <p:selectOneRadio  id="creditCustomerTypeValue" value="#{creditFacPropose.creditFacProposeView.creditCustomerType}" >
+                        <f:selectItems value="#{app.getCreditCustomerTypeValues('Normal|Prime')}" />
+                    </p:selectOneRadio>
+                 <!--   <p:selectOneRadio value="">
                         <f:selectItem itemLabel="Normal" itemValue="1"/>
                         <f:selectItem itemLabel="Prime" itemValue="0"/>
-                    </p:selectOneRadio>
+                    </p:selectOneRadio>-->
                 </td>
             </tr>
             <tr>
@@ -464,16 +467,15 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="creditRequest"
-                                     value="#{creditFacPropose.creditRequestTypeSelected}"
+                                     value="#{creditFacPropose.creditFacProposeView.creditRequestType.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="true">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.creditRequestTypeList}"
-                                       var="creditRequestType"
-                                       itemLabel="#{creditRequestType.description}"
-                                       itemValue="#{creditRequestType.code}"/>
-
+                                       var="creditRequest"
+                                       itemLabel="#{creditRequest.name}"
+                                       itemValue="#{creditRequest.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -484,7 +486,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="countryItem"
-                                     value="#{creditFacPropose.countrySelected}"
+                                     value="#{creditFacPropose.creditFacProposeView.country.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="true">
@@ -1101,7 +1103,7 @@
                 actionListener="#{creditFacPropose.onAddProposeCollInfo}"
                 update=":collateralDlgForm"
                 oncomplete="collateralInfoDlg.show();">
-            <p:resetInput target=":collateralDlgForm"/>
+            <!--<p:resetInput target=":collateralDlgForm"/>-->
         </p:commandButton>
     </td>
 </tr>
@@ -1258,15 +1260,16 @@
         <div class="separate"></div>
     </td>
 </tr>
+
 <ui:repeat value="#{creditFacPropose.proposeCollateralInfoView.collateralHeaderDetailViewList}"
-           var="collateralHeaderDetailView">
+           var="CollateralHeaderDetailView">
     <tr>
         <td class="title" style="width: 150px;">
             <p:outputLabel
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.potentialCollateral.description}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.potentialCollateral.description}"/>
         </td>
     </tr>
     <tr>
@@ -1284,7 +1287,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.existingCredit}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.existingCredit}"/>
         </td>
     </tr>
     <tr>
@@ -1293,7 +1296,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.titleDeed}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.titleDeed}"/>
         </td>
     </tr>
     <tr>
@@ -1302,7 +1305,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.collateralLocation}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.collateralLocation}"/>
         </td>
     </tr>
     <tr>
@@ -1311,7 +1314,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.appraisalValue')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.appraisalValue}">
+            <h:outputText value="#{CollateralHeaderDetailView.appraisalValue}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             </h:outputText>
         </td>
@@ -1331,7 +1334,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
         </td>
         <td>
-            <p:selectOneRadio value="#{collateralHeaderDetailView.insuranceCompany}">
+            <p:selectOneRadio value="#{CollateralHeaderDetailView.insuranceCompany}">
                 <f:selectItem itemLabel="Partner" itemValue="1"/>
                 <f:selectItem itemLabel="Non Partner" itemValue="0"/>
             </p:selectOneRadio>
@@ -1341,10 +1344,10 @@
         <td colspan="4">
             <p:dataTable tableStyleClass="center"
                          id="subCollateralDetailViewTable"
+                         value="#{CollateralHeaderDetailView.subCollateralDetailViewList}"
                          var="subCollateralDetailView"
-                         value="#{collateralHeaderDetailView.subCollateralDetailViewList}"
                          paginator="false"
-                         rowKey="#{subCollateralDetailView.id}"
+                         rowKey="#{subCollateralDetailView.SubCollateralDetailView}"
                          rowIndexVar="rowIndex">
                 <p:columnGroup type="header">
                     <p:row>
@@ -1356,8 +1359,8 @@
                                 headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}"/>
                         <p:column
                                 headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>
+<!--                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')} "/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>-->
                         <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')} "/>
                         <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')} "/>
                         <p:column/>
@@ -1380,12 +1383,12 @@
                 <p:column styleClass="left">
                     <h:outputText value="#{subCollateralDetailView.collateralOwner}"/>
                 </p:column>
-                <p:column styleClass="left">
+<!--                <p:column styleClass="left">
                     <h:outputText value="#{subCollateralDetailView.mortgageType}"/>
                 </p:column>
                 <p:column styleClass="left">
                     <h:outputText value="#{subCollateralDetailView.relatedWith}"/>
-                </p:column>
+                </p:column>-->
                 <p:column styleClass="right">
                     <h:outputText value="#{subCollateralDetailView.appraisalValue}">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
@@ -1475,7 +1478,7 @@
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{proposeGuarantorDetailView.guarantorName}"/>
+                            <h:outputText value="#{proposeGuarantorDetailView.guarantorName.nameTh}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1518,12 +1521,12 @@
                             <p:commandButton icon="ui-icon-pencil"
                                              action="#{creditFacPropose.onEditGuarantorInfo()}"
                                              update=":guarantorDlgForm"
-                                             process=":frmMain"
-                                             oncomplete="guanrantorInfoDlg.show();">
+                                             process="@this"
+                                             oncomplete="guarantorInfoDlg.show();">
                                 <f:setPropertyActionListener value="#{proposeGuarantorDetailView}"
                                                              target="#{creditFacPropose.proposeGuarantorDetailViewItem}"/>
                                 <f:setPropertyActionListener value="#{g.index}"
-                                                             target="#{creditFacPropose.rowIndex}"/>
+                                                             target="#{creditFacPropose.rowIndexGuarantor}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
                                              process="@this"
@@ -1755,7 +1758,7 @@
 
 <!-- Propose Collateral Dialog -->
 <p:dialog id="collateralInfoDialog" header="Propose Collateral Information" widgetVar="collateralInfoDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" >
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
 

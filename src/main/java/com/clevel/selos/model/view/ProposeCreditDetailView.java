@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CreditType;
-import com.clevel.selos.model.db.master.Disbursement;
-import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,8 +23,12 @@ public class ProposeCreditDetailView implements Serializable {
     private int reduceFrontEndFee;
     private boolean reduceFlag;
     private boolean reduceFrontEndFlag;
+    private RefRate standardBase;
     private BigDecimal standardPrice;
+    private BigDecimal standardAdd;
+    private RefRate suggestBase;
     private BigDecimal suggestPrice;
+    private BigDecimal suggestAdd;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -74,6 +75,10 @@ public class ProposeCreditDetailView implements Serializable {
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
 
+        this.standardBase = new RefRate();
+        this.suggestBase = new RefRate();
+        this.standardAdd = BigDecimal.ZERO;
+        this.suggestAdd = BigDecimal.ZERO;
     }
 
     public int getRequestType() {
@@ -310,5 +315,35 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 
+    public RefRate getStandardBase() {
+        return standardBase;
+    }
 
+    public void setStandardBase(RefRate standardBase) {
+        this.standardBase = standardBase;
+    }
+
+    public BigDecimal getStandardAdd() {
+        return standardAdd;
+    }
+
+    public void setStandardAdd(BigDecimal standardAdd) {
+        this.standardAdd = standardAdd;
+    }
+
+    public RefRate getSuggestBase() {
+        return suggestBase;
+    }
+
+    public void setSuggestBase(RefRate suggestBase) {
+        this.suggestBase = suggestBase;
+    }
+
+    public BigDecimal getSuggestAdd() {
+        return suggestAdd;
+    }
+
+    public void setSuggestAdd(BigDecimal suggestAdd) {
+        this.suggestAdd = suggestAdd;
+    }
 }
