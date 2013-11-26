@@ -41,22 +41,24 @@ public class STPExecutor {
 
 
 
-    public String addUserFromFile(String sql, Object... params) {
+    public String addUserFromFile( Object... params) {
 
-        String result="";
+        String result=null;
         try{
 
-            Query query=em.createNativeQuery("CALL SLOS.pUserprofileUpload(:userId,:userName,:email,:buCode,:phoneExt,:phoneNumber,:active,8,9,10" +
-                                            ",11,12,13,14,15,16,17)");
+            Query query=em.createNativeQuery("{CALL SLOS.PUSERFILEUPLOAD ( ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ? )}");
 
-            for(int i =0;i<params.length;i++){
+            for(int i =0;i < params.length;i++){
+                System.out.println("oooooooooo "+params[i]);
                 query.setParameter(i+1,params[i]);
-                result=(String)query.getSingleResult();
             }
-                query.executeUpdate();
+            query.setParameter(17,result);
+            result=(String)query.getSingleResult();
+//                query.executeUpdate();
+
 
         }catch (Exception e){
-
+                 e.printStackTrace();
         }finally {
             try{
 

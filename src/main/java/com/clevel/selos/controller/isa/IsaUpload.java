@@ -53,7 +53,7 @@ public class IsaUpload implements Serializable {
 
     private final static String UPLOAD_FOLDER = "_userUpload";
     public final static String RESULT_FILENAME = "UPLOAD_RESULT_";
-    private final static String PATH_FILE = "C:\\Users\\boonsongrit\\Desktop\\slosUploadFile";
+    private final static String PATH_FILE = "C:\\Users\\sahawat\\Desktop\\FileUploadTest";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
 
