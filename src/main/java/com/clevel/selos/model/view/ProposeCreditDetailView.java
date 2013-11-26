@@ -52,7 +52,7 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void reset(){
         this.requestType=0;
-        this.isRefinance=0;
+        this.isRefinance=1;
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();

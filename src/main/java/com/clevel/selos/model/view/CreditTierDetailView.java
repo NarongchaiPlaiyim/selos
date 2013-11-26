@@ -14,6 +14,10 @@ public class CreditTierDetailView implements Serializable {
     private RefRate finalBase;
     private BigDecimal finalPriceRate;
     private BigDecimal installment;
+    private RefRate suggestBase;
+    private BigDecimal suggestPrice;
+    private RefRate standardBase;
+    private BigDecimal standardPrice;
     private int tenor;
     private boolean canEdit;
     private Date createDate;
@@ -30,6 +34,10 @@ public class CreditTierDetailView implements Serializable {
         this.finalPriceRate = BigDecimal.ZERO;
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
+        this.standardBase = new RefRate();
+        this.standardPrice = BigDecimal.ZERO;
+        this.suggestBase = new RefRate();
+        this.suggestPrice = BigDecimal.ZERO;
     }
 
     public int getNo() {
@@ -110,6 +118,38 @@ public class CreditTierDetailView implements Serializable {
 
     public void setCanEdit(boolean canEdit) {
         this.canEdit = canEdit;
+    }
+
+    public RefRate getSuggestBase() {
+        return suggestBase;
+    }
+
+    public void setSuggestBase(RefRate suggestBase) {
+        this.suggestBase = suggestBase;
+    }
+
+    public BigDecimal getSuggestPrice() {
+        return suggestPrice;
+    }
+
+    public void setSuggestPrice(BigDecimal suggestPrice) {
+        this.suggestPrice = suggestPrice;
+    }
+
+    public RefRate getStandardBase() {
+        return standardBase;
+    }
+
+    public void setStandardBase(RefRate standardBase) {
+        this.standardBase = standardBase;
+    }
+
+    public BigDecimal getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(BigDecimal standardPrice) {
+        this.standardPrice = standardPrice;
     }
 
     @Override

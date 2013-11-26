@@ -209,9 +209,9 @@
         <p:commandButton
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
-                process="@this"
+                process="@form"
                 update=":creditInfoDlgForm:resultFinal"
-                action="#{creditFacPropose.onAddTierInfo()}"
+                actionListener="#{creditFacPropose.onAddTierInfo()}"
                 disabled="#{creditFacPropose.modeEdit}">
         </p:commandButton>
     </td>
@@ -220,9 +220,12 @@
     <td class="title">
     </td>
     <td colspan="3">
-        <p:dataTable id="resultFinal" var="item"
+        <p:dataTable id="resultFinal"
+                     var="item"
                      value="#{creditFacPropose.proposeCreditDetailView.creditTierDetailViewList}"
-                     rowKey="#{item.creditTierDetailView}" rowIndexVar="rowIndex" style="width: 100%">
+                     rowKey="#{item.creditTierDetailView}"
+                     rowIndexVar="rowIndex"
+                     style="width: 100%">
 
             <p:columnGroup type="header">
                 <p:row>
@@ -235,14 +238,13 @@
                               headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
                     <p:column style="width:50px;"/>
                 </p:row>
-
             </p:columnGroup>
 
             <p:column styleClass="center">
                 <h:outputText value="#{rowIndex+1}"/>
             </p:column>
 
-            <p:column styleClass="center">
+            <p:column>
                 <p:panelGrid  styleClass="panelGridPadding0" style="width:200px;">
                     <p:row>
                         <p:column>
@@ -256,54 +258,31 @@
                             </p:selectOneMenu>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{item.finalPriceRate}" style="width: 100px;">
+                            <p:inputText value="#{item.finalPriceRate}" style="width: 100px;text-align: right">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            </h:outputText>
+                            </p:inputText>
                         </p:column>
                     </p:row>
                 </p:panelGrid>
             </p:column>
 
-
             <p:column styleClass="right">
-                <h:outputText value="#{item.tenor}"/>
+                <p:inputText value="#{item.tenor}" style="text-align: right"/>
             </p:column>
 
             <p:column styleClass="right">
-                <h:outputText value="#{item.installment}">
+                <p:inputText value="#{item.installment}" style="text-align: right">
                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                </h:outputText>
-<!--                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{item.installment}">
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        </h:outputText>
-                    </f:facet>
-                    <f:facet name="input">
-                        <h:inputText value="#{item.installment}"  >
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        </h:inputText>
-                    </f:facet>
-                </p:cellEditor>-->
+                    <p:ajax event="blur" update="@this"/>
+                </p:inputText>
             </p:column>
 
-            <p:column styleClass="center" >
-                <p:commandButton icon="ui-icon-pencil"
-                                 rendered="#{item.canEdit}"
-                                 action="#{creditFacPropose.onEditTierInfo()}"
-                                 process="@this"
-                                 update=":creditInfoDlgForm:resultFinal" >
-                    <f:setPropertyActionListener value="#{item}"
-                                                 target="#{creditFacPropose.tierSelected}"/>
-                    <f:setPropertyActionListener value="#{rowIndex}"
-                                                 target="#{creditFacPropose.rowTierIndex}"/>
-                </p:commandButton>
+            <p:column styleClass="center">
                 <p:commandButton icon="ui-icon-trash"
                                  rendered="#{item.canEdit}"
-                                 process="@this"
-                                 onsuccess="confirmDeleteTierInfoDlg.show();">
-                    <f:setPropertyActionListener value="#{item}"
-                                                 target="#{creditFacPropose.tierSelected}"/>
+                                 process="@form"
+                                 update=":creditInfoDlgForm"
+                                 actionListener="#{creditFacPropose.onDeleteProposeTierInfo(rowIndex)}">
                 </p:commandButton>
             </p:column>
 

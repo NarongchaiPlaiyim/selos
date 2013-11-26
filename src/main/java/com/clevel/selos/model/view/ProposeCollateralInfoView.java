@@ -27,7 +27,6 @@ public class ProposeCollateralInfoView implements Serializable {
     private User modifyBy;
 
     private List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
-    private CollateralHeaderDetailView collateralHeaderDetailView;
     private List<CreditTypeDetailView> creditTypeDetailViewList;
 
     public ProposeCollateralInfoView(){
@@ -50,8 +49,6 @@ public class ProposeCollateralInfoView implements Serializable {
 
         this.collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
-        this.collateralHeaderDetailView = new CollateralHeaderDetailView();
-
     }
 
     public long getId() {
@@ -196,14 +193,6 @@ public class ProposeCollateralInfoView implements Serializable {
 
     public void setCollateralHeaderDetailViewList(List<CollateralHeaderDetailView> collateralHeaderDetailViewList) {
         this.collateralHeaderDetailViewList = collateralHeaderDetailViewList;
-    }
-
-    public CollateralHeaderDetailView getCollateralHeaderDetailView() {
-        return collateralHeaderDetailView;
-    }
-
-    public void setCollateralHeaderDetailView(CollateralHeaderDetailView collateralHeaderDetailView) {
-        this.collateralHeaderDetailView = collateralHeaderDetailView;
     }
 
     public List<CreditTypeDetailView> getCreditTypeDetailViewList() {

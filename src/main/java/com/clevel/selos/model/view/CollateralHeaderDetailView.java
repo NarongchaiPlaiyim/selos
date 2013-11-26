@@ -19,7 +19,7 @@ public class CollateralHeaderDetailView {
     private PotentialCollateral   potentialCollateral ;
 
     //dropdown
-//    private collTypePercentLTV ;
+    private String collTypePercentLTV ;
 
     private String existingCredit;
     private int insuranceCompany;
@@ -156,5 +156,13 @@ public class CollateralHeaderDetailView {
 
     public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
         this.potentialCollateral = potentialCollateral;
+    }
+
+    public String getCollTypePercentLTV() {
+        return collTypePercentLTV;
+    }
+
+    public void setCollTypePercentLTV(String collTypePercentLTV) {
+        this.collTypePercentLTV = collTypePercentLTV;
     }
 }

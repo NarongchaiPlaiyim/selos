@@ -19,6 +19,8 @@ public class CreditTypeDetailView implements Serializable {
     private String creditFacility;
     private BigDecimal  limit;
     private BigDecimal  guaranteeAmount;
+    private int usaCount;
+    private int seq;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -33,7 +35,6 @@ public class CreditTypeDetailView implements Serializable {
     public void reset() {
         this.id = 0;
         this.no = 0;
-        this.noFlag = false;
         this.account = "";
         this.Type  = "";
         this.requestType = 0;
@@ -41,6 +42,8 @@ public class CreditTypeDetailView implements Serializable {
         this.creditFacility  = "";
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
+        this.usaCount = 0;
+        this.seq = 0;
 
     }
 
@@ -53,12 +56,7 @@ public class CreditTypeDetailView implements Serializable {
     }
 
     public int getNo() {
-        if(noFlag){
-            return 1;
-        }else{
-            return 0;
-        }
-
+          return no;
     }
 
     public void setNo(int no) {
@@ -137,13 +135,6 @@ public class CreditTypeDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public boolean isNoFlag() {
-        return noFlag;
-    }
-
-    public void setNoFlag(boolean noFlag) {
-        this.noFlag = noFlag;
-    }
 
     public BigDecimal getGuaranteeAmount() {
         return guaranteeAmount;
@@ -159,6 +150,30 @@ public class CreditTypeDetailView implements Serializable {
 
     public void setRequestType(int requestType) {
         this.requestType = requestType;
+    }
+
+    public int getUsaCount() {
+        return usaCount;
+    }
+
+    public void setUsaCount(int usaCount) {
+        this.usaCount = usaCount;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public boolean isNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
     }
 
     @Override
