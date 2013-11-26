@@ -35,7 +35,7 @@ public class DBRTransform extends Transform {
         dbrView.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
         dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
         dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
-        dbrView.setModifyDate(DateTimeUtil.convertToDateTH(dbr.getModifyDate()));
+        dbrView.setModifyDate(dbr.getModifyDate());
         return dbrView;
     }
 

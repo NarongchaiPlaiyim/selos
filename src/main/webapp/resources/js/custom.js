@@ -335,6 +335,6 @@ function handleGuarantorInfoRequest(xhr, status, args) {
 }
 
 
-function onSave(buttonID, isDisable){
+function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
 }

@@ -130,7 +130,7 @@ public class NCBInfoControl extends BusinessControl {
                     BigDecimal dbrInterest = getDBRInterest();
                     switch (accountType.getCalculateType()){
                         case 1:
-                            if(ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
+                            if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
                                 debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
                                 debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
                                 debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
