@@ -49,6 +49,9 @@ public class DBR implements Serializable {
     @Column(name = "dbr_interest")
     private BigDecimal dbrInterest;
 
+    @Column(name ="final_dbr")
+    private BigDecimal finalDBR;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -189,11 +192,20 @@ public class DBR implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public BigDecimal getFinalDBR() {
+        return finalDBR;
+    }
+
+    public void setFinalDBR(BigDecimal finalDBR) {
+        this.finalDBR = finalDBR;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
+                .append("dbrDetails", dbrDetails)
                 .append("incomeFactor", incomeFactor)
                 .append("monthlyIncome", monthlyIncome)
                 .append("monthlyIncomeAdjust", monthlyIncomeAdjust)
@@ -201,6 +213,12 @@ public class DBR implements Serializable {
                 .append("netMonthlyIncome", netMonthlyIncome)
                 .append("currentDBR", currentDBR)
                 .append("dbrBeforeRequest", dbrBeforeRequest)
+                .append("dbrInterest", dbrInterest)
+                .append("finalDBR", finalDBR)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

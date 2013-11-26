@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -114,16 +115,18 @@ public class NCBInfoControl extends BusinessControl {
             Customer customer = ncb.getCustomer();
             List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
             AccountType accountType;
+            AccountStatus accountStatus;
             for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
-                if(accountType.getDbrFlag() == 1){
+                accountStatus = ncbDetail.getAccountStatus();
+                if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
                     NCBDetailView ncbDetailView = new NCBDetailView();
                     ncbDetailView.setId(ncbDetail.getId());
                     ncbDetailView.setLimit(ncbDetail.getLimit());
                     ncbDetailView.setInstallment(ncbDetail.getInstallment());
                     BigDecimal debtForCalculate = BigDecimal.ZERO;
-                    //todo hardcode interest
+
                     BigDecimal dbrInterest = getDBRInterest();
                     switch (accountType.getCalculateType()){
                         case 1:
