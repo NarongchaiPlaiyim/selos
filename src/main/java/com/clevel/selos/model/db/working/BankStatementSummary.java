@@ -61,6 +61,9 @@ public class BankStatementSummary implements Serializable {
     @Column(name = "grand_avg_os_balance_amt")
     private BigDecimal grdTotalAvgOSBalanceAmount;
 
+    @Column(name = "count_refresh")
+    private int countRefresh;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -264,6 +267,14 @@ public class BankStatementSummary implements Serializable {
         this.bankStmtList = bankStmtList;
     }
 
+    public int getCountRefresh() {
+        return countRefresh;
+    }
+
+    public void setCountRefresh(int countRefresh) {
+        this.countRefresh = countRefresh;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -282,12 +293,14 @@ public class BankStatementSummary implements Serializable {
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
                 .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
+                .append("countRefresh", countRefresh)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("workCase", workCase)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("bankStmtList", bankStmtList)
                 .toString();
     }
 }

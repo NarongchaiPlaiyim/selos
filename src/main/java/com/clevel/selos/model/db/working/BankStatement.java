@@ -52,7 +52,7 @@ public class BankStatement implements Serializable {
     private int accountCharacteristic;
 
     @Column(name = "limit")
-    private BigDecimal limit;
+    private BigDecimal avgLimit;
 
     @Column(name = "avg_income_gross")
     private BigDecimal avgIncomeGross;
@@ -202,12 +202,12 @@ public class BankStatement implements Serializable {
         this.accountCharacteristic = accountCharacteristic;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
+    public BigDecimal getAvgLimit() {
+        return avgLimit;
     }
 
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
+    public void setAvgLimit(BigDecimal avgLimit) {
+        this.avgLimit = avgLimit;
     }
 
     public BigDecimal getAvgIncomeGross() {
@@ -391,7 +391,7 @@ public class BankStatement implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("mainAccount", mainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
-                .append("limit", limit)
+                .append("avgLimit", avgLimit)
                 .append("avgIncomeGross", avgIncomeGross)
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)
                 .append("avgIncomeNetUW", avgIncomeNetUW)
