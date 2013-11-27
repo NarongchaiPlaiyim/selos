@@ -28,7 +28,6 @@ import java.util.List;
 public class BizInfoDetailControl extends BusinessControl {
     @Inject
     BusinessDescriptionDAO businessDescriptionDAO;
-
     @Inject
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject

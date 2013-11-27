@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.CreditCustomerType;
+import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
@@ -52,6 +55,10 @@ public class CreditFacProposeView implements Serializable {
     private BigDecimal frontendFeeDOA;
     private BigDecimal guarantorBA;
     private String reasonForReduction;
+
+    private CreditCustomerType creditCustomerType;
+    private CreditRequestType  creditRequestType;
+    private Country country;
 
     private List<ProposeFeeDetailView> proposeFeeDetailViewList;
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
@@ -125,6 +132,8 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
 
+        this.creditRequestType = new CreditRequestType();
+        this.country = new Country();
 
     }
 
@@ -518,5 +527,29 @@ public class CreditFacProposeView implements Serializable {
 
     public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
         this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
+
+    public CreditCustomerType getCreditCustomerType() {
+        return creditCustomerType;
+    }
+
+    public void setCreditCustomerType(CreditCustomerType creditCustomerType) {
+        this.creditCustomerType = creditCustomerType;
+    }
+
+    public CreditRequestType getCreditRequestType() {
+        return creditRequestType;
+    }
+
+    public void setCreditRequestType(CreditRequestType creditRequestType) {
+        this.creditRequestType = creditRequestType;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

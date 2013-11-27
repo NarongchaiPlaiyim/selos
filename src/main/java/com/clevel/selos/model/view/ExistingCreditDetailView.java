@@ -15,6 +15,9 @@ import java.util.List;
 public class ExistingCreditDetailView implements Serializable {
 
     private long id;
+    private int no;
+    private int seq;
+    private boolean noFlag;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
@@ -49,6 +52,30 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public boolean isNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
     }
 
     public String getAccountName() {
@@ -263,6 +290,9 @@ public class ExistingCreditDetailView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("no", no)
+                .append("seq", seq)
+                .append("noFlag", noFlag)
                 .append("accountName", accountName)
                 .append("accountSuf", accountSuf)
                 .append("accountNumber", accountNumber)
