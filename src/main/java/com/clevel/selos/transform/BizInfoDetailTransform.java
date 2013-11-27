@@ -69,6 +69,7 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setModifyBy(bizInfoDetailView.getModifyBy());
         bizInfoDetail.setModifyDate(DateTime.now().toDate());
 
+        bizInfoDetail.setIsMainDetail(bizInfoDetailView.getIsMainDetail());
 
         return bizInfoDetail;
     }
@@ -127,6 +128,8 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setModifyDate(bizInfoDetail.getModifyDate());
         bizInfoDetailView.setCreateBy(bizInfoDetail.getCreateBy());
         bizInfoDetailView.setCreateDate(bizInfoDetail.getCreateDate());
+
+        bizInfoDetailView.setIsMainDetail(bizInfoDetail.getIsMainDetail());
 
         return bizInfoDetailView;
     }

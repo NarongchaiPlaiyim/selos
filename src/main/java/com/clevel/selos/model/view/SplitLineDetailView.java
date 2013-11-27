@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.ProductProgram;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 
@@ -31,5 +33,14 @@ public class SplitLineDetailView {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("no", no)
+                .append("limit", limit)
+                .append("productProgram", productProgram)
+                .toString();
     }
 }

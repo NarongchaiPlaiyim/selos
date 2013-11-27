@@ -6,6 +6,7 @@ import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
@@ -312,10 +313,10 @@ public class CustomerInfoJuristic implements Serializable {
 
         documentTypeList = documentTypeDAO.findAll();
 //        relationList = relationDAO.getOtherRelationList();
-        relationList = relationCustomerDAO.getListRelationWithOutBorrower(2,caseBorrowerTypeId,0);
+        relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(2);
-        titleThList = titleDAO.getListByCustomerEntityId(2);
+        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
+        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
         businessTypeList = businessTypeDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -327,12 +328,12 @@ public class CustomerInfoJuristic implements Serializable {
 
         addressFlagForm2 = 1;
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(2);
+        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
-        customerInfoView.setCollateralOwner(0);
+        customerInfoView.setCollateralOwner(1);
 
         enableDocumentType = true;
         enableCitizenId = true;
@@ -360,10 +361,10 @@ public class CustomerInfoJuristic implements Serializable {
         if(customerInfoView.getRelation().getId() == 1){
             isEditBorrower = true;
 //            relationList = relationDAO.findAll();
-            relationList = relationCustomerDAO.getListRelation(2, caseBorrowerTypeId, 0);
+            relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
 //            relationList = relationDAO.getOtherRelationList();
-            relationList = relationCustomerDAO.getListRelationWithOutBorrower(2,caseBorrowerTypeId,0);
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
         }
     }
 
@@ -393,7 +394,7 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onChangeRelation(){
 //        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
-        referenceList = referenceDAO.findReferenceByFlag(2, caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
+        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
     }
 
     public void onChangeProvinceForm1() {

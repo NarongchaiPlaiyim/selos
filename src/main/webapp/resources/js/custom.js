@@ -293,6 +293,39 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     }
 }
 
+function handleDlgCreditExistingRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        existingCreditDlg.hide();
+    }
+}
+
+// Credit Facility Existing Collateral Dialog
+function handleExistingCollateralBorrowerRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        existingCollateralBorrowerDlg.hide();
+    }
+}
+
+// Credit Facility Existing Collateral Dialog
+function handleExistingCollateralRelatedRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        existingCollateralRelatedDlg.hide();
+    }
+}
+
+function handleExistingGuarantorRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        existingGuarantorDlg.hide();
+    }
+}
+
+// Credit Facility Existing Guarantor Dialog
+function handleExistingGuarantorInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        existingGuarantorInfoDlg.hide();
+    }
+}
+
 // Credit Facility Propose Credit Dialog
 function handleDlgCreditProposeRequest(xhr, status, args) {
     if (args.functionComplete) {
@@ -306,12 +339,6 @@ function handleTierDlgRequest(xhr, status, args) {
     }
 }
 
-// Credit Facility Propose Condition Dialog
-function handleConditionInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        conditionDlg.hide();
-    }
-}
 
 // Credit Facility Propose Collateral Dialog
 function handleProposeCollateralDetailRequest(xhr, status, args) {
@@ -334,6 +361,7 @@ function handleGuarantorInfoRequest(xhr, status, args) {
     }
 }
 
+// Credit Facility Propose Credit Dialog
 
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
