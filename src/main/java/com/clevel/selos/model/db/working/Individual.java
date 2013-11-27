@@ -28,8 +28,8 @@ public class Individual implements Serializable {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @Column(name = "gender")
-    private Gender gender;
+    @Column(name = "gender", nullable=false, columnDefinition="int default 0")
+    private int gender;
 
     @OneToOne
     @JoinColumn(name = "nationality_id")
@@ -97,11 +97,11 @@ public class Individual implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public Gender getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
