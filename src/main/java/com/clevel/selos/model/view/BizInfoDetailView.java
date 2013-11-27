@@ -65,6 +65,8 @@ public class BizInfoDetailView implements Serializable {
     private List<BizStakeHolderDetailView> supplierDetailList;
     private List<BizStakeHolderDetailView> buyerDetailList;
 
+    private int isMainDetail;
+
     public void reset() {
         this.bizDesc = new BusinessDescription();
         this.bizDesc.setBusinessGroup(new BusinessGroup());
@@ -488,43 +490,70 @@ public class BizInfoDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public void setIsMainDetail(int mainDetail) {
+        this.isMainDetail = mainDetail;
+    }
+
+    public int getIsMainDetail(){
+        return isMainDetail;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("bizInfoText", bizInfoText)
-                .append("bizActivity", bizActivity)
-                .append("bizType", bizType)
-                .append("bizGroup", bizGroup)
-                .append("bizDesc", bizDesc)
-                .append("bizCode", bizCode)
-                .append("incomeFactor", incomeFactor)
-                .append("adjustedIncomeFactor", adjustedIncomeFactor)
-                .append("percentBiz", percentBiz)
-                .append("bizPermission", bizPermission)
-                .append("bizComment", bizComment)
-                .append("standardAccountReceivable", standardAccountReceivable)
-                .append("averagePurchaseAmount", averagePurchaseAmount)
-                .append("purchasePercentCash", purchasePercentCash)
-                .append("purchasePercentCredit", purchasePercentCredit)
-                .append("purchasePercentLocal", purchasePercentLocal)
-                .append("purchasePercentForeign", purchasePercentForeign)
-                .append("purchaseTerm", purchaseTerm)
-                .append("standardAccountPayable", standardAccountPayable)
-                .append("averagePayableAmount", averagePayableAmount)
-                .append("payablePercentCash", payablePercentCash)
-                .append("payablePercentCredit", payablePercentCredit)
-                .append("payablePercentLocal", payablePercentLocal)
-                .append("payablePercentForeign", payablePercentForeign)
-                .append("payableTerm", payableTerm)
-                .append("standardStock", standardStock)
-                .append("stockDurationBDM", stockDurationBDM)
-                .append("stockDurationUW", stockDurationUW)
-                .append("stockValueBDM", stockValueBDM)
-                .append("stockValueUW", stockValueUW)
-                .append("bizProductDetailViewList", bizProductDetailViewList)
-                .append("supplierDetailList", supplierDetailList)
-                .append("buyerDetailList", buyerDetailList)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("bizInfoText", bizInfoText).
+                append("bizActivity", bizActivity).
+                append("bizType", bizType).
+                append("bizGroup", bizGroup).
+                append("bizDesc", bizDesc).
+                append("bizCode", bizCode).
+                append("incomeFactor", incomeFactor).
+                append("adjustedIncomeFactor", adjustedIncomeFactor).
+                append("bizComment", bizComment).
+                append("percentBiz", percentBiz).
+                append("bizPermission", bizPermission).
+                append("bizDocPermission", bizDocPermission).
+                append("bizDocExpiryDate", bizDocExpiryDate).
+                append("expIndCountryName", expIndCountryName).
+                append("percentExpIndCountryName", percentExpIndCountryName).
+                append("supplierTotalPercentBuyVolume", supplierTotalPercentBuyVolume).
+                append("supplierTotalPercentCredit", supplierTotalPercentCredit).
+                append("supplierTotalCreditTerm", supplierTotalCreditTerm).
+                append("supplierUWAdjustPercentCredit", supplierUWAdjustPercentCredit).
+                append("supplierUWAdjustCreditTerm", supplierUWAdjustCreditTerm).
+                append("buyerTotalPercentBuyVolume", buyerTotalPercentBuyVolume).
+                append("buyerTotalPercentCredit", buyerTotalPercentCredit).
+                append("buyerTotalCreditTerm", buyerTotalCreditTerm).
+                append("buyerUWAdjustPercentCredit", buyerUWAdjustPercentCredit).
+                append("buyerUWAdjustCreditTerm", buyerUWAdjustCreditTerm).
+                append("standardAccountReceivable", standardAccountReceivable).
+                append("averagePurchaseAmount", averagePurchaseAmount).
+                append("purchasePercentCash", purchasePercentCash).
+                append("purchasePercentCredit", purchasePercentCredit).
+                append("purchasePercentLocal", purchasePercentLocal).
+                append("purchasePercentForeign", purchasePercentForeign).
+                append("purchaseTerm", purchaseTerm).
+                append("standardAccountPayable", standardAccountPayable).
+                append("averagePayableAmount", averagePayableAmount).
+                append("payablePercentCash", payablePercentCash).
+                append("payablePercentCredit", payablePercentCredit).
+                append("payablePercentLocal", payablePercentLocal).
+                append("payablePercentForeign", payablePercentForeign).
+                append("payableTerm", payableTerm).
+                append("standardStock", standardStock).
+                append("stockDurationBDM", stockDurationBDM).
+                append("stockDurationUW", stockDurationUW).
+                append("stockValueBDM", stockValueBDM).
+                append("stockValueUW", stockValueUW).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("bizProductDetailViewList", bizProductDetailViewList).
+                append("supplierDetailList", supplierDetailList).
+                append("buyerDetailList", buyerDetailList).
+                append("isMainDetail", isMainDetail).
+                toString();
     }
 }

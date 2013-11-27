@@ -2,14 +2,13 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.BasicInfo;
-import com.clevel.selos.model.db.working.ExSumDeviate;
-import com.clevel.selos.model.db.working.ExSummary;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -286,20 +285,26 @@ public class ExSummaryTransform extends Transform {
         return exSumDeviateList;
     }
 
-    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView){
+    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, String qualitativeClass, BigDecimal bizSize){
         ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
         exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getBizLocationName());
-//        exSumBusinessInfoView.setBizType();
-//        exSumBusinessInfoView.setBizGroup();
-//        exSumBusinessInfoView.setBizCode();
-//        exSumBusinessInfoView.setBizDesc();
-//        exSumBusinessInfoView.setQualitativeClass();
+
+        for(BizInfoDetailView bd : bizInfoSummaryView.getBizInfoDetailViewList()){
+            if(bd.getIsMainDetail() == 1){
+                exSumBusinessInfoView.setBizType(bd.getBizType().getDescription());
+                exSumBusinessInfoView.setBizGroup(bd.getBizGroup().getDescription());
+                exSumBusinessInfoView.setBizCode(bd.getBizCode());
+                exSumBusinessInfoView.setBizDesc(bd.getBizDesc().getName());
+            }
+        }
+
+        exSumBusinessInfoView.setQualitativeClass(qualitativeClass);
 
 //        If Borrower is Juristic use Customer Info Detail else if Borrower is Individual use Bank Statement Summary
-//        exSumBusinessInfoView.setBizSize();
+        exSumBusinessInfoView.setBizSize(bizSize);
 
 //        exSumBusinessInfoView.setBDM();
 //        exSumBusinessInfoView.setUW();
@@ -308,5 +313,22 @@ public class ExSummaryTransform extends Transform {
         exSumBusinessInfoView.setINV(bizInfoSummaryView.getSumWeightINV());
 
         return exSumBusinessInfoView;
+    }
+
+    public ExSumAccountMovementView transformBankStmtToExSumBizView(BankStatement bankStatement){
+        ExSumAccountMovementView exSumAccountMovementView = new ExSumAccountMovementView();
+
+        exSumAccountMovementView.setOdLimit(bankStatement.getLimit());
+        exSumAccountMovementView.setUtilization(bankStatement.getAvgUtilizationPercent());
+        exSumAccountMovementView.setSwing(bankStatement.getAvgSwingPercent());
+        exSumAccountMovementView.setOverLimitTimes(bankStatement.getOverLimitTimes());
+        exSumAccountMovementView.setOverLimitDays(bankStatement.getOverLimitDays());
+        exSumAccountMovementView.setChequeReturn(bankStatement.getChequeReturn());
+        exSumAccountMovementView.setCashFlow(bankStatement.getAvgIncomeGross());
+        exSumAccountMovementView.setCashFlowLimit(bankStatement.getAvgGrossInflowPerLimit());
+        exSumAccountMovementView.setTradeChequeReturnAmount(bankStatement.getTdChequeReturnAmount());
+        exSumAccountMovementView.setTradeChequeReturnPercent(bankStatement.getTdChequeReturnPercent());
+
+        return exSumAccountMovementView;
     }
 }

@@ -18,12 +18,12 @@ public class BasicInfoTransform extends Transform {
     public BasicInfoTransform() {
     }
 
-    public BasicInfo transformToModel(BasicInfoView basicInfoView, WorkCase workCase, User user) {
+    public BasicInfo transformToModel(BasicInfoView basicInfoView, WorkCase workCase, User user){
         BasicInfo basicInfo = new BasicInfo();
 
         basicInfo.setWorkCase(workCase);
 
-        if (basicInfoView.getId() != 0) {
+        if(basicInfoView.getId() != 0){
             basicInfo.setId(basicInfoView.getId());
             basicInfo.setCreateDate(basicInfoView.getCreateDate());
             basicInfo.setCreateBy(basicInfoView.getCreateBy());
@@ -35,45 +35,45 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setModifyBy(user);
 
         basicInfo.setRequestType(basicInfoView.getRequestType());
-        if (basicInfo.getRequestType().getId() == 0) {
+        if(basicInfo.getRequestType().getId() == 0){
             basicInfo.setRequestType(null);
         }
 
         basicInfo.setProductGroup(basicInfoView.getProductGroup());
-        if (basicInfo.getProductGroup().getId() == 0) {
+        if(basicInfo.getProductGroup().getId() == 0){
             basicInfo.setProductGroup(null);
         }
 
-        basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid() ? 2 : 1);
-        basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending() ? 2 : 1);
+        basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid() ? 1 : 0);
+        basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending() ? 1 : 0);
 
-        basicInfo.setConstructionRequestLG(basicInfoView.isCharFCLG() ? 2 : 1);
-        basicInfo.setAbleToGettingGuarantorJob(basicInfoView.isCharFCIns() ? 2 : 1);
-        basicInfo.setNoClaimLGHistory(basicInfoView.isCharFCCom() ? 2 : 1);
-        basicInfo.setNoRevokedLicense(basicInfoView.isCharFCAba() ? 2 : 1);
-        basicInfo.setNoLateWorkDelivery(basicInfoView.isCharFCLate() ? 2 : 1);
-        basicInfo.setAdequateOfCapitalResource(basicInfoView.isCharFCFund() ? 2 : 1);
+        basicInfo.setConstructionRequestLG(basicInfoView.isCharFCLG() ? 1 : 0);
+        basicInfo.setAbleToGettingGuarantorJob(basicInfoView.isCharFCIns() ? 1 : 0);
+        basicInfo.setNoClaimLGHistory(basicInfoView.isCharFCCom() ? 1 : 0);
+        basicInfo.setNoRevokedLicense(basicInfoView.isCharFCAba() ? 1 : 0);
+        basicInfo.setNoLateWorkDelivery(basicInfoView.isCharFCLate() ? 1 : 0);
+        basicInfo.setAdequateOfCapitalResource(basicInfoView.isCharFCFund() ? 1 : 0);
 
         basicInfo.setApplySpecialProgram(basicInfoView.getSpProgram());
         basicInfo.setSpecialProgram(basicInfoView.getSpecialProgram());
-        if (basicInfo.getSpecialProgram().getId() == 0) {
+        if(basicInfo.getSpecialProgram().getId() == 0){
             basicInfo.setSpecialProgram(null);
         }
 
         basicInfo.setRefinanceIN(basicInfoView.getRefIn());
         basicInfo.setRefinanceInValue(basicInfoView.getRefinanceIn());
-        if (basicInfo.getRefinanceInValue().getCode() == 0) {
+        if(basicInfo.getRefinanceInValue().getCode() == 0){
             basicInfo.setRefinanceInValue(null);
         }
 
         basicInfo.setRefinanceOUT(basicInfoView.getRefOut());
         basicInfo.setRefinanceOutValue(basicInfoView.getRefinanceOut());
-        if (basicInfo.getRefinanceOutValue().getCode() == 0) {
+        if(basicInfo.getRefinanceOutValue().getCode() == 0){
             basicInfo.setRefinanceOutValue(null);
         }
 
         basicInfo.setRiskCustomerType(basicInfoView.getRiskType());
-        if (basicInfo.getRiskCustomerType().getId() == 0) {
+        if(basicInfo.getRiskCustomerType().getId() == 0){
             basicInfo.setRiskCustomerType(null);
         }
 
@@ -84,7 +84,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setExtendedReviewDate(basicInfoView.getExtReviewDate());
 
         basicInfo.setSbfScore(basicInfoView.getSbfScore());
-        if (basicInfo.getSbfScore().getId() == 0) {
+        if(basicInfo.getSbfScore().getId() == 0){
             basicInfo.setSbfScore(null);
         }
 
@@ -93,7 +93,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setPassAnnualReview(basicInfoView.getAnnual());
 
         basicInfo.setLoanRequestPattern(basicInfoView.getLoanRequestPattern());
-        if (basicInfo.getLoanRequestPattern().getId() == 0) {
+        if(basicInfo.getLoanRequestPattern().getId() == 0){
             basicInfo.setLoanRequestPattern(null);
         }
 
@@ -102,14 +102,14 @@ public class BasicInfoTransform extends Transform {
 
         basicInfo.setApplyBA(basicInfoView.getApplyBA());
         basicInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod());
-        if (basicInfo.getBaPaymentMethod().getId() == 0) {
+        if(basicInfo.getBaPaymentMethod().getId() == 0){
             basicInfo.setBaPaymentMethod(null);
         }
 
         return basicInfo;
     }
 
-    public BasicInfoView transformToView(BasicInfo basicInfo, WorkCase workCase) {
+    public BasicInfoView transformToView(BasicInfo basicInfo,WorkCase workCase){
         BasicInfoView basicInfoView = new BasicInfoView();
 
         basicInfoView.setId(basicInfo.getId());
@@ -122,46 +122,46 @@ public class BasicInfoTransform extends Transform {
 
 
         basicInfoView.setRequestType(basicInfo.getRequestType());
-        if (basicInfoView.getRequestType() == null) {
+        if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
         }
 
         basicInfoView.setProductGroup(basicInfo.getProductGroup());
-        if (basicInfoView.getProductGroup() == null) {
+        if(basicInfoView.getProductGroup() == null){
             basicInfoView.setProductGroup(new ProductGroup());
         }
 
-        basicInfoView.setCharUnPaid(basicInfo.getUnpaidFeeInsurance() != 1);
-        basicInfoView.setCharNoPending(basicInfo.getNoPendingClaimLG() != 1);
+        basicInfoView.setCharUnPaid(basicInfo.getUnpaidFeeInsurance() != 0);
+        basicInfoView.setCharNoPending(basicInfo.getNoPendingClaimLG() != 0);
 
-        basicInfoView.setCharFCLG(basicInfo.getConstructionRequestLG() != 1);
-        basicInfoView.setCharFCIns(basicInfo.getAbleToGettingGuarantorJob() != 1);
-        basicInfoView.setCharFCCom(basicInfo.getNoClaimLGHistory() != 1);
-        basicInfoView.setCharFCAba(basicInfo.getNoRevokedLicense() != 1);
-        basicInfoView.setCharFCLate(basicInfo.getNoLateWorkDelivery() != 1);
-        basicInfoView.setCharFCFund(basicInfo.getAdequateOfCapitalResource() != 1);
+        basicInfoView.setCharFCLG(basicInfo.getConstructionRequestLG() != 0);
+        basicInfoView.setCharFCIns(basicInfo.getAbleToGettingGuarantorJob() != 0);
+        basicInfoView.setCharFCCom(basicInfo.getNoClaimLGHistory() != 0);
+        basicInfoView.setCharFCAba(basicInfo.getNoRevokedLicense() != 0);
+        basicInfoView.setCharFCLate(basicInfo.getNoLateWorkDelivery() != 0);
+        basicInfoView.setCharFCFund(basicInfo.getAdequateOfCapitalResource() != 0);
 
         basicInfoView.setSpProgram(basicInfo.getApplySpecialProgram());
 
         basicInfoView.setSpecialProgram(basicInfo.getSpecialProgram());
-        if (basicInfoView.getSpecialProgram() == null) {
+        if(basicInfoView.getSpecialProgram() == null){
             basicInfoView.setSpecialProgram(new SpecialProgram());
         }
 
         basicInfoView.setRefIn(basicInfo.getRefinanceIN());
         basicInfoView.setRefinanceIn(basicInfo.getRefinanceInValue());
-        if (basicInfoView.getRefinanceIn() == null) {
+        if(basicInfoView.getRefinanceIn() == null){
             basicInfoView.setRefinanceIn(new Bank());
         }
 
         basicInfoView.setRefOut(basicInfo.getRefinanceOUT());
         basicInfoView.setRefinanceOut(basicInfo.getRefinanceOutValue());
-        if (basicInfoView.getRefinanceOut() == null) {
+        if(basicInfoView.getRefinanceOut() == null){
             basicInfoView.setRefinanceOut(new Bank());
         }
 
         basicInfoView.setRiskType(basicInfo.getRiskCustomerType());
-        if (basicInfoView.getRiskType() == null) {
+        if(basicInfoView.getRiskType() == null){
             basicInfoView.setRiskType(new RiskType());
         }
 
@@ -172,7 +172,7 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setExtReviewDate(basicInfo.getExtendedReviewDate());
 
         basicInfoView.setSbfScore(basicInfo.getSbfScore());
-        if (basicInfoView.getSbfScore() == null) {
+        if(basicInfoView.getSbfScore() == null){
             basicInfoView.setSbfScore(new SBFScore());
         }
 
@@ -181,7 +181,7 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setAnnual(basicInfo.getPassAnnualReview());
 
         basicInfoView.setLoanRequestPattern(basicInfo.getLoanRequestPattern());
-        if (basicInfoView.getLoanRequestPattern() == null) {
+        if(basicInfoView.getLoanRequestPattern() == null){
             basicInfoView.setLoanRequestPattern(new BorrowingType());
         }
 
@@ -190,7 +190,7 @@ public class BasicInfoTransform extends Transform {
 
         basicInfoView.setApplyBA(basicInfo.getApplyBA());
         basicInfoView.setBaPaymentMethod(basicInfo.getBaPaymentMethod());
-        if (basicInfoView.getBaPaymentMethod() == null) {
+        if(basicInfoView.getBaPaymentMethod() == null){
             basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
         }
 
