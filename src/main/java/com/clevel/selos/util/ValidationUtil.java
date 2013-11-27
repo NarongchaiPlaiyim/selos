@@ -121,4 +121,12 @@ public class ValidationUtil {
     public static boolean isValueEqual(BigDecimal value1, BigDecimal value2) {
         return value1.compareTo(value2) == 0;
     }
+
+    public static boolean isGreaterThan(BigDecimal value, BigDecimal target) {
+        return value.compareTo(target) > 0;
+    }
+
+    public static boolean isLessThan(BigDecimal value, BigDecimal target) {
+        return value.compareTo(target) < 0;
+    }
 }

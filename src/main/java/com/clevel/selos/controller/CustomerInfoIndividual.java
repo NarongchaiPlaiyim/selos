@@ -5,8 +5,10 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.DocumentType;
+import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -357,8 +359,8 @@ public class CustomerInfoIndividual implements Serializable {
 
         documentTypeList = documentTypeDAO.findAll();
 
-        titleEnList = titleDAO.getListByCustomerEntityId(1);
-        titleThList = titleDAO.getListByCustomerEntityId(1);
+        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
         raceList = raceDAO.findAll();
         nationalityList = nationalityDAO.findAll();
         sndNationalityList = nationalityDAO.findAll();
@@ -379,9 +381,9 @@ public class CustomerInfoIndividual implements Serializable {
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
 //        relationIndividualList = relationDAO.getOtherRelationList();
-        relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(1, caseBorrowerTypeId, 0);
+        relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
 //        relationSpouseList = relationDAO.getOtherRelationList();
-        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(1, caseBorrowerTypeId, 1);
+        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
 
         referenceIndividualList = new ArrayList<Reference>();
         referenceSpouseList = new ArrayList<Reference>();
@@ -391,7 +393,7 @@ public class CustomerInfoIndividual implements Serializable {
         addressFlagForm5 = 1;
         addressFlagForm6 = 1;
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(1);
+        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
         kycLevelList = kycLevelDAO.findAll();
 
         enableDocumentType = true;
@@ -448,25 +450,25 @@ public class CustomerInfoIndividual implements Serializable {
         if(customerInfoView.getRelation().getId() == 1){
             isEditBorrower = true;
 //            relationIndividualList = relationDAO.findAll();
-            relationIndividualList = relationCustomerDAO.getListRelation(1, caseBorrowerTypeId, 0);
+            relationIndividualList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
         }else{
 //            relationIndividualList = relationDAO.getOtherRelationList();
-            relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(1,caseBorrowerTypeId,0);
+            relationIndividualList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,0);
         }
 
-        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == 1){
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
             isEditSpouseBorrower = true;
 //            relationSpouseList = relationDAO.findAll();
-            relationSpouseList = relationCustomerDAO.getListRelation(1, caseBorrowerTypeId, 1);
+            relationSpouseList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }else{
 //            relationSpouseList = relationDAO.getOtherRelationList();
-            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(1,caseBorrowerTypeId,1);
+            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(),caseBorrowerTypeId,1);
         }
     }
 
     public void onChangeRelation(){
 //        referenceIndividualList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
-        referenceIndividualList = referenceDAO.findReferenceByFlag(1, caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
+        referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
@@ -475,7 +477,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeRelationSpouse(){
 //        referenceSpouseList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId());
-        referenceSpouseList = referenceDAO.findReferenceByFlag(1, caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
+        referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
 
         //this condition for spouse
         Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());

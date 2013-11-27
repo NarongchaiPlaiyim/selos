@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public abstract class BusinessControl implements Serializable {
     @Inject
@@ -37,4 +38,19 @@ public abstract class BusinessControl implements Serializable {
             return null;
         }
     }
+    protected BigDecimal getMRRParameter(){
+        try{
+            //todo Hardcode waiting Database
+            return BigDecimal.valueOf(8);
+        }catch (Exception e){
+            log.error("getMRR Not found", e);
+            return BigDecimal.ZERO;
+        }
+    }
+
+    protected BigDecimal getDBRInterest(){
+        // plus 6% for MRR
+        return getMRRParameter().add(BigDecimal.valueOf(6));
+    }
+
 }

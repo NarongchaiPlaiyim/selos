@@ -8,9 +8,9 @@ public class ExSumAccountMovementView {
     private BigDecimal odLimit;
     private BigDecimal utilization;
     private BigDecimal swing;
-    private int overLimitTimes;
-    private int overLimitDays;
-    private int chequeReturn;
+    private BigDecimal overLimitTimes;
+    private BigDecimal overLimitDays;
+    private BigDecimal chequeReturn;
     private BigDecimal cashFlow;
     private BigDecimal cashFlowLimit;
     private BigDecimal tradeChequeReturnAmount;
@@ -24,9 +24,9 @@ public class ExSumAccountMovementView {
         this.odLimit = BigDecimal.ZERO;
         this.utilization = BigDecimal.ZERO;
         this.swing = BigDecimal.ZERO;
-        this.overLimitTimes = 0;
-        this.overLimitDays = 0;
-        this.chequeReturn = 0;
+        this.overLimitTimes = BigDecimal.ZERO;
+        this.overLimitDays = BigDecimal.ZERO;
+        this.chequeReturn = BigDecimal.ZERO;
         this.cashFlow = BigDecimal.ZERO;
         this.cashFlowLimit = BigDecimal.ZERO;
         this.tradeChequeReturnAmount = BigDecimal.ZERO;
@@ -57,27 +57,27 @@ public class ExSumAccountMovementView {
         this.swing = swing;
     }
 
-    public int getOverLimitTimes() {
+    public BigDecimal getOverLimitTimes() {
         return overLimitTimes;
     }
 
-    public void setOverLimitTimes(int overLimitTimes) {
+    public void setOverLimitTimes(BigDecimal overLimitTimes) {
         this.overLimitTimes = overLimitTimes;
     }
 
-    public int getOverLimitDays() {
+    public BigDecimal getOverLimitDays() {
         return overLimitDays;
     }
 
-    public void setOverLimitDays(int overLimitDays) {
+    public void setOverLimitDays(BigDecimal overLimitDays) {
         this.overLimitDays = overLimitDays;
     }
 
-    public int getChequeReturn() {
+    public BigDecimal getChequeReturn() {
         return chequeReturn;
     }
 
-    public void setChequeReturn(int chequeReturn) {
+    public void setChequeReturn(BigDecimal chequeReturn) {
         this.chequeReturn = chequeReturn;
     }
 

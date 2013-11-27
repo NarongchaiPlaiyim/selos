@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -724,7 +723,7 @@ public class AppraisalResult implements Serializable {
         subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
         subCollateralDetailView.setAddress(subCollateralData.getAddress());
         subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwner(subCollateralData.getCollateralOwner());
+        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
         if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
