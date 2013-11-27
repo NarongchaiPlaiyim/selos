@@ -36,7 +36,6 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

@@ -27,13 +27,13 @@ public class BasicInfoControl extends BusinessControl {
     @SELOS
     Logger log;
     @Inject
+    private UserDAO userDAO;
+    @Inject
     BasicInfoDAO basicInfoDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     OpenAccountDAO openAccountDAO;
     @Inject
@@ -47,6 +47,11 @@ public class BasicInfoControl extends BusinessControl {
     BasicInfoAccountTransform basicInfoAccountTransform;
     @Inject
     BasicInfoAccPurposeTransform basicInfoAccPurposeTransform;
+
+    @Inject
+    public BasicInfoControl(){
+
+    }
 
     public BasicInfoView getBasicInfo(long workCaseId) {
         log.info("getBasicInfo ::: workCaseId : {}", workCaseId);

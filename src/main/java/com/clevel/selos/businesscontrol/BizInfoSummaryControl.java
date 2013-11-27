@@ -25,6 +25,9 @@ import java.util.List;
 public class BizInfoSummaryControl extends BusinessControl {
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
+	@Inject
+    @SELOS
+    private Logger log;
     @Inject
     BizInfoSummaryTransform bizInfoSummaryTransform;
     @Inject
@@ -33,6 +36,16 @@ public class BizInfoSummaryControl extends BusinessControl {
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
+    @Inject
+    BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    BizInfoSummaryTransform bizInfoSummaryTransform;
+
+    @Inject
+    public BizInfoSummaryControl(){
+
+    }
 
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
         BizInfoSummary bizInfoSummary;

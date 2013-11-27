@@ -126,17 +126,17 @@ public class CustomerAcceptance implements Serializable {
             }
 
             if(contactRecordDetailViewForStr.getReason()==1){
-                contactRecordDetailViewForStr.setReasonStr("ลูกค้าแจ้งนัดกับ BDM แล้ว");
+                contactRecordDetailViewForStr.setReasonStr("�١����駹Ѵ�Ѻ BDM ����");
             }else if(contactRecordDetailViewForStr.getReason()==2){
-                contactRecordDetailViewForStr.setReasonStr("ไม่สามารถติดต่อได้");
+                contactRecordDetailViewForStr.setReasonStr("�������ö�Դ�����");
             }else if(contactRecordDetailViewForStr.getReason()==3){
-                contactRecordDetailViewForStr.setReasonStr("ลูกค้ายังไม่รับนัด");
+                contactRecordDetailViewForStr.setReasonStr("�١����ѧ����Ѻ�Ѵ");
             }else if(contactRecordDetailViewForStr.getReason()==4){
-                contactRecordDetailViewForStr.setReasonStr("ลูกค้าไม่สะดวก");
+                contactRecordDetailViewForStr.setReasonStr("�١�������дǡ");
             }else if(contactRecordDetailViewForStr.getReason()==5){
-                contactRecordDetailViewForStr.setReasonStr("ลูกค้าขอติดต่อ BDM ก่อน");
+                contactRecordDetailViewForStr.setReasonStr("�١��Ң͵Դ��� BDM ��͹");
             }else if(contactRecordDetailViewForStr.getReason()==6){
-                contactRecordDetailViewForStr.setReasonStr("ลูกค้ารอเงินที่จะเป็นหลักประกัน");
+                contactRecordDetailViewForStr.setReasonStr("�١������Թ��������ѡ��Сѹ");
             }
 
         }

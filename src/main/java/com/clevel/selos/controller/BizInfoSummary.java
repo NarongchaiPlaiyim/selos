@@ -295,8 +295,8 @@ public class BizInfoSummary implements Serializable {
 
         if( productCostPercent > 100.01){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่าเกิน 100";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "����Թ 100";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -316,8 +316,8 @@ public class BizInfoSummary implements Serializable {
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า operatingExpenseAmount > profitMarginPercent";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� operatingExpenseAmount > profitMarginPercent";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -342,16 +342,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า Interest > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� Interest > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -359,8 +359,8 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า ผลรวม interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� ����� interest and tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }

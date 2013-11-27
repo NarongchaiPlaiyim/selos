@@ -10,7 +10,6 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -147,8 +146,16 @@ public class CustomerTransform extends Transform {
         if(customerInfoView.getKycLevel() == null){
             customerInfoView.setKycLevel(new KYCLevel());
         }
+        customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setCsiFlag(customer.getCsiFlag());
+        customerInfoView.setServiceSegment(customer.getServiceSegment());
+        customerInfoView.setSearchFromRM(customer.getSearchFromRM());
 
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
+        if(customerInfoView.getMailingAddressType() == null){
+            customerInfoView.setMailingAddressType(new AddressType());
+
+		customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
         }
@@ -165,8 +172,24 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
-
+        }
         customerInfoView.setValidId(2);
+
+        customerInfoView.setSourceIncome(customer.getSourceIncome());
+        if(customerInfoView.getSourceIncome() == null){
+            customerInfoView.setSourceIncome(new Country());
+        }
+
+        customerInfoView.setCountryIncome(customer.getCountryIncome());
+        if(customerInfoView.getCountryIncome() == null){
+            customerInfoView.setCountryIncome(new Country());
+        }
+
+        customerInfoView.setIsCommittee(customer.getIsCommittee());
+        customerInfoView.setCommitteeId(customer.getJuristicId());
+
+        customerInfoView.setCollateralOwner(customer.getCollateralOwner());
+        customerInfoView.setPercentShare(customer.getPercentShare());
 
         customerInfoView.setSearchBy(customer.getSearchBy());
         customerInfoView.setSearchId(customer.getSearchId());
@@ -394,6 +417,10 @@ public class CustomerTransform extends Transform {
         customer.setAge(customerInfoView.getAge());
         customer.setNcbFlag(customerInfoView.getNcbFlag());
         customer.setSearchFromRM(customerInfoView.getSearchFromRM());
+        customer.setCsiFlag(customerInfoView.getCsiFlag());
+        customer.setServiceSegment(customerInfoView.getServiceSegment());
+        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
+        customer.setPercentShare(customerInfoView.getPercentShare());
 
         if(customerInfoView.getBusinessType() != null && customerInfoView.getBusinessType().getId() != 0){
             customer.setBusinessType(businessTypeDAO.findById(customerInfoView.getBusinessType().getId()));

@@ -81,7 +81,7 @@ public class Customer implements Serializable {
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy = "customer")
     private Individual individual;
 
     @OneToOne(mappedBy="customer")
@@ -310,6 +310,14 @@ public class Customer implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
     }
 
     public int getNcbFlag() {

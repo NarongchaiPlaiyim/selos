@@ -6,6 +6,8 @@ import com.clevel.selos.model.db.export.NCBIExport;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
@@ -24,6 +26,7 @@ public class NCBIExportImp implements Serializable {
     public NCBIExportImp() {
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void add(NCBIExportModel exportModel) {
         log.debug("Call add (NCBIExportModel = {})", exportModel.toString());
         String staffId = exportModel.getStaffId();

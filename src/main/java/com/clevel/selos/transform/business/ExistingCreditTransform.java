@@ -195,8 +195,10 @@ public class ExistingCreditTransform extends BusinessTransform {
                 }
                 existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
                 existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
+                log.debug("transform ExistingCreditTransform ::: getAccountStatus {}", existingCreditDetailView.getAccountStatus());
                 if(existingCreditDetailView.getAccountStatus() != null){
                     BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getAccountStatus());
+                    log.debug("transform ExistingCreditTransform ::: bankAccountStatus : {}", bankAccountStatus);
                     if(bankAccountStatus.getId() != 0){
                         existingCreditDetail.setAccountstatus(bankAccountStatus);
                     }else{
@@ -216,6 +218,7 @@ public class ExistingCreditTransform extends BusinessTransform {
 
                 existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
                 existingCreditDetailList.add(existingCreditDetail);
+                log.debug("transform ExistingCreditTransform ::: existingCreditDetailList : {}", existingCreditDetail);
             }
         }
         return existingCreditDetailList;
@@ -263,6 +266,8 @@ public class ExistingCreditTransform extends BusinessTransform {
                 }
             }
 
+
+
             existingCreditView.setBorrowerComExistingCredit(_borrowerComList);
             existingCreditView.setBorrowerRetailExistingCredit(_borrowerRetList);
             existingCreditView.setBorrowerAppInRLOSCredit(_borrowerRLOSList);
@@ -285,8 +290,10 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
 
         //existingCreditDetailView.setAccountStatus();
-        //existingCreditDetailView.setAccountStatus(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getAccountstatus()));
-        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());     //TODO Remove this line
+        log.debug("getExistingCreditDetailView ::: getAccountstatus : {}", existingCreditDetail.getAccountstatus());
+        existingCreditDetailView.setAccountStatus(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getAccountstatus()));
+        existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
+        //existingCreditDetailView.setAccountStatus(new BankAccountStatusView());     //TODO Remove this line
         existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
         existingCreditDetailView.setIntFeePercent(existingCreditDetail.getIntFee());
         existingCreditDetailView.setOutstanding(existingCreditDetail.getOutstanding());

@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+
 import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -25,20 +26,22 @@ import java.util.List;
 @Stateless
 public class DBRControl extends BusinessControl {
     @Inject
-    DBRDAO dbrdao;
+    @SELOS
+    private Logger log;
 
+    @Inject
+    private UserDAO userDAO;
+    @Inject
+    DBRDAO dbrdao;
     @Inject
     DBRDetailDAO dbrDetailDAO;
-
     @Inject
     WorkCaseDAO workCaseDAO;
-
     @Inject
-    UserDAO userDAO;
+    BizInfoSummaryDAO bizInfoSummaryDAO;
 
     @Inject
     DBRTransform dbrTransform;
-
     @Inject
     DBRDetailTransform dbrDetailTransform;
 
@@ -51,8 +54,8 @@ public class DBRControl extends BusinessControl {
     @Inject
     NCBInfoControl ncbInfoControl;
 
+    @Inject
     public DBRControl() {
-
     }
 
     public void saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {

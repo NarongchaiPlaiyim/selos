@@ -112,9 +112,11 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
+
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId, userId);
+
 
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
@@ -155,6 +157,7 @@ public class DBRInfo implements Serializable {
         }
 
         selectedItem.setDebtForCalculate(BigDecimal.ZERO);
+
         if (isUpdate) {
             dbrDetails.set(rowIndex, selectedItem);
         } else {

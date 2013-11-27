@@ -35,7 +35,6 @@ public class CustomerInfoSummary implements Serializable {
     @Inject
     @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

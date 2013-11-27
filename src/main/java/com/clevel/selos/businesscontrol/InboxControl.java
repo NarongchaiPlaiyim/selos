@@ -26,14 +26,18 @@ import java.util.List;
 @Stateless
 public class InboxControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     BPMInterface bpmInterface;
 
+    @Inject
+    private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject

@@ -321,9 +321,10 @@ public class CaseCreation implements WSCaseCreation {
 
             //all validation passed including new case creation in BPM.
             if (bpmInterface.createCase(caseCreationHistory)) {
-                // return success
+                log.debug("case creation success!");
                 response.setValue(WSResponse.SUCCESS, normalMsg.get("ws.newCase.response.success"), caseCreationHistory.getAppNumber());
             } else {
+                log.debug("case creation fail!");
                 response.setValue(WSResponse.BPM_EXCEPTION, normalMsg.get("ws.newCase.response.failed"), caseCreationHistory.getAppNumber());
             }
 

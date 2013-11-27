@@ -44,8 +44,8 @@ public class BizInfoDetail implements Serializable {
     private String stakeType;
 
     double sumBizPercent = 0;
-    private BigDecimal sumSalePercentB ;
-    private BigDecimal sumCreditPercentB ;
+    private BigDecimal sumSalePercentB;
+    private BigDecimal sumCreditPercentB;
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;

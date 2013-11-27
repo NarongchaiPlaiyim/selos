@@ -36,6 +36,10 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     SubCollateralDetailTransform subCollateralDetailTransform;
 
+	@Inject
+    public AppraisalResultControl(){
+
+    }
 
     public AppraisalView getAppraisalResultByWorkCase(long workCaseId){
         log.info("getAppraisalByWorkCase ");
