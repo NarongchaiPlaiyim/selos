@@ -10,6 +10,7 @@ import com.clevel.selos.dao.working.BankStatementDetailDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BankStmtSrcOfCollateralProofDAO;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
+import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
@@ -138,9 +139,10 @@ public class BankStmtTransform extends Transform {
         bankStmtSummaryView.setGrdTotalTDChqRetPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
         bankStmtSummaryView.setGrdTotalAvgOSBalanceAmount(bankStatementSummary.getGrdTotalAvgOSBalanceAmount());
 
-        Bank tmbBank = bankDAO.getTMBBank();
+//        Bank tmbBank = bankDAO.getTMBBank();
         for (BankStatement bankStmt : Util.safetyList(bankStatementSummary.getBankStmtList())) {
-            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+//            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+            if (BankType.TMB.shortName().equalsIgnoreCase(bankStmt.getBank().getShortName())) {
                 tmbBankStmtViewList.add(getBankStmtView(bankStmt));
             } else {
                 othBankStmtViewList.add(getBankStmtView(bankStmt));
