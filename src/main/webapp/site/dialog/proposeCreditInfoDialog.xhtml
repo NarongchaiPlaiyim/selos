@@ -157,8 +157,8 @@
                     <p:selectOneMenu size="1"
                                      value="#{creditFacPropose.proposeCreditDetailView.standardBase.id}"
                                      style="width: 50px;"
-                                     disabled="#{creditFacPropose.modeEdit}">
-                        <f:selectItems value="#{creditFacPropose.refRateList}"
+                                     disabled="true">
+                        <f:selectItems value="#{creditFacPropose.baseRateList}"
                                        var="standard"
                                        itemLabel="#{standard.name}"
                                        itemValue="#{standard.id}"/>
@@ -167,7 +167,7 @@
                 <td>
                     <p:inputText value="#{creditFacPropose.proposeCreditDetailView.standardPrice}"
                                  style="text-align:right;width:50px;"
-                                 disabled="#{creditFacPropose.modeEdit}"/>
+                                 disabled="true"/>
                 </td>
             </tr>
         </table>
@@ -185,17 +185,28 @@
                     <p:selectOneMenu size="1"
                                      value="#{creditFacPropose.proposeCreditDetailView.suggestBase.id}"
                                      style="width: 50px;"
+                                     id="suggestDlg"
                                      disabled="#{creditFacPropose.modeEdit}">
-                        <f:selectItems value="#{creditFacPropose.refRateList}"
+                        <f:selectItems value="#{creditFacPropose.baseRateList}"
                                        var="suggest"
                                        itemLabel="#{suggest.name}"
                                        itemValue="#{suggest.id}"/>
+                        <p:ajax event="change"
+                                listener="#{creditFacPropose.onChangeSuggestValue}"
+                                process=":creditInfoDlgForm:suggestDlg,:creditInfoDlgForm:suggestPriceDlg"
+                                update=":creditInfoDlgForm:resultFinal"/>
                     </p:selectOneMenu>
                 </td>
                 <td>
                     <p:inputText value="#{creditFacPropose.proposeCreditDetailView.suggestPrice}"
                                  style="text-align:right;width:50px;"
-                                 disabled="#{creditFacPropose.modeEdit}"/>
+                                 id="suggestPriceDlg"
+                                 disabled="#{creditFacPropose.modeEdit}">
+                        <p:ajax event="blur"
+                                listener="#{creditFacPropose.onChangeSuggestValue}"
+                                process=":creditInfoDlgForm:suggestDlg,:creditInfoDlgForm:suggestPriceDlg"
+                                update=":creditInfoDlgForm:resultFinal"/>
+                    </p:inputText>
                 </td>
             </tr>
         </table>
@@ -212,7 +223,7 @@
                 process="@form"
                 update=":creditInfoDlgForm:resultFinal"
                 actionListener="#{creditFacPropose.onAddTierInfo()}"
-                disabled="#{creditFacPropose.modeEdit}">
+                readonly="#{creditFacPropose.modeEdit}">
         </p:commandButton>
     </td>
 </tr>
@@ -250,15 +261,18 @@
                         <p:column>
                             <p:selectOneMenu size="1"
                                              value="#{item.finalBase.id}"
-                                             style="width: 50px;">
-                                <f:selectItems value="#{creditFacPropose.refRateList}"
+                                             style="width: 50px;"
+                                             disabled="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}">
+                                <f:selectItems value="#{creditFacPropose.baseRateList}"
                                                var="final"
                                                itemLabel="#{final.name}"
                                                itemValue="#{final.id}"/>
                             </p:selectOneMenu>
                         </p:column>
                         <p:column>
-                            <p:inputText value="#{item.finalPriceRate}" style="width: 100px;text-align: right">
+                            <p:inputText value="#{item.finalPriceRate}"
+                                         style="width: 100px;text-align: right"
+                                         readonly="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </p:inputText>
                         </p:column>
@@ -267,11 +281,15 @@
             </p:column>
 
             <p:column styleClass="right">
-                <p:inputText value="#{item.tenor}" style="text-align: right"/>
+                <p:inputText value="#{item.tenor}"
+                             style="text-align: right"
+                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}"/>
             </p:column>
 
             <p:column styleClass="right">
-                <p:inputText value="#{item.installment}" style="text-align: right">
+                <p:inputText value="#{item.installment}"
+                             style="text-align: right"
+                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}">
                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     <p:ajax event="blur" update="@this"/>
                 </p:inputText>
