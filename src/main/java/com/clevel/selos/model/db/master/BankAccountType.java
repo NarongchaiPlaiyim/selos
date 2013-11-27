@@ -34,6 +34,9 @@ public class BankAccountType implements Serializable {
     @Column(name = "bank_statement_flag")
     private int bankStatementFlag;
 
+    @Column(name = "oth_bank_statement_flag")
+    private int othBankStatementFlag;
+
     public BankAccountType() {
     }
 
@@ -93,6 +96,14 @@ public class BankAccountType implements Serializable {
         this.bankStatementFlag = bankStatementFlag;
     }
 
+    public int getOthBankStatementFlag() {
+        return othBankStatementFlag;
+    }
+
+    public void setOthBankStatementFlag(int othBankStatementFlag) {
+        this.othBankStatementFlag = othBankStatementFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -103,6 +114,7 @@ public class BankAccountType implements Serializable {
                 .append("active", active)
                 .append("openAccountFlag", openAccountFlag)
                 .append("bankStatementFlag", bankStatementFlag)
+                .append("othBankStatementFlag", othBankStatementFlag)
                 .toString();
     }
 }

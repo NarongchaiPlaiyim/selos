@@ -33,7 +33,7 @@ public class ExSummaryView  implements Serializable {
     private List<NCBInfoView> ncbInfoListView;               //wo transform
 
     //Account Movement
-    private ExSumAccountMovementView exSumAccMovementView;
+    private List<ExSumAccountMovementView> exSumAccMovementViewList;
 
     //Collateral
     private ExSumCollateralView exSumCollateralView;
@@ -71,7 +71,7 @@ public class ExSummaryView  implements Serializable {
         exSumDecisionListView = new ArrayList<ExSumDecisionView>();
         exSumCharacteristicView = new ExSumCharacteristicView();
         exSumBusinessInfoView = new ExSumBusinessInfoView();
-        exSumAccMovementView = new ExSumAccountMovementView();
+        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
     }
 
     public long getId() {
@@ -268,12 +268,12 @@ public class ExSummaryView  implements Serializable {
         this.exSumCharacteristicView = exSumCharacteristicView;
     }
 
-    public ExSumAccountMovementView getExSumAccMovementView() {
-        return exSumAccMovementView;
+    public List<ExSumAccountMovementView> getExSumAccMovementViewList() {
+        return exSumAccMovementViewList;
     }
 
-    public void setExSumAccMovementView(ExSumAccountMovementView exSumAccMovementView) {
-        this.exSumAccMovementView = exSumAccMovementView;
+    public void setExSumAccMovementViewList(List<ExSumAccountMovementView> exSumAccMovementViewList) {
+        this.exSumAccMovementViewList = exSumAccMovementViewList;
     }
 
     public ExSumBusinessInfoView getExSumBusinessInfoView() {

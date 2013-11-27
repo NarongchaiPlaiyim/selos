@@ -209,11 +209,35 @@ public class Util {
         return null;
     }
 
+    public static BigDecimal add(BigDecimal value, BigDecimal augend) {
+        if (value == null)
+            return null;
+
+        if (augend == null)
+            return value;
+
+        return value.add(augend);
+    }
+
+    public static BigDecimal subtract(BigDecimal value, BigDecimal subtrahend) {
+        if (value == null)
+            return null;
+
+        if (subtrahend == null)
+            return value;
+
+        return value.subtract(subtrahend);
+    }
+
     public static BigDecimal divide(BigDecimal value, BigDecimal divisor) {
+        if (value == null || divisor == null)
+            return null;
+
         if (BigDecimal.ZERO.compareTo(divisor) == 0) {
             log.debug("divide() divisor is zero!");
             return BigDecimal.ZERO;
         }
+
         try {
             return value.divide(divisor, 2, RoundingMode.HALF_UP);
         } catch (Exception e) {
@@ -223,6 +247,10 @@ public class Util {
     }
 
     public static BigDecimal divide(BigDecimal value, int divisor) {
+        if (value == null) {
+            return null;
+        }
+
         if (divisor == 0) {
             log.debug("divide() divisor is zero!");
             return BigDecimal.ZERO;

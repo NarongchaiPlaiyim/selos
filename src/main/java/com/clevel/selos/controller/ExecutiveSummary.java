@@ -144,6 +144,8 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             exSummaryView = new ExSummaryView();
         }
 
+
+
         /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
         ec.reset();
         exSummaryView.setExSumCharacteristicView(ec);

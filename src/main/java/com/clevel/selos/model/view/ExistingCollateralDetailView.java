@@ -24,6 +24,7 @@ public class ExistingCollateralDetailView implements Serializable {
     private String cusName;
     private String accountNumber;
     private String accountSuffix;
+    private String productProgram;
     private String creditFacility;//todo: Change creditFacility to view object?
     private BigDecimal limit;
     private String mortgageType;//todo: Change mortgageType to view object?
@@ -126,6 +127,14 @@ public class ExistingCollateralDetailView implements Serializable {
 
     public void setAccountSuffix(String accountSuffix) {
         this.accountSuffix = accountSuffix;
+    }
+
+    public String getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
     }
 
     public String getCreditFacility() {
