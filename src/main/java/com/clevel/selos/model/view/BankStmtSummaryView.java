@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,6 +17,7 @@ public class BankStmtSummaryView implements Serializable {
     private long id;
     private int seasonal;
     private Date expectedSubmitDate;
+    private int countRefresh;
     private BigDecimal TMBTotalIncomeGross;
     private BigDecimal TMBTotalIncomeNetBDM;
     private BigDecimal TMBTotalIncomeNetUW;
@@ -35,10 +37,10 @@ public class BankStmtSummaryView implements Serializable {
     private List<BankStmtView> othBankStmtViewList;
 
     public BankStmtSummaryView() {
-        reset();
     }
 
     public void reset() {
+        this.setSeasonal(RadioValue.NOT_SELECTED.value());
         this.expectedSubmitDate = DateTimeUtil.getCurrentDateTH();
         this.TMBTotalIncomeGross = BigDecimal.ZERO;
         this.TMBTotalIncomeNetBDM = BigDecimal.ZERO;
@@ -86,6 +88,14 @@ public class BankStmtSummaryView implements Serializable {
 
     public void setExpectedSubmitDate(Date expectedSubmitDate) {
         this.expectedSubmitDate = expectedSubmitDate;
+    }
+
+    public int getCountRefresh() {
+        return countRefresh;
+    }
+
+    public void setCountRefresh(int countRefresh) {
+        this.countRefresh = countRefresh;
     }
 
     public BigDecimal getTMBTotalIncomeGross() {

@@ -122,6 +122,7 @@ public class BankStmtTransform extends Transform {
         bankStmtSummaryView.setId(bankStatementSummary.getId());
         bankStmtSummaryView.setSeasonal(bankStatementSummary.getSeasonal());
         bankStmtSummaryView.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
+        bankStmtSummaryView.setCountRefresh(bankStatementSummary.getCountRefresh());
         bankStmtSummaryView.setTMBTotalIncomeGross(bankStatementSummary.getTMBTotalIncomeGross());
         bankStmtSummaryView.setTMBTotalIncomeNetBDM(bankStatementSummary.getTMBTotalIncomeNetBDM());
         bankStmtSummaryView.setTMBTotalIncomeNetUW(bankStatementSummary.getTMBTotalIncomeNetUW());
@@ -168,7 +169,7 @@ public class BankStmtTransform extends Transform {
         bankStmtView.setAccountStatusView(accountStatusTransform.transformToView(bankStatement.getAccountStatus()));
         bankStmtView.setMainAccount(bankStatement.getMainAccount());
         bankStmtView.setAccountCharacteristic(bankStatement.getAccountCharacteristic());
-        bankStmtView.setLimit(bankStatement.getLimit());
+        bankStmtView.setAvgLimit(bankStatement.getAvgLimit());
         bankStmtView.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
         bankStmtView.setAvgIncomeNetBDM(bankStatement.getAvgIncomeNetBDM());
         bankStmtView.setAvgIncomeNetUW(bankStatement.getAvgIncomeNetUW());
@@ -262,6 +263,7 @@ public class BankStmtTransform extends Transform {
 
             bankStatementSummary.setSeasonal(bankStmtSummaryView.getSeasonal());
             bankStatementSummary.setExpectedSubmitDate(bankStmtSummaryView.getExpectedSubmitDate());
+            bankStatementSummary.setCountRefresh(bankStmtSummaryView.getCountRefresh());
 
             bankStatementSummary.setTMBTotalIncomeGross(bankStmtSummaryView.getTMBTotalIncomeGross());
             bankStatementSummary.setTMBTotalIncomeNetBDM(bankStmtSummaryView.getTMBTotalIncomeNetBDM());
@@ -318,7 +320,7 @@ public class BankStmtTransform extends Transform {
                     accountStatusDAO.findById(accountStatusId) : null);
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
-            bankStatement.setLimit(bankStmtView.getLimit());
+            bankStatement.setAvgLimit(bankStmtView.getAvgLimit());
             bankStatement.setAvgIncomeGross(bankStmtView.getAvgIncomeGross());
             bankStatement.setAvgIncomeNetBDM(bankStmtView.getAvgIncomeNetBDM());
             bankStatement.setAvgIncomeNetUW(bankStmtView.getAvgIncomeNetUW());

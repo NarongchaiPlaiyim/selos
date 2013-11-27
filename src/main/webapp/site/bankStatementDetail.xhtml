@@ -78,7 +78,7 @@
                             <td>
                                 <p:selectOneMenu id="bankAccountTypeSelect" value="#{bankStatementDetail.bankStmtView.bankAccountTypeView.id}"
                                                  style="width:160px;" required="#{bankStatementDetail.bankAccTypeSelectRequired}">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                     <f:selectItems value="#{bankStatementDetail.bankAccTypeViewList}" var="bankAccType"
                                                    itemLabel="#{bankAccType.name}" itemValue="#{bankAccType.id}"/>
 
@@ -94,11 +94,11 @@
                             <td>
                                 <p:selectOneMenu id="otherAccountTypeSelect" value="#{bankStatementDetail.bankStmtView.otherAccountType}"
                                                  style="width:160px;" required="#{bankStatementDetail.bankAccTypeSelectRequired}">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                     <f:selectItems value="#{bankStatementDetail.othBankAccTypeViewList}" var="othBankAccType"
                                                    itemLabel="#{othBankAccType.name}" itemValue="#{othBankAccType.id}"/>
 
-                                    <p:ajax event="change" listener="#{bankStatementDetail.onChangeBankAccTypeSelected()}"
+                                    <p:ajax event="change" listener="#{bankStatementDetail.onChangeOthAccTypeSelected()}"
                                             process="@this" update=":frmMain:bankAccountTypeSelect"/>
                                 </p:selectOneMenu>
                             </td>

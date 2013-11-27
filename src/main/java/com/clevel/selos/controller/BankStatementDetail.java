@@ -17,13 +17,17 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.joda.time.DateTime;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.Flash;
+import javax.faces.event.ValueChangeListener;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
@@ -106,6 +110,13 @@ public class BankStatementDetail implements Serializable {
     public BankStatementDetail() {
     }
 
+    @PostConstruct
+    public void onCreation() {
+        preRender();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
+    }
+
     private void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(false);
@@ -156,31 +167,7 @@ public class BankStatementDetail implements Serializable {
         }
     }
 
-    private List<BankStmtDetailView> generateBankStmtDetail() {
-        List<BankStmtDetailView> bankStmtDetailViewList;
-        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
-        Date date;
-        for (int i = 0; i < numberOfMonths; i++) {
-            BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
-            date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
-            bankStmtDetailView.setAsOfDate(date);
-            bankStmtDetailViewList.add(bankStmtDetailView);
-        }
-
-        //Ascending: asOfDate
-//        Collections.sort(bankStmtDetailViewList, new Comparator<BankStmtDetailView>() {
-//            public int compare(BankStmtDetailView o1, BankStmtDetailView o2) {
-//                if (o1.getAsOfDate() == null || o2.getAsOfDate() == null)
-//                    return 0;
-//                return o1.getAsOfDate().compareTo(o2.getAsOfDate());
-//            }
-//        });
-        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtDetailViewList, SortOrder.ASCENDING);
-        return bankStmtDetailViewList;
-    }
-
     private void initViewFormAndSelectItems() {
-
         if (bankStmtView == null) {
             // add new Bank statement
             bankStmtView = new BankStmtView();
@@ -192,28 +179,36 @@ public class BankStatementDetail implements Serializable {
             modeForButton = ModeForButton.EDIT;
         }
 
+        // select items
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank) {
             bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
         } else {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
         }
-        bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
-        //todo: get other bank account type list
-        othBankAccTypeViewList = new ArrayList<BankAccountTypeView>();
+
+        bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getBankAccountTypeList());
+        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
         accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
     }
 
-    @PostConstruct
-    public void onCreation() {
-        preRender();
-        initViewFormAndSelectItems();
-        onChangeBankAccTypeSelected();
+
+    private List<BankStmtDetailView> generateBankStmtDetail() {
+        List<BankStmtDetailView> bankStmtDetailViewList;
+        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
+        Date date;
+        for (int i = 0; i < numberOfMonths; i++) {
+            BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
+            date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
+            bankStmtDetailView.setAsOfDate(date);
+            bankStmtDetailViewList.add(bankStmtDetailView);
+        }
+        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtDetailViewList, SortOrder.ASCENDING);
+        return bankStmtDetailViewList;
     }
 
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
-
         // calculate Bank statement and detail
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
 
@@ -226,7 +221,7 @@ public class BankStatementDetail implements Serializable {
             }
         }
         else {
-            // edit bank statement
+            // edit exist Bank statement
             boolean foundBankStmt = false;
             // find from TMB Bank statement list
             for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
@@ -277,21 +272,28 @@ public class BankStatementDetail implements Serializable {
         //initViewFormAndSelectItems();
     }
 
-    public void onChangeBankAccTypeSelected() {
+    private void checkRequiredBankAccTypeSelected() {
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
-        if (bankAccTypeId == 0 && otherAccType == 0) {
+        if (bankAccTypeId == 0 && otherAccType == 0)
             bankAccTypeSelectRequired = true;
-            return;
-        }
+        else
+            bankAccTypeSelectRequired = false;
+    }
 
-        if (bankAccTypeId != 0) {
+    public void onChangeBankAccTypeSelected() {
+        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
             bankStmtView.setOtherAccountType(0);
-        } else {
+        }
+        checkRequiredBankAccTypeSelected();
+    }
+
+    public void onChangeOthAccTypeSelected() {
+        if (bankStmtView.getOtherAccountType() != 0) {
             bankStmtView.getBankAccountTypeView().setId(0);
         }
-        bankAccTypeSelectRequired = false;
+        checkRequiredBankAccTypeSelected();
     }
 
     //-------------------- Getter/Setter --------------------
