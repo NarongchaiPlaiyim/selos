@@ -50,10 +50,28 @@ public class ProposeCollateralInfoTransform extends Transform {
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
         List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
-        CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(appraisalData.getHeadCollateralData());
+    /*    List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
 
-        List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
+        for(HeadCollateralData headCollateralData : appraisalData.getHeadCollateralDataList())
+        {
+            CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(headCollateralData);
+
+            for(SubCollateralData subCollateralData : headCollateralData.getSubCollateralDataList()){
+                SubCollateralDetailView subCollateralDetailView = convertSubCollateral(subCollateralData);
+                subCollateralDetailViewList.add(subCollateralDetailView);
+            }
+
+            collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
+            collateralHeaderDetailViewList.add(collateralHeaderDetailView);
+        }
+
+        collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
+        log.info("convertCollateral end");
+        return collateralDetailView;*/
+
+        /*List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
         List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+
         for(int i= 0;i<appraisalData.getSubCollateralDataList().size();i++){
 
             SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(i));
@@ -68,11 +86,10 @@ public class ProposeCollateralInfoTransform extends Transform {
         collateralHeaderDetailView.setNo(1);
         collateralHeaderDetailViewList.add(collateralHeaderDetailView);
         collateralHeaderDetailView.setNo(2);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
+        collateralHeaderDetailViewList.add(collateralHeaderDetailView);*/
 
-        collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
-        log.info("convertCollateral end");
         return collateralDetailView;
+
     }
 
     private CollateralHeaderDetailView convertCollateralHeader(HeadCollateralData headCollateralData ){
@@ -104,7 +121,7 @@ public class ProposeCollateralInfoTransform extends Transform {
         subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
         subCollateralDetailView.setAddress(subCollateralData.getAddress());
         subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwner(subCollateralData.getCollateralOwner());
+        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
         if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){

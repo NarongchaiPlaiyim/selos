@@ -363,6 +363,6 @@ function handleGuarantorInfoRequest(xhr, status, args) {
 
 // Credit Facility Propose Credit Dialog
 
-function onSave(buttonID, isDisable){
+function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
 }

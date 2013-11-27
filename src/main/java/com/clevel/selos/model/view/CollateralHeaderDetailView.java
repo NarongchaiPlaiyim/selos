@@ -5,6 +5,7 @@ import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.User;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class CollateralHeaderDetailView {
     private PotentialCollateral   potentialCollateral ;
 
     //dropdown
-//    private collTypePercentLTV ;
+    private String collTypePercentLTV ;
 
     private String existingCredit;
     private int insuranceCompany;
@@ -29,6 +30,21 @@ public class CollateralHeaderDetailView {
     private User modifyBy;
 
     List<SubCollateralDetailView> subCollateralDetailViewList;
+
+    public CollateralHeaderDetailView(){
+          reset();
+    }
+
+    public void reset(){
+        this.potentialCollateral = new PotentialCollateral();
+        this.headCollType = new CollateralType();
+        this.appraisalValue = BigDecimal.ZERO;
+        this.collateralLocation = "";
+        this.existingCredit = "";
+        this.insuranceCompany = 0;
+        this.titleDeed = "";
+        this.subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+    }
 
     public long getId() {
         return id;
@@ -140,5 +156,13 @@ public class CollateralHeaderDetailView {
 
     public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
         this.potentialCollateral = potentialCollateral;
+    }
+
+    public String getCollTypePercentLTV() {
+        return collTypePercentLTV;
+    }
+
+    public void setCollTypePercentLTV(String collTypePercentLTV) {
+        this.collTypePercentLTV = collTypePercentLTV;
     }
 }
