@@ -31,6 +31,7 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     private UserDAO userDAO;
+
     @Inject
     DBRDAO dbrdao;
     @Inject
@@ -39,17 +40,13 @@ public class DBRControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    BankStatementSummaryDAO bankStatementSummaryDAO;
 
     @Inject
     DBRTransform dbrTransform;
     @Inject
     DBRDetailTransform dbrDetailTransform;
-
-    @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
-
-    @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
 
     @Inject
     NCBInfoControl ncbInfoControl;

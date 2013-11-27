@@ -40,15 +40,4 @@ public class CustomerCSIDAO extends GenericDAO<CustomerCSI, Long> {
         return customerAccountNameList;
     }
 
-    public List<CustomerCSI> getCustomerCSIByCustomer(Customer customer){
-        log.info("getCustomerCSIByCustomer ::: customer : {}", customer);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customer", customer));
-        criteria.addOrder(Order.asc("id"));
-        List<CustomerCSI> customerAccountNameList = (List<CustomerCSI>) criteria.list();
-        log.info("getCustomerCSIByCustomer ::: size : {}", customerAccountNameList.size());
-        return customerAccountNameList;
-    }
-
-
 }

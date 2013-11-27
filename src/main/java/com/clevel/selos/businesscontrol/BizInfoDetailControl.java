@@ -48,8 +48,6 @@ public class BizInfoDetailControl extends BusinessControl {
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
 
-    @Inject
-
 	@Inject
     public BizInfoDetailControl(){
 

@@ -4,9 +4,11 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.transform.CustomerTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,6 +16,10 @@ import java.util.List;
 
 @Stateless
 public class CreditFacProposeControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+
     @Inject
     CustomerTransform customerTransform;
     @Inject

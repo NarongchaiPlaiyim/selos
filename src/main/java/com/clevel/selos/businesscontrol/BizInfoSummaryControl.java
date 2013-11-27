@@ -23,13 +23,10 @@ import java.util.List;
 
 @Stateless
 public class BizInfoSummaryControl extends BusinessControl {
-    @Inject
-    BizInfoDetailTransform bizInfoDetailTransform;
 	@Inject
     @SELOS
     private Logger log;
-    @Inject
-    BizInfoSummaryTransform bizInfoSummaryTransform;
+
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject

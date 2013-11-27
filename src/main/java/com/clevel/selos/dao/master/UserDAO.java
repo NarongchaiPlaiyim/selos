@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.User;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 public class UserDAO extends GenericDAO<User,String> {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
     @Inject
     public UserDAO() {
     }

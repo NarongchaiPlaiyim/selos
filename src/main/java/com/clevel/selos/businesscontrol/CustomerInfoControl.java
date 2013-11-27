@@ -29,6 +29,10 @@ import java.util.List;
 @Stateless
 public class CustomerInfoControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;

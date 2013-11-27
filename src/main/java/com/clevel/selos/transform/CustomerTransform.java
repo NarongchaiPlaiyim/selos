@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class CustomerTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     CustomerCSITransform customerCSITransform;
 

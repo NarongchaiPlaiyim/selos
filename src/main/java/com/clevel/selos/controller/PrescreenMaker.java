@@ -230,9 +230,6 @@ public class PrescreenMaker implements Serializable {
     @Inject
     private InboxControl inboxControl;
 
-    @Inject
-    private InboxControl inboxControl;
-
     public PrescreenMaker() {
     }
 
@@ -1879,7 +1876,7 @@ public class PrescreenMaker implements Serializable {
                 if(customerInfoResultView.getCustomerInfoView() != null){
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
-                    borrowerInfo = customerInfoSummaryControl.getInfoForExistingCustomer(borrowerInfo);
+                    //borrowerInfo = customerInfoSummaryControl.getInfoForExistingCustomer(borrowerInfo);
 
                     enableCustomerForm = true;
                     enableDocumentType = false;

@@ -16,6 +16,7 @@ public abstract class BusinessControl implements Serializable {
     private Logger log;
     @Inject
     private UserDAO userDAO;
+
     @Inject
     public BusinessControl(){
 

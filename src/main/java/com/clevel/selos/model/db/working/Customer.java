@@ -560,14 +560,6 @@ public class Customer implements Serializable {
         this.juristicId = juristicId;
     }
 
-    public int getCsiFlag() {
-        return csiFlag;
-    }
-
-    public void setCsiFlag(int csiFlag) {
-        this.csiFlag = csiFlag;
-    }
-
     public Title getTitle() {
         return title;
     }

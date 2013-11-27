@@ -17,6 +17,7 @@ import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

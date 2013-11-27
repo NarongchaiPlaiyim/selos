@@ -22,6 +22,10 @@ import java.util.List;
 @Stateless
 public class ExSummaryControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     ExSummaryDAO exSummaryDAO;
     @Inject
     CustomerDAO customerDAO;
