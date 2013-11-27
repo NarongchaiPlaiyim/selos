@@ -318,7 +318,7 @@ public class ExSummaryTransform extends Transform {
     public ExSumAccountMovementView transformBankStmtToExSumBizView(BankStatement bankStatement){
         ExSumAccountMovementView exSumAccountMovementView = new ExSumAccountMovementView();
 
-        exSumAccountMovementView.setOdLimit(bankStatement.getLimit());
+        exSumAccountMovementView.setOdLimit(bankStatement.getAvgLimit());
         exSumAccountMovementView.setUtilization(bankStatement.getAvgUtilizationPercent());
         exSumAccountMovementView.setSwing(bankStatement.getAvgSwingPercent());
         exSumAccountMovementView.setOverLimitTimes(bankStatement.getOverLimitTimes());

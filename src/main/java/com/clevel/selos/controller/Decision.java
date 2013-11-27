@@ -276,14 +276,14 @@ public class Decision implements Serializable {
 
         collateralHeaderDetailView1.setSubCollateralDetailViewList(subCollateralDetailViewList);
 
-        proposeCollateralInfoView1.setCollateralHeaderDetailView(collateralHeaderDetailView1);
+//        proposeCollateralInfoView1.setCollateralHeaderDetailView(collateralHeaderDetailView1);
         proposeCollateralInfoViewList.add(proposeCollateralInfoView1);
         creditFacProposeView.setProposeCollateralInfoViewList(proposeCollateralInfoViewList);
 
         // Proposed Guarantor
         List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList = new ArrayList<ProposeGuarantorDetailView>();
         ProposeGuarantorDetailView proposeGuarantorDetailView1 = new ProposeGuarantorDetailView();
-        proposeGuarantorDetailView1.setGuarantorName("Guarantor name 1");
+//        proposeGuarantorDetailView1.setGuarantorName("Guarantor name 1");
         proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
         proposeGuarantorDetailView1.setCreditTypeDetailViewList(creditTypeDetailViewList);

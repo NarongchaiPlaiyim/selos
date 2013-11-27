@@ -1,20 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.CustomerEntityDAO;
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.db.master.BAPaymentMethod;
-import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.BasicInfoAccPurposeTransform;
-import com.clevel.selos.transform.BasicInfoAccountTransform;
-import com.clevel.selos.transform.BasicInfoTransform;
 import com.clevel.selos.transform.ExSummaryTransform;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -101,7 +94,7 @@ public class ExSummaryControl extends BusinessControl {
             if(bankStatementSummary.getBankStmtList() != null && bankStatementSummary.getBankStmtList().size() > 0 ){
                 for(BankStatement bs : bankStatementSummary.getBankStmtList()){
                     if(bs.getMainAccount() == 1){
-                        if(bs.getBank().getCode() == 7){ // TMB Bank //todo : enum
+                        if(bs.getBank().getCode() == BankType.TMB.value()){ // TMB Bank
                             mainBank = exSummaryTransform.transformBankStmtToExSumBizView(bs);
                         } else { // Other Bank
                             otherBank = exSummaryTransform.transformBankStmtToExSumBizView(bs);
@@ -128,7 +121,7 @@ public class ExSummaryControl extends BusinessControl {
                 if(customer != null && customer.size() > 0){
                     for(Customer cus : customer){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                            if(cus.getRelation().getId() == 1){ // Borrower //todo: enum
+                            if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
                                 bizSize = cus.getJuristic().getSalesFromFinancialStmt();
                             }
                         }
