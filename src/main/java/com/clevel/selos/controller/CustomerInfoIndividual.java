@@ -893,6 +893,14 @@ public class CustomerInfoIndividual implements Serializable {
 //        reqSpoKYCLev =
     }
 
+    public void onChangeDOB(){
+        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+    }
+
+    public void onChangeDOBSpouse(){
+        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+    }
+
     public void onSearchCustomerInfo() {
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
@@ -1142,6 +1150,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
 //        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
 //        Calendar today = Calendar.getInstance();
 //        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
@@ -1193,6 +1202,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);

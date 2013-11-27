@@ -44,7 +44,7 @@ public class CreditTypeDetailView implements Serializable {
         this.guaranteeAmount = BigDecimal.ZERO;
         this.usaCount = 0;
         this.seq = 0;
-
+        this.noFlag = false;
     }
 
     public long getId() {
@@ -60,7 +60,11 @@ public class CreditTypeDetailView implements Serializable {
     }
 
     public void setNo(int no) {
-         this.no = no;
+        if(this.noFlag){
+           this.no = 1;
+        }else{
+           this.no = 0;
+        }
     }
 
     public String getAccount() {

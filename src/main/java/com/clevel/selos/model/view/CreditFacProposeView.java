@@ -36,6 +36,8 @@ public class CreditFacProposeView implements Serializable {
     private BigDecimal maximumExistingSMELimit;
 
     private BigDecimal totalPropose;
+    private BigDecimal totalProposeLoanDBR;
+    private BigDecimal totalProposeNonLoanDBR;
     private BigDecimal totalCommercial;
     private BigDecimal totalCommercialAndOBOD;
     private BigDecimal totalExposure;
@@ -101,6 +103,8 @@ public class CreditFacProposeView implements Serializable {
         this.maximumExistingSMELimit = BigDecimal.ZERO;
 
         this.totalPropose = BigDecimal.ZERO;
+        this.totalProposeLoanDBR = BigDecimal.ZERO;
+        this.totalProposeNonLoanDBR = BigDecimal.ZERO;
         this.totalCommercial = BigDecimal.ZERO;
         this.totalCommercialAndOBOD = BigDecimal.ZERO;
         this.totalExposure = BigDecimal.ZERO;
@@ -135,6 +139,22 @@ public class CreditFacProposeView implements Serializable {
         this.creditRequestType = new CreditRequestType();
         this.country = new Country();
 
+    }
+
+    public BigDecimal getTotalProposeNonLoanDBR() {
+        return totalProposeNonLoanDBR;
+    }
+
+    public void setTotalProposeNonLoanDBR(BigDecimal totalProposeNonLoanDBR) {
+        this.totalProposeNonLoanDBR = totalProposeNonLoanDBR;
+    }
+
+    public BigDecimal getTotalProposeLoanDBR() {
+        return totalProposeLoanDBR;
+    }
+
+    public void setTotalProposeLoanDBR(BigDecimal totalProposeLoanDBR) {
+        this.totalProposeLoanDBR = totalProposeLoanDBR;
     }
 
     public BigDecimal getWCNeed() {

@@ -290,7 +290,7 @@ public class ExSummaryTransform extends Transform {
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
-        exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getBizLocationName());
+        exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getProvince().getName());
 
         for(BizInfoDetailView bd : bizInfoSummaryView.getBizInfoDetailViewList()){
             if(bd.getIsMainDetail() == 1){
