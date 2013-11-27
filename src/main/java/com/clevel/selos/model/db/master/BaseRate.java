@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "mst_ref_rate")
-public class RefRate implements Serializable {
+@Table(name = "mst_base_rate")
+public class BaseRate implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
