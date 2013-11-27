@@ -48,6 +48,9 @@ public class NCBInfoControl extends BusinessControl {
 
     }
 
+    private final BigDecimal plusMRR = BigDecimal.valueOf(6);
+
+
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList) {
         log.info("onSaveNCBToDB begin");
 
@@ -161,14 +164,6 @@ public class NCBInfoControl extends BusinessControl {
             }
         }
         return ncbDetailViews;
-    }
-
-    private BigDecimal getDBRInterest(){
-        BigDecimal result = BigDecimal.ZERO;
-        //todo waiting get form to Database
-        BigDecimal mrr = BigDecimal.TEN;
-        result = mrr.add(BigDecimal.valueOf(3));
-        return result;
     }
 
     public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){

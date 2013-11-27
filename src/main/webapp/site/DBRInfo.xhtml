@@ -295,7 +295,8 @@
                                                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                                      styleClass="medium"
                                                                      action="#{dbrInfo.onSaveDBRInfo}"
-
+                                                                     onclick="onOneClick('frmMain:btnSave', true);"
+                                                                     oncomplete="onOneClick('frmMain:btnSave', false);"
                                                                      update=":pnl_maincontainer :msgBoxSystemMessagePanel">
                                                     </p:commandButton>
                                                     <p:spacer  width="10"/>
