@@ -451,10 +451,13 @@
         <table class="table_noborder" style="width: 100%">
             <tr>
                 <td colspan="2">
-                    <p:selectOneRadio value="">
+                    <p:selectOneRadio  id="creditCustomerTypeValue" value="#{creditFacPropose.creditFacProposeView.creditCustomerType}" >
+                        <f:selectItems value="#{app.getCreditCustomerTypeValues('Normal|Prime')}" />
+                    </p:selectOneRadio>
+                 <!--   <p:selectOneRadio value="">
                         <f:selectItem itemLabel="Normal" itemValue="1"/>
                         <f:selectItem itemLabel="Prime" itemValue="0"/>
-                    </p:selectOneRadio>
+                    </p:selectOneRadio>-->
                 </td>
             </tr>
             <tr>
@@ -464,16 +467,15 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="creditRequest"
-                                     value="#{creditFacPropose.creditRequestTypeSelected}"
+                                     value="#{creditFacPropose.creditFacProposeView.creditRequestType.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="true">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.creditRequestTypeList}"
-                                       var="creditRequestType"
-                                       itemLabel="#{creditRequestType.description}"
-                                       itemValue="#{creditRequestType.code}"/>
-
+                                       var="creditRequest"
+                                       itemLabel="#{creditRequest.name}"
+                                       itemValue="#{creditRequest.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -484,7 +486,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="countryItem"
-                                     value="#{creditFacPropose.countrySelected}"
+                                     value="#{creditFacPropose.creditFacProposeView.country.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="true">
@@ -546,9 +548,9 @@
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
                          styleClass="medium"
                          style="width:200px"
-                         process="@form"
+                         process="@this"
                          update=":frmMain"
-                         action="#{creditFacPropose.onCallRetrieveProposeCreditInfo}"/>
+                         action="#{creditFacPropose.onRetrievePricingFee}"/>
     </td>
 </tr>
 
@@ -610,19 +612,35 @@
         <!-- BEGIN: Credit Tier Detail [0] -->
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].standardPrice : ''}">
+                                    proposeCredit.creditTierDetailViewList[0].standardBase.name: ''}">
+            </h:outputText>
+            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
+                                   '+' : ''}">
+            </h:outputText>
+            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
+                                    proposeCredit.creditTierDetailViewList[0].standardPrice: ''}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
             </h:outputText>
         </td>
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].suggestBase.name}">
+            </h:outputText>
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].suggestPrice : ''}">
+                                   '+' : ''}">
+            </h:outputText>
+            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
+                                 proposeCredit.creditTierDetailViewList[0].suggestPrice : ''}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
             </h:outputText>
         </td>
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].finalBase.name}">
+            </h:outputText>
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                   '+' : ''}">
+            </h:outputText>
+            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
+                                 proposeCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
             </h:outputText>
         </td>
@@ -1115,26 +1133,32 @@
 
 <tr>
 <td colspan="2">
+
+
+<ui:repeat value="#{creditFacPropose.creditFacProposeView.proposeCollateralInfoViewList}"
+           var="proposeCollateralInfoView"  varStatus="collIndex">
 <table style="width:100%">
 <tr>
     <td class="title" style="width:150px;text-align: left">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
     </td>
     <td style="width:150px;text-align: left">
-        <h:outputText id="jobID" value="#{creditFacPropose.proposeCollateralInfoView.jobID}"/>
+        <h:outputText id="jobID" value="#{proposeCollateralInfoView.jobID}"/>
     </td>
     <td colspan="2" style="text-align:right;">
         <p:commandButton value="Edit"
                          action="#{creditFacPropose.onEditProposeCollInfo()}"
                          update=":collateralDlgForm"
-                         process=":frmMain"
+                         process="@this"
                          oncomplete="collateralInfoDlg.show();">
-            <f:setPropertyActionListener value="#{creditFacPropose.proposeCollateralInfoView}"
+            <f:setPropertyActionListener value="#{proposeCollateralInfoView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
+            <f:setPropertyActionListener value="#{collIndex.index}"
+                                         target="#{creditFacPropose.rowIndexCollateral}"/>
         </p:commandButton>
         <p:commandButton value="Remove" process="@this"
                          oncomplete="confirmDeleteCollateralInfoDlg.show()">
-            <f:setPropertyActionListener value="#{creditFacPropose.proposeCollateralInfoView}"
+            <f:setPropertyActionListener value="#{proposeCollateralInfoView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
         </p:commandButton>
     </td>
@@ -1145,7 +1169,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.appraisalDate}">
+        <h:outputText value="#{proposeCollateralInfoView.appraisalDate}">
             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </h:outputText>
     </td>
@@ -1155,37 +1179,52 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.aadDecision}"/>
+        <h:outputText value="#{proposeCollateralInfoView.aadDecision}"/>
     </td>
 </tr>
 <tr>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
-    <td>
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.aadDecisionReason}"/>
+    <td  style="text-align: left">
+        <h:outputText value="#{proposeCollateralInfoView.aadDecisionReason}"/>
     </td>
     <td class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
+    <td  style="text-align: left">
+        <h:outputText value="#{proposeCollateralInfoView.aadDecisionReasonDetail}"/>
+    </td>
+</tr>
+<tr>
+    <td  class="title">
+        <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
+    </td>
     <td>
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.aadDecisionReasonDetail}"/>
+        <h:outputText  value="#{proposeCollateralInfoView.usage}"/>
+    </td>
+    <td  class="title">
+        <p:outputLabel
+                value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
+    </td>
+    <td  style="text-align: left">
+        <h:outputText  value="#{proposeCollateralInfoView.typeOfUsage}"/>
     </td>
 </tr>
 <tr>
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
     </td>
-    <td>
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.mortgageCondition}"/>
+    <td  style="text-align: left">
+        <h:outputText value="#{proposeCollateralInfoView.mortgageCondition}"/>
     </td>
     <td class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
     </td>
-    <td>
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.mortgageConditionDetail}"/>
+    <td  style="text-align: left">
+        <h:outputText value="#{proposeCollateralInfoView.mortgageConditionDetail}"/>
     </td>
 </tr>
 <tr>
@@ -1194,7 +1233,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3">
-        <p:dataTable value="#{creditFacPropose.proposeCollateralInfoView.creditTypeDetailViewList}"
+        <p:dataTable value="#{proposeCollateralInfoView.creditTypeDetailViewList}"
                      var="creditTypeDetailItem"
                      rowKey="#{creditTypeDetailItem.CreditTypeDetailView}"
                      rowIndexVar="rowIndex">
@@ -1224,7 +1263,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.type}"/>
+                <h:outputText value="#{creditTypeDetailItem.type == 0 ? 'New' : 'Change'}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1249,8 +1288,8 @@
     <td class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
     </td>
-    <td colspan="3">
-        <h:outputText value="#{creditFacPropose.proposeCollateralInfoView.bdmComments}"/>
+    <td colspan="3"  style="text-align: left">
+        <h:outputText value="#{proposeCollateralInfoView.bdmComments}"/>
     </td>
 </tr>
 <tr>
@@ -1258,15 +1297,16 @@
         <div class="separate"></div>
     </td>
 </tr>
-<ui:repeat value="#{creditFacPropose.proposeCollateralInfoView.collateralHeaderDetailViewList}"
-           var="collateralHeaderDetailView">
+
+<ui:repeat value="#{proposeCollateralInfoView.collateralHeaderDetailViewList}"
+           var="CollateralHeaderDetailView">
     <tr>
         <td class="title" style="width: 150px;">
             <p:outputLabel
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.potentialCollateral.description}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.potentialCollateral.description}"/>
         </td>
     </tr>
     <tr>
@@ -1275,7 +1315,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
         </td>
         <td>
-
+            <h:outputText value="#{CollateralHeaderDetailView.collTypePercentLTV}"/>
         </td>
     </tr>
     <tr>
@@ -1284,7 +1324,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.existingCredit}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.existingCredit}"/>
         </td>
     </tr>
     <tr>
@@ -1293,7 +1333,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.titleDeed}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.titleDeed}"/>
         </td>
     </tr>
     <tr>
@@ -1302,7 +1342,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.collateralLocation}"/>
+            <h:outputText value="#{CollateralHeaderDetailView.collateralLocation}"/>
         </td>
     </tr>
     <tr>
@@ -1311,7 +1351,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.appraisalValue')}"/>
         </td>
         <td>
-            <h:outputText value="#{collateralHeaderDetailView.appraisalValue}">
+            <h:outputText value="#{CollateralHeaderDetailView.appraisalValue}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             </h:outputText>
         </td>
@@ -1331,7 +1371,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
         </td>
         <td>
-            <p:selectOneRadio value="#{collateralHeaderDetailView.insuranceCompany}">
+            <p:selectOneRadio value="#{CollateralHeaderDetailView.insuranceCompany}">
                 <f:selectItem itemLabel="Partner" itemValue="1"/>
                 <f:selectItem itemLabel="Non Partner" itemValue="0"/>
             </p:selectOneRadio>
@@ -1341,10 +1381,10 @@
         <td colspan="4">
             <p:dataTable tableStyleClass="center"
                          id="subCollateralDetailViewTable"
+                         value="#{CollateralHeaderDetailView.subCollateralDetailViewList}"
                          var="subCollateralDetailView"
-                         value="#{collateralHeaderDetailView.subCollateralDetailViewList}"
                          paginator="false"
-                         rowKey="#{subCollateralDetailView.id}"
+                         rowKey="#{subCollateralDetailView.SubCollateralDetailView}"
                          rowIndexVar="rowIndex">
                 <p:columnGroup type="header">
                     <p:row>
@@ -1360,11 +1400,11 @@
                         <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>
                         <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')} "/>
                         <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')} "/>
-                        <p:column/>
+
                     </p:row>
                 </p:columnGroup>
                 <p:column styleClass="center">
-                    <h:outputText value="#{subCollateralDetailView.no}"/>
+                    <h:outputText value="#{rowIndex+1}"/>
                 </p:column>
                 <p:column styleClass="left">
                     <h:outputText value="#{subCollateralDetailView.subCollateralType.description}"/><br/>
@@ -1375,16 +1415,25 @@
                     <h:outputText value="#{subCollateralDetailView.titleDeed}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{subCollateralDetailView.collateralOwner}"/>
+                    <h:outputText value="#{subCollateralDetailView.collateralOwnerAAD}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{subCollateralDetailView.collateralOwner}"/>
+                    <ui:repeat value="#{subCollateralDetailView.collateralOwnerUWList}"
+                               var="String"  varStatus="a">
+                        <h:outputText value="#{String}"/><br/>
+                    </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{subCollateralDetailView.mortgageType}"/>
+                    <ui:repeat value="#{subCollateralDetailView.mortgageList}"
+                               var="String"  varStatus="b">
+                        <h:outputText value="#{String}"/><br/>
+                    </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{subCollateralDetailView.relatedWith}"/>
+                    <ui:repeat value="#{subCollateralDetailView.relatedWithList}"
+                               var="String"  varStatus="c">
+                        <h:outputText value="#{String}"/><br/>
+                    </ui:repeat>
                 </p:column>
                 <p:column styleClass="right">
                     <h:outputText value="#{subCollateralDetailView.appraisalValue}">
@@ -1396,7 +1445,7 @@
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     </h:outputText>
                 </p:column>
-                <p:column styleClass="center"></p:column>
+
             </p:dataTable>
         </td>
     </tr>
@@ -1411,10 +1460,8 @@
         </td>
     </tr>
 </ui:repeat>
-
-
 </table>
-
+   </ui:repeat>
 </td>
 </tr>
 
@@ -1475,7 +1522,7 @@
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{proposeGuarantorDetailView.guarantorName}"/>
+                            <h:outputText value="#{proposeGuarantorDetailView.guarantorName.nameTh}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1518,12 +1565,12 @@
                             <p:commandButton icon="ui-icon-pencil"
                                              action="#{creditFacPropose.onEditGuarantorInfo()}"
                                              update=":guarantorDlgForm"
-                                             process=":frmMain"
-                                             oncomplete="guanrantorInfoDlg.show();">
+                                             process="@this"
+                                             oncomplete="guarantorInfoDlg.show();">
                                 <f:setPropertyActionListener value="#{proposeGuarantorDetailView}"
                                                              target="#{creditFacPropose.proposeGuarantorDetailViewItem}"/>
                                 <f:setPropertyActionListener value="#{g.index}"
-                                                             target="#{creditFacPropose.rowIndex}"/>
+                                                             target="#{creditFacPropose.rowIndexGuarantor}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
                                              process="@this"
@@ -1755,7 +1802,7 @@
 
 <!-- Propose Collateral Dialog -->
 <p:dialog id="collateralInfoDialog" header="Propose Collateral Information" widgetVar="collateralInfoDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" >
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1797,6 +1844,27 @@
     <ui:param name="action" value="onDeleteConditionInfo"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
+
+<!-- subCollateralInfoDialog  -->
+<p:dialog id="subCollateralInfoDialog"
+          header="Sub Collateral Information"
+          widgetVar="subCollateralInfoDlg"
+          height="500"
+          modal="true"
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()">
+    <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
+</p:dialog>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteSubCollateralInfoDialog"/>
+    <ui:param name="name" value="confirmDeleteSubCollateralInfoDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
+    <ui:param name="controller" value="#{creditFacPropose}"/>
+    <ui:param name="action" value="onDeleteSubCollateral"/>
+    <ui:param name="update" value=":subCollateralDlgForm"/>
+</ui:include>
+
 
 <!-- Control  All Page-->
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

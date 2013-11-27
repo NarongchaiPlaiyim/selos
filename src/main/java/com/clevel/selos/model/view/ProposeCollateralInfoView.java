@@ -3,6 +3,7 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +27,29 @@ public class ProposeCollateralInfoView implements Serializable {
     private User modifyBy;
 
     private List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
-    private CollateralHeaderDetailView collateralHeaderDetailView;
-
     private List<CreditTypeDetailView> creditTypeDetailViewList;
+
+    public ProposeCollateralInfoView(){
+        reset();
+    }
+
+    public void reset(){
+        this.jobID = "";
+        this.appraisalDate = new Date();
+        this.aadDecision = "";
+        this.aadDecisionReason = "";
+        this.aadDecisionReasonDetail = "";
+        this.usage = "";
+        this.typeOfUsage = "";
+        this.uwDecision = "";
+        this.uwRemark = "";
+        this.mortgageCondition = "";
+        this.mortgageConditionDetail = "";
+        this.bdmComments= "";
+
+        this.collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+        this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
+    }
 
     public long getId() {
         return id;
@@ -172,14 +193,6 @@ public class ProposeCollateralInfoView implements Serializable {
 
     public void setCollateralHeaderDetailViewList(List<CollateralHeaderDetailView> collateralHeaderDetailViewList) {
         this.collateralHeaderDetailViewList = collateralHeaderDetailViewList;
-    }
-
-    public CollateralHeaderDetailView getCollateralHeaderDetailView() {
-        return collateralHeaderDetailView;
-    }
-
-    public void setCollateralHeaderDetailView(CollateralHeaderDetailView collateralHeaderDetailView) {
-        this.collateralHeaderDetailView = collateralHeaderDetailView;
     }
 
     public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
