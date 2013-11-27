@@ -14,17 +14,15 @@
                     </td>
                     <td style="width: 400px;">
                         <p:selectOneMenu id="guarantorName"
-                                         value="#{creditFacPropose.proposeGuarantorDetailView.guarantorName}"
+                                         value="#{creditFacPropose.proposeGuarantorDetailView.guarantorName.id}"
                                          size="1"
-                                         style="width: 200px;">
-                            <!--required="true"-->
+                                         style="width: 200px;"
+                                         required="true">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacPropose.guarantorList}"
                                            var="guarantorList"
                                            itemLabel="#{guarantorList.nameTh}"
                                            itemValue="#{guarantorList.id}"/>
-                            <!--      <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
-                                          update=":tcgDlgForm"/>-->
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -33,7 +31,7 @@
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                     </td>
                     <td>
-                        <p:inputText id="totalGuarantee" value="#{creditFacPropose.proposeGuarantorDetailView.tcgLgNo}"
+                        <p:inputText id="tcgLgNo" value="#{creditFacPropose.proposeGuarantorDetailView.tcgLgNo}"
                                      style="text-align:right">
                         </p:inputText>
                     </td>
@@ -81,7 +79,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.type}"/>
+                                            <h:outputText value="#{creditTypeItem.type == 0 ? 'New' : 'Change'}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -92,14 +90,14 @@
                                             <h:outputText value="#{creditTypeItem.creditFacility}"/>
                                         </p:column>
 
-                                        <p:column styleClass="center">
+                                        <p:column styleClass="right">
                                             <h:outputText value="#{creditTypeItem.limit}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
-                                        <p:column styleClass="center">
-                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}">
+                                        <p:column styleClass="right">
+                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}" style="text-align:right">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                 <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
@@ -114,7 +112,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveGuarantorDlg"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
@@ -135,7 +133,7 @@
         </h:form>
     </p:panel>
 
-    <p:blockUI widgetVar="blockGuarantorDlg" block="guarantorDlgPanel" trigger=":guarantorDlgForm:save">
+    <p:blockUI widgetVar="blockGuarantorDlg" block="guarantorDlgPanel" trigger=":guarantorDlgForm:saveGuarantorDlg">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

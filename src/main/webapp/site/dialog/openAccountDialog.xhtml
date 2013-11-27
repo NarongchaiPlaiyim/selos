@@ -1,0 +1,228 @@
+<!DOCTYPE html >
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Account Detail Information</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+<h:body>
+    <h:form id="openAccountDialogForm">
+
+        <table class="content_table_form">
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Request Account Type'}"/>
+                </td>
+
+                <td colspan="2" style="width: 300px;">
+                    <h:selectOneRadio value="#{openAccount.openAccountView.requestAccountType}">
+                        <f:selectItem itemLabel="#{'New'}" itemValue="0"/>
+                        <f:selectItem itemLabel="#{'Existing'}" itemValue="1"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Account Number'}"/>
+                </td>
+
+                <td style="width: 200px;">
+                    <p:inputText value="#{openAccount.openAccountView.accountNumber}" styleClass="larger"/>
+                </td>
+            </tr>
+
+            <!--<tr>-->
+                <!--<td class="title">-->
+                    <!--<h:outputText value="#{'Branch'}"/>-->
+                <!--</td>-->
+
+                <!--<td>-->
+                    <!--<p:selectOneMenu styleClass="largest" size="1"-->
+                                     <!--value="#{basicInfo.basicInfoView.requestType.id}"-->
+                                     <!--disabled="#{basicInfo.disRequestType}"-->
+                                     <!--required="#{basicInfo.reqRequestType and not empty param[saveBtn.clientId]}">-->
+                        <!--<f:selectItem itemLabel="- Please Select -" itemValue=""/>-->
+                        <!--<f:selectItems value="#{basicInfo.requestTypeList}"-->
+                                       <!--var="requestType"-->
+                                       <!--itemLabel="#{requestType.name}"-->
+                                       <!--itemValue="#{requestType.id}"/>-->
+                    <!--</p:selectOneMenu>-->
+                <!--</td>-->
+            <!--</tr>-->
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Account Type'}"/>
+                </td>
+
+                <td>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{openAccount.openAccountView.idOfAccountType}"
+                                        >
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{openAccount.bankAccountTypeList}"
+                                       var="accountType"
+                                       itemLabel="#{accountType.name}"
+                                       itemValue="#{accountType.id}"/>
+                        <p:ajax event="change"
+                                listener="#{openAccount.onChangeAccountType}"
+                                update=":openAccountDialogForm:productType" />
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Product Type'}"/>
+                </td>
+
+                <td style="width: 300px;">
+                    <p:selectOneMenu id="productType" styleClass="largest" size="1"
+                                     value="#{openAccount.openAccountView.productType}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{openAccount.openAccountProductList}"
+                                       var="openAccountProduct"
+                                       itemLabel="#{openAccountProduct.name}"
+                                       itemValue="#{openAccountProduct.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Term'}"/>
+                </td>
+
+                <td style="width: 200px;">
+                    <p:inputText value="#{openAccount.openAccountView.term}" styleClass="larger"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Account Name'}"/>
+                </td>
+
+                <td>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{openAccount.openAccountView.accountName}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{openAccount.accountName}"
+                                     var="accountNameList"
+                                     itemLabel="#{accountNameList}"
+                                     itemValue="#{accountNameList}"/>
+                    </p:selectOneMenu>
+                </td>
+                <td>
+                    <p:commandButton value="#{msg.get('app.button.add')}"
+                                     styleClass="small"
+                                     process="@form"
+                                     action="#{openAccount.addAccountName()}"
+                                     update=":openAccountDialogForm"/>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td class="title">
+                </td>
+
+                <td>
+                    <p:dataTable id="resultTableAccountName" var="item" value="#{openAccount.openAccountView.accountNameViewList}"
+                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+
+                        <p:column headerText="" styleClass="center" style="width:22px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
+                        <p:column headerText="#{'Account Name'}" style="width: 110px;">
+                            <h:outputText value="#{item.name}"/>
+                        </p:column>
+
+                        <p:column headerText="" styleClass="center" style="width:54px;">
+                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                                             icon="ui-icon-trash"
+                                             oncomplete="confirmDeleteAccountNameDlg.show()"
+                                             update=":openAccountDialogForm"
+                                             process="@form">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{openAccount.accountNameView}"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Purpose'}"/>
+                </td>
+                <td>
+                    <p:dataGrid value="#{openAccount.openAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
+                        <p:column>
+                            <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
+                            <h:outputText value="#{purposeList.purpose.name}"/>
+                        </p:column>
+                    </p:dataGrid>
+                </td>
+            </tr>
+
+            <!--<tr>-->
+                <!--<td class="left" style="background:none;">#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}</td>-->
+                <!--<ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">-->
+                    <!--<td class="center"-->
+                        <!--style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">-->
+                        <!--<p:inputText value="#{item.overLimitAmount}" styleClass="right">-->
+                            <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>-->
+                        <!--</p:inputText>-->
+                    <!--</td>-->
+                <!--</ui:repeat>-->
+            <!--</tr>-->
+
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{'Credit Type'}"/>
+                </td>
+
+                <td>
+                    <p:dataTable id="resultTableCreditType" var="itemCreditType" value="#{openAccount.openAccountView.openAccountCreditTypeViewList}}"
+                                 paginator="false" rowKey="#{itemCreditType}" rowIndexVar="rowIndex">
+
+                        <p:column headerText="" styleClass="center" style="width:110px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
+                        <p:column headerText="#{'Product Program'}" style="width: 110px;">
+                            <h:outputText value="#{''}"/>
+                        </p:column>
+
+                        <p:column headerText="#{'Credit Facility'}" style="width: 110px;">
+                            <h:outputText value="#{''}"/>
+                        </p:column>
+
+                        <p:column headerText="#{'Limit'}" style="width: 110px;">
+                            <h:outputText value="#{''}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+
+        </table>
+    </h:form>
+
+</h:body>
+
+</f:view>
+</html>

@@ -254,15 +254,15 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
 
-        basicInfoView.setSpProgram(-1);
-        basicInfoView.setRefIn(-1);
-        basicInfoView.setRefOut(-1);
-        basicInfoView.setApplyBA(-1);
+        basicInfoView.setSpProgram(0);
+        basicInfoView.setRefIn(0);
+        basicInfoView.setRefOut(0);
+        basicInfoView.setApplyBA(0);
 
-        tmpSpecialProgram = -1;
-        tmpRefinanceIN = -1;
-        tmpRefinanceOUT = -1;
-        tmpApplyBA = -1;
+        tmpSpecialProgram = 0;
+        tmpRefinanceIN = 0;
+        tmpRefinanceOUT = 0;
+        tmpApplyBA = 0;
 
         basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 
@@ -535,13 +535,13 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onChangeSpecialProgram(){
         if(tmpSpecialProgram == basicInfoView.getSpProgram()){
-            basicInfoView.setSpProgram(-1);
-            tmpSpecialProgram = -1;
+            basicInfoView.setSpProgram(0);
+            tmpSpecialProgram = 0;
         } else {
             tmpSpecialProgram = basicInfoView.getSpProgram();
         }
 
-        if(basicInfoView.getSpProgram() == 1){ // yes
+        if(basicInfoView.getSpProgram() == 2){ // yes
             reqSpecialProgramValue = true;
             disSpecialProgramValue = false;
         } else {
@@ -552,13 +552,13 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onChangeRefIn(){
         if(tmpRefinanceIN == basicInfoView.getRefIn()){
-            basicInfoView.setRefIn(-1);
-            tmpRefinanceIN = -1;
+            basicInfoView.setRefIn(0);
+            tmpRefinanceIN = 0;
         } else {
             tmpRefinanceIN = basicInfoView.getRefIn();
         }
 
-        if(basicInfoView.getRefIn() == 1){ // yes
+        if(basicInfoView.getRefIn() == 2){ // yes
             reqRefinanceInValue = true;
             disRefinanceInValue = false;
         } else {
@@ -569,13 +569,13 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onChangeRefOut(){
         if(tmpRefinanceOUT == basicInfoView.getRefOut()){
-            basicInfoView.setRefOut(-1);
-            tmpRefinanceOUT = -1;
+            basicInfoView.setRefOut(0);
+            tmpRefinanceOUT = 0;
         } else {
             tmpRefinanceOUT = basicInfoView.getRefOut();
         }
 
-        if(basicInfoView.getRefOut() == 1){ // yes
+        if(basicInfoView.getRefOut() == 2){ // yes
             reqRefinanceOutValue = true;
             disRefinanceOutValue = false;
         } else {
@@ -585,7 +585,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onChangeExistingSME(){
-        if(basicInfoView.getExistingSME() == 1){ // yes
+        if(basicInfoView.getExistingSME() == 2){ // yes
             reqExistingSMECustomerSince = true;
             disExistingSMECustomerSince = false;
         } else {
@@ -596,13 +596,13 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onChangeBA(){
         if(tmpApplyBA == basicInfoView.getApplyBA()){
-            basicInfoView.setApplyBA(-1);
-            tmpApplyBA = -1;
+            basicInfoView.setApplyBA(0);
+            tmpApplyBA = 0;
         } else {
             tmpApplyBA = basicInfoView.getApplyBA();
         }
 
-        if(basicInfoView.getApplyBA() == 0 || basicInfoView.getApplyBA() == -1){
+        if(basicInfoView.getApplyBA() == 1 || basicInfoView.getApplyBA() == 0){
             basicInfoView.getBaPaymentMethod().setId(0);
         }else{
             if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
@@ -612,7 +612,7 @@ public class BasicInfo extends MandatoryFieldsControl {
             }
         }
 
-        if(basicInfoView.getApplyBA() == 1){ // yes
+        if(basicInfoView.getApplyBA() == 2){ // yes
             reqBaPaymentMethod = true;
             disBaPaymentMethod = false;
         } else {

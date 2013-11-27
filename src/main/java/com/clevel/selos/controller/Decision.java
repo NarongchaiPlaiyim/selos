@@ -108,8 +108,8 @@ public class Decision implements Serializable {
         //----------------------------------------- 1 ---------------------------------------//
         List<CreditTierDetailView> tierDetailViewList1 = new ArrayList<CreditTierDetailView>();
         CreditTierDetailView tierDetailView1 = new CreditTierDetailView();
-        tierDetailView1.setStandardPrice(BigDecimal.valueOf(1.00));
-        tierDetailView1.setSuggestPrice(BigDecimal.valueOf(2.00));
+//        tierDetailView1.setStandardPrice(BigDecimal.valueOf(1.00));
+//        tierDetailView1.setSuggestPrice(BigDecimal.valueOf(2.00));
         tierDetailView1.setFinalPriceRate(BigDecimal.valueOf(2.00));
         tierDetailView1.setInstallment(BigDecimal.valueOf(123456.78));
         tierDetailView1.setTenor(3);
@@ -132,24 +132,24 @@ public class Decision implements Serializable {
         //----------------------------------------- 2 ---------------------------------------//
         List<CreditTierDetailView> tierDetailViewList2 = new ArrayList<CreditTierDetailView>();
         CreditTierDetailView tierDetailView2_1 = new CreditTierDetailView();
-        tierDetailView2_1.setStandardPrice(BigDecimal.valueOf(1.00));
-        tierDetailView2_1.setSuggestPrice(BigDecimal.valueOf(1.50));
+//        tierDetailView2_1.setStandardPrice(BigDecimal.valueOf(1.00));
+//        tierDetailView2_1.setSuggestPrice(BigDecimal.valueOf(1.50));
         tierDetailView2_1.setFinalPriceRate(BigDecimal.valueOf(1.50));
         tierDetailView2_1.setInstallment(BigDecimal.valueOf(123456.78));
         tierDetailView2_1.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_1);
 
         CreditTierDetailView tierDetailView2_2 = new CreditTierDetailView();
-        tierDetailView2_2.setStandardPrice(BigDecimal.valueOf(1.25));
-        tierDetailView2_2.setSuggestPrice(BigDecimal.valueOf(2.00));
+//        tierDetailView2_2.setStandardPrice(BigDecimal.valueOf(1.25));
+//        tierDetailView2_2.setSuggestPrice(BigDecimal.valueOf(2.00));
         tierDetailView2_2.setFinalPriceRate(BigDecimal.valueOf(2.00));
         tierDetailView2_2.setInstallment(BigDecimal.valueOf(123456.78));
         tierDetailView2_2.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_2);
 
         CreditTierDetailView tierDetailView2_3 = new CreditTierDetailView();
-        tierDetailView2_3.setStandardPrice(BigDecimal.valueOf(2.00));
-        tierDetailView2_3.setSuggestPrice(BigDecimal.valueOf(2.50));
+//        tierDetailView2_3.setStandardPrice(BigDecimal.valueOf(2.00));
+//        tierDetailView2_3.setSuggestPrice(BigDecimal.valueOf(2.50));
         tierDetailView2_3.setFinalPriceRate(BigDecimal.valueOf(2.50));
         tierDetailView2_3.setInstallment(BigDecimal.valueOf(123456.78));
         tierDetailView2_3.setTenor(24);

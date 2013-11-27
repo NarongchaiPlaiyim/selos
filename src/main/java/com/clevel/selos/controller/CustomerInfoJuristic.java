@@ -332,7 +332,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
-        customerInfoView.setCollateralOwner(0);
+        customerInfoView.setCollateralOwner(1);
 
         enableDocumentType = true;
         enableCitizenId = true;

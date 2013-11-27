@@ -779,7 +779,7 @@
                                                  update=":msgBoxSystemMessagePanel,:frmMain"/>
 
                                 <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                                 oncomplete="confirmChangScreenSumDlg.show()"
+                                                 oncomplete="confirmChangeScreenSumDlg.show()"
                                                  />
                             </td>
                         </tr>
@@ -825,12 +825,12 @@
         <ui:param name="update" value=":frmMain:supplierTable,:frmMain:buyerTable"/>
     </ui:include>
 
-    <ui:include src="dialog/confirmChangScreenDlg.xhtml">
+    <ui:include src="dialog/confirmChangeScreenDlg.xhtml">
         <ui:param name="headerMessage" value="คำเตือน"/>
         <ui:param name="message" value="ย้อนกลับไปยังหน้าจอ Summary จะทำยกเลิกการกระทำหน้าปัจจุบัน"/>
-        <ui:param name="id" value="confirmChangScreenSumDialog"/>
-        <ui:param name="name" value="confirmChangScreenSumDlg"/>
-        <ui:param name="formId" value="frmConfirmChangScreenSum"/>
+        <ui:param name="id" value="confirmChangeScreenSumDialog"/>
+        <ui:param name="name" value="confirmChangeScreenSumDlg"/>
+        <ui:param name="formId" value="frmConfirmChangeScreenSum"/>
         <ui:param name="controller" value="#{bizInfoDetail}"/>
         <ui:param name="action" value="onCancel"/>
     </ui:include>

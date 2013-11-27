@@ -1,0 +1,168 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="existingCollateraRelatedlDlgPanel" styleClass="panel-dialog">
+        <h:form id="existingCollateralRelatedDlgForm">
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width:145px;">ศักยภาพ หลักประกัน :</td>
+                    <td>
+                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{creditFacExisting.potentialCollateralList}"
+                                           var="potentialColl"
+                                           itemLabel="#{potentialColl.name}"
+                                           itemValue="#{potentialColl.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">Collateral Type :</td>
+                    <td>
+                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{creditFacExisting.collateralTypeList}"
+                                           var="collateralType"
+                                           itemLabel="#{collateralType.description}"
+                                           itemValue="#{collateralType.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">กรรมสิทธิ์ :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.owner}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">Collateral Type :</td>
+                    <td>
+                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{creditFacExisting.relationList}"
+                                           var="relation"
+                                           itemLabel="#{relation.description}"
+                                           itemValue="#{relation.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">วันทีทำการประเมิน :</td>
+                    <td>
+                        <p:calendar  value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="title" style="width:145px;">เลขที่ :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.collateralNumber}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">ที่อยู่ :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.collateralLocation}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">หมายเหตุ :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.remark}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">Credit Type :</td>
+                    <td>
+                        <p:dataTable id="resultCreditCollateralRelated" var="creditTypeRelated"
+                                     value="#{creditFacExisting.relatedExistingCreditDetailViewList}"
+                                     rowKey="#{creditTypeRelated.no}" rowIndexVar="rowIndex" style="width: 100%">
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column style="width:50px;"/>
+                                    <p:column style="width:150px;"
+                                              headerText="Account Name"/>
+                                    <p:column style="width:200px;"
+                                              headerText="Product Program"/>
+                                    <p:column style="width:200px;"
+                                              headerText="Credit Facility"/>
+                                    <p:column style="width:200px;"
+                                              headerText="Limit"/>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column styleClass="center">
+                                <p:selectBooleanCheckbox value="#{creditTypeRelated.noFlag}" />
+                            </p:column>
+
+                            <p:column styleClass="center">
+                                <p:outputLabel value="#{creditTypeRelated.accountName}"/><br/>
+                                <p:outputLabel value="#{creditTypeRelated.accountNumber}"/>  <p:outputLabel value="#{creditTypeRelated.accountSuf}"/>
+                            </p:column>
+
+                            <p:column styleClass="center">
+                                <p:outputLabel  value="#{creditTypeRelated.existProductProgram.name}" />
+                            </p:column>
+
+                            <p:column styleClass="center">
+                                <p:outputLabel  value="#{creditTypeRelated.existCreditType.name}" />
+                            </p:column>
+                            <p:column styleClass="center">
+                                <p:outputLabel  value="#{creditTypeRelated.limit}" />
+                            </p:column>
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">ประเภท :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.mortgageType}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">ราคาประเมิน :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:145px;">จำนอง :</td>
+                    <td>
+                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton
+                                id="save"
+                                value="#{msg.get('app.tcg.dlg.button.ok')}"
+                                binding="#{saveRelatedCollateral}"
+                                actionListener="#{creditFacExisting.onSaveExistingCollateral()}"
+                                process="@form"
+                                update=":existingCollateralRelatedDlgForm,:frmMain"
+                                oncomplete="handleExistingCollateralRelatedRequest(xhr, status, args)" />
+                                />
+
+                        <p:commandButton
+                                value="#{msg.get('app.tcg.dlg.button.cancel')}"
+                                styleClass="small"
+                                onclick="existingCollateralRelatedDlg.hide()"
+                                />
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:panel>
+
+    <!--<p:blockUI widgetVar="blockExistingSplitLineDlgForm" block="existingCollateralDlgPanel" trigger="existingCollateralDlgForm:save">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>  -->
+
+</ui:composition>

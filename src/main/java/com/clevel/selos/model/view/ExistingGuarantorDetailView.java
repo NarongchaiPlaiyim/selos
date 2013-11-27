@@ -1,7 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,28 +10,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeGuarantorDetailView implements Serializable {
+public class ExistingGuarantorDetailView implements Serializable {
 
-    private Customer guarantorName;
+    private String guarantorName;
     private String tcgLgNo;
     private BigDecimal guaranteeAmount;
 
-    private List<CreditTypeDetailView> creditTypeDetailViewList;
+    private List<ExistingCreditDetailView> creditFacilityList;
 
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
 
-    public ProposeGuarantorDetailView() {
+    public ExistingGuarantorDetailView() {
         reset();
     }
 
     public void reset() {
-        this.guarantorName = new Customer();
+        this.guarantorName = "";
         this.tcgLgNo = "";
         this.guaranteeAmount = BigDecimal.ZERO;
-        this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
+        this.creditFacilityList = new ArrayList<ExistingCreditDetailView>();
     }
 
     public Date getCreateDate() {
@@ -65,11 +66,11 @@ public class ProposeGuarantorDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public Customer getGuarantorName() {
+    public String getGuarantorName() {
         return guarantorName;
     }
 
-    public void setGuarantorName(Customer guarantorName) {
+    public void setGuarantorName(String guarantorName) {
         this.guarantorName = guarantorName;
     }
 
@@ -81,12 +82,12 @@ public class ProposeGuarantorDetailView implements Serializable {
         this.tcgLgNo = tcgLgNo;
     }
 
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
+    public List<ExistingCreditDetailView> getCreditFacilityList() {
+        return creditFacilityList;
     }
 
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
+    public void setCreditFacilityList(List<ExistingCreditDetailView> creditFacilityList) {
+        this.creditFacilityList = creditFacilityList;
     }
 
     public BigDecimal getGuaranteeAmount() {
@@ -97,4 +98,17 @@ public class ProposeGuarantorDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("guarantorName", guarantorName)
+                .append("tcgLgNo", tcgLgNo)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("creditFacilityList", creditFacilityList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
+    }
 }

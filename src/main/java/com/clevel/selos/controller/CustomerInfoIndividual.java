@@ -3,8 +3,8 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.dao.working.IndividualDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
@@ -15,7 +15,6 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
@@ -30,7 +29,10 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumIndi")
@@ -401,8 +403,8 @@ public class CustomerInfoIndividual implements Serializable {
         isEditBorrower = false;
         isEditSpouseBorrower = false;
 
-        customerInfoView.setCollateralOwner(0);
-        customerInfoView.getSpouse().setCollateralOwner(0);
+        customerInfoView.setCollateralOwner(1);
+        customerInfoView.getSpouse().setCollateralOwner(1);
 
         onChangeReference();
         onChangeReferenceSpouse();
