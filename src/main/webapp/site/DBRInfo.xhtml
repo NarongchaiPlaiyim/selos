@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <h:head>
         <title>#{msg.get('app.dbr.title')}</title>
@@ -33,6 +34,7 @@
                                 <div id="content_lastupdate">Last update by <h:outputText
                                             value="#{dbrInfo.dbr.modifyBy}"/>,
                                     <p:outputLabel value="#{dbrInfo.dbr.modifyDate}">
+                                        <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
 
                                     </p:outputLabel></div>
                             </div>
@@ -70,15 +72,16 @@
                                                 <td>
                                                     <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+
                                                     </p:inputText>
                                                 </td>
                                             </tr>
                                                 <tr>
                                                 <td class="title">
-                                                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
+                                                    <p:outputLabel for="monthlyIncomeAdjust" value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
                                                 </td>
                                                 <td>
-                                                    <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right">
+                                                    <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
                                                     </p:inputText>
@@ -86,10 +89,10 @@
                                             </tr>
                                                 <tr>
                                                 <td class="title">
-                                                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
+                                                    <p:outputLabel for="monthlyIncomePerMonth" value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right">
+                                                    <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                     </p:inputText>
@@ -287,15 +290,21 @@
                                         </td>
                                         </tr>
                                         <tr>
-                                            <td class="center">
-                                                <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                                             styleClass="medium"
-                                                             action="#{dbrInfo.onSaveDBRInfo}"
-                                                             onclick="onSave('frmMain:btnSave', true)"
-                                                             oncomplete="onSave('frmMain:btnSave', false)"
-                                                             update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                            <td>
+                                                <div class="center">
+                                                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                                     styleClass="medium"
+                                                                     action="#{dbrInfo.onSaveDBRInfo}"
 
-                                                </p:commandButton>
+                                                                     update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                                    </p:commandButton>
+                                                    <p:spacer  width="10"/>
+                                                    <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                                                                     styleClass="medium"
+
+                                                                     update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                                    </p:commandButton>
+                                                </div>
                                             </td>
                                         </tr>
                                    </table>
