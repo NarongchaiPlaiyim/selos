@@ -1,0 +1,323 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="existingCreditDlgPanel" styleClass="panel-dialog">
+<h:form id="existingCreditDlgForm">
+<table class="content_form">
+    <tr>
+        <td>
+            borrower name
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.accountName}"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            account Number
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.accountNumber}"/>
+        </td>
+        <td>
+            account suffix
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.accountSuf}"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+            account status
+        </td>
+        <td colspan="3">
+            <p:selectOneMenu id="dlgSelAccountStatus"
+                             value="#{creditFacExisting.existingCreditDetailView.existAccountStatus.id}"
+                             size="1"
+                             style="min-width: 200px; width: 200px; max-width: 200px;" >
+                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                <f:selectItems value="#{creditFacExisting.accountStatusList}"
+                               var="accountStatus"
+                               itemLabel="#{accountStatus.description}"
+                               itemValue="#{accountStatus.id}"/>
+
+            </p:selectOneMenu>
+        </td>
+    </tr>
+    <tr>
+        <td class="title" style="width:145px;">Product Program :</td>
+        <td>
+            <p:selectOneMenu id="dlgSelProdProgram" value="#{creditFacExisting.existingCreditDetailView.existProductProgram.id}"
+                             size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
+                             >
+                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                <f:selectItems value="#{creditFacExisting.prdGroupToPrdProgramList}"
+                               var="prodProgramItem"
+                               itemLabel="#{prodProgramItem.productProgram.name}"
+                               itemValue="#{prodProgramItem.productProgram.id}"/>
+                <p:ajax event="change"
+                        listener="#{creditFacExisting.onChangeProductProgram}"
+                        update=":existingCreditDlgForm:creditTypeName"/>
+            </p:selectOneMenu>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">Facility :</td>
+        <td>
+            <p:selectOneMenu id="creditTypeName" value="#{creditFacExisting.existingCreditDetailView.existCreditType.id}"
+                             size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
+                             >
+                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                <f:selectItems value="#{creditFacExisting.prdProgramToCreditTypeList}"
+                               var="dlgCreditType"
+                               itemLabel="#{dlgCreditType.creditType.name}"
+                               itemValue="#{dlgCreditType.creditType.id}"/>
+                <p:ajax event="change" listener="#{creditFacExisting.onChangeCreditType()}" process=":existingCreditDlgForm" update=":existingCreditDlgForm"/>
+            </p:selectOneMenu>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.productCode}"/>
+        </td>
+        <td class="title">
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.projectCode}"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.limit}"
+                         style="text-align:right"/>
+        </td>
+        <td class="title">
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.pcePercent}"
+                         style="text-align:right"/>
+            <p:spacer/>
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            outstanding
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.outstanding}"/>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+        </td>
+        <td class="title">
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
+                         style="text-align:right">
+
+            </p:inputText>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+            tier
+        </td>
+        <td style="text-align: left;" colspan="3">
+            <p:commandButton
+                    id="addTierinfo"
+                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                    styleClass="smaller"
+                    actionListener="#{creditFacExisting.onAddCreditTierDetailView()}"
+                    update=":existingCreditDlgForm"  >
+            </p:commandButton>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+        </td>
+        <td colspan="3">
+            <p:dataTable id="resultTier" var="creditTier"
+                         value="#{creditFacExisting.creditTierDetailViewList}"
+                         rowKey="#{creditTier.no}" rowIndexVar="rowIndex" style="width: 100%">
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column style="width:50px;"/>
+                        <p:column style="width:150px;"
+                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.price')}"/>
+                        <p:column style="width:200px;"
+                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.tenor')}"/>
+                        <p:column style="width:200px;"
+                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
+                        <p:column style="width: 80px"/>
+                    </p:row>
+                </p:columnGroup>
+                <p:column styleClass="center">
+                    <p:outputLabel value="#{rowIndex+1}"/>
+                </p:column>
+
+                <p:column styleClass="center">
+                    <p:inputText  value="#{creditTier.installment}" />
+                </p:column>
+
+                <p:column styleClass="center">
+                    <p:inputText  value="#{creditTier.finalPriceRate}" />
+                </p:column>
+
+                <p:column styleClass="center">
+                    <p:inputText  value="#{creditTier.tenor}" />
+                </p:column>
+                <p:column styleClass="center">
+                    <p:commandButton title="Remove" process="@form"
+                                     icon="ui-icon-trash"
+                                     update=":existingCreditDlgForm:resultTier"
+                                     actionListener="#{creditFacExisting.onDeleteCreditTierDetailView(rowIndex)}" >
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div class="separate"><!-- --></div>
+
+        </td>
+    </tr>
+<p:panel id="pnlSplitLine" rendered="#{creditFacExisting.showSplitLine}">
+    <tr>
+        <td class="title">
+            Spilt Line
+        </td>
+        <td style="text-align: left;" colspan="3">
+            <p:commandButton
+                    id="addSplitLineinfo"
+                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                    styleClass="smaller"
+                    actionListener="#{creditFacExisting.onAddSplitLineDetailView()}"
+                    update=":existingCreditDlgForm:spiltResult"
+                    >
+            </p:commandButton>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+        </td>
+        <td colspan="3">
+            <p:dataTable id="spiltResult" var="splitLine"
+                         value="#{creditFacExisting.splitLineDetailViewList}"
+                         rowKey="#{splitLine.no}" rowIndexVar="rowIndex" style="width: 100%">
+
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column style="width:50px;"/>
+                        <p:column style="width:150px;"
+                                  headerText="product program"/>
+                        <p:column style="width:200px;"
+                                  headerText="limit"/>
+                        <p:column style="width: 80px"/>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column styleClass="center">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>
+
+                <p:column styleClass="center">
+                    <p:selectOneMenu id="dlgSplitProdProgram" value="#{splitLine.productProgram.id}"
+                                     size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{creditFacExisting.productProgramList}"
+                                       var="productProgram"
+                                       itemLabel="#{productProgram.name}"
+                                       itemValue="#{productProgram.id}"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column styleClass="center">
+                    <p:inputText value="#{splitLine.limit}"/>
+                </p:column>
+                <p:column styleClass="center">
+                    <p:column styleClass="center">
+                        <p:commandButton title="Remove" process="@form"
+                                         icon="ui-icon-trash"
+                                         update=":existingCreditDlgForm:spiltResult"
+                                         actionListener="#{creditFacExisting.onDeleteSplitLineDetailView(rowIndex)}" >
+                        </p:commandButton>
+                    </p:column>
+                </p:column>
+
+
+            </p:dataTable>
+        </td>
+    </tr>
+</p:panel>
+    <tr>
+        <td colspan="4" class="center">
+            <p:commandButton id="dlgSaveCreditBtn"
+                             styleClass="small"
+                             binding="#{SaveCreditBtn}"
+                             value="#{msg.get('app.button.ok')}"
+                             action="#{creditFacExisting.onSaveCreditInfo()}"
+                             process="@form"
+                             update=":existingCreditDlgForm :frmMain"
+                             oncomplete="handleDlgCreditExistingRequest(xhr, status, args)"/>
+
+            <p:commandButton type="button" styleClass="small"
+                             value="#{msg.get('app.button.cancel')}"
+                             onclick="existingCreditInfoDlg.hide()"
+                             />
+        </td>
+    </tr>
+</table>
+</h:form>
+
+<p:dialog id="existingTierDialog" header="Existing Tier Infomartion" widgetVar="existingTierDlg" >
+    <ui:include src="existingTierDialog.xhtml"/>
+</p:dialog>
+
+<p:dialog id="existingSplitLineDialog" header="Existing Split Line Information" widgetVar="existingSplitLineDlg" >
+    <ui:include src="existingSplitLineDialog.xhtml"/>
+</p:dialog>
+
+
+
+<ui:include src="confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteCreditTierDetailViewDialog"/>
+    <ui:param name="name" value="confirmDeleteCreditTierDetailViewDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteCreditTierDetailView"/>
+    <ui:param name="controller" value="#{creditFacExisting}"/>
+    <ui:param name="action" value="onDeleteCreditTierDetailView"/>
+    <ui:param name="update" value=":existingCreditDlgForm"/>
+</ui:include>
+
+<ui:include src="confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteSplitLineDetailViewDialog"/>
+    <ui:param name="name" value="confirmDeleteSplitLineDetailViewDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteSplitLineDetailView"/>
+    <ui:param name="controller" value="#{creditFacExisting}"/>
+    <ui:param name="action" value="onDeleteSplitLineDetailView"/>
+    <ui:param name="update" value=":existingCreditDlgForm"/>
+</ui:include>
+
+
+</p:panel>
+
+<!-- <p:blockUI widgetVar="blockexistingCreditInfoDlg" block="existingCreditInfoDlgPanel" trigger=":existingCreditInfoDlgForm:addDlgCreditButton">
+     LOADING<br/>
+     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+ </p:blockUI>-->
+
+</ui:composition>
