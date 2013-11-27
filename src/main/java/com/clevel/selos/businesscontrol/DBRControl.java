@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRDetailView;
@@ -197,29 +198,10 @@ public class DBRControl extends BusinessControl {
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
 
-        //Ex summary Final DBR
-        BigDecimal debt = BigDecimal.ZERO;
-
-        //todo waiting for Value from Credit Exsiting
-        BigDecimal limit = BigDecimal.TEN;
-        BigDecimal install = BigDecimal.TEN;
-
-        BigDecimal sum = BigDecimal.ZERO;
-        if(roleId == RoleUser.BDM.getValue()){
-            sum = limit.multiply(getDBRInterest());
-            sum = sum.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            sum = sum.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-
-        }else if(roleId == RoleUser.UW.getValue()){
-            sum = limit.multiply(getDBRInterest());
-            sum = sum.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            sum = sum.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-        }
-        debt = currentDBR.add(install);
-        debt = debt.add(sum);
+        //Ex summary Final DBR BigDecimal debt = BigDecimal.ZERO;
 
         BigDecimal finalDBR = BigDecimal.ZERO;
-        finalDBR = debt.divide(netMonthlyIncome, 2, RoundingMode.HALF_UP);
+        finalDBR = calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
 
         // update dbr
         dbr.setNetMonthlyIncome(netMonthlyIncome);
@@ -232,12 +214,42 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    private BigDecimal getDBRInterest(){
-        BigDecimal result = BigDecimal.ZERO;
-        //todo waiting get form to Database
-        BigDecimal mrr = BigDecimal.TEN;
-        result = mrr.add(BigDecimal.valueOf(3));
-        return result;
+
+    public void updateFinalDBR(long workCaseId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
+        for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+            totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+        }
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+        DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
+        List<DBRDetail> dbrDetails = dbr.getDbrDetails();
+        for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+        }
+        BigDecimal finalDBR = BigDecimal.ZERO;
+        finalDBR =  calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
+        dbr.setFinalDBR(finalDBR);
+        dbrdao.persist(dbr);
+
+    }
+
+
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated, WorkCase workCase){
+        BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
+        int roleId = getCurrentUser().getRole().getId();
+        //todo waiting totalPurposeForDBR from Exsiting purpose
+        if(roleId == RoleUser.UW.getValue()){
+
+        }else if(roleId == RoleUser.BDM.getValue()){
+
+        }
+        BigDecimal debt = BigDecimal.ZERO;
+        debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
+        debt = debt.add(totalPurposeForDBR);
+        return debt;
+
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary, User user){
@@ -253,6 +265,10 @@ public class DBRControl extends BusinessControl {
         }
         return monthlyIncome;
 
+    }
+
+    private BigDecimal getTotalPurposeForDBR(){
+        return BigDecimal.TEN;
     }
 
 

@@ -23,10 +23,10 @@ public class ProposeCreditDetailView implements Serializable {
     private int reduceFrontEndFee;
     private boolean reduceFlag;
     private boolean reduceFrontEndFlag;
-    private RefRate standardBase;
+    private BaseRate standardBase;
     private BigDecimal standardPrice;
     private BigDecimal standardAdd;
-    private RefRate suggestBase;
+    private BaseRate suggestBase;
     private BigDecimal suggestPrice;
     private BigDecimal suggestAdd;
     private BigDecimal frontEndFee;
@@ -40,6 +40,7 @@ public class ProposeCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private Disbursement disbursement;
     private BigDecimal purpose;
+    private int seq;
 
     // master
 //    private loanPurpose
@@ -75,10 +76,18 @@ public class ProposeCreditDetailView implements Serializable {
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
 
-        this.standardBase = new RefRate();
-        this.suggestBase = new RefRate();
+        this.standardBase = new BaseRate();
+        this.suggestBase = new BaseRate();
         this.standardAdd = BigDecimal.ZERO;
         this.suggestAdd = BigDecimal.ZERO;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 
     public int getRequestType() {
@@ -315,11 +324,11 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 
-    public RefRate getStandardBase() {
+    public BaseRate getStandardBase() {
         return standardBase;
     }
 
-    public void setStandardBase(RefRate standardBase) {
+    public void setStandardBase(BaseRate standardBase) {
         this.standardBase = standardBase;
     }
 
@@ -331,11 +340,11 @@ public class ProposeCreditDetailView implements Serializable {
         this.standardAdd = standardAdd;
     }
 
-    public RefRate getSuggestBase() {
+    public BaseRate getSuggestBase() {
         return suggestBase;
     }
 
-    public void setSuggestBase(RefRate suggestBase) {
+    public void setSuggestBase(BaseRate suggestBase) {
         this.suggestBase = suggestBase;
     }
 

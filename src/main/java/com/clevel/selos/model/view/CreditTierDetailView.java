@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.RefRate;
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,12 +11,12 @@ import java.util.Date;
 
 public class CreditTierDetailView implements Serializable {
     private int no;
-    private RefRate finalBase;
+    private BaseRate finalBase;
     private BigDecimal finalPriceRate;
     private BigDecimal installment;
-    private RefRate suggestBase;
+    private BaseRate suggestBase;
     private BigDecimal suggestPrice;
-    private RefRate standardBase;
+    private BaseRate standardBase;
     private BigDecimal standardPrice;
     private int tenor;
     private boolean canEdit;
@@ -30,13 +30,13 @@ public class CreditTierDetailView implements Serializable {
     }
 
     public void reset() {
-        this.finalBase = new RefRate();
+        this.finalBase = new BaseRate();
         this.finalPriceRate = BigDecimal.ZERO;
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
-        this.standardBase = new RefRate();
+        this.standardBase = new BaseRate();
         this.standardPrice = BigDecimal.ZERO;
-        this.suggestBase = new RefRate();
+        this.suggestBase = new BaseRate();
         this.suggestPrice = BigDecimal.ZERO;
     }
 
@@ -48,11 +48,11 @@ public class CreditTierDetailView implements Serializable {
         this.no = no;
     }
 
-    public RefRate getFinalBase() {
+    public BaseRate getFinalBase() {
         return finalBase;
     }
 
-    public void setFinalBase(RefRate finalBase) {
+    public void setFinalBase(BaseRate finalBase) {
         this.finalBase = finalBase;
     }
 
@@ -120,11 +120,11 @@ public class CreditTierDetailView implements Serializable {
         this.canEdit = canEdit;
     }
 
-    public RefRate getSuggestBase() {
+    public BaseRate getSuggestBase() {
         return suggestBase;
     }
 
-    public void setSuggestBase(RefRate suggestBase) {
+    public void setSuggestBase(BaseRate suggestBase) {
         this.suggestBase = suggestBase;
     }
 
@@ -136,11 +136,11 @@ public class CreditTierDetailView implements Serializable {
         this.suggestPrice = suggestPrice;
     }
 
-    public RefRate getStandardBase() {
+    public BaseRate getStandardBase() {
         return standardBase;
     }
 
-    public void setStandardBase(RefRate standardBase) {
+    public void setStandardBase(BaseRate standardBase) {
         this.standardBase = standardBase;
     }
 
