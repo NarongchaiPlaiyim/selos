@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -276,14 +277,19 @@ public class Decision implements Serializable {
 
         collateralHeaderDetailView1.setSubCollateralDetailViewList(subCollateralDetailViewList);
 
-        proposeCollateralInfoView1.setCollateralHeaderDetailView(collateralHeaderDetailView1);
+        List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+        collateralHeaderDetailViewList.add(collateralHeaderDetailView1);
+        proposeCollateralInfoView1.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
         proposeCollateralInfoViewList.add(proposeCollateralInfoView1);
         creditFacProposeView.setProposeCollateralInfoViewList(proposeCollateralInfoViewList);
 
         // Proposed Guarantor
         List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList = new ArrayList<ProposeGuarantorDetailView>();
         ProposeGuarantorDetailView proposeGuarantorDetailView1 = new ProposeGuarantorDetailView();
-        proposeGuarantorDetailView1.setGuarantorName("Guarantor name 1");
+        Customer guarantor = new Customer();
+        guarantor.setNameTh("Guarantor Name");
+        guarantor.setLastNameTh("Lastname");
+        proposeGuarantorDetailView1.setGuarantorName(guarantor);
         proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
         proposeGuarantorDetailView1.setCreditTypeDetailViewList(creditTypeDetailViewList);
