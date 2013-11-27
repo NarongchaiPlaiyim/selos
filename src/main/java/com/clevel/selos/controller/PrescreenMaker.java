@@ -911,7 +911,11 @@ public class PrescreenMaker implements Serializable {
                 enableTMBCustomerId = false;
             } else {
                 enableDocumentType = false;
-                enableCitizenId = true;
+                if(borrowerInfo.getNcbFlag() == 1){
+                    enableCitizenId = false;
+                }else{
+                    enableCitizenId = true;
+                }
                 enableTMBCustomerId = true;
             }
         }
