@@ -39,6 +39,8 @@ public class ExSummaryControl extends BusinessControl {
     NCBInfoControl ncbInfoControl;
     @Inject
     BankStmtControl bankStmtControl;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -65,6 +67,10 @@ public class ExSummaryControl extends BusinessControl {
         }
 
 //        List<BankStmtSummaryView> bankStmtSummaryViewList =
+
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView);
+        exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
 

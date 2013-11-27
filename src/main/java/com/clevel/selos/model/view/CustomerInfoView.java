@@ -116,6 +116,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     private CustomerInfoView spouse;
 
+    // for show in Summary
+    private BigDecimal percentShareSummary;
+
     public CustomerInfoView(){
         //reset();
     }
@@ -177,6 +180,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.sourceIncome = new Country();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
+        this.percentShareSummary = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
@@ -848,5 +852,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public int getIsCommittee(){
         return isCommittee;
+    }
+
+    public BigDecimal getPercentShareSummary() {
+        return percentShareSummary;
+    }
+
+    public void setPercentShareSummary(BigDecimal percentShareSummary) {
+        this.percentShareSummary = percentShareSummary;
     }
 }
