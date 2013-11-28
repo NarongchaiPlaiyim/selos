@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,13 +12,13 @@ import java.util.Date;
 public class CreditTierDetailView implements Serializable {
     private int no;
     private BigDecimal finalInterest;
-    private BigDecimal finalBasePrice;
+    private BaseRate finalBasePrice;
     private String finalPriceRate;
     private BigDecimal installment;
-    private BigDecimal standardBasePrice;
+    private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
-    private BigDecimal suggestBasePrice;
+    private BaseRate suggestBasePrice;
     private String suggestPrice;
     private BigDecimal suggestInterest;
     private int tenor;
@@ -35,12 +36,13 @@ public class CreditTierDetailView implements Serializable {
         this.finalPriceRate = "";
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
-        this.standardBasePrice =  BigDecimal.ZERO;
+        this.standardBasePrice =  new BaseRate();
         this.standardPrice = "";
-        this.suggestBasePrice = BigDecimal.ZERO;
+        this.suggestBasePrice = new BaseRate();
         this.suggestPrice = "";
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+        this.finalBasePrice = new BaseRate();
     }
 
     public int getNo() {
@@ -123,25 +125,6 @@ public class CreditTierDetailView implements Serializable {
         this.finalInterest = finalInterest;
     }
 
-    public BigDecimal getFinalBasePrice() {
-        return finalBasePrice;
-    }
-
-    public void setFinalBasePrice(BigDecimal finalBasePrice) {
-        this.finalBasePrice = finalBasePrice;
-    }
-
-    public BigDecimal getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BigDecimal standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public void setSuggestBasePrice(BigDecimal suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
-    }
 
     public String getStandardPrice() {
         return standardPrice;
@@ -175,8 +158,28 @@ public class CreditTierDetailView implements Serializable {
         this.suggestInterest = suggestInterest;
     }
 
-    public BigDecimal getSuggestBasePrice() {
+    public BaseRate getFinalBasePrice() {
+        return finalBasePrice;
+    }
+
+    public void setFinalBasePrice(BaseRate finalBasePrice) {
+        this.finalBasePrice = finalBasePrice;
+    }
+
+    public BaseRate getStandardBasePrice() {
+        return standardBasePrice;
+    }
+
+    public void setStandardBasePrice(BaseRate standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
+    }
+
+    public BaseRate getSuggestBasePrice() {
         return suggestBasePrice;
+    }
+
+    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
+        this.suggestBasePrice = suggestBasePrice;
     }
 
     @Override

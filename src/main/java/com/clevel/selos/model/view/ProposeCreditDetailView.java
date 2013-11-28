@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CreditType;
-import com.clevel.selos.model.db.master.Disbursement;
-import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,10 +23,10 @@ public class ProposeCreditDetailView implements Serializable {
     private int reduceFrontEndFee;
     private boolean reduceFlag;
     private boolean reduceFrontEndFlag;
-    private BigDecimal standardBasePrice;
+    private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
-    private BigDecimal suggestBasePrice;
+    private BaseRate suggestBasePrice;
     private String suggestPrice;
     private BigDecimal suggestInterest;
     private BigDecimal frontEndFee;
@@ -79,8 +76,8 @@ public class ProposeCreditDetailView implements Serializable {
 
         this.standardPrice = "";
         this.suggestPrice = "";
-        this.standardBasePrice = BigDecimal.ZERO;
-        this.suggestBasePrice = BigDecimal.ZERO;
+        this.standardBasePrice = new BaseRate();
+        this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
     }
@@ -327,19 +324,19 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 
-    public BigDecimal getStandardBasePrice() {
+    public BaseRate getStandardBasePrice() {
         return standardBasePrice;
     }
 
-    public void setStandardBasePrice(BigDecimal standardBasePrice) {
+    public void setStandardBasePrice(BaseRate standardBasePrice) {
         this.standardBasePrice = standardBasePrice;
     }
 
-    public BigDecimal getSuggestBasePrice() {
+    public BaseRate getSuggestBasePrice() {
         return suggestBasePrice;
     }
 
-    public void setSuggestBasePrice(BigDecimal suggestBasePrice) {
+    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
         this.suggestBasePrice = suggestBasePrice;
     }
 
