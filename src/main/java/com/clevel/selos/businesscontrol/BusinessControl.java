@@ -1,7 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BaseRateConfig;
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.security.UserDetail;
 import org.slf4j.Logger;
@@ -17,6 +20,9 @@ public abstract class BusinessControl implements Serializable {
     Logger log;
     @Inject
     UserDAO userDAO;
+    @Inject
+    BaseRateDAO baseRateDAO;
+
 
     protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -36,8 +42,9 @@ public abstract class BusinessControl implements Serializable {
 
     protected BigDecimal getMRRParameter(){
         try{
-            //todo Hardcode waiting Database
-            return BigDecimal.valueOf(8);
+            BaseRate baseRate = baseRateDAO.findById(BaseRateConfig.MRR.value());
+            if(baseRate == null) return BigDecimal.ZERO;
+            return baseRate.getValue() == null ? BigDecimal.ZERO :  baseRate.getValue();
         }catch (Exception e){
             log.error("getMRR Not found", e);
             return BigDecimal.ZERO;
