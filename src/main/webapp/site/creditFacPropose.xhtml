@@ -612,37 +612,23 @@
         <!-- BEGIN: Credit Tier Detail [0] -->
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                    proposeCredit.creditTierDetailViewList[0].standardBase.name: ''}">
-            </h:outputText>
-            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                   '+' : ''}">
-            </h:outputText>
-            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                     proposeCredit.creditTierDetailViewList[0].standardPrice: ''}">
-                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
             </h:outputText>
         </td>
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].suggestBase.name}">
-            </h:outputText>
-            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                   '+' : ''}">
-            </h:outputText>
-            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                 proposeCredit.creditTierDetailViewList[0].suggestPrice : ''}">
-                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].suggestPrice}">
             </h:outputText>
         </td>
         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].finalBase.name}">
+            <h:outputText value="#{proposeCredit.creditTierDetailViewList[0].finalPriceRate}">
             </h:outputText>
-            <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
+            <!--<h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                    '+' : ''}">
             </h:outputText>
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                 proposeCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                 proposeCredit.creditTierDetailViewList[0].finalInterest : ''}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-            </h:outputText>
+            </h:outputText>-->
         </td>
         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
             <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?

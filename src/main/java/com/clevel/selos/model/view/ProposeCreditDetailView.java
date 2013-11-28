@@ -1,6 +1,9 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.CreditType;
+import com.clevel.selos.model.db.master.Disbursement;
+import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -23,12 +26,12 @@ public class ProposeCreditDetailView implements Serializable {
     private int reduceFrontEndFee;
     private boolean reduceFlag;
     private boolean reduceFrontEndFlag;
-    private BaseRate standardBase;
-    private BigDecimal standardPrice;
-    private BigDecimal standardAdd;
-    private BaseRate suggestBase;
-    private BigDecimal suggestPrice;
-    private BigDecimal suggestAdd;
+    private BigDecimal standardBasePrice;
+    private String standardPrice;
+    private BigDecimal standardInterest;
+    private BigDecimal suggestBasePrice;
+    private String suggestPrice;
+    private BigDecimal suggestInterest;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -66,8 +69,6 @@ public class ProposeCreditDetailView implements Serializable {
 
         this.reducePriceFlag = 0;
         this.reduceFrontEndFee = 0;
-        this.standardPrice = BigDecimal.ZERO;
-        this.suggestPrice = BigDecimal.ZERO;
         this.frontEndFee = BigDecimal.ZERO;
         this.remark = "";
         this.holdLimitAmount = BigDecimal.ZERO;
@@ -76,10 +77,12 @@ public class ProposeCreditDetailView implements Serializable {
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
 
-        this.standardBase = new BaseRate();
-        this.suggestBase = new BaseRate();
-        this.standardAdd = BigDecimal.ZERO;
-        this.suggestAdd = BigDecimal.ZERO;
+        this.standardPrice = "";
+        this.suggestPrice = "";
+        this.standardBasePrice = BigDecimal.ZERO;
+        this.suggestBasePrice = BigDecimal.ZERO;
+        this.standardInterest = BigDecimal.ZERO;
+        this.suggestInterest = BigDecimal.ZERO;
     }
 
     public int getSeq() {
@@ -186,19 +189,19 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFee = reduceFrontEndFee;
     }
 
-    public BigDecimal getStandardPrice() {
+    public String getStandardPrice() {
         return standardPrice;
     }
 
-    public void setStandardPrice(BigDecimal standardPrice) {
+    public void setStandardPrice(String standardPrice) {
         this.standardPrice = standardPrice;
     }
 
-    public BigDecimal getSuggestPrice() {
+    public String getSuggestPrice() {
         return suggestPrice;
     }
 
-    public void setSuggestPrice(BigDecimal suggestPrice) {
+    public void setSuggestPrice(String suggestPrice) {
         this.suggestPrice = suggestPrice;
     }
 
@@ -324,35 +327,35 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 
-    public BaseRate getStandardBase() {
-        return standardBase;
+    public BigDecimal getStandardBasePrice() {
+        return standardBasePrice;
     }
 
-    public void setStandardBase(BaseRate standardBase) {
-        this.standardBase = standardBase;
+    public void setStandardBasePrice(BigDecimal standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
     }
 
-    public BigDecimal getStandardAdd() {
-        return standardAdd;
+    public BigDecimal getSuggestBasePrice() {
+        return suggestBasePrice;
     }
 
-    public void setStandardAdd(BigDecimal standardAdd) {
-        this.standardAdd = standardAdd;
+    public void setSuggestBasePrice(BigDecimal suggestBasePrice) {
+        this.suggestBasePrice = suggestBasePrice;
     }
 
-    public BaseRate getSuggestBase() {
-        return suggestBase;
+    public BigDecimal getStandardInterest() {
+        return standardInterest;
     }
 
-    public void setSuggestBase(BaseRate suggestBase) {
-        this.suggestBase = suggestBase;
+    public void setStandardInterest(BigDecimal standardInterest) {
+        this.standardInterest = standardInterest;
     }
 
-    public BigDecimal getSuggestAdd() {
-        return suggestAdd;
+    public BigDecimal getSuggestInterest() {
+        return suggestInterest;
     }
 
-    public void setSuggestAdd(BigDecimal suggestAdd) {
-        this.suggestAdd = suggestAdd;
+    public void setSuggestInterest(BigDecimal suggestInterest) {
+        this.suggestInterest = suggestInterest;
     }
 }
