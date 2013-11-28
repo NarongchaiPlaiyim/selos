@@ -19,7 +19,7 @@
                 <ui:include src="site/include/header_logo.xhtml"/>
                 <ui:include src="site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
-                    <h:form enctype="multipart/form-data">
+                    <h:form id="useruploadForm" enctype="multipart/form-data">
                         <div class="body_lpane">
                             <div><label class="subject">Manage User</label></div>
                             <a class="step_border" href="manageUser.jsf">User Profile</a>
@@ -34,6 +34,7 @@
                                 <p:fileUpload fileUploadListener="#{isaUpload.uploadUserFile}"
                                               mode="advanced"
                                               showButtons="false"
+                                              update=":useruploadForm"
                                         />
 
                                     <!--<p:commandButton value="Submit"-->
@@ -54,7 +55,10 @@
                                        Result File:
                                 </p:column>
                                 <p:column>
-                                       #{o.resultFile}
+                                      <p:commandLink value="#{o.resultFile}"  ajax="false">
+                                          <f:setPropertyActionListener value="#{o.resultFile}" target="#{isaUpload.downloadFilePart}"  />
+                                          <p:fileDownload value="#{isaUpload.file}" />
+                                      </p:commandLink>
                                 </p:column>
                             </p:dataTable>
                         </div>

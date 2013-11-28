@@ -171,7 +171,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         }
                         //If Telephone type 1 = R move telephoneNumber1 to Personal Information-Home Number move extension1 to Personal Information-Ext Number
                         if (individualModel.getTelephoneNumber1().getTelephoneType() != null && individualModel.getTelephoneNumber1().getTelephoneType().equals("R")) {
-
+//                            homePhoneNumber=
                         }
                     }
 

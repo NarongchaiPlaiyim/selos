@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Stateless
@@ -43,22 +44,48 @@ public class STPExecutor {
 
     public String addUserFromFile( Object... params) {
 
-        String result=null;
+        String result="";
         try{
 
-            Query query=em.createNativeQuery("{CALL SLOS.PUSERFILEUPLOAD ( ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ? )}");
+            Query query=em.createNativeQuery("{call SLOS.PUSERFILEUPLOAD ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )}");
 
             for(int i =0;i < params.length;i++){
-                System.out.println("oooooooooo "+params[i]);
+                System.out.println("data "+params[i]);
                 query.setParameter(i+1,params[i]);
-            }
-            query.setParameter(17,result);
-            result=(String)query.getSingleResult();
-//                query.executeUpdate();
 
+            }
+//            query.setParameter(1,"'DELETE'");
+//            query.setParameter(2,"'DELETE'");
+//            query.setParameter(3,"'DELETE'");
+//            query.setParameter(4,"'DELETE'");
+//            query.setParameter(5,"'DELETE'");
+//            query.setParameter(6,"'DELETE'");
+//            query.setParameter(7,"'DELETE'");
+//            query.setParameter(8,"'DELETE'");
+//            query.setParameter(9,"'DELETE'");
+//            query.setParameter(10,"'DELETE'");
+//            query.setParameter(11,"'DELETE'");
+//            query.setParameter(12,"'DELETE'");
+//            query.setParameter(13,"'DELETE'");
+//            query.setParameter(14,"'DELETE'");
+//            query.setParameter(15,546);
+//            query.setParameter(16,"'DELETE'");
+            query.setParameter(17,result);
+            query.executeUpdate();
+            result= (String) query.getParameterValue(17);
+            System.out.println("result : "+result);
+            Object o=query.getParameterValue(17);
+            System.out.println(".............    "+o.toString());
+
+//            result= (String) query.getSingleResult();
+//            System.out.println("result2 : "+result);
+
+            result= (String) query.getParameterValue(17);
+            System.out.println("result3 : "+result);
 
         }catch (Exception e){
                  e.printStackTrace();
+            System.out.println("444444444444444444444 "+e.getMessage());
         }finally {
             try{
 
