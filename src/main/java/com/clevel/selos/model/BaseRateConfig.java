@@ -1,7 +1,7 @@
 package com.clevel.selos.model;
 
 public enum BaseRateConfig {
-    MRR(1);
+    MLR(1), MOR(2), MRR(3);
     int value;
 
     BaseRateConfig(int value) {
