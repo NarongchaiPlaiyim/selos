@@ -101,7 +101,6 @@ public class BankStatementDetail implements Serializable {
 
     //Session
     private long workCaseId;
-    private long workCasePrescreenId;
     private long stepId;
     private String userId;
 
@@ -127,7 +126,6 @@ public class BankStatementDetail implements Serializable {
         session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            workCasePrescreenId = 21;
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
         } else {
@@ -249,8 +247,8 @@ public class BankStatementDetail implements Serializable {
 
         try {
             // recalculate and save Bank statement summary
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView);
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, workCasePrescreenId, userId);
+            bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";

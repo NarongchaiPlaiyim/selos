@@ -214,7 +214,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
 
         prescreenResultView.setExistingCreditView(existingCreditView);
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);

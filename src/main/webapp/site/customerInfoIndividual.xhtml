@@ -206,7 +206,10 @@
                                 </td>
                                 <td>
                                     <p:calendar value="#{custInfoSumIndi.customerInfoView.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}"/>
+                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
+                                        <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
+                                        <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
+                                    </p:calendar>
                                 </td>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -314,12 +317,19 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.gender')}"/>
                                 </td>
                                 <td>
-                                    <!--<p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender.value}"
+                                    <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender}"
                                                      style="width: 200px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndGender}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItem itemLabel="Male" itemValue="1"/>
                                         <f:selectItem itemLabel="Female" itemValue="2"/>
-                                    </p:selectOneMenu>-->
+                                    </p:selectOneMenu>
+                                </td>
+                                <td class="title">
+                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{custInfoSumIndi.customerInfoView.age}" id="age"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1309,7 +1319,10 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button">
+                                            <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
+                                            <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
+                                        </p:calendar>
                                     </td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -1390,10 +1403,18 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.gender')}"/>
                                     </td>
                                     <td>
-                                        <!--<p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.spouse.gender.value}" style="width: 200px;">
+                                        <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.spouse.gender}"
+                                                         style="width: 200px;">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItem itemLabel="Male" itemValue="1"/>
                                             <f:selectItem itemLabel="Female" itemValue="2"/>
-                                        </p:selectOneMenu>-->
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td class="title">
+                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{custInfoSumIndi.customerInfoView.spouse.age}" id="ageSpouse"/>
                                     </td>
                                 </tr>
                                 <tr>
