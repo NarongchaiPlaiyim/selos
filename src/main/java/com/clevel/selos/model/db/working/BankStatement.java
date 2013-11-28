@@ -51,6 +51,12 @@ public class BankStatement implements Serializable {
     @Column(name = "account_character")
     private int accountCharacteristic;
 
+    @Column(name = "is_tmb")
+    private String isTMB;
+
+    @Column(name = "is_highest_inflow")
+    private String isHighestInflow;
+
     @Column(name = "limit")
     private BigDecimal avgLimit;
 
@@ -200,6 +206,22 @@ public class BankStatement implements Serializable {
 
     public void setAccountCharacteristic(int accountCharacteristic) {
         this.accountCharacteristic = accountCharacteristic;
+    }
+
+    public String getTMB() {
+        return isTMB;
+    }
+
+    public void setTMB(String TMB) {
+        isTMB = TMB;
+    }
+
+    public String getHighestInflow() {
+        return isHighestInflow;
+    }
+
+    public void setHighestInflow(String highestInflow) {
+        isHighestInflow = highestInflow;
     }
 
     public BigDecimal getAvgLimit() {
@@ -391,6 +413,8 @@ public class BankStatement implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("mainAccount", mainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
+                .append("isTMB", isTMB)
+                .append("isHighestInflow", isHighestInflow)
                 .append("avgLimit", avgLimit)
                 .append("avgIncomeGross", avgIncomeGross)
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)

@@ -323,270 +323,275 @@
                     </tr>
                     <tr>
                     <td colspan="2">
-                    <p:dataTable id="dtOtherBankStmtSum"
-                                 var="item" value="#{bankStatementSummary.summaryView.othBankStmtViewList}"
-                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                        <p:dataTable id="dtOtherBankStmtSum"
+                                     var="item" value="#{bankStatementSummary.summaryView.othBankStmtViewList}"
+                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
-                    <p:columnGroup type="header">
-                        <p:row>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}" width="25"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}" width="80"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}" width="70"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}" width="60"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}" width="40"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}" width="100"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}" width="100"/>
-                            <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}" width="70"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}" width="50"/>
-                            <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}" width="100"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}" width="40"/>
-                            <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}" width="100"/>
-                            <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}" />
-                            <p:column rowspan="2" headerText=""/>
-                        </p:row>
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}" width="25"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}" width="80"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}" width="70"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}" width="60"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}" width="40"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}" width="100"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}" width="100"/>
+                                <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}" width="70"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}" width="50"/>
+                                <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}" width="100"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}" width="40"/>
+                                <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}" width="100"/>
+                                <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}" />
+                                <p:column rowspan="2" headerText=""/>
+                            </p:row>
 
-                        <p:row>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}" width="100"/>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}" width="100"/>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}" width="40"/>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}" width="40"/>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}" width="65"/>
-                            <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}" width="65"/>
-                        </p:row>
-                    </p:columnGroup>
+                            <p:row>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}" width="100"/>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}" width="100"/>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}" width="40"/>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}" width="40"/>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}" width="65"/>
+                                <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}" width="65"/>
+                            </p:row>
+                        </p:columnGroup>
 
-                    <p:column styleClass="center" width="25">
-                        <h:outputText value="#{rowIndex + 1}"/>
-                    </p:column>
+                        <p:column styleClass="center" width="25">
+                            <h:outputText value="#{rowIndex + 1}"/>
+                        </p:column>
 
-                    <p:column styleClass="center" width="80">
-                        <h:outputText value="#{item.accountName}"/>
-                    </p:column>
+                        <p:column styleClass="center" width="80">
+                            <h:outputText value="#{item.accountName}"/>
+                        </p:column>
 
-                    <p:column styleClass="center" width="70">
-                        <h:outputText value="#{item.accountNumber}"/>
-                    </p:column>
+                        <p:column styleClass="center" width="70">
+                            <h:outputText value="#{item.accountNumber}"/>
+                        </p:column>
 
-                    <p:column styleClass="center" width="60">
-                        <h:outputText value="#{item.bankAccountTypeView.name}"/>
-                    </p:column>
+                        <p:column styleClass="center" width="60">
+                            <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                        </p:column>
 
-                    <p:column styleClass="center" width="40">
-                        <h:outputText value="#{item.mainAccount eq 1 ? 'Y' : ''}"/>
-                    </p:column>
+                        <p:column styleClass="center" width="40">
+                            <h:outputText value="#{item.mainAccount eq 1 ? 'Y' : ''}"/>
+                        </p:column>
 
-                    <p:column styleClass="right" width="100">
-                        <h:outputText value="#{item.avgLimit}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="100">
+                            <h:outputText value="#{item.avgLimit}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="100">
-                        <h:outputText value="#{item.avgIncomeGross}"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' :
-                                                  item.avgIncomeGross eq 0 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="100">
+                            <h:outputText value="#{item.avgIncomeGross}"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' :
+                                                      item.avgIncomeGross eq 0 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="100">
-                        <h:outputText value="#{item.avgIncomeNetBDM}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="100">
+                            <h:outputText value="#{item.avgIncomeNetBDM}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="100">
-                        <h:outputText value="#{item.avgIncomeNetUW}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="100">
+                            <h:outputText value="#{item.avgIncomeNetUW}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="70">
-                        <h:outputText value="#{item.avgUtilizationPercent}%"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.avgUtilizationPercent le 90 ? 'green' :
-                                                  item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
-                                                  item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="70">
+                            <h:outputText value="#{item.avgUtilizationPercent}%"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.avgUtilizationPercent le 90 ? 'green' :
+                                                      item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                                      item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="50">
-                        <h:outputText value="#{item.avgSwingPercent}%"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.avgUtilizationPercent le 90 ? 'green' :
-                                                  item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
-                                                  item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="50">
+                            <h:outputText value="#{item.avgSwingPercent}%"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.avgUtilizationPercent le 90 ? 'green' :
+                                                      item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                                      item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="center" width="40">
-                        <h:outputText value="#{item.overLimitTimes}"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.overLimitTimes lt 1 ? 'green' :
-                                                  item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
-                                                  item.overLimitTimes gt 2 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="center" width="40">
+                            <h:outputText value="#{item.overLimitTimes}"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.overLimitTimes lt 1 ? 'green' :
+                                                      item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
+                                                      item.overLimitTimes gt 2 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="center" width="40">
-                        <h:outputText value="#{item.overLimitDays}"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.overLimitDays le 3 ? 'green' :
-                                                  item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
-                                                  item.overLimitDays gt 7 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="center" width="40">
+                            <h:outputText value="#{item.overLimitDays}"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.overLimitDays le 3 ? 'green' :
+                                                      item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
+                                                      item.overLimitDays gt 7 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="center" width="40">
-                        <h:outputText value="#{item.chequeReturn}"
-                                      style="color:#{item.mainAccount != 1 ? '' :
-                                                  item.chequeReturn lt 1 ? 'green' :
-                                                  item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
-                                                  item.chequeReturn gt 2 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="center" width="40">
+                            <h:outputText value="#{item.chequeReturn}"
+                                          style="color:#{item.mainAccount != 1 ? '' :
+                                                      item.chequeReturn lt 1 ? 'green' :
+                                                      item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
+                                                      item.chequeReturn gt 2 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="100">
-                        <h:outputText value="#{item.avgGrossInflowPerLimit}%">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="100">
+                            <h:outputText value="#{item.avgGrossInflowPerLimit}%">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="65">
-                        <h:outputText value="#{item.trdChequeReturnAmount}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="65">
+                            <h:outputText value="#{item.trdChequeReturnAmount}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <p:column styleClass="right" width="65">
-                        <h:outputText value="#{item.trdChequeReturnPercent}%"
-                                      style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
-                                                  item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
-                                                  item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
-                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                        </h:outputText>
-                    </p:column>
+                        <p:column styleClass="right" width="65">
+                            <h:outputText value="#{item.trdChequeReturnPercent}%"
+                                          style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
+                                                      item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
+                                                      item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
 
-                    <!-- Edit/Delete Buttons -->
-                    <p:column headerText="" styleClass="option" style="width:54px;">
-                        <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
-                                         action="#{bankStatementSummary.onEditOthBankStmt()}"
-                                         onclick="blockUI.show()" onsuccess="blockUI.hide()">
-                            <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
-                        </p:commandButton>
+                        <!-- Edit/Delete Buttons -->
+                        <p:column headerText="" styleClass="option" style="width:54px;">
+                            <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
+                                             action="#{bankStatementSummary.onEditOthBankStmt()}"
+                                             onclick="blockUI.show()" onsuccess="blockUI.hide()">
+                                <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                            </p:commandButton>
 
-                        <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
-                                         oncomplete="confirmDeleteBankStmtDlg.show()">
-                            <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
-                        </p:commandButton>
-                    </p:column>
+                            <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
+                                             oncomplete="confirmDeleteBankStmtDlg.show()">
+                                <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                            </p:commandButton>
+                        </p:column>
 
-                    <p:columnGroup type="footer">
-                        <p:row>
-                            <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
-                                      style="background-color:#f4f8b6; text-align:left;"/>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
+                                          style="background-color:#f4f8b6; text-align:left;"/>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeGross}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeGross}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetBDM}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetBDM}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetUW}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetUW}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column colspan="9" style="background-color:#f4f8b6;"/>
-                        </p:row>
+                                <p:column colspan="9" style="background-color:#f4f8b6;"/>
+                            </p:row>
 
-                        <p:row>
-                            <p:column colspan="18" style="height:28px;"/>
-                        </p:row>
+                            <p:row>
+                                <p:column colspan="18" style="height:28px;"/>
+                            </p:row>
 
-                        <p:row>
-                            <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
-                                      style="background-color:#f4f8b6; text-align:left;"/>
+                            <p:row>
+                                <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
+                                          style="background-color:#f4f8b6; text-align:left;"/>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeGross}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeGross}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetBDM}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetBDM}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetUW}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetUW}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column colspan="6" style="background-color:#f4f8b6;"/>
+                                <p:column colspan="6" style="background-color:#f4f8b6;"/>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetAmount}">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetAmount}">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6; text-align:right;">
-                                <f:facet name="footer">
-                                    <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}%">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
-                                    </h:outputText>
-                                </f:facet>
-                            </p:column>
+                                <p:column style="background-color:#f4f8b6; text-align:right;">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}%">
+                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
 
-                            <p:column style="background-color:#f4f8b6;"/>
-                        </p:row>
-                    </p:columnGroup>
+                                <p:column style="background-color:#f4f8b6;"/>
+                            </p:row>
+                        </p:columnGroup>
 
-                    </p:dataTable>
+                        </p:dataTable>
                     </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="height:28px;"></td>
+                        <td colspan="2" style="height:28px;">
+                            <!-- Hidden -->
+                            <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeGross}"/>
+                            <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetBDM}"/>
+                            <h:inputHidden value="#{bankStatementSummary.summaryView.grdTotalBorrowerIncomeNetUW}"/>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">

@@ -136,9 +136,17 @@ public class ExSummaryControl extends BusinessControl {
             }
             ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView.getQualityResult(),bizSize);
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
+
+            exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
+            exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
+            exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
+            //if isRental = N, display ownerName. If isRental = Y, display expiryDate
+//        exSummaryView.setOwner();
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
         }
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);

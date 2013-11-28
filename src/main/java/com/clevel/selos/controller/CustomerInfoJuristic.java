@@ -602,7 +602,7 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeReference(){
-
+        //todo:mandatory field
     }
 
     public void onSave(){

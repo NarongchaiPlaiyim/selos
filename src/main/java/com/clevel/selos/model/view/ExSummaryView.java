@@ -18,6 +18,10 @@ public class ExSummaryView  implements Serializable {
 
     //Borrower
     private List<CustomerInfoView> borrowerListView;         //wo transform
+    private String businessLocationName;
+    private String businessLocationAddress;
+    private String businessLocationAddressEN;
+    private String owner;
 
     //Trade Finance
 
@@ -322,5 +326,37 @@ public class ExSummaryView  implements Serializable {
 
     public void setDeviateCode(List<ExSumReasonView> deviateCode) {
         this.deviateCode = deviateCode;
+    }
+
+    public String getBusinessLocationName() {
+        return businessLocationName;
+    }
+
+    public void setBusinessLocationName(String businessLocationName) {
+        this.businessLocationName = businessLocationName;
+    }
+
+    public String getBusinessLocationAddress() {
+        return businessLocationAddress;
+    }
+
+    public void setBusinessLocationAddress(String businessLocationAddress) {
+        this.businessLocationAddress = businessLocationAddress;
+    }
+
+    public String getBusinessLocationAddressEN() {
+        return businessLocationAddressEN;
+    }
+
+    public void setBusinessLocationAddressEN(String businessLocationAddressEN) {
+        this.businessLocationAddressEN = businessLocationAddressEN;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

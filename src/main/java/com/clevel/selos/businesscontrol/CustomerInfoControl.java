@@ -17,6 +17,7 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -192,6 +193,9 @@ public class CustomerInfoControl extends BusinessControl {
                 cus.setId(0);
             }
         }
+
+        //calculation age for juristic
+        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
         customerDAO.persist(customerJuristic);
