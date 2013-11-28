@@ -335,14 +335,23 @@ public class CustomerTransform extends Transform {
             }
         }
 
+        //for new field
+        customerInfoView.setAgeMonths(customer.getAgeMonths());
+        customerInfoView.setIsExistingSMECustomer(customer.getIsExistingSMECustomer());
+        customerInfoView.setLastReviewDate(customer.getLastReviewDate());
+        customerInfoView.setExtendedReviewDate(customer.getExtendedReviewDate());
+        customerInfoView.setExtendedReviewDateFlag(customer.getExtendedReviewDateFlag());
+        customerInfoView.setNextReviewDate(customer.getNextReviewDate());
+        customerInfoView.setNextReviewDateFlag(customer.getNextReviewDateFlag());
+        customerInfoView.setLastContractDate(customer.getLastContractDate());
+        customerInfoView.setNumberOfMonthsLastContractDate(customer.getNumberOfMonthsLastContractDate());
+        customerInfoView.setAdjustClass(customer.getAdjustClass());
+        customerInfoView.setRatingFinal(customer.getRatingFinal());
+        customerInfoView.setUnpaidFeeInsurance(customer.getUnpaidFeeInsurance());
+        customerInfoView.setNoPendingClaimLG(customer.getNoPendingClaimLG());
+
         log.info("Return Customer {}", customerInfoView);
         return customerInfoView;
-    }
-
-    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCase workCase){
-        Customer customer = new Customer();
-
-        return customer;
     }
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
@@ -717,13 +726,23 @@ public class CustomerTransform extends Transform {
 
             customer.setJuristic(juristic);
         }
+
+        //for new field
+        customer.setAgeMonths(customerInfoView.getAgeMonths());
+        customer.setIsExistingSMECustomer(customerInfoView.getIsExistingSMECustomer());
+        customer.setLastReviewDate(customerInfoView.getLastReviewDate());
+        customer.setExtendedReviewDate(customerInfoView.getExtendedReviewDate());
+        customer.setExtendedReviewDateFlag(customerInfoView.getExtendedReviewDateFlag());
+        customer.setNextReviewDate(customerInfoView.getNextReviewDate());
+        customer.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
+        customer.setLastContractDate(customerInfoView.getLastContractDate());
+        customer.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
+        customer.setAdjustClass(customerInfoView.getAdjustClass());
+        customer.setRatingFinal(customerInfoView.getRatingFinal());
+        customer.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
+        customer.setNoPendingClaimLG(customerInfoView.getNoPendingClaimLG());
+
         return customer;
-    }
-
-    private Individual transformToIndividual(CustomerInfoView customerInfoView){
-        Individual individual = new Individual();
-
-        return individual;
     }
 
     public List<CustomerInfoView> transformToViewList(List<Customer> customers){

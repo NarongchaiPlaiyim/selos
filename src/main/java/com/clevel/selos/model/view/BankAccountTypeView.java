@@ -11,6 +11,7 @@ public class BankAccountTypeView implements Serializable {
     private String shortName;
     private int openAccountFlag;
     private int bankStatementFlag;
+    private int othBankStatementFlag;
     private int active;
 
     public int getId() {
@@ -53,6 +54,14 @@ public class BankAccountTypeView implements Serializable {
         this.bankStatementFlag = bankStatementFlag;
     }
 
+    public int getOthBankStatementFlag() {
+        return othBankStatementFlag;
+    }
+
+    public void setOthBankStatementFlag(int othBankStatementFlag) {
+        this.othBankStatementFlag = othBankStatementFlag;
+    }
+
     public int getActive() {
         return active;
     }
@@ -69,6 +78,7 @@ public class BankAccountTypeView implements Serializable {
                 .append("shortName", shortName)
                 .append("openAccountFlag", openAccountFlag)
                 .append("bankStatementFlag", bankStatementFlag)
+                .append("othBankStatementFlag", othBankStatementFlag)
                 .append("active", active)
                 .toString();
     }

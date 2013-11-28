@@ -58,8 +58,20 @@ public class BankStatementSummary implements Serializable {
     @Column(name = "grand_td_chq_return_percent")
     private BigDecimal grdTotalTDChqRetPercent;
 
+    @Column(name = "grand_total_borrower_income_gross")
+    private BigDecimal grdTotalBorrowerIncomeGross;
+
+    @Column(name = "grand_total_borrower_income_bdm")
+    private BigDecimal grdTotalBorrowerIncomeNetBDM;
+
+    @Column(name = "grand_total_borrower_income_uw")
+    private BigDecimal grdTotalBorrowerIncomeNetUW;
+
     @Column(name = "grand_avg_os_balance_amt")
     private BigDecimal grdTotalAvgOSBalanceAmount;
+
+    @Column(name = "count_refresh")
+    private int countRefresh;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -200,6 +212,30 @@ public class BankStatementSummary implements Serializable {
         this.grdTotalTDChqRetPercent = grdTotalTDChqRetPercent;
     }
 
+    public BigDecimal getGrdTotalBorrowerIncomeGross() {
+        return grdTotalBorrowerIncomeGross;
+    }
+
+    public void setGrdTotalBorrowerIncomeGross(BigDecimal grdTotalBorrowerIncomeGross) {
+        this.grdTotalBorrowerIncomeGross = grdTotalBorrowerIncomeGross;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetBDM() {
+        return grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetBDM(BigDecimal grdTotalBorrowerIncomeNetBDM) {
+        this.grdTotalBorrowerIncomeNetBDM = grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetUW() {
+        return grdTotalBorrowerIncomeNetUW;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetUW(BigDecimal grdTotalBorrowerIncomeNetUW) {
+        this.grdTotalBorrowerIncomeNetUW = grdTotalBorrowerIncomeNetUW;
+    }
+
     public BigDecimal getGrdTotalAvgOSBalanceAmount() {
         return grdTotalAvgOSBalanceAmount;
     }
@@ -264,6 +300,14 @@ public class BankStatementSummary implements Serializable {
         this.bankStmtList = bankStmtList;
     }
 
+    public int getCountRefresh() {
+        return countRefresh;
+    }
+
+    public void setCountRefresh(int countRefresh) {
+        this.countRefresh = countRefresh;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -281,13 +325,18 @@ public class BankStatementSummary implements Serializable {
                 .append("grdTotalIncomeNetUW", grdTotalIncomeNetUW)
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
+                .append("grdTotalBorrowerIncomeGross", grdTotalBorrowerIncomeGross)
+                .append("grdTotalBorrowerIncomeNetBDM", grdTotalBorrowerIncomeNetBDM)
+                .append("grdTotalBorrowerIncomeNetUW", grdTotalBorrowerIncomeNetUW)
                 .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
+                .append("countRefresh", countRefresh)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("workCase", workCase)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("bankStmtList", bankStmtList)
                 .toString();
     }
 }

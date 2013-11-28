@@ -10,6 +10,7 @@ import com.clevel.selos.dao.working.BankStatementDetailDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BankStmtSrcOfCollateralProofDAO;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
+import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
@@ -122,6 +123,7 @@ public class BankStmtTransform extends Transform {
         bankStmtSummaryView.setId(bankStatementSummary.getId());
         bankStmtSummaryView.setSeasonal(bankStatementSummary.getSeasonal());
         bankStmtSummaryView.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
+        bankStmtSummaryView.setCountRefresh(bankStatementSummary.getCountRefresh());
         bankStmtSummaryView.setTMBTotalIncomeGross(bankStatementSummary.getTMBTotalIncomeGross());
         bankStmtSummaryView.setTMBTotalIncomeNetBDM(bankStatementSummary.getTMBTotalIncomeNetBDM());
         bankStmtSummaryView.setTMBTotalIncomeNetUW(bankStatementSummary.getTMBTotalIncomeNetUW());
@@ -135,11 +137,15 @@ public class BankStmtTransform extends Transform {
         bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());
         bankStmtSummaryView.setGrdTotalTDChqRetAmount(bankStatementSummary.getGrdTotalTDChqRetAmount());
         bankStmtSummaryView.setGrdTotalTDChqRetPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
+        bankStmtSummaryView.setGrdTotalBorrowerIncomeGross(bankStatementSummary.getGrdTotalBorrowerIncomeGross());
+        bankStmtSummaryView.setGrdTotalBorrowerIncomeNetBDM(bankStatementSummary.getGrdTotalBorrowerIncomeNetBDM());
+        bankStmtSummaryView.setGrdTotalBorrowerIncomeNetUW(bankStatementSummary.getGrdTotalBorrowerIncomeNetUW());
         bankStmtSummaryView.setGrdTotalAvgOSBalanceAmount(bankStatementSummary.getGrdTotalAvgOSBalanceAmount());
 
-        Bank tmbBank = bankDAO.getTMBBank();
+//        Bank tmbBank = bankDAO.getTMBBank();
         for (BankStatement bankStmt : Util.safetyList(bankStatementSummary.getBankStmtList())) {
-            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+//            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+            if (BankType.TMB.shortName().equalsIgnoreCase(bankStmt.getBank().getShortName())) {
                 tmbBankStmtViewList.add(getBankStmtView(bankStmt));
             } else {
                 othBankStmtViewList.add(getBankStmtView(bankStmt));
@@ -168,7 +174,9 @@ public class BankStmtTransform extends Transform {
         bankStmtView.setAccountStatusView(accountStatusTransform.transformToView(bankStatement.getAccountStatus()));
         bankStmtView.setMainAccount(bankStatement.getMainAccount());
         bankStmtView.setAccountCharacteristic(bankStatement.getAccountCharacteristic());
-        bankStmtView.setLimit(bankStatement.getLimit());
+        bankStmtView.setTMB(bankStatement.getTMB());
+        bankStmtView.setHighestInflow(bankStatement.getHighestInflow());
+        bankStmtView.setAvgLimit(bankStatement.getAvgLimit());
         bankStmtView.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
         bankStmtView.setAvgIncomeNetBDM(bankStatement.getAvgIncomeNetBDM());
         bankStmtView.setAvgIncomeNetUW(bankStatement.getAvgIncomeNetUW());
@@ -262,6 +270,7 @@ public class BankStmtTransform extends Transform {
 
             bankStatementSummary.setSeasonal(bankStmtSummaryView.getSeasonal());
             bankStatementSummary.setExpectedSubmitDate(bankStmtSummaryView.getExpectedSubmitDate());
+            bankStatementSummary.setCountRefresh(bankStmtSummaryView.getCountRefresh());
 
             bankStatementSummary.setTMBTotalIncomeGross(bankStmtSummaryView.getTMBTotalIncomeGross());
             bankStatementSummary.setTMBTotalIncomeNetBDM(bankStmtSummaryView.getTMBTotalIncomeNetBDM());
@@ -276,6 +285,9 @@ public class BankStmtTransform extends Transform {
             bankStatementSummary.setGrdTotalIncomeNetUW(bankStmtSummaryView.getGrdTotalIncomeNetUW());
             bankStatementSummary.setGrdTotalTDChqRetAmount(bankStmtSummaryView.getGrdTotalTDChqRetAmount());
             bankStatementSummary.setGrdTotalTDChqRetPercent(bankStmtSummaryView.getGrdTotalTDChqRetPercent());
+            bankStatementSummary.setGrdTotalBorrowerIncomeGross(bankStmtSummaryView.getGrdTotalBorrowerIncomeGross());
+            bankStatementSummary.setGrdTotalBorrowerIncomeNetBDM(bankStmtSummaryView.getGrdTotalBorrowerIncomeNetBDM());
+            bankStatementSummary.setGrdTotalBorrowerIncomeNetUW(bankStmtSummaryView.getGrdTotalBorrowerIncomeNetUW());
             bankStatementSummary.setGrdTotalAvgOSBalanceAmount(bankStmtSummaryView.getGrdTotalAvgOSBalanceAmount());
 
             List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
@@ -318,7 +330,9 @@ public class BankStmtTransform extends Transform {
                     accountStatusDAO.findById(accountStatusId) : null);
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
-            bankStatement.setLimit(bankStmtView.getLimit());
+            bankStatement.setTMB(bankStmtView.getTMB());
+            bankStatement.setHighestInflow(bankStmtView.getHighestInflow());
+            bankStatement.setAvgLimit(bankStmtView.getAvgLimit());
             bankStatement.setAvgIncomeGross(bankStmtView.getAvgIncomeGross());
             bankStatement.setAvgIncomeNetBDM(bankStmtView.getAvgIncomeNetBDM());
             bankStatement.setAvgIncomeNetUW(bankStmtView.getAvgIncomeNetUW());

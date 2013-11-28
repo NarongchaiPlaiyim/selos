@@ -95,9 +95,9 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
 
                     if (individualModel.getGender().equals("M")) {
-                        customerInfoView.setGender(Gender.MALE);
+                        customerInfoView.setGender(Gender.MALE.value());
                     } else if (individualModel.getGender().equals("F")) {
-                        customerInfoView.setGender(Gender.FEMALE);
+                        customerInfoView.setGender(Gender.FEMALE.value());
                     }
                     customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("code", individualModel.getEducationBackground())));
                     if (customerInfoView.getEducation() == null) {

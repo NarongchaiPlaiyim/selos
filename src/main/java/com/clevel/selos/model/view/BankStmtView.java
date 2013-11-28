@@ -20,8 +20,10 @@ public class BankStmtView implements Serializable {
     private AccountStatusView accountStatusView;
     private int isMainAccount;
     private int accountCharacteristic;
+    private String isTMB;
+    private String isHighestInflow;
 
-    private BigDecimal limit;
+    private BigDecimal avgLimit;
     private BigDecimal avgIncomeGross;
     private BigDecimal avgIncomeNetBDM;
     private BigDecimal avgIncomeNetUW;
@@ -51,21 +53,23 @@ public class BankStmtView implements Serializable {
         this.accountNumber = "";
         this.accountName = "";
         this.accountStatusView = new AccountStatusView();
-        this.limit = BigDecimal.ZERO;
-        this.avgIncomeGross = BigDecimal.ZERO;
-        this.avgIncomeNetBDM = BigDecimal.ZERO;
-        this.avgIncomeNetUW = BigDecimal.ZERO;
-        this.avgWithDrawAmount = BigDecimal.ZERO;
-        this.avgSwingPercent = BigDecimal.ZERO;
-        this.avgUtilizationPercent = BigDecimal.ZERO;
-        this.avgGrossInflowPerLimit = BigDecimal.ZERO;
-        this.chequeReturn = BigDecimal.ZERO;
-        this.trdChequeReturnAmount = BigDecimal.ZERO;
-        this.trdChequeReturnPercent = BigDecimal.ZERO;
-        this.overLimitTimes = BigDecimal.ZERO;
-        this.overLimitDays = BigDecimal.ZERO;
+        this.isTMB = "";
+        this.isHighestInflow = "";
+//        this.limit = BigDecimal.ZERO;
+//        this.avgIncomeGross = BigDecimal.ZERO;
+//        this.avgIncomeNetBDM = BigDecimal.ZERO;
+//        this.avgIncomeNetUW = BigDecimal.ZERO;
+//        this.avgWithDrawAmount = BigDecimal.ZERO;
+//        this.avgSwingPercent = BigDecimal.ZERO;
+//        this.avgUtilizationPercent = BigDecimal.ZERO;
+//        this.avgGrossInflowPerLimit = BigDecimal.ZERO;
+//        this.chequeReturn = BigDecimal.ZERO;
+//        this.trdChequeReturnAmount = BigDecimal.ZERO;
+//        this.trdChequeReturnPercent = BigDecimal.ZERO;
+//        this.overLimitTimes = BigDecimal.ZERO;
+//        this.overLimitDays = BigDecimal.ZERO;
+//        this.avgOSBalanceAmount = BigDecimal.ZERO;
         this.remark = "";
-        this.avgOSBalanceAmount = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -164,12 +168,28 @@ public class BankStmtView implements Serializable {
         this.accountCharacteristic = accountCharacteristic;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
+    public String getTMB() {
+        return isTMB;
     }
 
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
+    public void setTMB(String TMB) {
+        isTMB = TMB;
+    }
+
+    public String getHighestInflow() {
+        return isHighestInflow;
+    }
+
+    public void setHighestInflow(String highestInflow) {
+        isHighestInflow = highestInflow;
+    }
+
+    public BigDecimal getAvgLimit() {
+        return avgLimit;
+    }
+
+    public void setAvgLimit(BigDecimal avgLimit) {
+        this.avgLimit = avgLimit;
     }
 
     public BigDecimal getAvgIncomeGross() {
@@ -314,7 +334,9 @@ public class BankStmtView implements Serializable {
                 .append("accountStatusView", accountStatusView)
                 .append("isMainAccount", isMainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
-                .append("limit", limit)
+                .append("isTMB", isTMB)
+                .append("isHighestInflow", isHighestInflow)
+                .append("avgLimit", avgLimit)
                 .append("avgIncomeGross", avgIncomeGross)
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)
                 .append("avgIncomeNetUW", avgIncomeNetUW)

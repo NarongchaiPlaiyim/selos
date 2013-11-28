@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRDetailView;
@@ -90,8 +91,9 @@ public class DBRControl extends BusinessControl {
         }
     }
 
-    public DBRView getDBRByWorkCase(long workCaseId) {
+    public DBRView getDBRByWorkCase(long workCaseId, String userId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = userDAO.findById(userId);
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
         if(dbr == null){
             dbr = new DBR();
@@ -101,34 +103,43 @@ public class DBRControl extends BusinessControl {
             }
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
             if(bankStatementSummary != null){
-                dbr.setMonthlyIncome(getGrandTotalIncome(bankStatementSummary, workCase));
+                dbr.setMonthlyIncome(getMonthlyIncome(bankStatementSummary, user));
             }
             dbr.setDbrBeforeRequest(BigDecimal.ZERO);
+            // MonthlyIncomeAdjust default from MonthlyIncome
+            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+            //MonthlyIncomePerMonth Default = 0
+            dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
 
         }
-
         dbr.setDbrInterest(getDBRInterest());
+
         DBRView dbrView = dbrTransform.getDBRView(dbr);
         return dbrView;
     }
 
 
-    public void updateValueAndCalculate(BankStatementSummary bankStatementSummary, BizInfoSummary bizInfoSummary, long workCaseId, String userId){
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        DBRView dbrView =  getDBRByWorkCase(workCaseId);
-        if(bankStatementSummary != null){
-            dbrView.setMonthlyIncome(getGrandTotalIncome(bankStatementSummary, workCase));
+    public void updateValueOfDBR(BankStatementSummary bankStatementSummary, BizInfoSummary bizInfoSummary, long workCaseId, String userId){
+        DBRView dbrView =  getDBRByWorkCase(workCaseId, userId);
+        if(dbrView != null){
+            if(dbrView.getId() == 0){
+                return;
+            }
+            User user = userDAO.findById(userId);
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(bankStatementSummary != null){
+            dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary, user));
+            }
+
+            if(bizInfoSummary != null){
+                dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+            }
+
+            List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+
+            DBR dbr =  calculateDBR(dbrView, ncbDetailViews, user, workCase);
+            dbrdao.persist(dbr);
         }
-        if(bizInfoSummary != null){
-            dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
-        }
-
-        User user = userDAO.findById(userId);
-        List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-        DBR dbr =  calculateDBR(dbrView, ncbDetailViews, user, workCase);
-        dbrdao.persist(dbr);
-
-
     }
 
     private DBR calculateDBR(DBRView dbrView, List<NCBDetailView> ncbDetailViews, User user, WorkCase workCase){
@@ -187,16 +198,10 @@ public class DBRControl extends BusinessControl {
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
 
-        //Ex summary Final DBR
-        BigDecimal debt = BigDecimal.ZERO;
+        //Ex summary Final DBR BigDecimal debt = BigDecimal.ZERO;
 
-        if(roleId == RoleUser.BDM.getValue()){
-
-        }else if(roleId == RoleUser.UW.getValue()){
-
-        }
         BigDecimal finalDBR = BigDecimal.ZERO;
-        finalDBR = debt.divide(netMonthlyIncome, 2, RoundingMode.HALF_UP);
+        finalDBR = calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
 
         // update dbr
         dbr.setNetMonthlyIncome(netMonthlyIncome);
@@ -209,28 +214,61 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    private BigDecimal getDBRInterest(){
-        BigDecimal result = BigDecimal.ZERO;
-        //todo waiting get form to Database
-        BigDecimal mrr = BigDecimal.TEN;
-        result = mrr.add(BigDecimal.valueOf(3));
-        return result;
+
+    public void updateFinalDBR(long workCaseId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
+        for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+            totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+        }
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+        DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
+        List<DBRDetail> dbrDetails = dbr.getDbrDetails();
+        for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+        }
+        BigDecimal finalDBR = BigDecimal.ZERO;
+        finalDBR =  calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
+        dbr.setFinalDBR(finalDBR);
+        dbrdao.persist(dbr);
+
     }
 
-    private BigDecimal getGrandTotalIncome(BankStatementSummary bankStatementSummary, WorkCase workCase){
-        //todo set monthlyIncome
+
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated, WorkCase workCase){
+        BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
+        int roleId = getCurrentUser().getRole().getId();
+        //todo waiting totalPurposeForDBR from Exsiting purpose
+        if(roleId == RoleUser.UW.getValue()){
+
+        }else if(roleId == RoleUser.BDM.getValue()){
+
+        }
+        BigDecimal debt = BigDecimal.ZERO;
+        debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
+        debt = debt.add(totalPurposeForDBR);
+        return debt;
+
+    }
+
+    private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary, User user){
         BigDecimal monthlyIncome = BigDecimal.ZERO;
-        if(workCase.getBorrowerType().getId() == RoleUser.UW.getValue()){
-            if(bankStatementSummary.getGrdTotalIncomeNetUW() == null || bankStatementSummary.getGrdTotalIncomeNetUW().compareTo(BigDecimal.ZERO) == 0 )
+        if(user.getRole().getId() == RoleUser.UW.getValue()){
+            if(bankStatementSummary.getGrdTotalIncomeNetUW() == null)
                 monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
             else
                 monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetUW();
 
-        }else if(workCase.getBorrowerType().getId() == RoleUser.BDM.getValue()){
+        }else if(user.getRole().getId() == RoleUser.BDM.getValue()){
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
         return monthlyIncome;
 
+    }
+
+    private BigDecimal getTotalPurposeForDBR(){
+        return BigDecimal.TEN;
     }
 
 

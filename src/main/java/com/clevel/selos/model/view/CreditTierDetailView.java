@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.RefRate;
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,15 +11,15 @@ import java.util.Date;
 
 public class CreditTierDetailView implements Serializable {
     private int no;
-    private BigDecimal standardPrice;
-    private RefRate standardBase;
-    private BigDecimal standardAdd;
-    private BigDecimal suggestPrice;
-    private RefRate suggestBase;
-    private BigDecimal suggestAdd;
+    private BaseRate finalBase;
     private BigDecimal finalPriceRate;
     private BigDecimal installment;
+    private BaseRate suggestBase;
+    private BigDecimal suggestPrice;
+    private BaseRate standardBase;
+    private BigDecimal standardPrice;
     private int tenor;
+    private boolean canEdit;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -30,11 +30,13 @@ public class CreditTierDetailView implements Serializable {
     }
 
     public void reset() {
-
+        this.finalBase = new BaseRate();
         this.finalPriceRate = BigDecimal.ZERO;
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
+        this.standardBase = new BaseRate();
         this.standardPrice = BigDecimal.ZERO;
+        this.suggestBase = new BaseRate();
         this.suggestPrice = BigDecimal.ZERO;
     }
 
@@ -46,52 +48,12 @@ public class CreditTierDetailView implements Serializable {
         this.no = no;
     }
 
-    public BigDecimal getStandardPrice() {
-        return standardPrice;
+    public BaseRate getFinalBase() {
+        return finalBase;
     }
 
-    public void setStandardPrice(BigDecimal standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
-    public RefRate getStandardBase() {
-        return standardBase;
-    }
-
-    public void setStandardBase(RefRate standardBase) {
-        this.standardBase = standardBase;
-    }
-
-    public BigDecimal getStandardAdd() {
-        return standardAdd;
-    }
-
-    public void setStandardAdd(BigDecimal standardAdd) {
-        this.standardAdd = standardAdd;
-    }
-
-    public BigDecimal getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(BigDecimal suggestPrice) {
-        this.suggestPrice = suggestPrice;
-    }
-
-    public RefRate getSuggestBase() {
-        return suggestBase;
-    }
-
-    public void setSuggestBase(RefRate suggestBase) {
-        this.suggestBase = suggestBase;
-    }
-
-    public BigDecimal getSuggestAdd() {
-        return suggestAdd;
-    }
-
-    public void setSuggestAdd(BigDecimal suggestAdd) {
-        this.suggestAdd = suggestAdd;
+    public void setFinalBase(BaseRate finalBase) {
+        this.finalBase = finalBase;
     }
 
     public BigDecimal getFinalPriceRate() {
@@ -150,16 +112,50 @@ public class CreditTierDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public boolean isCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
+    public BaseRate getSuggestBase() {
+        return suggestBase;
+    }
+
+    public void setSuggestBase(BaseRate suggestBase) {
+        this.suggestBase = suggestBase;
+    }
+
+    public BigDecimal getSuggestPrice() {
+        return suggestPrice;
+    }
+
+    public void setSuggestPrice(BigDecimal suggestPrice) {
+        this.suggestPrice = suggestPrice;
+    }
+
+    public BaseRate getStandardBase() {
+        return standardBase;
+    }
+
+    public void setStandardBase(BaseRate standardBase) {
+        this.standardBase = standardBase;
+    }
+
+    public BigDecimal getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(BigDecimal standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("no", no)
-                .append("standardPrice", standardPrice)
-                .append("standardBase", standardBase)
-                .append("standardAdd", standardAdd)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestBase", suggestBase)
-                .append("suggestAdd", suggestAdd)
                 .append("finalPriceRate", finalPriceRate)
                 .append("installment", installment)
                 .append("tenor", tenor)

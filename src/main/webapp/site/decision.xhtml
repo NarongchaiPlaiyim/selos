@@ -925,8 +925,8 @@
                             <td colspan="2">
                                 <!-- Existing Credit - Collateral Borrower -->
                                 <p:dataTable id="dtExtColBorrower"
-                                             var="extColBrw" value="#{}"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extColBrw" value="#{decision.existingColBorrower.collateralDetailViewList}"
+                                             paginator="false" rowKey="#{extColBrw}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -939,12 +939,74 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
+
+                                    <p:column styleClass="left">
+                                        <table border="0" style="border:none; margin:-1px 0 -1px -10px;">
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.potential')}</td>
+                                                <td>#{extColBrw.potentialCollateralView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralType')}</td>
+                                                <td>#{extColBrw.collateralTypeView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.owner')}</td>
+                                                <td>#{extColBrw.owner}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.relationship')}</td>
+                                                <td>#{extColBrw.relationView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.appraisalDate')}</td>
+                                                <td><h:outputText value="#{extColBrw.appraisalDate}">
+                                                        <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                    </h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralNumber')}</td>
+                                                <td>#{extColBrw.collateralNumber}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralLocation')}</td>
+                                                <td>#{extColBrw.collateralLocation}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.remark')}</td>
+                                                <td>#{extColBrw.remark}</td>
+                                            </tr>
+                                        </table>
+                                    </p:column>
+
+                                    <p:column styleClass="left">
+                                        #{extColBrw.cusName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extColBrw.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extColBrw.accountSuffix}<br/>
+                                        #{extColBrw.productProgram},&#160;#{extColBrw.creditFacility}&#160;
+                                        <h:outputText value="#{extColBrw.limit}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="left">#{extColBrw.mortgageType}</p:column>
+
+                                    <p:column styleClass="right">
+                                        <h:outputText value="#{extColBrw.appraisalValue}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="right">
+                                        <h:outputText value="#{extColBrw.mortgageValue}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
 
                                     <p:columnGroup type="footer">
                                         <p:row>
@@ -955,7 +1017,7 @@
                                                       style="background-color:#f4f8b6; text-align:left;"/>
                                             <p:column style="background-color:#f4f8b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <h:outputText value="123456.78">
+                                                    <h:outputText value="#{decision.existingColBorrower.totalAppraisalValue}">
                                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
@@ -963,7 +1025,7 @@
                                             </p:column>
                                             <p:column style="background-color:#f4f8b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <h:outputText value="123456.78">
+                                                    <h:outputText value="#{decision.existingColBorrower.totalMortgageValue}">
                                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
@@ -984,8 +1046,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
+                                <!-- Existing Credit - Collateral Related Person -->
                                 <p:dataTable id="dtExtCltrRelatedPerson"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extColRelated" value="#{decision.existingColRelated.collateralDetailViewList}"
+                                             paginator="false" rowKey="#{extColRelated}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -998,12 +1062,74 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
+
+                                    <p:column styleClass="left">
+                                        <table border="0" style="border:none; margin:-1px 0 -1px -10px;">
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.potential')}</td>
+                                                <td>#{extColRelated.potentialCollateralView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralType')}</td>
+                                                <td>#{extColRelated.collateralTypeView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.owner')}</td>
+                                                <td>#{extColRelated.owner}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.relationship')}</td>
+                                                <td>#{extColRelated.relationView.description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.appraisalDate')}</td>
+                                                <td><h:outputText value="#{extColRelated.appraisalDate}">
+                                                    <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                </h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralNumber')}</td>
+                                                <td>#{extColRelated.collateralNumber}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.collateralLocation')}</td>
+                                                <td>#{extColRelated.collateralLocation}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>#{msg.get('app.decision.tb.td.label.remark')}</td>
+                                                <td>#{extColRelated.remark}</td>
+                                            </tr>
+                                        </table>
+                                    </p:column>
+
+                                    <p:column styleClass="left">
+                                        #{extColRelated.cusName}<br/>
+                                        #{msg.get('app.decision.tb.td.label.accNo')}&#160;#{extColRelated.accountNumber}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')}&#160;#{extColRelated.accountSuffix}<br/>
+                                        #{extColRelated.productProgram},&#160;#{extColRelated.creditFacility}&#160;
+                                        <h:outputText value="#{extColRelated.limit}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="left">#{extColRelated.mortgageType}</p:column>
+
+                                    <p:column styleClass="right">
+                                        <h:outputText value="#{extColRelated.appraisalValue}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="right">
+                                        <h:outputText value="#{extColRelated.mortgageValue}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
 
                                     <p:columnGroup type="footer">
                                         <p:row>
@@ -1014,7 +1140,7 @@
                                                       style="background-color:#f4f8b6; text-align:left;"/>
                                             <p:column style="background-color:#f4f8b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <h:outputText value="123456.78">
+                                                    <h:outputText value="#{decision.existingColRelated.totalAppraisalValue}">
                                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
@@ -1022,7 +1148,7 @@
                                             </p:column>
                                             <p:column style="background-color:#f4f8b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <h:outputText value="123456.78">
+                                                    <h:outputText value="#{decision.existingColRelated.totalMortgageValue}">
                                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
@@ -1055,8 +1181,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
+                                <!-- Existing Credit - Guarantor -->
                                 <p:dataTable id="dtExtGrtBorrower"
-                                             paginator="false" rowIndexVar="rowIndex">
+                                             var="extGrtBrw" value="#{decision.existingGuarantorList}"
+                                             paginator="false" rowKey="#{extGrtBrw}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -1068,11 +1196,39 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
+
+                                    <p:column styleClass="left">#{extGrtBrw.guarantorName}</p:column>
+
+                                    <p:column styleClass="center">#{extGrtBrw.tcgLgNo}</p:column>
+
+                                    <p:column styleClass="left">
+                                        <table border="0" style="border:none; margin:-1px 0 -1px -10px;">
+                                            <ui:repeat value="#{extGrtBrw.creditTypeDetailViewList}" var="crdType">
+                                            <tr>
+                                                <td>#{crdType.account}<br/>
+                                                    #{crdType.productProgram},&#160;#{crdType.creditFacility}&#160;
+                                                    <h:outputText value="#{crdType.limit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>&#160;
+                                                    #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
+                                                    <h:outputText value="#{crdType.guaranteeAmount}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </td>
+                                            </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </p:column>
+
+                                    <p:column styleClass="right">
+                                        <h:outputText value="#{extGrtBrw.guaranteeAmount}">
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
+                                        </h:outputText>
+                                    </p:column>
 
                                     <p:columnGroup type="footer">
                                         <p:row>
@@ -1257,9 +1413,9 @@
                                                                 <td>#{proposeCredit.disbursement.disbursement}</td>
                                                                 <td class="title">#{msg.get('app.decision.tb.td.label.holdAmount')}</td>
                                                                 <td><h:outputText value="#{proposeCredit.holdLimitAmount}">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </h:outputText>
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                         maxIntegerDigits="14"/>
+                                                                    </h:outputText>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -1272,6 +1428,21 @@
                                                     <td colspan="11">No records found.</td>
                                                 </tr>
                                             </h:panelGroup>
+
+                                                <tr>
+                                                    <td colspan="11" style="background-color:#ffffff; line-height:10px; height:10px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color:#f4f8b6;"></td>
+                                                    <td colspan="3" class="title" style="background-color:#f4f8b6;">#{msg.get('app.label.total')}</td>
+                                                    <td class="title right" style="background-color:#f4f8b6;">
+                                                        <h:outputText value="#{decision.creditFacProposeView.totalPropose}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td colspan="6" style="background-color:#f4f8b6;"></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -1289,43 +1460,61 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td colspan="2" class="title">
                                 <h:outputText value="#{msg.get('app.decision.label.approvedPurposed')}"/>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <h:selectOneRadio value="">
+                                <p:selectOneRadio value="">
                                     <f:selectItem itemLabel="#{msg.get('app.decision.radio.creditCusType.normal')}" itemValue="0"/>
+                                    <p:spacer width="10" height="0"/>
                                     <f:selectItem itemLabel="#{msg.get('app.decision.radio.creditCusType.prime')}" itemValue="1"/>
-                                </h:selectOneRadio>
+                                </p:selectOneRadio>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/>
-                                <h:selectOneListbox size="1" value="">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                </h:selectOneListbox>
+                                <table border="0">
+                                    <tr>
+                                        <td class="title"><h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/></td>
+                                        <td><p:selectOneMenu value="#{decision.creditRequestTypeSelected}">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                                <f:selectItems value="#{decision.creditRequestTypeList}" var="crdRequestType"
+                                                               itemLabel="#{crdRequestType.description}" itemValue="#{crdRequestType.id}"/>
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/>
-                                <h:selectOneListbox size="1" value="">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                                </h:selectOneListbox>
+                                <table border="0">
+                                    <tr>
+                                        <td class="title"><h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/></td>
+                                        <td><p:selectOneMenu value="#{decision.investedCountrySelected}">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                                <f:selectItems value="#{decision.investedCountryList}" var="investedCountry"
+                                                               itemLabel="#{investedCountry.name}" itemValue="#{investedCountry.id}"/>
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="title">
                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"/>
-                                <p:inputText value=""></p:inputText>
+                                <p:inputText value="#{decision.creditFacProposeView.existingSMELimit}" styleClass="left">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </p:inputText>
 
                                 <p:spacer width="10"/>
 
                                 <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"/>
-                                <p:inputText value="" styleClass="left">
+                                <p:inputText value="#{decision.creditFacProposeView.maximumExistingSMELimit}" styleClass="left">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </p:inputText>
@@ -1333,12 +1522,13 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                <p:commandButton id="btnAddApprovedCredit" value="#{msg.get('app.button.add')}"
                                                  styleClass="smaller"/>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
+
                                 <p:dataTable id="dtApprovedCredit"
                                              paginator="false" rowIndexVar="rowIndex">
 
@@ -1462,7 +1652,10 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:dataTable paginator="false" rowIndexVar="rowIndex">
+                                <!-- Propose - Fee Information -->
+                                <p:dataTable id="dtProFeeInfo"
+                                             var="proFeeInfo" value="#{decision.creditFacProposeView.proposeFeeDetailViewList}"
+                                             paginator="false" rowKey="#{proFeeInfo}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -1475,13 +1668,17 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{proFeeInfo.productProgram}</p:column>
 
+                                    <p:column styleClass="center">#{proFeeInfo.standardFrontEndFee}</p:column>
+
+                                    <p:column styleClass="center">#{proFeeInfo.commitmentFee}</p:column>
+
+                                    <p:column styleClass="center">#{proFeeInfo.extensionFee}</p:column>
+
+                                    <p:column styleClass="center">#{proFeeInfo.prepaymentFee}</p:column>
+
+                                    <p:column styleClass="center">#{proFeeInfo.cancellationFee}</p:column>
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -1499,12 +1696,13 @@
                             <td colspan="2">
                                 <!-- Proposed Collateral Table -->
                                 <table border="0">
+                                    <ui:repeat value="#{decision.creditFacProposeView.proposeCollateralInfoViewList}" var="proposeColl">
                                     <tr>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="#001"/>
+                                            <h:outputText value="#{proposeColl.jobID}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1512,8 +1710,8 @@
                                             <h:outputText value="#{msg.get('app.decision.label.appraisalDate')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="dd/MM/yyyy">
-                                                <!--<f:convertDateTime pattern="dd/MM/yyyy"/>-->
+                                            <h:outputText value="#{proposeColl.appraisalDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
                                             </h:outputText>
                                         </td>
                                     </tr>
@@ -1522,7 +1720,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="Accept"/>
+                                            <h:outputText value="#{proposeColl.aadDecision}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1530,13 +1728,13 @@
                                             <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Reason Example"/>
+                                            <h:outputText value="#{proposeColl.aadDecisionReason}"/>
                                         </td>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Remark Example"/>
+                                            <h:outputText value="#{proposeColl.aadDecisionReasonDetail}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1544,13 +1742,13 @@
                                             <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Use"/>
+                                            <h:outputText value="#{proposeColl.usage}"/>
                                         </td>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.typeOfUsage')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Type of Usage"/>
+                                            <h:outputText value="#{proposeColl.typeOfUsage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1558,13 +1756,13 @@
                                             <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Mortgage Condition XXX"/>
+                                            <h:outputText value="#{proposeColl.mortgageCondition}"/>
                                         </td>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
                                         </td>
                                         <td class="left">
-                                            <h:outputText value="Mortgage Condition Detail....."/>
+                                            <h:outputText value="#{proposeColl.mortgageConditionDetail}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1572,7 +1770,9 @@
                                             <h:outputText value="#{msg.get('app.decision.label.creditType')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <p:dataTable paginator="false" rowIndexVar="rowIndex" style="width:100%">
+                                            <p:dataTable var="proCollCrdType" value="#{proposeColl.creditTypeDetailViewList}"
+                                                         paginator="false" rowKey="#{proCollCrdType}" rowIndexVar="rowIndex"
+                                                         style="width:100%">
 
                                                 <p:columnGroup type="header">
                                                     <p:row>
@@ -1585,13 +1785,24 @@
                                                     </p:row>
                                                 </p:columnGroup>
 
-                                                <p:column><h:outputText value=""/></p:column>
-                                                <p:column><h:outputText value=""/></p:column>
-                                                <p:column><h:outputText value=""/></p:column>
-                                                <p:column><h:outputText value=""/></p:column>
-                                                <p:column><h:outputText value=""/></p:column>
-                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
+                                                <p:column styleClass="left">
+                                                    #{proCollCrdType.account}<br/>
+                                                </p:column>
+
+                                                <p:column styleClass="left">#{proCollCrdType.type}</p:column>
+
+                                                <p:column styleClass="left">#{proCollCrdType.productProgram}</p:column>
+
+                                                <p:column styleClass="left">#{proCollCrdType.creditFacility}</p:column>
+
+                                                <p:column styleClass="right">
+                                                    <h:outputText value="#{proCollCrdType.limit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </p:column>
                                             </p:dataTable>
                                         </td>
                                     </tr>
@@ -1600,7 +1811,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.BDMComments')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="BDM Comments Detail....."/>
+                                            <h:outputText value="#{proposeColl.bdmComments}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1613,7 +1824,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.potential')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="Core Asset"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.potentialCollateral.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1621,7 +1832,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.collTypePercentLTV')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="Land and Building"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.headCollType.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1629,9 +1840,9 @@
                                             <h:outputText value="#{msg.get('app.decision.label.existingCredit')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="123456.78">
-                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                                 maxIntegerDigits="14"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.existingCredit}">
+                                                <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"-->
+                                                                 <!--maxIntegerDigits="14"/>-->
                                             </h:outputText>
                                         </td>
                                     </tr>
@@ -1640,7 +1851,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.titleDeed')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="12, 1234"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.titleDeed}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1648,7 +1859,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.collateralLocation')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="Jompol, Jatujak, Bangkok"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.collateralLocation}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1656,7 +1867,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.headCollAppraisalValue')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="123456.78">
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.appraisalValue}">
                                                 <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="14"/>
                                             </h:outputText>
@@ -1667,7 +1878,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.headCollType')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="Land and Building"/>
+                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.headCollType.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1675,7 +1886,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.insuranceCompany')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:selectOneRadio value="">
+                                            <h:selectOneRadio value="#{proposeColl.collateralHeaderDetailView.insuranceCompany}">
                                                 <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="0"/>
                                                 <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
                                             </h:selectOneRadio>
@@ -1712,6 +1923,7 @@
                                             </p:dataTable>
                                         </td>
                                     </tr>
+                                    </ui:repeat>
                                 </table>
                             </td>
                         </tr>
@@ -2093,24 +2305,24 @@
                         <tr>
                             <td colspan="2">
                                 <h:selectOneListbox size="1" value="">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <!-- todo: select items - propose condition -->
+                                    <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
                                 </h:selectOneListbox>
-
                                 <p:spacer width="10"/>
-
-                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                <p:commandButton id="btnAddProposeCondition" value="#{msg.get('app.button.add')}"
+                                                 action="#{decision.onAddProposeCondition()}"
+                                                 update=":frmMain:dtProposeCondition"
                                                  styleClass="smaller"/>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:inputText value=""></p:inputText>
-
+                                <p:inputText value="#{decision.proposeCondition.conditionDesc}"/>
                                 <p:spacer width="10"/>
-
                                 <p:calendar id="calendarId" mindate=""
                                             navigator="true" showButtonPanel="true" showOn="both"
-                                            value=""
+                                            value="#{decision.proposeConditionDate}"
                                             pattern="dd/MM/yyyy"
                                             locale="th_TH"
                                             timeZone="Asia/Bangkok"
@@ -2122,7 +2334,9 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:dataTable paginator="false" rowIndexVar="rowIndex">
+                                <p:dataTable id="dtProposeCondition"
+                                             var="proposeCond" value="#{decision.creditFacProposeView.proposeConditionDetailViewList}"
+                                             paginator="false" rowKey="#{proposeCond}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
                                         <p:row>
@@ -2133,11 +2347,17 @@
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
-                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column styleClass="center">#{rowIndex + 1}</p:column>
 
+                                    <p:column styleClass="center">#{proposeCond.loanType}</p:column>
+
+                                    <p:column styleClass="left">#{proposeCond.conditionDesc}</p:column>
+
+                                    <p:column styleClass="center">
+                                        <h:outputText value="-">
+                                            <!--<f:convertDateTime pattern="MMM yyyy" locale="en"/>-->
+                                        </h:outputText>
+                                    </p:column>
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -2253,16 +2473,16 @@
                             </td>
                         </tr>
 
-                        <!-- Save & Cancel Buttons -->
+                        <!-- Save & Cancel Decision Buttons -->
                         <tr>
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                 action="#{decision.onSave()}" process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
-
                                 <p:spacer width="5" height="0"/>
-
-                                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                                                 action="#{decision.onCancel()}" process="@form"
                                                  update=":frmMain"
                                                  styleClass="smaller"/>
                             </td>
@@ -2280,7 +2500,8 @@
         </div>
     </h:form>
 
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    <p:blockUI block=":frmMain"
+               trigger=":frmMain:btnAddApprovedCredit,:frmMain:btnAddProposeCondition,:frmMain:btnSave,:frmMain:btnCancel">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

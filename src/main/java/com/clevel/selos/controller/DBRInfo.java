@@ -25,6 +25,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @ViewScoped
 @ManagedBean(name = "dbrInfo")
@@ -114,7 +116,7 @@ public class DBRInfo implements Serializable {
         try{
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId);
+            dbr = dbrControl.getDBRByWorkCase(workCaseId, userId);
 
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
@@ -192,22 +194,21 @@ public class DBRInfo implements Serializable {
             dbr.setUserId(userId);
 
             dbrControl.saveDBRInfo(dbr, ncbDetails);
-            messageHeader = "Save Basic Info Success.";
-            message = "Save Basic Info data success.";
-
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("ws.newCase.response.success");
 
             //update Display
             dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId);
+            dbr = dbrControl.getDBRByWorkCase(workCaseId, userId);
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
         } catch (Exception e) {
             if (e.getCause() != null) {
-                message = "Save Basic Info data failed. Cause : " + e.getCause().toString();
+                message = exceptionMsg.get("ws.newCase.response.failed");
             } else {
-                message = "Save Basic Info data failed. Cause : " + e.getMessage();
+                message = exceptionMsg.get("ws.newCase.response.failed");
             }
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

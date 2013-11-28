@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CreditType;
-import com.clevel.selos.model.db.master.Disbursement;
-import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,8 +23,12 @@ public class ProposeCreditDetailView implements Serializable {
     private int reduceFrontEndFee;
     private boolean reduceFlag;
     private boolean reduceFrontEndFlag;
+    private BaseRate standardBase;
     private BigDecimal standardPrice;
+    private BigDecimal standardAdd;
+    private BaseRate suggestBase;
     private BigDecimal suggestPrice;
+    private BigDecimal suggestAdd;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -39,6 +40,7 @@ public class ProposeCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private Disbursement disbursement;
     private BigDecimal purpose;
+    private int seq;
 
     // master
 //    private loanPurpose
@@ -51,7 +53,7 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void reset(){
         this.requestType=0;
-        this.isRefinance=0;
+        this.isRefinance=1;
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();
@@ -74,6 +76,18 @@ public class ProposeCreditDetailView implements Serializable {
         this.purpose = BigDecimal.ZERO;
         this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
 
+        this.standardBase = new BaseRate();
+        this.suggestBase = new BaseRate();
+        this.standardAdd = BigDecimal.ZERO;
+        this.suggestAdd = BigDecimal.ZERO;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 
     public int getRequestType() {
@@ -310,5 +324,35 @@ public class ProposeCreditDetailView implements Serializable {
         this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 
+    public BaseRate getStandardBase() {
+        return standardBase;
+    }
 
+    public void setStandardBase(BaseRate standardBase) {
+        this.standardBase = standardBase;
+    }
+
+    public BigDecimal getStandardAdd() {
+        return standardAdd;
+    }
+
+    public void setStandardAdd(BigDecimal standardAdd) {
+        this.standardAdd = standardAdd;
+    }
+
+    public BaseRate getSuggestBase() {
+        return suggestBase;
+    }
+
+    public void setSuggestBase(BaseRate suggestBase) {
+        this.suggestBase = suggestBase;
+    }
+
+    public BigDecimal getSuggestAdd() {
+        return suggestAdd;
+    }
+
+    public void setSuggestAdd(BigDecimal suggestAdd) {
+        this.suggestAdd = suggestAdd;
+    }
 }

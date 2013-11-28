@@ -1,5 +1,11 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.PotentialCollateral;
+import com.clevel.selos.model.db.master.Relation;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -7,10 +13,10 @@ import java.util.List;
 
 public class ExistingCollateralDetailView implements Serializable {
     private long id;
-    private PotentialCollateralView potentialCollateralView;
-    private CollateralTypeView collateralTypeView;
+    private PotentialCollateral potentialCollateral;
+    private CollateralType collateralType;
     private String owner;
-    private RelationView relationView;
+    private Relation relation;
     private Date appraisalDate;
     private String collateralNumber;
     private String collateralLocation;
@@ -18,15 +24,16 @@ public class ExistingCollateralDetailView implements Serializable {
     private String cusName;
     private String accountNumber;
     private String accountSuffix;
+    private String productProgram;
     private String creditFacility;//todo: Change creditFacility to view object?
     private BigDecimal limit;
     private String mortgageType;//todo: Change mortgageType to view object?
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
 
-    private List<CreditTypeDetailView> creditTypeDetailViewList;
+    private List<ExistingCreditDetailView> creditFacilityList;
 
-    public long getId() {
+    public long getId(){
         return id;
     }
 
@@ -34,20 +41,20 @@ public class ExistingCollateralDetailView implements Serializable {
         this.id = id;
     }
 
-    public PotentialCollateralView getPotentialCollateralView() {
-        return potentialCollateralView;
+    public PotentialCollateral getPotentialCollateral() {
+        return potentialCollateral;
     }
 
-    public void setPotentialCollateralView(PotentialCollateralView potentialCollateralView) {
-        this.potentialCollateralView = potentialCollateralView;
+    public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
+        this.potentialCollateral = potentialCollateral;
     }
 
-    public CollateralTypeView getCollateralTypeView() {
-        return collateralTypeView;
+    public CollateralType getCollateralType() {
+        return collateralType;
     }
 
-    public void setCollateralTypeView(CollateralTypeView collateralTypeView) {
-        this.collateralTypeView = collateralTypeView;
+    public void setCollateralType(CollateralType collateralType) {
+        this.collateralType = collateralType;
     }
 
     public String getOwner() {
@@ -58,12 +65,12 @@ public class ExistingCollateralDetailView implements Serializable {
         this.owner = owner;
     }
 
-    public RelationView getRelationView() {
-        return relationView;
+    public Relation getRelation() {
+        return relation;
     }
 
-    public void setRelationView(RelationView relationView) {
-        this.relationView = relationView;
+    public void setRelation(Relation relation) {
+        this.relation = relation;
     }
 
     public Date getAppraisalDate() {
@@ -122,6 +129,14 @@ public class ExistingCollateralDetailView implements Serializable {
         this.accountSuffix = accountSuffix;
     }
 
+    public String getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
+    }
+
     public String getCreditFacility() {
         return creditFacility;
     }
@@ -162,11 +177,35 @@ public class ExistingCollateralDetailView implements Serializable {
         this.mortgageValue = mortgageValue;
     }
 
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
+    public List<ExistingCreditDetailView> getCreditFacilityList() {
+        return creditFacilityList;
     }
 
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
+    public void setCreditFacilityList(List<ExistingCreditDetailView> creditFacilityList) {
+        this.creditFacilityList = creditFacilityList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("potentialCollateral", potentialCollateral)
+                .append("collateralType", collateralType)
+                .append("owner", owner)
+                .append("relation", relation)
+                .append("appraisalDate", appraisalDate)
+                .append("collateralNumber", collateralNumber)
+                .append("collateralLocation", collateralLocation)
+                .append("remark", remark)
+                .append("cusName", cusName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuffix", accountSuffix)
+                .append("creditFacility", creditFacility)
+                .append("limit", limit)
+                .append("mortgageType", mortgageType)
+                .append("appraisalValue", appraisalValue)
+                .append("mortgageValue", mortgageValue)
+                .append("creditFacilityList", creditFacilityList)
+                .toString();
     }
 }

@@ -2,9 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.CustomerCSI;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -81,7 +78,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Date dateOfBirth;
     private String citizenId;
     private String passportId;
-    private Gender gender;
+    private int gender;
     private int numberOfChild;
     private Education education;
     private MaritalStatus maritalStatus;
@@ -115,6 +112,25 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private List<ChildrenView> childrenList;
 
     private CustomerInfoView spouse;
+
+    // for show in Summary
+    private BigDecimal percentShareSummary;
+
+    //for new field
+    //age , customer entity
+    private int ageMonths;
+    private int isExistingSMECustomer;
+    private Date lastReviewDate;
+    private Date extendedReviewDate;
+    private int extendedReviewDateFlag;
+    private Date nextReviewDate;
+    private int nextReviewDateFlag;
+    private Date lastContractDate;
+    private Date numberOfMonthsLastContractDate;
+    private String adjustClass;
+    private String ratingFinal;
+    private int unpaidFeeInsurance;
+    private int noPendingClaimLG;
 
     public CustomerInfoView(){
         //reset();
@@ -177,6 +193,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.sourceIncome = new Country();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
+        this.percentShareSummary = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
@@ -459,11 +476,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.citizenId = citizenId;
     }
 
-    public Gender getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -848,5 +865,117 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public int getIsCommittee(){
         return isCommittee;
+    }
+
+    public BigDecimal getPercentShareSummary() {
+        return percentShareSummary;
+    }
+
+    public void setPercentShareSummary(BigDecimal percentShareSummary) {
+        this.percentShareSummary = percentShareSummary;
+    }
+
+    public int getAgeMonths() {
+        return ageMonths;
+    }
+
+    public void setAgeMonths(int ageMonths) {
+        this.ageMonths = ageMonths;
+    }
+
+    public int getIsExistingSMECustomer() {
+        return isExistingSMECustomer;
+    }
+
+    public void setIsExistingSMECustomer(int existingSMECustomer) {
+        isExistingSMECustomer = existingSMECustomer;
+    }
+
+    public Date getLastReviewDate() {
+        return lastReviewDate;
+    }
+
+    public void setLastReviewDate(Date lastReviewDate) {
+        this.lastReviewDate = lastReviewDate;
+    }
+
+    public Date getExtendedReviewDate() {
+        return extendedReviewDate;
+    }
+
+    public void setExtendedReviewDate(Date extendedReviewDate) {
+        this.extendedReviewDate = extendedReviewDate;
+    }
+
+    public int getExtendedReviewDateFlag() {
+        return extendedReviewDateFlag;
+    }
+
+    public void setExtendedReviewDateFlag(int extendedReviewDateFlag) {
+        this.extendedReviewDateFlag = extendedReviewDateFlag;
+    }
+
+    public Date getNextReviewDate() {
+        return nextReviewDate;
+    }
+
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
+    }
+
+    public int getNextReviewDateFlag() {
+        return nextReviewDateFlag;
+    }
+
+    public void setNextReviewDateFlag(int nextReviewDateFlag) {
+        this.nextReviewDateFlag = nextReviewDateFlag;
+    }
+
+    public Date getLastContractDate() {
+        return lastContractDate;
+    }
+
+    public void setLastContractDate(Date lastContractDate) {
+        this.lastContractDate = lastContractDate;
+    }
+
+    public Date getNumberOfMonthsLastContractDate() {
+        return numberOfMonthsLastContractDate;
+    }
+
+    public void setNumberOfMonthsLastContractDate(Date numberOfMonthsLastContractDate) {
+        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
+    }
+
+    public String getAdjustClass() {
+        return adjustClass;
+    }
+
+    public void setAdjustClass(String adjustClass) {
+        this.adjustClass = adjustClass;
+    }
+
+    public String getRatingFinal() {
+        return ratingFinal;
+    }
+
+    public void setRatingFinal(String ratingFinal) {
+        this.ratingFinal = ratingFinal;
+    }
+
+    public int getUnpaidFeeInsurance() {
+        return unpaidFeeInsurance;
+    }
+
+    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
+        this.unpaidFeeInsurance = unpaidFeeInsurance;
+    }
+
+    public int getNoPendingClaimLG() {
+        return noPendingClaimLG;
+    }
+
+    public void setNoPendingClaimLG(int noPendingClaimLG) {
+        this.noPendingClaimLG = noPendingClaimLG;
     }
 }
