@@ -91,6 +91,10 @@ public class BaseController implements Serializable {
 
     }
 
+ /*   public String getQualitativeType(){
+
+    }*/
+
     public ManageButton getManageButton() {
         return manageButton;
     }

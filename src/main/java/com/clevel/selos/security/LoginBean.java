@@ -201,6 +201,17 @@ public class LoginBean {
         return "loggedOut";
     }
 
+    public void signOut(){
+        log.debug("signing out.");
+        HttpSession httpSession = FacesUtil.getSession(false);
+        httpSession.setAttribute("user", null);
+        UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SecurityContextHolder.clearContext();
+        securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "", new Date());
+        loginExceptionMessage = "";
+        FacesUtil.redirect("/login.xhtml");
+    }
+
     public String getUserName() {
         return userName;
     }

@@ -31,7 +31,7 @@
                                         <td>
                                             <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
                                                          selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
-                                                         paginator="false" rowKey="#{item.fnWobNum}"
+                                                         paginator="false" rowKey="#{item.listKey}"
                                                          rowIndexVar="rowIndex">
 
                                                 <p:ajax event="rowSelect" update=":frmMain:resultInbox"
@@ -57,6 +57,10 @@
 
                                                 <p:column headerText="Step_Code" style="width: 120px;">
                                                     <h:outputText value="#{item.stepCode}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Id" style="width: 120px;">
+                                                    <h:outputText value="#{item.stepId}"/>
                                                 </p:column>
 
                                                 <p:column headerText="Lock_Status" styleClass="center"
