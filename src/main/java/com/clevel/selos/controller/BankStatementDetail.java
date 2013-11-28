@@ -154,7 +154,7 @@ public class BankStatementDetail implements Serializable {
 
             // if(add new bank statement)
             // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
-            if (null == bankStmtView && null == lastMonthDate && numberOfMonths == 0) {
+            if (summaryView == null || (lastMonthDate == null && numberOfMonths == 0)) {
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
                 return;
             }
@@ -211,43 +211,61 @@ public class BankStatementDetail implements Serializable {
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
 
         if (bankStmtView.getId() == 0) {
-            // add new Bank statement
+            // Add New Bank statement
             if (isTmbBank) {
-                summaryView.getTmbBankStmtViewList().add(bankStmtView);
+                if (summaryView.getTmbBankStmtViewList() != null) {
+                    summaryView.getTmbBankStmtViewList().add(bankStmtView);
+                } else {
+                    List<BankStmtView> tmbBankStmtViewList = new ArrayList<BankStmtView>();
+                    tmbBankStmtViewList.add(bankStmtView);
+                    summaryView.setTmbBankStmtViewList(tmbBankStmtViewList);
+                }
             } else {
-                summaryView.getOthBankStmtViewList().add(bankStmtView);
+                if (summaryView.getOthBankStmtViewList() != null) {
+                    summaryView.getOthBankStmtViewList().add(bankStmtView);
+                } else {
+                    List<BankStmtView> othBankStmtViewList = new ArrayList<BankStmtView>();
+                    othBankStmtViewList.add(bankStmtView);
+                    summaryView.setOthBankStmtViewList(othBankStmtViewList);
+                }
             }
         }
         else {
-            // edit exist Bank statement
+            // Edit exist Bank statement
             boolean foundBankStmt = false;
-            // find from TMB Bank statement list
-            for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
-                BankStmtView tmbBankStmtView = summaryView.getTmbBankStmtViewList().get(i);
-                if (bankStmtView.getId() == tmbBankStmtView.getId()) {
-                    // replace edited Bank statement to old
-                    summaryView.getTmbBankStmtViewList().set(i, bankStmtView);
-                    foundBankStmt = true;
-                    break;
+            // TMB
+            if (summaryView.getTmbBankStmtViewList() != null) {
+                for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
+                    BankStmtView tmbBankStmtView = summaryView.getTmbBankStmtViewList().get(i);
+                    if (bankStmtView.getId() == tmbBankStmtView.getId()) {
+                        // replace edited Bank statement to old
+                        summaryView.getTmbBankStmtViewList().set(i, bankStmtView);
+                        foundBankStmt = true;
+                        break;
+                    }
                 }
             }
 
             if (!foundBankStmt) {
-                // find from Other Bank statement list
-                for (int i=0; i<summaryView.getOthBankStmtViewList().size(); i++) {
-                    BankStmtView othBankStmtView = summaryView.getOthBankStmtViewList().get(i);
-                    if (bankStmtView.getId() == othBankStmtView.getId()) {
-                        // replace edited Bank statement to old
-                        summaryView.getOthBankStmtViewList().set(i, bankStmtView);
-                        break;
+                // OTHER
+                if (summaryView.getOthBankStmtViewList() != null) {
+                    for (int i=0; i<summaryView.getOthBankStmtViewList().size(); i++) {
+                        BankStmtView othBankStmtView = summaryView.getOthBankStmtViewList().get(i);
+                        if (bankStmtView.getId() == othBankStmtView.getId()) {
+                            summaryView.getOthBankStmtViewList().set(i, bankStmtView);
+                            break;
+                        }
                     }
                 }
             }
         }
 
         try {
-            // recalculate and save Bank statement summary
+            // update Main account and Highest inflow
+            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
+            // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
+
             bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
 
             messageHeader = "Save Bank Statement Detail Success.";
@@ -267,6 +285,7 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
+        // todo: onCancel()
         //initViewFormAndSelectItems();
     }
 
