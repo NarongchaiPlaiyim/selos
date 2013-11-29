@@ -293,9 +293,15 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     }
 }
 
-function handleDlgCreditExistingRequest(xhr, status, args) {
+function handleExistingCreditRequest(xhr, status, args) {
     if (args.functionComplete) {
         existingCreditDlg.hide();
+    }
+}
+
+function handleExistingConditionRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        conditionDlg.hide();
     }
 }
 
@@ -319,12 +325,6 @@ function handleExistingGuarantorRequest(xhr, status, args) {
     }
 }
 
-// Credit Facility Existing Guarantor Dialog
-function handleExistingGuarantorInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        existingGuarantorInfoDlg.hide();
-    }
-}
 
 // Credit Facility Propose Credit Dialog
 function handleDlgCreditProposeRequest(xhr, status, args) {
