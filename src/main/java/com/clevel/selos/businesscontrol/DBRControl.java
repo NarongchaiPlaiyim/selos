@@ -91,9 +91,9 @@ public class DBRControl extends BusinessControl {
         }
     }
 
-    public DBRView getDBRByWorkCase(long workCaseId, String userId) {
+    public DBRView getDBRByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        User user = userDAO.findById(userId);
+        User user = getCurrentUser();
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
         if(dbr == null){
             dbr = new DBR();
@@ -119,13 +119,13 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    public void updateValueOfDBR(BankStatementSummary bankStatementSummary, BizInfoSummary bizInfoSummary, long workCaseId, String userId){
-        DBRView dbrView =  getDBRByWorkCase(workCaseId, userId);
+    public void updateValueOfDBR(BankStatementSummary bankStatementSummary, BizInfoSummary bizInfoSummary, long workCaseId){
+        DBRView dbrView =  getDBRByWorkCase(workCaseId);
         if(dbrView != null){
             if(dbrView.getId() == 0){
                 return;
             }
-            User user = userDAO.findById(userId);
+            User user = getCurrentUser();
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if(bankStatementSummary != null){
             dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary, user));

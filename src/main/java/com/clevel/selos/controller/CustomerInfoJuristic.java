@@ -133,8 +133,8 @@ public class CustomerInfoJuristic implements Serializable {
     //session
     private long workCaseId;
     private long stepId;
-    private String userId;
-    private User user;
+    /*private String userId;
+    private User user;*/
 
     private int caseBorrowerTypeId;
 
@@ -249,20 +249,20 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void preRender(){
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
         log.info("preRender ::: setSession ");
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
-            user = userDAO.findById(userId);
+            //userId = session.getAttribute("userId").toString();
+            //user = userDAO.findById(userId);
         }else{
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -488,7 +488,7 @@ public class CustomerInfoJuristic implements Serializable {
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
         try{
-            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
@@ -506,7 +506,7 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView.getSpouse().setSearchBy(1);
                         customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                         try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
@@ -561,7 +561,7 @@ public class CustomerInfoJuristic implements Serializable {
             log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
             CustomerInfoResultView customerInfoResultView;
             try{
-                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView, user);
+                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView);
                 log.debug("refreshInterfaceInfo ::: customerInfoResultView : {}", customerInfoResultView);
                 if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                     log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
@@ -570,7 +570,7 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
 
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse(), user);
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){

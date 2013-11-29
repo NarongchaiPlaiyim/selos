@@ -334,7 +334,7 @@ public class CustomerInfoControl extends BusinessControl {
     //** function for integration **//
 
     // *** Function for RM *** //
-    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
@@ -350,6 +350,7 @@ public class CustomerInfoControl extends BusinessControl {
             masterDocumentType = documentTypeDAO.findById(1);
         }
 
+        User user = getCurrentUser();
         String userId = user.getId();
         String documentTypeCode = masterDocumentType.getDocumentTypeCode();
         log.info("getCustomerInfoFromRM ::: userId : {}", userId);
