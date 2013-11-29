@@ -56,7 +56,7 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
-    private User user;
+    //private User user;
     private Date currentDate;
 
     private ReferredExperience referredExperience;
@@ -110,6 +110,8 @@ public class BizInfoSummary implements Serializable {
     @Inject
     private Util util;
 
+    private long workCaseId;
+
     public BizInfoSummary() {
 
     }
@@ -117,17 +119,23 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("SESSION WorkCase : {}", session.getAttribute("workCaseId"));
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
         onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
 
-        log.info("onCreation bizInfoSum " + user.getRole().toString());
+        //user = (User)session.getAttribute("user");
 
-        user.getRole().setId(102);
+        //log.info("onCreation bizInfoSum " + user.getRole().toString());
+
+        //user.getRole().setId(102);
+
         bankStatementAvg = 0;
         if(bankStmtSummaryView != null ){
 
@@ -193,18 +201,19 @@ public class BizInfoSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        //session.setAttribute("workCaseId", 10001);
+
         log.info(" get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
 
-        com.clevel.selos.model.db.working.BankStatementSummary bankStatementSummary;
+        /*com.clevel.selos.model.db.working.BankStatementSummary bankStatementSummary;
 
         bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
-
+       asdf
         bankStmtSummaryView = new BankStmtSummaryView();
         bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStatementSummary.getGrdTotalIncomeNetBDM());
-        bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());
+        bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());*/
 
         log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
         log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
@@ -341,8 +350,8 @@ public class BizInfoSummary implements Serializable {
 
         if( productCostPercent > 100.01){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่าเกิน 100";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "����Թ 100";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -362,8 +371,8 @@ public class BizInfoSummary implements Serializable {
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า operatingExpenseAmount > profitMarginPercent";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� operatingExpenseAmount > profitMarginPercent";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -388,16 +397,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า Interest > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� Interest > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -405,8 +414,8 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า ผลรวม interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� ����� interest and tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -436,13 +445,7 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            if (bizInfoSummaryView.getId() == 0) {
-                bizInfoSummaryView.setCreateBy(user);
-                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);

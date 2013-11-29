@@ -1,7 +1,7 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html">
 
     <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css"/>
@@ -21,6 +21,8 @@
     <div id="selosmenu" class="selosmenu">
         <ul>
             <li id="mnuinbox"><a href="inbox.jsf" title="Inbox">Inbox</a></li>
+            <h:panelGroup id="pnl_menu_prescreen" rendered="#{baseController.stepId == 1001 || baseController.stepId == 1002 || baseController.stepId == 1003}"
+                     styleClass="panel">
             <li id="mnuprescreen">
                 <a href="prescreen.jsf" title="Prescreen">Prescreen</a>
                 <ul>
@@ -32,6 +34,42 @@
                     </p:panel>
                 </ul>
             </li>
+            </h:panelGroup>
+            <h:panelGroup id="pnl_menu_fullapp" rendered="#{baseController.stepId == 1004}"
+                     styleClass="panel">
+                <li id="mnubasicinfo"><a href="basicInfo.jsf" title="Basic Info.">Basic Info.</a></li>
+                <li id="mnuborrowerinfo">
+                    <a href="borrowerinfoSummary.jsf" title="Borrower Info.">Borrower Info.</a>
+                    <ul>
+                        <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="Prescreen">Customer Info.</a></li>
+                        <li id="submnucredithistory"><a href="NCBSummary.jsf" title="Credit History">Credit History</a></li>
+                        <h:panelGroup id="pnl_mnu_qualitative_a" rendered="#{baseController.qualitativeType == 1}" styleClass="panel">
+                            <li id="submnuqualitativea"><a href="qualitativeA.jsf" title="Qualitative A">Qualitative A</a></li>
+                        </h:panelGroup>
+                        <h:panelGroup id="pnl_mnu_qualitative_b" rendered="#{baseController.qualitativeType == 2}" styleClass="panel">
+                            <li id="submnuqualitativeb"><a href="qualitativeB.jsf" title="Qualitative B">Qualitative B</a></li>
+                        </h:panelGroup>
+                        <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="TCG Calculation">TCG Calculation</a></li>
+                    </ul>
+                </li>
+                <li id="mnubusinessinfo"><a href="bizInfoSummary.xhtml" title="Business Info.">Business Info.</a></li>
+                <li id="mnufinancialinfo">
+                    <a href="bankstatementSummary.jsf" title="Financial Info.">Financial Info.</a>
+                    <ul>
+                        <li id="submnubankstatement"><a href="bankstatementSummary.jsf" title="Bank Statement">Bank Statement</a></li>
+                        <li id="submnudbr"><a href="DBRInfo.jsf" title="DBR">DBR</a></li>
+                        <li id="submnuexistingline"><a href="existingline.jsf" title="Existing Line">Existing Line</a></li>
+                        <li id="submnuproposeline"><a href="proposeline.jsf" title="Propose Line">Propose Line</a></li>
+                    </ul>
+                </li>
+                <li id="mnudecision">
+                    <a href="exsummary.jsf" title="Decision">Decision</a>
+                    <ul>
+                        <li id="submnuexsum"><a href="exsummary.jsf" title="Ex Summary">Ex Summary</a></li>
+                        <li id="submnudecision"><a href="decision.jsf" title="Decision">Decision</a></li>
+                    </ul>
+                </li>
+            </h:panelGroup>
             <!--<li id="mnubasicinfo"><a href="basicInfo.jsf" title="Basic Info.">Basic Info.</a></li>
             <li id="mnuborrowerinfo">
                 <a href="borrowerinfoSummary.jsf" title="Borrower Info.">Borrower Info.</a>

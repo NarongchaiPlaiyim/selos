@@ -23,6 +23,10 @@ import java.util.List;
 @Stateless
 public class AppraisalRequestControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     AppraisalDAO appraisalDAO;
     @Inject
     AppraisalContactDetailDAO appraisalContactDetailDAO;
@@ -30,6 +34,7 @@ public class AppraisalRequestControl extends BusinessControl {
     AppraisalDetailDAO appraisalDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
     @Inject
     AppraisalTransform appraisalTransform;
     @Inject
@@ -37,8 +42,12 @@ public class AppraisalRequestControl extends BusinessControl {
     @Inject
     AppraisalContactDetailTransform appraisalContactDetailTransform;
 
+    @Inject
+    public AppraisalRequestControl(){
 
-    public AppraisalView getAppraisalRequestByWorkCase(long workCaseId){
+    }
+	
+	public AppraisalView getAppraisalRequestByWorkCase(long workCaseId){
         log.info("getAppraisalByWorkCase ");
 
         Appraisal appraisal;

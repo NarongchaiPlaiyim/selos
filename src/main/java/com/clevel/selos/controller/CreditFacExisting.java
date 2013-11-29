@@ -148,7 +148,7 @@ public class CreditFacExisting implements Serializable {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
                 Customer customer = new Customer();
-                customer.setNameTh("‡∏≠‡∏≤‡∏£‡∏¥‡∏¢‡∏≤ ‡πÄ‡∏≠ ‡∏Æ‡∏≤‡πÄ‡∏Å‡πâ‡∏ï");
+                customer.setNameTh("Õ“√‘¬“ ‡Õ Œ“‡°Èµ");
 
                 guarantorList.add(customer);
 

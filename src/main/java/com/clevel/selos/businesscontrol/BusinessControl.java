@@ -17,12 +17,16 @@ import java.math.BigDecimal;
 public abstract class BusinessControl implements Serializable {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Inject
     BaseRateDAO baseRateDAO;
 
+    @Inject
+    public BusinessControl(){
+
+    }
 
     protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,7 +43,6 @@ public abstract class BusinessControl implements Serializable {
             return null;
         }
     }
-
     protected BigDecimal getMRRValue(){
         try{
             BaseRate baseRate = baseRateDAO.findById(BaseRateConfig.MRR.value());

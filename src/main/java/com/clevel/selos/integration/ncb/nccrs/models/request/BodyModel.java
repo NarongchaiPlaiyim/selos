@@ -10,7 +10,7 @@ public class BodyModel implements Serializable {
     @XStreamAlias("h2hrequest")
     private H2HRequestModel h2hrequest;
 
-    @XStreamAlias("h2hrequest")
+    @XStreamAlias("attribute")
     private AttributeModel attribute;
 
     @XStreamAlias("criteria")

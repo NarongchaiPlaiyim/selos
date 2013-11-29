@@ -2,7 +2,6 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.view.BankView;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

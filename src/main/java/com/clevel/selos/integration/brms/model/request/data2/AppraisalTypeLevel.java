@@ -4,8 +4,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 
 public class AppraisalTypeLevel implements Serializable {
     private AttributeTypeLevelAppraisal attributeType;

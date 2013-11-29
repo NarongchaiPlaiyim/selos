@@ -94,6 +94,54 @@ public class ObligationService implements Serializable {
         return obligationResult;
     }
 
+    public ObligationResult getObligationByTmbCusId(String tmbCusId) {
+        log.debug("getObligationByTmbCusId (tmbCusId : {})", tmbCusId);
+        ObligationResult obligationResult = new ObligationResult();
+
+        //check which table is current
+        SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
+
+        if (systemParameter != null) {
+            String value = systemParameter.getValue();
+
+            if (value.equalsIgnoreCase("1")) {
+                //get from table 1 (Obligation1)
+                List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusId(tmbCusId);
+                if (obligation1List != null && obligation1List.size() > 0) {
+                    List<Obligation> obligationList = transformObligation(obligation1List, null);
+                    obligationResult.setActionResult(ActionResult.SUCCESS);
+                    obligationResult.setObligationList(obligationList);
+                } else {
+                    obligationResult.setActionResult(ActionResult.FAILED);
+                    obligationResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
+                    obligationResult.setObligationList(new ArrayList<Obligation>());
+                }
+            } else if (value.equalsIgnoreCase("2")) {
+                //get from table 2 (Obligation2)
+                List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusId(tmbCusId);
+                if (obligation2List != null && obligation2List.size() > 0) {
+                    List<Obligation> obligationList = transformObligation(null, obligation2List);
+                    obligationResult.setActionResult(ActionResult.SUCCESS);
+                    obligationResult.setObligationList(obligationList);
+                } else {
+                    obligationResult.setActionResult(ActionResult.FAILED);
+                    obligationResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
+                    obligationResult.setObligationList(new ArrayList<Obligation>());
+                }
+            } else {
+                obligationResult.setActionResult(ActionResult.FAILED);
+                obligationResult.setReason(exceptionMsg.get(ExceptionMapping.INVALID_SYSTEM_PARAM));
+                obligationResult.setObligationList(new ArrayList<Obligation>());
+            }
+        } else {
+            obligationResult.setActionResult(ActionResult.FAILED);
+            obligationResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
+            obligationResult.setObligationList(new ArrayList<Obligation>());
+        }
+
+        return obligationResult;
+    }
+
     public List<Obligation> transformObligation(List<Obligation1> obligation1List, List<Obligation2> obligation2List) {
         List<Obligation> obligationList = new ArrayList<Obligation>();
         if (obligation1List != null) {

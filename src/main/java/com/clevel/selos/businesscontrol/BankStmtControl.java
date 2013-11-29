@@ -1,10 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
@@ -23,6 +25,7 @@ import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -33,6 +36,12 @@ import java.util.*;
 
 @Stateless
 public class BankStmtControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+    @Inject
+    private UserDAO userDAO;
+
     //Interface
     @Inject
     private RMInterface rmInterface;

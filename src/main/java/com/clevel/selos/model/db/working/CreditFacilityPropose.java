@@ -177,19 +177,24 @@ public class CreditFacilityPropose  implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy = "proposeFeeDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "proposeFeeDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeFeeDetail> proposeFeeDetailList;
 
-    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<NewCreditDetail> newCreditDetailList;
 
-    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeCollateralDetail> proposeCollateralDetailList;
 
-    @OneToMany(mappedBy = "proposeGuarantorDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "proposeGuarantorDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeGuarantorDetail> proposeGuarantorDetailList;
 
-    @OneToMany(mappedBy = "proposeConditionDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "proposeConditionDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeConditionDetail> proposeConditionDetailList;
 
     public long getId() {

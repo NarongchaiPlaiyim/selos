@@ -28,34 +28,33 @@ import java.util.List;
 @Stateless
 public class DBRControl extends BusinessControl {
     @Inject
-    DBRDAO dbrdao;
+    @SELOS
+    private Logger log;
 
+    @Inject
+    private UserDAO userDAO;
+
+    @Inject
+    DBRDAO dbrdao;
     @Inject
     DBRDetailDAO dbrDetailDAO;
-
     @Inject
     WorkCaseDAO workCaseDAO;
-
-    @Inject
-    UserDAO userDAO;
-
-    @Inject
-    DBRTransform dbrTransform;
-
-    @Inject
-    DBRDetailTransform dbrDetailTransform;
-
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
-
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
 
     @Inject
+    DBRTransform dbrTransform;
+    @Inject
+    DBRDetailTransform dbrDetailTransform;
+
+    @Inject
     NCBInfoControl ncbInfoControl;
 
+    @Inject
     public DBRControl() {
-
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
@@ -96,6 +95,7 @@ public class DBRControl extends BusinessControl {
 
     public DBRView getDBRByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
         if(dbr == null){
             dbr = new DBR();
@@ -198,7 +198,7 @@ public class DBRControl extends BusinessControl {
             }
 
             WorkCase workCase = workCaseDAO.findById(workCaseId);
-            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(bankStatementSummary != null){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));

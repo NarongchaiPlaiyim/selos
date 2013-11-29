@@ -11,14 +11,13 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -71,11 +70,28 @@ public class Inbox implements Serializable {
     }
 
     public void onSelectInbox() {
+
+        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(userDetail == null){
+            FacesUtil.redirect("/login.jsf");
+            return;
+        }
+
         HttpSession session = FacesUtil.getSession(false);
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
-        session.setAttribute("workCasePreScreenId", inboxViewSelectItem.getWorkCasePreScreenId());
-        session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
+        if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCasePreScreenId()))){
+            session.setAttribute("workCasePreScreenId", inboxViewSelectItem.getWorkCasePreScreenId());
+        } else {
+            session.setAttribute("workCasePreScreenId", 0);
+        }
+        if(!Util.isEmpty(Long.toString(inboxViewSelectItem.getWorkCaseId()))){
+            session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
+        } else {
+            session.setAttribute("workCaseId", 0);
+        }
+
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
 
@@ -83,20 +99,24 @@ public class Inbox implements Serializable {
         AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        long selectedStepId = inboxViewSelectItem.getStepId();
+        String landingPage = inboxControl.getLandingPage(selectedStepId);
 
-            if (inboxViewSelectItem.getStepId() == 1001) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1002) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenChecker.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1003) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenMaker.jsf");
-            }
+        if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
+            FacesUtil.redirect(landingPage);
             return;
-        } catch (Exception ex) {
-            log.info("Exception :: {}", ex);
+        } else {
+            //TODO Show dialog
         }
+
+        /*if (inboxViewSelectItem.getStepId() == 1001) {
+            FacesUtil.redirect("/site/prescreenInitial.jsf");
+        } else if (inboxViewSelectItem.getStepId() == 1002) {
+            FacesUtil.redirect("/site/prescreenChecker.jsf");
+        } else if (inboxViewSelectItem.getStepId() == 1003) {
+            FacesUtil.redirect("/site/prescreenMaker.jsf");
+        }
+        return;*/
     }
 
     public UserDetail getUserDetail() {

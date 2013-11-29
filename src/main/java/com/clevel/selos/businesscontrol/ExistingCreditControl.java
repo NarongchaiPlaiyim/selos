@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.ExistingCreditSummaryDAO;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RLOSInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
@@ -23,6 +24,7 @@ import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditView;
 import com.clevel.selos.transform.business.ExistingCreditTransform;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -34,26 +36,30 @@ import java.util.Map;
 
 @Stateless
 public class ExistingCreditControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
 
     @Inject
     DWHInterface dwhInterface;
-
     @Inject
     RLOSInterface rlosInterface;
 
     @Inject
     ReferenceDAO referenceDAO;
+    @Inject
+    ExistingCreditSummaryDAO existingCreditSummaryDAO;
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
     ExistingCreditTransform existingCreditTransform;
 
     @Inject
-    ExistingCreditSummaryDAO existingCreditSummaryDAO;
+    public ExistingCreditControl(){
 
-    @Inject
-    ExistingCreditDetailDAO existingCreditDetailDAO;
-
-    /**
+    }
+                                                        /**
      * To refresh/retrieve the Existing Credit Information from DWH Obligation Database.
      *
      * @param customerInfoViewList
