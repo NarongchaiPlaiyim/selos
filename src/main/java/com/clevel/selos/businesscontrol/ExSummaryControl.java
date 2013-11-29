@@ -93,7 +93,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSumAccountMovementView mainBank = new ExSumAccountMovementView();
             ExSumAccountMovementView otherBank = new ExSumAccountMovementView();

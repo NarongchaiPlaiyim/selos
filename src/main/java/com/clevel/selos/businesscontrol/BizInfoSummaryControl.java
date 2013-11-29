@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -13,6 +14,7 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -48,6 +50,12 @@ public class BizInfoSummaryControl extends BusinessControl {
         BizInfoSummary bizInfoSummary;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
+        if (bizInfoSummaryView.getId() == 0) {
+            bizInfoSummaryView.setCreateBy(user);
+            bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
+        }
+        bizInfoSummaryView.setModifyBy(user);
 
         bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
         bizInfoSummary.setWorkCase(workCase);

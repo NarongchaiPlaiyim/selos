@@ -52,7 +52,7 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
-    private User user;
+    //private User user;
     private Date currentDate;
 
     private ReferredExperience referredExperience;
@@ -113,7 +113,7 @@ public class BizInfoSummary implements Serializable {
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
         HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
+        //user = (User)session.getAttribute("user");
 
         if (bizInfoSummaryView == null) {
 
@@ -156,7 +156,7 @@ public class BizInfoSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
+        //session.setAttribute("workCaseId", 10001);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         log.info(" get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
@@ -295,8 +295,8 @@ public class BizInfoSummary implements Serializable {
 
         if( productCostPercent > 100.01){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "à¡Ô´¢éÍ¼Ô´¾ÅÒ´";
-            message = "¤èÒà¡Ô¹ 100";
+            messageHeader = "ï¿½Ô´ï¿½ï¿½Í¼Ô´ï¿½ï¿½Ò´";
+            message = "ï¿½ï¿½ï¿½ï¿½Ô¹ 100";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -316,8 +316,8 @@ public class BizInfoSummary implements Serializable {
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "à¡Ô´¢éÍ¼Ô´¾ÅÒ´";
-            message = "¤èÒ operatingExpenseAmount > profitMarginPercent";
+            messageHeader = "ï¿½Ô´ï¿½ï¿½Í¼Ô´ï¿½ï¿½Ò´";
+            message = "ï¿½ï¿½ï¿½ operatingExpenseAmount > profitMarginPercent";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -342,16 +342,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "à¡Ô´¢éÍ¼Ô´¾ÅÒ´";
-            message = "¤èÒ Interest > earningsBeforeTaxAmount";
+            messageHeader = "ï¿½Ô´ï¿½ï¿½Í¼Ô´ï¿½ï¿½Ò´";
+            message = "ï¿½ï¿½ï¿½ Interest > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "à¡Ô´¢éÍ¼Ô´¾ÅÒ´";
-            message = "¤èÒ tax > earningsBeforeTaxAmount";
+            messageHeader = "ï¿½Ô´ï¿½ï¿½Í¼Ô´ï¿½ï¿½Ò´";
+            message = "ï¿½ï¿½ï¿½ tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -359,8 +359,8 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "à¡Ô´¢éÍ¼Ô´¾ÅÒ´";
-            message = "¤èÒ ¼ÅÃÇÁ interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "ï¿½Ô´ï¿½ï¿½Í¼Ô´ï¿½ï¿½Ò´";
+            message = "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ interest and tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -390,13 +390,7 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            if (bizInfoSummaryView.getId() == 0) {
-                bizInfoSummaryView.setCreateBy(user);
-                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);

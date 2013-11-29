@@ -129,44 +129,49 @@ public class NCBInfoControl extends BusinessControl {
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
-                if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
-                    NCBDetailView ncbDetailView = new NCBDetailView();
-                    ncbDetailView.setId(ncbDetail.getId());
-                    ncbDetailView.setLimit(ncbDetail.getLimit());
-                    ncbDetailView.setInstallment(ncbDetail.getInstallment());
-                    BigDecimal debtForCalculate = BigDecimal.ZERO;
+                if(accountStatus != null && accountType != null){
+                    if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
+                        NCBDetailView ncbDetailView = new NCBDetailView();
+                        ncbDetailView.setId(ncbDetail.getId());
+                        ncbDetailView.setLimit(ncbDetail.getLimit());
+                        ncbDetailView.setInstallment(ncbDetail.getInstallment());
+                        BigDecimal debtForCalculate = BigDecimal.ZERO;
 
-                    BigDecimal dbrInterest = getDBRInterest();
-                    switch (accountType.getCalculateType()){
-                        case 1:
-                            if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
-                                debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
-                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
-                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-                            }else{
-                                debtForCalculate = ncbDetail.getInstallment();
-                            }
-                            break;
-                        case 2:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(5));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-                            break;
-                        case 3:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(10));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-                            break;
-                        default:
-                            break;
+                        BigDecimal dbrInterest = getDBRInterest();
+                        switch (accountType.getCalculateType()){
+                            case 1:
+                                if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
+                                    debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
+                                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
+                                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+                                }else{
+                                    debtForCalculate = ncbDetail.getInstallment();
+                                }
+                                break;
+                            case 2:
+                                debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(5));
+                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                                break;
+                            case 3:
+                                debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(10));
+                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                                break;
+                            default:
+                                break;
+                        }
+                        ncbDetailView.setDebtForCalculate(debtForCalculate);
+                        StringBuilder accountName = new StringBuilder();
+                        accountName.append(customer.getTitle().getTitleTh())
+                                .append(" ").append(customer.getNameTh());
+                        if(!Util.isEmpty(customer.getLastNameTh())){
+                            accountName.append(" ").append(customer.getLastNameTh());
+                        }
+                        ncbDetailView.setAccountName(accountName.toString());
+                        ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                        ncbDetailViews.add(ncbDetailView);
                     }
-                    ncbDetailView.setDebtForCalculate(debtForCalculate);
-                    StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitle().getTitleTh())
-                            .append(" ").append(customer.getNameTh())
-                            .append(" ").append(customer.getLastNameTh());
-                    ncbDetailView.setAccountName(accountName.toString());
-                    ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
-                    ncbDetailViews.add(ncbDetailView);
                 }
+
             }
         }
         return ncbDetailViews;

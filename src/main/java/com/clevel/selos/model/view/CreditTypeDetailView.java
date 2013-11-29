@@ -19,7 +19,7 @@ public class CreditTypeDetailView implements Serializable {
     private String creditFacility;
     private BigDecimal  limit;
     private BigDecimal  guaranteeAmount;
-    private int usaCount;
+    private int useCount;
     private int seq;
     private Date createDate;
     private Date modifyDate;
@@ -42,7 +42,7 @@ public class CreditTypeDetailView implements Serializable {
         this.creditFacility  = "";
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
-        this.usaCount = 0;
+        this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
     }
@@ -156,12 +156,12 @@ public class CreditTypeDetailView implements Serializable {
         this.requestType = requestType;
     }
 
-    public int getUsaCount() {
-        return usaCount;
+    public int getUseCount() {
+        return useCount;
     }
 
-    public void setUsaCount(int usaCount) {
-        this.usaCount = usaCount;
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
 
     public int getSeq() {
