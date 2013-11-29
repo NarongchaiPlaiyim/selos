@@ -103,7 +103,7 @@ public class DBRControl extends BusinessControl {
             if(bizInfoSummary != null){
                 dbr.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
-            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             if(bankStatementSummary != null){
                 dbr.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
             }
