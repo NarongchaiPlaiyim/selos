@@ -35,7 +35,7 @@ public class ProposeGuarantorDetail  implements Serializable {
     @JoinColumn(name = "credit_facility_propose_id")
     private CreditFacilityPropose creditFacilityPropose;
 
-    @OneToMany(mappedBy = "creditTypeDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposeGuarantorDetail", cascade = CascadeType.ALL)
     private List<CreditTypeDetail> creditTypeDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)

@@ -49,15 +49,15 @@ public class ProposeCreditTierDetail  implements Serializable {
     private int editFlag ;
 
     @OneToOne
-    @JoinColumn(name = "base_rate_id")
+    @JoinColumn(name = "final_rate_id")
     private BaseRate finalBasePrice ;
 
     @OneToOne
-    @JoinColumn(name = "base_rate_id")
+    @JoinColumn(name = "standard_rate_id")
     private BaseRate standardBasePrice ;
 
     @OneToOne
-    @JoinColumn(name = "base_rate_id")
+    @JoinColumn(name = "suggest_rate_id")
     private BaseRate suggestBasePrice ;
 
 

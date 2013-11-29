@@ -50,7 +50,7 @@ public class ProposeCollateralHeadDetail  implements Serializable {
     @JoinColumn(name = "propose_collateral_detail_id")
     private ProposeCollateralDetail proposeCollateralDetail;
 
-    @OneToMany(mappedBy = "proposeSubCollateralDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
     private List<ProposeSubCollateralDetail> proposeSubCollateralDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)

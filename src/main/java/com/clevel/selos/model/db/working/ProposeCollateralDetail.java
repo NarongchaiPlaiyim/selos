@@ -74,10 +74,12 @@ public class ProposeCollateralDetail implements Serializable {
     @JoinColumn(name = "credit_facility_propose_id")
     private CreditFacilityPropose creditFacilityPropose;
 
-    @OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
     private List<ProposeCollateralHeadDetail> proposeCollateralHeadDetailList;
 
-    @OneToMany(mappedBy = "creditTypeDetail", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "creditTypeDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
     private List<CreditTypeDetail> creditTypeDetailList;
 
     public long getId() {
