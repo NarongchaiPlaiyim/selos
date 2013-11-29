@@ -130,13 +130,22 @@ public class BizInfoSummary implements Serializable {
         user.getRole().setId(102);
         bankStatementAvg = 0;
         if(bankStmtSummaryView != null ){
-            if(RoleUser.ABDM.getValue() == user.getRole().getId()){
+
+            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
                 if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
                     bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
                 }
             }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
                 if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
                     bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                }
+            }*/
+
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            }else{
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
                 }
             }
         }else{
