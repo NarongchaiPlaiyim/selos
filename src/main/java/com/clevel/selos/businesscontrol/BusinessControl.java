@@ -77,7 +77,7 @@ public abstract class BusinessControl implements Serializable {
     }
 
     protected BigDecimal getDBRInterest(){
-        // plus 6% for MRR
+        // plus 6% MRR
         return getMRRValue().add(BigDecimal.valueOf(6));
     }
 

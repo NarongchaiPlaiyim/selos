@@ -36,19 +36,19 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveCondition"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addConditionDlg}"
                                 styleClass="small"
                                 actionListener="#{creditFacExisting.onSaveConditionInfoDlg()}"
                                 process=":conditionDlgForm"
                                 update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
-                                oncomplete="handleConditionInfoRequest(xhr, status, args)"/>
+                                oncomplete="handleExistingConditionRequest(xhr, status, args)"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                                 styleClass="small"
-                                onclick="PF('conditionDlg').hide()"
+                                onclick="conditionDlg.hide()"
                                 update=":conditionDlgForm"/>
                     </td>
                 </tr>
@@ -56,7 +56,7 @@
         </h:form>
     </p:panel>
 
-    <p:blockUI widgetVar="blockConditionDlg" block="conditionDlgPanel" trigger=":conditionDlgForm:save">
+    <p:blockUI widgetVar="blockConditionDlg" block="conditionDlgPanel" trigger=":conditionDlgForm:saveCondition">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

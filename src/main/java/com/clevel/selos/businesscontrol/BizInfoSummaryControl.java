@@ -2,14 +2,17 @@ package com.clevel.selos.businesscontrol;
 
 //import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +39,8 @@ public class BizInfoSummaryControl extends BusinessControl {
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    BankStatementSummaryDAO bankStmtSummaryDAO;
 
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
@@ -111,5 +117,19 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bizInfoDetailViewList;
     }
 
+    public BankStmtSummaryView getBankStmtSummary(long workCaseId){
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+        BankStatementSummary bankStmtSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+
+        if(bankStmtSummary != null){
+            bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStmtSummary.getGrdTotalIncomeNetBDM());
+            bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStmtSummary.getGrdTotalIncomeNetUW());
+        } else {
+            bankStmtSummaryView.setGrdTotalIncomeNetBDM(BigDecimal.ZERO);
+            bankStmtSummaryView.setGrdTotalIncomeNetUW(BigDecimal.ZERO);
+        }
+
+        return bankStmtSummaryView;
+    }
 
 }
