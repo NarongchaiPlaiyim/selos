@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ProposeConditionDetailView implements Serializable {
-
+    private int no ;
     private String loanType;
     private String conditionDesc;
 
@@ -20,8 +20,17 @@ public class ProposeConditionDetailView implements Serializable {
     }
 
     public void reset() {
+        this.no=0;
         this.loanType = "";
         this.conditionDesc = "";
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public String getLoanType() {

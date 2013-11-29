@@ -265,18 +265,22 @@ public class BankStmtControl extends BusinessControl {
      * @param bankStmtDetailView
      * @return maxBalance
      */
-    public BigDecimal getMaxBalance(BankStmtDetailView bankStmtDetailView) {
-        if (ValidationUtil.isValueLessEqualZero(bankStmtDetailView.getMaxBalance()))
+    public BigDecimal getMaxBalance(BankStmtDetailView bankStmtDetailView, BankAccountType bankAccountType) {
+        if (bankStmtDetailView == null || bankStmtDetailView.getMaxBalance() == null)
+            return null;
+
+        if ((bankAccountType != null && com.clevel.selos.model.BankAccountType.CA.name().equalsIgnoreCase(bankAccountType.getShortName()))
+                && ValidationUtil.isValueLessEqualZero(bankStmtDetailView.getMaxBalance()))
             return BigDecimal.ZERO;
         else
             return bankStmtDetailView.getMaxBalance();
     }
 
     public BigDecimal getAvgMaxBalance(BankAccountType bankAccTypeFromBankStmt, BigDecimal maxBalance1, BigDecimal maxBalance2, BigDecimal maxBalance3,
-                                       BankAccountType currentAccType, BankAccountType savingAccType, BankAccountType othDepositType, BankAccountType othDraftType) {
-        log.debug("getAvgMaxBalance() bankAccTypeFromBankStmt: {}, maxBalance1: {}, maxBalance2: {}, maxBalance3: {}",
-                bankAccTypeFromBankStmt, maxBalance1, maxBalance2, maxBalance3);
-        // if(Account Type = 'Saving', 'Current', Other such as 'Deposit', 'Draft') -> [maxBalance1 + maxBalance2 + maxBalance3] / 3
+                                       BankAccountType savingAccType, BankAccountType currentAccType, BankAccountType othFDType, BankAccountType othBOEType) {
+        log.debug("getAvgMaxBalance() bankAccTypeFromBankStmt: {}, maxBalance1: {}, maxBalance2: {}, maxBalance3: {}, savingAccType: {}, currentAccType: {}, othFDType: {}, othBOEType: {}",
+                bankAccTypeFromBankStmt, maxBalance1, maxBalance2, maxBalance3, savingAccType, currentAccType, othFDType, othBOEType);
+        // if(Account Type = 'Saving Account', 'Current Account', Other: 'Fixed Deposit', 'Bill of Exchange') -> [maxBalance1 + maxBalance2 + maxBalance3] / 3
         if (savingAccType != null && savingAccType.getId() == bankAccTypeFromBankStmt.getId()) {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);
         }
@@ -285,18 +289,18 @@ public class BankStmtControl extends BusinessControl {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);
         }
 
-        if (othDepositType != null && othDepositType.getId() == bankAccTypeFromBankStmt.getId()) {
+        if (othFDType != null && othFDType.getId() == bankAccTypeFromBankStmt.getId()) {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);
         }
 
-        if (othDraftType != null && othDraftType.getId() == bankAccTypeFromBankStmt.getId()) {
+        if (othBOEType != null && othBOEType.getId() == bankAccTypeFromBankStmt.getId()) {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);
         }
         // else -> maxBalance3
         return maxBalance3;
     }
 
-    public BigDecimal getAvgMaxBalance(BankStmtView bankStmtView, BankAccountType bankAccTypeFromBankStmt, BankAccountType currentAccType, BankAccountType savingAccType, BankAccountType othDepositType, BankAccountType othDraftType) {
+    public BigDecimal getAvgMaxBalance(BankStmtView bankStmtView, BankAccountType bankAccTypeFromBankStmt, BankAccountType savingAccType, BankAccountType currentAccType, BankAccountType othDepositType, BankAccountType othDraftType) {
         log.debug("getAvgMaxBalance() bankStmtView");
         if (bankStmtView == null || bankStmtView.getSrcOfCollateralProofViewList() == null) {
             log.error("getAvgMaxBalance() bankStmtView is null or srcOfCollateralProofViewList is null!");
@@ -317,7 +321,7 @@ public class BankStmtControl extends BusinessControl {
                 bankStmtView.getSrcOfCollateralProofViewList().get(0).getMaxBalance(),
                 bankStmtView.getSrcOfCollateralProofViewList().get(1).getMaxBalance(),
                 bankStmtView.getSrcOfCollateralProofViewList().get(2).getMaxBalance(),
-                currentAccType, savingAccType, othDepositType, othDraftType);
+                savingAccType, currentAccType, othDepositType, othDraftType);
     }
 
     public List<BankStmtDetailView> getLastThreeMonthBankStmtDetails(List<BankStmtDetailView> bankStmtDetailViewList) {
@@ -917,6 +921,13 @@ public class BankStmtControl extends BusinessControl {
         log.debug("calSourceOfCollateralProof()");
         List<BankStmtDetailView> lastThreeMonthBankStmtDetail = getLastThreeMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList());
         List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList = bankStmtView.getSrcOfCollateralProofViewList();
+
+        BankAccountType bankAccTypeFromBankStmt = null;
+        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
+            bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId());
+        } else {
+            bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getOtherAccountType());
+        }
         /*  source.lastThreeMonth1 = BankStmtDetail.asOfDate( [T-x] )
             source.lastThreeMonth2 = BankStmtDetail.asOfDate( [T-x]+1 )
             source.lastThreeMonth3 = BankStmtDetail.asOfDate( [T-x]+2 )
@@ -929,7 +940,7 @@ public class BankStmtControl extends BusinessControl {
 
                 BankStmtSrcOfCollateralProofView srcOfCollateralProofView = srcOfCollateralProofViewList.get(i);
                 srcOfCollateralProofView.setDateOfMaxBalance(detailView.getDateOfMaxBalance());
-                srcOfCollateralProofView.setMaxBalance( getMaxBalance(detailView) );
+                srcOfCollateralProofView.setMaxBalance( getMaxBalance(detailView, bankAccTypeFromBankStmt) );
             }
         } else {
             // create & add new source of collateral proof list
@@ -937,25 +948,18 @@ public class BankStmtControl extends BusinessControl {
             for (BankStmtDetailView detailView : lastThreeMonthBankStmtDetail) {
                 BankStmtSrcOfCollateralProofView srcOfCollateralProofView = new BankStmtSrcOfCollateralProofView();
                 srcOfCollateralProofView.setDateOfMaxBalance(detailView.getDateOfMaxBalance());
-                srcOfCollateralProofView.setMaxBalance( getMaxBalance(detailView) );
+                srcOfCollateralProofView.setMaxBalance( getMaxBalance(detailView, bankAccTypeFromBankStmt) );
                 srcOfCollateralProofViewList.add(srcOfCollateralProofView);
             }
             bankStmtView.setSrcOfCollateralProofViewList(srcOfCollateralProofViewList);
         }
 
-        BankAccountType bankAccTypeFromBankStmt = null;
-        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
-            bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId());
-        } else {
-            bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getOtherAccountType());
-        }
-
         BankAccountType currentAccType = bankAccountTypeDAO.getByShortName(com.clevel.selos.model.BankAccountType.CA.name());
         BankAccountType savingAccType = bankAccountTypeDAO.getByShortName(com.clevel.selos.model.BankAccountType.SA.name());
-        BankAccountType othDepositType = bankAccountTypeDAO.getByName("เงินฝากประจำ");
-        BankAccountType othDraftType = bankAccountTypeDAO.getByName("ตั๋วแลกเงิน");
+        BankAccountType othFDType = bankAccountTypeDAO.getByName(com.clevel.selos.model.BankAccountType.FD.name());
+        BankAccountType othBOEType = bankAccountTypeDAO.getByName(com.clevel.selos.model.BankAccountType.BOE.name());
 
-        bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, currentAccType, savingAccType, othDepositType, othDraftType) );
+        bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, savingAccType, currentAccType, othFDType, othBOEType) );
     }
 
     public boolean isBDMUser() {

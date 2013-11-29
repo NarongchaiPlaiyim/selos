@@ -285,18 +285,15 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        // todo: onCancel()
-        //initViewFormAndSelectItems();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
     }
 
     private void checkRequiredBankAccTypeSelected() {
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
-        if (bankAccTypeId == 0 && otherAccType == 0)
-            bankAccTypeSelectRequired = true;
-        else
-            bankAccTypeSelectRequired = false;
+        bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
     }
 
     public void onChangeBankAccTypeSelected() {

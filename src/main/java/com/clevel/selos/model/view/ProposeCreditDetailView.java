@@ -39,11 +39,11 @@ public class ProposeCreditDetailView implements Serializable {
     private BigDecimal finalPrice;
     private BigDecimal tenor;
     private Disbursement disbursement;
+    private LoanPurpose loanPurpose;
     private BigDecimal purpose;
     private int seq;
 
-    // master
-//    private loanPurpose
+
 
     private List<CreditTierDetailView> creditTierDetailViewList;
 
