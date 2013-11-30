@@ -83,12 +83,12 @@ public class DBRInfo implements Serializable {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
-
+        session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 //            stepId = Long.parseLong(session.getAttribute("stepId").toString());
@@ -199,10 +199,11 @@ public class DBRInfo implements Serializable {
                 dbrDetails = dbr.getDbrDetailViews();
             }
         } catch (Exception e) {
+
             if (e.getCause() != null) {
-                message = exceptionMsg.get("ws.newCase.response.failed");
+                message = exceptionMsg.get("001");
             } else {
-                message = exceptionMsg.get("ws.newCase.response.failed");
+                message = exceptionMsg.get("001");
             }
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

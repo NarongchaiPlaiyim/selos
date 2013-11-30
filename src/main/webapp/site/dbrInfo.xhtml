@@ -313,19 +313,21 @@
                                    </table>
                             </div>
                         </div>
+                        <div id="bottom_line"/>
                     </div>
-                    <div id="bottom_line"/>
+
+                    <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
                 </div>
-                <div class="clear"/>
-                <!-- Start Footer -->
-                <ui:include src="include/footer.xhtml"/>
-                <h:inputHidden id="pagename" value="mnuprescreen"/>
-                <h:inputHidden id="subpagename" value="submnuprescreen"/>
+
+
+                <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+                    LOADING<br/>
+                    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                </p:blockUI>
             </h:form>
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-            LOADING<br/>
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
+
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

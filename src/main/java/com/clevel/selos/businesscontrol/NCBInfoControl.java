@@ -142,20 +142,20 @@ public class NCBInfoControl extends BusinessControl {
                     switch (accountType.getCalculateType()){
                         case 1:
                             if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
-                                debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
-                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
-                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+                                debtForCalculate = Util.multiply(ncbDetail.getLimit(), dbrInterest);
+                                debtForCalculate = Util.divide(debtForCalculate, 100);
+                                debtForCalculate = Util.divide(debtForCalculate, 12);
                             }else{
                                 debtForCalculate = ncbDetail.getInstallment();
                             }
                             break;
                         case 2:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(5));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                            debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
+                            debtForCalculate = Util.divide(debtForCalculate, 100);
                             break;
                         case 3:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(10));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                            debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
+                            debtForCalculate = Util.divide(debtForCalculate, 100);
                             break;
                         default:
                             break;

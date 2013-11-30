@@ -134,31 +134,32 @@ public class DBRControl extends BusinessControl {
         BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
         for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
             int loanType = dbrDetail.getLoanType().getCalculateType();
-            final  BigDecimal month = BigDecimal.valueOf(12);
+            final BigDecimal month = BigDecimal.valueOf(12);
             BigDecimal debtForCalculate = BigDecimal.ZERO;
             switch (loanType){
                 case 1:  //normal
                     if(dbrDetail.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment != 0
                         debtForCalculate = dbrDetail.getInstallment();
                     }else {
-                        debtForCalculate = dbrDetail.getLimit().multiply(dbr.getDbrInterest());
-                        debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
-                        debtForCalculate = debtForCalculate.divide(month, 2, RoundingMode.HALF_UP);
+                        debtForCalculate = Util.multiply(dbrDetail.getLimit(),dbr.getDbrInterest());
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        debtForCalculate = Util.divide(debtForCalculate, month);
                     }
                     break;
                 case 2:    //*5%
-                    debtForCalculate =  dbrDetail.getLimit().multiply(BigDecimal.valueOf(5));
-                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    debtForCalculate = Util.multiply(dbrDetail.getLimit(),BigDecimal.valueOf(5));
+                    debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
                 case 3:  // *10%
                     debtForCalculate = dbrDetail.getLimit().multiply(BigDecimal.valueOf(10));
-                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
                 default:
                     break;
             }
             dbrDetail.setDebtForCalculate(debtForCalculate);
-            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+
+            totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail
 
@@ -166,11 +167,11 @@ public class DBRControl extends BusinessControl {
         BigDecimal netMonthlyIncome = BigDecimal.ZERO;
         BigDecimal currentDBR = BigDecimal.ZERO;
         //**** Begin DBRInfo ****//
-        currentDBR = totalMonthDebtBorrower.add(totalMonthDebtRelated);
+        currentDBR = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
 
-        netMonthlyIncome = dbr.getMonthlyIncomeAdjust().multiply(dbr.getIncomeFactor());
-        netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-        netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
+        netMonthlyIncome = Util.multiply(dbr.getMonthlyIncomeAdjust(), dbr.getIncomeFactor());
+        netMonthlyIncome = Util.divide(netMonthlyIncome, 100);
+        netMonthlyIncome = Util.add(netMonthlyIncome,dbr.getMonthlyIncomePerMonth());
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
 
@@ -242,8 +243,8 @@ public class DBRControl extends BusinessControl {
 
         }
         BigDecimal debt = BigDecimal.ZERO;
-        debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
-        debt = debt.add(totalPurposeForDBR);
+        debt = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
+        debt = Util.add(debt,totalPurposeForDBR);
         return debt;
     }
 
@@ -259,6 +260,7 @@ public class DBRControl extends BusinessControl {
         }else if(roleId == RoleUser.BDM.getValue()){
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
+
         return monthlyIncome;
 
     }
