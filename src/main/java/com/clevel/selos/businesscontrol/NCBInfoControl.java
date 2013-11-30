@@ -15,6 +15,7 @@ import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 
 import javax.ejb.Stateless;
@@ -110,10 +111,9 @@ public class NCBInfoControl extends BusinessControl {
 
     public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
-        log.info("Begin getNCBForCalDBR workcase:{}", workcaseId);
+        log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
-        log.info("ncbs :{}", ncbs.size());
         for(NCB ncb : Util.safetyList(ncbs)){
             Customer customer = ncb.getCustomer();
             List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
@@ -123,6 +123,8 @@ public class NCBInfoControl extends BusinessControl {
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
+                if(accountStatus == null || accountType == null) break;
+
                 if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
                     NCBDetailView ncbDetailView = new NCBDetailView();
                     ncbDetailView.setId(ncbDetail.getId());
@@ -155,8 +157,8 @@ public class NCBInfoControl extends BusinessControl {
                     ncbDetailView.setDebtForCalculate(debtForCalculate);
                     StringBuilder accountName = new StringBuilder();
                     accountName.append(customer.getTitle().getTitleTh())
-                            .append(" ").append(customer.getNameTh())
-                            .append(" ").append(customer.getLastNameTh());
+                            .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                            .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
                     ncbDetailView.setAccountName(accountName.toString());
                     ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
                     ncbDetailViews.add(ncbDetailView);

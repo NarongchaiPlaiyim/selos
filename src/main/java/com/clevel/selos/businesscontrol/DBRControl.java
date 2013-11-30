@@ -198,7 +198,7 @@ public class DBRControl extends BusinessControl {
             }
 
             WorkCase workCase = workCaseDAO.findById(workCaseId);
-            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(bankStatementSummary != null){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));

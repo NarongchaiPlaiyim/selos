@@ -86,7 +86,7 @@ public class DBRInfo implements Serializable {
 
     public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
+        session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
@@ -116,7 +116,7 @@ public class DBRInfo implements Serializable {
         try{
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId, userId);
+            dbr = dbrControl.getDBRByWorkCase(workCaseId);
 
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
@@ -199,7 +199,7 @@ public class DBRInfo implements Serializable {
 
             //update Display
             dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId, userId);
+            dbr = dbrControl.getDBRByWorkCase(workCaseId);
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
