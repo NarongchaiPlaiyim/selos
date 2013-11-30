@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -666,28 +665,28 @@ public class AppraisalResult implements Serializable {
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
         List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
-        CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(appraisalData.getHeadCollateralData());
+        HeadCollateralData headCollateralData = appraisalData.getHeadCollateralData();
+        CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(headCollateralData);
+        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
 
         List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
-
         List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
-        for(int i= 0;i<appraisalData.getSubCollateralDataList().size();i++){
 
-            SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(i));
-            subCollateralDetailView.setNo(i+1);
-            subCollateralDetailView.getSubCollateralType().setCollateralType(collateralHeaderDetailView.getHeadCollType());
-            SubCollateralType  subCollateralTypeResult = subCollateralTypeDAO.findByBySubColCode(subCollateralDetailView.getSubCollateralType());
-            subCollateralDetailView.setSubCollateralType(subCollateralTypeResult);
-            subCollateralDetailViewList.add(subCollateralDetailView);
+        for(int i=0;i<collateralHeaderDetailViewList.size();i++){
+            CollateralHeaderDetailView collateralHeaderDetailViewTemp = collateralHeaderDetailViewList.get(i);
+            collateralHeaderDetailViewTemp.setNo(i+1);
+
+            for(int j= 0;j<SubCollateralDataList.size();j++){
+                SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(j));
+                subCollateralDetailView.setNo(j+1);
+                subCollateralDetailView.getSubCollateralType().setCollateralType(collateralHeaderDetailViewTemp.getHeadCollType());
+                SubCollateralType  subCollateralTypeResult = subCollateralTypeDAO.findByBySubColCode(subCollateralDetailView.getSubCollateralType());
+                log.info("subCollateralTypeDAO.findByBySubColCode ID is " + subCollateralTypeResult.getId());
+                subCollateralDetailView.setSubCollateralType(subCollateralTypeResult);
+                subCollateralDetailViewList.add(subCollateralDetailView);
+            }
+            collateralHeaderDetailViewTemp.setSubCollateralDetailViewList(subCollateralDetailViewList);
         }
-        collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
-
-        collateralHeaderDetailView.setNo(1);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
-        collateralHeaderDetailView.setNo(2);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
-
-
 
         collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
         log.info("convertCollateral end");
@@ -704,12 +703,13 @@ public class AppraisalResult implements Serializable {
         collateralHeaderDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
         CollateralType headCollType = new CollateralType();
         if(headCollateralData.getHeadCollType()== null || headCollateralData.getHeadCollType().equals("")){
-            headCollType.setCode("00");
+            headCollType.setCode("286003");
         }else{
             headCollType.setCode(headCollateralData.getHeadCollType());
         }
 
         headCollType = collateralTypeDAO.findByCollateralCode(headCollType);
+        log.info("collateralTypeDAO.findByCollateralCode ID is " + headCollType.getId());
         collateralHeaderDetailView.setHeadCollType(headCollType);
         log.info("convertCollateralHeader end");
         return collateralHeaderDetailView;
@@ -723,7 +723,7 @@ public class AppraisalResult implements Serializable {
         subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
         subCollateralDetailView.setAddress(subCollateralData.getAddress());
         subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwner(subCollateralData.getCollateralOwner());
+        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
         if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){

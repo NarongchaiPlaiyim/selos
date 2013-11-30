@@ -1,21 +1,20 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.controller.CreditFacPropose;
 import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.working.BizInfoSummaryDAO;
-import com.clevel.selos.dao.working.DBRDAO;
-import com.clevel.selos.dao.working.DBRDetailDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BizInfoSummary;
-import com.clevel.selos.model.db.working.DBR;
-import com.clevel.selos.model.db.working.DBRDetail;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.transform.DBRDetailTransform;
 import com.clevel.selos.transform.DBRTransform;
+import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -30,45 +29,45 @@ import java.util.List;
 public class DBRControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
+    @Inject
+    private UserDAO userDAO;
+
     @Inject
     DBRDAO dbrdao;
-
     @Inject
     DBRDetailDAO dbrDetailDAO;
-
     @Inject
     WorkCaseDAO workCaseDAO;
-
     @Inject
-    UserDAO userDAO;
+    BizInfoSummaryDAO bizInfoSummaryDAO;
+    @Inject
+    BankStatementSummaryDAO bankStatementSummaryDAO;
 
     @Inject
     DBRTransform dbrTransform;
-
     @Inject
     DBRDetailTransform dbrDetailTransform;
 
     @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
+    NCBInfoControl ncbInfoControl;
 
+    @Inject
     public DBRControl() {
-
     }
 
-    public void saveDBRInfo(DBRView dbrView) {
+    public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
         User user = userDAO.findById(dbrView.getUserId());
-
-        DBR dbr = calculateDBR(dbrView, user, workCase);
-
-        DBR returnDBRInfo = dbrdao.persist(dbr);
-        List<DBRDetailView> dbrDetailViews = dbrView.getDbrDetailViews();
+        DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
+        newDbrDetails = dbr.getDbrDetails();
+        dbr.setDbrDetails(null);
+        dbrdao.persist(dbr);
         List<DBRDetail> oldDbrDetails = dbrDetailDAO.createCriteria().add(Restrictions.eq("dbr", dbr)).list();  // old record
-        if (dbrDetailViews != null && !dbrDetailViews.isEmpty()) {
-            newDbrDetails = dbrDetailTransform.getDbrDetailModels(dbrDetailViews, user, returnDBRInfo);
-            if (oldDbrDetails.size() == 0) {
+        if (newDbrDetails != null && !newDbrDetails.isEmpty()) {
+            if (oldDbrDetails == null || oldDbrDetails.isEmpty() ) {
                 dbrDetailDAO.persist(newDbrDetails); //ADD New OR Update
             } else {
                 //delete old without new record
@@ -91,51 +90,188 @@ public class DBRControl extends BusinessControl {
                 dbrDetailDAO.delete(oldDbrDetails);
             }
         }
+        return ActionResult.SUCCEED;
     }
 
     public DBRView getDBRByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
-        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
-        dbr.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
-        BigDecimal dbrInterest = BigDecimal.valueOf(7).add(BigDecimal.valueOf(3));
-        dbr.setDbrInterest(dbrInterest);
+        if(dbr == null){
+            dbr = new DBR();
+            BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+            if(bizInfoSummary != null){
+                dbr.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
+            }
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+            if(bankStatementSummary != null){
+                dbr.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+            }
+            dbr.setDbrBeforeRequest(BigDecimal.ZERO);
+            // MonthlyIncomeAdjust default from MonthlyIncome
+            dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+            //MonthlyIncomePerMonth Default = 0
+            dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
+
+        }
+        dbr.setDbrInterest(getDBRInterest());
+
         DBRView dbrView = dbrTransform.getDBRView(dbr);
         return dbrView;
     }
 
-    private DBR calculateDBR(DBRView dbrView, User user, WorkCase workCase){
-        DBR result = new DBR();
-        int roleId = user.getRole().getId();
-        DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
+    private DBR calculateDBR(DBRView dbrView, List<NCBDetailView> ncbDetailViews, WorkCase workCase){
+        int roleId = getCurrentUser().getRole().getId();
+        DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, getCurrentUser());
+        List<DBRDetail> dbrDetails = dbrDetailTransform.getDbrDetailModels(dbrView.getDbrDetailViews(), getCurrentUser(), dbr);
+
+        //**NCB Borrower totalDebtForCalculate
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
+        for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+            totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+        }
+
+        //**Relate DbrDetail Calculate
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+        for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+            int loanType = dbrDetail.getLoanType().getCalculateType();
+            final  BigDecimal month = BigDecimal.valueOf(12);
+            BigDecimal debtForCalculate = BigDecimal.ZERO;
+            switch (loanType){
+                case 1:  //normal
+                    if(dbrDetail.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment != 0
+                        debtForCalculate = dbrDetail.getInstallment();
+                    }else {
+                        debtForCalculate = dbrDetail.getLimit().multiply(dbr.getDbrInterest());
+                        debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
+                        debtForCalculate = debtForCalculate.divide(month, 2, RoundingMode.HALF_UP);
+                    }
+                    break;
+                case 2:    //*5%
+                    debtForCalculate =  dbrDetail.getLimit().multiply(BigDecimal.valueOf(5));
+                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    break;
+                case 3:  // *10%
+                    debtForCalculate = dbrDetail.getLimit().multiply(BigDecimal.valueOf(10));
+                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    break;
+                default:
+                    break;
+            }
+            dbrDetail.setDebtForCalculate(debtForCalculate);
+            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+        }
+        //** END DbrDetail
 
         BigDecimal dbrBeforeRequest = BigDecimal.ZERO;
         BigDecimal netMonthlyIncome = BigDecimal.ZERO;
-        BigDecimal monthlyIncomePerMonth = BigDecimal.ZERO;
         BigDecimal currentDBR = BigDecimal.ZERO;
+        //**** Begin DBRInfo ****//
+        currentDBR = totalMonthDebtBorrower.add(totalMonthDebtRelated);
 
-        //DbrIf
+        netMonthlyIncome = dbr.getMonthlyIncomeAdjust().multiply(dbr.getIncomeFactor());
+        netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
 
-        netMonthlyIncome = dbrView.getTotalMonthDebtBorrower().add(dbrView.getTotalMonthDebtRelated());
+        dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
 
-        dbrBeforeRequest = currentDBR.divide(netMonthlyIncome, 20, RoundingMode.HALF_UP);
+        //Ex summary Final DBR BigDecimal debt = BigDecimal.ZERO;
 
+        BigDecimal finalDBR = BigDecimal.ZERO;
+        finalDBR = calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
 
-        if(roleId == RoleUser.UW.getValue()){
-            //netMinthlyIncome
-            monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
-            if(monthlyIncomePerMonth.compareTo(BigDecimal.ZERO) == 0){
-                monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
+        // update dbr
+        dbr.setNetMonthlyIncome(netMonthlyIncome);
+        dbr.setCurrentDBR(currentDBR);
+        dbr.setDbrBeforeRequest(dbrBeforeRequest);
+        dbr.setDbrDetails(dbrDetails);
+        dbr.setFinalDBR(finalDBR);
+        log.debug("calculateDBR complete");
+        return dbr;
+    }
+
+    public ActionResult updateValueOfDBR(long workCaseId){
+        DBRView dbrView =  getDBRByWorkCase(workCaseId);
+        if(dbrView != null){
+            if(dbrView.getId() == 0){
+                return ActionResult.FAILED;
             }
-            monthlyIncomePerMonth = monthlyIncomePerMonth.add(dbrView.getMonthlyIncomePerMonth());
+
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+            BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+            if(bankStatementSummary != null){
+                dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+            }
+
+            if(bizInfoSummary != null){
+                dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+            }
+
+            List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+
+            DBR dbr =  calculateDBR(dbrView, ncbDetailViews, workCase);
+            dbrdao.persist(dbr);
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    public void updateFinalDBR(long workCaseId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
+        for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+            totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+        }
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+        DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
+        List<DBRDetail> dbrDetails = dbr.getDbrDetails();
+        for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+        }
+        BigDecimal finalDBR = BigDecimal.ZERO;
+        finalDBR =  calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
+        dbr.setFinalDBR(finalDBR);
+        dbrdao.persist(dbr);
+
+    }
+
+
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated, WorkCase workCase){
+        BigDecimal totalPurposeForDBR = BigDecimal.valueOf(200);
+
+        int roleId = getCurrentUser().getRole().getId();
+
+        //todo waiting totalPurposeForDBR from Exsiting purpose
+        if(roleId == RoleUser.UW.getValue()){
 
         }else if(roleId == RoleUser.BDM.getValue()){
-            //netMinthlyIncome
-            monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
-            monthlyIncomePerMonth = monthlyIncomePerMonth.add(dbrView.getMonthlyIncomePerMonth());
+
         }
-        log.debug("calculateDBR complete");
-        return result;
+        BigDecimal debt = BigDecimal.ZERO;
+        debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
+        debt = debt.add(totalPurposeForDBR);
+        return debt;
+
     }
+
+    private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
+        BigDecimal monthlyIncome = BigDecimal.ZERO;
+        int roleId = getCurrentUser().getRole().getId();
+        if(roleId == RoleUser.UW.getValue()){
+            if(bankStatementSummary.getGrdTotalIncomeNetUW() == null)
+                monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
+            else
+                monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetUW();
+
+        }else if(roleId == RoleUser.BDM.getValue()){
+            monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
+        }
+        return monthlyIncome;
+
+    }
+
+
+
 
 }

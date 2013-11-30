@@ -27,10 +27,13 @@ import java.util.List;
 public class TCGInfoControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;    @Inject
+    private Logger log;
+
+    @Inject
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;
+
     @Inject
     TCGDAO tcgDAO;
     @Inject
@@ -45,12 +48,13 @@ public class TCGInfoControl extends BusinessControl {
 
     }
 
-    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId ,User user) {
+    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
         log.info("onSaveTCGToDB begin");
         log.info("workCaseId {} ", workCaseId);
         log.info("tcgView  {} ", tcgView.toString());
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase ,user);
         log.info("transform comeback {} ", tcg.toString());
         tcgDAO.persist(tcg);
@@ -59,11 +63,12 @@ public class TCGInfoControl extends BusinessControl {
         tcgDetailDAO.persist(tcgDetailList);
     }
 
-    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId,User user) {
+    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
         log.info("onEditTCGToDB begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase,user);
         tcgDAO.persist(tcg);
         log.info("persist tcg");

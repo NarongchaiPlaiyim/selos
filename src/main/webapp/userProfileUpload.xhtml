@@ -19,7 +19,7 @@
                 <ui:include src="site/include/header_logo.xhtml"/>
                 <ui:include src="site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
-                    <h:form id="userTableData" enctype="multipart/form-data">
+                    <h:form enctype="multipart/form-data">
                         <div class="body_lpane">
                             <div><label class="subject">Manage User</label></div>
                             <a class="step_border" href="manageUser.jsf">User Profile</a>
@@ -28,25 +28,33 @@
                         <div class="body_rpane">
                             <label class="subject">Upload User Profile</label>
                             <p:fieldset legend="" style="width: 700px">
-                                <p:panelGrid columns="2">
+
+                                <p:panelGrid columns="3">
                                 <h:outputText value="เลือก File ข้อมูลผู้ใช้ระบบ:"/>
-                                <p:fileUpload value="#{isaUpload.uploadUserFile}" fileLimit="1"/>
+                                <p:fileUpload fileUploadListener="#{isaUpload.uploadUserFile}"
+                                              mode="advanced"
+                                              showButtons="false"
+                                        />
+
+                                    <!--<p:commandButton value="Submit"-->
+                                                     <!--ajax="false"-->
+                                                     <!--actionListener="#{isaUpload.uploadUserFile}"/>-->
                                 </p:panelGrid>
 
                             </p:fieldset>
 
-                            <p:dataTable value="#{isaUpload.testlist}" var="o" widgetVar="" style="width: 700px">
+                            <p:dataTable value="#{isaUpload.userUploadViews}" var="o" widgetVar="okl" style="width: 700px">
                                 <p:column>
-                                   Upload Time :
+                                   Upload Time:
                                 </p:column>
                                 <p:column>
-                                       28/06/2013 11:41:30
+                                       #{o.uploadTime}
                                 </p:column>
                                 <p:column>
                                        Result File:
                                 </p:column>
                                 <p:column>
-                                       213124124234234234324
+                                       #{o.resultFile}
                                 </p:column>
                             </p:dataTable>
                         </div>

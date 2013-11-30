@@ -32,4 +32,24 @@ public class ReferenceDAO extends GenericDAO<Reference, Integer> {
 
         return referenceList;
     }
+
+    public List<Reference> findReferenceByFlag(int customerEntityId, int borrowerTypeId, int relationId, int mainCustomer, int spouse) {
+        log.info("findReferenceByFlag. (customerEntityId: {}, borrowerTypeId : {}, relationId : {}, mainCustomer : {}, spouse : {})",
+                customerEntityId, borrowerTypeId, relationId, mainCustomer, spouse);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("borrowerType.id", borrowerTypeId));
+        criteria.add(Restrictions.eq("relation.id", relationId));
+        if(mainCustomer != 0){
+            criteria.add(Restrictions.eq("mainCustomer", mainCustomer));
+        }
+        if(spouse != 0){
+            criteria.add(Restrictions.eq("spouse", spouse));
+        }
+        criteria.addOrder(Order.asc("id"));
+        List<Reference> referenceList = criteria.list();
+        log.info("findReferenceByFlag. (result size: {})", referenceList.size());
+
+        return referenceList;
+    }
 }

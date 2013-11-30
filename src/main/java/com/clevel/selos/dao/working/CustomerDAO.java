@@ -84,6 +84,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
     public List<Customer> findByWorkCaseId(long workCaseId) {
         log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
+        criteria.addOrder(Order.asc("id"));
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         List<Customer> customerList = (List<Customer>) criteria.list();
 
@@ -104,8 +105,20 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.debug("findSpouseById ::: committeeId : {}", committeeId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("juristicId", committeeId));
+        criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
 
+        return customerList;
+    }
+
+    public List<Customer> findGuarantorByWorkCaseId(long workCaseId) {
+        log.info("findByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("relation.id", 2));
+
+        List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("criteria.list() :: {}",criteria.list());
         return customerList;
     }
 }

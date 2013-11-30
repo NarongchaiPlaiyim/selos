@@ -1,5 +1,7 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,6 +17,7 @@ public class BankStmtSummaryView implements Serializable {
     private long id;
     private int seasonal;
     private Date expectedSubmitDate;
+    private int countRefresh;
     private BigDecimal TMBTotalIncomeGross;
     private BigDecimal TMBTotalIncomeNetBDM;
     private BigDecimal TMBTotalIncomeNetUW;
@@ -30,29 +33,34 @@ public class BankStmtSummaryView implements Serializable {
     private BigDecimal grdTotalTDChqRetPercent;
     private BigDecimal grdTotalAvgOSBalanceAmount;
 
+    private BigDecimal grdTotalBorrowerIncomeGross;
+    private BigDecimal grdTotalBorrowerIncomeNetBDM;
+    private BigDecimal grdTotalBorrowerIncomeNetUW;
+
     private List<BankStmtView> tmbBankStmtViewList;
     private List<BankStmtView> othBankStmtViewList;
 
     public BankStmtSummaryView() {
-        reset();
     }
 
     public void reset() {
-        this.expectedSubmitDate = new Date();
+        this.setSeasonal(RadioValue.NOT_SELECTED.value());
+        this.expectedSubmitDate = DateTimeUtil.getCurrentDateTH();
         this.TMBTotalIncomeGross = BigDecimal.ZERO;
         this.TMBTotalIncomeNetBDM = BigDecimal.ZERO;
         this.TMBTotalIncomeNetUW = BigDecimal.ZERO;
-
         this.OthTotalIncomeGross = BigDecimal.ZERO;
         this.OthTotalIncomeNetBDM = BigDecimal.ZERO;
         this.OthTotalIncomeNetUW = BigDecimal.ZERO;
-
         this.grdTotalIncomeGross = BigDecimal.ZERO;
         this.grdTotalIncomeNetBDM = BigDecimal.ZERO;
         this.grdTotalIncomeNetUW = BigDecimal.ZERO;
         this.grdTotalTDChqRetAmount = BigDecimal.ZERO;
         this.grdTotalTDChqRetPercent = BigDecimal.ZERO;
         this.grdTotalAvgOSBalanceAmount = BigDecimal.ZERO;
+        this.grdTotalBorrowerIncomeGross = BigDecimal.ZERO;
+        this.grdTotalBorrowerIncomeNetBDM = BigDecimal.ZERO;
+        this.grdTotalBorrowerIncomeNetUW = BigDecimal.ZERO;
     }
 
     public List<ActionStatusView> getActionStatusViewList() {
@@ -85,6 +93,14 @@ public class BankStmtSummaryView implements Serializable {
 
     public void setExpectedSubmitDate(Date expectedSubmitDate) {
         this.expectedSubmitDate = expectedSubmitDate;
+    }
+
+    public int getCountRefresh() {
+        return countRefresh;
+    }
+
+    public void setCountRefresh(int countRefresh) {
+        this.countRefresh = countRefresh;
     }
 
     public BigDecimal getTMBTotalIncomeGross() {
@@ -199,6 +215,30 @@ public class BankStmtSummaryView implements Serializable {
         this.grdTotalAvgOSBalanceAmount = grdTotalAvgOSBalanceAmount;
     }
 
+    public BigDecimal getGrdTotalBorrowerIncomeGross() {
+        return grdTotalBorrowerIncomeGross;
+    }
+
+    public void setGrdTotalBorrowerIncomeGross(BigDecimal grdTotalBorrowerIncomeGross) {
+        this.grdTotalBorrowerIncomeGross = grdTotalBorrowerIncomeGross;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetBDM() {
+        return grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetBDM(BigDecimal grdTotalBorrowerIncomeNetBDM) {
+        this.grdTotalBorrowerIncomeNetBDM = grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetUW() {
+        return grdTotalBorrowerIncomeNetUW;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetUW(BigDecimal grdTotalBorrowerIncomeNetUW) {
+        this.grdTotalBorrowerIncomeNetUW = grdTotalBorrowerIncomeNetUW;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -206,6 +246,7 @@ public class BankStmtSummaryView implements Serializable {
                 .append("id", id)
                 .append("seasonal", seasonal)
                 .append("expectedSubmitDate", expectedSubmitDate)
+                .append("countRefresh", countRefresh)
                 .append("TMBTotalIncomeGross", TMBTotalIncomeGross)
                 .append("TMBTotalIncomeNetBDM", TMBTotalIncomeNetBDM)
                 .append("TMBTotalIncomeNetUW", TMBTotalIncomeNetUW)
@@ -218,6 +259,9 @@ public class BankStmtSummaryView implements Serializable {
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
                 .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
+                .append("grdTotalBorrowerIncomeGross", grdTotalBorrowerIncomeGross)
+                .append("grdTotalBorrowerIncomeNetBDM", grdTotalBorrowerIncomeNetBDM)
+                .append("grdTotalBorrowerIncomeNetUW", grdTotalBorrowerIncomeNetUW)
                 .append("tmbBankStmtViewList", tmbBankStmtViewList)
                 .append("othBankStmtViewList", othBankStmtViewList)
                 .toString();

@@ -2,7 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.CustomerCSI;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -81,7 +80,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Date dateOfBirth;
     private String citizenId;
     private String passportId;
-    private Gender gender;
+    private int gender;
     private int numberOfChild;
     private Education education;
     private MaritalStatus maritalStatus;
@@ -115,6 +114,25 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private List<ChildrenView> childrenList;
 
     private CustomerInfoView spouse;
+
+    // for show in Summary
+    private BigDecimal percentShareSummary;
+
+    //for new field
+    //age , customer entity
+    private int ageMonths;
+    private int isExistingSMECustomer;
+    private Date lastReviewDate;
+    private Date extendedReviewDate;
+    private int extendedReviewDateFlag;
+    private Date nextReviewDate;
+    private int nextReviewDateFlag;
+    private Date lastContractDate;
+    private Date numberOfMonthsLastContractDate;
+    private String adjustClass;
+    private String ratingFinal;
+    private int unpaidFeeInsurance;
+    private int noPendingClaimLG;
 
     public CustomerInfoView(){
         //reset();
@@ -177,6 +195,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.sourceIncome = new Country();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
+        this.percentShareSummary = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
@@ -459,11 +478,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.citizenId = citizenId;
     }
 
-    public Gender getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -848,5 +867,196 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public int getIsCommittee(){
         return isCommittee;
+    }
+
+    public BigDecimal getPercentShareSummary() {
+        return percentShareSummary;
+    }
+
+    public void setPercentShareSummary(BigDecimal percentShareSummary) {
+        this.percentShareSummary = percentShareSummary;
+    }
+
+    public int getAgeMonths() {
+        return ageMonths;
+    }
+
+    public void setAgeMonths(int ageMonths) {
+        this.ageMonths = ageMonths;
+    }
+
+    public int getIsExistingSMECustomer() {
+        return isExistingSMECustomer;
+    }
+
+    public void setIsExistingSMECustomer(int existingSMECustomer) {
+        isExistingSMECustomer = existingSMECustomer;
+    }
+
+    public Date getLastReviewDate() {
+        return lastReviewDate;
+    }
+
+    public void setLastReviewDate(Date lastReviewDate) {
+        this.lastReviewDate = lastReviewDate;
+    }
+
+    public Date getExtendedReviewDate() {
+        return extendedReviewDate;
+    }
+
+    public void setExtendedReviewDate(Date extendedReviewDate) {
+        this.extendedReviewDate = extendedReviewDate;
+    }
+
+    public int getExtendedReviewDateFlag() {
+        return extendedReviewDateFlag;
+    }
+
+    public void setExtendedReviewDateFlag(int extendedReviewDateFlag) {
+        this.extendedReviewDateFlag = extendedReviewDateFlag;
+    }
+
+    public Date getNextReviewDate() {
+        return nextReviewDate;
+    }
+
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
+    }
+
+    public int getNextReviewDateFlag() {
+        return nextReviewDateFlag;
+    }
+
+    public void setNextReviewDateFlag(int nextReviewDateFlag) {
+        this.nextReviewDateFlag = nextReviewDateFlag;
+    }
+
+    public Date getLastContractDate() {
+        return lastContractDate;
+    }
+
+    public void setLastContractDate(Date lastContractDate) {
+        this.lastContractDate = lastContractDate;
+    }
+
+    public Date getNumberOfMonthsLastContractDate() {
+        return numberOfMonthsLastContractDate;
+    }
+
+    public void setNumberOfMonthsLastContractDate(Date numberOfMonthsLastContractDate) {
+        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
+    }
+
+    public String getAdjustClass() {
+        return adjustClass;
+    }
+
+    public void setAdjustClass(String adjustClass) {
+        this.adjustClass = adjustClass;
+    }
+
+    public String getRatingFinal() {
+        return ratingFinal;
+    }
+
+    public void setRatingFinal(String ratingFinal) {
+        this.ratingFinal = ratingFinal;
+    }
+
+    public int getUnpaidFeeInsurance() {
+        return unpaidFeeInsurance;
+    }
+
+    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
+        this.unpaidFeeInsurance = unpaidFeeInsurance;
+    }
+
+    public int getNoPendingClaimLG() {
+        return noPendingClaimLG;
+    }
+
+    public void setNoPendingClaimLG(int noPendingClaimLG) {
+        this.noPendingClaimLG = noPendingClaimLG;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("individualId", individualId)
+                .append("juristicId", juristicId)
+                .append("listIndex", listIndex)
+                .append("subIndex", subIndex)
+                .append("listName", listName)
+                .append("isSpouse", isSpouse)
+                .append("searchBy", searchBy)
+                .append("searchId", searchId)
+                .append("searchFromRM", searchFromRM)
+                .append("inputId", inputId)
+                .append("validId", validId)
+                .append("ncbResult", ncbResult)
+                .append("ncbReason", ncbReason)
+                .append("csiResult", csiResult)
+                .append("csiReason", csiReason)
+                .append("csiFlag", csiFlag)
+                .append("id", id)
+                .append("age", age)
+                .append("documentExpiredDate", documentExpiredDate)
+                .append("titleTh", titleTh)
+                .append("titleEn", titleEn)
+                .append("firstNameTh", firstNameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("firstNameEn", firstNameEn)
+                .append("lastNameEn", lastNameEn)
+                .append("ncbFlag", ncbFlag)
+                .append("customerEntity", customerEntity)
+                .append("documentType", documentType)
+                .append("relation", relation)
+                .append("reference", reference)
+                .append("documentAuthorizeBy", documentAuthorizeBy)
+                .append("serviceSegment", serviceSegment)
+                .append("tmbCustomerId", tmbCustomerId)
+                .append("collateralOwner", collateralOwner)
+                .append("percentShare", percentShare)
+                .append("approxIncome", approxIncome)
+                .append("dateOfBirth", dateOfBirth)
+                .append("citizenId", citizenId)
+                .append("passportId", passportId)
+                .append("gender", gender)
+                .append("numberOfChild", numberOfChild)
+                .append("education", education)
+                .append("maritalStatus", maritalStatus)
+                .append("nationality", nationality)
+                .append("sndNationality", sndNationality)
+                .append("origin", origin)
+                .append("occupation", occupation)
+                .append("capital", capital)
+                .append("financialYear", financialYear)
+                .append("dateOfRegister", dateOfRegister)
+                .append("paidCapital", paidCapital)
+                .append("registrationId", registrationId)
+                .append("signCondition", signCondition)
+                .append("totalShare", totalShare)
+                .append("currentAddress", currentAddress)
+                .append("workAddress", workAddress)
+                .append("registerAddress", registerAddress)
+                .append("mailingAddressType", mailingAddressType)
+                .append("childrenList", childrenList)
+                .append("citizenCountry", citizenCountry)
+                .append("registrationCountry", registrationCountry)
+                .append("mobileNumber", mobileNumber)
+                .append("faxNumber", faxNumber)
+                .append("email", email)
+                .append("kycLevel", kycLevel)
+                .append("convenantFlag", convenantFlag)
+                .append("reviewFlag", reviewFlag)
+                .append("reason", reason)
+                .append("businessType", businessType)
+                .append("spouse", spouse)
+                .append("documentAuthorizeDate", documentAuthorizeDate)
+                .append("kycReason", kycReason)
+                .append("worthiness", worthiness)
+                .toString();
     }
 }

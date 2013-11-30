@@ -239,6 +239,15 @@ public class AppraisalAppointment implements Serializable {
                 contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.etc"));
             }
 
+            if(contactRecordDetailViewForStr.getReason()==0){
+                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.accept"));
+            }else if(contactRecordDetailViewForStr.getReason()==1){
+                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.notAccept"));
+            }else if(contactRecordDetailViewForStr.getReason()==2){
+                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.needToConsider"));
+            }else{
+                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.etc"));
+            }
         }
     }
 

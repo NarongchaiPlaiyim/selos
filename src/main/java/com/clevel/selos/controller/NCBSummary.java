@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
@@ -51,6 +52,9 @@ public class NCBSummary implements Serializable {
     @Inject
     private NCBTransform ncbTransform;
 
+    @Inject
+    private NCBInfoControl ncbInfoControl;
+
     private long workCaseId;
     private List<NCBInfoView> ncbSumViewList;
     private NCBInfoView ncbView;
@@ -69,7 +73,7 @@ public class NCBSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
+        //session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
 
         user = (User)session.getAttribute("user");
         date = DateTime.now().toDate();
@@ -79,7 +83,8 @@ public class NCBSummary implements Serializable {
             log.info("workCaseId :: {} ", workCaseId);
         }
 
-        try {
+        //Change to use business control - AS
+        /*try {
             customerView = customerDAO.findByWorkCaseId(workCaseId);
         } catch (Exception e) {
             log.error("customerDAO.findAll  error ::: {}", e.getMessage());
@@ -103,7 +108,8 @@ public class NCBSummary implements Serializable {
             }
 
             log.info("ncbSumViewList :: {}", ncbSumViewList.size());
-        }
+        }*/
+        ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
 
         if (customerView == null) {
             customerView = new ArrayList<Customer>();

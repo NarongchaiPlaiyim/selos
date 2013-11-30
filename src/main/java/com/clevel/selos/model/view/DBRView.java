@@ -1,12 +1,12 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.working.WorkCase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBRView implements Serializable {
@@ -24,6 +24,9 @@ public class DBRView implements Serializable {
     private String userId;
     private BigDecimal totalMonthDebtBorrower;
     private BigDecimal totalMonthDebtRelated;
+	private String modifyBy;
+    private Date modifyDate;
+
 
     public DBRView() {
         reset();
@@ -40,7 +43,7 @@ public class DBRView implements Serializable {
         this.currentDBR = BigDecimal.ZERO;
         this.dbrBeforeRequest = BigDecimal.ZERO;
         this.dbrInterest = BigDecimal.ZERO;
-        this.workCaseId = 0L;
+        this.workCaseId = 0;
         this.totalMonthDebtBorrower = BigDecimal.ZERO;
         this.totalMonthDebtRelated = BigDecimal.ZERO;
     }
@@ -155,6 +158,22 @@ public class DBRView implements Serializable {
 
     public void setTotalMonthDebtRelated(BigDecimal totalMonthDebtRelated) {
         this.totalMonthDebtRelated = totalMonthDebtRelated;
+    }
+
+	public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
     @Override

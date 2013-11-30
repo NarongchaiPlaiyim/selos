@@ -219,10 +219,10 @@ public class NCBInfo implements Serializable {
     public void toControlNplFlagRendered(){
         log.info("nplFlag :: {}", ncbInfoView.getNplFlag());
 
-        if(ncbInfoView.getNplFlag() == 0){
-            nplRendered = false;
-        }else{
+        if(ncbInfoView.getNplFlag() == 2){
             nplRendered = true;
+        }else{
+            nplRendered = false;
         }
 
     }
@@ -230,10 +230,10 @@ public class NCBInfo implements Serializable {
     public void toControlTdrFlagRendered(){
         log.info("tdrFlag :: {}", ncbInfoView.getTdrFlag());
 
-        if(ncbInfoView.getTdrFlag() == 0){
-            tdrRendered = false;
-        }else{
+        if(ncbInfoView.getTdrFlag() == 2){
             tdrRendered = true;
+        }else{
+            tdrRendered = false;
         }
 
     }

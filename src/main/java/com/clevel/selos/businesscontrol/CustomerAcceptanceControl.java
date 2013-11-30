@@ -21,18 +21,24 @@ import java.util.List;
 public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
     @Inject
     CustomerAcceptanceDAO customerAcceptanceDAO;
     @Inject
     ContactRecordDetailDAO contactRecordDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
     @Inject
     CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
     ContactRecordDetailTransform contactRecordDetailTransform;
 
+    @Inject
+    public CustomerAcceptanceControl(){
+
+    }
 
     public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList, long workCaseId) {
 
@@ -58,7 +64,7 @@ public class CustomerAcceptanceControl extends BusinessControl {
             log.info("delete contactRecordDetailListDelete");
         }
 
-        List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, customerAcceptance);
+        List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, customerAcceptance,workCase);
         log.info("contactRecordDetailTransform contactRecordDetailViewList before add size is " + contactRecordDetailList.size());
 
         contactRecordDetailDAO.persist(contactRecordDetailList);
@@ -88,12 +94,12 @@ public class CustomerAcceptanceControl extends BusinessControl {
         return customerAcceptanceView;
     }
 
-    public List<ContactRecordDetailView> getContactRecordViewList(CustomerAcceptanceView customerAcceptanceView) {
-        log.info("getRecordCallingViewList :: customerAcceptanceViewId  :: {}", customerAcceptanceView.getId());
+    public List<ContactRecordDetailView> getContactRecordViewList(long workCaseId) {
+        log.info("getRecordCallingViewList :: workCaseId  :: {}", workCaseId);
         List<ContactRecordDetailView> contactRecordDetailViewList = null;
 
         try {
-            List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptanceView.getId());
+            List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailDAO.findRecordCallingByWorkCase(workCaseId);
 
             if (contactRecordDetailList.size() > 0) {
                 contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);

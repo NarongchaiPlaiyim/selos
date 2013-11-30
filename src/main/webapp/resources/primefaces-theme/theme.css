@@ -7,10 +7,10 @@
 /* Layout helpers
 ----------------------------------*/
 .ui-chkbox .ui-chkbox-box {
-    background-color: rgb(221, 219, 224) !important;
+    margin-right: 3px !important;
+    background-color: white !important;
+    border: 1px solid #bfbfbf !important;
 }
-
-
 
 /*-------------*/
 .ui-helper-hidden {
@@ -1630,6 +1630,7 @@ body .ui-tooltip {
 
 .ui-icon-check {
     background-position: -64px -144px;
+    background-color: white!important;
 }
 
 .ui-icon-bullet {

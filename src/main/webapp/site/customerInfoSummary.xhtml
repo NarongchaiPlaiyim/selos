@@ -139,7 +139,9 @@
 
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{item.citizenId}"
-                                                              style="min-width: 100px; max-width: 100px;"/>
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item.customerEntity.id == 1}"/>
+                                                <h:outputText value="#{item.registrationId}"
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item.customerEntity.id == 2}"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
@@ -169,7 +171,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.percentShare}"
+                                                <h:outputText value="#{item.percentShareSummary}"
                                                               style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
@@ -286,7 +288,9 @@
 
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{item2.citizenId}"
-                                                              style="min-width: 100px; max-width: 100px;"/>
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item2.customerEntity.id == 1}"/>
+                                                <h:outputText value="#{item2.registrationId}"
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item2.customerEntity.id == 2}"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
@@ -316,7 +320,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.percentShare}"
+                                                <h:outputText value="#{item2.percentShareSummary}"
                                                               style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
@@ -439,7 +443,9 @@
 
                                             <p:column styleClass="center">
                                                 <h:outputText value="#{item3.citizenId}"
-                                                              style="min-width: 100px; max-width: 100px;"/>
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item3.customerEntity.id == 1}"/>
+                                                <h:outputText value="#{item3.registrationId}"
+                                                              style="min-width: 100px; max-width: 100px;" rendered="#{item3.customerEntity.id == 2}"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
@@ -469,7 +475,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.percentShare}"
+                                                <h:outputText value="#{item3.percentShareSummary}"
                                                               style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 

@@ -22,6 +22,10 @@ public class ExistingCreditView implements Serializable {
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
     private BigDecimal totalGroupExposure;
+    private BigDecimal totalAppraisalValue;
+    private BigDecimal totalMortgageValue;
+    private BigDecimal totalGuaranteeAmount;
+
 
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
@@ -29,6 +33,7 @@ public class ExistingCreditView implements Serializable {
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
+    private List<ExistingCollateralDetailView> existingCollateralDetailViewList;
 
     public long getId() {
         return id;
@@ -126,6 +131,30 @@ public class ExistingCreditView implements Serializable {
         this.totalGroupExposure = totalGroupExposure;
     }
 
+    public BigDecimal getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
+    public BigDecimal getTotalAppraisalValue() {
+        return totalAppraisalValue;
+    }
+
+    public void setTotalAppraisalValue(BigDecimal totalAppraisalValue) {
+        this.totalAppraisalValue = totalAppraisalValue;
+    }
+
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
+
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
+
     public List<ExistingCreditDetailView> getBorrowerComExistingCredit() {
         return borrowerComExistingCredit;
     }
@@ -172,6 +201,14 @@ public class ExistingCreditView implements Serializable {
 
     public void setRelatedAppInRLOSCredit(List<ExistingCreditDetailView> relatedAppInRLOSCredit) {
         this.relatedAppInRLOSCredit = relatedAppInRLOSCredit;
+    }
+
+    public List<ExistingCollateralDetailView> getExistingCollateralDetailViewList() {
+        return existingCollateralDetailViewList;
+    }
+
+    public void setExistingCollateralDetailViewList(List<ExistingCollateralDetailView> existingCollateralDetailViewList) {
+        this.existingCollateralDetailViewList = existingCollateralDetailViewList;
     }
 
     public List<ActionStatusView> getStatus() {

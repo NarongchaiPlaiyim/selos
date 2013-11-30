@@ -35,7 +35,8 @@ import java.util.List;
 public class MandatoryFieldsControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject

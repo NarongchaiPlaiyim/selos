@@ -122,8 +122,8 @@
                                 <td colspan="3" style="width: 300px;">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3 || custInfoSumIndi.customerInfoView.relation.getId() == 4}">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -206,7 +206,10 @@
                                 </td>
                                 <td>
                                     <p:calendar value="#{custInfoSumIndi.customerInfoView.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}"/>
+                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
+                                        <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
+                                        <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
+                                    </p:calendar>
                                 </td>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -251,7 +254,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleTh"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleTh.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitTh}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -259,6 +262,9 @@
                                                                    var="titleTh"
                                                                    itemLabel="#{titleTh.titleTh}"
                                                                    itemValue="#{titleTh.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumIndi.onChangeTitleTh()}"
+                                                            update=":frmMain:titleEn"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
@@ -281,7 +287,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleEn"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleEn.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitEn}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -289,6 +295,9 @@
                                                                    var="titleEn"
                                                                    itemLabel="#{titleEn.titleEn}"
                                                                    itemValue="#{titleEn.id}"/>
+                                                    <p:ajax event="change"
+                                                            listener="#{custInfoSumIndi.onChangeTitleEn()}"
+                                                            update=":frmMain:titleTh"/>
                                                 </p:selectOneMenu>
                                             </td>
                                             <td>
@@ -308,12 +317,19 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.gender')}"/>
                                 </td>
                                 <td>
-                                    <!--<p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender.value}"
+                                    <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender}"
                                                      style="width: 200px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndGender}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItem itemLabel="Male" itemValue="1"/>
                                         <f:selectItem itemLabel="Female" itemValue="2"/>
-                                    </p:selectOneMenu>-->
+                                    </p:selectOneMenu>
+                                </td>
+                                <td class="title">
+                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{custInfoSumIndi.customerInfoView.age}" id="age"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1044,8 +1060,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                                 <td class="title">
@@ -1053,8 +1069,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" disabled="true">
-                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1072,9 +1088,9 @@
                                 </td>
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.worthiness}" disabled="#{custInfoSumIndi.editBorrower}">
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="2"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="3"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="4"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="4"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="5"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1213,8 +1229,8 @@
                                     <td colspan="3" style="width: 300px;">
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
                                                           disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3 || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4}">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
@@ -1303,7 +1319,10 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button">
+                                            <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
+                                            <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
+                                        </p:calendar>
                                     </td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -1327,13 +1346,16 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleThSpouse"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleTh.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleThList}"
                                                                        var="titleTh"
                                                                        itemLabel="#{titleTh.titleTh}"
                                                                        itemValue="#{titleTh.id}"/>
+                                                        <p:ajax event="change"
+                                                                listener="#{custInfoSumIndi.onChangeTitleThSpouse()}"
+                                                                update=":frmMain:titleEnSpouse"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                                 <td>
@@ -1354,13 +1376,16 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleEnSpouse"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleEn.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleEnList}"
                                                                        var="titleEn"
                                                                        itemLabel="#{titleEn.titleEn}"
                                                                        itemValue="#{titleEn.id}"/>
+                                                        <p:ajax event="change"
+                                                                listener="#{custInfoSumIndi.onChangeTitleEnSpouse()}"
+                                                                update=":frmMain:titleThSpouse"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                                 <td>
@@ -1378,10 +1403,18 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.gender')}"/>
                                     </td>
                                     <td>
-                                        <!--<p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.spouse.gender.value}" style="width: 200px;">
+                                        <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.spouse.gender}"
+                                                         style="width: 200px;">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItem itemLabel="Male" itemValue="1"/>
                                             <f:selectItem itemLabel="Female" itemValue="2"/>
-                                        </p:selectOneMenu>-->
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td class="title">
+                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{custInfoSumIndi.customerInfoView.spouse.age}" id="ageSpouse"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2009,8 +2042,8 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" disabled="true">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                     <td class="title">
@@ -2018,8 +2051,8 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" disabled="true">
-                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
@@ -2037,9 +2070,9 @@
                                     </td>
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.worthiness}" disabled="#{custInfoSumIndi.editSpouseBorrower}">
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="2"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="3"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="4"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="3"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="4"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="5"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>

@@ -4,14 +4,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ExSumDecisionView {
-
     private long id;
     private String flag;
     private String group;
     private String ruleName;
     private String cusName;
     private String deviationReason;
-
 
     public ExSumDecisionView() {
         reset();

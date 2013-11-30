@@ -15,20 +15,19 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-
-
 @Stateless
 public class QualitativeControl extends BusinessControl {
-
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
     QualitativeADAO qualitativeADAO;
     @Inject
     QualitativeBDAO qualitativeBDAO;
+
     @Inject
     QualitativeTransform qualitativeTransform;
 

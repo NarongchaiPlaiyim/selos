@@ -10,7 +10,7 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar size="10" id="callingDate" showOn="button" navigator="true"
+                    <p:calendar id="callingDate" showOn="button" navigator="true"
                                 value="#{customerAcceptance.contactRecordDetailView.callingDate}"
                                 pattern="dd/MM/yyyy  HH:mm"
                                 locale="th_TH"
@@ -44,7 +44,8 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.nextCallingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar size="10" id="nextCallingDate" mindate="#{customerAcceptance.currentDate}" showOn="button" navigator="true"
+                    <p:calendar
+                            id="nextCallingDate" mindate="#{customerAcceptance.currentDate}" showOn="button" navigator="true"
                                 value="#{customerAcceptance.contactRecordDetailView.nextCallingDate}"
                                 pattern="dd/MM/yyyy  HH:mm"
                                 locale="th_TH"
@@ -59,9 +60,12 @@
                 <td>
                     <p:selectOneMenu style="width: 100px" value="#{customerAcceptance.contactRecordDetailView.reason}" id="reason">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItem itemLabel="Accept" itemValue="1"/>
-                        <f:selectItem itemLabel="Not Accept" itemValue="0"/>
-                        <f:selectItem itemLabel="Need to consider" itemValue="2"/>
+                        <f:selectItem itemLabel="ลูกค้าแจ้งนัดกับ BDM แล้ว" itemValue="1"/>
+                        <f:selectItem itemLabel="ไม่สามารถติดต่อได้" itemValue="2"/>
+                        <f:selectItem itemLabel="ลูกค้ายังไม่รับนัด" itemValue="3"/>
+                        <f:selectItem itemLabel="ลูกค้าไม่สะดวก" itemValue="4"/>
+                        <f:selectItem itemLabel="ลูกค้าขอติดต่อ BDM ก่อน" itemValue="5"/>
+                        <f:selectItem itemLabel="ลูกค้ารอเงินที่จะเป็นหลักประกัน" itemValue="6"/>
                     </p:selectOneMenu>
                 </td>
             </tr>

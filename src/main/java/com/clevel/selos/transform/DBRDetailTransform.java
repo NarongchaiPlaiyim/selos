@@ -34,7 +34,7 @@ public class DBRDetailTransform extends Transform {
 
     public List<DBRDetailView> getDbrDetailViews(List<DBRDetail> dbrDetails) {
         List<DBRDetailView> dbrDetailViews = new ArrayList<DBRDetailView>();
-        if (dbrDetails == null && dbrDetails.isEmpty()) {
+        if (dbrDetails == null || dbrDetails.isEmpty()) {
             return dbrDetailViews;
         }
         for (DBRDetail dbrDetail : dbrDetails) {
@@ -61,7 +61,6 @@ public class DBRDetailTransform extends Transform {
                 dbrDetail.setId(dbrDetailView.getId());
             }
         }
-
         dbrDetail.setLimit(dbrDetailView.getLimit());
         dbrDetail.setAccountName(dbrDetailView.getAccountName());
         dbrDetail.setDebtForCalculate(dbrDetailView.getDebtForCalculate());
@@ -83,4 +82,6 @@ public class DBRDetailTransform extends Transform {
         }
         return dbrDetails;
     }
+
+
 }

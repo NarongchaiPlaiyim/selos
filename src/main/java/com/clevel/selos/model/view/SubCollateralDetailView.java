@@ -4,7 +4,9 @@ import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SubCollateralDetailView {
     private long id;
@@ -15,6 +17,12 @@ public class SubCollateralDetailView {
     private String titleDeed;
     private String collateralOwner;
     private String collateralOwnerAAD;
+    private String  collateralOwnerUW;
+    private List<String> collateralOwnerUWList;
+    private String  mortgageType;
+    private List<String> mortgageList;
+    private String  relatedWith;
+    private List<String> relatedWithList;
     private BigDecimal  appraisalValue;
     private BigDecimal  mortgageValue;
     private Date createDate;
@@ -22,10 +30,7 @@ public class SubCollateralDetailView {
     private User createBy;
     private User modifyBy;
 
-    // list master  ??
-//    private   collateralOwnerUW;
-//    private   mortgageType;
-//    private   relatedWith;
+
 
     public SubCollateralDetailView() {
         reset();
@@ -36,11 +41,17 @@ public class SubCollateralDetailView {
         this.address    = "";
         this.titleDeed  = "";
         this.landOffice = "";
+        this.collateralOwner = "";
         this.collateralOwnerAAD = "";
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue  = BigDecimal.ZERO;
         this.subCollateralType    = new SubCollateralType();
-
+        this.collateralOwnerUW = "";
+        this.mortgageType= "";
+        this.relatedWith = "";
+        this.collateralOwnerUWList = new ArrayList<String>();
+        this.mortgageList = new ArrayList<String>();
+        this.relatedWithList = new ArrayList<String>();
     }
 
     public long getId() {
@@ -99,6 +110,46 @@ public class SubCollateralDetailView {
         this.collateralOwner = collateralOwner;
     }
 
+    public String getCollateralOwnerAAD() {
+        return collateralOwnerAAD;
+    }
+
+    public void setCollateralOwnerAAD(String collateralOwnerAAD) {
+        this.collateralOwnerAAD = collateralOwnerAAD;
+    }
+
+    public String getCollateralOwnerUW() {
+        return collateralOwnerUW;
+    }
+
+    public void setCollateralOwnerUW(String collateralOwnerUW) {
+        this.collateralOwnerUW = collateralOwnerUW;
+    }
+
+    public String getMortgageType() {
+        return mortgageType;
+    }
+
+    public void setMortgageType(String mortgageType) {
+        this.mortgageType = mortgageType;
+    }
+
+    public String getRelatedWith() {
+        return relatedWith;
+    }
+
+    public void setRelatedWith(String relatedWith) {
+        this.relatedWith = relatedWith;
+    }
+
+    public BigDecimal getMortgageValue() {
+        return mortgageValue;
+    }
+
+    public void setMortgageValue(BigDecimal mortgageValue) {
+        this.mortgageValue = mortgageValue;
+    }
+
     public BigDecimal getAppraisalValue() {
         return appraisalValue;
     }
@@ -137,5 +188,29 @@ public class SubCollateralDetailView {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public List<String> getCollateralOwnerUWList() {
+        return collateralOwnerUWList;
+    }
+
+    public void setCollateralOwnerUWList(List<String> collateralOwnerUWList) {
+        this.collateralOwnerUWList = collateralOwnerUWList;
+    }
+
+    public List<String> getMortgageList() {
+        return mortgageList;
+    }
+
+    public void setMortgageList(List<String> mortgageList) {
+        this.mortgageList = mortgageList;
+    }
+
+    public List<String> getRelatedWithList() {
+        return relatedWithList;
+    }
+
+    public void setRelatedWithList(List<String> relatedWithList) {
+        this.relatedWithList = relatedWithList;
     }
 }

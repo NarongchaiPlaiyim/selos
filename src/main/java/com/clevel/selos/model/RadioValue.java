@@ -1,12 +1,12 @@
 package com.clevel.selos.model;
 
 public enum RadioValue {
-    NOT_SELECTED(-1),
-    NO(0),
-    YES(1),
-    PASS(2),
-    FAIL(3),
-    NA(4);
+    NOT_SELECTED(0),
+    NO(1),
+    YES(2),
+    PASS(3),
+    FAIL(4),
+    NA(5);
 
     int value;
 

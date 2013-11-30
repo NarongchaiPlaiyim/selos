@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
     <h:head>
         <title>#{msg.get('app.credit.facility.existing.header.title')}</title>
@@ -27,16 +28,14 @@
                     <ui:include src="include/menubar.xhtml"/>
                     <!-- End Menu -->
                     <div id="content_container">
-                         <div id="content_name">#{msg.get('app.credit.facility.existing.title')}
-                         </div>
+                         <div id="content_name">#{msg.get('app.credit.facility.existing.title')}</div>
                          <div id="content">
                             <div id="content_info">
-                                <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
-                                </div>
-                                    <div id="content_lastupdate">Last update by
+                                <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                                <div id="content_lastupdate">Last update by
                                         <h:outputText id="lastupdateName" value="??"/>,
                                         <h:outputText id="lastupdateTime" value="??"/>
-                                    </div>
+                                </div>
                             </div>
                             <div id="content_form">
                              <!-- start content -->
@@ -59,8 +58,6 @@
                                         </table>
 
                                       </td>
-
-
                                     </tr>
                                     <tr>
                                         <td class="title">
@@ -69,91 +66,245 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            <p:commandButton id="btBorrowerLimit"
-                                                    value="#{msg.get('app.button.add')}"
-                                                    styleClass="smaller">
+                                            <p:commandButton
+                                                id="addBorrowerCommercialCreditbtn"
+                                                value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                styleClass="smaller"
+                                                actionListener="#{creditFacExisting.onAddCommercialCredit()}"
+                                                process="@this"
+                                                update=":existingCreditDlgForm"
+                                                oncomplete="existingCreditDlg.show();">
+                                                <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
+                                                <p:resetInput target=":existingCreditDlgForm"/>
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            <p:dataTable id="dtBorrowerLimit" var="itemBorrowerLimit" value="" paginator="false" rowIndexVar="rowIndex">
-                                                <p:columnGroup type="header">
-                                                    <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.commercialCredit')}" />
-                                                    </p:row>
+                                        <div class="ui-datatable ui-widget">
+                                        <div class="ui-datatable-tablewrapper">
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th class="ui-state-default"></th>
+                                                <th class="ui-state-default">Account</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.code')}</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                <th class="ui-state-default">int/fee</th>
+                                                <th class="ui-state-default">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                <th class="ui-state-default"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="ui-datatable-data ui-widget-content">
+                                            <ui:repeat var="borrowerCredit" value="#{creditFacExisting.existingCreditView.borrowerComExistingCredit}" varStatus="i">
+                                                <tr>
+                                                    <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList)+fn:length(borrowerCredit.splitLineDetailViewList)  : '1'}">
+                                                        #{i.index + 1}
+                                                    </td>
+                                                    <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList)+fn:length(borrowerCredit.splitLineDetailViewList) : '1'}">
+                                                        #{borrowerCredit.accountName} <br/>
+                                                        #{borrowerCredit.accountNumber} Suf: #{borrowerCredit.accountSuf}<br/>
+                                                        #{borrowerCredit.existAccountStatus.name}
+                                                    </td>
+                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList) : '1'}">
+                                                        #{borrowerCredit.existProductProgram.description}
+                                                    </td>
+                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList) : '1'}">
+                                                        #{borrowerCredit.existCreditType.description}
+                                                    </td>
+                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList) : '1'}">
+                                                        #{msg.get('app.decision.tb.td.label.product')} #{borrowerCredit.productCode}<br/>
+                                                        #{msg.get('app.decision.tb.td.label.project')} #{borrowerCredit.projectCode}
+                                                    </td>
+                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList) : '1'}">
+                                                        <h:outputText value="#{borrowerCredit.limit}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <!-- BEGIN: Credit Tier Detail [0] -->
+                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                            borrowerCredit.creditTierDetailViewList[0].installment : ''}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                            borrowerCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                            borrowerCredit.creditTierDetailViewList[0].tenor : ''}">
+                                                            <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                        rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(borrowerCredit.creditTierDetailViewList)+fn:length(borrowerCredit.splitLineDetailViewList)  : '1'}">
+                                                        <p:commandButton icon="ui-icon-pencil"
+                                                                         action="#{creditFacExisting.onEditCommercialCredit()}"
+                                                                         process="@this"
+                                                                         update=":existingCreditDlgForm"
+                                                                         oncomplete="existingCreditDlg.show();">
+                                                            <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
+                                                            <f:setPropertyActionListener value="#{borrowerCredit}"
+                                                                                         target="#{creditFacExisting.selectCreditDetail}"/>
+                                                            <f:setPropertyActionListener value="#{i.index}"
+                                                                                         target="#{creditFacExisting.rowIndex}"/>
+                                                        </p:commandButton>
+                                                        <p:commandButton title="Remove" process="@form"
+                                                                         icon="ui-icon-trash"
+                                                                         update=":msgBoxSystemMessagePanel,:frmMain"
+                                                                         actionListener="#{creditFacExisting.onDeleteCommercialCredit()}" >
+                                                            <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
+                                                            <f:setPropertyActionListener value="#{borrowerCredit}"
+                                                                                         target="#{creditFacExisting.selectCreditDetail}"/>
+                                                            <f:setPropertyActionListener value="#{i.index}"
+                                                                                         target="#{creditFacExisting.rowIndex}"/>
+                                                        </p:commandButton>
+                                                    </td>
+                                                    <!-- END: Credit Tier Detail [0] -->
+                                                </tr>
 
-                                                    <p:row>
-                                                        <p:column headerText="" styleClass="center"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
-                                                    </p:row>
+                                                <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                                <ui:repeat value="#{borrowerCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
+                                                    <tr>
+                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{creditTierDetail.installment}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{creditTierDetail.finalPriceRate}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{creditTierDetail.tenor}">
+                                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
 
-                                                   <!--Data dtBorrowerLimit-->
+                                                <ui:repeat value="#{borrowerCredit.splitLineDetailViewList}" var="splitLineDetailView" varStatus="j">
+                                                    <tr>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{splitLineDetailView.productProgram.name}"/>
+                                                        </td>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <p:spacer width="5px"/>
+                                                        </td>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <p:spacer width="5px"/>
+                                                        </td>
+                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <h:outputText value="#{splitLineDetailView.limit}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <p:spacer width="5px"/>
+                                                        </td><td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <p:spacer width="5px"/>
+                                                    </td>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <p:spacer width="5px"/>
+                                                        </td>
 
-                                                </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                  <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                   icon="ui-icon-pencil" >
-                                                  </p:commandButton>
-                                                </p:column>
+                                                    </tr>
+                                                </ui:repeat>
 
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
-                                                        <p:column>
-                                                            <f:facet name="footer">
-                                                                <p:outputLabel value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="14"/>
-                                                                </p:outputLabel>
-                                                            </f:facet>
-                                                        </p:column>
-                                                        <p:column colspan="4"/>
-                                                  </p:row>
-                                                </p:columnGroup>
-                                          </p:dataTable>
+                                                <!-- END: Credit Tier Detail [1]->[N-1] -->
+                                            </ui:repeat>
+
+                                            <h:panelGroup rendered="#{empty creditFacExisting.borrowerExistingCreditDetailViewList}">
+                                                <tr>
+                                                    <td colspan="11">No records found.</td>
+                                                </tr>
+                                            </h:panelGroup>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                        </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td/>
-                                    </tr>
-                                    <tr>
-                                        <td class="title">
-                                            <p:outputLabel  value="#{msg.get('app.credit.facility.existing.title.conditionCommercialCredit')}"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                        <td colspan="2">
+                                            <p:commandButton
+                                                    id="addConditionButton"
+                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    styleClass="smaller"
+                                                    actionListener="#{creditFacExisting.onAddConditionInfo()}"
+                                                    process="@this"
+                                                    update=":conditionDlgForm"
+                                                    oncomplete="conditionDlg.show();">
+                                                <p:resetInput target=":conditionDlgForm"/>
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <p:dataTable id="dtCondition" paginator="false" value="" var="itemCon" rowIndexVar="rowIndex"  rowKey="">
-                                                <p:column headerText="" >
-                                                    <p:outputLabel value="#{rowIndex+1}"/>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.loanType')}" >
+                                        <td colspan="5">
+                                            <p:dataTable
+                                                    id="conditionInfoDetailTable"
+                                                    var="conditionInfoItem"
+                                                    value="#{creditFacExisting.conditionInfoDetailViewList}"
+                                                    paginator="false"
+                                                    rowKey="#{rowIndex}"
+                                                    rowIndexVar="rowIndex"
+                                                    style="width:100%">
 
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.conditionDesc')}">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column style="width:20px;"/>
+                                                        <p:column style="width:200px;"
+                                                                  headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.loanType')}"/>
+                                                        <p:column style="width:300px;"
+                                                                  headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.conditionDesc')}"/>
+                                                        <p:column style="width:30px;"/>
+                                                    </p:row>
 
+                                                </p:columnGroup>
+
+                                                <p:column styleClass="center">
+                                                    <h:outputText value="#{rowIndex+1}"/>
                                                 </p:column>
-                                                <p:column headerText="">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
+
+                                                <p:column styleClass="center">
+                                                    <h:outputText value="#{conditionInfoItem.loanType}"/>
+                                                </p:column>
+
+                                                <p:column styleClass="center">
+                                                    <h:outputText value="#{conditionInfoItem.conditionDesc}"/>
+                                                </p:column>
+
+                                                <p:column styleClass="center">
+                                                    <p:commandButton title="Remove"
+                                                                     icon="ui-icon-trash"
+                                                                     oncomplete="confirmDeleteConditionInfoDlg.show()">
+                                                        <f:setPropertyActionListener value="#{conditionInfoItem}"
+                                                                                     target="#{creditFacExisting.selectConditionItem}"/>
                                                     </p:commandButton>
                                                 </p:column>
+
                                             </p:dataTable>
                                         </td>
                                     </tr>
@@ -162,58 +313,8 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                           <p:dataTable id="dtRetailCredit" var="itemRetailCredit" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRetailProcessBorrower" var="borrowerRetailCredit" value="#{creditFacExisting.existingCreditView.borrowerRetailExistingCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
-                                                    <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.retailCredit')}" />
-                                                    </p:row>
-
-                                                    <p:row>
-                                                        <p:column headerText="" styleClass="center"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
-                                                    </p:row>
-
-                                                    <!--Data dtRetailCredit-->
-
-                                                </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
-                                                </p:column>
-
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
-                                                        <p:column>
-                                                            <f:facet name="footer">
-                                                                <p:outputLabel value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </p:outputLabel>
-                                                            </f:facet>
-                                                        </p:column>
-                                                        <p:column colspan="4"/>
-                                                    </p:row>
-                                                </p:columnGroup>
-                                           </p:dataTable>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td/>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p:dataTable id="dtRlosProcess" var="itemRlosProcess" value="" paginator="false" rowIndexVar="rowIndex">
-                                            <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
                                                     </p:row>
@@ -231,21 +332,133 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
                                                     </p:row>
 
-                                                    <!--Data dtRlosProcess-->
-
+                                                    <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountNo}" />  <p:outputLabel value="#{borrowerRetailCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountNumber}"/> Suff <p:outputLabel value="#{borrowerRetailCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerRetailLimit}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:outputLabel>
+                                                            </f:facet>
+                                                        </p:column>
+                                                        <p:column colspan="4"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p:dataTable id="dtRlosProcessBorrower" var="borrowerRLOSCredit" value="#{creditFacExisting.existingCreditView.borrowerAppInRLOSCredit}" paginator="false" rowIndexVar="rowIndex">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column headerText="" styleClass="center"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
+                                                    </p:row>
+
+                                                    <!--Data dtCommercialCreditborrowerPerson-->
+                                                </p:columnGroup>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountNo}" />  <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountNumber}"/> Suff <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.tenor}" /><br/>
+                                                </p:column>
+                                                <p:columnGroup type="footer">
+                                                    <p:row>
+                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
+                                                        <p:column>
+                                                            <f:facet name="footer">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerAppInRLOSLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -322,56 +535,184 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                            <p:commandButton
+                                                    id="addRelatedCommercialCreditbtn"
+                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    styleClass="smaller"
+                                                    actionListener="#{creditFacExisting.onAddCommercialCredit()}"
+                                                    process="@this"
+                                                    update=":existingCreditDlgForm"
+                                                    oncomplete="existingCreditDlg.show();">
+                                                <p:resetInput target=":existingCreditDlgForm"/>
+                                                <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <p:dataTable id="dtCommercialCreditRelatedPerson" var="itemCommercialCreditRelatedPerson" value="" paginator="false" rowIndexVar="rowIndex">
-                                                <p:columnGroup type="header">
-                                                    <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.commercialCredit')}" />
-                                                    </p:row>
+                                        <td colspan="2">
+                                            <div class="ui-datatable ui-widget">
+                                                <div class="ui-datatable-tablewrapper">
+                                                    <table>
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="ui-state-default"></th>
+                                                            <th class="ui-state-default">Account</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.code')}</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                            <th class="ui-state-default">int/fee</th>
+                                                            <th class="ui-state-default">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                            <th class="ui-state-default"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="ui-datatable-data ui-widget-content">
+                                                        <ui:repeat var="relatedCredit" value="#{creditFacExisting.existingCreditView.relatedComExistingCredit}" varStatus="i">
+                                                            <tr>
+                                                                <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList)+fn:length(relatedCredit.splitLineDetailViewList)  : '1'}">
+                                                                    #{i.index + 1}
+                                                                </td>
+                                                                <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList)+fn:length(relatedCredit.splitLineDetailViewList) : '1'}">
+                                                                    #{relatedCredit.accountName} <br/>
+                                                                    #{relatedCredit.accountNumber} Suf: #{relatedCredit.accountSuf}<br/>
+                                                                    #{relatedCredit.existAccountStatus.name}
+                                                                </td>
+                                                                <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList) : '1'}">
+                                                                    #{relatedCredit.existProductProgram.description}
+                                                                </td>
+                                                                <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList) : '1'}">
+                                                                    #{relatedCredit.existCreditType.description}
+                                                                </td>
+                                                                <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList) : '1'}">
+                                                                    #{msg.get('app.decision.tb.td.label.product')} #{relatedCredit.productCode}<br/>
+                                                                    #{msg.get('app.decision.tb.td.label.project')} #{relatedCredit.projectCode}
+                                                                </td>
+                                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList) : '1'}">
+                                                                    <h:outputText value="#{relatedCredit.limit}">
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                         maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <!-- BEGIN: Credit Tier Detail [0] -->
+                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                            relatedCredit.creditTierDetailViewList[0].installment : ''}">
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                            relatedCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <h:outputText value="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                            relatedCredit.creditTierDetailViewList[0].tenor : ''}">
+                                                                        <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                    rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
+                                                                fn:length(relatedCredit.creditTierDetailViewList)+fn:length(relatedCredit.splitLineDetailViewList)  : '1'}">
+                                                                    <p:commandButton icon="ui-icon-pencil"
+                                                                                     action="#{creditFacExisting.onEditCommercialCredit()}"
+                                                                                     process="@this"
+                                                                                     update=":existingCreditDlgForm"
+                                                                                     oncomplete="existingCreditDlg.show();">
+                                                                        <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
+                                                                        <f:setPropertyActionListener value="#{relatedCredit}"
+                                                                                                     target="#{creditFacExisting.selectCreditDetail}"/>
+                                                                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                                     target="#{creditFacExisting.rowIndex}"/>
+                                                                    </p:commandButton>
+                                                                    <p:commandButton title="Remove" process="@this"
+                                                                                     icon="ui-icon-trash"
+                                                                                     update=":frmMain"
+                                                                                     actionListener="#{creditFacExisting.onDeleteCommercialCredit()}" >
+                                                                        <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
+                                                                        <f:setPropertyActionListener value="#{relatedCredit}"
+                                                                                                     target="#{creditFacExisting.selectCreditDetail}"/>
+                                                                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                                     target="#{creditFacExisting.rowIndex}"/>
+                                                                    </p:commandButton>
+                                                                </td>
+                                                                <!-- END: Credit Tier Detail [0] -->
+                                                            </tr>
 
-                                                    <p:row>
-                                                        <p:column headerText="" styleClass="center"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
-                                                    </p:row>
+                                                            <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                                            <ui:repeat value="#{relatedCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
+                                                                <tr>
+                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <h:outputText value="#{creditTierDetail.installment}">
+                                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <h:outputText value="#{creditTierDetail.finalPriceRate}">
+                                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <h:outputText value="#{creditTierDetail.tenor}">
+                                                                            <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                </tr>
+                                                            </ui:repeat>
 
-                                                    <!--Data dtCommercialCreditRelatedPerson-->
+                                                            <ui:repeat value="#{relatedCredit.splitLineDetailViewList}" var="splitLineDetailView" varStatus="j">
+                                                                <tr>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <h:outputText value="#{splitLineDetailView.productProgram.name}"/>
+                                                                    </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td>
+                                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <h:outputText value="#{splitLineDetailView.limit}">
+                                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </h:outputText>
+                                                                    </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td><td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <p:spacer width="5px"/>
+                                                                </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </ui:repeat>
 
-                                                </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
-                                                </p:column>
+                                                            <!-- END: Credit Tier Detail [1]->[N-1] -->
+                                                        </ui:repeat>
 
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
-                                                        <p:column>
-                                                            <f:facet name="footer">
-                                                                <p:outputLabel value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </p:outputLabel>
-                                                            </f:facet>
-                                                        </p:column>
-                                                        <p:column colspan="4"/>
-                                                    </p:row>
-                                                </p:columnGroup>
-                                            </p:dataTable>
+                                                        <h:panelGroup rendered="#{empty creditFacExisting.relatedExistingCreditDetailViewList}">
+                                                            <tr>
+                                                                <td colspan="11">No records found.</td>
+                                                            </tr>
+                                                        </h:panelGroup>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -379,10 +720,10 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable id="dtRetailCreditRelatedPerson" var="itemCommercialCreditRelatedPerson" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRetailProcessRelated" var="relatedRetailCredit" value="#{creditFacExisting.existingCreditView.relatedRetailExistingCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.retailCredit')}" />
+                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
                                                     </p:row>
 
                                                     <p:row>
@@ -398,21 +739,52 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
                                                     </p:row>
 
-                                                    <!--Data dtCommercialCreditRelatedPerson-->
-
+                                                    <!--Data dtCommercialCreditrelatedPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountNo}" />  <p:outputLabel value="#{relatedRetailCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountNumber}"/> Suff <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalRelatedRetailLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -426,7 +798,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable id="dtRlosProcessRelatedPerson" var="itemRlosProcessRelatedPerson" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRlosProcessRelatedPerson" var="relatedRLOSCredit" value="#{creditFacExisting.existingCreditView.relatedAppInRLOSCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
@@ -446,20 +818,51 @@
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditRelatedPerson-->
-
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountNo}" />  <p:outputLabel value="#{relatedRLOSCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountNumber}"/> Suff <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerAppInRLOSLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -590,39 +993,80 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                            <p:commandButton
+                                                    id="addBorrowerExsitingCollateralbtn"
+                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    styleClass="smaller"
+                                                    actionListener="#{creditFacExisting.onAddExistingCollateral()}"
+                                                    process="@this"
+                                                    update=":existingCollateralBorrowerDlgForm"
+                                                    oncomplete="existingCollateralBorrowerDlg.show();">
+                                                <f:setPropertyActionListener value="borrower" target="#{creditFacExisting.typeOfList}" />
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="" var="itemExsitingCollateralBorrower" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.borrowerExistingCollateralDetailViewList}" var="borrowerCollateral" rowIndexVar="rowIndex">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column style="width:50px;"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}">
-
-                                                </p:column>
                                                 <p:column headerText="">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil">
+                                                    <p:outputLabel value="#{borrowerCollateral.collateralType.description}"></p:outputLabel>
+                                                </p:column>
 
+                                                <p:column headerText="">
+                                                   <ui:repeat value="#{borrowerCollateral.creditFacilityList}" var="creditFacility">
+                                                       <p:outputLabel value="#{creditFacility.accountName}"/><br/>
+                                                       <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
+                                                       <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                    </ui:repeat>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerCollateral.mortgageType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerCollateral.appraisalValue}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerCollateral.mortgageValue}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:commandButton icon="ui-icon-pencil"
+                                                                     action="#{creditFacExisting.onEditExistingCollateral()}"
+                                                                     process="@this"
+                                                                     update=":existingCollateralBorrowerDlgForm"
+                                                                     oncomplete="existingCollateralBorrowerDlg.show();">
+                                                        <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
+                                                        <f:setPropertyActionListener value="#{borrowerCollateral}"
+                                                                                     target="#{creditFacExisting.selectCollateralDetail}"/>
+                                                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                     target="#{creditFacExisting.rowIndex}"/>
                                                     </p:commandButton>
-                                                    <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                                     icon="ui-icon-trash">
+                                                    <p:commandButton title="Remove" process="@this"
+                                                                     icon="ui-icon-trash"
+                                                                     update=":frmMain"
+                                                                     actionListener="#{creditFacExisting.onDeleteExistingCollateral()}" >
+                                                        <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
+                                                        <f:setPropertyActionListener value="#{borrowerCollateral}"
+                                                                                     target="#{creditFacExisting.selectCollateralDetail}"/>
+                                                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                     target="#{creditFacExisting.rowIndex}"/>
                                                     </p:commandButton>
                                                 </p:column>
                                                 <p:columnGroup type="footer">
@@ -658,32 +1102,59 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                            <p:commandButton
+                                                    id="addRelatedExsitingCollateralbtn"
+                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    styleClass="smaller"
+                                                    actionListener="#{creditFacExisting.onAddExistingCollateral()}"
+                                                    process="@this"
+                                                    update=":existingCollateralRelatedDlgForm"
+                                                    oncomplete="existingCollateralRelatedDlg.show();">
+                                                <f:setPropertyActionListener value="related" target="#{creditFacExisting.typeOfList}" />
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="" var="itemExsitingCollateralRelated" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.relatedExistingCollateralDetailViewList}" var="relatedCollateral" rowIndexVar="rowIndex">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column style="width:50px;"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}">
-
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.collateralType.description}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}">
 
+                                                <p:column headerText="">
+                                                    <ui:repeat value="#{relatedCollateral.creditFacilityList}" var="creditFacility">
+                                                        <p:outputLabel value="#{creditFacility.accountName}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                    </ui:repeat>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}">
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.mortgageType}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}">
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.appraisalValue}"></p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}">
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.mortgageValue}"></p:outputLabel>
                                                 </p:column>
+
                                                 <p:column headerText="">
                                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                      icon="ui-icon-pencil">
@@ -705,12 +1176,12 @@
                                                             </f:facet>
                                                         </p:column >
                                                         <p:column style="text-align:right">
-                                                        <f:facet name="footer">
-                                                            <h:outputText value="">
-                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                 maxIntegerDigits="14"/>
-                                                            </h:outputText>
-                                                        </f:facet>
+                                                            <f:facet name="footer">
+                                                                <h:outputText value="">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </f:facet>
                                                         </p:column>
 
                                                         <p:column/>
@@ -736,13 +1207,93 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:commandButton value="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                            <p:commandButton
+                                                    id="addBorrowerExsitingGuarantorbtn"
+                                                    value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                                    styleClass="smaller"
+                                                    actionListener="#{creditFacExisting.onAddExistingGuarantor()}"
+                                                    process="@this"
+                                                    update=":existingGuarantorDlgForm"
+                                                    oncomplete="existingGuarantorDlg.show();">
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
+                                            <p:dataTable value="#{creditFacExisting.existingGuarantorDetailViewList}" var="existingGuarantor" rowIndexVar="rowIndex">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column style="width:50px;"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{existingGuarantor.guarantorName}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <ui:repeat value="#{existingGuarantor.creditFacilityList}" var="creditFacility">
+                                                        <p:outputLabel value="#{creditFacility.accountName}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                    </ui:repeat>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.appraisalValue}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedCollateral.mortgageValue}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                     icon="ui-icon-pencil">
+
+                                                    </p:commandButton>
+                                                    <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                                     icon="ui-icon-trash">
+                                                    </p:commandButton>
+                                                </p:column>
+                                                <p:columnGroup type="footer">
+                                                    <p:row>
+                                                        <p:column colspan="4" footerText="Totals:" style="text-align:left"/>
+                                                        <p:column style="text-align:right">
+                                                            <f:facet name="footer">
+                                                                <h:outputText value="">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </f:facet>
+                                                        </p:column >
+                                                        <p:column style="text-align:right">
+                                                            <f:facet name="footer">
+                                                                <h:outputText value="">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </f:facet>
+                                                        </p:column>
+
+                                                        <p:column/>
+                                                    </p:row>
+                                                </p:columnGroup>
+                                            </p:dataTable>
                                             <p:dataTable value="" var="itemExsitingCollateralRelated" rowIndexVar="rowIndex">
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
@@ -801,16 +1352,62 @@
                              </div>
                          </div>
                     </div>
-                <div id="bottom_line" />
-            </div>
-
-            <div class="clear"/>
+                    <div id="bottom_line" />
+                </div>
+                <div class="clear"/>
             <!-- Start Footer -->
             <ui:include src="include/footer.xhtml"/>
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </h:form>
         </p:panel>
+        <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg">
+            <ui:include src="dialog/conditionDetailDialog.xhtml"/>
+        </p:dialog>
+
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteConditionInfoDialog"/>
+            <ui:param name="name" value="confirmDeleteConditionInfoDlg"/>
+            <ui:param name="formId" value="frmConfirmDeleteConditionInfo"/>
+            <ui:param name="controller" value="#{creditFacExisting}"/>
+            <ui:param name="action" value="onDeleteConditionInfo"/>
+            <ui:param name="update" value=":frmMain"/>
+        </ui:include>
+
+        <p:dialog id="existingCreditDialog" header="existing Credit Information" widgetVar="existingCreditDlg" height="550">
+            <ui:include src="dialog/existingCreditInfoDialog.xhtml"/>
+        </p:dialog>
+
+        <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg">
+            <ui:include src="dialog/existingCollateralBorrowerDialog.xhtml" />
+        </p:dialog>
+
+        <p:dialog id="existingCollateraRelatedlDialog" header="Existing Collateral Related Information" widgetVar="existingCollateralRelatedDlg">
+            <ui:include src="dialog/existingCollateralRelatedDialog.xhtml" />
+        </p:dialog>
+
+        <p:dialog id="existingGuarantorDialog" header="existing Collateral Information" widgetVar="existingGuarantorDlg">
+            <ui:include src="dialog/existingGuarantorDialog.xhtml" />
+        </p:dialog>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{creditFacExisting.messageHeader}" message="#{creditFacExisting.message}" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteExistingCreditInfoDialog"/>
+            <ui:param name="name" value="confirmDeleteExistingCreditInfoDlg"/>
+            <ui:param name="formId" value="frmConfirmDeleteExistingCreditInfo"/>
+            <ui:param name="controller" value="#{creditFacExisting}"/>
+            <ui:param name="action" value="onDeleteExistingCreditInfo"/>
+            <ui:param name="update" value=":frmMain"/>
+        </ui:include>
     </h:body>
 </f:view>
 </html>

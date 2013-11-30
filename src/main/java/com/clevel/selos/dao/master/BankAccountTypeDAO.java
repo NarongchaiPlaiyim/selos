@@ -36,4 +36,46 @@ public class BankAccountTypeDAO extends GenericDAO<BankAccountType, Integer> {
 
         return bankAccountType;
     }
+
+    public List<BankAccountType> getBankAccountTypeList() {
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.eq("bankStatementFlag", 1))
+                .add(Restrictions.eq("othBankStatementFlag", 0));
+
+        List<BankAccountType> list = criteria.list();
+        return list;
+    }
+
+    public List<BankAccountType> getOtherAccountTypeList() {
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.eq("bankStatementFlag", 0))
+                .add(Restrictions.eq("othBankStatementFlag", 1));
+
+        List<BankAccountType> list = criteria.list();
+        return list;
+    }
+
+    public BankAccountType getByShortName(String shortName) {
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.eq("shortName", shortName));
+        List list = criteria.list();
+        if (list != null && list.size() > 1)
+            return (BankAccountType) list.get(0);
+        else
+            return (BankAccountType) criteria.uniqueResult();
+    }
+
+    public BankAccountType getByName(String name) {
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.eq("name", name));
+        List list = criteria.list();
+        if (list != null && list.size() > 1)
+            return (BankAccountType) list.get(0);
+        else
+            return (BankAccountType) criteria.uniqueResult();
+    }
 }

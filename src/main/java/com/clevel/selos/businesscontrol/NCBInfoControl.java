@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
@@ -14,7 +15,7 @@ import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
-import org.hibernate.criterion.Conjunction;
+import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -30,11 +31,8 @@ import java.util.List;
 public class NCBInfoControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
-    @Inject
-    NCBDetailTransform ncbDetailTransform;
-    @Inject
-    NCBTransform ncbTransform;
+    private Logger log;
+
     @Inject
     NCBDAO ncbDAO;
     @Inject
@@ -45,12 +43,19 @@ public class NCBInfoControl extends BusinessControl {
     private CustomerDAO customerDAO;
 
     @Inject
+    NCBDetailTransform ncbDetailTransform;
+    @Inject
+    NCBTransform ncbTransform;
+    @Inject
     private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
     public NCBInfoControl() {
 
     }
+
+    private final BigDecimal plusMRR = BigDecimal.valueOf(6);
+
 
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList) {
         log.info("onSaveNCBToDB begin");
@@ -113,54 +118,76 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.info("Begin getNCBForCalDBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
-
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         log.info("ncbs :{}", ncbs.size());
-        for(NCB ncb : ncbs){
+        for(NCB ncb : Util.safetyList(ncbs)){
             Customer customer = ncb.getCustomer();
             List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
             AccountType accountType;
-            for(NCBDetail ncbDetail : ncbDetails){
+            AccountStatus accountStatus;
+            for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
-                if(accountType.getDbrFlag() == 1){
-                    NCBDetailView ncbDetailView = new NCBDetailView();
-                    ncbDetailView.setId(ncbDetail.getId());
-                    ncbDetailView.setLimit(ncbDetail.getLimit());
-                    ncbDetailView.setInstallment(ncbDetail.getInstallment());
-                    BigDecimal debtForCalculate = BigDecimal.ZERO;
-                    BigDecimal dbrInterest = BigDecimal.TEN.add(BigDecimal.valueOf(3));
-                    switch (accountType.getCalculateType()){
-                        case 1:
-                            if(ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
-                                debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
-                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
-                            }else{
-                                debtForCalculate = ncbDetail.getInstallment();
-                            }
-                            break;
-                        case 2:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(5));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-                            break;
-                        case 3:
-                            debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(10));
-                            debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-                            break;
-                        default:
-                            break;
+                accountStatus = ncbDetail.getAccountStatus();
+                if(accountStatus != null && accountType != null){
+                    if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
+                        NCBDetailView ncbDetailView = new NCBDetailView();
+                        ncbDetailView.setId(ncbDetail.getId());
+                        ncbDetailView.setLimit(ncbDetail.getLimit());
+                        ncbDetailView.setInstallment(ncbDetail.getInstallment());
+                        BigDecimal debtForCalculate = BigDecimal.ZERO;
+
+                        BigDecimal dbrInterest = getDBRInterest();
+                        switch (accountType.getCalculateType()){
+                            case 1:
+                                if(ncbDetail.getInstallment() == null || ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
+                                    debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
+                                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
+                                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+                                }else{
+                                    debtForCalculate = ncbDetail.getInstallment();
+                                }
+                                break;
+                            case 2:
+                                debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(5));
+                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                                break;
+                            case 3:
+                                debtForCalculate = ncbDetail.getOutstanding().multiply(BigDecimal.valueOf(10));
+                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                                break;
+                            default:
+                                break;
+                        }
+                        ncbDetailView.setDebtForCalculate(debtForCalculate);
+                        StringBuilder accountName = new StringBuilder();
+                        accountName.append(customer.getTitle().getTitleTh())
+                                .append(" ").append(customer.getNameTh());
+                        if(!Util.isEmpty(customer.getLastNameTh())){
+                            accountName.append(" ").append(customer.getLastNameTh());
+                        }
+                        ncbDetailView.setAccountName(accountName.toString());
+                        ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                        ncbDetailViews.add(ncbDetailView);
                     }
-                    ncbDetailView.setDebtForCalculate(debtForCalculate);
-                    StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitleTh().getTitleTh())
-                            .append(" ").append(customer.getNameTh())
-                            .append(" ").append(customer.getLastNameTh());
-                    ncbDetailView.setAccountName(accountName.toString());
-                    ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
-                    ncbDetailViews.add(ncbDetailView);
                 }
+
             }
         }
         return ncbDetailViews;
+    }
+
+    public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){
+        List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        if (customerList != null && customerList.size() > 0) {
+            for(Customer cus : customerList){
+                if(cus.getNcb() != null){
+                    NCBInfoView ncbView = ncbTransform.transformToView(cus.getNcb());
+                    ncbInfoViewList.add(ncbView);
+                }
+            }
+        }
+        return ncbInfoViewList;
     }
 }

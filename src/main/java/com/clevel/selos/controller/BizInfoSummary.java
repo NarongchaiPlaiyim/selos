@@ -3,14 +3,18 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -52,22 +56,25 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
-    private User user;
+    //private User user;
     private Date currentDate;
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
-    private BigDecimal sumweightIntvIncomeFactor;
-    private BigDecimal sumweightAR;
-    private BigDecimal sumweightAP;
-    private BigDecimal sumweightINV;
-
+    private BigDecimal SumWeightIntvIncomeFactor;
+    private BigDecimal SumWeightAR;
+    private BigDecimal SumWeightAP;
+    private BigDecimal SumWeightINV;
+    double bankStatementAvg = 0;
+    private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
     private String message;
     private String redirect;
+    private boolean disableOwnerName;
+    private boolean disableExpiryDate;
 
     @Inject
     @SELOS
@@ -94,9 +101,16 @@ public class BizInfoSummary implements Serializable {
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     private CountryDAO countryDAO;
+    @Inject
+    BankStmtTransform bankStmtTransform;
+    @Inject
+    BankStatementSummaryDAO bankStmtSummaryDAO;
+
 
     @Inject
     private Util util;
+
+    private long workCaseId;
 
     public BizInfoSummary() {
 
@@ -105,14 +119,48 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("SESSION WorkCase : {}", session.getAttribute("workCaseId"));
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
         onSearchBizInfoSummaryByWorkCase();
-
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
+
+        //user = (User)session.getAttribute("user");
+
+        //log.info("onCreation bizInfoSum " + user.getRole().toString());
+
+        //user.getRole().setId(102);
+
+        bankStatementAvg = 0;
+        if(bankStmtSummaryView != null ){
+
+            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                }
+            }*/
+
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            }else{
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }
+        }else{
+           log.info("bankStmtSummaryView is null ");
+        }
+
+        log.info("bankStatementAvg is " + bankStatementAvg);
 
         if (bizInfoSummaryView == null) {
 
@@ -140,14 +188,12 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightINV(new BigDecimal(0));
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
 
-
         } else {
             getBusinessInfoListDB();
             onChangeProvince();
             onChangeDistrict();
+            onChangeRental();
         }
-
-
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
@@ -155,10 +201,22 @@ public class BizInfoSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        //session.setAttribute("workCaseId", 10001);
+
         log.info(" get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
+
+        /*com.clevel.selos.model.db.working.BankStatementSummary bankStatementSummary;
+
+        bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+       asdf
+        bankStmtSummaryView = new BankStmtSummaryView();
+        bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStatementSummary.getGrdTotalIncomeNetBDM());
+        bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());*/
+
+        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
+        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
 
     }
 
@@ -185,7 +243,7 @@ public class BizInfoSummary implements Serializable {
         if (bizInfoDetailViewList.size() == 0) {
             bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         } else {
-            double bankstatementAvg = 0;
+
             double incomeAmountCal = 0;
             double sumIncomeAmountD = 0;
 
@@ -214,9 +272,7 @@ public class BizInfoSummary implements Serializable {
 
                 incomePercentD = temp.getPercentBiz().doubleValue();
                 sumIncomePercentD += incomePercentD;
-
-                bankstatementAvg = 12000;
-                incomeAmountCal = bankstatementAvg * 12;
+                incomeAmountCal = bankStatementAvg * 12;
                 sumIncomeAmountD += incomeAmountCal;
 
 
@@ -248,33 +304,148 @@ public class BizInfoSummary implements Serializable {
 
             sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2);
             sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2);
-            sumweightAR = new BigDecimal(sumAR).setScale(2);
-            sumweightAP = new BigDecimal(sumAP).setScale(2);
-            sumweightINV = new BigDecimal(sumINV).setScale(2);
-            sumweightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
+            SumWeightAR = new BigDecimal(sumAR).setScale(2);
+            SumWeightAP = new BigDecimal(sumAP).setScale(2);
+            SumWeightINV = new BigDecimal(sumINV).setScale(2);
+            SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
 
 
+            bizInfoSummaryView.setCirculationAmount(sumIncomeAmount);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
             bizInfoSummaryView.setSumIncomeAmount(sumIncomeAmount);
             bizInfoSummaryView.setSumIncomePercent(sumIncomePercent);
-            bizInfoSummaryView.setSumWeightAR(sumweightAR);
-            bizInfoSummaryView.setSumWeightAP(sumweightAP);
-            bizInfoSummaryView.setSumWeightINV(sumweightINV);
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(sumweightIntvIncomeFactor);
+            bizInfoSummaryView.setSumWeightAR(SumWeightAR);
+            bizInfoSummaryView.setSumWeightAP(SumWeightAP);
+            bizInfoSummaryView.setSumWeightINV(SumWeightINV);
+            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
+            onCalSummaryTable();
         }
     }
 
+    public void onCalSummaryTable(){
+        log.info("onCalSummaryTable begin");
+        double sumIncomeAmount = 0;
+        double productCostAmount = 0;
+        double productCostPercent = 0;
+        double profitMarginAmount = 0;
+        double profitMarginPercent = 0;
+        double operatingExpenseAmount = 0;
+        double operatingExpensePercent = 0;
+        double earningsBeforeTaxAmount = 0;
+        double earningsBeforeTaxPercent = 0;
+        double reduceInterestAmount = 0;
+        double reduceTaxAmount = 0;
+        double reduceInterestPercent = 0;
+        double reduceTaxPercent = 0;
+        double netMarginAmount = 0;
+        double netMarginPercent = 0;
+
+        if(bizInfoSummaryView.getCirculationAmount()!= null){
+            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+        }
+
+        if(bizInfoSummaryView.getProductionCostsPercentage()!= null){
+            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage().doubleValue();
+        }
+
+        if( productCostPercent > 100.01){
+            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "����Թ 100";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+        
+        productCostAmount = (sumIncomeAmount * productCostPercent)/100;
+        bizInfoSummaryView.setProductionCostsAmount(new BigDecimal(productCostAmount));
+        profitMarginPercent = 100 - productCostPercent;
+        profitMarginAmount = (sumIncomeAmount * profitMarginPercent)/100;
+        bizInfoSummaryView.setProfitMarginPercentage(new BigDecimal(profitMarginPercent));
+        bizInfoSummaryView.setProfitMarginAmount(new BigDecimal(profitMarginAmount));
+
+        log.info("onCalSummaryTable 111");
+
+        if(bizInfoSummaryView.getOperatingExpenseAmount()!= null){
+            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount().doubleValue();
+        }
+
+        if( operatingExpenseAmount > profitMarginAmount){
+            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� operatingExpenseAmount > profitMarginPercent";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
+        operatingExpensePercent = (operatingExpenseAmount/sumIncomeAmount)*100;
+        bizInfoSummaryView.setOperatingExpensePercentage(new BigDecimal(operatingExpensePercent));
+
+        earningsBeforeTaxAmount = profitMarginAmount- operatingExpenseAmount;
+        earningsBeforeTaxPercent = profitMarginPercent - operatingExpensePercent;
+
+        bizInfoSummaryView.setEarningsBeforeTaxAmount(new BigDecimal(earningsBeforeTaxAmount));
+        bizInfoSummaryView.setEarningsBeforeTaxPercentage(new BigDecimal(earningsBeforeTaxPercent));
+
+        log.info("onCalSummaryTable 222");
+        if(bizInfoSummaryView.getReduceInterestAmount()!= null){
+            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
+        }
+
+        if(bizInfoSummaryView.getReduceTaxAmount()!= null){
+            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
+        }
+
+        if( reduceInterestAmount > earningsBeforeTaxAmount){
+            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� Interest > earningsBeforeTaxAmount";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
+        if( reduceTaxAmount > earningsBeforeTaxAmount){
+            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� tax > earningsBeforeTaxAmount";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
+        if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
+            bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
+            bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� ����� interest and tax > earningsBeforeTaxAmount";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
+
+
+        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
+        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
+
+        reduceInterestPercent = (reduceInterestAmount/sumIncomeAmount)*100;
+        reduceTaxPercent = (reduceTaxAmount/sumIncomeAmount)*100;
+
+        bizInfoSummaryView.setReduceInterestPercentage(new BigDecimal(reduceInterestPercent));
+        bizInfoSummaryView.setReduceTaxPercentage(new BigDecimal(reduceTaxPercent));
+
+        netMarginAmount = earningsBeforeTaxAmount- reduceInterestAmount - reduceTaxAmount ;
+        netMarginPercent = earningsBeforeTaxPercent - reduceInterestPercent - reduceTaxPercent;
+
+        bizInfoSummaryView.setNetMarginAmount(new BigDecimal(netMarginAmount));
+        bizInfoSummaryView.setNetMarginPercentage(new BigDecimal(netMarginPercent));
+        log.info("onCalSummaryTable 333");
+
+        log.info("onCalSummaryTable end");
+    }
 
     public void onSaveBizInfoSummary() {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            if (bizInfoSummaryView.getId() == 0) {
-                bizInfoSummaryView.setCreateBy(user);
-                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
@@ -337,6 +508,20 @@ public class BizInfoSummary implements Serializable {
 
         } finally {
             log.info("onDeleteBizInfoToDB Controller end ");
+        }
+    }
+
+    public void onChangeRental(){
+        log.info("onChangeRental ");
+        log.info("onChangeRental is " + bizInfoSummaryView.getRental());
+        disableOwnerName = true;
+        disableExpiryDate = true;
+        if(bizInfoSummaryView.getRental() == 0 ){
+            disableOwnerName = false;
+            bizInfoSummaryView.setExpiryDate(null);
+        }else if(bizInfoSummaryView.getRental() == 1 ){
+            disableExpiryDate = false;
+            bizInfoSummaryView.setOwnerName("");
         }
     }
 
@@ -444,36 +629,36 @@ public class BizInfoSummary implements Serializable {
         this.sumIncomePercent = sumIncomePercent;
     }
 
-    public BigDecimal getSumweightAR() {
-        return sumweightAR;
+    public BigDecimal getSumWeightAR() {
+        return SumWeightAR;
     }
 
-    public void setSumweightAR(BigDecimal sumweightAR) {
-        this.sumweightAR = sumweightAR;
+    public void setSumWeightAR(BigDecimal SumWeightAR) {
+        this.SumWeightAR = SumWeightAR;
     }
 
-    public BigDecimal getSumweightIntvIncomeFactor() {
-        return sumweightIntvIncomeFactor;
+    public BigDecimal getSumWeightIntvIncomeFactor() {
+        return SumWeightIntvIncomeFactor;
     }
 
-    public void setSumweightIntvIncomeFactor(BigDecimal sumweightIntvIncomeFactor) {
-        this.sumweightIntvIncomeFactor = sumweightIntvIncomeFactor;
+    public void setSumWeightIntvIncomeFactor(BigDecimal SumWeightIntvIncomeFactor) {
+        this.SumWeightIntvIncomeFactor = SumWeightIntvIncomeFactor;
     }
 
-    public BigDecimal getSumweightAP() {
-        return sumweightAP;
+    public BigDecimal getSumWeightAP() {
+        return SumWeightAP;
     }
 
-    public void setSumweightAP(BigDecimal sumweightAP) {
-        this.sumweightAP = sumweightAP;
+    public void setSumWeightAP(BigDecimal SumWeightAP) {
+        this.SumWeightAP = SumWeightAP;
     }
 
-    public BigDecimal getSumweightINV() {
-        return sumweightINV;
+    public BigDecimal getSumWeightINV() {
+        return SumWeightINV;
     }
 
-    public void setSumweightINV(BigDecimal sumweightINV) {
-        this.sumweightINV = sumweightINV;
+    public void setSumWeightINV(BigDecimal SumWeightINV) {
+        this.SumWeightINV = SumWeightINV;
     }
 
     public List<Country> getCountryList() {
@@ -498,5 +683,21 @@ public class BizInfoSummary implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public boolean isDisableExpiryDate() {
+        return disableExpiryDate;
+    }
+
+    public void setDisableExpiryDate(boolean disableExpiryDate) {
+        this.disableExpiryDate = disableExpiryDate;
+    }
+
+    public boolean isDisableOwnerName() {
+        return disableOwnerName;
+    }
+
+    public void setDisableOwnerName(boolean disableOwnerName) {
+        this.disableOwnerName = disableOwnerName;
     }
 }

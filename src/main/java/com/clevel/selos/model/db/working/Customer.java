@@ -57,12 +57,8 @@ public class Customer implements Serializable {
     private Date documentExpiredDate;
 
     @OneToOne
-    @JoinColumn(name="title_th_id")
-    private Title titleTh;
-
-    @OneToOne
-    @JoinColumn(name="title_en_id")
-    private Title titleEn;
+    @JoinColumn(name = "title_id")
+    private Title title;
 
     @Column(name="name_en")
     private String nameEn;
@@ -85,7 +81,7 @@ public class Customer implements Serializable {
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy = "customer")
     private Individual individual;
 
     @OneToOne(mappedBy="customer")
@@ -176,6 +172,45 @@ public class Customer implements Serializable {
 
     @Column(name="juristic_id")
     private long juristicId;
+
+    @Column(name="age_months", nullable=false, columnDefinition="int default 0")
+    private int ageMonths;
+
+    @Column(name="is_existing_customer", nullable=false, columnDefinition="int default 0")
+    private int isExistingSMECustomer;
+
+    @Column(name="last_review_date")
+    private Date lastReviewDate;
+
+    @Column(name="extended_review_date")
+    private Date extendedReviewDate;
+
+    @Column(name="extended_review_date_flag", nullable=false, columnDefinition="int default 0")
+    private int extendedReviewDateFlag;
+
+    @Column(name="next_review_date")
+    private Date nextReviewDate;
+
+    @Column(name="next_review_date_flag", nullable=false, columnDefinition="int default 0")
+    private int nextReviewDateFlag;
+
+    @Column(name="last_contract_date")
+    private Date lastContractDate;
+
+    @Column(name="months_last_contract_date")
+    private Date numberOfMonthsLastContractDate;
+
+    @Column(name="adjust_class")
+    private String adjustClass;
+
+    @Column(name="rating_final")
+    private String ratingFinal;
+
+    @Column(name="unpaid_fee_insurance", nullable=false, columnDefinition="int default 0")
+    private int unpaidFeeInsurance;
+
+    @Column(name="no_pending_claim_LG", nullable=false, columnDefinition="int default 0")
+    private int noPendingClaimLG;
 
     public Customer() {
     }
@@ -276,14 +311,6 @@ public class Customer implements Serializable {
         this.documentExpiredDate = expireDate;
     }
 
-    public Title getTitleTh() {
-        return titleTh;
-    }
-
-    public void setTitleTh(Title title) {
-        this.titleTh = title;
-    }
-
     public String getNameEn() {
         return nameEn;
     }
@@ -322,6 +349,14 @@ public class Customer implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
     }
 
     public int getNcbFlag() {
@@ -516,14 +551,6 @@ public class Customer implements Serializable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public Title getTitleEn() {
-        return titleEn;
-    }
-
-    public void setTitleEn(Title titleEn) {
-        this.titleEn = titleEn;
-    }
-
     public int getSearchBy() {
         return searchBy;
     }
@@ -572,12 +599,116 @@ public class Customer implements Serializable {
         this.juristicId = juristicId;
     }
 
-    public int getCsiFlag() {
-        return csiFlag;
+    public Title getTitle() {
+        return title;
     }
 
-    public void setCsiFlag(int csiFlag) {
-        this.csiFlag = csiFlag;
+    public void setTitle(Title title) {
+        this.title = title;
+    }
+
+    public int getAgeMonths() {
+        return ageMonths;
+    }
+
+    public void setAgeMonths(int ageMonths) {
+        this.ageMonths = ageMonths;
+    }
+
+    public int getIsExistingSMECustomer() {
+        return isExistingSMECustomer;
+    }
+
+    public void setIsExistingSMECustomer(int existingSMECustomer) {
+        isExistingSMECustomer = existingSMECustomer;
+    }
+
+    public Date getLastReviewDate() {
+        return lastReviewDate;
+    }
+
+    public void setLastReviewDate(Date lastReviewDate) {
+        this.lastReviewDate = lastReviewDate;
+    }
+
+    public Date getExtendedReviewDate() {
+        return extendedReviewDate;
+    }
+
+    public void setExtendedReviewDate(Date extendedReviewDate) {
+        this.extendedReviewDate = extendedReviewDate;
+    }
+
+    public int getExtendedReviewDateFlag() {
+        return extendedReviewDateFlag;
+    }
+
+    public void setExtendedReviewDateFlag(int extendedReviewDateFlag) {
+        this.extendedReviewDateFlag = extendedReviewDateFlag;
+    }
+
+    public Date getNextReviewDate() {
+        return nextReviewDate;
+    }
+
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
+    }
+
+    public int getNextReviewDateFlag() {
+        return nextReviewDateFlag;
+    }
+
+    public void setNextReviewDateFlag(int nextReviewDateFlag) {
+        this.nextReviewDateFlag = nextReviewDateFlag;
+    }
+
+    public Date getLastContractDate() {
+        return lastContractDate;
+    }
+
+    public void setLastContractDate(Date lastContractDate) {
+        this.lastContractDate = lastContractDate;
+    }
+
+    public Date getNumberOfMonthsLastContractDate() {
+        return numberOfMonthsLastContractDate;
+    }
+
+    public void setNumberOfMonthsLastContractDate(Date numberOfMonthsLastContractDate) {
+        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
+    }
+
+    public String getAdjustClass() {
+        return adjustClass;
+    }
+
+    public void setAdjustClass(String adjustClass) {
+        this.adjustClass = adjustClass;
+    }
+
+    public String getRatingFinal() {
+        return ratingFinal;
+    }
+
+    public void setRatingFinal(String ratingFinal) {
+        this.ratingFinal = ratingFinal;
+    }
+
+    public int getUnpaidFeeInsurance() {
+        return unpaidFeeInsurance;
+    }
+
+    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
+        this.unpaidFeeInsurance = unpaidFeeInsurance;
+    }
+
+    public int getNoPendingClaimLG() {
+        return noPendingClaimLG;
+    }
+
+    public void setNoPendingClaimLG(int noPendingClaimLG) {
+        this.noPendingClaimLG = noPendingClaimLG;
     }
 
     @Override
@@ -595,14 +726,14 @@ public class Customer implements Serializable {
                 append("approxIncome", approxIncome).
                 append("tmbCustomerId", tmbCustomerId).
                 append("documentExpiredDate", documentExpiredDate).
-                append("titleTh", titleTh).
-                append("titleEn", titleEn).
+                append("title", title).
                 append("nameEn", nameEn).
                 append("nameTh", nameTh).
                 append("lastNameTh", lastNameTh).
                 append("lastNameEn", lastNameEn).
                 append("age", age).
                 append("ncbFlag", ncbFlag).
+                append("csiFlag", csiFlag).
                 append("individual", individual).
                 append("juristic", juristic).
                 append("addressesList", addressesList).

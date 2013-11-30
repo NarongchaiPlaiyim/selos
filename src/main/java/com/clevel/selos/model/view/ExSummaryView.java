@@ -1,8 +1,10 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,47 +15,38 @@ public class ExSummaryView  implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    //Borrower Characteristic
-    private List<ExSumCharacteristicView> exCharacteristicListView;
-/*     private String customer;
-    private BigDecimal currentDBR;
-    private BigDecimal finalDBR;
-    private BigDecimal income;
-    private BigDecimal recommendedWCNeed;
-    private BigDecimal actualWC;
-    private Date startBusinessDate;
-    private String yearInBusiness;
-    private BigDecimal salePerYearBDM;
-    private BigDecimal salePerYearUW;
-    private BigDecimal groupSaleBDM;
-    private BigDecimal groupSaleUW;
-    private BigDecimal groupExposureBDM;
-    private BigDecimal groupExposureUW;*/
 
-    //Business Information Summary
-    private List<ExSumBusinessInfoView> exSumBusinessInfoListView;
-/*    private BigDecimal netFixAsset;
-    private int     noOfEmployee;
-    private String  bizProvince;
-    private String  bizType;
-    private String  bizGroup;
-    private String  bizCode;
-    private String  bizDesc;
-    private String  qualitativeClass;
-    private BigDecimal bizSize;
-    private BigDecimal BDM;
-    private BigDecimal UW;
-    private BigDecimal AR;
-    private BigDecimal AP;
-    private BigDecimal INV;*/
+    //Borrower
+    private List<CustomerInfoView> borrowerListView;         //wo transform
+    private String businessLocationName;
+    private String businessLocationAddress;
+    private String businessLocationAddressEN;
+    private String owner;
 
+    //Trade Finance
+
+
+    //Borrower Characteristic & Business Information Summary
+    private ExSumCharacteristicView exSumCharacteristicView;
+    private ExSumBusinessInfoView exSumBusinessInfoView;
     private String businessOperationActivity;
     private String businessPermission;
     private Date expiryDate;
 
+    //NCB Record
+    private List<NCBInfoView> ncbInfoListView;               //wo transform
+
+    //Account Movement
+    private List<ExSumAccountMovementView> exSumAccMovementViewList;
+
+    //Collateral
+    private ExSumCollateralView exSumCollateralView;
+
+    //Deviate
     private String applicationResult;
     private List<ExSumDecisionView> exSumDecisionListView;
 
+    //Business Overview and Support Decision
     private String natureOfBusiness;
     private String historicalAndReasonOfChange;
     private String tmbCreditHistory;
@@ -65,22 +58,25 @@ public class ExSummaryView  implements Serializable {
     private int    rm020Code;    //radio
     private String rm020Remark;
 
-    private String uwCode;
-    private int    decision;    //radio
+    //UW Decision and Explanation
+    private AuthorizationDOA approveAuthority;
+    private String uwCode;                          //wo transform
+    private int decision;    //radio                //wo transform
+    private List<ExSumReasonView> deviateCode;
 
-    private String reasonCode;
-    private String reasonDesc;
+    //UW Comment
     private String uwComment;
-
 
     public  ExSummaryView(){}
 
     public void reset(){
+        borrowerListView = new ArrayList<CustomerInfoView>();
+        ncbInfoListView = new ArrayList<NCBInfoView>();
         exSumDecisionListView = new ArrayList<ExSumDecisionView>();
-        exCharacteristicListView = new ArrayList<ExSumCharacteristicView>();
-        exSumBusinessInfoListView = new ArrayList<ExSumBusinessInfoView>();
+        exSumCharacteristicView = new ExSumCharacteristicView();
+        exSumBusinessInfoView = new ExSumBusinessInfoView();
+        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
     }
-
 
     public long getId() {
         return id;
@@ -252,22 +248,6 @@ public class ExSummaryView  implements Serializable {
         this.decision = decision;
     }
 
-    public String getReasonCode() {
-        return reasonCode;
-    }
-
-    public void setReasonCode(String reasonCode) {
-        this.reasonCode = reasonCode;
-    }
-
-    public String getReasonDesc() {
-        return reasonDesc;
-    }
-
-    public void setReasonDesc(String reasonDesc) {
-        this.reasonDesc = reasonDesc;
-    }
-
     public String getUwComment() {
         return uwComment;
     }
@@ -284,19 +264,99 @@ public class ExSummaryView  implements Serializable {
         exSumDecisionListView = exSumDecisionListView;
     }
 
-    public List<ExSumCharacteristicView> getExCharacteristicListView() {
-        return exCharacteristicListView;
+    public ExSumCharacteristicView getExSumCharacteristicView() {
+        return exSumCharacteristicView;
     }
 
-    public void setExCharacteristicListView(List<ExSumCharacteristicView> exCharacteristicListView) {
-        this.exCharacteristicListView = exCharacteristicListView;
+    public void setExSumCharacteristicView(ExSumCharacteristicView exSumCharacteristicView) {
+        this.exSumCharacteristicView = exSumCharacteristicView;
     }
 
-    public List<ExSumBusinessInfoView> getExSumBusinessInfoListView() {
-        return exSumBusinessInfoListView;
+    public List<ExSumAccountMovementView> getExSumAccMovementViewList() {
+        return exSumAccMovementViewList;
     }
 
-    public void setExSumBusinessInfoListView(List<ExSumBusinessInfoView> exSumBusinessInfoListView) {
-        this.exSumBusinessInfoListView = exSumBusinessInfoListView;
+    public void setExSumAccMovementViewList(List<ExSumAccountMovementView> exSumAccMovementViewList) {
+        this.exSumAccMovementViewList = exSumAccMovementViewList;
+    }
+
+    public ExSumBusinessInfoView getExSumBusinessInfoView() {
+        return exSumBusinessInfoView;
+    }
+
+    public void setExSumBusinessInfoView(ExSumBusinessInfoView exSumBusinessInfoView) {
+        this.exSumBusinessInfoView = exSumBusinessInfoView;
+    }
+
+    public List<CustomerInfoView> getBorrowerListView() {
+        return borrowerListView;
+    }
+
+    public void setBorrowerListView(List<CustomerInfoView> borrowerListView) {
+        this.borrowerListView = borrowerListView;
+    }
+
+    public List<NCBInfoView> getNcbInfoListView() {
+        return ncbInfoListView;
+    }
+
+    public void setNcbInfoListView(List<NCBInfoView> ncbInfoListView) {
+        this.ncbInfoListView = ncbInfoListView;
+    }
+
+    public ExSumCollateralView getExSumCollateralView() {
+        return exSumCollateralView;
+    }
+
+    public void setExSumCollateralView(ExSumCollateralView exSumCollateralView) {
+        this.exSumCollateralView = exSumCollateralView;
+    }
+
+    public AuthorizationDOA getApproveAuthority() {
+        return approveAuthority;
+    }
+
+    public void setApproveAuthority(AuthorizationDOA approveAuthority) {
+        this.approveAuthority = approveAuthority;
+    }
+
+    public List<ExSumReasonView> getDeviateCode() {
+        return deviateCode;
+    }
+
+    public void setDeviateCode(List<ExSumReasonView> deviateCode) {
+        this.deviateCode = deviateCode;
+    }
+
+    public String getBusinessLocationName() {
+        return businessLocationName;
+    }
+
+    public void setBusinessLocationName(String businessLocationName) {
+        this.businessLocationName = businessLocationName;
+    }
+
+    public String getBusinessLocationAddress() {
+        return businessLocationAddress;
+    }
+
+    public void setBusinessLocationAddress(String businessLocationAddress) {
+        this.businessLocationAddress = businessLocationAddress;
+    }
+
+    public String getBusinessLocationAddressEN() {
+        return businessLocationAddressEN;
+    }
+
+    public void setBusinessLocationAddressEN(String businessLocationAddressEN) {
+        this.businessLocationAddressEN = businessLocationAddressEN;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

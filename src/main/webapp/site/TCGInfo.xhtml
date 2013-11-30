@@ -36,26 +36,26 @@
                         <div id="content_form">
                             <!-- start content -->
                             <table  class="content_table_form">
-
                                 <tr>
                                     <td colspan="2"><h2>#{msg.get('app.tcg.label.title')}</h2></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">
-                                        <table class="table_noborder" style="padding-left: 100px;">
+                                    <td style="width: 70px;"></td>
+                                    <td>
+                                        <table class="table_noborder">
                                             <tr>
-                                                <td class="title">
+                                                <td class="title" style="min-width: 400px; width: 400px; max-width: 400px;">
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
-                                                        <f:selectItem itemLabel="No" itemValue="0"/>
-                                                        <f:selectItem itemLabel="Yes" itemValue="1"/>
-                                                    </h:selectOneRadio>
+                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
+                                                        <f:selectItem itemLabel="No" itemValue="1"/>
+                                                        <f:selectItem itemLabel="Yes" itemValue="2"/>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="title" style="width: 450px;">
+                                                <td class="title">
                                                     <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')} :" />
                                                 </td>
                                                 <td>
@@ -121,7 +121,8 @@
                                     <td colspan="2"><p:spacer width="2"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="left" colspan="2">
+                                    <td></td>
+                                    <td class="left">
                                         <p:commandButton
                                                 id="btnAdd"
                                                 value="#{msg.get('app.addButton')}"
@@ -135,43 +136,50 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">
+                                    <td></td>
+                                    <td>
                                         <table>
                                             <tr>
                                                 <td>
                                                     <p:dataTable id="resultCollateralDetail" var="item" value="#{tcgInfo.TCGDetailViewList}"
                                                                  paginator="false" rowKey="#{item.TCGDetailView}" rowIndexVar="rowIndex">
 
-                                                        <p:column headerText="" styleClass="center" style="width:20px;">
+                                                        <p:column headerText=""
+                                                                  styleClass="center" style="min-width: 20px; width:20px; max-width: 20px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.potential')}"  styleClass="left" style="width: 200px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.potential')}"
+                                                                  styleClass="left" style="min-width: 220px; width: 220px; max-width: 220px;">
                                                             <h:outputText value="#{item.potentialCollateral.description}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.collateralCollateralType')}" styleClass="left" style="width:200px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.collateralCollateralType')}"
+                                                                  styleClass="left" style="min-width: 220px; width:220px; max-width: 220px;">
                                                             <h:outputText value="#{item.tcgCollateralType.description}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.appraisalAmount')}" styleClass="right" style="width: 150px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.appraisalAmount')}"
+                                                                  styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
                                                             <h:outputText value="#{item.appraisalAmount}">
                                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.LTVvalue')}" styleClass="right" style="width: 150px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.LTVvalue')}"
+                                                                  styleClass="right" style="min-width: 140px; width: 140px; max-width: 140px;">
                                                             <h:outputText value="#{item.ltvValue}">
                                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.isProposeInThisRequest')}" styleClass="center" style="width: 90px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.isProposeInThisRequest')}"
+                                                                  styleClass="center" style="min-width: 90px; width: 90px; max-width: 90px;">
                                                            <h:outputText value="#{item.proposeInThis}"/>
                                                         </p:column>
 
 
-                                                        <p:column>
+                                                        <p:column style="min-width: 40px; width: 40px; max-width: 40px;">
                                                             <p:commandButton icon="ui-icon-pencil"
                                                                              action="#{tcgInfo.onEditCollateralDetail()}"
                                                                              process=":frmMain:resultCollateralDetail"
@@ -190,8 +198,8 @@
                                                             </p:commandButton>
                                                         </p:column>
 
-                                                      <p:columnGroup type="footer">
-                                                          <p:row>
+                                                        <p:columnGroup type="footer">
+                                                            <p:row>
                                                               <p:column/>
                                                               <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}" style="text-align:left"/>
                                                               <p:column  style="text-align:right">
@@ -209,8 +217,8 @@
                                                                   </f:facet>
                                                               </p:column>
                                                               <p:column colspan="2" />
-                                                          </p:row>
-                                                          <p:row>
+                                                            </p:row>
+                                                            <p:row>
                                                               <p:column/>
                                                               <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.totalInThis')}" style="text-align:left"/>
                                                               <p:column  style="text-align:right">
@@ -228,7 +236,7 @@
                                                                   </f:facet>
                                                               </p:column>
                                                               <p:column colspan="2" />
-                                                          </p:row>
+                                                            </p:row>
                                                         </p:columnGroup>
 
                                                     </p:dataTable>
@@ -266,7 +274,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td colspan="100%"><p:separator/></td>
+                                    <td colspan="2"><p:separator/></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="center">

@@ -114,7 +114,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td colspan="3">
-                                                    <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
+                                                    <table style="border: 1px solid #acacac; border-spacing: 0; margin-top: 10px; width: 700px;">
                                                         <tr>
                                                             <td>
                                                                 <table>
@@ -143,7 +143,7 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
+                                                    <table style="border: 1px solid #acacac; border-spacing: 0; margin-top: 10px; width: 700px;">
                                                         <tr>
                                                             <td>
                                                                 <table>
@@ -217,12 +217,12 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
+                                                                <p:selectOneRadio id="spProgram" value="#{basicInfo.basicInfoView.spProgram}"
                                                                                   disabled="#{basicInfo.disIsApplySpecialProgram}"
                                                                                   required="#{basicInfo.reqIsApplySpecialProgram and not empty param[saveBtn.clientId]}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                                    <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
+                                                                    <p:ajax update="spProgram,specialProgram" listener="#{basicInfo.onChangeSpecialProgram}" event="click"/>
                                                                 </p:selectOneRadio>
                                                             </td>
                                                             <td>
@@ -249,16 +249,16 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
+                                                                <p:selectOneRadio id="refIn" value="#{basicInfo.basicInfoView.refIn}"
                                                                                   disabled="#{basicInfo.disIsRefinanceIN}"
                                                                                   required="#{basicInfo.reqIsRefinanceIN and not empty param[saveBtn.clientId]}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                                    <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
+                                                                    <p:ajax update="refIn,referIn" listener="#{basicInfo.onChangeRefIn}" event="click"/>
                                                                 </p:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refIn" styleClass="largest"
+                                                                <p:selectOneMenu id="referIn" styleClass="largest"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}"
                                                                                  disabled="#{basicInfo.disRefinanceInValue}"
                                                                                  required="#{basicInfo.reqRefinanceInValue and not empty param[saveBtn.clientId]}">
@@ -281,16 +281,16 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
+                                                                <p:selectOneRadio id="refOut" value="#{basicInfo.basicInfoView.refOut}"
                                                                                   disabled="#{basicInfo.disIsRefinanceOUT}"
                                                                                   required="#{basicInfo.reqIsRefinanceOUT and not empty param[saveBtn.clientId]}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                                    <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
+                                                                    <p:ajax update="refOut,referOut" listener="#{basicInfo.onChangeRefOut}" event="click"/>
                                                                 </p:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refOut" styleClass="largest"
+                                                                <p:selectOneMenu id="referOut" styleClass="largest"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}"
                                                                                  disabled="#{basicInfo.disRefinanceOutValue}"
                                                                                  required="#{basicInfo.reqRefinanceOutValue and not empty param[saveBtn.clientId]}">
@@ -343,8 +343,8 @@
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}"
                                                                       disabled="#{basicInfo.disIsExistingSMECustomer}"
                                                                       required="#{basicInfo.reqIsExistingSMECustomer and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
                                                         <p:ajax update="since" listener="#{basicInfo.onChangeExistingSME()}"/>
                                                     </p:selectOneRadio>
                                                 </td>
@@ -413,8 +413,8 @@
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.loan}"
                                                                       disabled="#{basicInfo.disRequestLoanWithSameName}"
                                                                       required="#{basicInfo.reqRequestLoanWithSameName and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -426,8 +426,8 @@
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
                                                                       disabled="#{basicInfo.disHaveLoanInOneYear}"
                                                                       required="#{basicInfo.reqHaveLoanInOneYear and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -439,8 +439,8 @@
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
                                                                       disabled="#{basicInfo.disPassAnnualReview}"
                                                                       required="#{basicInfo.reqPassAnnualReview and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -579,12 +579,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.apply')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}"
+                                                    <p:selectOneRadio id="appBA" value="#{basicInfo.basicInfoView.applyBA}"
                                                                       disabled="#{basicInfo.disIsApplyBA}"
                                                                       required="#{basicInfo.reqIsApplyBA and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                        <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
+                                                        <p:ajax update="appBA,ba" listener="#{basicInfo.onChangeBA}" event="click"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>

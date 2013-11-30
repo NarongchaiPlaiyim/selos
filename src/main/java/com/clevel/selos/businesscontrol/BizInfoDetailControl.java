@@ -27,8 +27,11 @@ import java.util.List;
 @Stateless
 public class BizInfoDetailControl extends BusinessControl {
     @Inject
-    BusinessDescriptionDAO businessDescriptionDAO;
+    @SELOS
+    private Logger log;
 
+    @Inject
+    BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
@@ -36,13 +39,19 @@ public class BizInfoDetailControl extends BusinessControl {
     @Inject
     BizProductDetailDAO bizProductDetailDAO;
     @Inject
+    BizInfoSummaryDAO bizInfoSummaryDAO;
+
+    @Inject
     BizProductDetailTransform bizProductDetailTransform;
     @Inject
     BizStakeHolderDetailTransform bizStakeHolderDetailTransform;
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
-    @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
+
+	@Inject
+    public BizInfoDetailControl(){
+
+    }
 
     public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId) {
 

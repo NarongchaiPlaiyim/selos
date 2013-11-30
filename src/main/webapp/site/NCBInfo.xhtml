@@ -44,7 +44,7 @@
 <table class="content_table_form">
 
 <tr>
-    <td  class="title"  style="min-width:100px;width: 100px;max-width:100px;" >
+    <td  class="title"  style="min-width:230px;width: 230px;max-width:230px;" >
         <h:outputText value="#{msg.get('app.ncbSummaryResult')}"/>
     </td>
     <td>
@@ -113,16 +113,16 @@
         <table class="table_noborder">
             <tr>
                 <td class="title" style="width: 160px;">
-                    <h:selectOneRadio id="NPLFlag"
+                    <p:selectOneRadio id="NPLFlag"
                                       value="#{ncbInfo.ncbInfoView.nplFlag}"
                                       disabled="true">
-                        <f:selectItem itemLabel="Yes" itemValue="1"/>
-                        <f:selectItem itemLabel="No" itemValue="0"/>
+                        <f:selectItem itemLabel="Yes" itemValue="2"/>
+                        <f:selectItem itemLabel="No" itemValue="1"/>
                         <p:ajax event="click"
                                 listener="#{ncbInfo.toControlNplFlagRendered()}"
                                 process=":frmMain:NPLFlag"
                                 update=":frmMain"/>
-                    </h:selectOneRadio>
+                    </p:selectOneRadio>
                 </td>
                 <td class="title">
                     <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
@@ -202,16 +202,16 @@
         <table class="table_noborder">
             <tr>
                 <td class="title" style="width: 160px;">
-                    <h:selectOneRadio id="tdrFlag"
+                    <p:selectOneRadio id="tdrFlag"
                                       value="#{ncbInfo.ncbInfoView.tdrFlag}"
                                       disabled="true">
-                        <f:selectItem itemLabel="Yes" itemValue="1"/>
-                        <f:selectItem itemLabel="No" itemValue="0"/>
+                        <f:selectItem itemLabel="Yes" itemValue="2"/>
+                        <f:selectItem itemLabel="No" itemValue="1"/>
                         <p:ajax event="click"
                                 listener="#{ncbInfo.toControlTdrFlagRendered()}"
                                 process=":frmMain:tdrFlag"
                                 update=":frmMain"/>
-                    </h:selectOneRadio>
+                    </p:selectOneRadio>
                 </td>
                 <td class="title">
                     <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
@@ -324,28 +324,28 @@
                                  rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex">
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column>
+                                <p:column style="min-width: 30px; width: 30px; max-width: 30px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.no')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width: 130px; width: 130px; max-width: 130px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.loanAccountType')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width: 35px; width: 35px; max-width: 35px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.isTMBAccount')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width: 130px; width: 130px; max-width: 130px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.loanAccountStatus')}</f:facet>
                                 </p:column>
-                                <p:column style="min-width:80px;width:80px;max-width: 80px;">
+                                <p:column style="min-width:80px; width:80px; max-width: 80px;">
                                     <f:facet name="header">
                                         #{msg.get('app.ncbDetail.table.label.InfoAsOfDate')}
                                     </f:facet>
                                 </p:column>
-                                <p:column  style="min-width:80px;width:80px;max-width: 80px;">
+                                <p:column style="min-width:80px; width:80px; max-width: 80px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.accountOpenDate')}</f:facet>
                                 </p:column>
@@ -358,37 +358,40 @@
                                             name="header">#{msg.get('app.ncbDetail.table.label.outstanding')}</f:facet>
                                 </p:column>
                                 <p:column style="min-width:120px;width:120px;max-width: 120px;">
-                                    <f:facet name="header">#{msg.get('app.ncbDetail.table.label.installment')}</f:facet>
+                                    <f:facet
+                                            name="header">#{msg.get('app.ncbDetail.table.label.installment')}</f:facet>
                                 </p:column>
                                 <p:column style="min-width:140px;width:140px;max-width: 140px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.dateOfDebtRestructuring')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width:180px; width:180px; max-width: 180px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.typeOfCurrentPayment')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width:180px; width:180px; max-width: 180px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}</f:facet>
                                 </p:column>
-                                <p:column style="min-width:100px;width:100px;max-width: 100px;">
-                                    <f:facet name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
+                                <p:column style="min-width:100px; width:100px; max-width: 100px;">
+                                    <f:facet
+                                            name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
                                 </p:column>
-                                <p:column style="min-width:100px;width:100px;max-width: 100px;">
+                                <p:column style="min-width:100px; width:100px; max-width: 100px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width:65px; width:65px; max-width: 65px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.refinanceFlag')}</f:facet>
                                 </p:column>
-                                <p:column>
+                                <p:column style="min-width:30px; width:30px; max-width: 30px;">
                                     <f:facet
                                             name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header"></f:facet>
+                                <p:column style="min-width:30px; width:30px; max-width: 30px;">
+                                    <f:facet
+                                            name="header"></f:facet>
                                 </p:column>
 
                             </p:row>

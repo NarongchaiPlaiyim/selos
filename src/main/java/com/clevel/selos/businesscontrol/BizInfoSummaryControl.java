@@ -2,46 +2,66 @@ package com.clevel.selos.businesscontrol;
 
 //import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class BizInfoSummaryControl extends BusinessControl {
-
-    @Inject
+	@Inject
     @SELOS
-    Logger log;    @Inject
-    BizInfoDetailTransform bizInfoDetailTransform;
+    private Logger log;
 
-    @Inject
-    BizInfoSummaryTransform bizInfoSummaryTransform;
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject
     BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    BankStatementSummaryDAO bankStmtSummaryDAO;
+
+    @Inject
+    BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    BizInfoSummaryTransform bizInfoSummaryTransform;
+
+    @Inject
+    public BizInfoSummaryControl(){
+
+    }
 
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
         BizInfoSummary bizInfoSummary;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
+        if (bizInfoSummaryView.getId() == 0) {
+            bizInfoSummaryView.setCreateBy(user);
+            bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
+        }
+        bizInfoSummaryView.setModifyBy(user);
 
         bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
         bizInfoSummary.setWorkCase(workCase);
@@ -97,5 +117,19 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bizInfoDetailViewList;
     }
 
+    public BankStmtSummaryView getBankStmtSummary(long workCaseId){
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+        BankStatementSummary bankStmtSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+
+        if(bankStmtSummary != null){
+            bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStmtSummary.getGrdTotalIncomeNetBDM());
+            bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStmtSummary.getGrdTotalIncomeNetUW());
+        } else {
+            bankStmtSummaryView.setGrdTotalIncomeNetBDM(BigDecimal.ZERO);
+            bankStmtSummaryView.setGrdTotalIncomeNetUW(BigDecimal.ZERO);
+        }
+
+        return bankStmtSummaryView;
+    }
 
 }

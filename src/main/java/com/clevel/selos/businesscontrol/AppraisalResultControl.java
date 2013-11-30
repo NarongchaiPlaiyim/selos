@@ -18,7 +18,8 @@ import java.util.List;
 public class AppraisalResultControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
+
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -39,6 +40,10 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     SubCollateralDetailTransform subCollateralDetailTransform;
 
+	@Inject
+    public AppraisalResultControl(){
+
+    }
 
     public AppraisalView getAppraisalResultByWorkCase(long workCaseId){
         log.info("getAppraisalByWorkCase ");

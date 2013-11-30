@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -40,24 +41,24 @@ public class BankStmtDetailView implements Serializable {
     }
 
     public void reset() {
-        this.overLimitAmount = BigDecimal.ZERO;
-        this.grossCreditBalance = BigDecimal.ZERO;
-        this.excludeListBDM = BigDecimal.ZERO;
-        this.excludeListUW = BigDecimal.ZERO;
-        this.creditAmountBDM = BigDecimal.ZERO;
-        this.creditAmountUW = BigDecimal.ZERO;
-        this.timesOfAvgCreditBDM = BigDecimal.ZERO;
-        this.timesOfAvgCreditUW = BigDecimal.ZERO;
-        this.debitAmount = BigDecimal.ZERO;
-        this.dateOfMaxBalance = new Date();
-        this.maxBalance = BigDecimal.ZERO;
-        this.dateOfMinBalance = new Date();
-        this.minBalance = BigDecimal.ZERO;
-        this.monthBalance = BigDecimal.ZERO;
-        this.chequeReturnAmount = BigDecimal.ZERO;
-        this.swingPercent = BigDecimal.ZERO;
-        this.utilizationPercent = BigDecimal.ZERO;
-        this.grossInflowPerLimit = BigDecimal.ZERO;
+//        this.overLimitAmount = BigDecimal.ZERO;
+//        this.grossCreditBalance = BigDecimal.ZERO;
+//        this.excludeListBDM = BigDecimal.ZERO;
+//        this.excludeListUW = BigDecimal.ZERO;
+//        this.creditAmountBDM = BigDecimal.ZERO;
+//        this.creditAmountUW = BigDecimal.ZERO;
+//        this.timesOfAvgCreditBDM = BigDecimal.ZERO;
+//        this.timesOfAvgCreditUW = BigDecimal.ZERO;
+//        this.debitAmount = BigDecimal.ZERO;
+        this.dateOfMaxBalance = DateTimeUtil.getCurrentDateTH();
+        this.dateOfMinBalance = DateTimeUtil.getCurrentDateTH();
+//        this.maxBalance = BigDecimal.ZERO;
+//        this.minBalance = BigDecimal.ZERO;
+//        this.monthBalance = BigDecimal.ZERO;
+//        this.chequeReturnAmount = BigDecimal.ZERO;
+//        this.swingPercent = BigDecimal.ZERO;
+//        this.utilizationPercent = BigDecimal.ZERO;
+//        this.grossInflowPerLimit = BigDecimal.ZERO;
     }
 
     public long getId() {

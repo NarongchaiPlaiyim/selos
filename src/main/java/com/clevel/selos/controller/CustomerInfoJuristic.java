@@ -2,9 +2,11 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
@@ -56,6 +58,8 @@ public class CustomerInfoJuristic implements Serializable {
     private DocumentTypeDAO documentTypeDAO;
     @Inject
     private RelationDAO relationDAO;
+    @Inject
+    private RelationCustomerDAO relationCustomerDAO;
     @Inject
     private ReferenceDAO referenceDAO;
     @Inject
@@ -129,8 +133,8 @@ public class CustomerInfoJuristic implements Serializable {
     //session
     private long workCaseId;
     private long stepId;
-    private String userId;
-    private User user;
+    /*private String userId;
+    private User user;*/
 
     private int caseBorrowerTypeId;
 
@@ -245,20 +249,20 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void preRender(){
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
         log.info("preRender ::: setSession ");
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
-            user = userDAO.findById(userId);
+            //userId = session.getAttribute("userId").toString();
+            //user = userDAO.findById(userId);
         }else{
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -305,11 +309,14 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
 
-        documentTypeList = documentTypeDAO.findAll();
-        relationList = relationDAO.getOtherRelationList();
+        caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        titleEnList = titleDAO.getListByCustomerEntityId(2);
-        titleThList = titleDAO.getListByCustomerEntityId(2);
+        documentTypeList = documentTypeDAO.findAll();
+//        relationList = relationDAO.getOtherRelationList();
+        relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
+
+        titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
+        titleThList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
         businessTypeList = businessTypeDAO.findAll();
 
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
@@ -317,18 +324,16 @@ public class CustomerInfoJuristic implements Serializable {
 
         countryList = countryDAO.findAll();
 
-        caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
-
         referenceList = new ArrayList<Reference>();
 
         addressFlagForm2 = 1;
 
-        addressTypeList = addressTypeDAO.findByCustomerEntityId(2);
+        addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
-        customerInfoView.setCollateralOwner(0);
+        customerInfoView.setCollateralOwner(1);
 
         enableDocumentType = true;
         enableCitizenId = true;
@@ -355,9 +360,11 @@ public class CustomerInfoJuristic implements Serializable {
 
         if(customerInfoView.getRelation().getId() == 1){
             isEditBorrower = true;
-            relationList = relationDAO.findAll();
+//            relationList = relationDAO.findAll();
+            relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-            relationList = relationDAO.getOtherRelationList();
+//            relationList = relationDAO.getOtherRelationList();
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
         }
     }
 
@@ -386,7 +393,8 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeRelation(){
-        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
+//        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
+        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
     }
 
     public void onChangeProvinceForm1() {
@@ -480,7 +488,7 @@ public class CustomerInfoJuristic implements Serializable {
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
         try{
-            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
@@ -498,7 +506,7 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView.getSpouse().setSearchBy(1);
                         customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                         try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
@@ -553,7 +561,7 @@ public class CustomerInfoJuristic implements Serializable {
             log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
             CustomerInfoResultView customerInfoResultView;
             try{
-                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView, user);
+                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView);
                 log.debug("refreshInterfaceInfo ::: customerInfoResultView : {}", customerInfoResultView);
                 if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                     log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
@@ -562,7 +570,7 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
 
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse(), user);
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
@@ -594,17 +602,19 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeReference(){
-
+        //todo:mandatory field
     }
 
     public void onSave(){
         //check registration
         Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
         if(customer != null && customer.getId() != 0){
-            messageHeader = "Save Juristic Failed.";
-            message = "Registration Id is already exist";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
+            if(customer.getId() != customerInfoView.getId()){
+                messageHeader = "Save Juristic Failed.";
+                message = "Registration Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
         }
 
         if(addressFlagForm2 == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
@@ -626,6 +636,18 @@ public class CustomerInfoJuristic implements Serializable {
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public void onChangeTitleTh(){
+        customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
+    }
+
+    public void onChangeTitleEn(){
+        customerInfoView.getTitleTh().setId(customerInfoView.getTitleEn().getId());
+    }
+
+    public void onDeleteIndividual(){
+        customerInfoView.getIndividualViewList().remove(selectEditIndividual);
     }
 
     //Get Set
