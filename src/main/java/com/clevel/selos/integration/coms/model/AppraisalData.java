@@ -17,8 +17,7 @@ public class AppraisalData implements Serializable {
     private String typeOfUsage;
     private String mortgageCondition;
     private String mortgageConditionDetail;
-    private HeadCollateralData headCollateralData;
-    private List<SubCollateralData> subCollateralDataList;
+    private List<HeadCollateralData> headCollateralDataList;
 
     public String getJobId() {
         return jobId;
@@ -92,20 +91,12 @@ public class AppraisalData implements Serializable {
         this.mortgageConditionDetail = mortgageConditionDetail;
     }
 
-    public HeadCollateralData getHeadCollateralData() {
-        return headCollateralData;
+    public List<HeadCollateralData> getHeadCollateralDataList() {
+        return headCollateralDataList;
     }
 
-    public void setHeadCollateralData(HeadCollateralData headCollateralData) {
-        this.headCollateralData = headCollateralData;
-    }
-
-    public List<SubCollateralData> getSubCollateralDataList() {
-        return subCollateralDataList;
-    }
-
-    public void setSubCollateralDataList(List<SubCollateralData> subCollateralDataList) {
-        this.subCollateralDataList = subCollateralDataList;
+    public void setHeadCollateralDataList(List<HeadCollateralData> headCollateralDataList) {
+        this.headCollateralDataList = headCollateralDataList;
     }
 
     @Override
@@ -120,8 +111,7 @@ public class AppraisalData implements Serializable {
                 .append("typeOfUsage", typeOfUsage)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
-                .append("headCollateralData", headCollateralData)
-                .append("subCollateralDataList", subCollateralDataList)
+                .append("headCollateralDataList", headCollateralDataList)
                 .toString();
     }
 }

@@ -41,6 +41,11 @@ public interface ExceptionMapping {
     public static final String DWH_INVALID_INPUT = "043";
     public static final String DWH_DATA_NOT_ENOUGH = "044";
 
+    //COMS exception
+    public static final String COMS_EXCEPTION = "050";
+    public static final String COMS_CONNECT_ERROR = "051";
+    public static final String COMS_GETDATA_ERROR = "052";
+
     //RM
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
     public static final String RM_FAIL = "502";
