@@ -73,7 +73,7 @@ public class NCBSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
+        //session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
 
         user = (User)session.getAttribute("user");
         date = DateTime.now().toDate();

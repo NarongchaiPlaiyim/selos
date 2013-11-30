@@ -49,6 +49,21 @@ public class AccountTypeDAO extends GenericDAO<AccountType, Integer> {
         return accountType;
     }
 
+    public AccountType getJuristicByName(String name) {
+        log.debug("getJuristicByName. (name: {}", name);
+        AccountType accountType = new AccountType();
+        if (!Util.isEmpty(name)) {
+            //set for juristic
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("customerEntity.id", 2));
+            criteria.add(Restrictions.eq("name", name));
+            accountType = (AccountType) criteria.uniqueResult();
+
+            log.debug("getJuristicByCode. (accountType: {})", accountType);
+        }
+        return accountType;
+    }
+
     public List<AccountType> getListLoanTypeByCusEntity(int customerEntityId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));

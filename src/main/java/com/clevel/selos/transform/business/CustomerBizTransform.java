@@ -1,5 +1,6 @@
 package com.clevel.selos.transform.business;
 
+import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
@@ -9,6 +10,7 @@ import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualM
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerAccountView;
@@ -51,6 +53,8 @@ public class CustomerBizTransform extends BusinessTransform {
     RaceDAO raceDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
+    @Inject
+    RMTitleDAO rmTitleDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult) {
         CustomerInfoResultView customerInfoResultView = null;
@@ -66,7 +70,11 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.reset();
 
                     customerInfoView.setCitizenId(individualModel.getCitizenID());
-                    customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
+                    RMTitle rmTitle = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", individualModel.getTitleTH()));
+                    if (rmTitle != null && rmTitle.getTitle() != null) {
+                        customerInfoView.setTitleTh(rmTitle.getTitle());
+                    }
+
                     if (customerInfoView.getTitleTh() == null) {
                         customerInfoView.setTitleTh(new Title());
                     }
@@ -79,18 +87,18 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setDocumentType(new DocumentType());
                     }
                     log.debug("CustomerBizTransform ::: documentExpiredDate : {}", individualModel.getDocumentExpiredDate());
-                    if(!individualModel.getDocumentExpiredDate().equalsIgnoreCase("00/00/0000")){
+                    if (!individualModel.getDocumentExpiredDate().equalsIgnoreCase("00/00/0000")) {
                         customerInfoView.setDocumentExpiredDate(DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
                         log.debug("CustomerBizTransform ::: documentExpiredDate parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
-                    }else{
+                    } else {
                         customerInfoView.setDocumentExpiredDate(null);
                     }
 
                     log.debug("CustomerBizTransform ::: getDateOfBirth : {}", individualModel.getDateOfBirth());
-                    if(!individualModel.getDateOfBirth().equalsIgnoreCase("00/00/0000")){
+                    if (!individualModel.getDateOfBirth().equalsIgnoreCase("00/00/0000")) {
                         customerInfoView.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
                         log.debug("CustomerBizTransform ::: getDateOfBirth parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
-                    }else{
+                    } else {
                         customerInfoView.setDateOfBirth(null);
                     }
 
@@ -116,10 +124,10 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setNationality(new Nationality());
                     }
                     //TODO Check Null before Casting
-                    if(!Util.isEmpty(individualModel.getNumberOfChild())){
+                    if (!Util.isEmpty(individualModel.getNumberOfChild())) {
                         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
                     }
-                    if(!Util.isEmpty(individualModel.getOccupationCode())){
+                    if (!Util.isEmpty(individualModel.getOccupationCode())) {
                         if (individualModel.getOccupationCode().matches("[0-9]*")) {
                             customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code", new Integer(individualModel.getOccupationCode()))));
                             if (customerInfoView.getOccupation() == null) {
@@ -128,7 +136,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         } else {
                             customerInfoView.setOccupation(new Occupation());
                         }
-                    }else{
+                    } else {
                         customerInfoView.setOccupation(new Occupation());
                     }
 
@@ -139,10 +147,10 @@ public class CustomerBizTransform extends BusinessTransform {
                     spouse.setCitizenId(individualModel.getSpouse().getCitizenID());
                     //spouse.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getSpouse().getDateOfBirth()));
                     log.debug("CustomerBizTransform ::: spouse DateOfBirth : {}", individualModel.getSpouse().getDateOfBirth());
-                    if(!individualModel.getSpouse().getDateOfBirth().equalsIgnoreCase("00/00/0000")){
+                    if (!individualModel.getSpouse().getDateOfBirth().equalsIgnoreCase("00/00/0000")) {
                         spouse.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
                         log.debug("CustomerBizTransform ::: spouse DateOfBirth parse date : {}", DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
-                    }else{
+                    } else {
                         spouse.setDateOfBirth(null);
                     }
                     customerInfoView.setSpouse(spouse);
@@ -366,7 +374,12 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.reset();
 
                     customerInfoView.setTmbCustomerId(corporateModel.getTmbCusID());
-                    customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", corporateModel.getTitleTH())));
+
+                    RMTitle rmTitle = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", corporateModel.getTitleTH()));
+                    if (rmTitle != null && rmTitle.getTitle() != null) {
+                        customerInfoView.setTitleTh(rmTitle.getTitle());
+                    }
+
                     if (customerInfoView.getTitleTh() == null) {
                         customerInfoView.setTitleTh(new Title());
                     }
@@ -380,10 +393,10 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(2));
 
                     log.debug("CustomerBizTransform ::: registrationDate : {}", corporateModel.getRegistrationDate());
-                    if(!corporateModel.getRegistrationDate().equalsIgnoreCase("00/00/0000")){
+                    if (!corporateModel.getRegistrationDate().equalsIgnoreCase("00/00/0000")) {
                         customerInfoView.setDateOfRegister(DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
                         log.debug("CustomerBizTransform ::: registrationDate parse date : {}", DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
-                    }else{
+                    } else {
                         customerInfoView.setDateOfRegister(null);
                     }
 
@@ -467,6 +480,7 @@ public class CustomerBizTransform extends BusinessTransform {
     }
 
     public CustomerAccountView transformCustomerAccount(CustomerAccountResult customerAccountResult) {
+        log.debug("transformCustomerAccount()");
         CustomerAccountView customerAccountView = null;
         if (customerAccountResult != null) {
             customerAccountView = new CustomerAccountView();
@@ -475,11 +489,32 @@ public class CustomerBizTransform extends BusinessTransform {
                 customerAccountView.setCustomerId(customerAccountResult.getCustomerId());
                 if (customerAccountResult.getAccountListModels() != null && customerAccountResult.getAccountListModels().size() > 0) {
                     List<String> accountList = new ArrayList<String>();
+                    int resultRow=0;
                     for (CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()) {
                         if (!Util.isEmpty(customerAccountListModel.getAccountNo())) {
-                            accountList.add(customerAccountListModel.getAccountNo());
+                            //check Appl = IM
+                            if (customerAccountListModel.getAppl() != null) {
+                                if (customerAccountListModel.getAppl().equals("IM")) {
+                                    resultRow++;
+                                    log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
+                                    accountList.add(customerAccountListModel.getAccountNo());
+                                }
+                                //check Appl = ST
+                                if (customerAccountListModel.getAppl().equals("ST")) {
+                                    if (customerAccountListModel.getCtl4() != null) {
+                                        if (customerAccountListModel.getCtl4().equals("0200")) {
+                                            if (customerAccountListModel.getAccountNo().length() >= 4) {
+                                                resultRow++;
+                                                log.debug("TransformAccountListData: {}",customerAccountListModel.toString());
+                                                accountList.add(customerAccountListModel.getAccountNo().substring(4));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                    log.debug("TransformAccountListSize: {}",resultRow);
                     customerAccountView.setAccountList(accountList);
                 }
             } else {

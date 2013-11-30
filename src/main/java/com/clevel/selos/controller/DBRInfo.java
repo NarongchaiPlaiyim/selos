@@ -88,15 +88,15 @@ public class DBRInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
         log.info("preRender ::: setSession ");
 
         session = FacesUtil.getSession(true);
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            userId = session.getAttribute("userId").toString();*/
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");

@@ -4,18 +4,20 @@ import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
-import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.AccountStatusTransform;
+import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import org.joda.time.DateTime;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
@@ -32,8 +34,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @ViewScoped
@@ -285,18 +285,15 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        // todo: onCancel()
-        //initViewFormAndSelectItems();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
     }
 
     private void checkRequiredBankAccTypeSelected() {
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
-        if (bankAccTypeId == 0 && otherAccType == 0)
-            bankAccTypeSelectRequired = true;
-        else
-            bankAccTypeSelectRequired = false;
+        bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
     }
 
     public void onChangeBankAccTypeSelected() {

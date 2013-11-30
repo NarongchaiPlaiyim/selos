@@ -20,12 +20,18 @@ public class LoanAccountTypeControl extends BusinessControl {
     @Inject
     AccountTypeDAO loanAccountTypeDAO;
 
-    @Inject
+	@Inject
+    public LoanAccountTypeControl(){
+
+    }
+
+	@Inject
     WorkCaseDAO workCaseDAO;
 
     public List<LoanAccountTypeView> getListLoanTypeByWorkcase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         List<AccountType> loanAccountTypes = loanAccountTypeDAO.getListLoanTypeByCusEntity(workCase.getBorrowerType().getId());
+
         List<LoanAccountTypeView> loanTypeViews = loanAccountTypeTransform.getLoanAccountTypeViews(loanAccountTypes);
         return loanTypeViews;
     }

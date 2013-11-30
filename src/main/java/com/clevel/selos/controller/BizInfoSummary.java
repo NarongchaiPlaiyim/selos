@@ -3,14 +3,18 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -52,7 +56,7 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
-    private User user;
+    //private User user;
     private Date currentDate;
 
     private ReferredExperience referredExperience;
@@ -63,7 +67,8 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal SumWeightAR;
     private BigDecimal SumWeightAP;
     private BigDecimal SumWeightINV;
-
+    double bankStatementAvg = 0;
+    private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
     private String message;
@@ -96,9 +101,16 @@ public class BizInfoSummary implements Serializable {
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     private CountryDAO countryDAO;
+    @Inject
+    BankStmtTransform bankStmtTransform;
+    @Inject
+    BankStatementSummaryDAO bankStmtSummaryDAO;
+
 
     @Inject
     private Util util;
+
+    private long workCaseId;
 
     public BizInfoSummary() {
 
@@ -107,13 +119,48 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("SESSION WorkCase : {}", session.getAttribute("workCaseId"));
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
         onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
+
+        //user = (User)session.getAttribute("user");
+
+        //log.info("onCreation bizInfoSum " + user.getRole().toString());
+
+        //user.getRole().setId(102);
+
+        bankStatementAvg = 0;
+        if(bankStmtSummaryView != null ){
+
+            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                }
+            }*/
+
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            }else{
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }
+        }else{
+           log.info("bankStmtSummaryView is null ");
+        }
+
+        log.info("bankStatementAvg is " + bankStatementAvg);
 
         if (bizInfoSummaryView == null) {
 
@@ -147,8 +194,6 @@ public class BizInfoSummary implements Serializable {
             onChangeDistrict();
             onChangeRental();
         }
-
-
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
@@ -156,10 +201,22 @@ public class BizInfoSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        //session.setAttribute("workCaseId", 10001);
+
         log.info(" get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
+
+        /*com.clevel.selos.model.db.working.BankStatementSummary bankStatementSummary;
+
+        bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+       asdf
+        bankStmtSummaryView = new BankStmtSummaryView();
+        bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStatementSummary.getGrdTotalIncomeNetBDM());
+        bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());*/
+
+        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
+        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
 
     }
 
@@ -186,7 +243,7 @@ public class BizInfoSummary implements Serializable {
         if (bizInfoDetailViewList.size() == 0) {
             bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         } else {
-            double bankStatementAvg = 0;
+
             double incomeAmountCal = 0;
             double sumIncomeAmountD = 0;
 
@@ -215,8 +272,6 @@ public class BizInfoSummary implements Serializable {
 
                 incomePercentD = temp.getPercentBiz().doubleValue();
                 sumIncomePercentD += incomePercentD;
-
-                bankStatementAvg = 12000;
                 incomeAmountCal = bankStatementAvg * 12;
                 sumIncomeAmountD += incomeAmountCal;
 
@@ -295,8 +350,8 @@ public class BizInfoSummary implements Serializable {
 
         if( productCostPercent > 100.01){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่าเกิน 100";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "����Թ 100";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -316,8 +371,8 @@ public class BizInfoSummary implements Serializable {
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า operatingExpenseAmount > profitMarginPercent";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� operatingExpenseAmount > profitMarginPercent";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -342,16 +397,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า Interest > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� Interest > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -359,8 +414,8 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า ผลรวม interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "�Դ��ͼԴ��Ҵ";
+            message = "��� ����� interest and tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -390,13 +445,7 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            if (bizInfoSummaryView.getId() == 0) {
-                bizInfoSummaryView.setCreateBy(user);
-                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);

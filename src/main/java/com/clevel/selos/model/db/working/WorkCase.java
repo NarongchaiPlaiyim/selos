@@ -47,11 +47,11 @@ public class WorkCase implements Serializable {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
 
-    @OneToMany(mappedBy = "workCase")
+    @OneToMany(mappedBy = "workCase", fetch = FetchType.LAZY)
     private List<Customer> customerList;
 
     @OneToOne(mappedBy = "workCase")

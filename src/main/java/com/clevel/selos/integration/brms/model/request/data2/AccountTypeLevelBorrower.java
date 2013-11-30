@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class AccountTypeLevelBorrower implements Serializable {
     private String dataSource; //todo : to be enum

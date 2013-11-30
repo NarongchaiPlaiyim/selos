@@ -3,9 +3,6 @@ apply plugin: 'war'
 sourceCompatibility = 1.6
 
 project.ext {
-    projectRoot='D:/Works/TMB/SELOS/Projects/selos'
-    beanXML= projectRoot+'/src/main/webapp/WEB-INF/beans.xml'
-    persistenceXML = projectRoot+'/src/main/resources/META-INF/persistence.bank.xml'
     selosLib='D:/Works/TMB/SELOS/Projects/selos_lib_compile'
     versionString = ''
     versionNumber = 'vvv'
@@ -41,145 +38,18 @@ task getVersion << {
     }
 }
 
-//war {
-//    getVersion.execute()
-//
-//    println project.ext.version
-//    baseName = 'selos'
-//    println "selos library folder: $project.ext.selosLib"
-//
-//    eachFile {
-//        if (it.name == 'login.xhtml') {
-//            it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ['versionNumber' : project.ext.version])
-//        }
-//    }
-//    war.rootSpec.exclude '**/*.java'
-//    war.rootSpec.exclude '**/logback.xml'
-//    war.rootSpec.exclude '**/selos.properties'
-//
-//    // exclude resources to be static
-////    war.rootSpec.exclude 'resources/css'
-////    war.rootSpec.exclude 'resources/images'
-////    war.rootSpec.exclude 'resources/js'
-////    war.rootSpec.exclude 'resources/primefaces-theme'
-//
-//    // exclude EJBs
-////    war.rootSpec.exclude 'com/clevel/selos/businesscontrol/**/*'
-////    war.rootSpec.exclude 'com/clevel/selos/dao/stp/**/*'
-////    war.rootSpec.exclude 'com/clevel/selos/system/audit/**/*'
-////    war.rootSpec.exclude 'com/clevel/selos/ws/WSDataPersist.*'
-//
-//    // exclude temporary files
-//    war.rootSpec.exclude 'mockup'
-////    war.rootSpec.exclude 'test'
-//
-//    // replace with bank environment
-//    rootSpec.eachFile { details ->
-//        if (details.name == "persistence.xml") {
-//            details.exclude()
-//        } else if (details.name == "persistence.bank.xml") {
-//            details.name = "persistence.xml"
-//        }
-//    }
-//}
-//
-//task packEar(type: Jar) {
-//    extension = 'ear'
-//
-//    metaInf { from 'src/main/application/META-INF' }
-//
-//    from war.outputs.files
-//}
-
-task buildLibrary(dependsOn: classes, type: Jar) {
-    archiveName = 'selos-lib.jar'
-    includeEmptyDirs = false
-    manifest {
-        attributes("Implementation-Title": "C-Level")
-    }
-
-    from (files([project.ext.projectRoot+'/build/classes/main',project.ext.projectRoot+'/src/main/resources']))
-    from (files([project.ext.beanXML, project.ext.persistenceXML])) {
-        into 'META-INF'
-        rename('persistence.bank.xml','persistence.xml')
-    }
-
-    exclude 'com/clevel/**/*.java'
-    exclude 'META-INF/*'
-
-    include '**/beans.xml'
-    include '**/persistence.bank.xml'
-
-    //********* LOG ************
-    include 'com/clevel/selos/system/LogProducer.*'
-
-    //********* Integrations and type annotation ************
-    include 'com/clevel/selos/integration/**/*'
-    include 'com/clevel/selos/ws/WS.*'
-
-    //************* MODEL and DAO **************
-    include 'com/clevel/selos/model/**/*'
-    include 'com/clevel/selos/dao/**/*'
-
-    //************* Transformation ****************
-    include 'com/clevel/selos/transform/**/*'
-
-    //************* Messages & Configuration ***********************
-    include 'com/clevel/selos/system/message/**/*'
-    include 'com/clevel/selos/*.properties'
-    include 'com/clevel/selos/system/Config.*'
-    include 'com/clevel/selos/system/ConfigurationProducer.*'
-
-    //************* Security and Encryption ***********************
-    include 'com/clevel/selos/security/encryption/**/*'
-    include 'com/clevel/selos/security/UserDetail.*'
-
-    //************* Exceptions ***********************
-    include 'com/clevel/selos/exception/**/*'
-
-    //************* Utilities ***********************
-    include 'com/clevel/selos/util/**/*'
-
-    //************* TMB Services ***********************
-    include 'com/tmb/**/*'
-}
-
-task buildEJB(dependsOn:'buildLibrary', type: Jar) {
-    archiveName = 'selos-ejb.jar'
-    includeEmptyDirs = false
-    manifest {
-        attributes("Implementation-Title": "C-Level")
-    }
-
-    from project.ext.projectRoot+'/build/classes/main'
-
-    from(project.ext.beanXML) {
-        into 'META-INF'
-    }
-    include '**/beans.xml'
-    exclude 'com/clevel/**/*.java'
-
-    //************** @Stateless ***************
-    include 'com/clevel/selos/businesscontrol/**/*'
-    include 'com/clevel/selos/controller/TestList.*'
-    include 'com/clevel/selos/ws/WSDataPersist.*'
-    include 'com/clevel/selos/system/audit/**/*'
-    include 'com/clevel/selos/integration/ncb/exportncbi/NCBIExportImp.*'
-    include 'com/clevel/selos/integration/ncb/ncbresult/NCBResultImp.*'
-}
-
 war {
-    dependsOn 'buildEJB'
-    baseName = 'selos'
-    manifest {
-        attributes("Implementation-Title": "C-Level","Class-Path": 'selos-ejb.jar lib/selos-lib.jar')
-    }
+    getVersion.execute()
 
-//    eachFile {
-//        if (it.name == 'login.xhtml') {
-//            it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ['versionNumber' : project.ext.version])
-//        }
-//    }
+    println project.ext.version
+    baseName = 'selos'
+    println "selos library folder: $project.ext.selosLib"
+
+    eachFile {
+        if (it.name == 'login.xhtml') {
+            it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ['versionNumber' : project.ext.version])
+        }
+    }
     war.rootSpec.exclude '**/*.java'
     war.rootSpec.exclude '**/logback.xml'
     war.rootSpec.exclude '**/selos.properties'
@@ -190,60 +60,31 @@ war {
 //    war.rootSpec.exclude 'resources/js'
 //    war.rootSpec.exclude 'resources/primefaces-theme'
 
+    // exclude EJBs
+//    war.rootSpec.exclude 'com/clevel/selos/businesscontrol/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/dao/stp/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/system/audit/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/ws/WSDataPersist.*'
+
     // exclude temporary files
     war.rootSpec.exclude 'mockup'
 //    war.rootSpec.exclude 'test'
 
-    // ********* LOG ***********
-    war.rootSpec.exclude 'com/clevel/selos/system/LogProducer.*'
-    war.rootSpec.exclude 'com/clevel/selos/integration'
-    war.rootSpec.exclude 'com/clevel/selos/ws/WS.*'
-
-    // *********** MODEL and DAO *********
-//    war.rootSpec.exclude 'com/clevel/selos/model/db'
-    war.rootSpec.exclude 'com/clevel/selos/model'
-    war.rootSpec.exclude 'com/clevel/selos/dao'
-    war.rootSpec.exclude 'META-INF/persistence*'
-
-    //************* Transformation ****************
-    war.rootSpec.exclude 'com/clevel/selos/transform'
-
-    //************* Messages and Configuration ***********************
-    war.rootSpec.exclude 'com/clevel/selos/system/message'
-    war.rootSpec.exclude 'com/clevel/selos/*.properties'
-    war.rootSpec.exclude 'com/clevel/selos/system/Config.*'
-    war.rootSpec.exclude 'com/clevel/selos/system/ConfigurationProducer.*'
-
-    //************* Encryption ***********************
-    war.rootSpec.exclude 'com/clevel/selos/security/encryption'
-
-    //************* Security and Exceptions ***********************
-    war.rootSpec.exclude 'com/clevel/selos/exception'
-    war.rootSpec.exclude 'com/clevel/selos/security/UserDetail.*'
-
-    //************* Utilities ***********************
-    war.rootSpec.exclude 'com/clevel/selos/util'
-
-    //************* TMB Services ***********************
-    war.rootSpec.exclude 'com/tmb'
-
-    // ************* EJB ************
-    war.rootSpec.exclude 'com/clevel/selos/businesscontrol'
-    war.rootSpec.exclude 'com/clevel/selos/controller/TestList.*'
-    war.rootSpec.exclude 'com/clevel/selos/ws/WSDataPersist.*'
-    war.rootSpec.exclude 'com/clevel/selos/system/audit'
-    war.rootSpec.exclude 'com/clevel/selos/integration/ncb/exportncbi/NCBIExportImp.*'
-    war.rootSpec.exclude 'com/clevel/selos/integration/ncb/ncbresult/NCBResultImp.*'
-
+    // replace with bank environment
+    rootSpec.eachFile { details ->
+        if (details.name == "persistence.xml") {
+            details.exclude()
+        } else if (details.name == "persistence.bank.xml") {
+            details.name = "persistence.xml"
+        }
+    }
 }
 
-task buildPackage(dependsOn:'war',type:Jar)  {
-    archiveName = 'selos.ear'
+task packEar(type: Jar) {
+    extension = 'ear'
+
     metaInf { from 'src/main/application/META-INF' }
 
     from war.outputs.files
-    from (project.ext.projectRoot+'/build/libs/selos-ejb.jar')
-    from(project.ext.projectRoot+'/build/libs/selos-lib.jar') {
-        into 'lib'
-    }
 }
+
