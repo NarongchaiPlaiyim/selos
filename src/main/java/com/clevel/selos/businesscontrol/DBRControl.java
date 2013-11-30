@@ -59,7 +59,6 @@ public class DBRControl extends BusinessControl {
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
-        User user = userDAO.findById(dbrView.getUserId());
         DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
         newDbrDetails = dbr.getDbrDetails();
@@ -196,20 +195,16 @@ public class DBRControl extends BusinessControl {
             if(dbrView.getId() == 0){
                 return ActionResult.FAILED;
             }
-
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(bankStatementSummary != null){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
             }
-
             if(bizInfoSummary != null){
                 dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
             }
-
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-
             DBR dbr =  calculateDBR(dbrView, ncbDetailViews, workCase);
             dbrdao.persist(dbr);
         }
@@ -239,9 +234,7 @@ public class DBRControl extends BusinessControl {
 
     private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated, WorkCase workCase){
         BigDecimal totalPurposeForDBR = BigDecimal.valueOf(200);
-
         int roleId = getCurrentUser().getRole().getId();
-
         //todo waiting totalPurposeForDBR from Exsiting purpose
         if(roleId == RoleUser.UW.getValue()){
 
@@ -252,7 +245,6 @@ public class DBRControl extends BusinessControl {
         debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
         debt = debt.add(totalPurposeForDBR);
         return debt;
-
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
@@ -270,8 +262,4 @@ public class DBRControl extends BusinessControl {
         return monthlyIncome;
 
     }
-
-
-
-
 }

@@ -73,8 +73,6 @@ public class DBRInfo implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    private String userId;
     private String lastUpdated;
 
     private boolean isComplete;
@@ -85,18 +83,16 @@ public class DBRInfo implements Serializable {
     }
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
+        session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
-
-        session = FacesUtil.getSession(true);
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();*/
+//            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+//            userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -191,8 +187,6 @@ public class DBRInfo implements Serializable {
         try {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
-            dbr.setUserId(userId);
-
             dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("ws.newCase.response.success");
