@@ -89,11 +89,11 @@ public class NewCreditDetail implements Serializable {
     private CreditType creditType;
 
     @OneToOne
-    @JoinColumn(name = "base_rate_id")
+    @JoinColumn(name = "standard_rate_id")
     private BaseRate standardBasePrice;
 
     @OneToOne
-    @JoinColumn(name = "base_rate_id")
+    @JoinColumn(name = "suggest_rate_id")
     private BaseRate suggestBasePrice;
 
     @OneToOne
