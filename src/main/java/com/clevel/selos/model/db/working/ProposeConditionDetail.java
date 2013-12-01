@@ -12,8 +12,8 @@ import java.util.Date;
 @Table(name = "wrk_propose_condition_detail")
 public class ProposeConditionDetail  implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_CONDITION_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_CONDITION_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_CONDITION_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PROP_COND_DET_ID", sequenceName = "SEQ_WRK_PROP_COND_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROP_COND_DET_ID")
     private long id;
 
     @Column(name = "no")

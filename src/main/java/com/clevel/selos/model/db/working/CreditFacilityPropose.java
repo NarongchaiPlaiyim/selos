@@ -16,8 +16,8 @@ import java.util.List;
 @Table(name = "wrk_credit_facility_propose")
 public class CreditFacilityPropose  implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_CREDIT_FACILITY_PROPOSE_ID", sequenceName = "SEQ_WRK_CREDIT_FACILITY_PROPOSE_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CREDIT_FACILITY_PROPOSE_ID")
+    @SequenceGenerator(name = "SEQ_WRK_CREDIT_FAC_PROP_ID", sequenceName = "SEQ_WRK_CREDIT_FAC_PROP_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CREDIT_FAC_PROP_ID")
     private long id;
 
     @ManyToOne

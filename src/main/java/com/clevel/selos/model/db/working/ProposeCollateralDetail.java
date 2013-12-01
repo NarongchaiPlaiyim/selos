@@ -13,8 +13,8 @@ import java.util.List;
 @Table(name = "wrk_propose_collateral_detail")
 public class ProposeCollateralDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PROP_COL_DET_ID", sequenceName = "SEQ_WRK_PROP_COL_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROP_COL_DET_ID")
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)

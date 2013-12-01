@@ -154,10 +154,11 @@ public class ExSummaryControl extends BusinessControl {
         return exSummaryView;
     }
 
-    public void saveExSummary(ExSummaryView exSummaryView, long workCaseId, User user) {
+    public void saveExSummary(ExSummaryView exSummaryView, long workCaseId) {
         log.info("saveExSummary ::: exSummaryView : {}", exSummaryView);
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
 
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);

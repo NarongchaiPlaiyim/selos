@@ -14,8 +14,8 @@ import java.util.List;
 @Table(name = "wrk_propose_guarantor_detail")
 public class ProposeGuarantorDetail  implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PROP_GRT_DET_ID", sequenceName = "SEQ_WRK_PROP_GRT_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROP_GRT_DET_ID")
     private long id;
 
     @Column(name = "no")

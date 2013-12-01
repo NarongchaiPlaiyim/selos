@@ -889,9 +889,9 @@ public class BankStmtControl extends BusinessControl {
         }
     }
 
-    public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId, String userId) {
-        log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}, userId: {}",
-                bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId, userId);
+    public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId) {
+        log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}",
+                bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId);
 
         WorkCase workCase = null;
         WorkCasePrescreen workCasePrescreen = null;
@@ -901,7 +901,7 @@ public class BankStmtControl extends BusinessControl {
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         }
-        User user = userDAO.findById(userId);
+        User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
         bankStatementSummary.setWorkCase(workCase);

@@ -102,7 +102,7 @@ public class BankStatementDetail implements Serializable {
     //Session
     private long workCaseId;
     private long stepId;
-    private String userId;
+    //private String userId;
 
     private boolean bankAccTypeSelectRequired;
 
@@ -118,16 +118,16 @@ public class BankStatementDetail implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            //userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -266,7 +266,7 @@ public class BankStatementDetail implements Serializable {
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
 
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";

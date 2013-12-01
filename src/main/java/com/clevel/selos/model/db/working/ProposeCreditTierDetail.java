@@ -14,8 +14,8 @@ import java.util.Date;
 @Table(name = "wrk_propose_credit_tier_detail")
 public class ProposeCreditTierDetail  implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_CREDIT_TIER_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_CREDIT_TIER_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_CREDIT_TIER_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PROP_CRD_TIER_DET_ID", sequenceName = "SEQ_WRK_PROP_CRD_TIER_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROP_CRD_TIER_DET_ID")
     private long id;
 
     @Column(name = "final_interest")
