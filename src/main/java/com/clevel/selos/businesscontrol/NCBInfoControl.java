@@ -120,13 +120,14 @@ public class NCBInfoControl extends BusinessControl {
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
-        for(NCB ncb : Util.safetyList(ncbs)){
-            Customer customer = ncb.getCustomer();
-            List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
-            AccountType accountType;
-            AccountStatus accountStatus;
+        List<NCBDetail> ncbDetails = new ArrayList<NCBDetail>();
+        ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
+        log.debug("ncbDetails size:{}", ncbDetails.size());
+        AccountType accountType;
+        AccountStatus accountStatus;
             for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
-                log.info("ncbDetail :{}", ncbDetail);
+                Customer customer = ncbDetail.getNcb().getCustomer();
+
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
                 if(accountStatus == null || accountType == null) break;
@@ -149,27 +150,27 @@ public class NCBInfoControl extends BusinessControl {
                                 debtForCalculate = ncbDetail.getInstallment();
                             }
                             break;
-                        case 2:
+                        case 2: //5%
                             debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(5));
                             debtForCalculate = Util.divide(debtForCalculate, 100);
                             break;
-                        case 3:
+                        case 3: //10 %
                             debtForCalculate = Util.multiply(ncbDetail.getOutstanding(), BigDecimal.valueOf(10));
                             debtForCalculate = Util.divide(debtForCalculate, 100);
                             break;
                         default:
                             break;
                     }
-                    ncbDetailView.setDebtForCalculate(debtForCalculate);
-                    StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitle().getTitleTh())
-                            .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
-                            .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
-                    ncbDetailView.setAccountName(accountName.toString());
-                    ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
-                    ncbDetailViews.add(ncbDetailView);
-                }
+                ncbDetailView.setDebtForCalculate(debtForCalculate);
+                StringBuilder accountName = new StringBuilder();
+                accountName.append(customer.getTitle().getTitleTh())
+                        .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                        .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
+                ncbDetailView.setAccountName(accountName.toString());
+                ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                ncbDetailViews.add(ncbDetailView);
             }
+
         }
         return ncbDetailViews;
     }
