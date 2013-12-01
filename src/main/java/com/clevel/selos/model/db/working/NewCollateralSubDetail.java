@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_propose_sub_collateral_detail")
-public class ProposeSubCollateralDetail  implements Serializable {
+@Table(name = "wrk_new_collateral_sub_detail")
+public class NewCollateralSubDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROP_SUB_COL_DET_ID", sequenceName = "SEQ_WRK_PROP_SUB_COL_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROP_SUB_COL_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_DET_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COL_DET_ID")
     private long id;
 
     @OneToOne
@@ -69,8 +69,8 @@ public class ProposeSubCollateralDetail  implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "propose_collateral_head_detail_id")
-    private ProposeCollateralHeadDetail proposeCollateralHeadDetail;
+    @JoinColumn(name = "new_collateral_head_detail_id")
+    private NewCollateralHeadDetail newCollateralHeadDetail;
 
     public long getId() {
         return id;
@@ -176,12 +176,12 @@ public class ProposeSubCollateralDetail  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ProposeCollateralHeadDetail getProposeCollateralHeadDetail() {
-        return proposeCollateralHeadDetail;
+    public NewCollateralHeadDetail getNewCollateralHeadDetail() {
+        return newCollateralHeadDetail;
     }
 
-    public void setProposeCollateralHeadDetail(ProposeCollateralHeadDetail proposeCollateralHeadDetail) {
-        this.proposeCollateralHeadDetail = proposeCollateralHeadDetail;
+    public void setNewCollateralHeadDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
+        this.newCollateralHeadDetail = newCollateralHeadDetail;
     }
 
     @Override
