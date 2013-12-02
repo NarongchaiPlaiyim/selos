@@ -117,6 +117,9 @@ public class ExSummaryTransform extends Transform {
         //UW Comment
         exSummary.setUwComment(exSummaryView.getUwComment());
 
+        //
+        exSummary.setYearInBusinessMonth(exSummaryView.getYearInBusinessMonth());
+
         return exSummary;
     }
 

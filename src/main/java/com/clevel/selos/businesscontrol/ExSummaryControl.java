@@ -12,6 +12,7 @@ import com.clevel.selos.transform.ExSummaryTransform;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -36,8 +37,6 @@ public class ExSummaryControl extends BusinessControl {
     CustomerInfoControl customerInfoControl;
     @Inject
     NCBInfoControl ncbInfoControl;
-//    @Inject
-//    BankStmtControl bankStmtControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
@@ -88,6 +87,7 @@ public class ExSummaryControl extends BusinessControl {
 
         //Bank Statement Summary
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+        exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSumAccountMovementView mainBank = new ExSumAccountMovementView();
             ExSumAccountMovementView otherBank = new ExSumAccountMovementView();
@@ -134,7 +134,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
             exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
-            //if isRental = N, display ownerName. If isRental = Y, display expiryDate
+            //todo: if isRental = N, display ownerName. If isRental = Y, display expiryDate
 //        exSummaryView.setOwner();
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
