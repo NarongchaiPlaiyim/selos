@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_propose_fee_detail")
-public class ProposeFeeDetail  implements Serializable {
+@Table(name = "wrk_new_fee_detail")
+public class NewFeeDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_FEE_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_FEE_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_FEE_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_FEE_DET_ID", sequenceName = "SEQ_WRK_NEW_FEE_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_FEE_DET_ID")
     private long id;
 
     @Column(name = "product_program")
@@ -51,8 +51,8 @@ public class ProposeFeeDetail  implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "credit_facility_propose_id")
-    private CreditFacilityPropose creditFacilityPropose;
+    @JoinColumn(name = "new_credit_facility_id")
+    private NewCreditFacility newCreditFacility;
 
     public long getId() {
         return id;
@@ -142,12 +142,12 @@ public class ProposeFeeDetail  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public CreditFacilityPropose getCreditFacilityPropose() {
-        return creditFacilityPropose;
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
     }
 
-    public void setCreditFacilityPropose(CreditFacilityPropose creditFacilityPropose) {
-        this.creditFacilityPropose = creditFacilityPropose;
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
 
@@ -166,7 +166,7 @@ public class ProposeFeeDetail  implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("creditFacilityPropose", creditFacilityPropose)
+                .append("newCreditFacility", newCreditFacility)
                 .toString();
     }
 }

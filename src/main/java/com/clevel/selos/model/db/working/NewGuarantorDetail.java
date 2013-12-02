@@ -11,11 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_propose_guarantor_detail")
-public class ProposeGuarantorDetail  implements Serializable {
+@Table(name = "wrk_new_guarantor_detail")
+public class NewGuarantorDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_GUARANTOR_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_GRT_DET_ID", sequenceName = "SEQ_WRK_NEW_GRT_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_GRT_DET_ID")
     private long id;
 
     @Column(name = "no")
@@ -32,10 +32,10 @@ public class ProposeGuarantorDetail  implements Serializable {
     private BigDecimal totalLimitGuaranteeAmount;
 
     @ManyToOne
-    @JoinColumn(name = "credit_facility_propose_id")
-    private CreditFacilityPropose creditFacilityPropose;
+    @JoinColumn(name = "new_credit_facility_id")
+    private NewCreditFacility newCreditFacility;
 
-    @OneToMany(mappedBy = "proposeGuarantorDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
     private List<CreditTypeDetail> creditTypeDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -94,12 +94,12 @@ public class ProposeGuarantorDetail  implements Serializable {
         this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
-    public CreditFacilityPropose getCreditFacilityPropose() {
-        return creditFacilityPropose;
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
     }
 
-    public void setCreditFacilityPropose(CreditFacilityPropose creditFacilityPropose) {
-        this.creditFacilityPropose = creditFacilityPropose;
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
     public Date getCreateDate() {
@@ -151,7 +151,7 @@ public class ProposeGuarantorDetail  implements Serializable {
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
-                .append("creditFacilityPropose", creditFacilityPropose)
+                .append("newCreditFacility", newCreditFacility)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

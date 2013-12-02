@@ -106,10 +106,10 @@ public class NewCreditDetail implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "credit_facility_propose_id")
-    private CreditFacilityPropose creditFacilityPropose;
+    private NewCreditFacility newCreditFacility;
 
 /*    @OneToMany(mappedBy = "proposeCreditTierDetail", cascade = CascadeType.ALL)
-    private List<ProposeCreditTierDetail> proposeCreditTierDetailList;*/
+    private List<NewCreditTierDetail> proposeCreditTierDetailList;*/
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -351,12 +351,12 @@ public class NewCreditDetail implements Serializable {
         this.loanPurpose = loanPurpose;
     }
 
-    public CreditFacilityPropose getCreditFacilityPropose() {
-        return creditFacilityPropose;
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
     }
 
-    public void setCreditFacilityPropose(CreditFacilityPropose creditFacilityPropose) {
-        this.creditFacilityPropose = creditFacilityPropose;
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
     public Date getCreateDate() {
@@ -391,11 +391,11 @@ public class NewCreditDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-/*    public List<ProposeCreditTierDetail> getProposeCreditTierDetailList() {
+/*    public List<NewCreditTierDetail> getProposeCreditTierDetailList() {
         return proposeCreditTierDetailList;
     }
 
-    public void setProposeCreditTierDetailList(List<ProposeCreditTierDetail> proposeCreditTierDetailList) {
+    public void setProposeCreditTierDetailList(List<NewCreditTierDetail> proposeCreditTierDetailList) {
         this.proposeCreditTierDetailList = proposeCreditTierDetailList;
     }*/
 
@@ -430,7 +430,7 @@ public class NewCreditDetail implements Serializable {
                 .append("suggestBasePrice", suggestBasePrice)
                 .append("disbursement", disbursement)
                 .append("loanPurpose", loanPurpose)
-                .append("creditFacilityPropose", creditFacilityPropose)
+                .append("newCreditFacility", newCreditFacility)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
