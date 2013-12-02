@@ -295,12 +295,14 @@ public class ExSummaryTransform extends Transform {
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
         exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getProvince().getName());
 
-        for(BizInfoDetailView bd : bizInfoSummaryView.getBizInfoDetailViewList()){
-            if(bd.getIsMainDetail() == 1){
-                exSumBusinessInfoView.setBizType(bd.getBizType().getDescription());
-                exSumBusinessInfoView.setBizGroup(bd.getBizGroup().getDescription());
-                exSumBusinessInfoView.setBizCode(bd.getBizCode());
-                exSumBusinessInfoView.setBizDesc(bd.getBizDesc().getName());
+        if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
+            for(BizInfoDetailView bd : bizInfoSummaryView.getBizInfoDetailViewList()){
+                if(bd.getIsMainDetail() == 1){
+                    exSumBusinessInfoView.setBizType(bd.getBizType().getDescription());
+                    exSumBusinessInfoView.setBizGroup(bd.getBizGroup().getDescription());
+                    exSumBusinessInfoView.setBizCode(bd.getBizCode());
+                    exSumBusinessInfoView.setBizDesc(bd.getBizDesc().getName());
+                }
             }
         }
 

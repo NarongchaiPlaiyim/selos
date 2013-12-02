@@ -35,6 +35,8 @@ public class ExSummaryControl extends BusinessControl {
     BasicInfoDAO basicInfoDAO;
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -67,6 +69,11 @@ public class ExSummaryControl extends BusinessControl {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
         }
 
+        if(qualitativeView == null) { // todo:check this
+            qualitativeView = new QualitativeView();
+            qualitativeView.setQualityResult("qualitativeClass");
+        }
+
         if (exSummary == null) {
             exSummary = new ExSummary();
         }
@@ -80,6 +87,12 @@ public class ExSummaryControl extends BusinessControl {
         } else {
             exSummaryView.setBorrowerListView(null);
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Trade Finance
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //NCB Information
@@ -148,11 +161,21 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
             exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
+
             //todo: if isRental = N, display ownerName. If isRental = Y, display expiryDate
-//        exSummaryView.setOwner();
+            if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
+                exSummaryView.setOwner(bizInfoSummaryView.getExpiryDate().toString());
+            } else {
+
+            }
+            //todo: this
+            exSummaryView.setBusinessOperationActivity("");
+            exSummaryView.setBusinessPermission("");
+            exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate());
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
         }
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
