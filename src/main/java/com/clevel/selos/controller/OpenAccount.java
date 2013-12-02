@@ -142,7 +142,11 @@ public class OpenAccount {
                 stringBuilder.append(accountName.getName());
             }
             String show = stringBuilder.toString();
-            openAccountView.getAccountDetailInformationView().setAccountNameForShow(show.substring(2, show.length()));
+            if(show.length() > 1){
+                openAccountView.getAccountDetailInformationView().setAccountNameForShow(show.substring(2, show.length()));
+            } else {
+                openAccountView.getAccountDetailInformationView().setAccountNameForShow(" - ");
+            }
         } else {
             openAccountView.getAccountDetailInformationView().setAccountNameForShow(" - ");
         }
@@ -184,7 +188,7 @@ public class OpenAccount {
                 }
             }
             String show = stringBuilder.toString();
-            if(show.length() > 0){
+            if(show.length() > 1){
                 openAccountView.getAccountDetailInformationView().setPurposeForShow(show.substring(2, show.length()));
             } else {
                 openAccountView.getAccountDetailInformationView().setPurposeForShow(" - ");
@@ -194,11 +198,9 @@ public class OpenAccount {
         }
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
-            log.debug("ADD");
             accountDetailInformationViewSelected = openAccountView.getAccountDetailInformationView();
             accountDetailInformationViewList.add(accountDetailInformationViewSelected);
         } else {
-            log.debug("EDIT index : {}", rowIndex);
             accountDetailInformationViewSelected = openAccountView.getAccountDetailInformationView();
             accountDetailInformationViewList.set(rowIndex, accountDetailInformationViewSelected);
         }

@@ -42,13 +42,13 @@
 
     <tr>
         <td class="title">
-            <h:outputText value="#{'ลักษณะการอนุมัติสินเชื่อ'}"/>
-        </td>
-        <td colspan="3" style="width: 300px;">
-            <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
-                <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new')}" itemValue="0"/>
-                <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new.change')}" itemValue="1"/>
-            </h:selectOneRadio>
+            <div>
+                <p:outputLabel value="#{'ลักษณะการอนุมัติสินเชื่อ'}"/>
+                <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
+                    <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new')}" itemValue="0"/>
+                    <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new.change')}" itemValue="1"/>
+                </h:selectOneRadio>
+            </div>
         </td>
     </tr>
 
