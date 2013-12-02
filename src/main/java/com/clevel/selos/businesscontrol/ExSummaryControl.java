@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
@@ -8,6 +9,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ExSummaryTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -17,6 +19,10 @@ import java.util.List;
 
 @Stateless
 public class ExSummaryControl extends BusinessControl {
+    @Inject
+    @SELOS
+    Logger log;
+
     @Inject
     ExSummaryDAO exSummaryDAO;
     @Inject
@@ -86,7 +92,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
         exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSumAccountMovementView mainBank = new ExSumAccountMovementView();
