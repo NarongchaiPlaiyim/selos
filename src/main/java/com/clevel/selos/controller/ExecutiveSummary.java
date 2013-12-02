@@ -55,8 +55,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    //private User user;
-    private Date date;
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
     private ModeForDB modeForDB;
     private String messageHeader;
@@ -167,7 +165,7 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         log.info("onSaveExecutiveSummary ::: ModeForDB  {}", modeForDB);
 
         try {
-            exSummaryControl.saveExSummary(exSummaryView,workCaseId);
+            exSummaryControl.saveExSummary(exSummaryView, workCaseId);
 
             messageHeader = msg.get("app.header.save.success");
 //            message = msg.get("Save Ex Summary data success.");

@@ -95,8 +95,8 @@ public class ExSummaryControl extends BusinessControl {
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
         exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
-            ExSumAccountMovementView mainBank = new ExSumAccountMovementView();
-            ExSumAccountMovementView otherBank = new ExSumAccountMovementView();
+            ExSumAccountMovementView mainBank = null;
+            ExSumAccountMovementView otherBank = null;
             if(bankStatementSummary.getBankStmtList() != null && bankStatementSummary.getBankStmtList().size() > 0 ){
                 for(BankStatement bs : bankStatementSummary.getBankStmtList()){
                     if(bs.getMainAccount() == 1){
@@ -108,8 +108,16 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
-            exSummaryView.getExSumAccMovementViewList().add(mainBank);
-            exSummaryView.getExSumAccMovementViewList().add(otherBank);
+            if(mainBank != null || otherBank != null) {
+                if(mainBank != null) {
+                    exSummaryView.getExSumAccMovementViewList().add(mainBank);
+                }
+                if(otherBank != null) {
+                    exSummaryView.getExSumAccMovementViewList().add(otherBank);
+                }
+            } else {
+                exSummaryView.setExSumAccMovementViewList(null);
+            }
         } else {
             exSummaryView.setExSumAccMovementViewList(null);
         }
@@ -154,8 +162,10 @@ public class ExSummaryControl extends BusinessControl {
         return exSummaryView;
     }
 
-    public void saveExSummary(ExSummaryView exSummaryView, long workCaseId, User user) {
+    public void saveExSummary(ExSummaryView exSummaryView, long workCaseId) {
         log.info("saveExSummary ::: exSummaryView : {}", exSummaryView);
+
+        User user = getCurrentUser();
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
