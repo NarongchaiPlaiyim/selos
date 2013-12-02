@@ -44,8 +44,8 @@ public class BizInfoDetail implements Serializable {
     private String stakeType;
 
     double sumBizPercent = 0;
-    private BigDecimal sumSalePercentB ;
-    private BigDecimal sumCreditPercentB ;
+    private BigDecimal sumSalePercentB;
+    private BigDecimal sumCreditPercentB;
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;
@@ -87,9 +87,10 @@ public class BizInfoDetail implements Serializable {
     private BusinessType bizType;
 
     private BizInfoSummaryView bizInfoSummaryView;
-    private User user;
+    //private User user;
 
     private boolean isDisable = false;
+    private long workCaseId;
 
     @Inject
     @SELOS
@@ -118,20 +119,26 @@ public class BizInfoDetail implements Serializable {
 
             HttpSession session = FacesUtil.getSession(true);
 
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
-            user = (User)session.getAttribute("user");
+            //user = (User)session.getAttribute("user");
 
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-            if(bizInfoSummaryView.getCirculationAmount()!=null){
-                circulationAmount =bizInfoSummaryView.getCirculationAmount().doubleValue();
-            }
+            double x = 0;
+            double y = 0;
+            if(bizInfoSummaryView != null){
+                if(bizInfoSummaryView.getCirculationAmount()!=null){
+                    circulationAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+                }
 
-            if(bizInfoSummaryView.getProductionCostsAmount()!=null){
-                productionCostsAmount =bizInfoSummaryView.getProductionCostsAmount().doubleValue();
+                if(bizInfoSummaryView.getProductionCostsAmount()!=null){
+                    productionCostsAmount =bizInfoSummaryView.getProductionCostsAmount().doubleValue();
+                }
+                x = (circulationAmount/365)*30;
+                y = (productionCostsAmount/365)*30;
+            } else {
+                bizInfoSummaryView = new BizInfoSummaryView();
             }
-            double x = (circulationAmount/365)*30;
-            double y = (productionCostsAmount/365)*30;
 
             if(bizInfoSummaryView.getId() != 0 ){
                 bizInfoSummaryId = bizInfoSummaryView.getId();
@@ -600,11 +607,7 @@ public class BizInfoDetail implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
-            if(bizInfoDetailView.getId() == 0){
-                bizInfoDetailView.setCreateBy(user);
-                bizInfoDetailView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoDetailView.setModifyBy(user);
+
             bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");

@@ -20,15 +20,25 @@ import java.util.List;
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     CustomerAcceptanceDAO customerAcceptanceDAO;
     @Inject
     ContactRecordDetailDAO contactRecordDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+
     @Inject
     CustomerAcceptanceTransform customerAcceptanceTransform;
     @Inject
     ContactRecordDetailTransform contactRecordDetailTransform;
+
+    @Inject
+    public CustomerAcceptanceControl(){
+
+    }
 
     public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList, long workCaseId) {
 

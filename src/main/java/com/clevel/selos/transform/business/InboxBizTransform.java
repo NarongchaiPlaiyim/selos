@@ -28,9 +28,10 @@ public class InboxBizTransform extends BusinessTransform {
 
     public List<InboxView> transformToView(List<CaseDTO> caseDTOs) {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
+        int listKey = 0;
         for (CaseDTO item : caseDTOs) {
             InboxView inboxView = new InboxView();
-
+            inboxView.setListKey(listKey);
             if (item.getCaseData().containsKey("F_WobNum")) {
                 inboxView.setFnWobNum(item.getCaseData().get("F_WobNum"));
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxView.getFnWobNum());
@@ -71,7 +72,7 @@ public class InboxBizTransform extends BusinessTransform {
             if (item.getCaseData().containsKey("QUEUE_NAME")) {
                 inboxView.setQueueName(item.getCaseData().get("QUEUE_NAME"));
             }
-
+            listKey = listKey + 1;
             inboxViewList.add(inboxView);
         }
         return inboxViewList;

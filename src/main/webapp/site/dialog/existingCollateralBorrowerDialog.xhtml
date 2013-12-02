@@ -11,7 +11,7 @@
                 <tr>
                     <td class="title" style="width:145px;">ศักยภาพ หลักประกัน :</td>
                     <td>
-                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}"
+                        <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.potentialCollateralList}"
@@ -24,7 +24,7 @@
                 <tr>
                     <td class="title" style="width:145px;">Collateral Type :</td>
                     <td>
-                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}"
+                        <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.collateralTypeList}"
@@ -43,7 +43,7 @@
                 <tr>
                     <td class="title" style="width:145px;">Collateral Type :</td>
                     <td>
-                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}"
+                        <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.relationList}"
@@ -140,7 +140,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveBorrowerCollateral"
                                 binding="#{saveBorrowerCollateral}"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"
@@ -159,9 +159,9 @@
         </h:form>
     </p:panel>
 
-    <!--<p:blockUI widgetVar="blockExistingSplitLineDlgForm" block="existingCollateralDlgPanel" trigger="existingCollateralDlgForm:save">
+    <p:blockUI widgetVar="blockExistingCollateralBorrowerDlgPanel" block="existingCollateralBorrowerDlgPanel" trigger="existingCollateralBorrowerDlgForm:saveBorrowerCollateral">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>  -->
+    </p:blockUI>
 
 </ui:composition>

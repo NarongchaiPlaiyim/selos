@@ -20,6 +20,8 @@ public class BankStmtView implements Serializable {
     private AccountStatusView accountStatusView;
     private int isMainAccount;
     private int accountCharacteristic;
+    private String isTMB;
+    private String isHighestInflow;
 
     private BigDecimal avgLimit;
     private BigDecimal avgIncomeGross;
@@ -51,6 +53,8 @@ public class BankStmtView implements Serializable {
         this.accountNumber = "";
         this.accountName = "";
         this.accountStatusView = new AccountStatusView();
+        this.isTMB = "";
+        this.isHighestInflow = "";
 //        this.limit = BigDecimal.ZERO;
 //        this.avgIncomeGross = BigDecimal.ZERO;
 //        this.avgIncomeNetBDM = BigDecimal.ZERO;
@@ -162,6 +166,22 @@ public class BankStmtView implements Serializable {
 
     public void setAccountCharacteristic(int accountCharacteristic) {
         this.accountCharacteristic = accountCharacteristic;
+    }
+
+    public String getTMB() {
+        return isTMB;
+    }
+
+    public void setTMB(String TMB) {
+        isTMB = TMB;
+    }
+
+    public String getHighestInflow() {
+        return isHighestInflow;
+    }
+
+    public void setHighestInflow(String highestInflow) {
+        isHighestInflow = highestInflow;
     }
 
     public BigDecimal getAvgLimit() {
@@ -314,6 +334,8 @@ public class BankStmtView implements Serializable {
                 .append("accountStatusView", accountStatusView)
                 .append("isMainAccount", isMainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
+                .append("isTMB", isTMB)
+                .append("isHighestInflow", isHighestInflow)
                 .append("avgLimit", avgLimit)
                 .append("avgIncomeGross", avgIncomeGross)
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)

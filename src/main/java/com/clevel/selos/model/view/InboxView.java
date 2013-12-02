@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class InboxView implements Serializable {
+    private int listKey;
     private String caNo;
     private String bdmId;
     private String fnWobNum;
@@ -17,6 +18,14 @@ public class InboxView implements Serializable {
     private long workCasePreScreenId;
     private long workCaseId;
     private long stepId;
+
+    public int getListKey() {
+        return listKey;
+    }
+
+    public void setListKey(int listKey) {
+        this.listKey = listKey;
+    }
 
     public String getCaNo() {
         return caNo;

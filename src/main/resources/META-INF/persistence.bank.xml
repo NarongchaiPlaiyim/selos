@@ -6,6 +6,7 @@
     <persistence-unit name="selos" transaction-type="JTA">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>jdbc/SLOSDB</jta-data-source>
+        <jar-file>../selos-ejb.jar</jar-file>
         <properties>
 
             <property name="hibernate.transaction.jta.platform"

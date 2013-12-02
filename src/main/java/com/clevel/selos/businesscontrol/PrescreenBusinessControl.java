@@ -40,7 +40,7 @@ import java.util.List;
 public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject
@@ -65,6 +65,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     NCBDetailTransform ncbDetailTransform;
 
     @Inject
+    private UserDAO userDAO;
+    @Inject
     PrescreenDAO prescreenDAO;
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
@@ -86,8 +88,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     IndividualDAO individualDAO;
     @Inject
     JuristicDAO juristicDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     ActionDAO actionDAO;
     @Inject
@@ -135,7 +135,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     BankStmtControl bankStmtControl;
 
-
+    @Inject
     public PrescreenBusinessControl(){
 
     }
@@ -214,7 +214,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
 
         prescreenResultView.setExistingCreditView(existingCreditView);
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
@@ -252,13 +252,14 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenResultView;
     }
 
-    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId){
+    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId, User user){
         Prescreen prescreen = prescreenTransform.getPrescreen(prescreenResultView, getCurrentUser());
         prescreen.setModifyFlag(0);
         prescreenDAO.persist(prescreen);
 
         try{
             existingCreditControl.saveExistingCredit(prescreenResultView.getExistingCreditView(), getWorkCase(workCasePrescreenId));
+            bankStmtControl.saveBankStmtSummary(prescreenResultView.getBankStmtSummaryView(), 0, workCasePrescreenId);
 
         } catch(Exception ex){
             log.error("cannot get workcase prescreen id", ex);
@@ -807,6 +808,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
+
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 individualDAO.delete(customer.getIndividual());
@@ -936,6 +947,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerDeleteList : {}", customerDeleteList);
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
+
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
 
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
@@ -1135,6 +1156,15 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getAddressesList() != null){
                 List<Address> addressList = customer.getAddressesList();
                 addressDAO.delete(addressList);
+            }
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
             }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
                 Individual individual = customer.getIndividual();

@@ -16,6 +16,10 @@
         <p:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.requestType}">
             <f:selectItem itemLabel="New" itemValue="1"/>
             <f:selectItem itemLabel="Change" itemValue="0"/>
+            <p:ajax event="change"
+                    listener="#{creditFacPropose.onChangeRequestType()}"
+                    process="@this"
+                    update=":creditInfoDlgForm"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -155,7 +159,8 @@
             <tr>
                 <td>
                     <p:selectOneMenu size="1"
-                                     value="#{creditFacPropose.proposeCreditDetailView.standardBase.id}"
+                                     value="#{creditFacPropose.proposeCreditDetailView.standardBasePrice.id}"
+                                     id="standDlg"
                                      style="width: 50px;"
                                      disabled="true">
                         <f:selectItems value="#{creditFacPropose.baseRateList}"
@@ -165,7 +170,8 @@
                     </p:selectOneMenu>
                 </td>
                 <td>
-                    <p:inputText value="#{creditFacPropose.proposeCreditDetailView.standardPrice}"
+                    <p:inputText value="#{creditFacPropose.proposeCreditDetailView.standardInterest}"
+                                 id="standPriceDlg"
                                  style="text-align:right;width:50px;"
                                  disabled="true"/>
                 </td>
@@ -183,7 +189,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu size="1"
-                                     value="#{creditFacPropose.proposeCreditDetailView.suggestBase.id}"
+                                     value="#{creditFacPropose.proposeCreditDetailView.suggestBasePrice.id}"
                                      style="width: 50px;"
                                      id="suggestDlg"
                                      disabled="#{creditFacPropose.modeEdit}">
@@ -193,19 +199,17 @@
                                        itemValue="#{suggest.id}"/>
                         <p:ajax event="change"
                                 listener="#{creditFacPropose.onChangeSuggestValue}"
-                                process=":creditInfoDlgForm:suggestDlg,:creditInfoDlgForm:suggestPriceDlg"
-                                update=":creditInfoDlgForm:resultFinal"/>
+                                process=":creditInfoDlgForm" />
                     </p:selectOneMenu>
                 </td>
                 <td>
-                    <p:inputText value="#{creditFacPropose.proposeCreditDetailView.suggestPrice}"
+                    <p:inputText value="#{creditFacPropose.proposeCreditDetailView.suggestInterest}"
                                  style="text-align:right;width:50px;"
                                  id="suggestPriceDlg"
                                  disabled="#{creditFacPropose.modeEdit}">
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.onChangeSuggestValue}"
-                                process=":creditInfoDlgForm:suggestDlg,:creditInfoDlgForm:suggestPriceDlg"
-                                update=":creditInfoDlgForm:resultFinal"/>
+                                process=":creditInfoDlgForm" />
                     </p:inputText>
                 </td>
             </tr>
@@ -260,7 +264,7 @@
                     <p:row>
                         <p:column>
                             <p:selectOneMenu size="1"
-                                             value="#{item.finalBase.id}"
+                                             value="#{item.finalBasePrice.id}"
                                              style="width: 50px;"
                                              disabled="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}">
                                 <f:selectItems value="#{creditFacPropose.baseRateList}"
@@ -270,7 +274,7 @@
                             </p:selectOneMenu>
                         </p:column>
                         <p:column>
-                            <p:inputText value="#{item.finalPriceRate}"
+                            <p:inputText value="#{item.finalInterest}"
                                          style="width: 100px;text-align: right"
                                          readonly="#{(rowIndex+1)== fn:length(creditFacPropose.proposeCreditDetailView.creditTierDetailViewList)?true:false}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>

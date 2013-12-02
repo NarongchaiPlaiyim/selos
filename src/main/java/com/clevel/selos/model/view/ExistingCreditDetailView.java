@@ -2,6 +2,7 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
@@ -18,12 +19,14 @@ public class ExistingCreditDetailView implements Serializable {
     private int no;
     private int seq;
     private boolean noFlag;
+    private String stage;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
     private BankAccountStatusView accountStatus;
-    private BankAccountStatus existAccountStatus;
+
+    private AccountStatus existAccountStatus;
     private String productProgram;
     private ProductProgram existProductProgram;
     private String creditType;
@@ -78,6 +81,14 @@ public class ExistingCreditDetailView implements Serializable {
         this.noFlag = noFlag;
     }
 
+    public String getStage() {
+        return stage;
+    }
+
+    public void setStage(String stage) {
+        this.stage = stage;
+    }
+
     public String getAccountName() {
         return accountName;
     }
@@ -118,11 +129,11 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
-    public BankAccountStatus getExistAccountStatus() {
+    public AccountStatus getExistAccountStatus() {
         return existAccountStatus;
     }
 
-    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
+    public void setExistAccountStatus(AccountStatus existAccountStatus) {
         this.existAccountStatus = existAccountStatus;
     }
 

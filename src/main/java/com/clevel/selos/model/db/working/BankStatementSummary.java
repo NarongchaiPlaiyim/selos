@@ -58,6 +58,15 @@ public class BankStatementSummary implements Serializable {
     @Column(name = "grand_td_chq_return_percent")
     private BigDecimal grdTotalTDChqRetPercent;
 
+    @Column(name = "grand_total_brw_income_gross")
+    private BigDecimal grdTotalBorrowerIncomeGross;
+
+    @Column(name = "grand_total_brw_income_bdm")
+    private BigDecimal grdTotalBorrowerIncomeNetBDM;
+
+    @Column(name = "grand_total_brw_income_uw")
+    private BigDecimal grdTotalBorrowerIncomeNetUW;
+
     @Column(name = "grand_avg_os_balance_amt")
     private BigDecimal grdTotalAvgOSBalanceAmount;
 
@@ -203,6 +212,30 @@ public class BankStatementSummary implements Serializable {
         this.grdTotalTDChqRetPercent = grdTotalTDChqRetPercent;
     }
 
+    public BigDecimal getGrdTotalBorrowerIncomeGross() {
+        return grdTotalBorrowerIncomeGross;
+    }
+
+    public void setGrdTotalBorrowerIncomeGross(BigDecimal grdTotalBorrowerIncomeGross) {
+        this.grdTotalBorrowerIncomeGross = grdTotalBorrowerIncomeGross;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetBDM() {
+        return grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetBDM(BigDecimal grdTotalBorrowerIncomeNetBDM) {
+        this.grdTotalBorrowerIncomeNetBDM = grdTotalBorrowerIncomeNetBDM;
+    }
+
+    public BigDecimal getGrdTotalBorrowerIncomeNetUW() {
+        return grdTotalBorrowerIncomeNetUW;
+    }
+
+    public void setGrdTotalBorrowerIncomeNetUW(BigDecimal grdTotalBorrowerIncomeNetUW) {
+        this.grdTotalBorrowerIncomeNetUW = grdTotalBorrowerIncomeNetUW;
+    }
+
     public BigDecimal getGrdTotalAvgOSBalanceAmount() {
         return grdTotalAvgOSBalanceAmount;
     }
@@ -292,6 +325,9 @@ public class BankStatementSummary implements Serializable {
                 .append("grdTotalIncomeNetUW", grdTotalIncomeNetUW)
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
+                .append("grdTotalBorrowerIncomeGross", grdTotalBorrowerIncomeGross)
+                .append("grdTotalBorrowerIncomeNetBDM", grdTotalBorrowerIncomeNetBDM)
+                .append("grdTotalBorrowerIncomeNetUW", grdTotalBorrowerIncomeNetUW)
                 .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
                 .append("countRefresh", countRefresh)
                 .append("createDate", createDate)
