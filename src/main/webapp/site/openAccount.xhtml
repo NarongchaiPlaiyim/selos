@@ -46,8 +46,8 @@
         </td>
         <td colspan="3" style="width: 300px;">
             <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
-                <f:selectItem itemLabel="#{'New'}" itemValue="0"/>
-                <f:selectItem itemLabel="#{'New + Change'}" itemValue="1"/>
+                <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new')}" itemValue="0"/>
+                <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new.change')}" itemValue="1"/>
             </h:selectOneRadio>
         </td>
     </tr>
@@ -63,107 +63,99 @@
             <table>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.basicInfo.content.opAcc')}"/>
+                        <p:outputLabel value="#{msg.get('app.openAccount.content.opening.account.information')}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p:commandButton type="button" value="#{msg.get('app.button.add')}"
+                        <p:commandButton value="#{msg.get('app.button.add')}"
                                          styleClass="smaller"
                                          process="@this"
-                                         onclick="openAccountDlg.show();">
+                                         actionListener="#{openAccount.onAddAccountDetail()}"
+                                         update=":openAccountDialogForm"
+                                         oncomplete="openAccountDlg.show();">
+                            <p:resetInput target=":openAccountDialogForm"/>
                         </p:commandButton>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
-                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                        <p:dataTable id="accountDetailTable" var="accountDetail" value="#{openAccount.accountDetailInformationViewList}"
+                                     paginator="false" rowKey="#{accountDetail}" rowIndexVar="rowIndex">
 
                             <p:columnGroup type="header">
-
                                 <p:row>
                                     <p:column colspan="9" style="width:222px;"
-                                              headerText="#{'Account Detail'}"/>
+                                              headerText="#{msg.get('app.openAccount.table.header')}"/>
                                 </p:row>
 
                                 <p:row>
-                                    <p:column
-                                            headerText="#{'    '}"
-                                            style="width: 22px;">
-                                    </p:column>
-
-                                    <p:column headerText="#{'Request Account Type'}" style="width: 130px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Account Number'}" style="width: 110px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Branch'}" style="width: 110px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Account Name'}" style="width: 120px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Product Type'}" style="width: 110px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Term'}" style="width: 110px;">
-
-                                    </p:column>
-
-                                    <p:column headerText="#{'Purpose'}" style="width: 110px;">
-
-                                    </p:column>
-
-                                    <p:column
-                                            headerText="#{'    '}"
-                                            style="width: 55px;">
-                                    </p:column>
-
+                                    <p:column style="width: 22px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.request')}" style="width: 130px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.account.number')}" style="width: 110px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.branch')}" style="width: 110px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.account.name')}" style="width: 120px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.product.type')}" style="width: 110px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.term')}" style="width: 110px;"/>
+                                    <p:column headerText="#{msg.get('app.openAccount.table.purpose')}" style="width: 110px;"/>
+                                    <p:column style="width: 55px;"/>
                                 </p:row>
-
                             </p:columnGroup>
+
                             <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
+                                <p:outputLabel value="#{rowIndex+1}"/>
                             </p:column>
 
                             <p:column headerText="#{'Request Account Type'}" style="width: 130px;">
-                                <h:outputText value="#{item.accountName}"/>
+                                <p:outputLabel value="#{accountDetail.requestAccountType.name}"/>
                             </p:column>
 
                             <p:column headerText="#{'Account Number'}" style="width: 110px;">
-                                <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                                <p:outputLabel value="#{accountDetail.accountNumber}"/>
                             </p:column>
 
                             <p:column headerText="#{'Branch'}" style="width: 110px;">
-                                <h:outputText value="#{item.product.name}"/>
+                                <p:outputLabel value="#{accountDetail.branch.name}"/>
                             </p:column>
 
                             <p:column headerText="#{'Account Name'}" style="width: 120px;">
-                                <h:outputText value="#{item.purposeForShow}"/>
+                                <p:outputLabel value="#{accountDetail.accountNameForShow}"/>
                             </p:column>
 
                             <p:column headerText="#{'Product Type'}" style="width: 110px;">
-                                <h:outputText value="#{item.product.name}"/>
+                                <p:outputLabel value="#{accountDetail.productType.name}"/>
                             </p:column>
 
                             <p:column headerText="#{'Term'}" style="width: 110px;">
-                                <h:outputText value="#{item.product.name}"/>
+                                <p:outputLabel value="#{accountDetail.term}"/>
                             </p:column>
 
                             <p:column headerText="#{'Purpose'}" style="width: 110px;">
-                                <h:outputText value="#{item.product.name}"/>
+                                <p:outputLabel value="#{accountDetail.purposeForShow}"/>
                             </p:column>
 
-                            <p:column headerText="#{'    '}" style="width: 55px;">
-                                <h:outputText value="#{item.product.name}"/>
+                            <p:column headerText="" styleClass="center" style="width:54px;">
+                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                 icon="ui-icon-pencil"
+                                                 action="#{openAccount.editAccountDetail()}"
+                                                 update=":openAccountDialogForm"
+                                                 oncomplete="openAccountDlg.show();">
+                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                 target="#{openAccount.rowIndex}"/>
+                                    <f:setPropertyActionListener value="#{accountDetail}"
+                                                                 target="#{openAccount.accountDetailInformationViewSelected}"/>
+                                    <p:resetInput target=":openAccountDialogForm"/>
+                                </p:commandButton>
+
+                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                 icon="ui-icon-trash"
+                                                 oncomplete="confirmDeleteAccountDetailDlg.show()"
+                                                 update=":frmMain:accountDetailTable"
+                                                 process="@form">
+                                    <f:setPropertyActionListener value="#{accountDetail}"
+                                                                 target="#{openAccount.accountDetailInformationViewSelected}"/>
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
 
@@ -201,18 +193,28 @@
 
 </p:panel>
     <p:dialog id="openAccountDialog" widgetVar="openAccountDlg" resizable="false"
-              modal="true" width="550" height="700">
+              modal="true" width="650" height="600"
+            header="#{msg.get('app.openAccount.dialog.content.header')}">
         <ui:include src="dialog/openAccountDialog.xhtml"/>
     </p:dialog>
 
-<ui:include src="dialog/confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteAccountNameDialog"/>
-    <ui:param name="name" value="confirmDeleteAccountNameDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteAccount"/>
-    <ui:param name="controller" value="#{openAccount}"/>
-    <ui:param name="action" value="removeAccountName"/>
-    <ui:param name="update" value=":openAccountDialogForm"/>
-</ui:include>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAccountNameDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountNameDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccount"/>
+        <ui:param name="controller" value="#{openAccount}"/>
+        <ui:param name="action" value="removeAccountName"/>
+        <ui:param name="update" value=":openAccountDialogForm"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAccountDetailDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountDetailDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccountDetail"/>
+        <ui:param name="controller" value="#{openAccount}"/>
+        <ui:param name="action" value="removeAccountDetail"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 </h:body>
 </f:view>
 </html>
