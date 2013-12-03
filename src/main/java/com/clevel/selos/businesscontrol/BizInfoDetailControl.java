@@ -7,6 +7,7 @@ import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.BizProductDetail;
@@ -17,6 +18,7 @@ import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -68,6 +70,14 @@ public class BizInfoDetailControl extends BusinessControl {
         BizStakeHolderDetailView stakeHolderDetailViewTemp;
         BizProductDetailView bizProductDetailViewTemp;
         BizProductDetail bizProductDetailTemp;
+
+        User user = getCurrentUser();
+
+        if(bizInfoDetailView.getId() == 0){
+            bizInfoDetailView.setCreateBy(user);
+            bizInfoDetailView.setCreateDate(DateTime.now().toDate());
+        }
+        bizInfoDetailView.setModifyBy(user);
 
         try {
             log.info("onSaveBizInfoToDB begin");

@@ -87,7 +87,9 @@ public class BasicInfoControl extends BusinessControl {
         return customerEntity;
     }
 
-    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId, User user) {
+    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId) {
+        User user = getCurrentUser();
+
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         if (basicInfoView.getQualitative() == 0) {

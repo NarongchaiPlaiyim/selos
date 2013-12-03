@@ -8,20 +8,19 @@
 
     <h:head>
         <title>Business Information Detail</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="include/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="include/header_detail.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml" />
@@ -789,7 +788,7 @@
             </div>
             <div class="clear"></div>
                 <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>

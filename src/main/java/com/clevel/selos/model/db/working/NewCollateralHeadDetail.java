@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_propose_collateral_head_detail")
-public class ProposeCollateralHeadDetail  implements Serializable {
+@Table(name = "wrk_new_collateral_head_detail")
+public class NewCollateralHeadDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_COLLATERAL_HEAD_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_COLLATERAL_HEAD_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_COLLATERAL_HEAD_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COL_HEAD_DET_ID", sequenceName = "SEQ_WRK_NEW_COL_HEAD_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COL_HEAD_DET_ID")
     private long id;
 
     @OneToOne
@@ -47,11 +47,11 @@ public class ProposeCollateralHeadDetail  implements Serializable {
     private BigDecimal appraisalValue;
 
     @ManyToOne
-    @JoinColumn(name = "propose_collateral_detail_id")
-    private ProposeCollateralDetail proposeCollateralDetail;
+    @JoinColumn(name = "new_collateral_detail_id")
+    private NewCollateralDetail newCollateralDetail;
 
-    @OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
-    private List<ProposeSubCollateralDetail> proposeSubCollateralDetailList;
+    @OneToMany(mappedBy = "newCollateralHeadDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubDetail> newCollateralSubDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -174,20 +174,20 @@ public class ProposeCollateralHeadDetail  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ProposeCollateralDetail getProposeCollateralDetail() {
-        return proposeCollateralDetail;
+    public NewCollateralDetail getNewCollateralDetail() {
+        return newCollateralDetail;
     }
 
-    public void setProposeCollateralDetail(ProposeCollateralDetail proposeCollateralDetail) {
-        this.proposeCollateralDetail = proposeCollateralDetail;
+    public void setNewCollateralDetail(NewCollateralDetail newCollateralDetail) {
+        this.newCollateralDetail = newCollateralDetail;
     }
 
-    public List<ProposeSubCollateralDetail> getProposeSubCollateralDetailList() {
-        return proposeSubCollateralDetailList;
+    public List<NewCollateralSubDetail> getNewCollateralSubDetailList() {
+        return newCollateralSubDetailList;
     }
 
-    public void setProposeSubCollateralDetailList(List<ProposeSubCollateralDetail> proposeSubCollateralDetailList) {
-        this.proposeSubCollateralDetailList = proposeSubCollateralDetailList;
+    public void setNewCollateralSubDetailList(List<NewCollateralSubDetail> newCollateralSubDetailList) {
+        this.newCollateralSubDetailList = newCollateralSubDetailList;
     }
 
 
@@ -203,8 +203,8 @@ public class ProposeCollateralHeadDetail  implements Serializable {
                 .append("existingCredit", existingCredit)
                 .append("insuranceCompany", insuranceCompany)
                 .append("appraisalValue", appraisalValue)
-                .append("proposeCollateralDetail", proposeCollateralDetail)
-                .append("proposeSubCollateralDetailList", proposeSubCollateralDetailList)
+                .append("newCollateralDetail", newCollateralDetail)
+                .append("newCollateralSubDetailList", newCollateralSubDetailList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
