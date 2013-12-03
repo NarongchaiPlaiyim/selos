@@ -5,19 +5,13 @@ import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.coms.model.AppraisalData;
-import com.clevel.selos.integration.coms.model.HeadCollateralData;
-import com.clevel.selos.integration.coms.model.SubCollateralData;
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
-import com.clevel.selos.model.view.NewCollateralHeadDetailView;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.view.NewCollateralInfoView;
-import com.clevel.selos.model.view.NewSubCollateralDetailView;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +29,7 @@ public class NewCollateralInfoTransform extends Transform {
     CollateralTypeDAO collateralTypeDAO;
     @Inject
     BasicInfoDAO basicInfoDAO;
+/*
 
     public NewCollateralInfoView transformsCOMSToModelView(AppraisalData appraisalData) {
 
@@ -51,7 +46,8 @@ public class NewCollateralInfoTransform extends Transform {
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
         List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
-    /*    List<NewSubCollateralDetailView> subCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
+    */
+/*    List<NewSubCollateralDetailView> subCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
 
         for(HeadCollateralData headCollateralData : appraisalData.getHeadCollateralDataList())
         {
@@ -68,9 +64,11 @@ public class NewCollateralInfoTransform extends Transform {
 
         collateralDetailView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViewList);
         log.info("convertCollateral end");
-        return collateralDetailView;*/
+        return collateralDetailView;*//*
 
-        /*List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
+
+        */
+/*List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
         List<NewSubCollateralDetailView> subCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
 
         for(int i= 0;i<appraisalData.getSubCollateralDataList().size();i++){
@@ -87,7 +85,8 @@ public class NewCollateralInfoTransform extends Transform {
         collateralHeaderDetailView.setNo(1);
         newCollateralHeadDetailViewList.add(collateralHeaderDetailView);
         collateralHeaderDetailView.setNo(2);
-        newCollateralHeadDetailViewList.add(collateralHeaderDetailView);*/
+        newCollateralHeadDetailViewList.add(collateralHeaderDetailView);*//*
+
 
         return collateralDetailView;
 
@@ -135,9 +134,37 @@ public class NewCollateralInfoTransform extends Transform {
         log.info("convertSubCollateral end");
         return newSubCollateralDetailView;
     }
+*/
 
-    public List<NewCollateralDetail> transformsToModel() {
+    public List<NewCollateralDetail> transformsToModel(List<NewCollateralInfoView> newCollateralInfoViewList , NewCreditFacility newCreditFacility) {
+           List<NewCollateralDetail> newCollateralDetailList = new ArrayList<NewCollateralDetail>();
+           NewCollateralDetail newCollateralDetail;
 
+           for(NewCollateralInfoView newCollateralInfoView : newCollateralInfoViewList){
+               newCollateralDetail = new NewCollateralDetail();
+
+               if(newCollateralInfoView.getId()==0){
+                   newCollateralDetail.setId(newCollateralInfoView.getId());
+                   newCollateralDetail.setCreateBy(newCollateralInfoView.getCreateBy());
+                   newCollateralDetail.setCreateDate(DateTime.now().toDate());
+               }
+
+               newCollateralDetail.setJobID(newCollateralInfoView.getJobID());
+               newCollateralDetail.setAadDecision(newCollateralInfoView.getAadDecision());
+               newCollateralDetail.setAadDecisionReason(newCollateralInfoView.getAadDecisionReason());
+               newCollateralDetail.setAadDecisionReasonDetail(newCollateralInfoView.getAadDecisionReasonDetail());
+               newCollateralDetail.setAppraisalDate(newCollateralInfoView.getAppraisalDate());
+               newCollateralDetail.setBdmComments(newCollateralInfoView.getBdmComments());
+               newCollateralDetail.setMortgageCondition(newCollateralInfoView.getMortgageCondition());
+               newCollateralDetail.setMortgageConditionDetail(newCollateralInfoView.getMortgageConditionDetail());
+               newCollateralDetail.setTypeOfUsage(newCollateralInfoView.getTypeOfUsage());
+               newCollateralDetail.setUsage(newCollateralInfoView.getUsage());
+               newCollateralDetail.setUwDecision(newCollateralInfoView.getUwDecision());
+               newCollateralDetail.setUwRemark(newCollateralInfoView.getUwRemark());
+               newCollateralDetail.setNewCreditFacility(newCreditFacility);
+
+//               newCollateralDetail.setCreditTypeDetailList();
+           }
        return null;
     }
 

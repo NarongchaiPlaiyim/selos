@@ -34,8 +34,9 @@ public class NewCollateralHeadDetail implements Serializable {
     @Column(name = "collateral_location")
     private String collateralLocation;
 
-    @Column(name = "coll_type_percent_ltv")
-    private String collTypePercentLTV;
+    @OneToOne
+    @JoinColumn(name = "coll_type_ltv_id")
+    private CollateralType collTypePercentLTV;
 
     @Column(name = "existing_credit")
     private BigDecimal existingCredit;
@@ -109,11 +110,11 @@ public class NewCollateralHeadDetail implements Serializable {
         this.collateralLocation = collateralLocation;
     }
 
-    public String getCollTypePercentLTV() {
+    public CollateralType getCollTypePercentLTV() {
         return collTypePercentLTV;
     }
 
-    public void setCollTypePercentLTV(String collTypePercentLTV) {
+    public void setCollTypePercentLTV(CollateralType collTypePercentLTV) {
         this.collTypePercentLTV = collTypePercentLTV;
     }
 

@@ -23,7 +23,7 @@ public class NewSubCollateralDetailView {
     private String  collateralOwnerUW;
     private List<String> collateralOwnerUWList;
     private MortgageType mortgageType;
-    private List<String> mortgageList;
+    private List<MortgageType> mortgageList;
     private String  relatedWith;
     private List<String> relatedWithList;
     private BigDecimal  appraisalValue;
@@ -53,7 +53,7 @@ public class NewSubCollateralDetailView {
         this.mortgageType= new MortgageType();
         this.relatedWith = "";
         this.collateralOwnerUWList = new ArrayList<String>();
-        this.mortgageList = new ArrayList<String>();
+        this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<String>();
     }
 
@@ -193,20 +193,20 @@ public class NewSubCollateralDetailView {
         this.modifyBy = modifyBy;
     }
 
+    public List<MortgageType> getMortgageList() {
+        return mortgageList;
+    }
+
+    public void setMortgageList(List<MortgageType> mortgageList) {
+        this.mortgageList = mortgageList;
+    }
+
     public List<String> getCollateralOwnerUWList() {
         return collateralOwnerUWList;
     }
 
     public void setCollateralOwnerUWList(List<String> collateralOwnerUWList) {
         this.collateralOwnerUWList = collateralOwnerUWList;
-    }
-
-    public List<String> getMortgageList() {
-        return mortgageList;
-    }
-
-    public void setMortgageList(List<String> mortgageList) {
-        this.mortgageList = mortgageList;
     }
 
     public List<String> getRelatedWithList() {

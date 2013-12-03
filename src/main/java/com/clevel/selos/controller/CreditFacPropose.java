@@ -895,7 +895,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddMortgageType() {
         MortgageType mortgageType = mortgageTypeDAO.findById(newSubCollateralDetailView.getMortgageType().getId());
         log.info("onAddMortgageType :: {} ", newSubCollateralDetailView.getMortgageType());
-        newSubCollateralDetailView.getMortgageList().add(mortgageType.getMortgage());
+        newSubCollateralDetailView.getMortgageList().add(mortgageType);
     }
 
     public void onDeleteMortgageType(int row) {

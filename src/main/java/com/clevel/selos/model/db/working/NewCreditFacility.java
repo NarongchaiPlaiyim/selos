@@ -27,8 +27,8 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "wc_need")
     private BigDecimal wcNeed;
 
-    @Column(name = "total_credit_turnover")
-    private BigDecimal totalCreditTurnover;
+    @Column(name = "total_wc_tmb")
+    private BigDecimal totalWcTmb;
 
     @Column(name = "wc_need_differ")
     private BigDecimal WCNeedDiffer;
@@ -217,12 +217,12 @@ public class NewCreditFacility implements Serializable {
         this.wcNeed = wcNeed;
     }
 
-    public BigDecimal getTotalCreditTurnover() {
-        return totalCreditTurnover;
+    public BigDecimal getTotalWcTmb() {
+        return totalWcTmb;
     }
 
-    public void setTotalCreditTurnover(BigDecimal totalCreditTurnover) {
-        this.totalCreditTurnover = totalCreditTurnover;
+    public void setTotalWcTmb(BigDecimal totalWcTmb) {
+        this.totalWcTmb = totalWcTmb;
     }
 
     public BigDecimal getWCNeedDiffer() {
@@ -681,7 +681,7 @@ public class NewCreditFacility implements Serializable {
                 .append("id", id)
                 .append("workCase", workCase)
                 .append("wcNeed", wcNeed)
-                .append("totalCreditTurnover", totalCreditTurnover)
+                .append("totalWcTmb", totalWcTmb)
                 .append("WCNeedDiffer", WCNeedDiffer)
                 .append("totalWcDebit", totalWcDebit)
                 .append("case1WcLimit", case1WcLimit)

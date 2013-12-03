@@ -14,7 +14,7 @@ import java.util.List;
 public class NewCreditFacilityView implements Serializable {
     private long id;
     private BigDecimal WCNeed;
-    private BigDecimal totalCreditTurnover;
+    private BigDecimal totalWcTmb;
     private BigDecimal WCNeedDiffer;
     private BigDecimal totalWcDebit;
 
@@ -90,7 +90,7 @@ public class NewCreditFacilityView implements Serializable {
 
     public void reset() {
         this.WCNeed = BigDecimal.ZERO;
-        this.totalCreditTurnover = BigDecimal.ZERO;
+        this.totalWcTmb = BigDecimal.ZERO;
         this.WCNeedDiffer = BigDecimal.ZERO;
         this.totalWcDebit = BigDecimal.ZERO;
         this.case1WcLimit = BigDecimal.ZERO;
@@ -181,12 +181,12 @@ public class NewCreditFacilityView implements Serializable {
         this.WCNeed = WCNeed;
     }
 
-    public BigDecimal getTotalCreditTurnover() {
-        return totalCreditTurnover;
+    public BigDecimal getTotalWcTmb() {
+        return totalWcTmb;
     }
 
-    public void setTotalCreditTurnover(BigDecimal totalCreditTurnover) {
-        this.totalCreditTurnover = totalCreditTurnover;
+    public void setTotalWcTmb(BigDecimal totalWcTmb) {
+        this.totalWcTmb = totalWcTmb;
     }
 
     public BigDecimal getWCNeedDiffer() {
