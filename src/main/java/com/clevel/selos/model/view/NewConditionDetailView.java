@@ -1,49 +1,31 @@
-package com.clevel.selos.model.db.working;
+package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name = "wrk_propose_condition_detail")
-public class ProposeConditionDetail  implements Serializable {
-    @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_CONDITION_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_CONDITION_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_CONDITION_DET_ID")
-    private long id;
-
-    @Column(name = "no")
+public class NewConditionDetailView implements Serializable {
     private int no ;
-
-    @Column(name = "loan_type")
-    private String loanType ;
-
-    @Column(name = "condition_desc")
+    private String loanType;
     private String conditionDesc;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
     private Date createDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modify_date")
     private Date modifyDate;
-
-    @OneToOne
-    @JoinColumn(name = "create_user_id")
     private User createBy;
-
-    @OneToOne
-    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+    private long id;
+    public NewConditionDetailView() {
+        reset();
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "credit_facility_propose_id")
-    private CreditFacilityPropose creditFacilityPropose;
+    public void reset() {
+        this.no=0;
+        this.loanType = "";
+        this.conditionDesc = "";
+    }
 
     public long getId() {
         return id;
@@ -109,18 +91,9 @@ public class ProposeConditionDetail  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public CreditFacilityPropose getCreditFacilityPropose() {
-        return creditFacilityPropose;
-    }
-
-    public void setCreditFacilityPropose(CreditFacilityPropose creditFacilityPropose) {
-        this.creditFacilityPropose = creditFacilityPropose;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
                 .append("no", no)
                 .append("loanType", loanType)
                 .append("conditionDesc", conditionDesc)
@@ -128,7 +101,6 @@ public class ProposeConditionDetail  implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("creditFacilityPropose", creditFacilityPropose)
                 .toString();
     }
 }

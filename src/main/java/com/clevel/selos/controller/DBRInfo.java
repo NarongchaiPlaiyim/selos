@@ -88,7 +88,7 @@ public class DBRInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
+        session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
 
         session = FacesUtil.getSession(true);

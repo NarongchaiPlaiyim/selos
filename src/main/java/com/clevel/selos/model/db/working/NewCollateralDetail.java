@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_propose_collateral_detail")
-public class ProposeCollateralDetail implements Serializable {
+@Table(name = "wrk_new_collateral_detail")
+public class NewCollateralDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID", sequenceName = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PROPOSE_COLLATERAL_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COL_DET_ID", sequenceName = "SEQ_WRK_NEW_COL_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COL_DET_ID")
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -24,34 +24,34 @@ public class ProposeCollateralDetail implements Serializable {
     @Column(name = "job_id")
     private String jobID;
 
-    @Column(name = "aadDecision")
+    @Column(name = "aad_decision")
     private String aadDecision;
 
-    @Column(name = "aadDecisionReason")
+    @Column(name = "aad_decision_reason")
     private String aadDecisionReason;
 
-    @Column(name = "aadDecisionReasonDetail")
+    @Column(name = "aad_decision_reason_detail")
     private String aadDecisionReasonDetail;
 
     @Column(name = "usage")
     private String usage;
 
-    @Column(name = "typeOfUsage")
+    @Column(name = "type_of_usage")
     private String typeOfUsage;
 
-    @Column(name = "uwDecision")
+    @Column(name = "uw_decision")
     private String uwDecision;
 
-    @Column(name = "uwRemark")
+    @Column(name = "uw_remark")
     private String uwRemark;
 
-    @Column(name = "mortgageCondition")
+    @Column(name = "mortgage_condition")
     private String mortgageCondition;
 
-    @Column(name = "mortgageConditionDetail")
+    @Column(name = "mortgage_condition_detail")
     private String mortgageConditionDetail;
 
-    @Column(name = "bdmComments")
+    @Column(name = "bdm_comments")
     private String bdmComments;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -71,15 +71,13 @@ public class ProposeCollateralDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "credit_facility_propose_id")
-    private CreditFacilityPropose creditFacilityPropose;
+    @JoinColumn(name = "new_credit_facility_id")
+    private NewCreditFacility newCreditFacility;
 
-    //@OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
-    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
-    private List<ProposeCollateralHeadDetail> proposeCollateralHeadDetailList;
+    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralHeadDetail> newCollateralHeadDetailList;
 
-    //@OneToMany(mappedBy = "creditTypeDetail", cascade = CascadeType.ALL)
-    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
     private List<CreditTypeDetail> creditTypeDetailList;
 
     public long getId() {
@@ -186,20 +184,20 @@ public class ProposeCollateralDetail implements Serializable {
         this.bdmComments = bdmComments;
     }
 
-    public CreditFacilityPropose getCreditFacilityPropose() {
-        return creditFacilityPropose;
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
     }
 
-    public void setCreditFacilityPropose(CreditFacilityPropose creditFacilityPropose) {
-        this.creditFacilityPropose = creditFacilityPropose;
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
     }
 
-    public List<ProposeCollateralHeadDetail> getProposeCollateralHeadDetailList() {
-        return proposeCollateralHeadDetailList;
+    public List<NewCollateralHeadDetail> getNewCollateralHeadDetailList() {
+        return newCollateralHeadDetailList;
     }
 
-    public void setProposeCollateralHeadDetailList(List<ProposeCollateralHeadDetail> proposeCollateralHeadDetailList) {
-        this.proposeCollateralHeadDetailList = proposeCollateralHeadDetailList;
+    public void setNewCollateralHeadDetailList(List<NewCollateralHeadDetail> newCollateralHeadDetailList) {
+        this.newCollateralHeadDetailList = newCollateralHeadDetailList;
     }
 
     public List<CreditTypeDetail> getCreditTypeDetailList() {
@@ -259,7 +257,7 @@ public class ProposeCollateralDetail implements Serializable {
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
                 .append("bdmComments", bdmComments)
-                .append("creditFacilityPropose", creditFacilityPropose)
+                .append("newCreditFacility", newCreditFacility)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

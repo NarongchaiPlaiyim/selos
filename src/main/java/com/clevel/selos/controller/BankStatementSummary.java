@@ -76,7 +76,7 @@ public class BankStatementSummary implements Serializable {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
-    private String userId;
+    //private String userId;
 
     //Message Dialog
     private String messageHeader;
@@ -99,19 +99,19 @@ public class BankStatementSummary implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             if (session.getAttribute("workCasePreScreenId") != null) {
                 workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             }
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            //userId = session.getAttribute("userId").toString();
             // check user (ABDM/BDM)
             isABDM_BDM = bankStmtControl.isBDMUser();
         } else {
@@ -255,7 +255,7 @@ public class BankStatementSummary implements Serializable {
         summaryView.setExpectedSubmitDate(expectedSubmitDate);
 
         try {
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";

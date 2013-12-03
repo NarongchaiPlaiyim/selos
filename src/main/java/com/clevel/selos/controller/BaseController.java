@@ -82,7 +82,11 @@ public class BaseController implements Serializable {
         log.info("BaseController ::: appHeader : {}", appHeaderView);
 
         if(session.getAttribute("workCaseId") != null){
+            try{
             workCaseId = (Long)session.getAttribute("workCaseId");
+            } catch (ClassCastException ex){
+                log.error("Exception :", ex);
+            }
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             if(basicInfo != null){

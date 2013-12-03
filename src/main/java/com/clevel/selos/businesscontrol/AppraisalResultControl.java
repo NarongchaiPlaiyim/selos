@@ -3,10 +3,10 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.CollateralHeaderDetailView;
+import com.clevel.selos.model.view.NewCollateralHeadDetailView;
 import com.clevel.selos.model.view.CollateralDetailView;
 import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.model.view.SubCollateralDetailView;
+import com.clevel.selos.model.view.NewSubCollateralDetailView;
 import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
@@ -36,9 +36,9 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     CollateralDetailTransform collateralDetailTransform;
     @Inject
-    CollateralHeaderDetailTransform collateralHeaderDetailTransform;
+    NewCollHeadDetailTransform newCollHeadDetailTransform;
     @Inject
-    SubCollateralDetailTransform subCollateralDetailTransform;
+    NewSubCollDetailTransform newSubCollDetailTransform;
 
 	@Inject
     public AppraisalResultControl(){
@@ -53,9 +53,9 @@ public class AppraisalResultControl extends BusinessControl {
         List<CollateralDetail> collateralDetailList;
         List<CollateralDetailView> collateralDetailViewList;
         List<CollateralHeaderDetail> collateralHeaderDetailList;
-        List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
+        List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
         List<SubCollateralDetail> subCollateralDetailList;
-        List<SubCollateralDetailView> subCollateralDetailViewList;
+        List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
         CollateralDetail collateralDetail;
         CollateralHeaderDetail collateralHeaderDetail;
 
@@ -78,7 +78,7 @@ public class AppraisalResultControl extends BusinessControl {
                     collateralDetail = collateralDetailList.get(i);
                     log.info("collateralDetail.size()i is " + i +" getId is " + collateralDetail.getId()  );
                     collateralHeaderDetailList = collateralHeaderDetailDAO.findByCollateralDetail(collateralDetail);
-                    collateralHeaderDetailViewList = collateralHeaderDetailTransform.transformToView(collateralHeaderDetailList);
+                    newCollateralHeadDetailViewList = newCollHeadDetailTransform.transformToView(collateralHeaderDetailList);
                     log.info("collateralDetail.size() i is " + i + "  collateralHeaderDetailList size is "+ collateralHeaderDetailList.size());
 
                     if(collateralHeaderDetailList.size()>0){
@@ -86,13 +86,13 @@ public class AppraisalResultControl extends BusinessControl {
                             collateralHeaderDetail = collateralHeaderDetailList.get(j);
                             log.info("collateralHeaderDetailList.size()i is " + j +" getId is " +collateralHeaderDetail.getId()  );
                             subCollateralDetailList = subCollateralDetailDAO.findByCollateralHeaderDetail(collateralHeaderDetail);
-                            subCollateralDetailViewList = subCollateralDetailTransform.transformToView(subCollateralDetailList);
-                            log.info("collateralHeaderDetailList.size() j is " + j + "  subCollateralDetailViewList size is "+ subCollateralDetailViewList.size());
-                            collateralHeaderDetailViewList.get(j).setSubCollateralDetailViewList(subCollateralDetailViewList);
+                            newSubCollateralDetailViewList = newSubCollDetailTransform.transformToView(subCollateralDetailList);
+                            log.info("collateralHeaderDetailList.size() j is " + j + "  newSubCollateralDetailViewList size is "+ newSubCollateralDetailViewList.size());
+                            newCollateralHeadDetailViewList.get(j).setNewSubCollateralDetailViewList(newSubCollateralDetailViewList);
 
                         }
                     }
-                    collateralDetailViewList.get(i).setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
+                    collateralDetailViewList.get(i).setNewCollateralHeadDetailViewList(newCollateralHeadDetailViewList);
                 }
                 appraisalView.setCollateralDetailViewList(collateralDetailViewList);
             }
@@ -108,10 +108,10 @@ public class AppraisalResultControl extends BusinessControl {
         Appraisal appraisal;
         List<CollateralDetailView> collateralDetailViewList;
         List<CollateralDetail> collateralDetailList;
-        List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
+        List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
         List<CollateralHeaderDetail> collateralHeaderDetailList;
         List<SubCollateralDetail> subCollateralDetailList;
-        List<SubCollateralDetailView> subCollateralDetailViewList;
+        List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         appraisal = appraisalTransform.transformToModel(appraisalView);
@@ -143,13 +143,13 @@ public class AppraisalResultControl extends BusinessControl {
         collateralDetailDAO.persist(collateralDetailList);
         log.info( "collateralDetailDAO persist end" );
         for(int i=0;i<collateralDetailViewList.size();i++){
-            collateralHeaderDetailViewList =  collateralDetailViewList.get(i).getCollateralHeaderDetailViewList();
-            collateralHeaderDetailList = collateralHeaderDetailTransform.transformToModel(collateralHeaderDetailViewList,collateralDetailList.get(i));
+            newCollateralHeadDetailViewList =  collateralDetailViewList.get(i).getNewCollateralHeadDetailViewList();
+            collateralHeaderDetailList = newCollHeadDetailTransform.transformToModel(newCollateralHeadDetailViewList,collateralDetailList.get(i));
             collateralHeaderDetailDAO.persist(collateralHeaderDetailList);
             log.info( "collateralHeaderDetailDAO persist end i is " + i  );
-            for(int j=0;j<collateralHeaderDetailViewList.size();j++){
-                subCollateralDetailViewList =  collateralHeaderDetailViewList.get(j).getSubCollateralDetailViewList();
-                subCollateralDetailList = subCollateralDetailTransform.transformToModel(subCollateralDetailViewList,collateralHeaderDetailList.get(j));
+            for(int j=0;j< newCollateralHeadDetailViewList.size();j++){
+                newSubCollateralDetailViewList =  newCollateralHeadDetailViewList.get(j).getNewSubCollateralDetailViewList();
+                subCollateralDetailList = newSubCollDetailTransform.transformToModel(newSubCollateralDetailViewList,collateralHeaderDetailList.get(j));
                 log.info( "subCollateralDetailList size before persist end i is " + i +" and j is " + j  + " size is " + subCollateralDetailList.size());
                 subCollateralDetailDAO.persist(subCollateralDetailList);
                 log.info( "subCollateralDetailDAO persist end i is " + i +" and j is " + j  );
