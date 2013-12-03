@@ -147,12 +147,30 @@ public class Decision implements Serializable {
         disbursementList = disbursementDAO.findAll();
     }
 
+    private void initialProposeView() {
+        selectedAppProposeCredit = new NewCreditDetailView();
+        selectedAppProposeCredit.setProductProgram(new ProductProgram());
+        selectedAppProposeCredit.setCreditType(new CreditType());
+        if (baseRateList != null && !baseRateList.isEmpty()) {
+            selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0));
+            selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0));
+        } else {
+            selectedAppProposeCredit.setStandardBasePrice(new BaseRate());
+            selectedAppProposeCredit.setSuggestBasePrice(new BaseRate());
+        }
+        if (disbursementList != null && !disbursementList.isEmpty()) {
+            selectedAppProposeCredit.setDisbursement(disbursementList.get(0));
+        } else {
+            selectedAppProposeCredit.setDisbursement(new Disbursement());
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
-        //todo: find ExistingCredit and creditFacPropose by workCaseId
-
         initSelectList();
+        initialProposeView();
 
+        //todo: find ExistingCredit and creditFacPropose by workCaseId
         // -------------------- Common Object -------------------- //
         BankAccountStatusView bankAccountStatusView = new BankAccountStatusView();
         bankAccountStatusView.setCode("01");
@@ -490,7 +508,7 @@ public class Decision implements Serializable {
         NewGuarantorDetailView proposeGuarantorDetailView1 = new NewGuarantorDetailView();
         Customer guarantor = new Customer();
         guarantor.setNameTh("Guarantor Name");
-        guarantor.setLastNameTh("Lastname");
+        guarantor.setLastNameTh("Last name");
         proposeGuarantorDetailView1.setGuarantorName(guarantor);
         proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
@@ -502,11 +520,19 @@ public class Decision implements Serializable {
         proposeCondition = new NewConditionDetailView();
         proposeConditionDate = DateTimeUtil.getCurrentDateTH();
         newCreditFacilityView.setNewConditionDetailViewList(new ArrayList<NewConditionDetailView>());
+
+        // Duplicate Approved Propose
+        approvedProposeCreditList = new ArrayList<NewCreditDetailView>();
+        approvedProposeCreditList.add(proposeCreditDetailView1);
+        approvedProposeCreditList.add(proposeCreditDetailView2);
+        approvedProposeCreditList.add(proposeCreditDetailView3);
+        approvedProposeCreditList.add(proposeCreditDetailView4);        
     }
 
     public void onAddAppProposeCredit() {
         log.debug("onAddAppProposeCredit()");
         selectedAppProposeCredit = new NewCreditDetailView();
+        initialProposeView();
         modeEdit = false;
         modeForButton = ModeForButton.ADD;
     }
