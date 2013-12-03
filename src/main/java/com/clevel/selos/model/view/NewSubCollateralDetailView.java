@@ -1,14 +1,17 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SubCollateralDetailView {
+public class NewSubCollateralDetailView {
     private long id;
     private int no;
     private SubCollateralType subCollateralType;
@@ -19,7 +22,7 @@ public class SubCollateralDetailView {
     private String collateralOwnerAAD;
     private String  collateralOwnerUW;
     private List<String> collateralOwnerUWList;
-    private String  mortgageType;
+    private MortgageType mortgageType;
     private List<String> mortgageList;
     private String  relatedWith;
     private List<String> relatedWithList;
@@ -32,7 +35,7 @@ public class SubCollateralDetailView {
 
 
 
-    public SubCollateralDetailView() {
+    public NewSubCollateralDetailView() {
         reset();
     }
 
@@ -47,7 +50,7 @@ public class SubCollateralDetailView {
         this.mortgageValue  = BigDecimal.ZERO;
         this.subCollateralType    = new SubCollateralType();
         this.collateralOwnerUW = "";
-        this.mortgageType= "";
+        this.mortgageType= new MortgageType();
         this.relatedWith = "";
         this.collateralOwnerUWList = new ArrayList<String>();
         this.mortgageList = new ArrayList<String>();
@@ -126,11 +129,11 @@ public class SubCollateralDetailView {
         this.collateralOwnerUW = collateralOwnerUW;
     }
 
-    public String getMortgageType() {
+    public MortgageType getMortgageType() {
         return mortgageType;
     }
 
-    public void setMortgageType(String mortgageType) {
+    public void setMortgageType(MortgageType mortgageType) {
         this.mortgageType = mortgageType;
     }
 
@@ -212,5 +215,31 @@ public class SubCollateralDetailView {
 
     public void setRelatedWithList(List<String> relatedWithList) {
         this.relatedWithList = relatedWithList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("no", no)
+                .append("subCollateralType", subCollateralType)
+                .append("address", address)
+                .append("landOffice", landOffice)
+                .append("titleDeed", titleDeed)
+                .append("collateralOwner", collateralOwner)
+                .append("collateralOwnerAAD", collateralOwnerAAD)
+                .append("collateralOwnerUW", collateralOwnerUW)
+                .append("collateralOwnerUWList", collateralOwnerUWList)
+                .append("mortgageType", mortgageType)
+                .append("mortgageList", mortgageList)
+                .append("relatedWith", relatedWith)
+                .append("relatedWithList", relatedWithList)
+                .append("appraisalValue", appraisalValue)
+                .append("mortgageValue", mortgageValue)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

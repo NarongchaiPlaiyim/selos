@@ -1,12 +1,14 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProposeFeeDetailView implements Serializable {
-
+public class NewFeeDetailView implements Serializable {
+    private long id;
     private String productProgram;
     private String standardFrontEndFee;
     private String commitmentFee;
@@ -19,7 +21,7 @@ public class ProposeFeeDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public ProposeFeeDetailView() {
+    public NewFeeDetailView() {
         reset();
     }
 
@@ -30,6 +32,14 @@ public class ProposeFeeDetailView implements Serializable {
         this.extensionFee = "";
         this.prepaymentFee = "";
         this.cancellationFee = "";
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Date getCreateDate() {
@@ -110,5 +120,21 @@ public class ProposeFeeDetailView implements Serializable {
 
     public void setCancellationFee(String cancellationFee) {
         this.cancellationFee = cancellationFee;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("productProgram", productProgram)
+                .append("standardFrontEndFee", standardFrontEndFee)
+                .append("commitmentFee", commitmentFee)
+                .append("extensionFee", extensionFee)
+                .append("prepaymentFee", prepaymentFee)
+                .append("cancellationFee", cancellationFee)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

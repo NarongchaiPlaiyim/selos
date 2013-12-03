@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeCreditDetailView implements Serializable {
+public class NewCreditDetailView implements Serializable {
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -48,7 +48,7 @@ public class ProposeCreditDetailView implements Serializable {
 
     private List<CreditTierDetailView> creditTierDetailViewList;
 
-    public ProposeCreditDetailView(){
+    public NewCreditDetailView(){
         reset();
     }
 
@@ -363,6 +363,14 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void setApproved(int approved) {
         isApproved = approved;
+    }
+
+    public LoanPurpose getLoanPurpose() {
+        return loanPurpose;
+    }
+
+    public void setLoanPurpose(LoanPurpose loanPurpose) {
+        this.loanPurpose = loanPurpose;
     }
 
     @Override

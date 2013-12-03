@@ -1,11 +1,13 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProposeConditionDetailView implements Serializable {
+public class NewConditionDetailView implements Serializable {
     private int no ;
     private String loanType;
     private String conditionDesc;
@@ -14,8 +16,8 @@ public class ProposeConditionDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-
-    public ProposeConditionDetailView() {
+    private long id;
+    public NewConditionDetailView() {
         reset();
     }
 
@@ -23,6 +25,14 @@ public class ProposeConditionDetailView implements Serializable {
         this.no=0;
         this.loanType = "";
         this.conditionDesc = "";
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getNo() {
@@ -79,5 +89,18 @@ public class ProposeConditionDetailView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("no", no)
+                .append("loanType", loanType)
+                .append("conditionDesc", conditionDesc)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }
