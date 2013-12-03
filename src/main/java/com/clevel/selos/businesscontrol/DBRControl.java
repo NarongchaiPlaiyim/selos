@@ -1,22 +1,17 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.controller.CreditFacPropose;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RoleUser;
-import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.transform.DBRDetailTransform;
 import com.clevel.selos.transform.DBRTransform;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -198,11 +193,11 @@ public class DBRControl extends BusinessControl {
             }
 
             WorkCase workCase = workCaseDAO.findById(workCaseId);
-            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
+//            BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkcase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
-            if(bankStatementSummary != null){
-                dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
-            }
+//            if(bankStatementSummary != null){
+//                dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+//            }
 
             if(bizInfoSummary != null){
                 dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());

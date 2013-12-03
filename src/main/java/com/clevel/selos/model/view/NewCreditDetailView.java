@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeCreditDetailView implements Serializable {
+public class NewCreditDetailView implements Serializable {
+    private long id;
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -47,7 +50,7 @@ public class ProposeCreditDetailView implements Serializable {
 
     private List<CreditTierDetailView> creditTierDetailViewList;
 
-    public ProposeCreditDetailView(){
+    public NewCreditDetailView(){
         reset();
     }
 
@@ -57,6 +60,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();
+        this.loanPurpose = new LoanPurpose();
         this.productCode = "";
         this.projectCode = "";
         this.borrowerName = "";
@@ -80,6 +84,14 @@ public class ProposeCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getSeq() {
@@ -354,5 +366,53 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void setSuggestInterest(BigDecimal suggestInterest) {
         this.suggestInterest = suggestInterest;
+    }
+
+    public LoanPurpose getLoanPurpose() {
+        return loanPurpose;
+    }
+
+    public void setLoanPurpose(LoanPurpose loanPurpose) {
+        this.loanPurpose = loanPurpose;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("requestType", requestType)
+                .append("isRefinance", isRefinance)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .append("productCode", productCode)
+                .append("projectCode", projectCode)
+                .append("borrowerName", borrowerName)
+                .append("limit", limit)
+                .append("PCEPercent", PCEPercent)
+                .append("PCEAmount", PCEAmount)
+                .append("reducePriceFlag", reducePriceFlag)
+                .append("reduceFrontEndFee", reduceFrontEndFee)
+                .append("reduceFlag", reduceFlag)
+                .append("reduceFrontEndFlag", reduceFrontEndFlag)
+                .append("standardBasePrice", standardBasePrice)
+                .append("standardPrice", standardPrice)
+                .append("standardInterest", standardInterest)
+                .append("suggestBasePrice", suggestBasePrice)
+                .append("suggestPrice", suggestPrice)
+                .append("suggestInterest", suggestInterest)
+                .append("frontEndFee", frontEndFee)
+                .append("remark", remark)
+                .append("holdLimitAmount", holdLimitAmount)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("finalPrice", finalPrice)
+                .append("tenor", tenor)
+                .append("disbursement", disbursement)
+                .append("loanPurpose", loanPurpose)
+                .append("purpose", purpose)
+                .append("seq", seq)
+                .append("creditTierDetailViewList", creditTierDetailViewList)
+                .toString();
     }
 }

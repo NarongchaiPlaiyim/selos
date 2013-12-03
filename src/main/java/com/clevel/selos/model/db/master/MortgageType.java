@@ -10,22 +10,23 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_loan_purpose")
-public class LoanPurpose implements Serializable {
+@Table(name = "mst_mortgage_type")
+public class MortgageType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
 
-    @Column(name = "description", length = 255)
-    private String description;
+    @Column(name = "mortgage_type", length = 255)
+    private String mortgage;
 
-    @Column(name = "brms_code")
-    private int brmsCode;
+    @Column(name = "redeem")
+    private String redeem;
 
     @Column(name = "active")
     private int active;
 
-    public LoanPurpose(){}
+    public MortgageType() {
+    }
 
     public int getId() {
         return id;
@@ -35,20 +36,20 @@ public class LoanPurpose implements Serializable {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getMortgage() {
+        return mortgage;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setMortgage(String mortgage) {
+        this.mortgage = mortgage;
     }
 
-    public int getBrmsCode() {
-        return brmsCode;
+    public String getRedeem() {
+        return redeem;
     }
 
-    public void setBrmsCode(int brmsCode) {
-        this.brmsCode = brmsCode;
+    public void setRedeem(String redeem) {
+        this.redeem = redeem;
     }
 
     public int getActive() {
@@ -63,9 +64,10 @@ public class LoanPurpose implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("description", description)
-                .append("brmsCode", brmsCode)
+                .append("mortgage", mortgage)
+                .append("redeem", redeem)
                 .append("active", active)
                 .toString();
     }
+
 }

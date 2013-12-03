@@ -39,14 +39,14 @@ public class CreditFacExisting implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
-    private ProposeConditionDetailView conditionInfoDetailView;
-    private List<ProposeConditionDetailView> conditionInfoDetailViewList;
+    private NewConditionDetailView conditionInfoDetailView;
+    private List<NewConditionDetailView> conditionInfoDetailViewList;
 
     private ExistingCreditDetailView selectCreditDetail;
     private ExistingCollateralDetailView selectCollateralDetail;
     private ExistingGuarantorDetailView selectGuarantorDetail;
 
-    private ProposeConditionDetailView selectConditionItem;
+    private NewConditionDetailView selectConditionItem;
     private User user;
     private ExistingCreditView existingCreditView;
 
@@ -155,7 +155,7 @@ public class CreditFacExisting implements Serializable {
                 //guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
             }
 
-            conditionInfoDetailViewList = new ArrayList<ProposeConditionDetailView>();
+            conditionInfoDetailViewList = new ArrayList<NewConditionDetailView>();
             existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
             borrowerExistingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
@@ -444,7 +444,7 @@ public class CreditFacExisting implements Serializable {
     //Start Condition Information //
     public void onAddConditionInfo() {
         log.info("onAddConditionInfo ::: ");
-        conditionInfoDetailView = new ProposeConditionDetailView();
+        conditionInfoDetailView = new NewConditionDetailView();
         modeForButton = ModeForButton.ADD;
         log.info("onAddConditionInfo ::: modeForButton : {}", modeForButton);
 
@@ -458,7 +458,7 @@ public class CreditFacExisting implements Serializable {
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
 
-            ProposeConditionDetailView conditionDetailViewAdd = new ProposeConditionDetailView();
+            NewConditionDetailView conditionDetailViewAdd = new NewConditionDetailView();
             conditionDetailViewAdd.setLoanType(conditionInfoDetailView.getLoanType());
             conditionDetailViewAdd.setConditionDesc(conditionInfoDetailView.getConditionDesc());
             conditionInfoDetailViewList.add(conditionDetailViewAdd);
@@ -716,27 +716,27 @@ public class CreditFacExisting implements Serializable {
     }
 
 
-    public ProposeConditionDetailView getConditionInfoDetailView() {
+    public NewConditionDetailView getConditionInfoDetailView() {
         return conditionInfoDetailView;
     }
 
-    public void setConditionInfoDetailView(ProposeConditionDetailView conditionInfoDetailView) {
+    public void setConditionInfoDetailView(NewConditionDetailView conditionInfoDetailView) {
         this.conditionInfoDetailView = conditionInfoDetailView;
     }
 
-    public List<ProposeConditionDetailView> getConditionInfoDetailViewList() {
+    public List<NewConditionDetailView> getConditionInfoDetailViewList() {
         return conditionInfoDetailViewList;
     }
 
-    public void setConditionInfoDetailViewList(List<ProposeConditionDetailView> conditionInfoDetailViewList) {
+    public void setConditionInfoDetailViewList(List<NewConditionDetailView> conditionInfoDetailViewList) {
         this.conditionInfoDetailViewList = conditionInfoDetailViewList;
     }
 
-    public ProposeConditionDetailView getSelectConditionItem() {
+    public NewConditionDetailView getSelectConditionItem() {
         return selectConditionItem;
     }
 
-    public void setSelectConditionItem(ProposeConditionDetailView selectConditionItem) {
+    public void setSelectConditionItem(NewConditionDetailView selectConditionItem) {
         this.selectConditionItem = selectConditionItem;
     }
 

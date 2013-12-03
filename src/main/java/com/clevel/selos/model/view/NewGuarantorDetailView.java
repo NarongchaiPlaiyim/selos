@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -9,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeGuarantorDetailView implements Serializable {
-
+public class NewGuarantorDetailView implements Serializable {
+    private long id;
     private Customer guarantorName;
     private String tcgLgNo;
     private BigDecimal guaranteeAmount;
@@ -22,7 +24,7 @@ public class ProposeGuarantorDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public ProposeGuarantorDetailView() {
+    public NewGuarantorDetailView() {
         reset();
     }
 
@@ -31,6 +33,14 @@ public class ProposeGuarantorDetailView implements Serializable {
         this.tcgLgNo = "";
         this.guaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Date getCreateDate() {
@@ -97,4 +107,17 @@ public class ProposeGuarantorDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("guarantorName", guarantorName)
+                .append("tcgLgNo", tcgLgNo)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("creditTypeDetailViewList", creditTypeDetailViewList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
+    }
 }

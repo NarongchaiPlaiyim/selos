@@ -99,6 +99,15 @@ public class CreditFacilityPropose  implements Serializable {
     @Column(name = "total_guarantee_amount")
     private BigDecimal totalGuaranteeAmount;
 
+    @Column(name = "total_num_new_od")
+    private BigDecimal totalNumberOfNewOD;
+
+    @Column(name = "total_num_propose_credit")
+    private BigDecimal totalNumberProposeCreditFac;
+
+    @Column(name = "total_num_contingen")
+    private BigDecimal totalNumberContingenPropose;
+
     @Column(name = "related_tmb_lending")
     private int relatedTMBLending;
 
@@ -108,53 +117,53 @@ public class CreditFacilityPropose  implements Serializable {
     @Column(name = "single_lending_limit")
     private int singleLendingLimit;
 
-    @Column(name = "contactName")
-    private BigDecimal contactName;
+    @Column(name = "contact_name")
+    private String contactName;
 
-    @Column(name = "contactPhoneNo")
+    @Column(name = "contact_phone_no")
     private String contactPhoneNo;
 
-    @Column(name = "interService")
+    @Column(name = "inter_service")
     private String interService;
 
-    @Column(name = "currentAddress")
+    @Column(name = "current_address")
     private String currentAddress;
 
-    @Column(name = "registeredAddress")
+    @Column(name = "registered_address")
     private String registeredAddress;
 
-    @Column(name = "emailAddress")
+    @Column(name = "email_address")
     private String emailAddress;
 
-    @Column(name = "importMail")
+    @Column(name = "import_mail")
     private String importMail;
 
-    @Column(name = "exportMail")
+    @Column(name = "export_mail")
     private String exportMail;
 
-    @Column(name = "depositBranchCode")
+    @Column(name = "deposit_branch_code")
     private String depositBranchCode;
 
-    @Column(name = "ownerBranchCode")
+    @Column(name = "owner_branch_code")
     private String ownerBranchCode;
 
-    @Column(name = "reasonForReduction")
+    @Column(name = "reason_for_reduction")
     private String reasonForReduction;
 
-    @Column(name = "intFeeDOA")
+    @Column(name = "int_fee_doa")
     private BigDecimal intFeeDOA;
 
-    @Column(name = "frontendFeeDOA")
+    @Column(name = "frontend_fee_doa")
     private BigDecimal frontendFeeDOA;
 
-    @Column(name = "guarantorBA")
+    @Column(name = "guarantor_ba")
     private BigDecimal guarantorBA;
 
-    @Column(name = "creditCustomerType")
+    @Column(name = "credit_customer_type")
     private int creditCustomerType;
 
     @OneToOne
-    @JoinColumn(name = "creditRequestType")
+    @JoinColumn(name = "credit_request_type")
     private  CreditRequestType creditRequestType;
 
     @OneToOne
@@ -177,19 +186,19 @@ public class CreditFacilityPropose  implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy = "proposeFeeDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeFeeDetail> proposeFeeDetailList;
 
-    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<NewCreditDetail> newCreditDetailList;
 
-    @OneToMany(mappedBy = "proposeCollateralDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeCollateralDetail> proposeCollateralDetailList;
 
-    @OneToMany(mappedBy = "proposeGuarantorDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeGuarantorDetail> proposeGuarantorDetailList;
 
-    @OneToMany(mappedBy = "proposeConditionDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creditFacilityPropose", cascade = CascadeType.ALL)
     private List<ProposeConditionDetail> proposeConditionDetailList;
 
     public long getId() {
@@ -198,6 +207,14 @@ public class CreditFacilityPropose  implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
     }
 
     public BigDecimal getWcNeed() {
@@ -424,11 +441,11 @@ public class CreditFacilityPropose  implements Serializable {
         this.singleLendingLimit = singleLendingLimit;
     }
 
-    public BigDecimal getContactName() {
+    public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(BigDecimal contactName) {
+    public void setContactName(String contactName) {
         this.contactName = contactName;
     }
 
@@ -592,14 +609,6 @@ public class CreditFacilityPropose  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public WorkCase getWorkCase() {
-        return workCase;
-    }
-
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
-    }
-
     public List<ProposeFeeDetail> getProposeFeeDetailList() {
         return proposeFeeDetailList;
     }
@@ -641,66 +650,29 @@ public class CreditFacilityPropose  implements Serializable {
     }
 
 
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("wcNeed", wcNeed)
-                .append("totalCreditTurnover", totalCreditTurnover)
-                .append("WCNeedDiffer", WCNeedDiffer)
-                .append("totalWcDebit", totalWcDebit)
-                .append("case1WcLimit", case1WcLimit)
-                .append("case1WcMinLimit", case1WcMinLimit)
-                .append("case1Wc50CoreWc", case1Wc50CoreWc)
-                .append("case1WcDebitCoreWc", case1WcDebitCoreWc)
-                .append("case2WcLimit", case2WcLimit)
-                .append("case2WcMinLimit", case2WcMinLimit)
-                .append("case2Wc50CoreWc", case2Wc50CoreWc)
-                .append("case2WcDebitCoreWc", case2WcDebitCoreWc)
-                .append("case3WcLimit", case3WcLimit)
-                .append("case3WcMinLimit", case3WcMinLimit)
-                .append("case3Wc50CoreWc", case3Wc50CoreWc)
-                .append("case3WcDebitCoreWc", case3WcDebitCoreWc)
-                .append("existingSMELimit", existingSMELimit)
-                .append("maximumExistingSMELimit", maximumExistingSMELimit)
-                .append("totalPropose", totalPropose)
-                .append("totalProposeLoanDBR", totalProposeLoanDBR)
-                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
-                .append("totalCommercial", totalCommercial)
-                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
-                .append("totalExposure", totalExposure)
-                .append("totalGuaranteeAmount", totalGuaranteeAmount)
-                .append("relatedTMBLending", relatedTMBLending)
-                .append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending)
-                .append("singleLendingLimit", singleLendingLimit)
-                .append("contactName", contactName)
-                .append("contactPhoneNo", contactPhoneNo)
-                .append("interService", interService)
-                .append("currentAddress", currentAddress)
-                .append("registeredAddress", registeredAddress)
-                .append("emailAddress", emailAddress)
-                .append("importMail", importMail)
-                .append("exportMail", exportMail)
-                .append("depositBranchCode", depositBranchCode)
-                .append("ownerBranchCode", ownerBranchCode)
-                .append("reasonForReduction", reasonForReduction)
-                .append("intFeeDOA", intFeeDOA)
-                .append("frontendFeeDOA", frontendFeeDOA)
-                .append("guarantorBA", guarantorBA)
-                .append("creditCustomerType", creditCustomerType)
-                .append("creditRequestType", creditRequestType)
-                .append("country", country)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("proposeFeeDetailList", proposeFeeDetailList)
-                .append("newCreditDetailList", newCreditDetailList)
-                .append("proposeCollateralDetailList", proposeCollateralDetailList)
-                .append("proposeGuarantorDetailList", proposeGuarantorDetailList)
-                .append("proposeConditionDetailList", proposeConditionDetailList)
-                .toString();
+    public BigDecimal getTotalNumberOfNewOD() {
+        return totalNumberOfNewOD;
     }
+
+    public void setTotalNumberOfNewOD(BigDecimal totalNumberOfNewOD) {
+        this.totalNumberOfNewOD = totalNumberOfNewOD;
+    }
+
+    public BigDecimal getTotalNumberProposeCreditFac() {
+        return totalNumberProposeCreditFac;
+    }
+
+    public void setTotalNumberProposeCreditFac(BigDecimal totalNumberProposeCreditFac) {
+        this.totalNumberProposeCreditFac = totalNumberProposeCreditFac;
+    }
+
+    public BigDecimal getTotalNumberContingenPropose() {
+        return totalNumberContingenPropose;
+    }
+
+    public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
+        this.totalNumberContingenPropose = totalNumberContingenPropose;
+    }
+
+
 }

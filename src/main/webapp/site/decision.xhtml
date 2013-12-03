@@ -1286,7 +1286,7 @@
                                             </tr>
                                             </thead>
                                             <tbody class="ui-datatable-data ui-widget-content">
-                                            <ui:repeat value="#{decision.creditFacProposeView.proposeCreditDetailViewList}" var="proposeCredit" varStatus="i">
+                                            <ui:repeat value="#{decision.creditFacProposeView.newCreditDetailViewList}" var="proposeCredit" varStatus="i">
                                                 <tr>
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
@@ -1423,7 +1423,7 @@
                                                 </tr>
                                             </ui:repeat>
 
-                                            <h:panelGroup rendered="#{empty decision.creditFacProposeView.proposeCreditDetailViewList}">
+                                            <h:panelGroup rendered="#{empty decision.creditFacProposeView.newCreditDetailViewList}">
                                                 <tr>
                                                     <td colspan="11">No records found.</td>
                                                 </tr>
@@ -1654,7 +1654,7 @@
                             <td colspan="2">
                                 <!-- Propose - Fee Information -->
                                 <p:dataTable id="dtProFeeInfo"
-                                             var="proFeeInfo" value="#{decision.creditFacProposeView.proposeFeeDetailViewList}"
+                                             var="proFeeInfo" value="#{decision.creditFacProposeView.newFeeDetailViewList}"
                                              paginator="false" rowKey="#{proFeeInfo}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">
@@ -1696,7 +1696,7 @@
                             <td colspan="2">
                                 <!-- Proposed Collateral Table -->
                                 <table border="0">
-                                    <ui:repeat value="#{decision.creditFacProposeView.proposeCollateralInfoViewList}" var="proposeColl">
+                                    <ui:repeat value="#{decision.creditFacProposeView.newCollateralInfoViewList}" var="proposeColl">
                                     <tr>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
@@ -1824,7 +1824,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.potential')}"/>
                                         </td>
                                         <td colspan="3" class="left">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.potentialCollateral.description}"/>
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.potentialCollateral.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1832,7 +1832,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.collTypePercentLTV')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.headCollType.description}"/>
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.headCollType.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1840,7 +1840,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.existingCredit')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.existingCredit}">
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.existingCredit}">
                                                 <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"-->
                                                                  <!--maxIntegerDigits="14"/>-->
                                             </h:outputText>
@@ -1851,7 +1851,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.titleDeed')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.titleDeed}"/>
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.titleDeed}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1859,7 +1859,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.collateralLocation')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.collateralLocation}"/>
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.collateralLocation}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1867,7 +1867,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.headCollAppraisalValue')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.appraisalValue}">
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.appraisalValue}">
                                                 <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                                  maxIntegerDigits="14"/>
                                             </h:outputText>
@@ -1878,7 +1878,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.headCollType')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:outputText value="#{proposeColl.collateralHeaderDetailView.headCollType.description}"/>
+                                            <h:outputText value="#{proposeColl.newCollateralHeadDetailView.headCollType.description}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1886,7 +1886,7 @@
                                             <h:outputText value="#{msg.get('app.decision.label.insuranceCompany')}"/>
                                         </td>
                                         <td colspan="3">
-                                            <h:selectOneRadio value="#{proposeColl.collateralHeaderDetailView.insuranceCompany}">
+                                            <h:selectOneRadio value="#{proposeColl.newCollateralHeadDetailView.insuranceCompany}">
                                                 <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="0"/>
                                                 <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
                                             </h:selectOneRadio>
@@ -2335,7 +2335,7 @@
                         <tr>
                             <td colspan="2">
                                 <p:dataTable id="dtProposeCondition"
-                                             var="proposeCond" value="#{decision.creditFacProposeView.proposeConditionDetailViewList}"
+                                             var="proposeCond" value="#{decision.creditFacProposeView.newConditionDetailViewList}"
                                              paginator="false" rowKey="#{proposeCond}" rowIndexVar="rowIndex">
 
                                     <p:columnGroup type="header">

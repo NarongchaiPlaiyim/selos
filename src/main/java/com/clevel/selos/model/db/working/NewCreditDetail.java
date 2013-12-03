@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_new_credit_detail")
@@ -108,8 +109,8 @@ public class NewCreditDetail implements Serializable {
     @JoinColumn(name = "credit_facility_propose_id")
     private CreditFacilityPropose creditFacilityPropose;
 
-/*    @OneToMany(mappedBy = "proposeCreditTierDetail", cascade = CascadeType.ALL)
-    private List<ProposeCreditTierDetail> proposeCreditTierDetailList;*/
+    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    private List<ProposeCreditTierDetail> proposeCreditTierDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -359,6 +360,7 @@ public class NewCreditDetail implements Serializable {
         this.creditFacilityPropose = creditFacilityPropose;
     }
 
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -391,13 +393,13 @@ public class NewCreditDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-/*    public List<ProposeCreditTierDetail> getProposeCreditTierDetailList() {
+    public List<ProposeCreditTierDetail> getProposeCreditTierDetailList() {
         return proposeCreditTierDetailList;
     }
 
     public void setProposeCreditTierDetailList(List<ProposeCreditTierDetail> proposeCreditTierDetailList) {
         this.proposeCreditTierDetailList = proposeCreditTierDetailList;
-    }*/
+    }
 
     @Override
     public String toString() {

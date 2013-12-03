@@ -38,7 +38,7 @@ public class ProposeCollateralHeadDetail  implements Serializable {
     private String collTypePercentLTV;
 
     @Column(name = "existing_credit")
-    private String existingCredit;
+    private BigDecimal existingCredit;
 
     @Column(name = "insurance_company")
     private int insuranceCompany;
@@ -50,7 +50,7 @@ public class ProposeCollateralHeadDetail  implements Serializable {
     @JoinColumn(name = "propose_collateral_detail_id")
     private ProposeCollateralDetail proposeCollateralDetail;
 
-    @OneToMany(mappedBy = "proposeSubCollateralDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "proposeCollateralHeadDetail", cascade = CascadeType.ALL)
     private List<ProposeSubCollateralDetail> proposeSubCollateralDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -117,11 +117,11 @@ public class ProposeCollateralHeadDetail  implements Serializable {
         this.collTypePercentLTV = collTypePercentLTV;
     }
 
-    public String getExistingCredit() {
+    public BigDecimal getExistingCredit() {
         return existingCredit;
     }
 
-    public void setExistingCredit(String existingCredit) {
+    public void setExistingCredit(BigDecimal existingCredit) {
         this.existingCredit = existingCredit;
     }
 
