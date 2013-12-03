@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BankType;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -39,6 +40,8 @@ public class ExSummaryControl extends BusinessControl {
     NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     DBRDAO dbrDAO;
+    @Inject
+    DecisionDAO decisionDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -198,18 +201,18 @@ public class ExSummaryControl extends BusinessControl {
         }
         // todo: business logic here
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
-//            Grand Total Income Net BDM จากหน้า Bank Statement Summary * 12
+//            Grand Total Income Net BDM ๏ฟฝากหน๏ฟฝ๏ฟฝ Bank Statement Summary * 12
             exSumCharacteristicView.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
-//            Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
+//            Grand Total Income Net UW ๏ฟฝากหน๏ฟฝ๏ฟฝ Bank Statement Summary * 12
             exSumCharacteristicView.setGroupSaleUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
         }
 
         // todo: business logic here
         if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+//            ๏ฟฝรณีผ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ = Individual (Grand Total Income Gross ๏ฟฝากหน๏ฟฝ๏ฟฝ Bank Statement Summary + ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝวข๏ฟฝอง๏ฟฝุก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Flag Group Income = Y)*12
 //            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());
 
-//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            ๏ฟฝรณีผ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ = Individual (Grand Total Income Gross ๏ฟฝากหน๏ฟฝ๏ฟฝ Bank Statement Summary + ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝวข๏ฟฝอง๏ฟฝุก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Flag Group Income = Y) * 12
             if(cusListView != null && cusListView.size() > 0){
                 for(CustomerInfoView cus : cusListView){
                     if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
@@ -220,10 +223,10 @@ public class ExSummaryControl extends BusinessControl {
                 }
             }
         } else { // use customer
-//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            ๏ฟฝรณีผ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ = Juristic (๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝิน ๏ฟฝาก Cust Info Detail (Juristic) + ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝวข๏ฟฝอง๏ฟฝุก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Flag Group Income = Y) * 12
 //            exSumCharacteristicView.setGroupSaleBDM();
 
-//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            ๏ฟฝรณีผ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ = Juristic (๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝิน ๏ฟฝาก Cust Info Detail (Juristic) + ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ / ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝวข๏ฟฝอง๏ฟฝุก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Flag Group Income = Y) * 12
 //            exSumCharacteristicView.setGroupSaleUW();
         }
 
@@ -255,25 +258,51 @@ public class ExSummaryControl extends BusinessControl {
     }
 
     //TODO : Business login here
-
     //Borrower Characteristic - income ( Line 45 )
     //Credit Facility-Propose + DBR + Decision
-    //[สินเชื่อหมุนเวียนที่มีอยู่กับ TMB + OD Limit ที่อนุมัติ + Loan Core WC ที่อนุมัติ] / (รายได้ต่อเดือน Adjusted หน้า DBR *12)
+    //[เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธกเธตเธญเธขเธนเนเธเธฑเธ TMB + OD Limit เธ—เธตเนเธญเธเธธเธกเธฑเธ•เธด + Loan Core WC เธ—เธตเนเธญเธเธธเธกเธฑเธ•เธด] / (เธฃเธฒเธขเนเธ”เนเธ•เนเธญเน€เธ”เธทเธญเธ Adjusted เธซเธเนเธฒ DBR *12)
+    public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Fac & DBR & Decision pls call me !!
+        DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
+
+        BigDecimal income = (dbr.getMonthlyIncomeAdjust().multiply(new BigDecimal(12)));
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setIncome(income);
+
+        exSummaryDAO.persist(exSummary);
+    }
 
     //Borrower Characteristic - recommendedWCNeed ( Line 46 )
-    //Credit Facility-Propose หัวข้อ WC Requirement
-    //กรณี Refinance In Flag = Yes + Prime
-    //Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
-    //กรณี Refinance In Flag = Yes + Normal
-    //Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
-    //กรณี Refinance In Flag = No + Prime
-    //Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
-    //กรณี Refinance In Flag = No + Normal
-    //Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+    //Credit Facility-Propose เธซเธฑเธงเธเนเธญ WC Requirement
+//    เธเธฃเธ“เธต Refinance In Flag = Yes + Prime
+//    Min [เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 2 : เธเธณเธเธงเธ“เธเธฒเธ 1.5 เน€เธ—เนเธฒเธเธญเธ WC, เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 3 : เธเธณเธเธงเธ“เธเธฒเธ 35% เธเธญเธเธฃเธฒเธขเนเธ”เน]
+//    เธเธฃเธ“เธต Refinance In Flag = Yes + Normal
+//    Min [เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 1 : เธเธณเธเธงเธ“เธเธฒเธ 1.25 เน€เธ—เนเธฒเธเธญเธ WC, เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 3 : เธเธณเธเธงเธ“เธเธฒเธ 35% เธเธญเธเธฃเธฒเธขเนเธ”เน]
+//    เธเธฃเธ“เธต Refinance In Flag = No + Prime
+//    Min [(เธเธงเธฒเธกเธ•เนเธญเธเธเธฒเธฃเน€เธเธดเธเธ—เธธเธเธซเธกเธธเธเน€เธงเธตเธขเธ - เธฃเธงเธกเธงเธเน€เธเธดเธเธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธเธญเธ TMB) , เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 2 : เธเธณเธเธงเธ“เธเธฒเธ 1.5 เน€เธ—เนเธฒเธเธญเธ WC, เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 3 : เธเธณเธเธงเธ“เธเธฒเธ 35% เธเธญเธเธฃเธฒเธขเนเธ”เน]
+//    เธเธฃเธ“เธต Refinance In Flag = No + Normal
+//    Min [(เธเธงเธฒเธกเธ•เนเธญเธเธเธฒเธฃเน€เธเธดเธเธ—เธธเธเธซเธกเธธเธเน€เธงเธตเธขเธ - เธฃเธงเธกเธงเธเน€เธเธดเธเธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธเธญเธ TMB) , เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 1 : เธเธณเธเธงเธ“เธเธฒเธ 1.25 เน€เธ—เนเธฒเธเธญเธ WC, เธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธชเธฒเธกเธฒเธฃเธ–เธเธดเธเธฒเธฃเธ“เธฒเนเธซเนเนเธ”เนเธเธฒเธเธเธฃเธ“เธตเธ—เธตเน 3 : เธเธณเธเธงเธ“เธเธฒเธ 35% เธเธญเธเธฃเธฒเธขเนเธ”เน]
+    public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+        if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.NORMAL.value()){
+
+        } else {
+
+        }
+
+        BigDecimal recommendedWCNeed = BigDecimal.ZERO;
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setRecommendedWCNeed(recommendedWCNeed);
+
+        exSummaryDAO.persist(exSummary);
+    }
+
 
     //Borrower Characteristic - actualWC ( Line 47 )
-    //Decision หัวข้อ Approve Credit
-    //Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
-
-
+    //Decision เธซเธฑเธงเธเนเธญ Approve Credit
+//    Sum( เธงเธเน€เธเธดเธเธชเธดเธเน€เธเธทเนเธญเธซเธกเธธเธเน€เธงเธตเธขเธเธ—เธตเนเธญเธเธธเธกเธฑเธ•)
 }

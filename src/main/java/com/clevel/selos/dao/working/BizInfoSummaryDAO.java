@@ -20,13 +20,13 @@ public class BizInfoSummaryDAO extends GenericDAO<BizInfoSummary, Long> {
 
     public BizInfoSummary onSearchByWorkCase(WorkCase workCase) {
         BizInfoSummary bizInfoSummary;
-        log.info("getListByBusinessGroup. (district: {})", workCase);
+        log.info("onSearchByWorkCase. (workCase: {})", workCase);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
 
         bizInfoSummary = (BizInfoSummary) criteria.uniqueResult();
 
-        log.info("getListByDistrict. (result size: {})", bizInfoSummary);
+        log.info("onSearchByWorkCase. (result size: {})", bizInfoSummary);
         return bizInfoSummary;
     }
 
