@@ -99,6 +99,15 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "total_guarantee_amount")
     private BigDecimal totalGuaranteeAmount;
 
+    @Column(name = "total_num_new_od")
+    private BigDecimal totalNumberOfNewOD;
+
+    @Column(name = "total_num_contingen_propose")
+    private BigDecimal totalNumberContingenPropose;
+
+    @Column(name = "total_number_propose_credit")
+    private BigDecimal totalNumberProposeCreditFac;
+
     @Column(name = "related_tmb_lending")
     private int relatedTMBLending;
 
@@ -108,53 +117,53 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "single_lending_limit")
     private int singleLendingLimit;
 
-    @Column(name = "contactName")
-    private BigDecimal contactName;
+    @Column(name = "contact_name")
+    private String contactName;
 
-    @Column(name = "contactPhoneNo")
+    @Column(name = "contact_phone_no")
     private String contactPhoneNo;
 
-    @Column(name = "interService")
+    @Column(name = "inter_service")
     private String interService;
 
-    @Column(name = "currentAddress")
+    @Column(name = "current_address")
     private String currentAddress;
 
-    @Column(name = "registeredAddress")
+    @Column(name = "registered_address")
     private String registeredAddress;
 
-    @Column(name = "emailAddress")
+    @Column(name = "email_address")
     private String emailAddress;
 
-    @Column(name = "importMail")
+    @Column(name = "import_mail")
     private String importMail;
 
-    @Column(name = "exportMail")
+    @Column(name = "export_mail")
     private String exportMail;
 
-    @Column(name = "depositBranchCode")
+    @Column(name = "deposit_branch_code")
     private String depositBranchCode;
 
-    @Column(name = "ownerBranchCode")
+    @Column(name = "owner_branch_code")
     private String ownerBranchCode;
 
-    @Column(name = "reasonForReduction")
+    @Column(name = "reason_for_reduction")
     private String reasonForReduction;
 
-    @Column(name = "intFeeDOA")
+    @Column(name = "int_fee_doa")
     private BigDecimal intFeeDOA;
 
-    @Column(name = "frontendFeeDOA")
+    @Column(name = "frontend_fee_doa")
     private BigDecimal frontendFeeDOA;
 
-    @Column(name = "guarantorBA")
+    @Column(name = "guarantor_ba")
     private BigDecimal guarantorBA;
 
-    @Column(name = "creditCustomerType")
+    @Column(name = "credit_customer_type")
     private int creditCustomerType;
 
     @OneToOne
-    @JoinColumn(name = "creditRequestType")
+    @JoinColumn(name = "credit_request_type")
     private  CreditRequestType creditRequestType;
 
     @OneToOne
@@ -344,6 +353,30 @@ public class NewCreditFacility implements Serializable {
         this.maximumExistingSMELimit = maximumExistingSMELimit;
     }
 
+    public BigDecimal getTotalNumberOfNewOD() {
+        return totalNumberOfNewOD;
+    }
+
+    public void setTotalNumberOfNewOD(BigDecimal totalNumberOfNewOD) {
+        this.totalNumberOfNewOD = totalNumberOfNewOD;
+    }
+
+    public BigDecimal getTotalNumberContingenPropose() {
+        return totalNumberContingenPropose;
+    }
+
+    public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
+        this.totalNumberContingenPropose = totalNumberContingenPropose;
+    }
+
+    public BigDecimal getTotalNumberProposeCreditFac() {
+        return totalNumberProposeCreditFac;
+    }
+
+    public void setTotalNumberProposeCreditFac(BigDecimal totalNumberProposeCreditFac) {
+        this.totalNumberProposeCreditFac = totalNumberProposeCreditFac;
+    }
+
     public BigDecimal getTotalPropose() {
         return totalPropose;
     }
@@ -424,11 +457,11 @@ public class NewCreditFacility implements Serializable {
         this.singleLendingLimit = singleLendingLimit;
     }
 
-    public BigDecimal getContactName() {
+    public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(BigDecimal contactName) {
+    public void setContactName(String contactName) {
         this.contactName = contactName;
     }
 

@@ -38,7 +38,7 @@ public class NewCollateralHeadDetail implements Serializable {
     private String collTypePercentLTV;
 
     @Column(name = "existing_credit")
-    private String existingCredit;
+    private BigDecimal existingCredit;
 
     @Column(name = "insurance_company")
     private int insuranceCompany;
@@ -117,11 +117,11 @@ public class NewCollateralHeadDetail implements Serializable {
         this.collTypePercentLTV = collTypePercentLTV;
     }
 
-    public String getExistingCredit() {
+    public BigDecimal getExistingCredit() {
         return existingCredit;
     }
 
-    public void setExistingCredit(String existingCredit) {
+    public void setExistingCredit(BigDecimal existingCredit) {
         this.existingCredit = existingCredit;
     }
 

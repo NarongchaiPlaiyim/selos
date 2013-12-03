@@ -39,19 +39,19 @@ public class CreditFacExisting implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
-    private ProposeConditionDetailView conditionInfoDetailView;
-    private List<ProposeConditionDetailView> conditionInfoDetailViewList;
+    private NewConditionDetailView conditionInfoDetailView;
+    private List<NewConditionDetailView> conditionInfoDetailViewList;
 
     private ExistingCreditDetailView selectCreditDetail;
     private ExistingCollateralDetailView selectCollateralDetail;
     private ExistingGuarantorDetailView selectGuarantorDetail;
 
-    private ProposeConditionDetailView selectConditionItem;
+    private NewConditionDetailView selectConditionItem;
     private User user;
     private ExistingCreditView existingCreditView;
 
-    private CreditTierDetailView creditTierDetailView;
-    private List<CreditTierDetailView> creditTierDetailViewList;
+    private NewCreditTierDetailView newCreditTierDetailView;
+    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
     private SplitLineDetailView splitLineDetailView;
     private List<SplitLineDetailView> splitLineDetailViewList;
     private ProductProgram existProductProgram;
@@ -148,14 +148,14 @@ public class CreditFacExisting implements Serializable {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
                 Customer customer = new Customer();
-                customer.setNameTh("ÍÒÃÔÂÒ àÍ ÎÒà¡éµ");
+                customer.setNameTh("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
                 guarantorList.add(customer);
 
                 //guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
             }
 
-            conditionInfoDetailViewList = new ArrayList<ProposeConditionDetailView>();
+            conditionInfoDetailViewList = new ArrayList<NewConditionDetailView>();
             existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
             borrowerExistingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
@@ -273,8 +273,8 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setExistProductProgram(existProductProgram);
         existingCreditDetailView.setExistCreditType(existCreditType);
 
-        creditTierDetailView = new CreditTierDetailView();
-        creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+        newCreditTierDetailView = new NewCreditTierDetailView();
+        newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         splitLineDetailView = new SplitLineDetailView();
         productProgram = new ProductProgram();
@@ -299,8 +299,8 @@ public class CreditFacExisting implements Serializable {
 
         splitLineDetailViewList= selectCreditDetail.getSplitLineDetailViewList();
         existingCreditDetailView.setSplitLineDetailViewList(selectCreditDetail.getSplitLineDetailViewList());
-        creditTierDetailViewList = selectCreditDetail.getCreditTierDetailViewList();
-        existingCreditDetailView.setCreditTierDetailViewList(selectCreditDetail.getCreditTierDetailViewList());
+        newCreditTierDetailViewList = selectCreditDetail.getNewCreditTierDetailViewList();
+        existingCreditDetailView.setNewCreditTierDetailViewList(selectCreditDetail.getNewCreditTierDetailViewList());
 
 
         log.info("onEditCommercialCredit end ::: mode : {}", modeForButton);
@@ -358,10 +358,10 @@ public class CreditFacExisting implements Serializable {
                 existingCreditDetailView.setExistAccountStatus(accountStatus);
 
                 existingCreditDetailView.setSplitLineDetailViewList(splitLineDetailViewList);
-                existingCreditDetailView.setCreditTierDetailViewList(creditTierDetailViewList);
+                existingCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
                 existingCreditDetailView.setSeq(seq);
                 log.info("getSplitLineDetailViewList  size " + existingCreditDetailView.getSplitLineDetailViewList().size());
-                log.info("getCreditTierDetailViewList size " + existingCreditDetailView.getCreditTierDetailViewList().size());
+                log.info("getNewCreditTierDetailViewList size " + existingCreditDetailView.getNewCreditTierDetailViewList().size());
                 hashBorrower.put(seq,0);
                 seq++;
                 if(typeOfList.equals("borrower")){
@@ -392,10 +392,10 @@ public class CreditFacExisting implements Serializable {
 
 
                 log.info("getSplitLineDetailViewList  size " + existingCreditDetailView.getSplitLineDetailViewList().size());
-                log.info("getCreditTierDetailViewList size " + existingCreditDetailView.getCreditTierDetailViewList().size());
+                log.info("getNewCreditTierDetailViewList size " + existingCreditDetailView.getNewCreditTierDetailViewList().size());
 
                 existingCreditDetailViewRow.setSplitLineDetailViewList(splitLineDetailViewList);
-                existingCreditDetailViewRow.setCreditTierDetailViewList(creditTierDetailViewList);
+                existingCreditDetailViewRow.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
 
                 log.info("update list end");
             }else {
@@ -413,14 +413,14 @@ public class CreditFacExisting implements Serializable {
     //  Start Tier Dialog //
     public void onAddCreditTierDetailView() {
         log.info("onAddCreditInfo ::: ");
-        creditTierDetailView = new CreditTierDetailView();
-        creditTierDetailViewList.add(creditTierDetailView);
+        newCreditTierDetailView = new NewCreditTierDetailView();
+        newCreditTierDetailViewList.add(newCreditTierDetailView);
     }
 
     public void onDeleteCreditTierDetailView(int rowOnTable) {
         if(Integer.toString(rowOnTable) != null ){
             log.info("onDeleteCreditTierDetailView ::: rowOnTable " + rowOnTable);
-            creditTierDetailViewList.remove(rowOnTable);
+            newCreditTierDetailViewList.remove(rowOnTable);
         }
     }
 
@@ -447,7 +447,7 @@ public class CreditFacExisting implements Serializable {
     //Start Condition Information //
     public void onAddConditionInfo() {
         log.info("onAddConditionInfo ::: ");
-        conditionInfoDetailView = new ProposeConditionDetailView();
+        conditionInfoDetailView = new NewConditionDetailView();
         modeForButton = ModeForButton.ADD;
         log.info("onAddConditionInfo ::: modeForButton : {}", modeForButton);
 
@@ -461,7 +461,7 @@ public class CreditFacExisting implements Serializable {
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
 
-            ProposeConditionDetailView conditionDetailViewAdd = new ProposeConditionDetailView();
+            NewConditionDetailView conditionDetailViewAdd = new NewConditionDetailView();
             conditionDetailViewAdd.setLoanType(conditionInfoDetailView.getLoanType());
             conditionDetailViewAdd.setConditionDesc(conditionInfoDetailView.getConditionDesc());
             conditionInfoDetailViewList.add(conditionDetailViewAdd);
@@ -741,27 +741,27 @@ public class CreditFacExisting implements Serializable {
     }
 
 
-    public ProposeConditionDetailView getConditionInfoDetailView() {
+    public NewConditionDetailView getConditionInfoDetailView() {
         return conditionInfoDetailView;
     }
 
-    public void setConditionInfoDetailView(ProposeConditionDetailView conditionInfoDetailView) {
+    public void setConditionInfoDetailView(NewConditionDetailView conditionInfoDetailView) {
         this.conditionInfoDetailView = conditionInfoDetailView;
     }
 
-    public List<ProposeConditionDetailView> getConditionInfoDetailViewList() {
+    public List<NewConditionDetailView> getConditionInfoDetailViewList() {
         return conditionInfoDetailViewList;
     }
 
-    public void setConditionInfoDetailViewList(List<ProposeConditionDetailView> conditionInfoDetailViewList) {
+    public void setConditionInfoDetailViewList(List<NewConditionDetailView> conditionInfoDetailViewList) {
         this.conditionInfoDetailViewList = conditionInfoDetailViewList;
     }
 
-    public ProposeConditionDetailView getSelectConditionItem() {
+    public NewConditionDetailView getSelectConditionItem() {
         return selectConditionItem;
     }
 
-    public void setSelectConditionItem(ProposeConditionDetailView selectConditionItem) {
+    public void setSelectConditionItem(NewConditionDetailView selectConditionItem) {
         this.selectConditionItem = selectConditionItem;
     }
 
@@ -870,20 +870,20 @@ public class CreditFacExisting implements Serializable {
         this.existCreditType = existCreditType;
     }
 
-    public List<CreditTierDetailView> getCreditTierDetailViewList() {
-        return creditTierDetailViewList;
+    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
+        return newCreditTierDetailViewList;
     }
 
-    public void setCreditTierDetailViewList(List<CreditTierDetailView> creditTierDetailViewList) {
-        this.creditTierDetailViewList = creditTierDetailViewList;
+    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
+        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
     }
 
-    public CreditTierDetailView getCreditTierDetailView() {
-        return creditTierDetailView;
+    public NewCreditTierDetailView getNewCreditTierDetailView() {
+        return newCreditTierDetailView;
     }
 
-    public void setCreditTierDetailView(CreditTierDetailView creditTierDetailView) {
-        this.creditTierDetailView = creditTierDetailView;
+    public void setNewCreditTierDetailView(NewCreditTierDetailView newCreditTierDetailView) {
+        this.newCreditTierDetailView = newCreditTierDetailView;
     }
 
     public boolean isShowSplitLine() {

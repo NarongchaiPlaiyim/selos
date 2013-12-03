@@ -3,25 +3,25 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CollateralHeaderDetailView {
+public class NewCollateralHeadDetailView {
     private long id;
     private int no;
     private String titleDeed;
     private String collateralLocation;
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
+    private CollateralType collTypePercentLTV;
     private PotentialCollateral   potentialCollateral ;
 
-    //dropdown
-    private String collTypePercentLTV ;
-
-    private String existingCredit;
+    private BigDecimal existingCredit;
     private int insuranceCompany;
 
     private Date createDate;
@@ -29,21 +29,22 @@ public class CollateralHeaderDetailView {
     private User createBy;
     private User modifyBy;
 
-    List<SubCollateralDetailView> subCollateralDetailViewList;
+    List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
 
-    public CollateralHeaderDetailView(){
+    public NewCollateralHeadDetailView(){
           reset();
     }
 
     public void reset(){
         this.potentialCollateral = new PotentialCollateral();
         this.headCollType = new CollateralType();
+        this.collTypePercentLTV = new CollateralType();
         this.appraisalValue = BigDecimal.ZERO;
         this.collateralLocation = "";
-        this.existingCredit = "";
+        this.existingCredit = BigDecimal.ZERO;
         this.insuranceCompany = 0;
         this.titleDeed = "";
-        this.subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+        this.newSubCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
     }
 
     public long getId() {
@@ -126,19 +127,19 @@ public class CollateralHeaderDetailView {
         this.modifyBy = modifyBy;
     }
 
-    public List<SubCollateralDetailView> getSubCollateralDetailViewList() {
-        return subCollateralDetailViewList;
+    public List<NewSubCollateralDetailView> getNewSubCollateralDetailViewList() {
+        return newSubCollateralDetailViewList;
     }
 
-    public void setSubCollateralDetailViewList(List<SubCollateralDetailView> subCollateralDetailViewList) {
-        this.subCollateralDetailViewList = subCollateralDetailViewList;
+    public void setNewSubCollateralDetailViewList(List<NewSubCollateralDetailView> newSubCollateralDetailViewList) {
+        this.newSubCollateralDetailViewList = newSubCollateralDetailViewList;
     }
 
-    public String getExistingCredit() {
+    public BigDecimal getExistingCredit() {
         return existingCredit;
     }
 
-    public void setExistingCredit(String existingCredit) {
+    public void setExistingCredit(BigDecimal existingCredit) {
         this.existingCredit = existingCredit;
     }
 
@@ -158,11 +159,32 @@ public class CollateralHeaderDetailView {
         this.potentialCollateral = potentialCollateral;
     }
 
-    public String getCollTypePercentLTV() {
+    public CollateralType getCollTypePercentLTV() {
         return collTypePercentLTV;
     }
 
-    public void setCollTypePercentLTV(String collTypePercentLTV) {
+    public void setCollTypePercentLTV(CollateralType collTypePercentLTV) {
         this.collTypePercentLTV = collTypePercentLTV;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("no", no)
+                .append("titleDeed", titleDeed)
+                .append("collateralLocation", collateralLocation)
+                .append("appraisalValue", appraisalValue)
+                .append("headCollType", headCollType)
+                .append("collTypePercentLTV", collTypePercentLTV)
+                .append("potentialCollateral", potentialCollateral)
+                .append("existingCredit", existingCredit)
+                .append("insuranceCompany", insuranceCompany)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("newSubCollateralDetailViewList", newSubCollateralDetailViewList)
+                .toString();
     }
 }

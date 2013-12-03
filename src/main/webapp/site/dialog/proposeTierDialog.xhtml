@@ -17,7 +17,7 @@
                             <tr>
                                 <td>
                                    <!-- <p:selectOneMenu size="1"
-                                                     value="#{creditFacPropose.creditTierDetailView.finalBase}"
+                                                     value="#{creditFacPropose.newCreditTierDetailView.finalBase}"
                                                      style="width: 50px;">
                                         <f:selectItems value="#{creditFacPropose.baseRateDlgList}"
                                                        var="finalBaseItem"
@@ -28,7 +28,7 @@
                                 <td>
                                     <p:inputText styleClass="large"
                                                  id="finalPriceRate"
-                                                 value="#{creditFacPropose.creditTierDetailView.finalPriceRate}"
+                                                 value="#{creditFacPropose.newCreditTierDetailView.finalPriceRate}"
                                                  style="width:50px;">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update="@this"/>
@@ -45,7 +45,7 @@
                     <td>
                         <p:inputText styleClass="large"
                                      id="tenor"
-                                     value="#{creditFacPropose.creditTierDetailView.tenor}"
+                                     value="#{creditFacPropose.newCreditTierDetailView.tenor}"
                                      required="#{not empty param[addDlgTier.clientId]}"
                                      style="width:150px;text-align: right">
                         </p:inputText>
@@ -58,7 +58,7 @@
                     <td>
                         <p:inputText styleClass="large"
                                      id="installment"
-                                     value="#{creditFacPropose.creditTierDetailView.installment}"
+                                     value="#{creditFacPropose.newCreditTierDetailView.installment}"
                                      required="#{not empty param[addDlgTier.clientId]}"
                                      style="width:150px;text-align: right">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>

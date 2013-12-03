@@ -1,13 +1,15 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeCollateralInfoView implements Serializable {
+public class NewCollateralInfoView implements Serializable {
     private long id;
     private String jobID;
     private Date appraisalDate;
@@ -26,10 +28,10 @@ public class ProposeCollateralInfoView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    private List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
+    private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
     private List<CreditTypeDetailView> creditTypeDetailViewList;
 
-    public ProposeCollateralInfoView(){
+    public NewCollateralInfoView(){
         reset();
     }
 
@@ -47,7 +49,7 @@ public class ProposeCollateralInfoView implements Serializable {
         this.mortgageConditionDetail = "";
         this.bdmComments= "";
 
-        this.collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+        this.newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
     }
 
@@ -187,12 +189,12 @@ public class ProposeCollateralInfoView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public List<CollateralHeaderDetailView> getCollateralHeaderDetailViewList() {
-        return collateralHeaderDetailViewList;
+    public List<NewCollateralHeadDetailView> getNewCollateralHeadDetailViewList() {
+        return newCollateralHeadDetailViewList;
     }
 
-    public void setCollateralHeaderDetailViewList(List<CollateralHeaderDetailView> collateralHeaderDetailViewList) {
-        this.collateralHeaderDetailViewList = collateralHeaderDetailViewList;
+    public void setNewCollateralHeadDetailViewList(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList) {
+        this.newCollateralHeadDetailViewList = newCollateralHeadDetailViewList;
     }
 
     public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
@@ -203,5 +205,28 @@ public class ProposeCollateralInfoView implements Serializable {
         this.creditTypeDetailViewList = creditTypeDetailViewList;
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("jobID", jobID)
+                .append("appraisalDate", appraisalDate)
+                .append("aadDecision", aadDecision)
+                .append("aadDecisionReason", aadDecisionReason)
+                .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
+                .append("uwDecision", uwDecision)
+                .append("uwRemark", uwRemark)
+                .append("mortgageCondition", mortgageCondition)
+                .append("mortgageConditionDetail", mortgageConditionDetail)
+                .append("bdmComments", bdmComments)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("newCollateralHeadDetailViewList", newCollateralHeadDetailViewList)
+                .append("creditTypeDetailViewList", creditTypeDetailViewList)
+                .toString();
+    }
 }
