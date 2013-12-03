@@ -62,6 +62,10 @@ a {
     text-decoration: none;
 }
 
+label {
+    font-size: 12px!important;
+}
+
 h1 {
     font-size: 12px;
     font-weight: bold;

@@ -49,8 +49,9 @@ public class ExSummary implements Serializable {
     private BigDecimal currentDBR;
 
     @Column(name = "final_dbr")
-    private BigDecimal finalDBR;
+    private BigDecimal finalDBR;*/
 
+    //for calculator
     @Column(name = "income")
     private BigDecimal income;
 
@@ -60,7 +61,7 @@ public class ExSummary implements Serializable {
     @Column(name = "actual_wc")
     private BigDecimal actualWC;
 
-    @Column(name = "start_business_date")
+    /*@Column(name = "start_business_date")
     private Date startBusinessDate;
 
     @Column(name = "year_in_business")
@@ -242,6 +243,11 @@ public class ExSummary implements Serializable {
     private String uwComment;
     ///////////////////////////////////////////////////////////////
 
+    //To Send to BRMS - calculate months from yearInBusiness fields.
+    @Column(name ="year_business_month")
+    private String yearInBusinessMonth;
+    ///////////////////////////////////////////////////////////////
+
     public long getId() {
         return id;
     }
@@ -408,5 +414,37 @@ public class ExSummary implements Serializable {
 
     public void setDeviateCode(List<ExSumDeviate> deviateCode) {
         this.deviateCode = deviateCode;
+    }
+
+    public String getYearInBusinessMonth() {
+        return yearInBusinessMonth;
+    }
+
+    public void setYearInBusinessMonth(String yearInBusinessMonth) {
+        this.yearInBusinessMonth = yearInBusinessMonth;
+    }
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
+
+    public BigDecimal getRecommendedWCNeed() {
+        return recommendedWCNeed;
+    }
+
+    public void setRecommendedWCNeed(BigDecimal recommendedWCNeed) {
+        this.recommendedWCNeed = recommendedWCNeed;
+    }
+
+    public BigDecimal getActualWC() {
+        return actualWC;
+    }
+
+    public void setActualWC(BigDecimal actualWC) {
+        this.actualWC = actualWC;
     }
 }

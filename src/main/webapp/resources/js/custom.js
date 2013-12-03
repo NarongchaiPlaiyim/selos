@@ -737,6 +737,13 @@ function handleGuarantorInfoRequest(xhr, status, args) {
     }
 }
 
+
+function handleConditionInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        conditionDlg.hide();
+    }
+}
+
 // Credit Facility Propose Credit Dialog
 
 function onOneClick(buttonID, isDisable){

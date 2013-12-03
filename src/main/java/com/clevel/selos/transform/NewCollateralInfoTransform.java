@@ -10,9 +10,10 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
-import com.clevel.selos.model.view.CollateralHeaderDetailView;
-import com.clevel.selos.model.view.ProposeCollateralInfoView;
-import com.clevel.selos.model.view.SubCollateralDetailView;
+import com.clevel.selos.model.db.working.NewCollateralDetail;
+import com.clevel.selos.model.view.NewCollateralHeadDetailView;
+import com.clevel.selos.model.view.NewCollateralInfoView;
+import com.clevel.selos.model.view.NewSubCollateralDetailView;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProposeCollateralInfoTransform extends Transform {
+public class NewCollateralInfoTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
@@ -35,10 +36,10 @@ public class ProposeCollateralInfoTransform extends Transform {
     @Inject
     BasicInfoDAO basicInfoDAO;
 
-    public ProposeCollateralInfoView transformsCOMSToModelView(AppraisalData appraisalData){
+    public NewCollateralInfoView transformsCOMSToModelView(AppraisalData appraisalData) {
 
         log.info("transformsCOMSToModelView begin");
-        ProposeCollateralInfoView collateralDetailView = new ProposeCollateralInfoView();
+        NewCollateralInfoView collateralDetailView = new NewCollateralInfoView();
         collateralDetailView.setJobID(appraisalData.getJobId());
         collateralDetailView.setAppraisalDate(appraisalData.getAppraisalDate());
         collateralDetailView.setAadDecision(appraisalData.getAadDecision());
@@ -49,89 +50,101 @@ public class ProposeCollateralInfoTransform extends Transform {
         collateralDetailView.setMortgageCondition(appraisalData.getMortgageCondition());
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
-        List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
-    /*    List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+        List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
+    /*    List<NewSubCollateralDetailView> subCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
 
         for(HeadCollateralData headCollateralData : appraisalData.getHeadCollateralDataList())
         {
-            CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(headCollateralData);
+            NewCollateralHeadDetailView collateralHeaderDetailView = convertCollateralHeader(headCollateralData);
 
             for(SubCollateralData subCollateralData : headCollateralData.getSubCollateralDataList()){
-                SubCollateralDetailView subCollateralDetailView = convertSubCollateral(subCollateralData);
+                NewSubCollateralDetailView subCollateralDetailView = convertSubCollateral(subCollateralData);
                 subCollateralDetailViewList.add(subCollateralDetailView);
             }
 
-            collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
-            collateralHeaderDetailViewList.add(collateralHeaderDetailView);
+            collateralHeaderDetailView.setNewSubCollateralDetailViewList(subCollateralDetailViewList);
+            newCollateralHeadDetailViewList.add(collateralHeaderDetailView);
         }
 
-        collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
+        collateralDetailView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViewList);
         log.info("convertCollateral end");
         return collateralDetailView;*/
 
         /*List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
-        List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+        List<NewSubCollateralDetailView> subCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
 
         for(int i= 0;i<appraisalData.getSubCollateralDataList().size();i++){
 
-            SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(i));
+            NewSubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(i));
             subCollateralDetailView.setNo(i+1);
             subCollateralDetailView.getSubCollateralType().setCollateralType(collateralHeaderDetailView.getHeadCollType());
             SubCollateralType subCollateralTypeResult = subCollateralTypeDAO.findByBySubColCode(subCollateralDetailView.getSubCollateralType());
             subCollateralDetailView.setSubCollateralType(subCollateralTypeResult);
             subCollateralDetailViewList.add(subCollateralDetailView);
         }
-        collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
+        collateralHeaderDetailView.setNewSubCollateralDetailViewList(subCollateralDetailViewList);
 
         collateralHeaderDetailView.setNo(1);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
+        newCollateralHeadDetailViewList.add(collateralHeaderDetailView);
         collateralHeaderDetailView.setNo(2);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);*/
+        newCollateralHeadDetailViewList.add(collateralHeaderDetailView);*/
 
         return collateralDetailView;
 
     }
 
-    private CollateralHeaderDetailView convertCollateralHeader(HeadCollateralData headCollateralData ){
+    private NewCollateralHeadDetailView convertCollateralHeader(HeadCollateralData headCollateralData) {
         log.info("convertCollateralHeader begin");
-        CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
+        NewCollateralHeadDetailView newCollateralHeadDetailView = new NewCollateralHeadDetailView();
 
-        collateralHeaderDetailView.setTitleDeed(headCollateralData.getTitleDeed());
+        newCollateralHeadDetailView.setTitleDeed(headCollateralData.getTitleDeed());
         double appraisalValue = Double.parseDouble(headCollateralData.getAppraisalValue());
-        collateralHeaderDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
-        collateralHeaderDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
+        newCollateralHeadDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
+        newCollateralHeadDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
         CollateralType headCollType = new CollateralType();
-        if(headCollateralData.getHeadCollType()== null || headCollateralData.getHeadCollType().equals("")){
+        if (headCollateralData.getHeadCollType() == null || headCollateralData.getHeadCollType().equals("")) {
             headCollType.setCode("00");
-        }else{
+        } else {
             headCollType.setCode(headCollateralData.getHeadCollType());
         }
 
         headCollType = collateralTypeDAO.findByCollateralCode(headCollType);
-        collateralHeaderDetailView.setHeadCollType(headCollType);
+        newCollateralHeadDetailView.setHeadCollType(headCollType);
         log.info("convertCollateralHeader end");
-        return collateralHeaderDetailView;
+        return newCollateralHeadDetailView;
     }
 
-    private SubCollateralDetailView convertSubCollateral(SubCollateralData subCollateralData ){
+    private NewSubCollateralDetailView convertSubCollateral(SubCollateralData subCollateralData) {
         log.info("convertSubCollateral begin");
-        SubCollateralDetailView subCollateralDetailView = new SubCollateralDetailView();
+        NewSubCollateralDetailView newSubCollateralDetailView = new NewSubCollateralDetailView();
 
-        subCollateralDetailView.setTitleDeed(subCollateralData.getTitleDeed());
-        subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
-        subCollateralDetailView.setAddress(subCollateralData.getAddress());
-        subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
+        newSubCollateralDetailView.setTitleDeed(subCollateralData.getTitleDeed());
+        newSubCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
+        newSubCollateralDetailView.setAddress(subCollateralData.getAddress());
+        newSubCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
+        newSubCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
-        if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
+        if (subCollateralData.getCollateralType() == null || subCollateralData.getCollateralType().equals("")) {
             subCollType.setCode("00");
-        }else{
+        } else {
             subCollType.setCode(subCollateralData.getCollateralType());
         }
 
-        subCollateralDetailView.setSubCollateralType(subCollType);
+        newSubCollateralDetailView.setSubCollateralType(subCollType);
         log.info("convertSubCollateral end");
-        return subCollateralDetailView;
+        return newSubCollateralDetailView;
     }
+
+    public List<NewCollateralDetail> transformsToModel() {
+
+       return null;
+    }
+
+    public List<NewCollateralInfoView> transformsToView() {
+
+        return null;
+    }
+
+
 }

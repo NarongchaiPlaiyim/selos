@@ -56,15 +56,15 @@ public class CreditTypeDetailView implements Serializable {
     }
 
     public int getNo() {
-          return no;
+        if(this.noFlag==true){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
     public void setNo(int no) {
-        if(this.noFlag){
-           this.no = 1;
-        }else{
-           this.no = 0;
-        }
+           this.no = no;
     }
 
     public String getAccount() {
@@ -185,11 +185,20 @@ public class CreditTypeDetailView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("noFlag", noFlag)
                 .append("account", account)
                 .append("Type", Type)
+                .append("requestType", requestType)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
                 .append("limit", limit)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("useCount", useCount)
+                .append("seq", seq)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

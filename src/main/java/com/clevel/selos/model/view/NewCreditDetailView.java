@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProposeCreditDetailView implements Serializable {
+public class NewCreditDetailView implements Serializable {
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -46,9 +46,9 @@ public class ProposeCreditDetailView implements Serializable {
     private int seq;
     private int isApproved;
 
-    private List<CreditTierDetailView> creditTierDetailViewList;
+    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
 
-    public ProposeCreditDetailView(){
+    public NewCreditDetailView(){
         reset();
     }
 
@@ -73,7 +73,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.finalPrice = BigDecimal.ZERO;
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
-        this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+        this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         this.standardPrice = "";
         this.suggestPrice = "";
@@ -227,12 +227,12 @@ public class ProposeCreditDetailView implements Serializable {
         this.holdLimitAmount = holdLimitAmount;
     }
 
-    public List<CreditTierDetailView> getCreditTierDetailViewList() {
-        return creditTierDetailViewList;
+    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
+        return newCreditTierDetailViewList;
     }
 
-    public void setCreditTierDetailViewList(List<CreditTierDetailView> creditTierDetailViewList) {
-        this.creditTierDetailViewList = creditTierDetailViewList;
+    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
+        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
     }
 
     public BigDecimal getFinalPrice() {
@@ -365,6 +365,14 @@ public class ProposeCreditDetailView implements Serializable {
         isApproved = approved;
     }
 
+    public LoanPurpose getLoanPurpose() {
+        return loanPurpose;
+    }
+
+    public void setLoanPurpose(LoanPurpose loanPurpose) {
+        this.loanPurpose = loanPurpose;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -402,7 +410,7 @@ public class ProposeCreditDetailView implements Serializable {
                 .append("purpose", purpose)
                 .append("seq", seq)
                 .append("isApproved", isApproved)
-                .append("creditTierDetailViewList", creditTierDetailViewList)
+                .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .toString();
     }
 }

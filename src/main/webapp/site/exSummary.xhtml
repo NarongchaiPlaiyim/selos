@@ -38,7 +38,7 @@
                 <div id="content_info">
                     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
                     <div id="content_lastupdate">Last update by
-                        <h:outputText id="lastupdateName" value="#{executiveSummary.user.userName}"/>,
+                        <h:outputText id="lastupdateName" value="#{executiveSummary.exSummaryView.modifyBy.userName}"/>,
                         <h:outputText id="lastupdateTime" value="#{executiveSummary.exSummaryView.modifyDate}"/></div>
                 </div>
                 <div id="content_form">
@@ -754,19 +754,19 @@
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{accItem.overLimitTimes}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{accItem.overLimitDays}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                             </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{accItem.chequeReturn}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                             </h:outputText>
                                         </p:column>
 

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CreditFacProposeView implements Serializable {
+public class NewCreditFacilityView implements Serializable {
+    private long id;
     private BigDecimal WCNeed;
     private BigDecimal totalCreditTurnover;
     private BigDecimal WCNeedDiffer;
@@ -42,6 +43,12 @@ public class CreditFacProposeView implements Serializable {
     private BigDecimal totalCommercialAndOBOD;
     private BigDecimal totalExposure;
 
+    //hidden
+    private BigDecimal totalNumberOfNewOD;
+    private BigDecimal totalNumberProposeCreditFac;
+    private BigDecimal totalNumberContingenPropose;
+
+
     private String contactName;
     private String contactPhoneNo;
     private String interService;
@@ -61,24 +68,23 @@ public class CreditFacProposeView implements Serializable {
     private CreditCustomerType creditCustomerType;
     private CreditRequestType  creditRequestType;
     private Country country;
-
-    private List<ProposeFeeDetailView> proposeFeeDetailViewList;
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
-    private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
-    private List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList;
     private BigDecimal totalGuaranteeAmount;
-    private List<ProposeConditionDetailView> proposeConditionDetailViewList;
-
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
     private int singleLendingLimit;
+
+    private List<NewFeeDetailView> newFeeDetailViewList;
+    private List<NewCreditDetailView> newCreditDetailViewList;
+    private List<NewCollateralInfoView> newCollateralInfoViewList;
+    private List<NewGuarantorDetailView> newGuarantorDetailViewList;
+    private List<NewConditionDetailView> newConditionDetailViewList;
 
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
 
-    public CreditFacProposeView() {
+    public NewCreditFacilityView() {
         reset();
     }
 
@@ -108,6 +114,9 @@ public class CreditFacProposeView implements Serializable {
         this.totalCommercial = BigDecimal.ZERO;
         this.totalCommercialAndOBOD = BigDecimal.ZERO;
         this.totalExposure = BigDecimal.ZERO;
+        this.totalNumberOfNewOD = BigDecimal.ZERO;
+        this.totalNumberProposeCreditFac = BigDecimal.ZERO;
+        this.totalNumberContingenPropose=BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -119,19 +128,18 @@ public class CreditFacProposeView implements Serializable {
         this.exportMail = "";
         this.depositBranchCode = "";
         this.ownerBranchCode = "";
-
         this.intFeeDOA = BigDecimal.ZERO;
         this.frontendFeeDOA = BigDecimal.ZERO;
         this.guarantorBA = BigDecimal.ZERO;
         this.reasonForReduction = "";
 
-        this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
-        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
-        this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
-        this.proposeGuarantorDetailViewList = new ArrayList<ProposeGuarantorDetailView>();
-        this.totalGuaranteeAmount = BigDecimal.ZERO;
-        this.proposeConditionDetailViewList = new ArrayList<ProposeConditionDetailView>();
+        this.newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
+        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
+        this.newCollateralInfoViewList = new ArrayList<NewCollateralInfoView>();
+        this.newGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
+        this.newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
 
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
@@ -139,6 +147,14 @@ public class CreditFacProposeView implements Serializable {
         this.creditRequestType = new CreditRequestType();
         this.country = new Country();
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public BigDecimal getTotalProposeNonLoanDBR() {
@@ -285,20 +301,20 @@ public class CreditFacProposeView implements Serializable {
         this.case3WcDebitCoreWc = case3WcDebitCoreWc;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
+    public List<NewCreditDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
-    public List<ProposeCollateralInfoView> getProposeCollateralInfoViewList() {
-        return proposeCollateralInfoViewList;
+    public List<NewCollateralInfoView> getNewCollateralInfoViewList() {
+        return newCollateralInfoViewList;
     }
 
-    public void setProposeCollateralInfoViewList(List<ProposeCollateralInfoView> proposeCollateralInfoViewList) {
-        this.proposeCollateralInfoViewList = proposeCollateralInfoViewList;
+    public void setNewCollateralInfoViewList(List<NewCollateralInfoView> newCollateralInfoViewList) {
+        this.newCollateralInfoViewList = newCollateralInfoViewList;
     }
 
     public BigDecimal getExistingSMELimit() {
@@ -493,28 +509,28 @@ public class CreditFacProposeView implements Serializable {
         this.reasonForReduction = reasonForReduction;
     }
 
-    public List<ProposeFeeDetailView> getProposeFeeDetailViewList() {
-        return proposeFeeDetailViewList;
+    public List<NewFeeDetailView> getNewFeeDetailViewList() {
+        return newFeeDetailViewList;
     }
 
-    public void setProposeFeeDetailViewList(List<ProposeFeeDetailView> proposeFeeDetailViewList) {
-        this.proposeFeeDetailViewList = proposeFeeDetailViewList;
+    public void setNewFeeDetailViewList(List<NewFeeDetailView> newFeeDetailViewList) {
+        this.newFeeDetailViewList = newFeeDetailViewList;
     }
 
-    public List<ProposeGuarantorDetailView> getProposeGuarantorDetailViewList() {
-        return proposeGuarantorDetailViewList;
+    public List<NewGuarantorDetailView> getNewGuarantorDetailViewList() {
+        return newGuarantorDetailViewList;
     }
 
-    public void setProposeGuarantorDetailViewList(List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList) {
-        this.proposeGuarantorDetailViewList = proposeGuarantorDetailViewList;
+    public void setNewGuarantorDetailViewList(List<NewGuarantorDetailView> newGuarantorDetailViewList) {
+        this.newGuarantorDetailViewList = newGuarantorDetailViewList;
     }
 
-    public List<ProposeConditionDetailView> getProposeConditionDetailViewList() {
-        return proposeConditionDetailViewList;
+    public List<NewConditionDetailView> getNewConditionDetailViewList() {
+        return newConditionDetailViewList;
     }
 
-    public void setProposeConditionDetailViewList(List<ProposeConditionDetailView> proposeConditionDetailViewList) {
-        this.proposeConditionDetailViewList = proposeConditionDetailViewList;
+    public void setNewConditionDetailViewList(List<NewConditionDetailView> newConditionDetailViewList) {
+        this.newConditionDetailViewList = newConditionDetailViewList;
     }
 
     public int getSingleLendingLimit() {
@@ -572,4 +588,30 @@ public class CreditFacProposeView implements Serializable {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+    public BigDecimal getTotalNumberOfNewOD() {
+        return totalNumberOfNewOD;
+    }
+
+    public void setTotalNumberOfNewOD(BigDecimal totalNumberOfNewOD) {
+        this.totalNumberOfNewOD = totalNumberOfNewOD;
+    }
+
+    public BigDecimal getTotalNumberProposeCreditFac() {
+        return totalNumberProposeCreditFac;
+    }
+
+    public void setTotalNumberProposeCreditFac(BigDecimal totalNumberProposeCreditFac) {
+        this.totalNumberProposeCreditFac = totalNumberProposeCreditFac;
+    }
+
+    public BigDecimal getTotalNumberContingenPropose() {
+        return totalNumberContingenPropose;
+    }
+
+    public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
+        this.totalNumberContingenPropose = totalNumberContingenPropose;
+    }
+
+
 }

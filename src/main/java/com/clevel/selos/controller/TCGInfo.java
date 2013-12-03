@@ -241,11 +241,6 @@ public class TCGInfo implements Serializable {
             }
 
             if (TCGDetailViewList.size() > 0) {
-                /*log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", CalculateSumValue(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList, "LTV"));
-                TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList, "LTV"));*/
                 log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
                 TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
                 TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
@@ -270,48 +265,6 @@ public class TCGInfo implements Serializable {
         context.addCallbackParam("functionComplete", complete);
     }
 
-   /* public BigDecimal CalculateSumValue(List<TCGDetailView> TCGDetailViewList, String typeAmt) {
-        BigDecimal sum = new BigDecimal(0);
-
-        for (int i = 0; i < TCGDetailViewList.size(); i++) {
-
-            if (typeAmt.equals("Appraisal")) {
-                sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
-            } else if (typeAmt.equals("LTV")) {
-                sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
-            } else {
-                sum = new BigDecimal(0);
-            }
-        }
-
-        log.info("sum ::: {} ", sum);
-
-        return sum;
-    }
-
-    public BigDecimal CalculateSumValueInThis(List<TCGDetailView> TCGDetailViewList, String typeAmt) {
-        BigDecimal sum = new BigDecimal(0);
-
-        for (int i = 0; i < TCGDetailViewList.size(); i++) {
-
-            if (typeAmt.equals("Appraisal")) {
-                if (TCGDetailViewList.get(i).getProposeInThisRequest() == 1) {
-                    sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
-                }
-            } else if (typeAmt.equals("LTV")) {
-                if (TCGDetailViewList.get(i).getProposeInThisRequest() == 1) {
-                    sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
-                }
-            } else {
-                sum = new BigDecimal(0);
-            }
-
-        }
-        log.info("sum ::: {} ", sum);
-
-        return sum;
-    }*/
-
     public void onDeleteTcgDetail() {
         TCGDetailViewList.remove(selectCollateralItem);
         calculateAfterDelete();
@@ -320,12 +273,6 @@ public class TCGInfo implements Serializable {
     public void calculateAfterDelete() {
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
-        /*   log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
-            TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList, "Appraisal"));
-            TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList, "LTV"));
-            TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
-            TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList, "LTV"));
-        */
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
             TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
             TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
