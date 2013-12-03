@@ -46,7 +46,7 @@ public class NewCreditDetailView implements Serializable {
     private int seq;
     private int isApproved;
 
-    private List<CreditTierDetailView> creditTierDetailViewList;
+    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
 
     public NewCreditDetailView(){
         reset();
@@ -73,7 +73,7 @@ public class NewCreditDetailView implements Serializable {
         this.finalPrice = BigDecimal.ZERO;
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
-        this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+        this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         this.standardPrice = "";
         this.suggestPrice = "";
@@ -227,12 +227,12 @@ public class NewCreditDetailView implements Serializable {
         this.holdLimitAmount = holdLimitAmount;
     }
 
-    public List<CreditTierDetailView> getCreditTierDetailViewList() {
-        return creditTierDetailViewList;
+    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
+        return newCreditTierDetailViewList;
     }
 
-    public void setCreditTierDetailViewList(List<CreditTierDetailView> creditTierDetailViewList) {
-        this.creditTierDetailViewList = creditTierDetailViewList;
+    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
+        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
     }
 
     public BigDecimal getFinalPrice() {
@@ -410,7 +410,7 @@ public class NewCreditDetailView implements Serializable {
                 .append("purpose", purpose)
                 .append("seq", seq)
                 .append("isApproved", isApproved)
-                .append("creditTierDetailViewList", creditTierDetailViewList)
+                .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .toString();
     }
 }

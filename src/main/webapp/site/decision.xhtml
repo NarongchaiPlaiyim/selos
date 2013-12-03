@@ -1389,32 +1389,32 @@
                                             </tr>
                                             </thead>
                                             <tbody class="ui-datatable-data ui-widget-content">
-                                            <ui:repeat value="#{decision.creditFacProposeView.proposeCreditDetailViewList}" var="proposeCredit" varStatus="i">
+                                            <ui:repeat value="#{decision.newCreditFacilityView.proposeCreditDetailViewList}" var="proposeCredit" varStatus="i">
                                                 <tr>
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) + 1 : '2'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{i.index + 1}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{proposeCredit.productProgram.description}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{proposeCredit.creditType.description}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{msg.get('app.decision.tb.td.label.product')} #{proposeCredit.productCode}<br/>
                                                         #{msg.get('app.decision.tb.td.label.project')} #{proposeCredit.projectCode}
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -1422,39 +1422,39 @@
                                                     </td>
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].standardPrice : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].standardPrice : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].suggestPrice : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].finalPriceRate : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].installment : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].tenor : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                            fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                            fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.frontEndFee}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -1463,7 +1463,7 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                <ui:repeat value="#{proposeCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
+                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.standardPrice}">
@@ -1537,7 +1537,7 @@
                                                 </tr>
                                             </ui:repeat>
 
-                                            <h:panelGroup rendered="#{empty decision.creditFacProposeView.proposeCreditDetailViewList}">
+                                            <h:panelGroup rendered="#{empty decision.newCreditFacilityView.proposeCreditDetailViewList}">
                                                 <tr>
                                                     <td colspan="11">No records found.</td>
                                                 </tr>
@@ -1550,7 +1550,7 @@
                                                     <td style="background-color:#f4f8b6;"></td>
                                                     <td colspan="3" class="title" style="background-color:#f4f8b6;">#{msg.get('app.decision.totalProposedCredit')}</td>
                                                     <td class="title right" style="background-color:#f4f8b6;">
-                                                        <h:outputText value="#{decision.creditFacProposeView.totalPropose}">
+                                                        <h:outputText value="#{decision.newCreditFacilityView.totalPropose}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
                                                         </h:outputText>
@@ -1579,7 +1579,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:selectOneRadio value="#{decision.creditFacProposeView.creditCustomerType}">
+                                <p:selectOneRadio value="#{decision.newCreditFacilityView.creditCustomerType}">
                                     <f:selectItems value="#{app.getCreditCustomerTypeValues('Normal|Prime')}" />
                                 </p:selectOneRadio>
                             </td>
@@ -1589,7 +1589,7 @@
                                 <table border="0">
                                     <tr>
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/></td>
-                                        <td><p:selectOneMenu value="#{decision.creditFacProposeView.creditRequestType.id}">
+                                        <td><p:selectOneMenu value="#{decision.newCreditFacilityView.creditRequestType.id}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                                 <f:selectItems value="#{decision.creditRequestTypeList}" var="crdRequestType"
                                                                itemLabel="#{crdRequestType.description}" itemValue="#{crdRequestType.id}"/>
@@ -1604,7 +1604,7 @@
                                 <table border="0">
                                     <tr>
                                         <td class="title"><h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/></td>
-                                        <td><p:selectOneMenu value="#{decision.creditFacProposeView.country.id}">
+                                        <td><p:selectOneMenu value="#{decision.newCreditFacilityView.country.id}">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                                                 <f:selectItems value="#{decision.countryList}" var="country"
                                                                itemLabel="#{country.name}" itemValue="#{country.id}"/>
@@ -1617,7 +1617,7 @@
                         <tr>
                             <td class="title">
                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"/>
-                                <p:inputText value="#{decision.creditFacProposeView.existingSMELimit}" styleClass="left">
+                                <p:inputText value="#{decision.newCreditFacilityView.existingSMELimit}" styleClass="left">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </p:inputText>
@@ -1625,7 +1625,7 @@
                                 <p:spacer width="10"/>
 
                                 <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"/>
-                                <p:inputText value="#{decision.creditFacProposeView.maximumExistingSMELimit}" styleClass="left">
+                                <p:inputText value="#{decision.newCreditFacilityView.maximumExistingSMELimit}" styleClass="left">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </p:inputText>
@@ -1671,34 +1671,34 @@
                                             <ui:repeat value="#{decision.approvedProposeCreditList}" var="proposeCredit" varStatus="i">
                                                 <tr>
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) + 1 : '2'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{i.index + 1}
                                                     </td>
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) + 1 : '2'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
                                                         #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{proposeCredit.productProgram.description}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{proposeCredit.creditType.description}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         #{msg.get('app.decision.tb.td.label.product')} #{proposeCredit.productCode}<br/>
                                                         #{msg.get('app.decision.tb.td.label.project')} #{proposeCredit.projectCode}
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -1706,47 +1706,47 @@
                                                     </td>
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].standardPrice : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].standardPrice : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].suggestPrice : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].finalPriceRate : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].finalPriceRate : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].installment : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.creditTierDetailViewList[0].tenor : ''}">
+                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                            proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                            fn:length(proposeCredit.creditTierDetailViewList) : '1'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                            fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.frontEndFee}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
-                                                        rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
-                                                                fn:length(proposeCredit.creditTierDetailViewList) + 1 : '2'}">
+                                                        rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
 
                                                         <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
                                                                          action="#{decision.onEditAppProposeCredit()}" process="@this"
@@ -1762,7 +1762,7 @@
                                                 </tr>
 
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                                <ui:repeat value="#{proposeCredit.creditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
+                                                <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.standardPrice}">
@@ -1849,7 +1849,7 @@
                                                 <td style="background-color:#f4f8b6;"></td>
                                                 <td colspan="3" class="title" style="background-color:#f4f8b6;">#{msg.get('app.decision.totalProposedCredit')}</td>
                                                 <td class="title right" style="background-color:#f4f8b6;">
-                                                    <h:outputText value="#{decision.creditFacProposeView.totalPropose}">
+                                                    <h:outputText value="#{decision.newCreditFacilityView.totalPropose}">
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                          maxIntegerDigits="14"/>
                                                     </h:outputText>
@@ -1869,7 +1869,7 @@
                             <td colspan="2">
                                 <!-- Propose - Fee Information -->
                                 <p:dataTable id="dtProFeeInfo"
-                                             var="proFeeInfo" value="#{decision.creditFacProposeView.proposeFeeDetailViewList}"
+                                             var="proFeeInfo" value="#{decision.newCreditFacilityView.proposeFeeDetailViewList}"
                                              paginator="false" rowKey="#{proFeeInfo}" rowIndexVar="rowIndex"
                                              style="width: 100%">
 
@@ -1912,7 +1912,7 @@
                             <td colspan="2">
                                 <!-- Proposed Collateral Table -->
                                 <table border="0" style="width: 100%">
-                                    <ui:repeat value="#{decision.creditFacProposeView.proposeCollateralInfoViewList}" var="proposeColl">
+                                    <ui:repeat value="#{decision.newCreditFacilityView.proposeCollateralInfoViewList}" var="proposeColl">
                                     <tr>
                                         <td class="title">
                                             <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
@@ -2567,7 +2567,7 @@
                         <tr>
                             <td colspan="2">
                                 <p:dataTable id="dtProposeCondition"
-                                             var="proposeCond" value="#{decision.creditFacProposeView.proposeConditionDetailViewList}"
+                                             var="proposeCond" value="#{decision.newCreditFacilityView.proposeConditionDetailViewList}"
                                              paginator="false" rowKey="#{proposeCond}" rowIndexVar="rowIndex"
                                              style="width: 100%">
 

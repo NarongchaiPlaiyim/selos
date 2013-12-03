@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CreditTierDetailView implements Serializable {
+public class NewCreditTierDetailView implements Serializable {
     private int no;
     private BigDecimal finalInterest;
     private BaseRate finalBasePrice;
@@ -28,7 +28,7 @@ public class CreditTierDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public CreditTierDetailView() {
+    public NewCreditTierDetailView() {
         reset();
     }
 

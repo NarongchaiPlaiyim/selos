@@ -243,8 +243,8 @@
                 <td class="title"></td>
                 <td colspan="3">
                     <p:dataTable id="dlgDtCreditTier"
-                                 var="item" value="#{decision.selectedAppProposeCredit.creditTierDetailViewList}"
-                                 paginator="false" rowKey="#{item.creditTierDetailView}" rowIndexVar="rowIndex"
+                                 var="item" value="#{decision.selectedAppProposeCredit.newCreditTierDetailViewList}"
+                                 paginator="false" rowKey="#{item.newCreditTierDetailView}" rowIndexVar="rowIndex"
                                  style="width: 100%; font-size: 12px!important;">
 
                         <p:columnGroup type="header">
@@ -268,7 +268,7 @@
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}"
                                                          style="width: 50px;"
-                                                         disabled="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.creditTierDetailViewList)}">
+                                                         disabled="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList)}">
                                             <f:selectItems value="#{decision.baseRateList}"
                                                            var="final"
                                                            itemLabel="#{final.name}"
@@ -279,7 +279,7 @@
                                         <p:inputText value="#{item.finalInterest}"
                                                      styleClass="right"
                                                      style="width:100px;"
-                                                     readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.creditTierDetailViewList)}">
+                                                     readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList)}">
                                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </p:inputText>
                                     </p:column>
@@ -290,7 +290,7 @@
                         <p:column>
                             <p:inputText value="#{item.tenor}"
                                          styleClass="right"
-                                         readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.creditTierDetailViewList)}">
+                                         readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList)}">
                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                             </p:inputText>
                         </p:column>
@@ -298,7 +298,7 @@
                         <p:column>
                             <p:inputText value="#{item.installment}"
                                          styleClass="right"
-                                         readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.creditTierDetailViewList)}">
+                                         readonly="#{(rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList)}">
                                 <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
