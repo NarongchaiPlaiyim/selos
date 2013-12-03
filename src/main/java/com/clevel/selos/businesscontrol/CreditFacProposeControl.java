@@ -4,11 +4,12 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.NewCreditFacilityDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.CreditFacProposeView;
+import com.clevel.selos.model.view.NewCreditFacilityView;
 import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
@@ -52,6 +53,8 @@ public class CreditFacProposeControl extends BusinessControl {
     BasicInfoDAO basicInfoDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
 
     public CreditFacProposeControl(){}
 
@@ -66,15 +69,15 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
-    public void onSaveNewCreditFacility(CreditFacProposeView creditFacProposeView, Long workCaseId ,User user) {
+    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, Long workCaseId ,User user) {
         log.info("onSaveNewCreditFacility begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        NewCreditFacility creditFacilityPropose = newCreditFacilityTransform.transformToModelDB(creditFacProposeView,workCase,user);
-       // creditFacilityProposeDAO.persist(creditFacilityPropose);      because N'KO created dao of newCreditFacility
+        NewCreditFacility creditFacilityPropose = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView,workCase,user);
+        newCreditFacilityDAO.persist(creditFacilityPropose);
 
 
-        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(creditFacProposeView.getNewFeeDetailViewList(),creditFacilityPropose);
+        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(),creditFacilityPropose);
    /*     List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel();
         List<ProposeCollateralDetail> proposeCollateralDetailList = newCollateralInfoTransform.transformsToModel();
         List<ProposeGuarantorDetail>  proposeGuarantorDetailList = newGuarantorDetailTransform.transformToModel();
