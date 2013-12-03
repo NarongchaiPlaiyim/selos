@@ -145,7 +145,7 @@ public class Decision implements Serializable {
     }
 
     private void initialProposeView() {
-        selectedAppProposeCredit = new ProposeCreditDetailView();
+        selectedAppProposeCredit = new NewCreditDetailView();
         selectedAppProposeCredit.setProductProgram(new ProductProgram());
         selectedAppProposeCredit.setCreditType(new CreditType());
         if (baseRateList != null && !baseRateList.isEmpty()) {
@@ -505,7 +505,7 @@ public class Decision implements Serializable {
         NewGuarantorDetailView proposeGuarantorDetailView1 = new NewGuarantorDetailView();
         Customer guarantor = new Customer();
         guarantor.setNameTh("Guarantor Name");
-        guarantor.setLastNameTh("Lastname");
+        guarantor.setLastNameTh("Last name");
         proposeGuarantorDetailView1.setGuarantorName(guarantor);
         proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
@@ -517,10 +517,9 @@ public class Decision implements Serializable {
         proposeCondition = new NewConditionDetailView();
         proposeConditionDate = DateTimeUtil.getCurrentDateTH();
         creditFacProposeView.setNewConditionDetailViewList(new ArrayList<NewConditionDetailView>());
-        creditFacProposeView.setProposeConditionDetailViewList(new ArrayList<ProposeConditionDetailView>());
 
         // Duplicate Approved Propose
-        approvedProposeCreditList = new ArrayList<ProposeCreditDetailView>();
+        approvedProposeCreditList = new ArrayList<NewCreditDetailView>();
         approvedProposeCreditList.add(proposeCreditDetailView1);
         approvedProposeCreditList.add(proposeCreditDetailView2);
         approvedProposeCreditList.add(proposeCreditDetailView3);
