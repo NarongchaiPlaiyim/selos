@@ -37,6 +37,8 @@ public class ExSummaryControl extends BusinessControl {
     BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
     NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    DBRDAO dbrDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -105,7 +107,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSumAccountMovementView mainBank = null;
@@ -144,30 +146,32 @@ public class ExSummaryControl extends BusinessControl {
             if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 bizSize = bankStatementSummary.getGrdTotalIncomeGross();
             } else { // use customer
-                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
-                if(customer != null && customer.size() > 0){
-                    for(Customer cus : customer){
+//                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                             if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
-                                bizSize = cus.getJuristic().getSalesFromFinancialStmt();
+                                bizSize = cus.getSalesFromFinancialStmt();
                             }
                         }
                     }
                 }
             }
+
             ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView.getQualityResult(),bizSize);
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
             exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
-
             //todo: if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
                 exSummaryView.setOwner(bizInfoSummaryView.getExpiryDate().toString());
             } else {
-
+//                exSummaryView.setOwner();
             }
+
+            //For footer borrower
             //todo: this
             exSummaryView.setBusinessOperationActivity("");
             exSummaryView.setBusinessPermission("");
@@ -176,7 +180,54 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setExSumBusinessInfoView(null);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //Borrower
+        ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
+        DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+        if(dbr != null && dbr.getId() != 0){
+            exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
+            exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
+        }
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
+            if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){
+                exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
+            } else {
+                exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
+            }
+        }
+        // todo: business logic here
+        if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
+//            Grand Total Income Net BDM จากหน้า Bank Statement Summary * 12
+            exSumCharacteristicView.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
+//            Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
+            exSumCharacteristicView.setGroupSaleUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+        }
+
+        // todo: business logic here
+        if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+//            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());
+
+//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+            if(cusListView != null && cusListView.size() > 0){
+                for(CustomerInfoView cus : cusListView){
+                    if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
+//                            exSumCharacteristicView.setGroupSaleUW(cus.getSalesFromFinancialStmt());
+                        }
+                    }
+                }
+            }
+        } else { // use customer
+//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleBDM();
+
+//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleUW();
+        }
+
+        exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -202,4 +253,27 @@ public class ExSummaryControl extends BusinessControl {
         List<ExSumDeviate> exSumDeviateList = exSummaryTransform.transformDeviateToModel(exSummaryView.getDeviateCode(),exSummary.getId());
         exSumDeviateDAO.persist(exSumDeviateList);
     }
+
+    //TODO : Business login here
+
+    //Borrower Characteristic - income ( Line 45 )
+    //Credit Facility-Propose + DBR + Decision
+    //[สินเชื่อหมุนเวียนที่มีอยู่กับ TMB + OD Limit ที่อนุมัติ + Loan Core WC ที่อนุมัติ] / (รายได้ต่อเดือน Adjusted หน้า DBR *12)
+
+    //Borrower Characteristic - recommendedWCNeed ( Line 46 )
+    //Credit Facility-Propose หัวข้อ WC Requirement
+    //กรณี Refinance In Flag = Yes + Prime
+    //Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+    //กรณี Refinance In Flag = Yes + Normal
+    //Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+    //กรณี Refinance In Flag = No + Prime
+    //Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+    //กรณี Refinance In Flag = No + Normal
+    //Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+
+    //Borrower Characteristic - actualWC ( Line 47 )
+    //Decision หัวข้อ Approve Credit
+    //Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
+
+
 }
