@@ -119,7 +119,7 @@ public class BankStatementDetail implements Serializable {
     private void preRender() {
         log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
+        session.setAttribute("workCaseId", new Long(2));
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
 
