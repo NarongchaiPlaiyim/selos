@@ -209,6 +209,24 @@ public class DBRInfo implements Serializable {
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
+    public void testUpdateValueDBR(){
+        try{
+            dbrControl.updateValueOfDBR(workCaseId);
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("ws.newCase.response.success");
+            //update Display
+            dbr = new DBRView();
+            dbr = dbrControl.getDBRByWorkCase(workCaseId);
+            dbrDetails = new ArrayList<DBRDetailView>();
+            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
+                dbrDetails = dbr.getDbrDetailViews();
+            }
+        }catch (Exception e){
+
+        }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+    }
+
     public BigDecimal getTotalMonthDebtBorrower(){
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){

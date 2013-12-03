@@ -218,7 +218,7 @@ public class DBRControl extends BusinessControl {
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
             }
             if(bizInfoSummary != null){
-                dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+                dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
             DBR dbr =  calculateDBR(dbrView, ncbDetailViews, workCase);
