@@ -1,7 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.DecisionControl;
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.BaseRateDAO;
+import com.clevel.selos.dao.master.CountryDAO;
+import com.clevel.selos.dao.master.CreditRequestTypeDAO;
+import com.clevel.selos.dao.master.DisbursementDAO;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.integration.SELOS;
@@ -81,7 +84,7 @@ public class Decision implements Serializable {
     private List<ExistingGuarantorDetailView> existingGuarantorList;
 
     //----- Propose Credit -----//
-    private CreditFacProposeView creditFacProposeView;
+    private NewCreditFacilityView newCreditFacilityView;
     // Approved Model View
     private List<NewCreditDetailView> approvedProposeCreditList;
     private List<NewCollateralInfoView> approvedProposeCollateralList;
@@ -301,13 +304,13 @@ public class Decision implements Serializable {
         existingConditionList.add(existingCondition_2);
 
         //========================================= Propose =========================================//
-        creditFacProposeView = new CreditFacProposeView();
+        newCreditFacilityView = new NewCreditFacilityView();
 
         // Proposed Credit
         List<NewCreditDetailView> proposeCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         //----------------------------------------- 1 ---------------------------------------//
-        List<CreditTierDetailView> tierDetailViewList1 = new ArrayList<CreditTierDetailView>();
-        CreditTierDetailView tierDetailView1 = new CreditTierDetailView();
+        List<NewCreditTierDetailView> tierDetailViewList1 = new ArrayList<NewCreditTierDetailView>();
+        NewCreditTierDetailView tierDetailView1 = new NewCreditTierDetailView();
         tierDetailView1.setStandardPrice("MLR+1.00");
         tierDetailView1.setSuggestPrice("MLR+1.00");
         tierDetailView1.setFinalPriceRate("MLR+1.00");
@@ -322,7 +325,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView1.setProjectCode("90074");
         proposeCreditDetailView1.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView1.setFrontEndFee(BigDecimal.valueOf(1.75));
-        proposeCreditDetailView1.setCreditTierDetailViewList(tierDetailViewList1);
+        proposeCreditDetailView1.setNewCreditTierDetailViewList(tierDetailViewList1);
         proposeCreditDetailView1.setRequestType(0);
         proposeCreditDetailView1.setRefinance(0);
         proposeCreditDetailView1.setRemark("Purpose Detail Example");
@@ -330,8 +333,8 @@ public class Decision implements Serializable {
         proposeCreditDetailView1.setHoldLimitAmount(BigDecimal.valueOf(1234567.89));
 
         //----------------------------------------- 2 ---------------------------------------//
-        List<CreditTierDetailView> tierDetailViewList2 = new ArrayList<CreditTierDetailView>();
-        CreditTierDetailView tierDetailView2_1 = new CreditTierDetailView();
+        List<NewCreditTierDetailView> tierDetailViewList2 = new ArrayList<NewCreditTierDetailView>();
+        NewCreditTierDetailView tierDetailView2_1 = new NewCreditTierDetailView();
         tierDetailView2_1.setStandardPrice("MLR+1.00");
         tierDetailView2_1.setSuggestPrice("MLR+1.00");
         tierDetailView2_1.setFinalPriceRate("MLR+1.00");
@@ -339,7 +342,7 @@ public class Decision implements Serializable {
         tierDetailView2_1.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_1);
 
-        CreditTierDetailView tierDetailView2_2 = new CreditTierDetailView();
+        NewCreditTierDetailView tierDetailView2_2 = new NewCreditTierDetailView();
         tierDetailView2_2.setStandardPrice("MLR+1.00");
         tierDetailView2_2.setSuggestPrice("MLR+1.00");
         tierDetailView2_2.setFinalPriceRate("MLR+1.00");
@@ -347,7 +350,7 @@ public class Decision implements Serializable {
         tierDetailView2_2.setTenor(3);
         tierDetailViewList2.add(tierDetailView2_2);
 
-        CreditTierDetailView tierDetailView2_3 = new CreditTierDetailView();
+        NewCreditTierDetailView tierDetailView2_3 = new NewCreditTierDetailView();
         tierDetailView2_3.setStandardPrice("MLR+1.00");
         tierDetailView2_3.setSuggestPrice("MLR+1.00");
         tierDetailView2_3.setFinalPriceRate("MLR+1.00");
@@ -362,7 +365,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView2.setProjectCode("90078");
         proposeCreditDetailView2.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView2.setFrontEndFee(BigDecimal.valueOf(1.75));
-        proposeCreditDetailView2.setCreditTierDetailViewList(tierDetailViewList2);
+        proposeCreditDetailView2.setNewCreditTierDetailViewList(tierDetailViewList2);
         proposeCreditDetailView2.setRequestType(1);
         proposeCreditDetailView2.setRefinance(1);
         proposeCreditDetailView2.setRemark("Purpose Detail Example 2");
@@ -377,7 +380,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView3.setProjectCode("90082");
         proposeCreditDetailView3.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView3.setFrontEndFee(BigDecimal.valueOf(2.25));
-        proposeCreditDetailView3.setCreditTierDetailViewList(null);
+        proposeCreditDetailView3.setNewCreditTierDetailViewList(null);
         proposeCreditDetailView3.setRequestType(0);
         proposeCreditDetailView3.setRefinance(1);
         proposeCreditDetailView3.setRemark("Purpose Detail Example 3");
@@ -392,7 +395,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView4.setProjectCode("90086");
         proposeCreditDetailView4.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView4.setFrontEndFee(BigDecimal.valueOf(2.75));
-        proposeCreditDetailView4.setCreditTierDetailViewList(new ArrayList<CreditTierDetailView>());
+        proposeCreditDetailView4.setNewCreditTierDetailViewList(new ArrayList<NewCreditTierDetailView>());
         proposeCreditDetailView4.setRequestType(1);
         proposeCreditDetailView4.setRefinance(0);
         proposeCreditDetailView4.setRemark("Purpose Detail Example 4");
@@ -403,7 +406,7 @@ public class Decision implements Serializable {
         proposeCreditDetailViewList.add(proposeCreditDetailView2);
         proposeCreditDetailViewList.add(proposeCreditDetailView3);
         proposeCreditDetailViewList.add(proposeCreditDetailView4);
-        creditFacProposeView.setNewCreditDetailViewList(proposeCreditDetailViewList);
+        newCreditFacilityView.setNewCreditDetailViewList(proposeCreditDetailViewList);
 
         // Fee Information
         List<NewFeeDetailView> proposeFeeDetailViewList = new ArrayList<NewFeeDetailView>();
@@ -415,7 +418,7 @@ public class Decision implements Serializable {
         proposeFeeDetailView1.setPrepaymentFee("12.34%, 5 Years");
         proposeFeeDetailView1.setCancellationFee("12.34%, 2 Years");
         proposeFeeDetailViewList.add(proposeFeeDetailView1);
-        creditFacProposeView.setNewFeeDetailViewList(proposeFeeDetailViewList);
+        newCreditFacilityView.setNewFeeDetailViewList(proposeFeeDetailViewList);
 
         // Propose Collateral
         List<NewCollateralInfoView> proposeCollateralInfoViewList = new ArrayList<NewCollateralInfoView>();
@@ -480,7 +483,7 @@ public class Decision implements Serializable {
         collateralHeaderDetailViewList.add(collateralHeaderDetailView1);
         proposeCollateralInfoView1.setNewCollateralHeadDetailViewList(collateralHeaderDetailViewList);
         proposeCollateralInfoViewList.add(proposeCollateralInfoView1);
-        creditFacProposeView.setNewCollateralInfoViewList(proposeCollateralInfoViewList);
+        newCreditFacilityView.setNewCollateralInfoViewList(proposeCollateralInfoViewList);
 
         // Proposed Guarantor
         List<NewGuarantorDetailView> proposeGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
@@ -493,12 +496,12 @@ public class Decision implements Serializable {
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
         proposeGuarantorDetailView1.setCreditTypeDetailViewList(creditTypeDetailViewList);
         proposeGuarantorDetailViewList.add(proposeGuarantorDetailView1);
-        creditFacProposeView.setNewGuarantorDetailViewList(proposeGuarantorDetailViewList);
+        newCreditFacilityView.setNewGuarantorDetailViewList(proposeGuarantorDetailViewList);
 
         // Propose Condition
         proposeCondition = new NewConditionDetailView();
         proposeConditionDate = DateTimeUtil.getCurrentDateTH();
-        creditFacProposeView.setNewConditionDetailViewList(new ArrayList<NewConditionDetailView>());
+        newCreditFacilityView.setNewConditionDetailViewList(new ArrayList<NewConditionDetailView>());
     }
 
     public void onAddAppProposeCredit() {
@@ -591,7 +594,7 @@ public class Decision implements Serializable {
             resultSuggestPrice = suggestBaseRate != null ? suggestBaseRate.getValue() : suggestInterest;
         }
 
-        CreditTierDetailView newCreditTierDetail = new CreditTierDetailView();
+        NewCreditTierDetailView newCreditTierDetail = new NewCreditTierDetailView();
         newCreditTierDetail.setStandardBasePrice(standardBaseRate);
         newCreditTierDetail.setStandardInterest(standardInterest);
         newCreditTierDetail.setSuggestBasePrice(suggestBaseRate);
@@ -610,22 +613,22 @@ public class Decision implements Serializable {
         }
         newCreditTierDetail.setCanEdit(true);
 
-        if (selectedAppProposeCredit.getCreditTierDetailViewList() != null) {
-            selectedAppProposeCredit.getCreditTierDetailViewList().add(newCreditTierDetail);
+        if (selectedAppProposeCredit.getNewCreditTierDetailViewList() != null) {
+            selectedAppProposeCredit.getNewCreditTierDetailViewList().add(newCreditTierDetail);
         } else {
-            List<CreditTierDetailView> creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
-            creditTierDetailViewList.add(newCreditTierDetail);
+            List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
+            newCreditTierDetailViewList.add(newCreditTierDetail);
         }
 
     }
 
     public void onDeleteTierInfo(int rowIndex) {
-        selectedAppProposeCredit.getCreditTierDetailViewList().remove(rowIndex);
+        selectedAppProposeCredit.getNewCreditTierDetailViewList().remove(rowIndex);
     }
 
     public void onSaveAppProposeCredit() {
-        if (creditFacProposeView.getNewCreditDetailViewList() != null) {
-            List<NewCreditDetailView> proposeCreditDetailViewList = creditFacProposeView.getNewCreditDetailViewList();
+        if (newCreditFacilityView.getNewCreditDetailViewList() != null) {
+            List<NewCreditDetailView> proposeCreditDetailViewList = newCreditFacilityView.getNewCreditDetailViewList();
             if (modeEdit) {
                 proposeCreditDetailViewList.set(proposeCreditDetailViewList.indexOf(selectedAppProposeCredit), selectedAppProposeCredit);
             }
@@ -663,12 +666,12 @@ public class Decision implements Serializable {
         this.existingGuarantorList = existingGuarantorList;
     }
 
-    public CreditFacProposeView getCreditFacProposeView() {
-        return creditFacProposeView;
+    public NewCreditFacilityView getNewCreditFacilityView() {
+        return newCreditFacilityView;
     }
 
-    public void setCreditFacProposeView(CreditFacProposeView creditFacProposeView) {
-        this.creditFacProposeView = creditFacProposeView;
+    public void setNewCreditFacilityView(NewCreditFacilityView newCreditFacilityView) {
+        this.newCreditFacilityView = newCreditFacilityView;
     }
 
     public List<NewCreditDetailView> getApprovedProposeCreditList() {
