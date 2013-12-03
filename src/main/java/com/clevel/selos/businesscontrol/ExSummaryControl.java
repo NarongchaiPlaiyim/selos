@@ -2,10 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BankType;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.CreditCustomerType;
-import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -264,9 +261,14 @@ public class ExSummaryControl extends BusinessControl {
     public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Fac & DBR & Decision pls call me !!
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
 
-        BigDecimal income = (dbr.getMonthlyIncomeAdjust().multiply(new BigDecimal(12)));
+//        BigDecimal totalWCTMB = newCreditFacility.getTotalWCTMB();
+        BigDecimal totalWCTMB = BigDecimal.ZERO;
+        BigDecimal odLimit = newCreditFacility.getTotalCommercialAndOBOD();
+        BigDecimal loanCoreWC = newCreditFacility.getTotalCommercial();
+        BigDecimal adjusted = dbr.getMonthlyIncomeAdjust();
+
+        BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         exSummary.setIncome(income);
@@ -305,4 +307,17 @@ public class ExSummaryControl extends BusinessControl {
     //Borrower Characteristic - actualWC ( Line 47 )
     //Decision หัวข้อ Approve Credit
 //    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
+    public void calActualWCBorrowerCharacteristic(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        BigDecimal actualWC = BigDecimal.ZERO;
+        for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
+            if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
+//                actualWC = actualWC.add(n.get);
+            }
+        }
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setActualWC(actualWC);
+
+        exSummaryDAO.persist(exSummary);
+    }
 }
