@@ -4,8 +4,6 @@ import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CreditFacProposeView implements Serializable {
+public class NewCreditFacilityView implements Serializable {
     private long id;
     private BigDecimal WCNeed;
     private BigDecimal totalCreditTurnover;
@@ -86,7 +84,7 @@ public class CreditFacProposeView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public CreditFacProposeView() {
+    public NewCreditFacilityView() {
         reset();
     }
 
@@ -116,7 +114,6 @@ public class CreditFacProposeView implements Serializable {
         this.totalCommercial = BigDecimal.ZERO;
         this.totalCommercialAndOBOD = BigDecimal.ZERO;
         this.totalExposure = BigDecimal.ZERO;
-
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
         this.totalNumberContingenPropose=BigDecimal.ZERO;
@@ -131,7 +128,6 @@ public class CreditFacProposeView implements Serializable {
         this.exportMail = "";
         this.depositBranchCode = "";
         this.ownerBranchCode = "";
-
         this.intFeeDOA = BigDecimal.ZERO;
         this.frontendFeeDOA = BigDecimal.ZERO;
         this.guarantorBA = BigDecimal.ZERO;

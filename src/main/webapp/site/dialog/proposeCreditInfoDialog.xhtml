@@ -15,7 +15,7 @@
     <td colspan="3">
         <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}">
             <f:selectItem itemLabel="New" itemValue="1"/>
-            <f:selectItem itemLabel="Change" itemValue="0"/>
+            <f:selectItem itemLabel="Change" itemValue="2"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeRequestType()}"
                     process="@this"
@@ -237,8 +237,8 @@
     <td colspan="3">
         <p:dataTable id="resultFinal"
                      var="item"
-                     value="#{creditFacPropose.newCreditDetailView.creditTierDetailViewList}"
-                     rowKey="#{item.creditTierDetailView}"
+                     value="#{creditFacPropose.newCreditDetailView.newCreditTierDetailViewList}"
+                     rowKey="#{item.newCreditTierDetailView}"
                      rowIndexVar="rowIndex"
                      style="width: 100%">
 
@@ -266,7 +266,7 @@
                             <p:selectOneMenu size="1"
                                              value="#{item.finalBasePrice.id}"
                                              style="width: 50px;"
-                                             disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.creditTierDetailViewList)?true:false}">
+                                             disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
                                 <f:selectItems value="#{creditFacPropose.baseRateList}"
                                                var="final"
                                                itemLabel="#{final.name}"
@@ -276,7 +276,7 @@
                         <p:column>
                             <p:inputText value="#{item.finalInterest}"
                                          style="width: 100px;text-align: right"
-                                         readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.creditTierDetailViewList)?true:false}">
+                                         readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </p:inputText>
                         </p:column>
@@ -287,13 +287,13 @@
             <p:column styleClass="right">
                 <p:inputText value="#{item.tenor}"
                              style="text-align: right"
-                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.creditTierDetailViewList)?true:false}"/>
+                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}"/>
             </p:column>
 
             <p:column styleClass="right">
                 <p:inputText value="#{item.installment}"
                              style="text-align: right"
-                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.creditTierDetailViewList)?true:false}">
+                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     <p:ajax event="blur" update="@this"/>
                 </p:inputText>
