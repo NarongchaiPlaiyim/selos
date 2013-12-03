@@ -1,9 +1,12 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
@@ -25,11 +28,14 @@ public class BaseController implements Serializable {
     Logger log;
     @Inject
     UserDAO userDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     private ManageButton manageButton;
     private User user;
     private AppHeaderView appHeaderView;
     private long stepId;
+    private int qualitativeType;
 
     public BaseController() {
     }
@@ -40,6 +46,7 @@ public class BaseController implements Serializable {
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
         long workCasePreScreenId = 0;
+        long workCaseId = 0;
         stepId = 0;
 
         if (session.getAttribute("workCasePreScreenId") != null) {
@@ -74,6 +81,21 @@ public class BaseController implements Serializable {
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
 
+        if(session.getAttribute("workCaseId") != null){
+            try{
+            workCaseId = (Long)session.getAttribute("workCaseId");
+            } catch (ClassCastException ex){
+                log.error("Exception :", ex);
+            }
+
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if(basicInfo != null){
+                qualitativeType = basicInfo.getQualitativeType();
+            }
+            log.debug("Qualitative type : {}", qualitativeType);
+        }
+
+
         user = (User) session.getAttribute("user");
         if (user == null) {
             UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -89,6 +111,18 @@ public class BaseController implements Serializable {
             }
         }*/
 
+    }
+
+    /*public String getQualitativeType(){
+
+    }*/
+
+    public int getQualitativeType() {
+        return qualitativeType;
+    }
+
+    public void setQualitativeType(int qualitativeType) {
+        this.qualitativeType = qualitativeType;
     }
 
     public ManageButton getManageButton() {

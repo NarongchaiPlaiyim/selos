@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCreditDetailView implements Serializable {
-    private long id;
+public class ProposeCreditDetailView implements Serializable {
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -45,12 +44,11 @@ public class NewCreditDetailView implements Serializable {
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
     private int seq;
-
-
+    private int isApproved;
 
     private List<CreditTierDetailView> creditTierDetailViewList;
 
-    public NewCreditDetailView(){
+    public ProposeCreditDetailView(){
         reset();
     }
 
@@ -60,7 +58,6 @@ public class NewCreditDetailView implements Serializable {
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();
-        this.loanPurpose = new LoanPurpose();
         this.productCode = "";
         this.projectCode = "";
         this.borrowerName = "";
@@ -84,14 +81,6 @@ public class NewCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public int getSeq() {
@@ -368,12 +357,12 @@ public class NewCreditDetailView implements Serializable {
         this.suggestInterest = suggestInterest;
     }
 
-    public LoanPurpose getLoanPurpose() {
-        return loanPurpose;
+    public int getApproved() {
+        return isApproved;
     }
 
-    public void setLoanPurpose(LoanPurpose loanPurpose) {
-        this.loanPurpose = loanPurpose;
+    public void setApproved(int approved) {
+        isApproved = approved;
     }
 
     @Override
@@ -412,6 +401,7 @@ public class NewCreditDetailView implements Serializable {
                 .append("loanPurpose", loanPurpose)
                 .append("purpose", purpose)
                 .append("seq", seq)
+                .append("isApproved", isApproved)
                 .append("creditTierDetailViewList", creditTierDetailViewList)
                 .toString();
     }

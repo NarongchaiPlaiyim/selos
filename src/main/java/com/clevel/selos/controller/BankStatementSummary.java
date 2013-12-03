@@ -76,7 +76,7 @@ public class BankStatementSummary implements Serializable {
     private long workCaseId;
     private long workCasePreScreenId;
     private long stepId;
-    private String userId;
+    //private String userId;
 
     //Message Dialog
     private String messageHeader;
@@ -92,25 +92,26 @@ public class BankStatementSummary implements Serializable {
     private boolean isABDM_BDM;
     private boolean disableRefresh;
     private boolean dwhIsDown;
+    private boolean isTMB;
 
     public BankStatementSummary() {
     }
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             if (session.getAttribute("workCasePreScreenId") != null) {
                 workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             }
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            //userId = session.getAttribute("userId").toString();
             // check user (ABDM/BDM)
             isABDM_BDM = bankStmtControl.isBDMUser();
         } else {
@@ -254,7 +255,7 @@ public class BankStatementSummary implements Serializable {
         summaryView.setExpectedSubmitDate(expectedSubmitDate);
 
         try {
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
@@ -299,38 +300,48 @@ public class BankStatementSummary implements Serializable {
         }
     }
 
-
-    public void onRedirectToBankStmtDetail() {
-        log.debug("onRedirectToBankStmtDetail()");
-        FacesUtil.redirect("/site/bankStatementDetail.jsf");
-    }
-
     public void onEditTmbBankStmt() {
         log.debug("onEditTmbBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
-        passParamsToBankStmtDetail(true);
+        isTMB = true;
         onRedirectToBankStmtDetail();
     }
 
     public void onEditOthBankStmt() {
         log.debug("onEditOthBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
-        passParamsToBankStmtDetail(false);
+        isTMB = false;
         onRedirectToBankStmtDetail();
     }
 
     public void onClickAddTMBBankStmt() {
         log.debug("onClickAddTMBBankStmt()");
 //        if (!checkSelectSeasonalFlag()) return;
+        numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
+        lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+        log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
+
         if (!checkConfirmToAddBankStmt()) return;
-        passParamsToBankStmtDetail(true);
+
+        isTMB = true;
         onRedirectToBankStmtDetail();
     }
 
     public void onClickAddOtherBankStmt() {
         log.debug("onClickAddOtherBankStmt()");
 //        if (!checkSelectSeasonalFlag()) return;
+        numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
+        lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+        log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
+
         if (!checkConfirmToAddBankStmt()) return;
-        passParamsToBankStmtDetail(true);
+
+        isTMB = false;
         onRedirectToBankStmtDetail();
+    }
+
+    public void onRedirectToBankStmtDetail() {
+        log.debug("onRedirectToBankStmtDetail()");
+        passParamsToBankStmtDetail();
+        FacesUtil.redirect("/site/bankStatementDetail.jsf");
     }
 
     private boolean checkSelectSeasonalFlag() {
@@ -351,7 +362,7 @@ public class BankStatementSummary implements Serializable {
         if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
             List<BankStmtDetailView> detailViewList = summaryView.getTmbBankStmtViewList().get(0).getBankStmtDetailViewList();
             int numberOfMonthsFromTMB = detailViewList.size();
-            int numberOfMonthsFromView = bankStmtControl.getNumberOfMonthsBankStmt(summaryView.getSeasonal());
+            int numberOfMonthsFromView = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
             // Check number of months
             if (numberOfMonthsFromTMB != numberOfMonthsFromView) {
                 confirmMessageHeader = "Confirm message dialog";
@@ -363,7 +374,7 @@ public class BankStatementSummary implements Serializable {
 
             bankStmtControl.sortAsOfDateBankStmtDetails(detailViewList, SortOrder.ASCENDING);
             Date dateFromTMB = detailViewList.get(numberOfMonthsFromTMB - 1).getAsOfDate();
-            Date dateFromView = bankStmtControl.getLastMonthDateBankStmt(summaryView.getExpectedSubmitDate());
+            Date dateFromView = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
             int lastMonthTMB = DateTimeUtil.getMonthOfDate(dateFromTMB);
             int lastMonthFromView = DateTimeUtil.getMonthOfDate(dateFromView);
             int yearOfLastMonthTMB = DateTimeUtil.getYearOfDate(dateFromTMB);
@@ -381,12 +392,12 @@ public class BankStatementSummary implements Serializable {
         return true;
     }
 
-    private void passParamsToBankStmtDetail(boolean isTmbBank) {
+    private void passParamsToBankStmtDetail() {
         log.debug("passParamsToBankStmtDetail() summaryView.id: {}, seasonalFlag: {}, expectedSubmitDate: {}, isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView: {}",
-                summaryView.getId(), seasonalFlag, expectedSubmitDate, isTmbBank, lastMonthDate, numberOfMonths, selectedBankStmtView);
+                summaryView.getId(), seasonalFlag, expectedSubmitDate, isTMB, lastMonthDate, numberOfMonths, selectedBankStmtView);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bankStmtSumView", summaryView);
-        map.put("isTmbBank", isTmbBank);
+        map.put("isTmbBank", isTMB);
         map.put("lastMonthDate", lastMonthDate);
         map.put("numberOfMonths", numberOfMonths);
         map.put("selectedBankStmtView", selectedBankStmtView);

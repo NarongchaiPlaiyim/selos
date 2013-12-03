@@ -8,615 +8,599 @@
 
     <h:head>
         <title>Business Information Summary</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
+
+
     <h:body>
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="include/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="include/header_detail.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
-                <div id="content_name"><p:outputLabel value="#{msg.get('app.bizInfoSummary.header')}"/></div>
+                <div id="content_name"><h:outputText value="#{msg.get('app.bizInfoSummary.header')}"/></div>
                 <div id="content">
-                    <table id="content_form" class="content_table_form" >
-                        <colgroup>
-                            <col style="width: 150px"/>
-                            <col style="width: 150px"/>
-                            <col style="width: 80px"/>
-                            <col style="width: 120px"/>
-                            <col style="width: 400px"/>
-                        </colgroup>
+                    <div id="content_info">
+                        <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                        <div id="content_lastupdate">Last update by
+                            <h:outputText id="lastupdateName" value="#{bizInfoSummary.bizInfoSummaryView.modifyBy.userName}"/>,
+                            <h:outputText id="lastupdateTime" value="#{bizInfoSummary.bizInfoSummaryView.modifyDate}"/>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                        <table class="content_table_form">
+                            <tr>
+                                <td colspan="4" class="title" ><h:outputText value="#{msg.get('app.bizInfoSummary.label.businessLocationDetail')}"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="min-width: 180px; width: 180px; max-width: 180px;">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[saveButton.clientId]}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> :
+                                </td>
+                                <td style="min-width:120px; width: 120px; max-width: 120px;">
+                                    <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom" required="#{not empty param[saveButton.clientId]}">
+                                        <f:selectItem itemLabel="No"  itemValue="0" />
+                                        <f:selectItem itemLabel="Yes" itemValue="1" />
+                                        <p:ajax process="@this" update=":frmMain:ownerName,:frmMain:expiryDate" listener="#{bizInfoSummary.onChangeRental}"/>
+                                    </p:selectOneRadio>
+                                    <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
+                                    <h:outputLabel for="Peropt1" value="No" />
+                                </td>
+                                <td class="title" style="min-width: 160px; width: 160px; max-width: 160px;">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :
+                                </td>
+                                <td>
+                                    <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}" disabled="#{bizInfoSummary.disableOwnerName}" required="#{!bizInfoSummary.disableOwnerName}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
+                                    <h:outputLabel for="Peropt2" value="Yes" />
+                                </td>
+                                <td class="title">
+                                    <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
+                                </td>
+                                <td class="title">
+                                    <p:calendar size="10" id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate}"
+                                                value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
+                                                pattern="dd/MM/yyyy"
+                                                locale="th_TH"
+                                                timeZone="Asia/Bangkok"
+                                                yearRange="2440:3000">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </p:calendar>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title top" style="padding-top: 3px;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
+                                <td colspan="3">
+                                    <table class="table_noborder">
+                                        <tr>
+                                            <td class="left title" style="min-width: 110px; width: 110px; max-width: 110px;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
+                                            <td class="left" colspan="3">
+                                                <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[saveButton.clientId]}"/>
+                                                <p:spacer width="30px" height="5px"/>
+                                                <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
+                                                <p:spacer width="10px" height="5px"/>
+                                                <p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
+                                                <p:spacer width="30px" height="5px"/>
+                                                <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')}" styleClass="title"/> :
+                                                <p:spacer width="10px" height="5px"/>
+                                                <p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}"/> :</td>
+                                            <td class="left" colspan="5"><p:inputText styleClass="large" id="addressStreet" value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[saveButton.clientId]}"
+                                                                 id="provinceCode">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{bizInfoSummary.provinceList}"
+                                                                   var="province"
+                                                                   itemLabel="#{province.name}"
+                                                                   itemValue="#{province.code}"/>
+                                                    <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
+                                                            update=":frmMain:districtCode,:frmMain:subDistrictCode"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[saveButton.clientId]}"
+                                                                  id="districtCode">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{bizInfoSummary.districtList}"
+                                                                   var="district"
+                                                                   itemLabel="#{district.name}"
+                                                                   itemValue="#{district.id}"/>
+                                                    <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}" required="#{not empty param[saveButton.clientId]}"
+                                                                  id="subDistrictCode">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{bizInfoSummary.subDistrictList}"
+                                                                   var="subDistrict"
+                                                                   itemLabel="#{subDistrict.name}"
+                                                                   itemValue="#{subDistrict.code}"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.postCode')}"/> :</td>
+                                            <td><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" required="#{not empty param[saveButton.clientId]}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
+                                            <td colspan="3">
+                                                <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country.id}" required="#{not empty param[saveButton.clientId]}"
+                                                                  id="countryId">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{bizInfoSummary.countryList}"
+                                                                   var="country"
+                                                                   itemLabel="#{country.name}"
+                                                                   itemValue="#{country.id}"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
+                                            <td><p:inputText styleClass="medium" id="addressEng" value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
+                                <td>
+                                    <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" required="#{not empty param[saveButton.clientId]}" />
+                                </td>
+                                <td colspan="2">
+                                    <p:spacer width="10px" height="10px"></p:spacer>
+                                    <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}" styleClass="title"/>
+                                    <p:spacer width="20px" height="10px"></p:spacer>
+                                    <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <p:spacer width="2px"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <h:outputLabel class="title" value="#{msg.get('app.bizInfoSummary.label.businessPeriod')}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <h:outputLabel class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:calendar size="10" id="registrationDate" showOn="button" navigator="true"
+                                                value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
+                                                pattern="dd/MM/yyyy"
+                                                locale="th_TH"
+                                                timeZone="Asia/Bangkok"
+                                                yearRange="2440:3000">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </p:calendar>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td class="title">
+                                    <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
+                                </td>
+                                <td>
+                                    <p:calendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
+                                                value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
+                                                pattern="dd/MM/yyyy"
+                                                locale="th_TH"
+                                                timeZone="Asia/Bangkok"
+                                                yearRange="2440:3000">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                    </p:calendar>
+                                </td>
+                                <td class="title">
+                                    <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[saveButton.clientId]}"
+                                                     id="referExpId">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
+                                                       var="referExp"
+                                                       itemLabel="#{referExp.description}"
+                                                       itemValue="#{referExp.id}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><p:separator/></td>
+                            </tr>
+                            <tr>
+                                <td class="left title" colspan="4">
+                                    <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizInterviewInfo')}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="left title" colspan="4">
+                                    <table class="table_content">
+                                        <tr>
+                                            <th style="min-width: 210px; width: 210px; max-width: 210px;">
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.list')}"/>
+                                            </th>
+                                            <th>
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.amount')}"/>
+                                            </th>
+                                            <th>
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.percent')}"/>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.circulation')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:circulationAmount"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="circulationPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
+                                                    <p:ajax event="blur" update=":frmMain:circulationPercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.productionCosts')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    <p:ajax event="blur" update=":frmMain:productionCostsAmount"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="productionCostsPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
+                                                    <f:convertNumber  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.profitMargin')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:profitMarginAmount"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="profitMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:profitMarginPercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="operatingExpenseAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
+                                                    <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="operatingExpensePercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpensePercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:operatingExpensePercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.earningsBeforeTax')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="earningsBeforeTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="earningsBeforeTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:earningsBeforeTaxPercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="reduceInterestAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
+                                                    <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="reduceInterestPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:reduceInterestPercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="reduceTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
+                                                    <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="reduceTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:reduceTaxPercentage" />
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title" >
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netMargin')}"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
+                                                    <p:ajax event="blur" update=":frmMain:netMarginAmount"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="netMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginPercentage}" readonly="true">
+                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                    <p:ajax event="blur" update=":frmMain:netMarginPercentage"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left title">
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
+                                            </td>
+                                            <td class="left">
+                                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}" required="#{not empty param[saveButton.clientId]}">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    <p:ajax event="blur" update=":frmMain:netFixAsset"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left title">
+                                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
+                                            </td>
+                                            <td class="left">
+                                                <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[saveButton.clientId]}">
+                                                    <f:convertNumber pattern="#,##0" integerOnly="true"/>
+                                                    <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><p:separator/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="left">
+                                    <p:commandButton id="addBizInfoDetail"
+                                                     styleClass="small"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                        <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
+                                    </p:commandButton>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <p:dataTable id="businessInfoTable"
+                                                 var="bizInfoDetailx"
+                                                 value="#{bizInfoSummary.bizInfoDetailViewList}"
+                                                 rowKey="#{bizInfoDetail.bizComment}"
+                                                 rowIndexVar="rowIndex">
 
-                        <tr>
-                            <td class="right" colspan="5" style="padding-right: 10px;">
-                                Last update by <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.modifyBy.userName}"/> , <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.modifyDate}"/>
-                                <a style="cursor: pointer;" href="#">[View Track Change]</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><div class="separate"><!-- --></div></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="title" ><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationDetail')}"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <table style="width:100%;"  >
-                                    <colgroup>
-                                        <col style="width: 150px"/>
-                                        <col style="width: 120px"/>
-                                        <col style="width: 150px"/>
-                                        <col style="width: auto"/>
-                                    </colgroup>
-                                    <tr>
-                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
-                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[saveButton.clientId]}"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
-                                        <td>
-                                            <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom" required="#{not empty param[saveButton.clientId]}">
-                                                <f:selectItem itemLabel="No"  itemValue="0" />
-                                                <f:selectItem itemLabel="Yes" itemValue="1" />
-                                                <p:ajax process="@this" update=":frmMain:ownerName,:frmMain:expiryDate" listener="#{bizInfoSummary.onChangeRental}"/>
-                                            </p:selectOneRadio>
-                                            <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
-                                            <h:outputLabel for="Peropt1" value="NO" />
-                                        </td>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :
-                                        </td>
-                                        <td>
-                                            <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}" disabled="#{bizInfoSummary.disableOwnerName}" required="#{!bizInfoSummary.disableOwnerName}"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
-                                            <h:outputLabel for="Peropt2" value="Yes" />
-                                        </td>
-                                        <td class="title">
-                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
-                                        </td>
-                                        <td class="title">
-                                            <p:calendar size="10" id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate}"
-                                                        value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
-                                                        pattern="dd/MM/yyyy"
-                                                        locale="th_TH"
-                                                        timeZone="Asia/Bangkok"
-                                                        yearRange="2440:3000">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                            </p:calendar>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" style="vertical-align: top;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
-                                        <td colspan="3">
-                                            <table>
-                                                <colgroup>
-                                                    <col style="width: 150px"/>
-                                                    <col style="width: 100px"/>
-                                                    <col style="width: 130px"/>
-                                                    <col style="width: 250px"/>
-                                                </colgroup>
-                                                <tr>
-                                                    <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
-                                                    <td class="left title" colspan="3">
-                                                        <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[saveButton.clientId]}"/>
-                                                        <p:spacer width="30px"/>
-                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
-                                                        <p:spacer width="30px"/>
-                                                        <p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
-                                                        <p:spacer width="30px"/>
-                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')}"/> :
-                                                        <p:spacer width="30px"/>
-                                                        <p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
-                                                    </td>
+                                        <p:column headerText="" styleClass="center" style="width:25px;">
+                                            <h:outputText value="#{rowIndex+1}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizCode')}" styleClass="center" style="width: 70px;">
+                                            <h:outputText value="#{bizInfoDetailx.bizCode}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizType')}" styleClass="center" style="width: 100px;">
+                                            <h:outputText value="#{bizInfoDetailx.bizType.name}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizGroup')}" styleClass="center" style="width: 100px;">
+                                            <h:outputText value="#{bizInfoDetailx.bizGroup.name}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizDesc')}" styleClass="center" style="width: 140px;">
+                                            <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="right" style="width: 100px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="right" style="width: 100px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="right" style="width: 50px;">
+                                            <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="right" style="width: 50px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="right" style="width: 50px;">
+                                            <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
+                                            <h:outputText value="#{bizInfoDetailx.bizComment}"/>
+                                        </p:column>
+                                        <p:column headerText="" styleClass="left" style="width:100px;">
 
-                                                </tr>
-                                                <tr>
-                                                    <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}"/> :</td>
-                                                    <td class="left" colspan="5"><p:inputText styleClass="large" id="addressStreet" value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>
-                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[saveButton.clientId]}"
-                                                                         id="provinceCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                            <f:selectItems value="#{bizInfoSummary.provinceList}"
-                                                                           var="province"
-                                                                           itemLabel="#{province.name}"
-                                                                           itemValue="#{province.code}"/>
-                                                            <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
-                                                                    update=":frmMain:districtCode,:frmMain:subDistrictCode"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[saveButton.clientId]}"
-                                                                         id="districtCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                            <f:selectItems value="#{bizInfoSummary.districtList}"
-                                                                           var="district"
-                                                                           itemLabel="#{district.name}"
-                                                                           itemValue="#{district.id}"/>
-                                                            <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                    <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}" required="#{not empty param[saveButton.clientId]}"
-                                                                         id="subDistrictCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                            <f:selectItems value="#{bizInfoSummary.subDistrictList}"
-                                                                           var="subDistrict"
-                                                                           itemLabel="#{subDistrict.name}"
-                                                                           itemValue="#{subDistrict.code}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.postCode')}"/> :</td>
-                                                    <td><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" required="#{not empty param[saveButton.clientId]}"/></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
-                                                    <td colspan="3">
-                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country.id}" required="#{not empty param[saveButton.clientId]}"
-                                                                          id="countryId">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                            <f:selectItems value="#{bizInfoSummary.countryList}"
-                                                                           var="country"
-                                                                           itemLabel="#{country.name}"
-                                                                           itemValue="#{country.id}"/>
-                                                        </p:selectOneMenu>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
-                                                    <td><p:inputText styleClass="medium" id="addressEng" value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
-                                        <td>
-                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" required="#{not empty param[saveButton.clientId]}" />
-                                        </td>
-                                        <td colspan="3">
-                                            <p:spacer width="10px"></p:spacer>
-                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
-                                            <p:spacer width="20px"></p:spacer>
-                                            <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <p:spacer  width="2px"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.businessPeriod')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
-                            </td>
-                            <td colspan="4">
-                                <p:calendar size="10" id="registrationDate" showOn="button" navigator="true"
-                                            value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
-                                            pattern="dd/MM/yyyy"
-                                            locale="th_TH"
-                                            timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
-                            </td>
-                        </tr>
-                        <tr >
-                            <td class="title">
-                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
-                            </td>
-                            <td>
-                                <p:calendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
-                                            value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
-                                            pattern="dd/MM/yyyy"
-                                            locale="th_TH"
-                                            timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
-                            </td>
-                            <td class="title">
-                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
-                            </td>
-                            <td>
-                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[saveButton.clientId]}"
-                                                 id="referExpId">
-                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                    <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
-                                                   var="referExp"
-                                                   itemLabel="#{referExp.description}"
-                                                   itemValue="#{referExp.id}"/>
-                                </p:selectOneMenu>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td class="left title" colspan="5">
-                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizInterviewInfo')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="left title" colspan="5">
-                                <table class="table_content" style="padding: 0%" >
-                                    <tr>
-                                        <th>
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.list')}"/>
-                                        </th>
-                                        <th>
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.amount')}"/>
-                                        </th>
-                                        <th>
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.percent')}"/>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.circulation')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:circulationAmount"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="circulationPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:circulationPercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.productionCosts')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:productionCostsAmount"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="productionCostsPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
-                                                <f:convertNumber  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.profitMargin')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:profitMarginAmount"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="profitMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:profitMarginPercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="operatingExpenseAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="operatingExpensePercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpensePercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:operatingExpensePercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.earningsBeforeTax')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="earningsBeforeTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="earningsBeforeTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:earningsBeforeTaxPercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="reduceInterestAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="reduceInterestPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:reduceInterestPercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="reduceTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="reduceTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:reduceTaxPercentage" />
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title" >
-                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netMargin')}"/>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:netMarginAmount"/>
-                                            </p:inputText>
-                                        </td>
-                                        <td>
-                                            <p:inputText id="netMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:netMarginPercentage"/>
-                                            </p:inputText>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
+                                            <p:commandButton icon="ui-icon-pencil"
+                                                             title="Edit" process="@this"
+                                                             oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                                <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                                <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
+                                            </p:commandButton>
 
-                        <tr>
-                            <td class="left title">
-                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
-                            </td>
-                            <td class="left">
-                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}" required="#{not empty param[saveButton.clientId]}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                                    <p:ajax event="blur" update=":frmMain:netFixAsset"/>
-                                </p:inputText>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="left title">
-                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
-                            </td>
-                            <td class="left">
-                                <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[saveButton.clientId]}">
-                                    <f:convertNumber pattern="#,##0" integerOnly="true"/>
-                                    <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
-                                </p:inputText>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="left">
-                                <p:commandButton id="addBizInfoDetail" styleClass="medium" value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
-                                    <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
-                                </p:commandButton>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%"><p:spacer width="2"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" align="center">
-                                <p:dataTable id="businessInfoTable"
-                                             var="bizInfoDetailx"
-                                             value="#{bizInfoSummary.bizInfoDetailViewList}"
-                                             rowKey="#{bizInfoDetail.bizComment}"
-                                             rowIndexVar="rowIndex">
+                                            <p:commandButton icon="ui-icon-trash"          rendered="#{rowIndex!=0}"
+                                                             title="Remove" process="@this"
+                                                             oncomplete="confirmDeleteBizInfoDetailDlg.show();" >
+                                                <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                            </p:commandButton>
+                                        </p:column>
 
-                                    <p:column headerText="" styleClass="center" style="width:25px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizCode')}" styleClass="center" style="width: 70px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizCode}"/>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizType')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizType.name}"/>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizGroup')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizGroup.name}"/>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizDesc')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="right" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="right" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
-                                    </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizComment}"/>
-                                    </p:column>
-                                    <p:column headerText="" styleClass="left" style="width:100px;">
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="5" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumIncomeAmount')}"
+                                                          style="background-color:#f4f8b6; text-align:left;"/>
 
-                                        <p:commandButton icon="ui-icon-pencil"
-                                                         title="Edit" process="@this"
-                                                         oncomplete="confirmAddBizInfoDetailDlg.show()" >
-                                            <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
-                                            <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
-                                        </p:commandButton>
+                                                <p:column footerText="#{bizInfoSummary.sumIncomeAmountDis}"
+                                                          style="background-color:#f4f8b6; text-align:right;"/>
 
-                                        <p:commandButton icon="ui-icon-trash"          rendered="#{rowIndex!=0}"
-                                                         title="Remove" process="@this"
-                                                         oncomplete="confirmDeleteBizInfoDetailDlg.show();" >
-                                            <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
-                                        </p:commandButton>
-                                    </p:column>
+                                                <p:column footerText="#{bizInfoSummary.sumIncomePercent}"
+                                                          style="background-color:#f4f8b6; text-align:right;"/>
 
-                                    <p:columnGroup type="footer">
-                                        <p:row>
-                                            <p:column colspan="5" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumIncomeAmount')}"
-                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                                <p:column style="background-color:#f4f8b6;" colspan="7" />
+                                            </p:row>
+                                            <p:row>
+                                                <p:column colspan="7" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumWeight')}"
+                                                            style="background-color:#f8d0b6;; text-align:left;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumIncomeAmountDis}"
-                                                      style="background-color:#f4f8b6; text-align:right;"/>
+                                                <p:column footerText="-"
+                                                          style="background-color:#f8d0b6; text-align:right;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumIncomePercent}"
-                                                      style="background-color:#f4f8b6; text-align:right;"/>
+                                                <p:column footerText="#{bizInfoSummary.sumWeightIntvIncomeFactor}"
+                                                          style="background-color:#f8d0b6; text-align:right;">
+                                                </p:column>
 
-                                            <p:column style="background-color:#f4f8b6;" colspan="7" />
-                                        </p:row>
-                                        <p:row>
-                                            <p:column colspan="7" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumWeight')}"
-                                                        style="background-color:#f8d0b6;; text-align:left;"/>
+                                                <p:column footerText="#{bizInfoSummary.sumWeightAR}"
+                                                          style="background-color:#f8d0b6; text-align:right;"/>
 
-                                            <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                                <p:column footerText="#{bizInfoSummary.sumWeightAP}"
+                                                          style="background-color:#f8d0b6; text-align:right;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightIntvIncomeFactor}"
-                                                      style="background-color:#f8d0b6; text-align:right;">
-                                            </p:column>
+                                                <p:column footerText="#{bizInfoSummary.sumWeightINV}"
+                                                          style="background-color:#f8d0b6; text-align:right;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightAR}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                                <p:column footerText="-"
+                                                          style="background-color:#f8d0b6; text-align:center;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightAP}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                                <p:column style="background-color:#f8d0b6;"/>
+                                            </p:row>
+                                        </p:columnGroup>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightINV}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><p:separator/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><p:spacer width="2px"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="center">
+                                    <p:commandButton id="btnAddBizInfoSummary"
+                                                     styleClass="small"
+                                                     binding="#{saveButton}"
+                                                     value="#{msg.get('app.button.save')}"
+                                                     process=":frmMain"
+                                                     actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
+                                                     update=":msgBoxSystemMessagePanel,:frmMain"
+                                                     oncomplete="document.location.replace('bizInfoSummary.jsf')" />
 
-                                            <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:center;"/>
-
-                                            <p:column style="background-color:#f8d0b6;"/>
-                                        </p:row>
-                                    </p:columnGroup>
-
-                                </p:dataTable>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><p:spacer width="2px"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="center">
-                                <p:commandButton id="btnAddBizInfoSummary"
-                                                 binding="#{saveButton}"
-                                                 value="#{msg.get('app.button.save')}"
-                                                 process=":frmMain"
-                                                 actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
-                                                 update=":msgBoxSystemMessagePanel,:frmMain"
-                                                 oncomplete="document.location.replace('bizInfoSummary.jsf')" />
-
-                                <p:commandButton  value="#{msg.get('app.button.cancel')}" onclick="document.location.replace('bizInfoSummary.jsf')"/>
-                            </td>
-                        </tr>
-                    </table>
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                                     styleClass="small"
+                                                     onclick="document.location.replace('bizInfoSummary.jsf')"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="bottom_line"></div>
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
         </div>
         </h:form>

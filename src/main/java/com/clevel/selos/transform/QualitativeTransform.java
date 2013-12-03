@@ -6,9 +6,7 @@ import com.clevel.selos.model.db.working.QualitativeB;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
 
-import javax.inject.Inject;
 import java.util.Date;
 
 

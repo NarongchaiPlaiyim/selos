@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -108,8 +110,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private AddressView workAddress;
     private AddressView registerAddress;
 
-    //*** Var for Children ***//
-    private List<ChildrenView> childrenList;
+    /*/*//*** Var for Children ***//*/
+    private List<ChildrenView> childrenList;*/
 
     private CustomerInfoView spouse;
 
@@ -171,7 +173,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.occupation = new Occupation();
         this.maritalStatus = new MaritalStatus();
         this.numberOfChild = 0;
-        this.childrenList = new ArrayList<ChildrenView>();
+        //this.childrenList = new ArrayList<ChildrenView>();
         this.citizenCountry = new Country();
         this.registrationCountry = new Country();
         this.currentAddress = new AddressView();
@@ -628,13 +630,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public List<ChildrenView> getChildrenList() {
+    /*public List<ChildrenView> getChildrenList() {
         return childrenList;
     }
 
     public void setChildrenList(List<ChildrenView> childrenList) {
         this.childrenList = childrenList;
-    }
+    }*/
 
     public Country getCitizenCountry() {
         return citizenCountry;
@@ -977,5 +979,84 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setNoPendingClaimLG(int noPendingClaimLG) {
         this.noPendingClaimLG = noPendingClaimLG;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("individualId", individualId)
+                .append("juristicId", juristicId)
+                .append("listIndex", listIndex)
+                .append("subIndex", subIndex)
+                .append("listName", listName)
+                .append("isSpouse", isSpouse)
+                .append("searchBy", searchBy)
+                .append("searchId", searchId)
+                .append("searchFromRM", searchFromRM)
+                .append("inputId", inputId)
+                .append("validId", validId)
+                .append("ncbResult", ncbResult)
+                .append("ncbReason", ncbReason)
+                .append("csiResult", csiResult)
+                .append("csiReason", csiReason)
+                .append("csiFlag", csiFlag)
+                .append("id", id)
+                .append("age", age)
+                .append("documentExpiredDate", documentExpiredDate)
+                .append("titleTh", titleTh)
+                .append("titleEn", titleEn)
+                .append("firstNameTh", firstNameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("firstNameEn", firstNameEn)
+                .append("lastNameEn", lastNameEn)
+                .append("ncbFlag", ncbFlag)
+                .append("customerEntity", customerEntity)
+                .append("documentType", documentType)
+                .append("relation", relation)
+                .append("reference", reference)
+                .append("documentAuthorizeBy", documentAuthorizeBy)
+                .append("serviceSegment", serviceSegment)
+                .append("tmbCustomerId", tmbCustomerId)
+                .append("collateralOwner", collateralOwner)
+                .append("percentShare", percentShare)
+                .append("approxIncome", approxIncome)
+                .append("dateOfBirth", dateOfBirth)
+                .append("citizenId", citizenId)
+                .append("passportId", passportId)
+                .append("gender", gender)
+                .append("numberOfChild", numberOfChild)
+                .append("education", education)
+                .append("maritalStatus", maritalStatus)
+                .append("nationality", nationality)
+                .append("sndNationality", sndNationality)
+                .append("origin", origin)
+                .append("occupation", occupation)
+                .append("capital", capital)
+                .append("financialYear", financialYear)
+                .append("dateOfRegister", dateOfRegister)
+                .append("paidCapital", paidCapital)
+                .append("registrationId", registrationId)
+                .append("signCondition", signCondition)
+                .append("totalShare", totalShare)
+                .append("currentAddress", currentAddress)
+                .append("workAddress", workAddress)
+                .append("registerAddress", registerAddress)
+                .append("mailingAddressType", mailingAddressType)
+                //.append("childrenList", childrenList)
+                .append("citizenCountry", citizenCountry)
+                .append("registrationCountry", registrationCountry)
+                .append("mobileNumber", mobileNumber)
+                .append("faxNumber", faxNumber)
+                .append("email", email)
+                .append("kycLevel", kycLevel)
+                .append("convenantFlag", convenantFlag)
+                .append("reviewFlag", reviewFlag)
+                .append("reason", reason)
+                .append("businessType", businessType)
+                .append("spouse", spouse)
+                .append("documentAuthorizeDate", documentAuthorizeDate)
+                .append("kycReason", kycReason)
+                .append("worthiness", worthiness)
+                .toString();
     }
 }

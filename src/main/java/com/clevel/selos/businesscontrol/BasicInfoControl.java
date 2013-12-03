@@ -27,13 +27,13 @@ public class BasicInfoControl extends BusinessControl {
     @SELOS
     Logger log;
     @Inject
+    private UserDAO userDAO;
+    @Inject
     BasicInfoDAO basicInfoDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     OpenAccountDAO openAccountDAO;
     @Inject
@@ -47,6 +47,11 @@ public class BasicInfoControl extends BusinessControl {
     BasicInfoAccountTransform basicInfoAccountTransform;
     @Inject
     BasicInfoAccPurposeTransform basicInfoAccPurposeTransform;
+
+    @Inject
+    public BasicInfoControl(){
+
+    }
 
     public BasicInfoView getBasicInfo(long workCaseId) {
         log.info("getBasicInfo ::: workCaseId : {}", workCaseId);
@@ -82,7 +87,9 @@ public class BasicInfoControl extends BusinessControl {
         return customerEntity;
     }
 
-    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId, User user) {
+    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId) {
+        User user = getCurrentUser();
+
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         if (basicInfoView.getQualitative() == 0) {

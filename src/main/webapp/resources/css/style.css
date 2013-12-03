@@ -62,6 +62,10 @@ a {
     text-decoration: none;
 }
 
+label {
+    font-size: 12px!important;
+}
+
 h1 {
     font-size: 12px;
     font-weight: bold;
@@ -101,6 +105,15 @@ textarea {
     min-height: 100%;
     display: table;
     background: url('../images/shared/content_bg.jpg');
+}
+
+#main_container_login {
+    position: relative;
+    min-width: 980px;
+    width: 100%;
+    min-height: 100%;
+    display: table;
+    background: url('../images/login/login_backgrd.jpg');
 }
 
 #pnl_maincontainer {
@@ -212,11 +225,82 @@ textarea {
 }
 
 #content_container {
-    display: table-row;
+    /*display: table-row;
     min-height: 400px;
-    border: 1px solid;
-    padding: 0 5px 0 5px;
+    border: 1px solid;*/
+    min-height: 100%;
+    padding-bottom: 240px;
+    /*padding: 0 5px 0 5px;*/
     background: url('../images/shared/content_bg.jpg');
+}
+#content_container_login {
+    min-height: 100%;
+    padding-bottom: 210px;
+    background: url('../images/login/login_backgrd.jpg');
+}
+#pnl_maincontainer{
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+}
+
+#pnl_maincontainer_content{
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+}
+
+#frmMain{
+
+}
+
+#login_box{
+    position: absolute;
+    width: 700px;
+    top: 50%;
+    left: 50%;
+    margin: -180px 0 0 -350px;
+}
+
+.login-inp {
+    background: url(../images/login/inp_login.jpg) no-repeat;
+    border: none!important;
+    color: #000!important;
+    /*font-size: 18px!important;*/
+    font-weight: bold!important;
+    height: 28px;
+    /*padding: 6px 6px 0 10px;*/
+    width: 204px;
+}
+.login-button {
+    /* background: url(../images/login/submit_login.gif) no-repeat; */
+    background: url(../images/login/login_btn_nor.jpg) no-repeat;
+    border: none;
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    text-indent: -3000px;
+    font-size:0;
+    line-height:0;
+    overflow: hidden;
+    width: 125px;
+
+}
+
+.login-button:hover {
+    /* background: url(../images/login/submit_login.gif) no-repeat; */
+    background: url(../images/login/login_btn_hover.jpg) no-repeat;
+    border: none;
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    text-indent: -3000px;
+    font-size:0;
+    line-height:0;
+    overflow: hidden;
+    width: 125px;
+    margin-right: 4px!important;
+
 }
 
 #content_name {
@@ -306,6 +390,13 @@ textarea {
 }*/
 
 #footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height: 210px;
+}
+
+#footer_container {
     min-height: 180px;
     height: 180px;
     background: #202932;
@@ -605,6 +696,12 @@ td .cell_spacer {
 
 .calendar_right input {
     text-align: right;
+}
+
+tfoot {
+    background-color: #ffffff;
+    height: 28px;
+    border-color: #aaaaaa;
 }
 
 /** Overide Primeface Theme **/

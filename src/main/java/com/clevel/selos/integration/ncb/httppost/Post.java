@@ -93,6 +93,7 @@ public class Post implements Serializable {
         } else {
             String reason = catchStatus(resCode);
             log.error("The request has failed, Error code is {} = {}", resCode, reason);
+//            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode + " = " + reason), exception, exceptionMessage.get(exception, "" + resCode+" = "+ reason));
             throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode + " = " + reason), connectError, exceptionMessage.get(connectError));
         }
     }
@@ -142,5 +143,4 @@ public class Post implements Serializable {
             default : return "";
         }
     }
-
 }

@@ -7,6 +7,9 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.tool.DBContext;
 import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -40,6 +43,10 @@ public class DBExecute implements Serializable {
 
     @Inject
     DBContext dbContext;
+
+    @Inject
+    @ExceptionMessage
+    Message msg;
 
     Connection conn = null;
     transient ResultSet rs = null;
@@ -106,6 +113,7 @@ public class DBExecute implements Serializable {
             log.debug("connection closed.");
         } catch(SQLException e) {
             log.error("execute query exception!", e);
+            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_GETDATA_ERROR, msg.get(ExceptionMapping.RLOS_CSI_GETDATA_ERROR));
         } finally {
             closeConnection();
         }
@@ -166,6 +174,7 @@ public class DBExecute implements Serializable {
             log.debug("connection closed.");
         } catch (SQLException e) {
             log.error("execute query exception!", e);
+            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_GETDATA_ERROR, msg.get(ExceptionMapping.RLOS_CSI_GETDATA_ERROR));
         } finally {
             closeConnection();
         }

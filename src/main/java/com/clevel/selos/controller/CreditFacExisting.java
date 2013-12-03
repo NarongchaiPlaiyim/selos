@@ -148,7 +148,7 @@ public class CreditFacExisting implements Serializable {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
                 Customer customer = new Customer();
-                customer.setNameTh("‡∏≠‡∏≤‡∏£‡∏¥‡∏¢‡∏≤ ‡πÄ‡∏≠ ‡∏Æ‡∏≤‡πÄ‡∏Å‡πâ‡∏ï");
+                customer.setNameTh("Õ“√‘¬“ ‡Õ Œ“‡°Èµ");
 
                 guarantorList.add(customer);
 
@@ -162,6 +162,9 @@ public class CreditFacExisting implements Serializable {
             relatedExistingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
             existingCreditView = new ExistingCreditView();
+            existingCreditView.setBorrowerComExistingCredit(borrowerExistingCreditDetailViewList);
+            existingCreditView.setRelatedComExistingCredit(relatedExistingCreditDetailViewList);
+
             existingCreditDetailView = new ExistingCreditDetailView();
             existAccountStatus = new AccountStatus();
             existProductProgram = new ProductProgram();
@@ -533,7 +536,7 @@ public class CreditFacExisting implements Serializable {
         log.info("onAddCommercialCredit ::: modeForButton : {}", modeForButton);
     }
 
-    public void onSaveExistingCollateral() {
+    public void onSaveExistingCollateral(){
         log.info("onSaveExistingCollateral ::: mode : {}", modeForButton);
         boolean complete = false;
         ExistingCreditDetailView existingCreditDetailViewNoFlag;
@@ -666,6 +669,28 @@ public class CreditFacExisting implements Serializable {
 
     }
 
+    public void onDeleteExistingCollateral(){
+        log.info("onDeleteExistingCollateral begin");
+        ExistingCollateralDetailView borrowerCollateralDetailViewDel = borrowerExistingCollateralDetailViewList.get(rowIndex);
+
+        for (int l=0;l<hashBorrower.size();l++){
+            log.info("before hashBorrower seq :  "+ l + " use is   " +hashBorrower.get(l).toString());
+        }
+        log.info("getCreditFacilityList().size() " + borrowerCollateralDetailViewDel.getCreditFacilityList().size());
+
+        for(int j=0;j<borrowerCollateralDetailViewDel.getCreditFacilityList().size();j++){
+            if(Integer.parseInt(hashBorrower.get(j).toString())>0){
+                hashBorrower.put( borrowerCollateralDetailViewDel.getCreditFacilityList().get(j).getSeq(),Integer.parseInt(hashBorrower.get(j).toString()) -1);
+            }
+        }
+
+        borrowerExistingCollateralDetailViewList.remove(borrowerCollateralDetailViewDel);
+
+        for (int l=0;l<hashBorrower.size();l++){
+            log.info("after hashBorrower seq :  "+ l + " use is   " +hashBorrower.get(l).toString());
+        }
+
+    }
 
     //Start Condition Information //
     public void onAddExistingGuarantor() {

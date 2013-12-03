@@ -4,18 +4,20 @@ import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
-import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.AccountStatusTransform;
+import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import org.joda.time.DateTime;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
@@ -32,8 +34,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @ViewScoped
@@ -102,7 +102,7 @@ public class BankStatementDetail implements Serializable {
     //Session
     private long workCaseId;
     private long stepId;
-    private String userId;
+    //private String userId;
 
     private boolean bankAccTypeSelectRequired;
 
@@ -118,16 +118,16 @@ public class BankStatementDetail implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
+        /*HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCaseId", new Long(2));
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            //userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -266,7 +266,7 @@ public class BankStatementDetail implements Serializable {
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
 
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
@@ -285,18 +285,15 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        // todo: onCancel()
-        //initViewFormAndSelectItems();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
     }
 
     private void checkRequiredBankAccTypeSelected() {
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
-        if (bankAccTypeId == 0 && otherAccType == 0)
-            bankAccTypeSelectRequired = true;
-        else
-            bankAccTypeSelectRequired = false;
+        bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
     }
 
     public void onChangeBankAccTypeSelected() {

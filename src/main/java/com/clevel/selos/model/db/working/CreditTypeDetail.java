@@ -65,11 +65,11 @@ public class CreditTypeDetail  implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "propose_collateral_detail_id")
-    private ProposeCollateralDetail proposeCollateralDetail;
+    private NewCollateralDetail newCollateralDetail;
 
     @ManyToOne
     @JoinColumn(name = "propose_guarantor_detail_id")
-    private  ProposeGuarantorDetail proposeGuarantorDetail;
+    private NewGuarantorDetail newGuarantorDetail;
 
 
 
@@ -193,20 +193,20 @@ public class CreditTypeDetail  implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ProposeCollateralDetail getProposeCollateralDetail() {
-        return proposeCollateralDetail;
+    public NewCollateralDetail getNewCollateralDetail() {
+        return newCollateralDetail;
     }
 
-    public void setProposeCollateralDetail(ProposeCollateralDetail proposeCollateralDetail) {
-        this.proposeCollateralDetail = proposeCollateralDetail;
+    public void setNewCollateralDetail(NewCollateralDetail newCollateralDetail) {
+        this.newCollateralDetail = newCollateralDetail;
     }
 
-    public ProposeGuarantorDetail getProposeGuarantorDetail() {
-        return proposeGuarantorDetail;
+    public NewGuarantorDetail getNewGuarantorDetail() {
+        return newGuarantorDetail;
     }
 
-    public void setProposeGuarantorDetail(ProposeGuarantorDetail proposeGuarantorDetail) {
-        this.proposeGuarantorDetail = proposeGuarantorDetail;
+    public void setNewGuarantorDetail(NewGuarantorDetail newGuarantorDetail) {
+        this.newGuarantorDetail = newGuarantorDetail;
     }
 
 

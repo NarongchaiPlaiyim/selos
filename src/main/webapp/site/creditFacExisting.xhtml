@@ -99,7 +99,7 @@
                                             </tr>
                                             </thead>
                                             <tbody class="ui-datatable-data ui-widget-content">
-                                            <ui:repeat var="borrowerCredit" value="#{creditFacExisting.borrowerExistingCreditDetailViewList}" varStatus="i">
+                                            <ui:repeat var="borrowerCredit" value="#{creditFacExisting.existingCreditView.borrowerComExistingCredit}" varStatus="i">
                                                 <tr>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.creditTierDetailViewList and fn:length(borrowerCredit.creditTierDetailViewList) gt 0 ?
@@ -313,58 +313,8 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                           <p:dataTable id="dtRetailCredit" var="itemRetailCredit" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRetailProcessBorrower" var="borrowerRetailCredit" value="#{creditFacExisting.existingCreditView.borrowerRetailExistingCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
-                                                    <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.retailCredit')}" />
-                                                    </p:row>
-
-                                                    <p:row>
-                                                        <p:column headerText="" styleClass="center"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
-                                                    </p:row>
-
-                                                    <!--Data dtRetailCredit-->
-
-                                                </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
-                                                </p:column>
-
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
-                                                        <p:column>
-                                                            <f:facet name="footer">
-                                                                <p:outputLabel value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </p:outputLabel>
-                                                            </f:facet>
-                                                        </p:column>
-                                                        <p:column colspan="4"/>
-                                                    </p:row>
-                                                </p:columnGroup>
-                                           </p:dataTable>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td/>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p:dataTable id="dtRlosProcess" var="itemRlosProcess" value="" paginator="false" rowIndexVar="rowIndex">
-                                            <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
                                                     </p:row>
@@ -382,21 +332,133 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
                                                     </p:row>
 
-                                                    <!--Data dtRlosProcess-->
-
+                                                    <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountNo}" />  <p:outputLabel value="#{borrowerRetailCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountNumber}"/> Suff <p:outputLabel value="#{borrowerRetailCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRetailCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerRetailLimit}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </p:outputLabel>
+                                                            </f:facet>
+                                                        </p:column>
+                                                        <p:column colspan="4"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p:dataTable id="dtRlosProcessBorrower" var="borrowerRLOSCredit" value="#{creditFacExisting.existingCreditView.borrowerAppInRLOSCredit}" paginator="false" rowIndexVar="rowIndex">
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
+                                                    </p:row>
+
+                                                    <p:row>
+                                                        <p:column headerText="" styleClass="center"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
+                                                    </p:row>
+
+                                                    <!--Data dtCommercialCreditborrowerPerson-->
+                                                </p:columnGroup>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountNo}" />  <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountNumber}"/> Suff <p:outputLabel value="#{borrowerRLOSCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.tenor}" /><br/>
+                                                </p:column>
+                                                <p:columnGroup type="footer">
+                                                    <p:row>
+                                                        <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
+                                                        <p:column>
+                                                            <f:facet name="footer">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerAppInRLOSLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -506,7 +568,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody class="ui-datatable-data ui-widget-content">
-                                                        <ui:repeat var="relatedCredit" value="#{creditFacExisting.relatedExistingCreditDetailViewList}" varStatus="i">
+                                                        <ui:repeat var="relatedCredit" value="#{creditFacExisting.existingCreditView.relatedComExistingCredit}" varStatus="i">
                                                             <tr>
                                                                 <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.creditTierDetailViewList and fn:length(relatedCredit.creditTierDetailViewList) gt 0 ?
@@ -658,10 +720,10 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable id="dtRetailCreditRelatedPerson" var="itemCommercialCreditRelatedPerson" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRetailProcessRelated" var="relatedRetailCredit" value="#{creditFacExisting.existingCreditView.relatedRetailExistingCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
-                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.retailCredit')}" />
+                                                        <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
                                                     </p:row>
 
                                                     <p:row>
@@ -677,21 +739,52 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}"/>
                                                     </p:row>
 
-                                                    <!--Data dtCommercialCreditRelatedPerson-->
-
+                                                    <!--Data dtCommercialCreditrelatedPerson-->
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountNo}" />  <p:outputLabel value="#{relatedRetailCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountNumber}"/> Suff <p:outputLabel value="#{relatedRetailCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRetailCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalRelatedRetailLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -705,7 +798,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable id="dtRlosProcessRelatedPerson" var="itemRlosProcessRelatedPerson" value="" paginator="false" rowIndexVar="rowIndex">
+                                            <p:dataTable id="dtRlosProcessRelatedPerson" var="relatedRLOSCredit" value="#{creditFacExisting.existingCreditView.relatedAppInRLOSCredit}" paginator="false" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column colspan="11" headerText="#{msg.get('app.credit.facility.existing.tb.label.rlosProcess')}" />
@@ -725,20 +818,51 @@
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditRelatedPerson-->
-
                                                 </p:columnGroup>
-                                                <p:column headerText="" styleClass="center">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil" >
-                                                    </p:commandButton>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountName}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountNo}" />  <p:outputLabel value="#{relatedRLOSCredit.accountSuf}" />
                                                 </p:column>
 
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountName}"/><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountNumber}"/> Suff <p:outputLabel value="#{relatedRLOSCredit.accountSuf}"/><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.accountStatus}" />
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.productProgram}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.creditType}"></p:outputLabel>
+                                                </p:column>
+
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.productCode}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.projectCode}" />
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.limit}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.outstanding}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" /><br/>
+                                                </p:column>
+                                                <p:column headerText="">
+                                                    <p:outputLabel value="#{relatedRLOSCredit.tenor}" /><br/>
+                                                </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
                                                         <p:column>
                                                             <f:facet name="footer">
-                                                                <p:outputLabel value="">
+                                                                <p:outputLabel value="#{creditFacExisting.existingCreditView.totalBorrowerAppInRLOSLimit}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </p:outputLabel>
@@ -937,9 +1061,9 @@
                                                     <p:commandButton title="Remove" process="@this"
                                                                      icon="ui-icon-trash"
                                                                      update=":frmMain"
-                                                                     actionListener="#{creditFacExisting.onDeleteCommercialCredit()}" >
+                                                                     actionListener="#{creditFacExisting.onDeleteExistingCollateral()}" >
                                                         <f:setPropertyActionListener value="borrower"  target="#{creditFacExisting.typeOfList}" />
-                                                        <f:setPropertyActionListener value="#{borrowerCredit}"
+                                                        <f:setPropertyActionListener value="#{borrowerCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
                                                         <f:setPropertyActionListener value="#{rowIndex}"
                                                                                      target="#{creditFacExisting.rowIndex}"/>
@@ -1228,11 +1352,11 @@
                              </div>
                          </div>
                     </div>
-                    <div id="bottom_line" />
+                    <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                    <!-- End Footer -->
                 </div>
-                <div class="clear"/>
-            <!-- Start Footer -->
-            <ui:include src="include/footer.xhtml"/>
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </h:form>

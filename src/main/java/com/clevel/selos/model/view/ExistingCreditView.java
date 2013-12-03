@@ -25,7 +25,11 @@ public class ExistingCreditView implements Serializable {
     private BigDecimal totalAppraisalValue;
     private BigDecimal totalMortgageValue;
     private BigDecimal totalGuaranteeAmount;
-
+    /* Total for Decision */
+    private BigDecimal totalBorrowerAppraisalValue;
+    private BigDecimal totalBorrowerMortgageValue;
+    private BigDecimal totalRelatedAppraisalValue;
+    private BigDecimal totalRelatedMortgageValue;
 
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
@@ -34,6 +38,9 @@ public class ExistingCreditView implements Serializable {
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
     private List<ExistingCollateralDetailView> existingCollateralDetailViewList;
+    /* Collateral list for Decision */
+    private List<ExistingCollateralDetailView> borrowerCollateralList;
+    private List<ExistingCollateralDetailView> relatedCollateralList;
 
     public long getId() {
         return id;
@@ -155,6 +162,38 @@ public class ExistingCreditView implements Serializable {
         this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 
+    public BigDecimal getTotalBorrowerAppraisalValue() {
+        return totalBorrowerAppraisalValue;
+    }
+
+    public void setTotalBorrowerAppraisalValue(BigDecimal totalBorrowerAppraisalValue) {
+        this.totalBorrowerAppraisalValue = totalBorrowerAppraisalValue;
+    }
+
+    public BigDecimal getTotalBorrowerMortgageValue() {
+        return totalBorrowerMortgageValue;
+    }
+
+    public void setTotalBorrowerMortgageValue(BigDecimal totalBorrowerMortgageValue) {
+        this.totalBorrowerMortgageValue = totalBorrowerMortgageValue;
+    }
+
+    public BigDecimal getTotalRelatedAppraisalValue() {
+        return totalRelatedAppraisalValue;
+    }
+
+    public void setTotalRelatedAppraisalValue(BigDecimal totalRelatedAppraisalValue) {
+        this.totalRelatedAppraisalValue = totalRelatedAppraisalValue;
+    }
+
+    public BigDecimal getTotalRelatedMortgageValue() {
+        return totalRelatedMortgageValue;
+    }
+
+    public void setTotalRelatedMortgageValue(BigDecimal totalRelatedMortgageValue) {
+        this.totalRelatedMortgageValue = totalRelatedMortgageValue;
+    }
+
     public List<ExistingCreditDetailView> getBorrowerComExistingCredit() {
         return borrowerComExistingCredit;
     }
@@ -211,6 +250,22 @@ public class ExistingCreditView implements Serializable {
         this.existingCollateralDetailViewList = existingCollateralDetailViewList;
     }
 
+    public List<ExistingCollateralDetailView> getBorrowerCollateralList() {
+        return borrowerCollateralList;
+    }
+
+    public void setBorrowerCollateralList(List<ExistingCollateralDetailView> borrowerCollateralList) {
+        this.borrowerCollateralList = borrowerCollateralList;
+    }
+
+    public List<ExistingCollateralDetailView> getRelatedCollateralList() {
+        return relatedCollateralList;
+    }
+
+    public void setRelatedCollateralList(List<ExistingCollateralDetailView> relatedCollateralList) {
+        this.relatedCollateralList = relatedCollateralList;
+    }
+
     public List<ActionStatusView> getStatus() {
         return status;
     }
@@ -223,6 +278,9 @@ public class ExistingCreditView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("status", status)
+                .append("id", id)
+                .append("workcasePrescreenId", workcasePrescreenId)
+                .append("getWorkcaseFullAppId", getWorkcaseFullAppId)
                 .append("totalBorrowerComLimit", totalBorrowerComLimit)
                 .append("totalBorrowerRetailLimit", totalBorrowerRetailLimit)
                 .append("totalBorrowerAppInRLOSLimit", totalBorrowerAppInRLOSLimit)
@@ -232,12 +290,18 @@ public class ExistingCreditView implements Serializable {
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)
+                .append("totalAppraisalValue", totalAppraisalValue)
+                .append("totalMortgageValue", totalMortgageValue)
+                .append("totalGuaranteeAmount", totalGuaranteeAmount)
                 .append("borrowerComExistingCredit", borrowerComExistingCredit)
                 .append("borrowerRetailExistingCredit", borrowerRetailExistingCredit)
                 .append("borrowerAppInRLOSCredit", borrowerAppInRLOSCredit)
                 .append("relatedComExistingCredit", relatedComExistingCredit)
                 .append("relatedRetailExistingCredit", relatedRetailExistingCredit)
                 .append("relatedAppInRLOSCredit", relatedAppInRLOSCredit)
+                .append("existingCollateralDetailViewList", existingCollateralDetailViewList)
+                .append("borrowerCollateralList", borrowerCollateralList)
+                .append("relatedCollateralList", relatedCollateralList)
                 .toString();
     }
 }
