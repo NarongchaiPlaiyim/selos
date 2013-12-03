@@ -12,7 +12,7 @@ test2
 
 - Create Table [WRK_CHILDREN]
     CREATE TABLE SLOS.WRK_CHILDREN
-    (
+    (333
       ID           NUMBER(19)                       NOT NULL,
       CUSTOMER_ID  NUMBER(19)                       NOT NULL,
       TITLE_ID     NUMBER(10)                       NOT NULL,
