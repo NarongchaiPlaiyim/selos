@@ -10,7 +10,7 @@ import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
-import com.clevel.selos.model.db.working.ProposeCollateralDetail;
+import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.view.NewCollateralHeadDetailView;
 import com.clevel.selos.model.view.NewCollateralInfoView;
 import com.clevel.selos.model.view.NewSubCollateralDetailView;
@@ -136,7 +136,7 @@ public class NewCollateralInfoTransform extends Transform {
         return newSubCollateralDetailView;
     }
 
-    public List<ProposeCollateralDetail> transformsToModel() {
+    public List<NewCollateralDetail> transformsToModel() {
 
        return null;
     }

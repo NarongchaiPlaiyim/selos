@@ -5,10 +5,12 @@ import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CreditFacProposeView;
 import com.clevel.selos.transform.*;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,6 +18,10 @@ import java.util.List;
 
 @Stateless
 public class CreditFacProposeControl extends BusinessControl {
+    @SELOS
+    @Inject
+    Logger log;
+
     @Inject
     CustomerTransform customerTransform;
     @Inject
@@ -64,11 +70,11 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("onSaveNewCreditFacility begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        CreditFacilityPropose creditFacilityPropose = newCreditFacilityTransform.transformToModelDB(creditFacProposeView,workCase,user);
+        NewCreditFacility creditFacilityPropose = newCreditFacilityTransform.transformToModelDB(creditFacProposeView,workCase,user);
        // creditFacilityProposeDAO.persist(creditFacilityPropose);      because N'KO created dao of newCreditFacility
 
 
-        List<ProposeFeeDetail> proposeFeeDetailList = newFeeDetailTransform.transformToModel(creditFacProposeView.getNewFeeDetailViewList(),creditFacilityPropose);
+        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(creditFacProposeView.getNewFeeDetailViewList(),creditFacilityPropose);
    /*     List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel();
         List<ProposeCollateralDetail> proposeCollateralDetailList = newCollateralInfoTransform.transformsToModel();
         List<ProposeGuarantorDetail>  proposeGuarantorDetailList = newGuarantorDetailTransform.transformToModel();

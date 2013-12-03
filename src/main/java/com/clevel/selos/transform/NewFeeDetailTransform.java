@@ -1,7 +1,7 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.working.CreditFacilityPropose;
-import com.clevel.selos.model.db.working.ProposeFeeDetail;
+import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.NewFeeDetail;
 import com.clevel.selos.model.view.NewFeeDetailView;
 
 import javax.inject.Inject;
@@ -14,44 +14,44 @@ public class NewFeeDetailTransform extends Transform {
     public NewFeeDetailTransform() {
     }
 
-    public List<ProposeFeeDetail> transformToModel(List<NewFeeDetailView> newFeeDetailViewList, CreditFacilityPropose creditFacilityPropose) {
+    public List<NewFeeDetail> transformToModel(List<NewFeeDetailView> newFeeDetailViewList, NewCreditFacility creditFacilityPropose) {
 
-        List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
-        ProposeFeeDetail proposeFeeDetail;
+        List<NewFeeDetail> newFeeDetailList = new ArrayList<NewFeeDetail>();
+        NewFeeDetail newFeeDetail;
 
         for (NewFeeDetailView newFeeDetailView : newFeeDetailViewList){
-            proposeFeeDetail = new ProposeFeeDetail();
+            newFeeDetail = new NewFeeDetail();
 
             if (newFeeDetailView.getId() != 0) {
-                proposeFeeDetail.setId(newFeeDetailView.getId());
+                newFeeDetail.setId(newFeeDetailView.getId());
             }
-            proposeFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
-            proposeFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
-            proposeFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
-            proposeFeeDetail.setExtensionFee(newFeeDetailView.getExtensionFee());
-            proposeFeeDetail.setPrepaymentFee(newFeeDetailView.getPrepaymentFee());
-            proposeFeeDetail.setCancellationFee(newFeeDetailView.getCancellationFee());
-            proposeFeeDetail.setCreditFacilityPropose(creditFacilityPropose);
-            proposeFeeDetailList.add(proposeFeeDetail);
+            newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
+            newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
+            newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
+            newFeeDetail.setExtensionFee(newFeeDetailView.getExtensionFee());
+            newFeeDetail.setPrepaymentFee(newFeeDetailView.getPrepaymentFee());
+            newFeeDetail.setCancellationFee(newFeeDetailView.getCancellationFee());
+            newFeeDetail.setNewCreditFacility(creditFacilityPropose);
+            newFeeDetailList.add(newFeeDetail);
         }
 
-        return proposeFeeDetailList;
+        return newFeeDetailList;
     }
 
-    public List<NewFeeDetailView> transformToView(List<ProposeFeeDetail> proposeFeeDetailList) {
+    public List<NewFeeDetailView> transformToView(List<NewFeeDetail> newFeeDetailList) {
 
         List<NewFeeDetailView> newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
         NewFeeDetailView newFeeDetailView;
 
-        for (ProposeFeeDetail proposeFeeDetail : proposeFeeDetailList) {
+        for (NewFeeDetail newFeeDetail : newFeeDetailList) {
             newFeeDetailView = new NewFeeDetailView();
 
-            newFeeDetailView.setProductProgram(proposeFeeDetail.getProductProgram());
-            newFeeDetailView.setStandardFrontEndFee(proposeFeeDetail.getStandardFrontEndFee());
-            newFeeDetailView.setCommitmentFee(proposeFeeDetail.getCommitmentFee());
-            newFeeDetailView.setExtensionFee(proposeFeeDetail.getExtensionFee());
-            newFeeDetailView.setPrepaymentFee(proposeFeeDetail.getPrepaymentFee());
-            newFeeDetailView.setCancellationFee(proposeFeeDetail.getCancellationFee());
+            newFeeDetailView.setProductProgram(newFeeDetail.getProductProgram());
+            newFeeDetailView.setStandardFrontEndFee(newFeeDetail.getStandardFrontEndFee());
+            newFeeDetailView.setCommitmentFee(newFeeDetail.getCommitmentFee());
+            newFeeDetailView.setExtensionFee(newFeeDetail.getExtensionFee());
+            newFeeDetailView.setPrepaymentFee(newFeeDetail.getPrepaymentFee());
+            newFeeDetailView.setCancellationFee(newFeeDetail.getCancellationFee());
             newFeeDetailViewList.add(newFeeDetailView);
         }
 

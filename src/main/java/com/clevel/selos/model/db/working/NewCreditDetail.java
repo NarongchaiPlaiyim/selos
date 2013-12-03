@@ -110,7 +110,7 @@ public class NewCreditDetail implements Serializable {
     private NewCreditFacility newCreditFacility;
 
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewCreditTierDetail> proposeCreditTierDetailList;*/
+    private List<NewCreditTierDetail> proposeCreditTierDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
