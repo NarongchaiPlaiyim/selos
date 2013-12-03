@@ -67,6 +67,9 @@ public class ExSummaryView  implements Serializable {
     //UW Comment
     private String uwComment;
 
+    //
+    private String yearInBusinessMonth;
+
     public  ExSummaryView(){}
 
     public void reset(){
@@ -358,5 +361,13 @@ public class ExSummaryView  implements Serializable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getYearInBusinessMonth() {
+        return yearInBusinessMonth;
+    }
+
+    public void setYearInBusinessMonth(String yearInBusinessMonth) {
+        this.yearInBusinessMonth = yearInBusinessMonth;
     }
 }

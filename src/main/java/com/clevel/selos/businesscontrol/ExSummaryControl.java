@@ -14,13 +14,14 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class ExSummaryControl extends BusinessControl {
     @Inject
     @SELOS
-    private Logger log;
+    Logger log;
 
     @Inject
     ExSummaryDAO exSummaryDAO;
@@ -34,6 +35,10 @@ public class ExSummaryControl extends BusinessControl {
     BasicInfoDAO basicInfoDAO;
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    DBRDAO dbrDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -42,8 +47,6 @@ public class ExSummaryControl extends BusinessControl {
     CustomerInfoControl customerInfoControl;
     @Inject
     NCBInfoControl ncbInfoControl;
-//    @Inject
-//    BankStmtControl bankStmtControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
@@ -68,6 +71,11 @@ public class ExSummaryControl extends BusinessControl {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
         }
 
+        if(qualitativeView == null) { // todo:check this
+            qualitativeView = new QualitativeView();
+            qualitativeView.setQualityResult("qualitativeClass");
+        }
+
         if (exSummary == null) {
             exSummary = new ExSummary();
         }
@@ -83,6 +91,12 @@ public class ExSummaryControl extends BusinessControl {
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //Trade Finance
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         //NCB Information
         List<NCBInfoView> ncbInfoViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
         if(ncbInfoViewList != null && ncbInfoViewList.size() > 0){
@@ -93,10 +107,11 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
-            ExSumAccountMovementView mainBank = new ExSumAccountMovementView();
-            ExSumAccountMovementView otherBank = new ExSumAccountMovementView();
+            ExSumAccountMovementView mainBank = null;
+            ExSumAccountMovementView otherBank = null;
             if(bankStatementSummary.getBankStmtList() != null && bankStatementSummary.getBankStmtList().size() > 0 ){
                 for(BankStatement bs : bankStatementSummary.getBankStmtList()){
                     if(bs.getMainAccount() == 1){
@@ -108,8 +123,16 @@ public class ExSummaryControl extends BusinessControl {
                     }
                 }
             }
-            exSummaryView.getExSumAccMovementViewList().add(mainBank);
-            exSummaryView.getExSumAccMovementViewList().add(otherBank);
+            if(mainBank != null || otherBank != null) {
+                if(mainBank != null) {
+                    exSummaryView.getExSumAccMovementViewList().add(mainBank);
+                }
+                if(otherBank != null) {
+                    exSummaryView.getExSumAccMovementViewList().add(otherBank);
+                }
+            } else {
+                exSummaryView.setExSumAccMovementViewList(null);
+            }
         } else {
             exSummaryView.setExSumAccMovementViewList(null);
         }
@@ -123,29 +146,88 @@ public class ExSummaryControl extends BusinessControl {
             if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 bizSize = bankStatementSummary.getGrdTotalIncomeGross();
             } else { // use customer
-                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
-                if(customer != null && customer.size() > 0){
-                    for(Customer cus : customer){
+//                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                             if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
-                                bizSize = cus.getJuristic().getSalesFromFinancialStmt();
+                                bizSize = cus.getSalesFromFinancialStmt();
                             }
                         }
                     }
                 }
             }
+
             ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView.getQualityResult(),bizSize);
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
             exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
-            //if isRental = N, display ownerName. If isRental = Y, display expiryDate
-//        exSummaryView.setOwner();
+            //todo: if isRental = N, display ownerName. If isRental = Y, display expiryDate
+            if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
+                exSummaryView.setOwner(bizInfoSummaryView.getExpiryDate().toString());
+            } else {
+//                exSummaryView.setOwner();
+            }
+
+            //For footer borrower
+            //todo: this
+            exSummaryView.setBusinessOperationActivity("");
+            exSummaryView.setBusinessPermission("");
+            exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate());
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Borrower
+        ExSumCharacteristicView exSumCharacteristicView = new ExSumCharacteristicView();
+        DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+        if(dbr != null && dbr.getId() != 0){
+            exSumCharacteristicView.setCurrentDBR(dbr.getCurrentDBR());
+            exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
+        }
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
+            if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){
+                exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
+            } else {
+                exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
+            }
+        }
+        // todo: business logic here
+        if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
+//            Grand Total Income Net BDM จากหน้า Bank Statement Summary * 12
+            exSumCharacteristicView.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
+//            Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
+            exSumCharacteristicView.setGroupSaleUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+        }
+
+        // todo: business logic here
+        if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+//            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());
+
+//            กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+            if(cusListView != null && cusListView.size() > 0){
+                for(CustomerInfoView cus : cusListView){
+                    if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
+//                            exSumCharacteristicView.setGroupSaleUW(cus.getSalesFromFinancialStmt());
+                        }
+                    }
+                }
+            }
+        } else { // use customer
+//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleBDM();
+
+//            กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleUW();
+        }
+
+        exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -157,8 +239,9 @@ public class ExSummaryControl extends BusinessControl {
     public void saveExSummary(ExSummaryView exSummaryView, long workCaseId) {
         log.info("saveExSummary ::: exSummaryView : {}", exSummaryView);
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
