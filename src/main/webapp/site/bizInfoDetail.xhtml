@@ -304,7 +304,7 @@
                                              id="supplierTable"
                                              var="supplierItem"
                                              styleClass="medium"
-                                             value="#{bizInfoDetail.bizInfoDetailView.supplierDetailList}"
+                                             value="#{bizInfoDetail.supplierDetailList}"
                                              paginator="false"
                                              rowKey="#{supplierItem.no}"
                                              rowIndexVar="rowIndex">
@@ -462,7 +462,7 @@
                             <td colspan="6" align="center">
                                 <p:dataTable id="buyerTable" style="width: 100%;"
                                              var="buyerItem"
-                                             value="#{bizInfoDetail.bizInfoDetailView.buyerDetailList}"
+                                             value="#{bizInfoDetail.buyerDetailList}"
                                              paginator="false"
                                              rowKey="#{buyer.no}"
                                              rowIndexVar="rowIndex">
@@ -682,14 +682,14 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
@@ -705,7 +705,7 @@
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}" >
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
                                             </p:inputText>
@@ -728,14 +728,14 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -775,7 +775,7 @@
                                                  value="#{msg.get('app.button.save')}"
                                                  process=":frmMain"
                                                  actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
-                                                 update=":msgBoxSystemMessagePanel,:frmMain"/>
+                                                 update=":msgBoxSystemMessagePanel"/>
 
                                 <p:commandButton value="#{msg.get('app.button.cancel')}"
                                                  oncomplete="confirmChangeScreenSumDlg.show()"

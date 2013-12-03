@@ -3,10 +3,10 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <persistence-unit name="selos" transaction-type="JTA">
+    <persistence-unit name="selos_vm" transaction-type="JTA">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <!--<jta-data-source>jdbc/SLOSDB</jta-data-source>-->
-        <jta-data-source>selos</jta-data-source>
+        <jta-data-source>selos_vm</jta-data-source>
         <properties>
 
             <!--for running on WebSphere-->

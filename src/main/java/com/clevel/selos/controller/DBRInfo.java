@@ -73,8 +73,8 @@ public class DBRInfo implements Serializable {
 
     //session
     private long workCaseId;
-    //private long stepId;
-    //private String userId;
+    private long stepId;
+    private String userId;
     private String lastUpdated;
 
     private boolean isComplete;
@@ -85,13 +85,13 @@ public class DBRInfo implements Serializable {
     }
 
     public void preRender() {
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCaseId", 2001);
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
+        session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
 
-        HttpSession session = FacesUtil.getSession(true);
+        session = FacesUtil.getSession(true);
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -114,11 +114,9 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
-
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
-
 
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
@@ -159,7 +157,6 @@ public class DBRInfo implements Serializable {
         }
 
         selectedItem.setDebtForCalculate(BigDecimal.ZERO);
-
         if (isUpdate) {
             dbrDetails.set(rowIndex, selectedItem);
         } else {
@@ -194,7 +191,7 @@ public class DBRInfo implements Serializable {
         try {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
-            //dbr.setUserId(userId);
+            dbr.setUserId(userId);
 
             dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = msg.get("app.header.save.success");

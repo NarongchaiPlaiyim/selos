@@ -1,17 +1,14 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewSubCollateralDetailView {
+public class SubCollateralDetailView {
     private long id;
     private int no;
     private SubCollateralType subCollateralType;
@@ -22,8 +19,8 @@ public class NewSubCollateralDetailView {
     private String collateralOwnerAAD;
     private String  collateralOwnerUW;
     private List<String> collateralOwnerUWList;
-    private MortgageType mortgageType;
-    private List<MortgageType> mortgageList;
+    private String  mortgageType;
+    private List<String> mortgageList;
     private String  relatedWith;
     private List<String> relatedWithList;
     private BigDecimal  appraisalValue;
@@ -35,7 +32,7 @@ public class NewSubCollateralDetailView {
 
 
 
-    public NewSubCollateralDetailView() {
+    public SubCollateralDetailView() {
         reset();
     }
 
@@ -50,10 +47,10 @@ public class NewSubCollateralDetailView {
         this.mortgageValue  = BigDecimal.ZERO;
         this.subCollateralType    = new SubCollateralType();
         this.collateralOwnerUW = "";
-        this.mortgageType= new MortgageType();
+        this.mortgageType= "";
         this.relatedWith = "";
         this.collateralOwnerUWList = new ArrayList<String>();
-        this.mortgageList = new ArrayList<MortgageType>();
+        this.mortgageList = new ArrayList<String>();
         this.relatedWithList = new ArrayList<String>();
     }
 
@@ -129,11 +126,11 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerUW = collateralOwnerUW;
     }
 
-    public MortgageType getMortgageType() {
+    public String getMortgageType() {
         return mortgageType;
     }
 
-    public void setMortgageType(MortgageType mortgageType) {
+    public void setMortgageType(String mortgageType) {
         this.mortgageType = mortgageType;
     }
 
@@ -193,14 +190,6 @@ public class NewSubCollateralDetailView {
         this.modifyBy = modifyBy;
     }
 
-    public List<MortgageType> getMortgageList() {
-        return mortgageList;
-    }
-
-    public void setMortgageList(List<MortgageType> mortgageList) {
-        this.mortgageList = mortgageList;
-    }
-
     public List<String> getCollateralOwnerUWList() {
         return collateralOwnerUWList;
     }
@@ -209,37 +198,19 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerUWList = collateralOwnerUWList;
     }
 
+    public List<String> getMortgageList() {
+        return mortgageList;
+    }
+
+    public void setMortgageList(List<String> mortgageList) {
+        this.mortgageList = mortgageList;
+    }
+
     public List<String> getRelatedWithList() {
         return relatedWithList;
     }
 
     public void setRelatedWithList(List<String> relatedWithList) {
         this.relatedWithList = relatedWithList;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("no", no)
-                .append("subCollateralType", subCollateralType)
-                .append("address", address)
-                .append("landOffice", landOffice)
-                .append("titleDeed", titleDeed)
-                .append("collateralOwner", collateralOwner)
-                .append("collateralOwnerAAD", collateralOwnerAAD)
-                .append("collateralOwnerUW", collateralOwnerUW)
-                .append("collateralOwnerUWList", collateralOwnerUWList)
-                .append("mortgageType", mortgageType)
-                .append("mortgageList", mortgageList)
-                .append("relatedWith", relatedWith)
-                .append("relatedWithList", relatedWithList)
-                .append("appraisalValue", appraisalValue)
-                .append("mortgageValue", mortgageValue)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
     }
 }
