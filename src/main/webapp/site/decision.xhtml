@@ -1678,7 +1678,7 @@
                                                     <td class="center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.creditTierDetailViewList) + 1 : '2'}">
-                                                        #{proposeCredit.approved eq 1 ? 'Approved' : 'Not Approved'}
+                                                        #{proposeCredit.approved eq 2 ? msg.get('') : proposeCredit.approved eq 1 ? 'Not Approved' : ''}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.creditTierDetailViewList and fn:length(proposeCredit.creditTierDetailViewList) gt 0 ?

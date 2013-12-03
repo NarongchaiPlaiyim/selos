@@ -144,12 +144,30 @@ public class Decision implements Serializable {
         disbursementList = disbursementDAO.findAll();
     }
 
+    private void initialProposeView() {
+        selectedAppProposeCredit = new ProposeCreditDetailView();
+        selectedAppProposeCredit.setProductProgram(new ProductProgram());
+        selectedAppProposeCredit.setCreditType(new CreditType());
+        if (baseRateList != null && !baseRateList.isEmpty()) {
+            selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0));
+            selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0));
+        } else {
+            selectedAppProposeCredit.setStandardBasePrice(new BaseRate());
+            selectedAppProposeCredit.setSuggestBasePrice(new BaseRate());
+        }
+        if (disbursementList != null && !disbursementList.isEmpty()) {
+            selectedAppProposeCredit.setDisbursement(disbursementList.get(0));
+        } else {
+            selectedAppProposeCredit.setDisbursement(new Disbursement());
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
-        //todo: find ExistingCredit and creditFacPropose by workCaseId
-
         initSelectList();
+        initialProposeView();
 
+        //todo: find ExistingCredit and creditFacPropose by workCaseId
         // -------------------- Common Object -------------------- //
         BankAccountStatusView bankAccountStatusView = new BankAccountStatusView();
         bankAccountStatusView.setCode("01");
@@ -499,11 +517,18 @@ public class Decision implements Serializable {
         proposeCondition = new ProposeConditionDetailView();
         proposeConditionDate = DateTimeUtil.getCurrentDateTH();
         creditFacProposeView.setProposeConditionDetailViewList(new ArrayList<ProposeConditionDetailView>());
+
+        // Duplicate Approved Propose
+        approvedProposeCreditList = new ArrayList<ProposeCreditDetailView>();
+        approvedProposeCreditList.add(proposeCreditDetailView1);
+        approvedProposeCreditList.add(proposeCreditDetailView2);
+        approvedProposeCreditList.add(proposeCreditDetailView3);
+        approvedProposeCreditList.add(proposeCreditDetailView4);
     }
 
     public void onAddAppProposeCredit() {
         log.debug("onAddAppProposeCredit()");
-        selectedAppProposeCredit = new ProposeCreditDetailView();
+        initialProposeView();
         modeEdit = false;
         modeForButton = ModeForButton.ADD;
     }
