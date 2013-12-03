@@ -54,9 +54,6 @@ public class WorkCase implements Serializable {
     @OneToMany(mappedBy = "workCase", fetch = FetchType.LAZY)
     private List<Customer> customerList;
 
-    @OneToOne(mappedBy = "workCase")
-    private BizInfoSummary bizInfoSummary;
-
     @OneToMany(mappedBy = "workCase")
     private List<DBR> dbrList;
 
@@ -224,14 +221,6 @@ public class WorkCase implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
-    public BizInfoSummary getBizInfoSummary() {
-        return bizInfoSummary;
-    }
-
-    public void setBizInfoSummary(BizInfoSummary bizInfoSummary) {
-        this.bizInfoSummary = bizInfoSummary;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -252,7 +241,6 @@ public class WorkCase implements Serializable {
                 .append("modifyBy", modifyBy)
                 .append("stepOwner", stepOwner)
                 .append("workCasePrescreen", workCasePrescreen)
-                .append("bizInfoSummary", bizInfoSummary)
                 .toString();
     }
 }

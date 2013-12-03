@@ -85,7 +85,9 @@ public class BaseController implements Serializable {
             workCaseId = (Long)session.getAttribute("workCaseId");
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-            qualitativeType = basicInfo.getQualitativeType();
+            if(basicInfo != null){
+                qualitativeType = basicInfo.getQualitativeType();
+            }
             log.debug("Qualitative type : {}", qualitativeType);
         }
 
