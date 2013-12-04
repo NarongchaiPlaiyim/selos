@@ -22,7 +22,7 @@ public class CollateralDetailView {
     private User createBy;
     private User modifyBy;
 
-    List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
+    List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
 
     public long getId() {
         return id;
@@ -144,11 +144,11 @@ public class CollateralDetailView {
         this.modifyBy = modifyBy;
     }
 
-    public List<NewCollateralHeadDetailView> getNewCollateralHeadDetailViewList() {
-        return newCollateralHeadDetailViewList;
+    public List<CollateralHeaderDetailView> getCollateralHeaderDetailViewList() {
+        return collateralHeaderDetailViewList;
     }
 
-    public void setNewCollateralHeadDetailViewList(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList) {
-        this.newCollateralHeadDetailViewList = newCollateralHeadDetailViewList;
+    public void setCollateralHeaderDetailViewList(List<CollateralHeaderDetailView> collateralHeaderDetailViewList) {
+        this.collateralHeaderDetailViewList = collateralHeaderDetailViewList;
     }
 }

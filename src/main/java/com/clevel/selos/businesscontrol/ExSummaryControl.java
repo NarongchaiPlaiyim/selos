@@ -2,9 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BankType;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.RelationValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -39,6 +37,8 @@ public class ExSummaryControl extends BusinessControl {
     NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     DBRDAO dbrDAO;
+    @Inject
+    DecisionDAO decisionDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -196,36 +196,12 @@ public class ExSummaryControl extends BusinessControl {
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
             }
         }
-        // todo: business logic here
-        if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
-//            Grand Total Income Net BDM �ҡ˹�� Bank Statement Summary * 12
-            exSumCharacteristicView.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
-//            Grand Total Income Net UW �ҡ˹�� Bank Statement Summary * 12
-            exSumCharacteristicView.setGroupSaleUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
-        }
-
-        // todo: business logic here
-        if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//            �óռ���� = Individual (Grand Total Income Gross �ҡ˹�� Bank Statement Summary + �����ͧ������ / �������Ǣ�ͧ�ء����� Flag Group Income = Y)*12
-//            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());
-
-//            �óռ���� = Individual (Grand Total Income Gross �ҡ˹�� Bank Statement Summary + �����ͧ������ / �������Ǣ�ͧ�ء����� Flag Group Income = Y) * 12
-            if(cusListView != null && cusListView.size() > 0){
-                for(CustomerInfoView cus : cusListView){
-                    if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
-//                            exSumCharacteristicView.setGroupSaleUW(cus.getSalesFromFinancialStmt());
-                        }
-                    }
-                }
-            }
-        } else { // use customer
-//            �óռ���� = Juristic (�������������Թ �ҡ Cust Info Detail (Juristic) + �����ͧ������ / �������Ǣ�ͧ�ء����� Flag Group Income = Y) * 12
-//            exSumCharacteristicView.setGroupSaleBDM();
-
-//            �óռ���� = Juristic (�������������Թ �ҡ Cust Info Detail (Juristic) + �����ͧ������ / �������Ǣ�ͧ�ء����� Flag Group Income = Y) * 12
-//            exSumCharacteristicView.setGroupSaleUW();
-        }
+        exSumCharacteristicView.setSalePerYearBDM(exSummary.getSalePerYearBDM());
+        exSumCharacteristicView.setSalePerYearUW(exSummary.getSalePerYearUW());
+        exSumCharacteristicView.setGroupSaleBDM(exSummary.getGroupSaleBDM());
+        exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
+        exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
+        exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
 
         exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
@@ -254,26 +230,165 @@ public class ExSummaryControl extends BusinessControl {
         exSumDeviateDAO.persist(exSumDeviateList);
     }
 
-    //TODO : Business login here
+    //TODO : Method Call For Page
+    public void calForCreditFacility(long workCaseId){
+        calIncomeBorrowerCharacteristic(workCaseId);
+        calRecommendedWCNeedBorrowerCharacteristic(workCaseId);
+    }
 
+    public void calForDecision(long workCaseId){
+        calIncomeBorrowerCharacteristic(workCaseId);
+        calActualWCBorrowerCharacteristic(workCaseId);
+        calGroupExposureBorrowerCharacteristic(workCaseId);
+    }
+
+    public void calForBankStmtSummary(long workCaseId){
+        calSalePerYearBorrowerCharacteristic(workCaseId);
+        calGroupSaleBorrowerCharacteristic(workCaseId);
+    }
+
+    public void calForDBR(long workCaseId){
+        calIncomeBorrowerCharacteristic(workCaseId);
+    }
+
+    //TODO : Business login here
     //Borrower Characteristic - income ( Line 45 )
     //Credit Facility-Propose + DBR + Decision
-    //[�Թ������ع���¹���������Ѻ TMB + OD Limit ���͹��ѵ� + Loan Core WC ���͹��ѵ�] / (���������͹ Adjusted ˹�� DBR *12)
+    //[สินเชื่อหมุนเวียนที่มีอยู่กับ TMB + OD Limit ที่อนุมัติ + Loan Core WC ที่อนุมัติ] / (รายได้ต่อเดือน Adjusted หน้า DBR *12)
+    public void calIncomeBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose & DBR & Decision , Pls Call me !!
+        DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+        BigDecimal totalWCTMB = newCreditFacility.getTotalWcTmb();
+        BigDecimal odLimit = newCreditFacility.getTotalCommercialAndOBOD();
+        BigDecimal loanCoreWC = newCreditFacility.getTotalCommercial();
+        BigDecimal adjusted = dbr.getMonthlyIncomeAdjust();
+
+        BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setIncome(income);
+
+        exSummaryDAO.persist(exSummary);
+    }
 
     //Borrower Characteristic - recommendedWCNeed ( Line 46 )
-    //Credit Facility-Propose ��Ǣ�� WC Requirement
-    //�ó� Refinance In Flag = Yes + Prime
-    //Min [�Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 2 : �ӹǳ�ҡ 1.5 ��Ңͧ WC, �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 3 : �ӹǳ�ҡ 35% �ͧ�����]
-    //�ó� Refinance In Flag = Yes + Normal
-    //Min [�Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 1 : �ӹǳ�ҡ 1.25 ��Ңͧ WC, �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 3 : �ӹǳ�ҡ 35% �ͧ�����]
-    //�ó� Refinance In Flag = No + Prime
-    //Min [(������ͧ����Թ�ع��ع���¹ - ���ǧ�Թ�Թ������ع���¹�ͧ TMB) , �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 2 : �ӹǳ�ҡ 1.5 ��Ңͧ WC, �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 3 : �ӹǳ�ҡ 35% �ͧ�����]
-    //�ó� Refinance In Flag = No + Normal
-    //Min [(������ͧ����Թ�ع��ع���¹ - ���ǧ�Թ�Թ������ع���¹�ͧ TMB) , �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 1 : �ӹǳ�ҡ 1.25 ��Ңͧ WC, �Թ������ع���¹�������ö�Ԩ�ó������ҡ�óշ�� 3 : �ӹǳ�ҡ 35% �ͧ�����]
+    //Credit Facility-Propose หัวข้อ WC Requirement
+    //Refinance from Basic Info
+//    กรณี Refinance In Flag = Yes + Prime
+//    Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+//    กรณี Refinance In Flag = Yes + Normal
+//    Min [สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+//    กรณี Refinance In Flag = No + Prime
+//    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 2 : คำนวณจาก 1.5 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+//    กรณี Refinance In Flag = No + Normal
+//    Min [(ความต้องการเงินทุนหมุนเวียน - รวมวงเงินสินเชื่อหมุนเวียนของ TMB) , สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 1 : คำนวณจาก 1.25 เท่าของ WC, สินเชื่อหมุนเวียนที่สามารถพิจารณาให้ได้จากกรณีที่ 3 : คำนวณจาก 35% ของรายได้]
+    public void calRecommendedWCNeedBorrowerCharacteristic(long workCaseId){ //TODO : Credit Facility-Propose , Pls Call me !!
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+
+        BigDecimal recommendedWCNeed;
+        BigDecimal value1 = newCreditFacility.getCase1WcLimit();
+        BigDecimal value2 = newCreditFacility.getCase2WcLimit();
+        BigDecimal value3 = newCreditFacility.getCase3WcLimit();
+        BigDecimal value4 = newCreditFacility.getWcNeed();
+        BigDecimal value5 = newCreditFacility.getTotalWcTmb();
+        BigDecimal value6 = value4.subtract(value5);
+
+        if(basicInfo.getRefinanceIN() == 1){
+            if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                recommendedWCNeed = getMinBigDecimal(value2,value3);
+            } else {
+                recommendedWCNeed = getMinBigDecimal(value1,value3);
+            }
+        } else {
+            if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                recommendedWCNeed = getMinBigDecimal(value2,value3,value6);
+            } else {
+                recommendedWCNeed = getMinBigDecimal(value1,value3,value6);
+            }
+        }
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setRecommendedWCNeed(recommendedWCNeed);
+
+        exSummaryDAO.persist(exSummary);
+    }
 
     //Borrower Characteristic - actualWC ( Line 47 )
-    //Decision ��Ǣ�� Approve Credit
-    //Sum( ǧ�Թ�Թ������ع���¹���͹��ѵ)
+    //Decision หัวข้อ Approve Credit
+//    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
+    public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        BigDecimal actualWC = BigDecimal.ZERO;
+        for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
+            if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
+//                actualWC = actualWC.add(n.get);
+            }
+        }
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setActualWC(actualWC);
 
+        exSummaryDAO.persist(exSummary);
+    }
 
+    //Borrower Characteristic - salePerYearBDM , salePerYearUW ( Line 52-53 )
+    //Bank Statement Summary
+//    Grand Total Income Net BDM จากหน้า Bank Statement Summary * 12
+//    Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
+    public void calSalePerYearBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary , Pls Call me !!
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+        if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
+            ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+            exSummary.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
+            exSummary.setSalePerYearUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+            exSummaryDAO.persist(exSummary);
+        }
+    }
+
+    //Borrower Characteristic - groupSaleBDM , groupSaleUW ( Line 55-56 )
+    //Customer Info Detail , Bank Statement Summary
+//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+//    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
+//    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+    public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
+        User user = getCurrentUser();
+        if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+            if(user.getRole().getId() != RoleValue.UW.id()){//Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
+//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+//            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());
+            }
+
+//    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleUW(cus.getSalesFromFinancialStmt());
+        } else { // use customer
+            if(cusListView != null && cusListView.size() > 0){
+                for(CustomerInfoView cus : cusListView){
+                    if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
+                        }
+                    }
+                }
+            }
+
+            if(user.getRole().getId() != RoleValue.UW.id()){//Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
+//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleBDM();
+            }
+
+//    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+//            exSumCharacteristicView.setGroupSaleUW();
+        }
+    }
+    //Borrower Characteristic - groupExposureBDM , groupExposureUW ( Line 58-59 )
+    //Decision
+//    groupExposureBDM - Group Total Exposure + Total Propose Credit
+//    groupExposureUW - Group Total Exposure + Total Approved Credit
+    public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Pls Call me !!
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+    }
 }

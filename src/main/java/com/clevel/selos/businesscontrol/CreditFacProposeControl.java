@@ -2,14 +2,11 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
-import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.NewCreditFacilityDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.NewCreditFacilityView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
@@ -22,7 +19,6 @@ public class CreditFacProposeControl extends BusinessControl {
     @SELOS
     @Inject
     Logger log;
-
     @Inject
     CustomerTransform customerTransform;
     @Inject
@@ -44,6 +40,8 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewConditionDetailTransform newConditionDetailTransform;
     @Inject
+    NewCreditTierTransform newCreditTierTransform;
+    @Inject
     CustomerDAO customerDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
@@ -55,6 +53,25 @@ public class CreditFacProposeControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    NewFeeCreditDAO newFeeCreditDAO;
+    @Inject
+    NewConditionDetailDAO newConditionDetailDAO;
+    @Inject
+    NewCreditDetailDAO newCreditDetailDAO;
+    @Inject
+    NewCreditTierDetailDAO newCreditTierDetailDAO;
+    @Inject
+    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject
+    CreditTypeDetailDAO creditTypeDetailDAO;
+    @Inject
+    NewCollateralDetailDAO  newCollateralDetailDAO;
+    @Inject
+    NewCollateralSubDetailDAO  newCollateralSubDetailDAO;
+    @Inject
+    NewCollateralHeadDetailDAO newCollateralHeadDetailDAO;
+
 
     public CreditFacProposeControl(){}
 
@@ -69,23 +86,88 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
+    public NewCreditFacility getNewCreditFacilityViewByWorkCaseId(long workCaseId){
+        log.info("workCaseId :: {}",workCaseId);
+        return newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+    }
+
+    public NewCreditFacilityView findNewCreditFacilityByWorkCase(long workCaseId){
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        NewCreditFacilityView newCreditFacilityView  =  newCreditFacilityTransform.transformToView(newCreditFacility);
+        return   newCreditFacilityView;
+    }
+
     public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, Long workCaseId ,User user) {
         log.info("onSaveNewCreditFacility begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        NewCreditFacility creditFacilityPropose = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView,workCase,user);
-        newCreditFacilityDAO.persist(creditFacilityPropose);
+        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView,workCase,user);
+        newCreditFacilityDAO.persist(newCreditFacility);
+        log.info("persist :: creditFacilityPropose...");
 
+        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(),newCreditFacility,user);
+        newFeeCreditDAO.persist(newFeeDetailList);
+        log.info("persist :: newFeeDetailList...");
 
-        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(),creditFacilityPropose);
-   /*     List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel();
-        List<ProposeCollateralDetail> proposeCollateralDetailList = newCollateralInfoTransform.transformsToModel();
-        List<ProposeGuarantorDetail>  proposeGuarantorDetailList = newGuarantorDetailTransform.transformToModel();
-        List<ProposeConditionDetail>  proposeConditionDetailList = newConditionDetailTransform.transformToModel();
-        List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModel();
-        List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModel();
-*/
-//        List<SubCollateralDetail> subCollateralDetailList = newSubCollDetailTransform.transformToModel();
+        List<NewConditionDetail>  newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(),newCreditFacility,user);
+        newConditionDetailDAO.persist(newConditionDetailList);
+        log.info("persist :: newConditionDetail ...");
+
+        List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(),newCreditFacility,user);
+        newCreditDetailDAO.persist(newCreditDetailList);
+        log.info("persist newCreditDetailList...");
+
+         for(NewCreditDetail newCreditDetail : newCreditDetailList)
+         {
+            for(NewCreditDetailView newCreditDetailView : newCreditFacilityView.getNewCreditDetailViewList())
+            {
+               List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList(),newCreditDetail,user);
+               newCreditTierDetailDAO.persist(newCreditTierDetailList);
+               log.info("persist newCreditTierDetailList...");
+            }
+         }
+
+        List<NewGuarantorDetail>  newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(),newCreditFacility,user);
+        newGuarantorDetailDAO.persist(newGuarantorDetailList);
+        log.info("persist newGuarantorDetailList...");
+
+        for(NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList)
+        {
+            for(NewGuarantorDetailView newGuarantorDetailView : newCreditFacilityView.getNewGuarantorDetailViewList())
+            {
+               List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForGuarantor(newGuarantorDetailView.getCreditTypeDetailViewList(), newGuarantorDetail, user);
+               creditTypeDetailDAO.persist(creditTypeDetailList);
+               log.info("persist creditTypeDetailList...");
+            }
+
+        }
+
+        List<NewCollateralDetail> newCollateralDetailList = newCollateralInfoTransform.transformsToModel(newCreditFacilityView.getNewCollateralInfoViewList(),newCreditFacility,user);
+        newCollateralDetailDAO.persist(newCollateralDetailList);
+        log.info("persist newCollateralDetailList...");
+
+        for(NewCollateralDetail newCollateralDetail :newCollateralDetailList){
+            for(NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()){
+                List<NewCollateralHeadDetail> newCollateralHeadDetailList = newCollHeadDetailTransform.transformToModel(newCollateralInfoView.getNewCollateralHeadDetailViewList(),newCollateralDetail,user);
+                newCollateralHeadDetailDAO.persist(newCollateralHeadDetailList);
+                log.info("persist newCollateralHeadDetailList...");
+
+                for(NewCollateralHeadDetail newCollateralHeadDetail : newCollateralHeadDetailList){
+                    for(NewCollateralHeadDetailView newCollateralHeadDetailView :newCollateralInfoView.getNewCollateralHeadDetailViewList()){
+                        List<NewCollateralSubDetail> newCollateralSubDetails = newSubCollDetailTransform.transformToModel(newCollateralHeadDetailView.getNewSubCollateralDetailViewList(),newCollateralHeadDetail,user);
+                        newCollateralSubDetailDAO.persist(newCollateralSubDetails);
+                        log.info("persist newCollateralSubDetailList...");
+                    }
+                }
+
+                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForCollateral(newCollateralInfoView.getCreditTypeDetailViewList(), newCollateralDetail, user);
+                creditTypeDetailDAO.persist(creditTypeDetailList);
+                log.info("persist creditTypeDetailList...");
+
+            }
+        }
+
     }
 
 

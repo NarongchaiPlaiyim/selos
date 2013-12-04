@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NewCreditDetailView implements Serializable {
+    private long id;
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -58,6 +59,7 @@ public class NewCreditDetailView implements Serializable {
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();
+        this.loanPurpose = new LoanPurpose();
         this.productCode = "";
         this.projectCode = "";
         this.borrowerName = "";
@@ -81,6 +83,14 @@ public class NewCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getSeq() {

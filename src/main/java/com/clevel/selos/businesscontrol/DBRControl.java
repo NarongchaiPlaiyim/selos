@@ -44,7 +44,6 @@ public class DBRControl extends BusinessControl {
     BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
-
     @Inject
     DBRTransform dbrTransform;
     @Inject
@@ -59,7 +58,6 @@ public class DBRControl extends BusinessControl {
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
-        User user = userDAO.findById(dbrView.getUserId());
         DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
         newDbrDetails = dbr.getDbrDetails();
@@ -113,6 +111,22 @@ public class DBRControl extends BusinessControl {
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
 
+        }else{
+            if(dbr.getIncomeFactor() == null){
+                BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+                if(bizInfoSummary != null){
+                    dbr.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
+                }
+            }
+            if(dbr.getMonthlyIncome() == null){
+                BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+                if(bankStatementSummary != null){
+                    dbr.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
+                }
+            }
+            if(dbr.getMonthlyIncomeAdjust() == null){
+                dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncome());
+            }
         }
         dbr.setDbrInterest(getDBRInterest());
 
@@ -128,38 +142,39 @@ public class DBRControl extends BusinessControl {
         //**NCB Borrower totalDebtForCalculate
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-            totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+            totalMonthDebtBorrower = Util.add(totalMonthDebtBorrower, ncbDetailView.getDebtForCalculate());
         }
 
         //**Relate DbrDetail Calculate
         BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
         for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
             int loanType = dbrDetail.getLoanType().getCalculateType();
-            final  BigDecimal month = BigDecimal.valueOf(12);
+            final BigDecimal month = BigDecimal.valueOf(12);
             BigDecimal debtForCalculate = BigDecimal.ZERO;
             switch (loanType){
                 case 1:  //normal
                     if(dbrDetail.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment != 0
                         debtForCalculate = dbrDetail.getInstallment();
                     }else {
-                        debtForCalculate = dbrDetail.getLimit().multiply(dbr.getDbrInterest());
-                        debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
-                        debtForCalculate = debtForCalculate.divide(month, 2, RoundingMode.HALF_UP);
+                        debtForCalculate = Util.multiply(dbrDetail.getLimit(), dbr.getDbrInterest());
+                        debtForCalculate = Util.divide(debtForCalculate, 100);
+                        debtForCalculate = Util.divide(debtForCalculate, month);
                     }
                     break;
                 case 2:    //*5%
-                    debtForCalculate =  dbrDetail.getLimit().multiply(BigDecimal.valueOf(5));
-                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    debtForCalculate = Util.multiply(dbrDetail.getLimit(), BigDecimal.valueOf(5));
+                    debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
                 case 3:  // *10%
-                    debtForCalculate = dbrDetail.getLimit().multiply(BigDecimal.valueOf(10));
-                    debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    debtForCalculate = Util.multiply(dbrDetail.getLimit(), BigDecimal.valueOf(10));
+                    debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
                 default:
                     break;
             }
             dbrDetail.setDebtForCalculate(debtForCalculate);
-            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+
+            totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail
 
@@ -167,18 +182,18 @@ public class DBRControl extends BusinessControl {
         BigDecimal netMonthlyIncome = BigDecimal.ZERO;
         BigDecimal currentDBR = BigDecimal.ZERO;
         //**** Begin DBRInfo ****//
-        currentDBR = totalMonthDebtBorrower.add(totalMonthDebtRelated);
+        currentDBR = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
 
-        netMonthlyIncome = dbr.getMonthlyIncomeAdjust().multiply(dbr.getIncomeFactor());
-        netMonthlyIncome = netMonthlyIncome.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-        netMonthlyIncome = netMonthlyIncome.add(dbr.getMonthlyIncomePerMonth());
+        netMonthlyIncome = Util.multiply(dbr.getMonthlyIncomeAdjust(), dbr.getIncomeFactor());
+        netMonthlyIncome = Util.divide(netMonthlyIncome, 100);
+        netMonthlyIncome = Util.add(netMonthlyIncome,dbr.getMonthlyIncomePerMonth());
 
         dbrBeforeRequest = Util.divide(currentDBR, netMonthlyIncome);
 
         //Ex summary Final DBR BigDecimal debt = BigDecimal.ZERO;
 
         BigDecimal finalDBR = BigDecimal.ZERO;
-        finalDBR = calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
+        finalDBR = calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, netMonthlyIncome, workCase);
 
         // update dbr
         dbr.setNetMonthlyIncome(netMonthlyIncome);
@@ -196,20 +211,16 @@ public class DBRControl extends BusinessControl {
             if(dbrView.getId() == 0){
                 return ActionResult.FAILED;
             }
-
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(bankStatementSummary != null){
                 dbrView.setMonthlyIncome(getMonthlyIncome(bankStatementSummary));
             }
-
             if(bizInfoSummary != null){
-                dbrView.setIncomeFactor(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+                dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
-
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-
             DBR dbr =  calculateDBR(dbrView, ncbDetailViews, workCase);
             dbrdao.persist(dbr);
         }
@@ -225,23 +236,24 @@ public class DBRControl extends BusinessControl {
         }
         BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
-        List<DBRDetail> dbrDetails = dbr.getDbrDetails();
-        for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
-            totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetail.getDebtForCalculate());
+        if(dbr != null){
+            List<DBRDetail> dbrDetails = dbr.getDbrDetails();
+            for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
+                totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
+            }
+            BigDecimal finalDBR = BigDecimal.ZERO;
+            finalDBR =  calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, dbr.getNetMonthlyIncome(), workCase);
+            dbr.setFinalDBR(finalDBR);
+            dbrdao.persist(dbr);
         }
-        BigDecimal finalDBR = BigDecimal.ZERO;
-        finalDBR =  calculateFinalDBR(totalMonthDebtBorrower, totalMonthDebtRelated, workCase);
-        dbr.setFinalDBR(finalDBR);
-        dbrdao.persist(dbr);
 
     }
 
 
-    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated, WorkCase workCase){
+    private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
+        BigDecimal result = BigDecimal.ZERO;
         BigDecimal totalPurposeForDBR = BigDecimal.valueOf(200);
-
         int roleId = getCurrentUser().getRole().getId();
-
         //todo waiting totalPurposeForDBR from Exsiting purpose
         if(roleId == RoleUser.UW.getValue()){
 
@@ -249,10 +261,10 @@ public class DBRControl extends BusinessControl {
 
         }
         BigDecimal debt = BigDecimal.ZERO;
-        debt = totalMonthDebtBorrower.add(totalMonthDebtRelated);
-        debt = debt.add(totalPurposeForDBR);
+        debt = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);
+        debt = Util.add(debt, totalPurposeForDBR);
+        result = Util.divide(debt, netMonthlyIncome);
         return debt;
-
     }
 
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
@@ -267,11 +279,8 @@ public class DBRControl extends BusinessControl {
         }else if(roleId == RoleUser.BDM.getValue()){
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
+
         return monthlyIncome;
 
     }
-
-
-
-
 }

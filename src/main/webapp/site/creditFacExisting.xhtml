@@ -1016,6 +1016,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                        <p:column headerText=""/>
                                                     </p:row>
                                                 </p:columnGroup>
 
@@ -1125,6 +1126,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                        <p:column headerText=""/>
                                                     </p:row>
                                                 </p:columnGroup>
 
@@ -1224,11 +1226,11 @@
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column style="width:50px;"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guarantorName')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tcg.lg.no')}"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guaranteeAmount')}"/>
+                                                        <p:column headerText=""/>
                                                     </p:row>
                                                 </p:columnGroup>
 
@@ -1248,19 +1250,9 @@
                                                         <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
                                                     </ui:repeat>
                                                 </p:column>
-
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
+                                                    <p:outputLabel value="#{existingGuarantor.guaranteeAmount}"></p:outputLabel>
                                                 </p:column>
-
-                                                <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedCollateral.appraisalValue}"></p:outputLabel>
-                                                </p:column>
-
-                                                <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedCollateral.mortgageValue}"></p:outputLabel>
-                                                </p:column>
-
                                                 <p:column headerText="">
                                                     <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                      icon="ui-icon-pencil">
@@ -1289,48 +1281,6 @@
                                                                 </h:outputText>
                                                             </f:facet>
                                                         </p:column>
-
-                                                        <p:column/>
-                                                    </p:row>
-                                                </p:columnGroup>
-                                            </p:dataTable>
-                                            <p:dataTable value="" var="itemExsitingCollateralRelated" rowIndexVar="rowIndex">
-                                                <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guarantorName')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tcg.lg.no')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guaranteeAmount')}">
-
-                                                </p:column>
-                                                <p:column headerText="">
-                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil">
-
-                                                    </p:commandButton>
-                                                    <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                                     icon="ui-icon-trash">
-                                                    </p:commandButton>
-                                                </p:column>
-                                                <p:columnGroup type="footer">
-                                                    <p:row>
-                                                        <p:column colspan="4" footerText="Totals:" style="text-align:left"/>
-                                                        <p:column style="text-align:right">
-                                                            <f:facet name="footer">
-                                                                <h:outputText value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </h:outputText>
-                                                            </f:facet>
-                                                        </p:column >
-                                                        <p:column/>
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>

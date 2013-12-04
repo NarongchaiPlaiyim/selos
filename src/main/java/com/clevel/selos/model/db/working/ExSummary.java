@@ -49,8 +49,9 @@ public class ExSummary implements Serializable {
     private BigDecimal currentDBR;
 
     @Column(name = "final_dbr")
-    private BigDecimal finalDBR;
+    private BigDecimal finalDBR;*/
 
+    //for calculator
     @Column(name = "income")
     private BigDecimal income;
 
@@ -60,8 +61,8 @@ public class ExSummary implements Serializable {
     @Column(name = "actual_wc")
     private BigDecimal actualWC;
 
-    @Column(name = "start_business_date")
-    private Date startBusinessDate;
+    /*@Column(name = "start_business_date")
+    private Date startBusinessDate;*/
 
     @Column(name = "year_in_business")
     private String yearInBusiness;
@@ -85,7 +86,7 @@ public class ExSummary implements Serializable {
     private BigDecimal groupExposureUW;
 
     //exSumBusinessInfoView;
-    @Column(name = "net_fix_asset")
+    /*@Column(name = "net_fix_asset")
     private BigDecimal netFixAsset;
 
     @Column(name = "no_of_employee", nullable = false, columnDefinition = "int default 0")
@@ -421,5 +422,85 @@ public class ExSummary implements Serializable {
 
     public void setYearInBusinessMonth(String yearInBusinessMonth) {
         this.yearInBusinessMonth = yearInBusinessMonth;
+    }
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
+
+    public BigDecimal getRecommendedWCNeed() {
+        return recommendedWCNeed;
+    }
+
+    public void setRecommendedWCNeed(BigDecimal recommendedWCNeed) {
+        this.recommendedWCNeed = recommendedWCNeed;
+    }
+
+    public BigDecimal getActualWC() {
+        return actualWC;
+    }
+
+    public void setActualWC(BigDecimal actualWC) {
+        this.actualWC = actualWC;
+    }
+
+    public String getYearInBusiness() {
+        return yearInBusiness;
+    }
+
+    public void setYearInBusiness(String yearInBusiness) {
+        this.yearInBusiness = yearInBusiness;
+    }
+
+    public BigDecimal getSalePerYearBDM() {
+        return salePerYearBDM;
+    }
+
+    public void setSalePerYearBDM(BigDecimal salePerYearBDM) {
+        this.salePerYearBDM = salePerYearBDM;
+    }
+
+    public BigDecimal getSalePerYearUW() {
+        return salePerYearUW;
+    }
+
+    public void setSalePerYearUW(BigDecimal salePerYearUW) {
+        this.salePerYearUW = salePerYearUW;
+    }
+
+    public BigDecimal getGroupSaleBDM() {
+        return groupSaleBDM;
+    }
+
+    public void setGroupSaleBDM(BigDecimal groupSaleBDM) {
+        this.groupSaleBDM = groupSaleBDM;
+    }
+
+    public BigDecimal getGroupSaleUW() {
+        return groupSaleUW;
+    }
+
+    public void setGroupSaleUW(BigDecimal groupSaleUW) {
+        this.groupSaleUW = groupSaleUW;
+    }
+
+    public BigDecimal getGroupExposureBDM() {
+        return groupExposureBDM;
+    }
+
+    public void setGroupExposureBDM(BigDecimal groupExposureBDM) {
+        this.groupExposureBDM = groupExposureBDM;
+    }
+
+    public BigDecimal getGroupExposureUW() {
+        return groupExposureUW;
+    }
+
+    public void setGroupExposureUW(BigDecimal groupExposureUW) {
+        this.groupExposureUW = groupExposureUW;
     }
 }

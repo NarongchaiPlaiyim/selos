@@ -35,7 +35,6 @@
                                             value="#{dbrInfo.dbr.modifyBy}"/>,
                                     <p:outputLabel value="#{dbrInfo.dbr.modifyDate}">
                                         <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
-
                                     </p:outputLabel></div>
                             </div>
                             <div id="content_form">
@@ -304,7 +303,9 @@
                                                     <p:spacer  width="10"/>
                                                     <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                                      styleClass="medium"
-
+                                                                     action="#{dbrInfo.testUpdateValueDBR()}"
+                                                                     onclick="onOneClick('frmMain:btnCancel', true);"
+                                                                     oncomplete="onOneClick('frmMain:btnCancel', false);"
                                                                      update=":pnl_maincontainer :msgBoxSystemMessagePanel">
                                                     </p:commandButton>
                                                 </div>
@@ -313,19 +314,21 @@
                                    </table>
                             </div>
                         </div>
+                        <div id="bottom_line"/>
                     </div>
-                    <div id="bottom_line"/>
+
+                    <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
                 </div>
-                <div class="clear"/>
-                <!-- Start Footer -->
-                <ui:include src="include/footer.xhtml"/>
-                <h:inputHidden id="pagename" value="mnuprescreen"/>
-                <h:inputHidden id="subpagename" value="submnuprescreen"/>
+
+
+                <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+                    LOADING<br/>
+                    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                </p:blockUI>
             </h:form>
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-            LOADING<br/>
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
+
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
