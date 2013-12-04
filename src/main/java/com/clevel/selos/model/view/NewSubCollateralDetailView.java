@@ -20,20 +20,18 @@ public class NewSubCollateralDetailView {
     private String titleDeed;
     private String collateralOwner;
     private String collateralOwnerAAD;
-    private String  collateralOwnerUW;
+    private String collateralOwnerUW;
     private List<String> collateralOwnerUWList;
     private MortgageType mortgageType;
     private List<String> mortgageList;
-    private String  relatedWith;
+    private String relatedWith;
     private List<String> relatedWithList;
-    private BigDecimal  appraisalValue;
-    private BigDecimal  mortgageValue;
+    private BigDecimal appraisalValue;
+    private BigDecimal mortgageValue;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-
-
 
     public NewSubCollateralDetailView() {
         reset();
