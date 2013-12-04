@@ -65,6 +65,14 @@ public class IsaUpload implements Serializable {
     public void initForm() {
         log.debug("initForm()");
 
+        if(PATH_FILE==""||PATH_FILE.length()==0){
+            log.debug("PATH_FILE IS NULL");
+        }else{
+            if(!new File(PATH_FILE).isDirectory()){
+                new File(PATH_FILE).mkdir();
+            }
+        }
+
         FilenameFilter dirFilter = new FilenameFilter() {
 
             public boolean accept(File dir, String name) {
@@ -107,8 +115,8 @@ public class IsaUpload implements Serializable {
                         for (int subidx = 0; subidx < subFiles.length; subidx++) {
                             System.out.println("nb "+subFiles[subidx].getName());
                             if (subFiles[subidx].getName().startsWith(IsaUpload.RESULT_FILENAME)) {
-                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
-//                                userUploadView.setResultFile(subFiles[subidx].getName());
+//                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
+                                userUploadView.setResultFile(subFiles[subidx].getName());
 //                                System.out.println("1 "+userUploadView.getResultFile());
                             }
 //                            System.out.println("2 " + userUploadView.getResultFile());
@@ -128,13 +136,13 @@ public class IsaUpload implements Serializable {
         }
 //        model.addAttribute("userUploadViews", userUploadViews);
         System.out.println("n " + userUploadViews.size());
-        if (isaUploadService.isFileProcessing()) {
-        }
-//            model.addAttribute("isUploadWorking", "true");
-        else {
-            System.out.println();
-        }
-//            model.addAttribute("isUploadWorking", "false");
+//        if (isaUploadService.isFileProcessing()) {
+//        }
+////            model.addAttribute("isUploadWorking", "true");
+//        else {
+//            System.out.println();
+//        }
+////            model.addAttribute("isUploadWorking", "false");
 
         RequestContext.getCurrentInstance().update(":okl");
 
@@ -186,7 +194,7 @@ public class IsaUpload implements Serializable {
 
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
-                isaUploadService.processUserUploadFiles(PATH_FILE, fileDir.listFiles()[0].getName());
+                isaUploadService.processingUploadFile(PATH_FILE, fileDir.listFiles()[0].getName());
 
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -203,7 +211,7 @@ public class IsaUpload implements Serializable {
 
         String filename="C:\\Users\\sahawat\\Desktop\\FileUploadTest\\"+downloadFilePart;
         File file1 =new File(filename);
-
+        System.out.println(filename);
         InputStream stream = null;
         try {
             stream = new FileInputStream(file1);

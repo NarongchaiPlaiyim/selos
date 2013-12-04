@@ -35,6 +35,8 @@
                                               mode="advanced"
                                               showButtons="false"
                                               update=":useruploadForm"
+                                              allowTypes="/(\.|\/)(csv)$/"
+                                              sizeLimit="5000000"
                                         />
 
                                     <!--<p:commandButton value="Submit"-->
@@ -57,7 +59,7 @@
                                 <p:column>
                                       <p:commandLink value="#{o.resultFile}"  ajax="false">
                                           <f:setPropertyActionListener value="#{o.resultFile}" target="#{isaUpload.downloadFilePart}"  />
-                                          <p:fileDownload value="#{isaUpload.file}" />
+                                          <p:fileDownload value="#{isaUpload.file}"/>
                                       </p:commandLink>
                                 </p:column>
                             </p:dataTable>
