@@ -30,7 +30,7 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setModifyBy(user);
 
         newCreditFacility.setWcNeed(newCreditFacilityView.getWCNeed());
-        newCreditFacility.setTotalCreditTurnover(newCreditFacilityView.getTotalCreditTurnover());
+        newCreditFacility.setTotalWcTmb(newCreditFacilityView.getTotalWcTmb());
         newCreditFacility.setWCNeedDiffer(newCreditFacilityView.getWCNeedDiffer());
         newCreditFacility.setTotalWcDebit(newCreditFacilityView.getTotalWcDebit());
         newCreditFacility.setCase1WcLimit(newCreditFacilityView.getCase1WcLimit());
