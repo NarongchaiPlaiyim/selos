@@ -78,6 +78,9 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "maximum_existing_sme_limit")
     private BigDecimal maximumExistingSMELimit;
 
+    @Column(name = "total_approve_credit")
+    private BigDecimal totalApproveCredit;
+
     @Column(name = "total_propose")
     private BigDecimal totalPropose;
 
@@ -231,6 +234,14 @@ public class NewCreditFacility implements Serializable {
 
     public void setWCNeedDiffer(BigDecimal WCNeedDiffer) {
         this.WCNeedDiffer = WCNeedDiffer;
+    }
+
+    public BigDecimal getTotalApproveCredit() {
+        return totalApproveCredit;
+    }
+
+    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
+        this.totalApproveCredit = totalApproveCredit;
     }
 
     public BigDecimal getTotalWcDebit() {
