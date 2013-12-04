@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Collateral and Mortgage Information Summary</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{mortgageSummary.preRender()}" />
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name">#{msg.get('app.mortgageSummary.header')}</div>
+                    <div id="content">
+                        <div id="content_info">
+                            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                            </div>
+                        </div>
+                        <div id="content_form">
+                            <!-- start content -->
+                            <table class="content_table_form">
+                                <tr>
+                                    <td style="padding-left: 50px;">
+                                        <table>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- end content -->
+                        </div>
+                    </div>
+                    <div id="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="include/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
+        </h:form>
+
+        <!--<p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>-->
+
+    </p:panel>
+</h:body>
+</f:view>
+</html>

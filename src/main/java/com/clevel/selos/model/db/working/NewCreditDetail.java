@@ -131,6 +131,9 @@ public class NewCreditDetail implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Column(name = "type", nullable = false, columnDefinition = "int default 0")
+    private int type;
+
     public long getId() {
         return id;
     }
@@ -404,42 +407,52 @@ public class NewCreditDetail implements Serializable {
         this.proposeCreditTierDetailList = proposeCreditTierDetailList;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("projectCode", projectCode)
-                .append("productCode", productCode)
-                .append("borrowerName", borrowerName)
-                .append("limit", limit)
-                .append("pcePercent", pcePercent)
-                .append("pceAmount", pceAmount)
-                .append("reducePriceFlag", reducePriceFlag)
-                .append("reduceFrontEndFee", reduceFrontEndFee)
-                .append("outstanding", outstanding)
-                .append("standardPrice", standardPrice)
-                .append("standardInterest", standardInterest)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestInterest", suggestInterest)
-                .append("frontEndFee", frontEndFee)
-                .append("remark", remark)
-                .append("holdLimitAmount", holdLimitAmount)
-                .append("installment", installment)
-                .append("finalPrice", finalPrice)
-                .append("tenor", tenor)
-                .append("purpose", purpose)
-                .append("seq", seq)
-                .append("productProgram", productProgram)
-                .append("creditType", creditType)
-                .append("standardBasePrice", standardBasePrice)
-                .append("suggestBasePrice", suggestBasePrice)
-                .append("disbursement", disbursement)
-                .append("loanPurpose", loanPurpose)
-                .append("newCreditFacility", newCreditFacility)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("projectCode", projectCode).
+                append("productCode", productCode).
+                append("borrowerName", borrowerName).
+                append("limit", limit).
+                append("pcePercent", pcePercent).
+                append("pceAmount", pceAmount).
+                append("reducePriceFlag", reducePriceFlag).
+                append("reduceFrontEndFee", reduceFrontEndFee).
+                append("outstanding", outstanding).
+                append("standardPrice", standardPrice).
+                append("standardInterest", standardInterest).
+                append("suggestPrice", suggestPrice).
+                append("suggestInterest", suggestInterest).
+                append("frontEndFee", frontEndFee).
+                append("remark", remark).
+                append("holdLimitAmount", holdLimitAmount).
+                append("installment", installment).
+                append("finalPrice", finalPrice).
+                append("tenor", tenor).
+                append("purpose", purpose).
+                append("seq", seq).
+                append("productProgram", productProgram).
+                append("creditType", creditType).
+                append("standardBasePrice", standardBasePrice).
+                append("suggestBasePrice", suggestBasePrice).
+                append("disbursement", disbursement).
+                append("loanPurpose", loanPurpose).
+                append("newCreditFacility", newCreditFacility).
+                append("proposeCreditTierDetailList", proposeCreditTierDetailList).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("type", type).
+                toString();
     }
 }
