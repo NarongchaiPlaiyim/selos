@@ -73,8 +73,6 @@ public class DBRInfo implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    private String userId;
     private String lastUpdated;
 
     private boolean isComplete;
@@ -90,13 +88,11 @@ public class DBRInfo implements Serializable {
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
         log.info("preRender ::: setSession ");
-
         session = FacesUtil.getSession(true);
-
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();*/
+//            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+//            userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -191,8 +187,6 @@ public class DBRInfo implements Serializable {
         try {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
-            dbr.setUserId(userId);
-
             dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("ws.newCase.response.success");
@@ -205,11 +199,30 @@ public class DBRInfo implements Serializable {
                 dbrDetails = dbr.getDbrDetailViews();
             }
         } catch (Exception e) {
+
             if (e.getCause() != null) {
-                message = exceptionMsg.get("ws.newCase.response.failed");
+                message = exceptionMsg.get("001");
             } else {
-                message = exceptionMsg.get("ws.newCase.response.failed");
+                message = exceptionMsg.get("001");
             }
+        }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+    }
+
+    public void testUpdateValueDBR(){
+        try{
+            dbrControl.updateValueOfDBR(workCaseId);
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("ws.newCase.response.success");
+            //update Display
+            dbr = new DBRView();
+            dbr = dbrControl.getDBRByWorkCase(workCaseId);
+            dbrDetails = new ArrayList<DBRDetailView>();
+            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
+                dbrDetails = dbr.getDbrDetailViews();
+            }
+        }catch (Exception e){
+
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
