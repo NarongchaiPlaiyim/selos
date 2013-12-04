@@ -1,12 +1,15 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.ProposeCreditDetailView;
+import com.clevel.selos.model.view.NewCreditDetailView;
+import com.clevel.selos.model.view.OpenAccountView;
+import com.clevel.selos.model.view.openaccount.AccountNameView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +19,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +49,11 @@ public class UpdateApproveDetail {
     //session
     private long workCaseId;
 
+    //Modify
+
     // content //
-    List<ProposeCreditDetailView> approveCreditDetailViews;
+    private List<NewCreditDetailView> approveCreditDetailViews;
+    private List<OpenAccountView> openAccountViews;
 
     public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
@@ -74,12 +81,43 @@ public class UpdateApproveDetail {
 
     @PostConstruct
     public void onCreation(){
-        approveCreditDetailViews = new ArrayList<ProposeCreditDetailView>();
+        approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
+        openAccountViews = new ArrayList<OpenAccountView>();
         try{
+        List<OpenAccountView> openAccountViewList = new ArrayList<OpenAccountView>();
+
+        OpenAccountView openAccountView = new OpenAccountView();
+            List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
+            for(int i =0; i<10; i++){
+                AccountNameView accountNameView = new AccountNameView();
+                accountNameView.setName(String.valueOf(i));
+                accountNameViews.add(accountNameView);
+            }
+
+            openAccountView.setAccountNameViewList(accountNameViews);
+            openAccountView.setAccountNumber("1234567890");
+            openAccountViewList.add(openAccountView);
+            openAccountViews = openAccountViewList;
 
         }catch (Exception e){
 
         }
+    }
+
+    public BigDecimal getTotalApprovedCredit(){
+        BigDecimal result = BigDecimal.ZERO;
+        for(NewCreditDetailView newCreditDetailView : Util.safetyList(approveCreditDetailViews)){
+            result = Util.add(result,newCreditDetailView.getLimit());
+        }
+    return result;
+    }
+
+    public List<String> getStringList(){
+        List<String> result = new ArrayList<String>();
+        for(int i = 0; i <5; i++){
+            result.add(String.valueOf(i));
+        }
+        return result;
     }
 
     public long getWorkCaseId() {
@@ -106,11 +144,19 @@ public class UpdateApproveDetail {
         this.messageHeader = messageHeader;
     }
 
-    public List<ProposeCreditDetailView> getApproveCreditDetailViews() {
+    public List<NewCreditDetailView> getApproveCreditDetailViews() {
         return approveCreditDetailViews;
     }
 
-    public void setApproveCreditDetailViews(List<ProposeCreditDetailView> approveCreditDetailViews) {
+    public void setApproveCreditDetailViews(List<NewCreditDetailView> approveCreditDetailViews) {
         this.approveCreditDetailViews = approveCreditDetailViews;
+    }
+
+    public List<OpenAccountView> getOpenAccountViews() {
+        return openAccountViews;
+    }
+
+    public void setOpenAccountViews(List<OpenAccountView> openAccountViews) {
+        this.openAccountViews = openAccountViews;
     }
 }
