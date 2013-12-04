@@ -191,6 +191,9 @@ public class BizInfoDetail implements Serializable {
     @JoinColumn(name = "biz_info_summary_id")
     private BizInfoSummary bizInfoSummary;
 
+    @Column(name="is_main_detail", nullable=false, columnDefinition="int default 0")
+    private int isMainDetail;
+
     public BizInfoDetail() {
     }
 
@@ -632,6 +635,14 @@ public class BizInfoDetail implements Serializable {
 
     public void setBizInfoSummary(BizInfoSummary bizInfoSummary) {
         this.bizInfoSummary = bizInfoSummary;
+    }
+
+    public int getIsMainDetail() {
+        return isMainDetail;
+    }
+
+    public void setIsMainDetail(int mainDetail) {
+        isMainDetail = mainDetail;
     }
 
     @Override

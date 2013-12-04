@@ -36,7 +36,6 @@ public class IsaBusinessControl extends BusinessControl {
     @Inject
     @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
 

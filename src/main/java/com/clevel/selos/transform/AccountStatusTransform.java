@@ -2,7 +2,6 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.view.AccountStatusView;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

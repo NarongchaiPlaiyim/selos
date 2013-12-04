@@ -14,7 +14,7 @@
                     </td>
                     <td style="width: 400px;">
                         <p:selectOneMenu id="guarantorName"
-                                         value="#{creditFacPropose.proposeGuarantorDetailView.guarantorName.id}"
+                                         value="#{creditFacPropose.newGuarantorDetailView.guarantorName.id}"
                                          size="1"
                                          style="width: 200px;"
                                          required="true">
@@ -31,7 +31,7 @@
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                     </td>
                     <td>
-                        <p:inputText id="tcgLgNo" value="#{creditFacPropose.proposeGuarantorDetailView.tcgLgNo}"
+                        <p:inputText id="tcgLgNo" value="#{creditFacPropose.newGuarantorDetailView.tcgLgNo}"
                                      style="text-align:right">
                         </p:inputText>
                     </td>
@@ -46,7 +46,7 @@
                                 <td>
                                     <p:dataTable style="width: 90%"
                                                  id="creditTypeTable"
-                                                 value="#{creditFacPropose.proposeGuarantorDetailView.creditTypeDetailViewList}"
+                                                 value="#{creditFacPropose.newGuarantorDetailView.creditTypeDetailViewList}"
                                                  var="creditTypeItem"
                                                  rowKey="#{creditTypeItem.CreditTypeDetailView}"
                                                  rowIndexVar="rowIndex">

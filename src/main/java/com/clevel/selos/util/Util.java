@@ -191,7 +191,7 @@ public class Util {
     }
 
     public static int calAge(Date date) {
-        int resultDay = 0;
+        /*int resultDay = 0;
         Calendar nowDay = Calendar.getInstance();
         Calendar birthDay = Calendar.getInstance();
         birthDay.setTime(date);
@@ -199,7 +199,17 @@ public class Util {
             return resultDay;
 
         resultDay = (nowDay.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR));
-        return resultDay;
+        return resultDay;*/
+        int age = 0;
+        Calendar dob = Calendar.getInstance();
+        dob.setTime(date);
+        Calendar today = Calendar.getInstance();
+        if(dob.after(today))
+            return age;
+        age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
+            age--;
+        return age;
     }
 
     public static String[] splitSpace(String str) {
@@ -209,11 +219,35 @@ public class Util {
         return null;
     }
 
+    public static BigDecimal add(BigDecimal value, BigDecimal augend) {
+        if (value == null)
+            return null;
+
+        if (augend == null)
+            return value;
+
+        return value.add(augend);
+    }
+
+    public static BigDecimal subtract(BigDecimal value, BigDecimal subtrahend) {
+        if (value == null)
+            return null;
+
+        if (subtrahend == null)
+            return value;
+
+        return value.subtract(subtrahend);
+    }
+
     public static BigDecimal divide(BigDecimal value, BigDecimal divisor) {
+        if (value == null || divisor == null)
+            return null;
+
         if (BigDecimal.ZERO.compareTo(divisor) == 0) {
             log.debug("divide() divisor is zero!");
             return BigDecimal.ZERO;
         }
+
         try {
             return value.divide(divisor, 2, RoundingMode.HALF_UP);
         } catch (Exception e) {
@@ -223,6 +257,10 @@ public class Util {
     }
 
     public static BigDecimal divide(BigDecimal value, int divisor) {
+        if (value == null) {
+            return null;
+        }
+
         if (divisor == 0) {
             log.debug("divide() divisor is zero!");
             return BigDecimal.ZERO;
@@ -233,6 +271,17 @@ public class Util {
             log.error("", e);
             return BigDecimal.ZERO;
         }
+    }
+
+    public static BigDecimal multiply(BigDecimal value, BigDecimal multiplier){
+        BigDecimal result = BigDecimal.ZERO;
+        if(value == null || multiplier == null) return null;
+        try {
+            result = value.multiply(multiplier);
+        }catch (Exception e){
+            return null;
+        }
+        return result;
     }
 
     public static <T> List<T> safetyList(List<T> list) {

@@ -10,7 +10,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +48,13 @@ public class DateTimeUtil {
     public static Date convertToDateUS(Date date){
         DateTime dateConvert = new DateTime(date, ISOChronology.getInstance());
         return dateConvert.toDate();
+    }
+
+    public static String convertToStringDDMMYYYY(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = simpleDateFormat.format(date);
+
+        return dateString;
     }
 
     public static Date convertToDateTH(Date date){

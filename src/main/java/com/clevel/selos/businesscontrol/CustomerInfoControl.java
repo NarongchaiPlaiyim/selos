@@ -17,15 +17,22 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class CustomerInfoControl extends BusinessControl {
+    @Inject
+    @SELOS
+    private Logger log;
+
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -59,6 +66,23 @@ public class CustomerInfoControl extends BusinessControl {
 
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        //update percent share for juristic
+        for(CustomerInfoView cV : customerInfoViewList){
+            if(cV.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
+                    if(cV.getTotalShare() != null && cV.getTotalShare().compareTo(BigDecimal.ZERO) > 0){
+                        cV.setPercentShareSummary((cV.getPercentShare().divide(cV.getTotalShare(), RoundingMode.HALF_UP)).multiply(new BigDecimal(100)));
+                    }
+                }
+            } else {
+                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
+                    cV.setPercentShareSummary(cV.getPercentShare());
+                } else {
+                    cV.setPercentShareSummary(BigDecimal.ZERO);
+                }
+            }
+        }
 
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
         customerInfoSummaryView.setBorrowerCustomerViewList(borrowerCustomerList);
@@ -169,6 +193,9 @@ public class CustomerInfoControl extends BusinessControl {
                 cus.setId(0);
             }
         }
+
+        //calculation age for juristic
+        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
         customerDAO.persist(customerJuristic);
@@ -307,7 +334,7 @@ public class CustomerInfoControl extends BusinessControl {
     //** function for integration **//
 
     // *** Function for RM *** //
-    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
@@ -323,6 +350,7 @@ public class CustomerInfoControl extends BusinessControl {
             masterDocumentType = documentTypeDAO.findById(1);
         }
 
+        User user = getCurrentUser();
         String userId = user.getId();
         String documentTypeCode = masterDocumentType.getDocumentTypeCode();
         log.info("getCustomerInfoFromRM ::: userId : {}", userId);

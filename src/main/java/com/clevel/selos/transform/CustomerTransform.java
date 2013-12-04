@@ -21,6 +21,7 @@ public class CustomerTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     CustomerCSITransform customerCSITransform;
 
@@ -147,8 +148,16 @@ public class CustomerTransform extends Transform {
         if(customerInfoView.getKycLevel() == null){
             customerInfoView.setKycLevel(new KYCLevel());
         }
+        customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setCsiFlag(customer.getCsiFlag());
+        customerInfoView.setServiceSegment(customer.getServiceSegment());
+        customerInfoView.setSearchFromRM(customer.getSearchFromRM());
 
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
+        if(customerInfoView.getMailingAddressType() == null){
+            customerInfoView.setMailingAddressType(new AddressType());
+
+		customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
         }
@@ -165,8 +174,24 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
-
+        }
         customerInfoView.setValidId(2);
+
+        customerInfoView.setSourceIncome(customer.getSourceIncome());
+        if(customerInfoView.getSourceIncome() == null){
+            customerInfoView.setSourceIncome(new Country());
+        }
+
+        customerInfoView.setCountryIncome(customer.getCountryIncome());
+        if(customerInfoView.getCountryIncome() == null){
+            customerInfoView.setCountryIncome(new Country());
+        }
+
+        customerInfoView.setIsCommittee(customer.getIsCommittee());
+        customerInfoView.setCommitteeId(customer.getJuristicId());
+
+        customerInfoView.setCollateralOwner(customer.getCollateralOwner());
+        customerInfoView.setPercentShare(customer.getPercentShare());
 
         customerInfoView.setSearchBy(customer.getSearchBy());
         customerInfoView.setSearchId(customer.getSearchId());
@@ -335,14 +360,23 @@ public class CustomerTransform extends Transform {
             }
         }
 
+        //for new field
+        customerInfoView.setAgeMonths(customer.getAgeMonths());
+        customerInfoView.setIsExistingSMECustomer(customer.getIsExistingSMECustomer());
+        customerInfoView.setLastReviewDate(customer.getLastReviewDate());
+        customerInfoView.setExtendedReviewDate(customer.getExtendedReviewDate());
+        customerInfoView.setExtendedReviewDateFlag(customer.getExtendedReviewDateFlag());
+        customerInfoView.setNextReviewDate(customer.getNextReviewDate());
+        customerInfoView.setNextReviewDateFlag(customer.getNextReviewDateFlag());
+        customerInfoView.setLastContractDate(customer.getLastContractDate());
+        customerInfoView.setNumberOfMonthsLastContractDate(customer.getNumberOfMonthsLastContractDate());
+        customerInfoView.setAdjustClass(customer.getAdjustClass());
+        customerInfoView.setRatingFinal(customer.getRatingFinal());
+        customerInfoView.setUnpaidFeeInsurance(customer.getUnpaidFeeInsurance());
+        customerInfoView.setNoPendingClaimLG(customer.getNoPendingClaimLG());
+
         log.info("Return Customer {}", customerInfoView);
         return customerInfoView;
-    }
-
-    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCase workCase){
-        Customer customer = new Customer();
-
-        return customer;
     }
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
@@ -394,6 +428,10 @@ public class CustomerTransform extends Transform {
         customer.setAge(customerInfoView.getAge());
         customer.setNcbFlag(customerInfoView.getNcbFlag());
         customer.setSearchFromRM(customerInfoView.getSearchFromRM());
+        customer.setCsiFlag(customerInfoView.getCsiFlag());
+        customer.setServiceSegment(customerInfoView.getServiceSegment());
+        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
+        customer.setPercentShare(customerInfoView.getPercentShare());
 
         if(customerInfoView.getBusinessType() != null && customerInfoView.getBusinessType().getId() != 0){
             customer.setBusinessType(businessTypeDAO.findById(customerInfoView.getBusinessType().getId()));
@@ -717,13 +755,23 @@ public class CustomerTransform extends Transform {
 
             customer.setJuristic(juristic);
         }
+
+        //for new field
+        customer.setAgeMonths(customerInfoView.getAgeMonths());
+        customer.setIsExistingSMECustomer(customerInfoView.getIsExistingSMECustomer());
+        customer.setLastReviewDate(customerInfoView.getLastReviewDate());
+        customer.setExtendedReviewDate(customerInfoView.getExtendedReviewDate());
+        customer.setExtendedReviewDateFlag(customerInfoView.getExtendedReviewDateFlag());
+        customer.setNextReviewDate(customerInfoView.getNextReviewDate());
+        customer.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
+        customer.setLastContractDate(customerInfoView.getLastContractDate());
+        customer.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
+        customer.setAdjustClass(customerInfoView.getAdjustClass());
+        customer.setRatingFinal(customerInfoView.getRatingFinal());
+        customer.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
+        customer.setNoPendingClaimLG(customerInfoView.getNoPendingClaimLG());
+
         return customer;
-    }
-
-    private Individual transformToIndividual(CustomerInfoView customerInfoView){
-        Individual individual = new Individual();
-
-        return individual;
     }
 
     public List<CustomerInfoView> transformToViewList(List<Customer> customers){

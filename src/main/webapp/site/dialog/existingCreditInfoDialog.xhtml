@@ -36,13 +36,13 @@
         </td>
         <td colspan="3">
             <p:selectOneMenu id="dlgSelAccountStatus"
-                             value="#{creditFacExisting.existingCreditDetailView.existAccountStatus.id}"
+                             value="#{creditFacExisting.existingCreditDetailView.existAccountStatus.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                              size="1"
                              style="min-width: 200px; width: 200px; max-width: 200px;" >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacExisting.accountStatusList}"
                                var="accountStatus"
-                               itemLabel="#{accountStatus.description}"
+                               itemLabel="#{accountStatus.name}"
                                itemValue="#{accountStatus.id}"/>
 
             </p:selectOneMenu>
@@ -51,7 +51,7 @@
     <tr>
         <td class="title" style="width:145px;">Product Program :</td>
         <td>
-            <p:selectOneMenu id="dlgSelProdProgram" value="#{creditFacExisting.existingCreditDetailView.existProductProgram.id}"
+            <p:selectOneMenu id="dlgSelProdProgram" value="#{creditFacExisting.existingCreditDetailView.existProductProgram.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                              size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                              >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -68,7 +68,7 @@
     <tr>
         <td class="title">Facility :</td>
         <td>
-            <p:selectOneMenu id="creditTypeName" value="#{creditFacExisting.existingCreditDetailView.existCreditType.id}"
+            <p:selectOneMenu id="creditTypeName" value="#{creditFacExisting.existingCreditDetailView.existCreditType.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                              size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                              >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -152,7 +152,7 @@
         </td>
         <td colspan="3">
             <p:dataTable id="resultTier" var="creditTier"
-                         value="#{creditFacExisting.creditTierDetailViewList}"
+                         value="#{creditFacExisting.newCreditTierDetailViewList}"
                          rowKey="#{creditTier.no}" rowIndexVar="rowIndex" style="width: 100%">
                 <p:columnGroup type="header">
                     <p:row>
@@ -266,14 +266,14 @@
 </p:panel>
     <tr>
         <td colspan="4" class="center">
-            <p:commandButton id="dlgSaveCreditBtn"
+            <p:commandButton id="saveCreditBtn"
                              styleClass="small"
-                             binding="#{SaveCreditBtn}"
+                             binding="#{saveCreditBtn}"
                              value="#{msg.get('app.button.ok')}"
                              action="#{creditFacExisting.onSaveCreditInfo()}"
                              process="@form"
                              update=":existingCreditDlgForm :frmMain"
-                             oncomplete="handleDlgCreditExistingRequest(xhr, status, args)"/>
+                             oncomplete="handleExistingCreditRequest(xhr, status, args)"/>
 
             <p:commandButton type="button" styleClass="small"
                              value="#{msg.get('app.button.cancel')}"
@@ -283,41 +283,11 @@
     </tr>
 </table>
 </h:form>
-
-<p:dialog id="existingTierDialog" header="Existing Tier Infomartion" widgetVar="existingTierDlg" >
-    <ui:include src="existingTierDialog.xhtml"/>
-</p:dialog>
-
-<p:dialog id="existingSplitLineDialog" header="Existing Split Line Information" widgetVar="existingSplitLineDlg" >
-    <ui:include src="existingSplitLineDialog.xhtml"/>
-</p:dialog>
-
-
-
-<ui:include src="confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteCreditTierDetailViewDialog"/>
-    <ui:param name="name" value="confirmDeleteCreditTierDetailViewDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteCreditTierDetailView"/>
-    <ui:param name="controller" value="#{creditFacExisting}"/>
-    <ui:param name="action" value="onDeleteCreditTierDetailView"/>
-    <ui:param name="update" value=":existingCreditDlgForm"/>
-</ui:include>
-
-<ui:include src="confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteSplitLineDetailViewDialog"/>
-    <ui:param name="name" value="confirmDeleteSplitLineDetailViewDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteSplitLineDetailView"/>
-    <ui:param name="controller" value="#{creditFacExisting}"/>
-    <ui:param name="action" value="onDeleteSplitLineDetailView"/>
-    <ui:param name="update" value=":existingCreditDlgForm"/>
-</ui:include>
-
-
 </p:panel>
 
-<!-- <p:blockUI widgetVar="blockexistingCreditInfoDlg" block="existingCreditInfoDlgPanel" trigger=":existingCreditInfoDlgForm:addDlgCreditButton">
+<p:blockUI widgetVar="blockexistingCreditDlg" block="existingCreditDlgPanel" trigger=":existingCreditDlgForm:saveCreditBtn">
      LOADING<br/>
      <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
- </p:blockUI>-->
+</p:blockUI>
 
 </ui:composition>

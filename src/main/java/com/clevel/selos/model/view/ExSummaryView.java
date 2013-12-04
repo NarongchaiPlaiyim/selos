@@ -18,6 +18,10 @@ public class ExSummaryView  implements Serializable {
 
     //Borrower
     private List<CustomerInfoView> borrowerListView;         //wo transform
+    private String businessLocationName;
+    private String businessLocationAddress;
+    private String businessLocationAddressEN;
+    private String owner;
 
     //Trade Finance
 
@@ -33,7 +37,7 @@ public class ExSummaryView  implements Serializable {
     private List<NCBInfoView> ncbInfoListView;               //wo transform
 
     //Account Movement
-    private ExSumAccountMovementView exSumAccMovementView;
+    private List<ExSumAccountMovementView> exSumAccMovementViewList;
 
     //Collateral
     private ExSumCollateralView exSumCollateralView;
@@ -63,6 +67,9 @@ public class ExSummaryView  implements Serializable {
     //UW Comment
     private String uwComment;
 
+    //
+    private String yearInBusinessMonth;
+
     public  ExSummaryView(){}
 
     public void reset(){
@@ -71,7 +78,7 @@ public class ExSummaryView  implements Serializable {
         exSumDecisionListView = new ArrayList<ExSumDecisionView>();
         exSumCharacteristicView = new ExSumCharacteristicView();
         exSumBusinessInfoView = new ExSumBusinessInfoView();
-        exSumAccMovementView = new ExSumAccountMovementView();
+        exSumAccMovementViewList = new ArrayList<ExSumAccountMovementView>();
     }
 
     public long getId() {
@@ -268,12 +275,12 @@ public class ExSummaryView  implements Serializable {
         this.exSumCharacteristicView = exSumCharacteristicView;
     }
 
-    public ExSumAccountMovementView getExSumAccMovementView() {
-        return exSumAccMovementView;
+    public List<ExSumAccountMovementView> getExSumAccMovementViewList() {
+        return exSumAccMovementViewList;
     }
 
-    public void setExSumAccMovementView(ExSumAccountMovementView exSumAccMovementView) {
-        this.exSumAccMovementView = exSumAccMovementView;
+    public void setExSumAccMovementViewList(List<ExSumAccountMovementView> exSumAccMovementViewList) {
+        this.exSumAccMovementViewList = exSumAccMovementViewList;
     }
 
     public ExSumBusinessInfoView getExSumBusinessInfoView() {
@@ -322,5 +329,45 @@ public class ExSummaryView  implements Serializable {
 
     public void setDeviateCode(List<ExSumReasonView> deviateCode) {
         this.deviateCode = deviateCode;
+    }
+
+    public String getBusinessLocationName() {
+        return businessLocationName;
+    }
+
+    public void setBusinessLocationName(String businessLocationName) {
+        this.businessLocationName = businessLocationName;
+    }
+
+    public String getBusinessLocationAddress() {
+        return businessLocationAddress;
+    }
+
+    public void setBusinessLocationAddress(String businessLocationAddress) {
+        this.businessLocationAddress = businessLocationAddress;
+    }
+
+    public String getBusinessLocationAddressEN() {
+        return businessLocationAddressEN;
+    }
+
+    public void setBusinessLocationAddressEN(String businessLocationAddressEN) {
+        this.businessLocationAddressEN = businessLocationAddressEN;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getYearInBusinessMonth() {
+        return yearInBusinessMonth;
+    }
+
+    public void setYearInBusinessMonth(String yearInBusinessMonth) {
+        this.yearInBusinessMonth = yearInBusinessMonth;
     }
 }

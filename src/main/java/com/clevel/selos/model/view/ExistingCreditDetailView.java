@@ -2,7 +2,7 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
-import com.clevel.selos.model.db.master.BankAccountStatus;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,12 +18,14 @@ public class ExistingCreditDetailView implements Serializable {
     private int no;
     private int seq;
     private boolean noFlag;
+    private String stage;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
     private BankAccountStatusView accountStatus;
-    private BankAccountStatus existAccountStatus;
+
+    private AccountStatus existAccountStatus;
     private String productProgram;
     private ProductProgram existProductProgram;
     private String creditType;
@@ -43,7 +45,7 @@ public class ExistingCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private String accountRef;
 
-    private List<CreditTierDetailView> creditTierDetailViewList;
+    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
     private List<SplitLineDetailView> splitLineDetailViewList;
 
     public long getId() {
@@ -76,6 +78,14 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setNoFlag(boolean noFlag) {
         this.noFlag = noFlag;
+    }
+
+    public String getStage() {
+        return stage;
+    }
+
+    public void setStage(String stage) {
+        this.stage = stage;
     }
 
     public String getAccountName() {
@@ -118,11 +128,11 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
-    public BankAccountStatus getExistAccountStatus() {
+    public AccountStatus getExistAccountStatus() {
         return existAccountStatus;
     }
 
-    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
+    public void setExistAccountStatus(AccountStatus existAccountStatus) {
         this.existAccountStatus = existAccountStatus;
     }
 
@@ -270,12 +280,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountRef = accountRef;
     }
 
-    public List<CreditTierDetailView> getCreditTierDetailViewList() {
-        return creditTierDetailViewList;
+    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
+        return newCreditTierDetailViewList;
     }
 
-    public void setCreditTierDetailViewList(List<CreditTierDetailView> creditTierDetailViewList) {
-        this.creditTierDetailViewList = creditTierDetailViewList;
+    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
+        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
     }
 
     public List<SplitLineDetailView> getSplitLineDetailViewList() {
@@ -317,7 +327,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
-                .append("creditTierDetailViewList", creditTierDetailViewList)
+                .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .append("splitLineDetailViewList", splitLineDetailViewList)
                 .toString();
     }

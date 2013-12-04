@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -89,18 +88,16 @@ public class AppraisalResult implements Serializable {
 
 
     private List<CollateralDetailView> collateralDetailViewList;
-    private List<CollateralHeaderDetailView> collateralHeadDetailViewList;
+    private List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
     private List<SubCollateralDetailView> subCollateralDetailViewList;
 
-    private CollateralHeaderDetailView collateralHeadDetailView;
+    private CollateralHeaderDetailView collateralHeaderDetailView;
 
-    AppraisalData appraisalData;
-    HeadCollateralData headCollateralData;
-    SubCollateralData subCollateralData;
-    List<SubCollateralData> subCollateralDataList;
-
-    CollateralHeaderDetailView collateralHeaderDetailView;
-    SubCollateralDetailView subCollateralDetailView;
+    private AppraisalData appraisalData;
+    private HeadCollateralData headCollateralData;
+    private SubCollateralData subCollateralData;
+    private List<SubCollateralData> subCollateralDataList;
+    private SubCollateralDetailView subCollateralDetailView;
 
     private CollateralDetailView selectCollateralDetailView;
     private ContactRecordDetailView selectContactRecordDetail;
@@ -151,13 +148,13 @@ public class AppraisalResult implements Serializable {
                 }else{
                     for(int i=0;i<collateralDetailViewList.size();i++){
                         collateralDetailView = collateralDetailViewList.get(i);
-                        collateralHeadDetailViewList = collateralDetailView.getCollateralHeaderDetailViewList();
-                        if(collateralHeadDetailViewList == null){
-                            collateralHeadDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+                        collateralHeaderDetailViewList = collateralDetailView.getCollateralHeaderDetailViewList();
+                        if(collateralHeaderDetailViewList == null){
+                            collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
                         }else{
-                            for(int j=0;j<collateralHeadDetailViewList.size();j++){
-                                collateralHeadDetailView = collateralHeadDetailViewList.get(j);
-                                subCollateralDetailViewList = collateralHeadDetailView.getSubCollateralDetailViewList();
+                            for(int j=0;j<collateralHeaderDetailViewList.size();j++){
+                                collateralHeaderDetailView = collateralHeaderDetailViewList.get(j);
+                                subCollateralDetailViewList = collateralHeaderDetailView.getSubCollateralDetailViewList();
                             }
                             if(subCollateralDetailViewList == null){
                                 subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
@@ -208,10 +205,10 @@ public class AppraisalResult implements Serializable {
 
                 convertCollateral(appraisalData);
 
-                CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
+                CollateralHeaderDetailView newCollateralHeadDetailView = new CollateralHeaderDetailView();
 
-                collateralHeaderDetailView.setTitleDeed("xx");
-                collateralHeaderDetailView.setCollateralLocation( "yy");
+                newCollateralHeadDetailView.setTitleDeed("xx");
+                newCollateralHeadDetailView.setCollateralLocation( "yy");
 
                 subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
                 subCollateralDetailView = new SubCollateralDetailView();
@@ -223,19 +220,19 @@ public class AppraisalResult implements Serializable {
                 subCollateralDetailView.setAppraisalValue(new BigDecimal(1000000));
                 subCollateralDetailViewList.add(subCollateralDetailView);
 
-                collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
+                newCollateralHeadDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
 
-                collateralDetailView.getCollateralHeaderDetailViewList().add(collateralHeaderDetailView);
+                collateralDetailView.getCollateralHeaderDetailViewList().add(newCollateralHeadDetailView);
 
                 collateralDetailViewList.add(collateralDetailView);
 
 
                 for(int i=0; i<collateralDetailViewList.size();i++){
                     collateralDetailViewTemp = collateralDetailViewList.get(i);
-                    collateralHeadDetailViewList = collateralDetailViewTemp.getCollateralHeaderDetailViewList();
+                    collateralHeaderDetailViewList = collateralDetailViewTemp.getCollateralHeaderDetailViewList();
 
-                    for(int j=0; j<collateralHeadDetailViewList.size();j++){
-                        collateralHeaderDetailViewTemp = collateralHeadDetailViewList.get(j);
+                    for(int j=0; j<collateralHeaderDetailViewList.size();j++){
+                        collateralHeaderDetailViewTemp = collateralHeaderDetailViewList.get(j);
                         subCollateralDetailViewList = collateralHeaderDetailViewTemp.getSubCollateralDetailViewList();
                     }
                 }
@@ -665,43 +662,43 @@ public class AppraisalResult implements Serializable {
         collateralDetailView.setMortgageCondition(appraisalData.getMortgageCondition());
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
-        List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+        List<CollateralHeaderDetailView> newCollateralHeadDetailViewList = new ArrayList<CollateralHeaderDetailView>();
         HeadCollateralData headCollateralData = appraisalData.getHeadCollateralData();
-        CollateralHeaderDetailView collateralHeaderDetailView = convertCollateralHeader(headCollateralData);
-        collateralHeaderDetailViewList.add(collateralHeaderDetailView);
+        CollateralHeaderDetailView newCollateralHeadDetailView = convertCollateralHeader(headCollateralData);
+        newCollateralHeadDetailViewList.add(newCollateralHeadDetailView);
 
         List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
         List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
 
-        for(int i=0;i<collateralHeaderDetailViewList.size();i++){
-            CollateralHeaderDetailView collateralHeaderDetailViewTemp = collateralHeaderDetailViewList.get(i);
-            collateralHeaderDetailViewTemp.setNo(i+1);
+        for(int i=0;i< newCollateralHeadDetailViewList.size();i++){
+            CollateralHeaderDetailView newCollateralHeadDetailViewTemp = newCollateralHeadDetailViewList.get(i);
+            newCollateralHeadDetailViewTemp.setNo(i+1);
 
             for(int j= 0;j<SubCollateralDataList.size();j++){
                 SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(j));
                 subCollateralDetailView.setNo(j+1);
-                subCollateralDetailView.getSubCollateralType().setCollateralType(collateralHeaderDetailViewTemp.getHeadCollType());
+                subCollateralDetailView.getSubCollateralType().setCollateralType(newCollateralHeadDetailViewTemp.getHeadCollType());
                 SubCollateralType  subCollateralTypeResult = subCollateralTypeDAO.findByBySubColCode(subCollateralDetailView.getSubCollateralType());
                 log.info("subCollateralTypeDAO.findByBySubColCode ID is " + subCollateralTypeResult.getId());
                 subCollateralDetailView.setSubCollateralType(subCollateralTypeResult);
                 subCollateralDetailViewList.add(subCollateralDetailView);
             }
-            collateralHeaderDetailViewTemp.setSubCollateralDetailViewList(subCollateralDetailViewList);
+            newCollateralHeadDetailViewTemp.setSubCollateralDetailViewList(subCollateralDetailViewList);
         }
 
-        collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
+        collateralDetailView.setCollateralHeaderDetailViewList(newCollateralHeadDetailViewList);
         log.info("convertCollateral end");
         return collateralDetailView;
     }
 
     private CollateralHeaderDetailView convertCollateralHeader(HeadCollateralData headCollateralData ){
         log.info("convertCollateralHeader begin");
-        CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
+        CollateralHeaderDetailView newCollateralHeadDetailView = new CollateralHeaderDetailView();
 
-        collateralHeaderDetailView.setTitleDeed(headCollateralData.getTitleDeed());
+        newCollateralHeadDetailView.setTitleDeed(headCollateralData.getTitleDeed());
         double appraisalValue = Double.parseDouble(headCollateralData.getAppraisalValue());
-        collateralHeaderDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
-        collateralHeaderDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
+        newCollateralHeadDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
+        newCollateralHeadDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
         CollateralType headCollType = new CollateralType();
         if(headCollateralData.getHeadCollType()== null || headCollateralData.getHeadCollType().equals("")){
             headCollType.setCode("286003");
@@ -711,9 +708,9 @@ public class AppraisalResult implements Serializable {
 
         headCollType = collateralTypeDAO.findByCollateralCode(headCollType);
         log.info("collateralTypeDAO.findByCollateralCode ID is " + headCollType.getId());
-        collateralHeaderDetailView.setHeadCollType(headCollType);
+        newCollateralHeadDetailView.setHeadCollType(headCollType);
         log.info("convertCollateralHeader end");
-        return collateralHeaderDetailView;
+        return newCollateralHeadDetailView;
     }
 
     private SubCollateralDetailView convertSubCollateral(SubCollateralData subCollateralData ){
@@ -724,7 +721,7 @@ public class AppraisalResult implements Serializable {
         subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
         subCollateralDetailView.setAddress(subCollateralData.getAddress());
         subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwner(subCollateralData.getCollateralOwner());
+        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
         if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
@@ -747,11 +744,11 @@ public class AppraisalResult implements Serializable {
     }
 
     public List<CollateralHeaderDetailView> getCollateralHeadDetailViewList() {
-        return collateralHeadDetailViewList;
+        return collateralHeaderDetailViewList;
     }
 
-    public void setCollateralHeadDetailViewList(List<CollateralHeaderDetailView> collateralHeadDetailViewList) {
-        this.collateralHeadDetailViewList = collateralHeadDetailViewList;
+    public void setCollateralHeadDetailViewList(List<CollateralHeaderDetailView> collateralHeaderDetailViewList) {
+        this.collateralHeaderDetailViewList = collateralHeaderDetailViewList;
     }
 
     public List<SubCollateralDetailView> getSubCollateralDetailViewList() {

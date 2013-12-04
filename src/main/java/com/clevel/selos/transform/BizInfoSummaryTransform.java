@@ -1,12 +1,35 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.*;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import org.joda.time.DateTime;
 
+import javax.inject.Inject;
+import java.math.BigDecimal;
+
 public class BizInfoSummaryTransform extends Transform {
 
+    @Inject
+    ProvinceDAO provinceDAO;
+    @Inject
+    DistrictDAO districtDAO;
+    @Inject
+    SubDistrictDAO subDistrictDAO;
+    @Inject
+    CountryDAO countryDAO;
+    @Inject
+    ReferredExperienceDAO referredExperienceDAO;
+
+    private Province province;
+    private District district;
+    private SubDistrict subDistrict;
+    private Country country;
+    private ReferredExperience referredExperience;
+
     public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView) {
+        log.info("find transformToModel begin");
         BizInfoSummary bizInfoSummary;
 
         bizInfoSummary = new BizInfoSummary();
@@ -18,20 +41,61 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummary.setCreateDate(DateTime.now().toDate());
         }
 
+        log.info("find transformToModel xxx1");
+
         bizInfoSummary.setBizLocationName(bizInfoSummaryView.getBizLocationName());
         bizInfoSummary.setRental(bizInfoSummaryView.getRental());
         bizInfoSummary.setOwnerName(bizInfoSummaryView.getOwnerName());
         bizInfoSummary.setExpiryDate(bizInfoSummaryView.getExpiryDate());
+
+        log.info("transformToModel bizInfoSummaryView getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
+        log.info("transformToModel bizInfoSummaryView getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
 
         bizInfoSummary.setAddressNo(bizInfoSummaryView.getAddressNo());
         bizInfoSummary.setAddressMoo(bizInfoSummaryView.getAddressMoo());
         bizInfoSummary.setAddressBuilding(bizInfoSummaryView.getAddressBuilding());
         bizInfoSummary.setAddressStreet(bizInfoSummaryView.getAddressStreet());
 
-        bizInfoSummary.setProvince(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince());
-        bizInfoSummary.setDistrict(bizInfoSummaryView.getSubDistrict().getDistrict());
-        bizInfoSummary.setSubDistrict(bizInfoSummaryView.getSubDistrict());
-        bizInfoSummary.setCountry(bizInfoSummaryView.getCountry());
+        log.info("find transformToModel xxx2");
+
+        log.info("find transformToModel province" + bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
+
+        if(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode() != 0){
+            province = provinceDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
+            log.info("find transformToModel findById  is " + province.toString());
+            bizInfoSummary.setProvince(province);
+        }else{
+            bizInfoSummary.setProvince(null);
+        }
+
+        log.info("find transformToModel district" + bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+
+        if(bizInfoSummaryView.getSubDistrict().getDistrict()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getId() != 0){
+            district = districtDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+            log.info("find transformToModel findById  is " + district.toString());
+            bizInfoSummary.setDistrict(district);
+        }else{
+            bizInfoSummary.setDistrict(null);
+        }
+
+        log.info("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
+        if(bizInfoSummaryView.getSubDistrict()!=null && bizInfoSummaryView.getSubDistrict().getCode() != 0){
+            subDistrict = subDistrictDAO.findById(bizInfoSummaryView.getSubDistrict().getCode());
+            log.info("find transformToModel findById  is " + subDistrict.toString());
+            bizInfoSummary.setSubDistrict(subDistrict);
+        }else{
+            bizInfoSummary.setSubDistrict(null);
+        }
+
+        log.info("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
+        if(bizInfoSummaryView.getCountry()!=null && bizInfoSummaryView.getCountry().getId() != 0){
+            country = countryDAO.findById(bizInfoSummaryView.getCountry().getId());
+            log.info("find transformToModel findById  is " + country.toString());
+            bizInfoSummary.setCountry(country);
+        }else{
+            bizInfoSummary.setCountry(null);
+        }
+
 
         bizInfoSummary.setPostCode(bizInfoSummaryView.getPostCode());
         bizInfoSummary.setPhoneNo(bizInfoSummaryView.getPhoneNo());
@@ -39,35 +103,121 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummary.setRegistrationDate(bizInfoSummaryView.getRegistrationDate());
         bizInfoSummary.setEstablishDate(bizInfoSummaryView.getEstablishDate());
-        bizInfoSummary.setReferredExperience(bizInfoSummaryView.getReferredExperience());
 
-        bizInfoSummary.setCirculationAmount(bizInfoSummaryView.getCirculationAmount());
-        bizInfoSummary.setCirculationPercentage(bizInfoSummaryView.getCirculationPercentage());
+        log.info("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+        if(bizInfoSummaryView.getReferredExperience()!=null && bizInfoSummaryView.getReferredExperience().getId() != 0){
+            referredExperience = referredExperienceDAO.findById(bizInfoSummaryView.getReferredExperience().getId());
+            bizInfoSummary.setReferredExperience(referredExperience);
+        }else{
+            bizInfoSummary.setReferredExperience(null);
+        }
 
-        bizInfoSummary.setProductionCostsAmount(bizInfoSummaryView.getProductionCostsAmount());
-        bizInfoSummary.setProductionCostsPercentage(bizInfoSummaryView.getProductionCostsPercentage());
+        if(bizInfoSummaryView.getCirculationAmount() != null){
+            bizInfoSummary.setCirculationAmount(bizInfoSummaryView.getCirculationAmount());
+        }else{
+            bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
+        }
 
-        bizInfoSummary.setProfitMarginAmount(bizInfoSummaryView.getProfitMarginAmount());
-        bizInfoSummary.setProfitMarginPercentage(bizInfoSummaryView.getProfitMarginPercentage());
+        if(bizInfoSummaryView.getCirculationPercentage() != null){
+            bizInfoSummary.setCirculationPercentage(bizInfoSummaryView.getCirculationPercentage());
+        }else{
+            bizInfoSummary.setCirculationPercentage(BigDecimal.ZERO);
+        }
 
-        bizInfoSummary.setOperatingExpenseAmount(bizInfoSummaryView.getOperatingExpenseAmount());
-        bizInfoSummary.setOperatingExpensePercentage(bizInfoSummaryView.getOperatingExpensePercentage());
+        if(bizInfoSummaryView.getProductionCostsAmount() != null){
+            bizInfoSummary.setProductionCostsAmount(bizInfoSummaryView.getProductionCostsAmount());
+        }else{
+            bizInfoSummary.setProductionCostsAmount(BigDecimal.ZERO);
+        }
 
-        bizInfoSummary.setReduceTaxAmount(bizInfoSummaryView.getReduceTaxAmount());
-        bizInfoSummary.setReduceTaxPercentage(bizInfoSummaryView.getReduceTaxPercentage());
+        if(bizInfoSummaryView.getProductionCostsPercentage() != null){
+            bizInfoSummary.setProductionCostsPercentage(bizInfoSummaryView.getProductionCostsPercentage());
+        }else{
+            bizInfoSummary.setProductionCostsPercentage(BigDecimal.ZERO);
+        }
 
-        bizInfoSummary.setReduceInterestAmount(bizInfoSummaryView.getReduceInterestAmount());
-        bizInfoSummary.setReduceInterestPercentage(bizInfoSummaryView.getReduceInterestAmount());
+
+        if(bizInfoSummaryView.getProfitMarginAmount() != null){
+            bizInfoSummary.setProfitMarginAmount(bizInfoSummaryView.getProfitMarginAmount());
+        }else{
+            bizInfoSummary.setProfitMarginAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getProfitMarginPercentage() != null){
+            bizInfoSummary.setProfitMarginPercentage(bizInfoSummaryView.getProfitMarginPercentage());
+        }else{
+            bizInfoSummary.setProfitMarginPercentage(BigDecimal.ZERO);
+        }
 
 
-        bizInfoSummary.setEarningsBeforeTaxAmount(bizInfoSummaryView.getEarningsBeforeTaxAmount());
-        bizInfoSummary.setEarningsBeforeTaxPercentage(bizInfoSummaryView.getEarningsBeforeTaxPercentage());
 
-        bizInfoSummary.setNetMarginAmount(bizInfoSummaryView.getNetMarginAmount());
-        bizInfoSummary.setNetMarginPercentage(bizInfoSummaryView.getNetMarginPercentage());
+        if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
+            bizInfoSummary.setOperatingExpenseAmount(bizInfoSummaryView.getOperatingExpenseAmount());
+        }else{
+            bizInfoSummary.setOperatingExpenseAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getOperatingExpensePercentage() != null){
+            bizInfoSummary.setOperatingExpensePercentage(bizInfoSummaryView.getOperatingExpensePercentage());
+        }else{
+            bizInfoSummary.setOperatingExpensePercentage(BigDecimal.ZERO);
+        }
+
+
+        if(bizInfoSummaryView.getReduceTaxAmount() != null){
+            bizInfoSummary.setReduceTaxAmount(bizInfoSummaryView.getReduceTaxAmount());
+        }else{
+            bizInfoSummary.setReduceTaxAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getReduceTaxPercentage() != null){
+            bizInfoSummary.setReduceTaxPercentage(bizInfoSummaryView.getReduceTaxPercentage());
+        }else{
+            bizInfoSummary.setReduceTaxPercentage(BigDecimal.ZERO);
+        }
+
+
+        if(bizInfoSummaryView.getReduceInterestAmount() != null){
+            bizInfoSummary.setReduceInterestAmount(bizInfoSummaryView.getReduceInterestAmount());
+        }else{
+            bizInfoSummary.setReduceInterestAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getReduceInterestPercentage() != null){
+            bizInfoSummary.setReduceInterestPercentage(bizInfoSummaryView.getReduceInterestPercentage());
+        }else{
+            bizInfoSummary.setReduceInterestPercentage(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getEarningsBeforeTaxAmount() != null){
+            bizInfoSummary.setEarningsBeforeTaxAmount(bizInfoSummaryView.getEarningsBeforeTaxAmount());
+        }else{
+            bizInfoSummary.setEarningsBeforeTaxAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getEarningsBeforeTaxPercentage() != null){
+            bizInfoSummary.setEarningsBeforeTaxPercentage(bizInfoSummaryView.getEarningsBeforeTaxPercentage());
+        }else{
+            bizInfoSummary.setEarningsBeforeTaxPercentage(BigDecimal.ZERO);
+        }
+
+
+        if(bizInfoSummaryView.getNetMarginAmount() != null){
+            bizInfoSummary.setNetMarginAmount(bizInfoSummaryView.getNetMarginAmount());
+        }else{
+            bizInfoSummary.setNetMarginAmount(BigDecimal.ZERO);
+        }
+
+        if(bizInfoSummaryView.getNetMarginPercentage() != null){
+            bizInfoSummary.setNetMarginPercentage(bizInfoSummaryView.getNetMarginPercentage());
+        }else{
+            bizInfoSummary.setNetMarginPercentage(BigDecimal.ZERO);
+        }
 
         bizInfoSummary.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         bizInfoSummary.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
+
+        log.info("find transformToModel xxx4");
 
         bizInfoSummary.setSumIncomeAmount(bizInfoSummaryView.getSumIncomeAmount());
         bizInfoSummary.setSumIncomePercent(bizInfoSummaryView.getSumIncomePercent());
@@ -80,6 +230,11 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setModifyBy(bizInfoSummaryView.getModifyBy());
         bizInfoSummary.setModifyDate(DateTime.now().toDate());
 
+
+        log.info("transformToModel bizInfoSummary getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
+        log.info("transformToModel bizInfoSummary getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
+
+        log.info("find transformToModel end");
 
         return bizInfoSummary;
     }
