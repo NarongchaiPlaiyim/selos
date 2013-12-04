@@ -490,11 +490,13 @@
                                 <tr>
                                     <td style="padding-left: 50px;">
                                         <table>
+
                                             <tr>
                                                 <td class="title">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.opAcc')}"/>
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td>
                                                     <p:commandButton value="#{msg.get('app.button.add')}"
@@ -507,6 +509,7 @@
                                                     </p:commandButton>
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td>
                                                     <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
@@ -544,6 +547,7 @@
                                                                                              target="#{basicInfo.rowIndex}"/>
                                                                 <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                             </p:commandButton>
+
                                                             <p:commandButton title="#{msg.get('app.button.remove')}"
                                                                              icon="ui-icon-trash"
                                                                              oncomplete="confirmDeleteAccountDlg.show()"
@@ -552,6 +556,8 @@
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
+
+
                                                         </p:column>
                                                     </p:dataTable>
                                                 </td>
