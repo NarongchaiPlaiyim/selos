@@ -11,10 +11,7 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BankType;
-import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.User;
@@ -31,7 +28,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Stateless
@@ -269,7 +265,7 @@ public class BankStmtControl extends BusinessControl {
         if (bankStmtDetailView == null || bankStmtDetailView.getMaxBalance() == null)
             return null;
 
-        if ((bankAccountType != null && com.clevel.selos.model.BankAccountType.CA.name().equalsIgnoreCase(bankAccountType.getShortName()))
+        if ((bankAccountType != null && BankAccountTypeEnum.CA.name().equalsIgnoreCase(bankAccountType.getShortName()))
                 && ValidationUtil.isValueLessEqualZero(bankStmtDetailView.getMaxBalance()))
             return BigDecimal.ZERO;
         else
@@ -889,9 +885,9 @@ public class BankStmtControl extends BusinessControl {
         }
     }
 
-    public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId, String userId) {
-        log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}, userId: {}",
-                bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId, userId);
+    public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId) {
+        log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}",
+                bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId);
 
         WorkCase workCase = null;
         WorkCasePrescreen workCasePrescreen = null;
@@ -901,7 +897,7 @@ public class BankStmtControl extends BusinessControl {
         if (workCasePrescreenId != 0) {
             workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         }
-        User user = userDAO.findById(userId);
+        User user = getCurrentUser();
 
         BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
         bankStatementSummary.setWorkCase(workCase);
@@ -954,10 +950,10 @@ public class BankStmtControl extends BusinessControl {
             bankStmtView.setSrcOfCollateralProofViewList(srcOfCollateralProofViewList);
         }
 
-        BankAccountType currentAccType = bankAccountTypeDAO.getByShortName(com.clevel.selos.model.BankAccountType.CA.name());
-        BankAccountType savingAccType = bankAccountTypeDAO.getByShortName(com.clevel.selos.model.BankAccountType.SA.name());
-        BankAccountType othFDType = bankAccountTypeDAO.getByName(com.clevel.selos.model.BankAccountType.FD.name());
-        BankAccountType othBOEType = bankAccountTypeDAO.getByName(com.clevel.selos.model.BankAccountType.BOE.name());
+        BankAccountType currentAccType = bankAccountTypeDAO.getByShortName(BankAccountTypeEnum.CA.name());
+        BankAccountType savingAccType = bankAccountTypeDAO.getByShortName(BankAccountTypeEnum.SA.name());
+        BankAccountType othFDType = bankAccountTypeDAO.getByName(BankAccountTypeEnum.FD.name());
+        BankAccountType othBOEType = bankAccountTypeDAO.getByName(BankAccountTypeEnum.BOE.name());
 
         bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, savingAccType, currentAccType, othFDType, othBOEType) );
     }

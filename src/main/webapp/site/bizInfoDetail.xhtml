@@ -8,20 +8,19 @@
 
     <h:head>
         <title>Business Information Detail</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="include/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="include/header_detail.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml" />
@@ -305,7 +304,7 @@
                                              id="supplierTable"
                                              var="supplierItem"
                                              styleClass="medium"
-                                             value="#{bizInfoDetail.bizInfoDetailView.supplierDetailList}"
+                                             value="#{bizInfoDetail.supplierDetailList}"
                                              paginator="false"
                                              rowKey="#{supplierItem.no}"
                                              rowIndexVar="rowIndex">
@@ -463,7 +462,7 @@
                             <td colspan="6" align="center">
                                 <p:dataTable id="buyerTable" style="width: 100%;"
                                              var="buyerItem"
-                                             value="#{bizInfoDetail.bizInfoDetailView.buyerDetailList}"
+                                             value="#{bizInfoDetail.buyerDetailList}"
                                              paginator="false"
                                              rowKey="#{buyer.no}"
                                              rowIndexVar="rowIndex">
@@ -683,14 +682,14 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
@@ -706,7 +705,7 @@
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}" >
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
                                             </p:inputText>
@@ -729,14 +728,14 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}">
+                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
@@ -776,7 +775,7 @@
                                                  value="#{msg.get('app.button.save')}"
                                                  process=":frmMain"
                                                  actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
-                                                 update=":msgBoxSystemMessagePanel,:frmMain"/>
+                                                 update=":msgBoxSystemMessagePanel"/>
 
                                 <p:commandButton value="#{msg.get('app.button.cancel')}"
                                                  oncomplete="confirmChangeScreenSumDlg.show()"
@@ -789,7 +788,7 @@
             </div>
             <div class="clear"></div>
                 <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>

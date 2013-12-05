@@ -16,11 +16,11 @@ public class LoanPurpose implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "description", length = 100)
+    @Column(name = "description", length = 255)
     private String description;
 
-    @Column(name = "brms_code", length = 5)
-    private String brmsCode;
+    @Column(name = "brms_code")
+    private int brmsCode;
 
     @Column(name = "active")
     private int active;
@@ -43,11 +43,11 @@ public class LoanPurpose implements Serializable {
         this.description = description;
     }
 
-    public String getBrmsCode() {
+    public int getBrmsCode() {
         return brmsCode;
     }
 
-    public void setBrmsCode(String brmsCode) {
+    public void setBrmsCode(int brmsCode) {
         this.brmsCode = brmsCode;
     }
 

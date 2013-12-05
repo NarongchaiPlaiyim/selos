@@ -60,12 +60,12 @@
                                     </colgroup>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
-                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[saveButton.clientId]}"/></td>
+                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
                                     </tr>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
                                         <td>
-                                            <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom" required="#{not empty param[saveButton.clientId]}">
+                                            <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom" required="#{not empty param[addBizInfoSummary.clientId]}">
                                                 <f:selectItem itemLabel="No"  itemValue="0" />
                                                 <f:selectItem itemLabel="Yes" itemValue="1" />
                                                 <p:ajax process="@this" update=":frmMain:ownerName,:frmMain:expiryDate" listener="#{bizInfoSummary.onChangeRental}"/>
@@ -113,7 +113,7 @@
                                                 <tr>
                                                     <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
                                                     <td class="left title" colspan="3">
-                                                        <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[saveButton.clientId]}"/>
+                                                        <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[addBizInfoSummary.clientId]}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
                                                         <p:spacer width="30px"/>
@@ -132,7 +132,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td>
-                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[saveButton.clientId]}"
+                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                          id="provinceCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
@@ -144,7 +144,7 @@
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[saveButton.clientId]}"
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                          id="districtCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
@@ -155,7 +155,7 @@
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}" required="#{not empty param[saveButton.clientId]}"
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                          id="subDistrictCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
@@ -167,12 +167,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.postCode')}"/> :</td>
-                                                    <td><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" required="#{not empty param[saveButton.clientId]}"/></td>
+                                                    <td><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
                                                     <td colspan="3">
-                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country.id}" required="#{not empty param[saveButton.clientId]}"
+                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                           id="countryId">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.countryList}"
@@ -192,7 +192,7 @@
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
                                         <td>
-                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" required="#{not empty param[saveButton.clientId]}" />
+                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" required="#{not empty param[addBizInfoSummary.clientId]}" />
                                         </td>
                                         <td colspan="3">
                                             <p:spacer width="10px"></p:spacer>
@@ -247,7 +247,7 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
                             </td>
                             <td>
-                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[saveButton.clientId]}"
+                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                  id="referExpId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
@@ -430,7 +430,7 @@
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
                             </td>
                             <td class="left">
-                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}" required="#{not empty param[saveButton.clientId]}">
+                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}" required="#{not empty param[addBizInfoSummary.clientId]}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>
                                 </p:inputText>
@@ -441,7 +441,7 @@
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
                             </td>
                             <td class="left">
-                                <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[saveButton.clientId]}">
+                                <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId]}">
                                     <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                     <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
                                 </p:inputText>
@@ -475,57 +475,57 @@
                                              rowIndexVar="rowIndex">
 
                                     <p:column headerText="" styleClass="center" style="width:25px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                        <p:outputLabel value="#{rowIndex+1}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizCode')}" styleClass="center" style="width: 70px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizCode}"/>
+                                        <p:outputLabel value="#{bizInfoDetailx.bizCode}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizType')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizType.name}"/>
+                                        <p:outputLabel value="#{bizInfoDetailx.bizType.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizGroup')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizGroup.name}"/>
+                                        <p:outputLabel value="#{bizInfoDetailx.bizGroup.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizDesc')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
+                                        <p:outputLabel value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}">
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.percentBiz}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="right" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="right" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
+                                        <p:outputLabel styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="right" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizComment}"/>
+                                        <p:outputLabel value="#{bizInfoDetailx.bizComment}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="left" style="width:100px;">
 
@@ -597,13 +597,11 @@
                         </tr>
                         <tr>
                             <td colspan="5" class="center">
-                                <p:commandButton id="btnAddBizInfoSummary"
-                                                 binding="#{saveButton}"
+                                <p:commandButton id="btnAddBizInfoSummary" binding="#{saveButton}"
                                                  value="#{msg.get('app.button.save')}"
-                                                 process=":frmMain"
-                                                 actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
+                                                 process="@form"
                                                  update=":msgBoxSystemMessagePanel,:frmMain"
-                                                 oncomplete="document.location.replace('bizInfoSummary.jsf')" />
+                                                 action="#{bizInfoSummary.onSaveBizInfoSummary()}"/>
 
                                 <p:commandButton  value="#{msg.get('app.button.cancel')}" onclick="document.location.replace('bizInfoSummary.jsf')"/>
                             </td>

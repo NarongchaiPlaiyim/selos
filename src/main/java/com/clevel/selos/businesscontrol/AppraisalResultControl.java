@@ -40,7 +40,7 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     SubCollateralDetailTransform subCollateralDetailTransform;
 
-	@Inject
+    @Inject
     public AppraisalResultControl(){
 
     }

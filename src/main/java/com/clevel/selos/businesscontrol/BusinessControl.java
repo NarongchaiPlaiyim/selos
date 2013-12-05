@@ -81,4 +81,35 @@ public abstract class BusinessControl implements Serializable {
         return getMRRValue().add(BigDecimal.valueOf(6));
     }
 
+    protected BigDecimal getMinBigDecimal(BigDecimal value1, BigDecimal value2){
+        if(value1 != null && value2 != null){
+            if(value1.compareTo(value2) < 0){
+                return value1;
+            } else {
+                return value2;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    protected BigDecimal getMinBigDecimal(BigDecimal value1, BigDecimal value2, BigDecimal value3){
+        if(value1 != null && value2 != null && value3 != null){
+            if(value1.compareTo(value2) < 0){
+                if(value1.compareTo(value3) < 0){
+                    return value1;
+                } else {
+                    return value3;
+                }
+            } else {
+                if(value2.compareTo(value3) < 0){
+                    return value2;
+                } else {
+                    return value3;
+                }
+            }
+        } else {
+            return null;
+        }
+    }
 }

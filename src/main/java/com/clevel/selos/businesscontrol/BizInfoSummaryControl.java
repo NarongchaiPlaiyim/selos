@@ -53,9 +53,14 @@ public class BizInfoSummaryControl extends BusinessControl {
     }
 
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
+
+        log.info("onSaveBizSummaryToDB begin");
         BizInfoSummary bizInfoSummary;
 
+        log.info("find workCase begin");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        log.info("find workCase end workCase is " + workCase.toString());
+
         User user = getCurrentUser();
         if (bizInfoSummaryView.getId() == 0) {
             bizInfoSummaryView.setCreateBy(user);
@@ -66,19 +71,22 @@ public class BizInfoSummaryControl extends BusinessControl {
         bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
         bizInfoSummary.setWorkCase(workCase);
 
+        log.info("bizInfoSummaryDAO.persist begin " + bizInfoSummary.toString());
+
         bizInfoSummaryDAO.persist(bizInfoSummary);
+        log.info("onSaveBizSummaryToDB end");
     }
 
 
     public BizInfoSummaryView onGetBizInfoSummaryByWorkCase(long workCaseId) {
-        log.info("onGetBizInfoSummaryByWorkCase ");
+        log.info("onGetBizInfoSummaryByWorkCase workCaseId is " + workCaseId);
 
         BizInfoSummary bizInfoSummary;
         BizInfoSummaryView bizInfoSummaryView;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        log.info("workCase after findById " + workCase);
+        //log.info("workCase after findById " + workCase);
 
         bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
 

@@ -110,8 +110,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private AddressView workAddress;
     private AddressView registerAddress;
 
-    //*** Var for Children ***//
-    private List<ChildrenView> childrenList;
+    /*/*//*** Var for Children ***//*/
+    private List<ChildrenView> childrenList;*/
 
     private CustomerInfoView spouse;
 
@@ -173,7 +173,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.occupation = new Occupation();
         this.maritalStatus = new MaritalStatus();
         this.numberOfChild = 0;
-        this.childrenList = new ArrayList<ChildrenView>();
+        //this.childrenList = new ArrayList<ChildrenView>();
         this.citizenCountry = new Country();
         this.registrationCountry = new Country();
         this.currentAddress = new AddressView();
@@ -630,13 +630,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public List<ChildrenView> getChildrenList() {
+    /*public List<ChildrenView> getChildrenList() {
         return childrenList;
     }
 
     public void setChildrenList(List<ChildrenView> childrenList) {
         this.childrenList = childrenList;
-    }
+    }*/
 
     public Country getCitizenCountry() {
         return citizenCountry;
@@ -1042,7 +1042,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
                 .append("workAddress", workAddress)
                 .append("registerAddress", registerAddress)
                 .append("mailingAddressType", mailingAddressType)
-                .append("childrenList", childrenList)
+                //.append("childrenList", childrenList)
                 .append("citizenCountry", citizenCountry)
                 .append("registrationCountry", registrationCountry)
                 .append("mobileNumber", mobileNumber)
