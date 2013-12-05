@@ -124,7 +124,7 @@
     </td>
     <td>
         <p:inputText styleClass="large"
-                     value="#{creditFacPropose.newCreditFacilityView.totalCreditTurnover}"
+                     value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
                      style="text-align: right;"
                      readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -1741,7 +1741,9 @@
                          process="@form"
                          update=":frmMain, :msgBoxSystemMessagePanel"
                          actionListener="#{creditFacPropose.onSaveCreditFacPropose()}"/>
-        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+        <p:commandButton value="#{msg.get('app.button.cancel')}"
+                         styleClass="small"
+                         id="btnCancel"
                          process="@form" update=":frmMain"
                          actionListener="#{creditFacPropose.onCreation}"/>
     </td>
@@ -1758,11 +1760,6 @@
 <!-- End Footer -->
 </div>
 </h:form>
-
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 
 </p:panel>
 
@@ -1845,6 +1842,12 @@
     <ui:param name="action" value="onDeleteSubCollateral"/>
     <ui:param name="update" value=":subCollateralDlgForm"/>
 </ui:include>
+
+
+<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 
 
 <!-- Control  All Page-->

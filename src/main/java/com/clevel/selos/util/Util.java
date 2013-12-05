@@ -273,6 +273,17 @@ public class Util {
         }
     }
 
+    public static BigDecimal multiply(BigDecimal value, BigDecimal multiplier){
+        BigDecimal result = BigDecimal.ZERO;
+        if(value == null || multiplier == null) return null;
+        try {
+            result = value.multiply(multiplier);
+        }catch (Exception e){
+            return null;
+        }
+        return result;
+    }
+
     public static <T> List<T> safetyList(List<T> list) {
         return list == null ? Collections.<T>emptyList() : list;
     }

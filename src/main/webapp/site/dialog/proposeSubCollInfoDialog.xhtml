@@ -122,7 +122,7 @@
        <table class="table_noborder">
            <tr>
                <td>
-                    <p:selectOneMenu id="dlgCollateralType"
+                    <p:selectOneMenu id="dlgMortgageType"
                                      value="#{creditFacPropose.newSubCollateralDetailView.mortgageType.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
@@ -155,7 +155,7 @@
         <p:dataTable id="MortgageTb"
                      value="#{creditFacPropose.newSubCollateralDetailView.mortgageList}"
                      var="mortgageItem"
-                     rowKey="#{mortgageItem.String}"
+                     rowKey="#{mortgageItem.MortgageType}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
@@ -171,7 +171,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{mortgageItem}"/>
+                <h:outputText value="#{mortgageItem.mortgage}"/>
             </p:column>
 
             <p:column styleClass="center">

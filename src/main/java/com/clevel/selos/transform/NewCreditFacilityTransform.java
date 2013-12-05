@@ -1,5 +1,10 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.CountryDAO;
+import com.clevel.selos.dao.master.CreditRequestTypeDAO;
+import com.clevel.selos.dao.working.NewCreditFacilityDAO;
+import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -12,9 +17,17 @@ public class NewCreditFacilityTransform extends Transform {
     @Inject
     public NewCreditFacilityTransform() {}
 
+    @Inject
+    CreditRequestTypeDAO creditRequestTypeDAO;
+    @Inject
+    CountryDAO countryDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
+
     public NewCreditFacility transformToModelDB(NewCreditFacilityView newCreditFacilityView, WorkCase workCase, User user) {
 
         NewCreditFacility newCreditFacility = new NewCreditFacility();
+
         newCreditFacility.setWorkCase(workCase);
 
         if (newCreditFacilityView.getId() != 0) {
@@ -28,9 +41,8 @@ public class NewCreditFacilityTransform extends Transform {
 
         newCreditFacility.setModifyDate(new Date());
         newCreditFacility.setModifyBy(user);
-
         newCreditFacility.setWcNeed(newCreditFacilityView.getWCNeed());
-        newCreditFacility.setTotalCreditTurnover(newCreditFacilityView.getTotalCreditTurnover());
+        newCreditFacility.setTotalWcTmb(newCreditFacilityView.getTotalWcTmb());
         newCreditFacility.setWCNeedDiffer(newCreditFacilityView.getWCNeedDiffer());
         newCreditFacility.setTotalWcDebit(newCreditFacilityView.getTotalWcDebit());
         newCreditFacility.setCase1WcLimit(newCreditFacilityView.getCase1WcLimit());
@@ -70,33 +82,21 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
         newCreditFacility.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
         newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType().value());
-        newCreditFacility.setCreditRequestType(newCreditFacilityView.getCreditRequestType());
-        newCreditFacility.setCountry(newCreditFacilityView.getCountry());
+
+        if (newCreditFacilityView.getCreditRequestType().getId() != 0) {
+            CreditRequestType creditRequestType = creditRequestTypeDAO.findById(newCreditFacilityView.getCreditRequestType().getId());
+            newCreditFacility.setCreditRequestType(creditRequestType);
+        }
+
+        if (newCreditFacilityView.getCountry().getId() != 0) {
+            Country country = countryDAO.findById(newCreditFacilityView.getCountry().getId());
+            newCreditFacility.setCountry(country);
+        }
+
         newCreditFacility.setTotalGuaranteeAmount(newCreditFacilityView.getTotalGuaranteeAmount());
         newCreditFacility.setRelatedTMBLending(newCreditFacilityView.getRelatedTMBLending());
         newCreditFacility.setTwentyFivePercentShareRelatedTMBLending(newCreditFacilityView.getTwentyFivePercentShareRelatedTMBLending());
         newCreditFacility.setSingleLendingLimit(newCreditFacilityView.getSingleLendingLimit());
-
-
-       /* for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralHeadDetailViewList) {
-            collateralHeaderDetail = new CollateralHeaderDetail();
-            if(newCollateralHeadDetailView.getId()==0){
-                collateralHeaderDetail.setCreateBy(newCollateralHeadDetailView.getCreateBy());
-                collateralHeaderDetail.setCreateDate(DateTime.now().toDate());
-            }
-
-            collateralHeaderDetail.setNo(newCollateralHeadDetailView.getNo());
-            collateralHeaderDetail.setCollateralLocation(newCollateralHeadDetailView.getCollateralLocation());
-            collateralHeaderDetail.setTitleDeed(newCollateralHeadDetailView.getTitleDeed());
-            collateralHeaderDetail.setAppraisalValue(newCollateralHeadDetailView.getAppraisalValue());
-            collateralHeaderDetail.setHeadCollType(newCollateralHeadDetailView.getHeadCollType());
-            collateralHeaderDetail.setCollateralDetail(collateralDetail);
-
-            collateralHeaderDetail.setModifyBy(newCollateralHeadDetailView.getModifyBy());
-            collateralHeaderDetail.setModifyDate(newCollateralHeadDetailView.getModifyDate());
-
-            collateralHeaderDetailList.add(collateralHeaderDetail);
-        }*/
 
         return newCreditFacility;
     }
@@ -104,6 +104,59 @@ public class NewCreditFacilityTransform extends Transform {
     public NewCreditFacilityView transformToView(NewCreditFacility newCreditFacility) {
         NewCreditFacilityView newCreditFacilityView = new NewCreditFacilityView();
 
+        newCreditFacilityView.setCreateDate(newCreditFacility.getCreateDate());
+        newCreditFacilityView.setCreateBy(newCreditFacility.getCreateBy());
+        newCreditFacilityView.setModifyDate(newCreditFacility.getModifyDate());
+        newCreditFacilityView.setModifyBy(newCreditFacility.getModifyBy());
+        newCreditFacilityView.setWCNeed(newCreditFacility.getWcNeed());
+        newCreditFacilityView.setTotalWcTmb(newCreditFacility.getTotalWcTmb());
+        newCreditFacilityView.setWCNeedDiffer(newCreditFacility.getWCNeedDiffer());
+        newCreditFacilityView.setTotalWcDebit(newCreditFacility.getTotalWcDebit());
+        newCreditFacilityView.setCase1WcLimit(newCreditFacility.getCase1WcLimit());
+        newCreditFacilityView.setCase1WcMinLimit(newCreditFacility.getCase1WcMinLimit());
+        newCreditFacilityView.setCase1Wc50CoreWc(newCreditFacility.getCase1Wc50CoreWc());
+        newCreditFacilityView.setCase1WcDebitCoreWc(newCreditFacility.getCase1WcDebitCoreWc());
+        newCreditFacilityView.setCase2WcLimit(newCreditFacility.getCase2WcLimit());
+        newCreditFacilityView.setCase2WcMinLimit(newCreditFacility.getCase2WcMinLimit());
+        newCreditFacilityView.setCase2Wc50CoreWc(newCreditFacility.getCase2Wc50CoreWc());
+        newCreditFacilityView.setCase2WcDebitCoreWc(newCreditFacility.getCase2WcDebitCoreWc());
+        newCreditFacilityView.setCase3WcLimit(newCreditFacility.getCase3WcLimit());
+        newCreditFacilityView.setCase3WcMinLimit(newCreditFacility.getCase3WcMinLimit());
+        newCreditFacilityView.setCase3Wc50CoreWc(newCreditFacility.getCase3Wc50CoreWc());
+        newCreditFacilityView.setCase3WcDebitCoreWc(newCreditFacility.getCase3WcDebitCoreWc());
+        newCreditFacilityView.setExistingSMELimit(newCreditFacility.getExistingSMELimit());
+        newCreditFacilityView.setMaximumExistingSMELimit(newCreditFacility.getMaximumExistingSMELimit());
+        newCreditFacilityView.setTotalPropose(newCreditFacility.getTotalPropose());
+        newCreditFacilityView.setTotalProposeLoanDBR(newCreditFacility.getTotalProposeLoanDBR());
+        newCreditFacilityView.setTotalProposeNonLoanDBR(newCreditFacility.getTotalProposeNonLoanDBR());
+        newCreditFacilityView.setTotalCommercial(newCreditFacility.getTotalCommercial());
+        newCreditFacilityView.setTotalCommercialAndOBOD(newCreditFacility.getTotalCommercialAndOBOD());
+        newCreditFacilityView.setTotalExposure(newCreditFacility.getTotalExposure());
+        newCreditFacilityView.setTotalNumberOfNewOD(newCreditFacility.getTotalNumberOfNewOD());
+        newCreditFacilityView.setTotalNumberContingenPropose(newCreditFacility.getTotalNumberContingenPropose());
+        newCreditFacilityView.setTotalNumberProposeCreditFac(newCreditFacility.getTotalNumberProposeCreditFac());
+        newCreditFacilityView.setContactName(newCreditFacility.getContactName());
+        newCreditFacilityView.setContactPhoneNo(newCreditFacility.getContactPhoneNo());
+        newCreditFacilityView.setInterService(newCreditFacility.getInterService());
+        newCreditFacilityView.setCurrentAddress(newCreditFacility.getCurrentAddress());
+        newCreditFacilityView.setRegisteredAddress(newCreditFacility.getRegisteredAddress());
+        newCreditFacilityView.setEmailAddress(newCreditFacility.getEmailAddress());
+        newCreditFacilityView.setImportMail(newCreditFacility.getImportMail());
+        newCreditFacilityView.setExportMail(newCreditFacility.getExportMail());
+        newCreditFacilityView.setDepositBranchCode(newCreditFacility.getDepositBranchCode());
+        newCreditFacilityView.setOwnerBranchCode(newCreditFacility.getOwnerBranchCode());
+        newCreditFacilityView.setFrontendFeeDOA(newCreditFacility.getFrontendFeeDOA());
+        newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
+        newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
+//        newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
+        newCreditFacilityView.setCreditRequestType(newCreditFacility.getCreditRequestType());
+        newCreditFacilityView.setCountry(newCreditFacility.getCountry());
+        newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
+        newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
+        newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
+        newCreditFacilityView.setSingleLendingLimit(newCreditFacility.getSingleLendingLimit());
+
         return newCreditFacilityView;
     }
+
 }

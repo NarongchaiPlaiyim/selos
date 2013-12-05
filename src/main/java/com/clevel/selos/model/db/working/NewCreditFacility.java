@@ -27,8 +27,8 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "wc_need")
     private BigDecimal wcNeed;
 
-    @Column(name = "total_credit_turnover")
-    private BigDecimal totalCreditTurnover;
+    @Column(name = "total_wc_tmb")
+    private BigDecimal totalWcTmb;
 
     @Column(name = "wc_need_differ")
     private BigDecimal WCNeedDiffer;
@@ -77,6 +77,9 @@ public class NewCreditFacility implements Serializable {
 
     @Column(name = "maximum_existing_sme_limit")
     private BigDecimal maximumExistingSMELimit;
+
+    @Column(name = "total_approve_credit")
+    private BigDecimal totalApproveCredit;
 
     @Column(name = "total_propose")
     private BigDecimal totalPropose;
@@ -217,12 +220,12 @@ public class NewCreditFacility implements Serializable {
         this.wcNeed = wcNeed;
     }
 
-    public BigDecimal getTotalCreditTurnover() {
-        return totalCreditTurnover;
+    public BigDecimal getTotalWcTmb() {
+        return totalWcTmb;
     }
 
-    public void setTotalCreditTurnover(BigDecimal totalCreditTurnover) {
-        this.totalCreditTurnover = totalCreditTurnover;
+    public void setTotalWcTmb(BigDecimal totalWcTmb) {
+        this.totalWcTmb = totalWcTmb;
     }
 
     public BigDecimal getWCNeedDiffer() {
@@ -231,6 +234,14 @@ public class NewCreditFacility implements Serializable {
 
     public void setWCNeedDiffer(BigDecimal WCNeedDiffer) {
         this.WCNeedDiffer = WCNeedDiffer;
+    }
+
+    public BigDecimal getTotalApproveCredit() {
+        return totalApproveCredit;
+    }
+
+    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
+        this.totalApproveCredit = totalApproveCredit;
     }
 
     public BigDecimal getTotalWcDebit() {
@@ -681,7 +692,7 @@ public class NewCreditFacility implements Serializable {
                 .append("id", id)
                 .append("workCase", workCase)
                 .append("wcNeed", wcNeed)
-                .append("totalCreditTurnover", totalCreditTurnover)
+                .append("totalWcTmb", totalWcTmb)
                 .append("WCNeedDiffer", WCNeedDiffer)
                 .append("totalWcDebit", totalWcDebit)
                 .append("case1WcLimit", case1WcLimit)

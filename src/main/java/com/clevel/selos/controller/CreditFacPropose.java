@@ -191,6 +191,21 @@ public class CreditFacPropose implements Serializable {
             modeForDB = ModeForDB.ADD_DB;
         }
 
+        try {
+            newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+
+            if (newCreditFacilityView != null) {
+                //find list of each table
+                modeForDB = ModeForDB.EDIT_DB;
+            } else if (newCreditFacilityView == null) {
+                newCreditFacilityView = new NewCreditFacilityView();
+                modeForDB = ModeForDB.ADD_DB;
+            }
+        } catch (Exception ex) {
+            log.info("Exception :: {}", ex);
+        }
+
+
         if (workCaseId != null) {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
@@ -207,9 +222,9 @@ public class CreditFacPropose implements Serializable {
         }
 
 
-        if (newCreditFacilityView == null) {
+       /* if (newCreditFacilityView == null) {
             newCreditFacilityView = new NewCreditFacilityView();
-        }
+        }*/
 
         if (creditRequestTypeList == null) {
             creditRequestTypeList = new ArrayList<CreditRequestType>();
@@ -414,7 +429,8 @@ public class CreditFacPropose implements Serializable {
         if ((newCreditDetailView.getProductProgram().getId() != 0) && (newCreditDetailView.getCreditType().getId() != 0)) {
             ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
             CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
-
+             //productFormulaDAO
+             //where 4 ตัว ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
                 ProductFormula productFormula = productFormulaDAO.findProductFormula(prdProgramToCreditType);
@@ -895,7 +911,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddMortgageType() {
         MortgageType mortgageType = mortgageTypeDAO.findById(newSubCollateralDetailView.getMortgageType().getId());
         log.info("onAddMortgageType :: {} ", newSubCollateralDetailView.getMortgageType());
-        newSubCollateralDetailView.getMortgageList().add(mortgageType.getMortgage());
+        newSubCollateralDetailView.getMortgageList().add(mortgageType);
     }
 
     public void onDeleteMortgageType(int row) {
@@ -1177,20 +1193,41 @@ public class CreditFacPropose implements Serializable {
         log.info("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 
         try {
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("");
-
-            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView,workCaseId,user);
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            if ((newCreditFacilityView.getCountry().getId()!= 0)&&(newCreditFacilityView.getCreditRequestType().getId()!=0))
+            {
+                if((newCreditFacilityView.getNewCreditDetailViewList().size()> 0) && (newCreditFacilityView.getNewCollateralInfoViewList().size()>0)
+                   &&(newCreditFacilityView.getNewConditionDetailViewList().size()>0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size()>0))
+                {
+                    if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
+                        creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView,workCaseId,user);
+                        onCreation();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    }
+                    else if(modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB))
+                    {
+                        messageHeader = msg.get("app.header.save.success");
+                        message = msg.get("app.propose.response.save.success");
+                        onCreation();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    } else {
+                        messageHeader = msg.get("app.propose.response.cannot.save");
+                        message = msg.get("app.propose.response.desc.cannot.save");
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    }
+                }
+            }else{
+                messageHeader = msg.get("app.propose.response.cannot.save");
+                message = msg.get("app.propose.response.desc.cannot.save");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
+            messageHeader = msg.get("app.propose.response.save.failed");
 
             if (ex.getCause() != null) {
-                message = msg.get("") + " cause : " + ex.getCause().toString();
+                message = msg.get("app.propose.response.save.failed") + " cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("") + ex.getMessage();
+                message = msg.get("app.propose.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;
@@ -1200,13 +1237,6 @@ public class CreditFacPropose implements Serializable {
 
     }
 
-
-    public void onCancelCreditFacPropose() {
-        modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelCreditFacPropose ::: ");
-
-        onCreation();
-    }
 
 
     public boolean isMessageErr() {
@@ -1536,6 +1566,30 @@ public class CreditFacPropose implements Serializable {
 
     public void setMortgageTypeList(List<MortgageType> mortgageTypeList) {
         this.mortgageTypeList = mortgageTypeList;
+    }
+
+    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
+        return newCreditTierDetailViewList;
+    }
+
+    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
+        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
+    }
+
+    public List<NewCollateralHeadDetailView> getNewCollateralHeadDetailViewList() {
+        return newCollateralHeadDetailViewList;
+    }
+
+    public void setNewCollateralHeadDetailViewList(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList) {
+        this.newCollateralHeadDetailViewList = newCollateralHeadDetailViewList;
+    }
+
+    public List<NewSubCollateralDetailView> getNewSubCollateralDetailViewList() {
+        return newSubCollateralDetailViewList;
+    }
+
+    public void setNewSubCollateralDetailViewList(List<NewSubCollateralDetailView> newSubCollateralDetailViewList) {
+        this.newSubCollateralDetailViewList = newSubCollateralDetailViewList;
     }
 }
 
