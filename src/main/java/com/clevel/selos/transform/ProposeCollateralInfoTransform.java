@@ -44,8 +44,8 @@ public class ProposeCollateralInfoTransform extends Transform {
         collateralDetailView.setAadDecision(appraisalData.getAadDecision());
         collateralDetailView.setAadDecisionReason(appraisalData.getAadDecisionReason());
         collateralDetailView.setAadDecisionReasonDetail(appraisalData.getAadDecisionReasonDetail());
-        collateralDetailView.setUsage(appraisalData.getUsage());
-        collateralDetailView.setTypeOfUsage(appraisalData.getTypeOfUsage());
+        //collateralDetailView.setUsage(appraisalData.getUsage());
+        //collateralDetailView.setTypeOfUsage(appraisalData.getTypeOfUsage());
         collateralDetailView.setMortgageCondition(appraisalData.getMortgageCondition());
         collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
@@ -97,8 +97,8 @@ public class ProposeCollateralInfoTransform extends Transform {
         CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
 
         collateralHeaderDetailView.setTitleDeed(headCollateralData.getTitleDeed());
-        double appraisalValue = Double.parseDouble(headCollateralData.getAppraisalValue());
-        collateralHeaderDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
+        //double appraisalValue = Double.parseDouble(headCollateralData.getAppraisalValue());
+        //collateralHeaderDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
         collateralHeaderDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
         CollateralType headCollType = new CollateralType();
         if(headCollateralData.getHeadCollType()== null || headCollateralData.getHeadCollType().equals("")){
@@ -120,15 +120,15 @@ public class ProposeCollateralInfoTransform extends Transform {
         subCollateralDetailView.setTitleDeed(subCollateralData.getTitleDeed());
         subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
         subCollateralDetailView.setAddress(subCollateralData.getAddress());
-        subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
+        //subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
         subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
         SubCollateralType subCollType = new SubCollateralType();
 
-        if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
+        /*if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
             subCollType.setCode("00");
         }else{
             subCollType.setCode(subCollateralData.getCollateralType());
-        }
+        }*/
 
         subCollateralDetailView.setSubCollateralType(subCollType);
         log.info("convertSubCollateral end");

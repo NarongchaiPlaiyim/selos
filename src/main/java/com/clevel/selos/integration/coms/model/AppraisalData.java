@@ -10,11 +10,10 @@ import java.util.List;
 public class AppraisalData implements Serializable {
     private String jobId;
     private Date appraisalDate;
+    private String isMATI;
     private String aadDecision;
     private String aadDecisionReason;
     private String aadDecisionReasonDetail;
-    private String usage;
-    private String typeOfUsage;
     private String mortgageCondition;
     private String mortgageConditionDetail;
     private List<HeadCollateralData> headCollateralDataList;
@@ -33,6 +32,14 @@ public class AppraisalData implements Serializable {
 
     public void setAppraisalDate(Date appraisalDate) {
         this.appraisalDate = appraisalDate;
+    }
+
+    public String getMATI() {
+        return isMATI;
+    }
+
+    public void setMATI(String MATI) {
+        isMATI = MATI;
     }
 
     public String getAadDecision() {
@@ -57,22 +64,6 @@ public class AppraisalData implements Serializable {
 
     public void setAadDecisionReasonDetail(String aadDecisionReasonDetail) {
         this.aadDecisionReasonDetail = aadDecisionReasonDetail;
-    }
-
-    public String getUsage() {
-        return usage;
-    }
-
-    public void setUsage(String usage) {
-        this.usage = usage;
-    }
-
-    public String getTypeOfUsage() {
-        return typeOfUsage;
-    }
-
-    public void setTypeOfUsage(String typeOfUsage) {
-        this.typeOfUsage = typeOfUsage;
     }
 
     public String getMortgageCondition() {
@@ -104,11 +95,10 @@ public class AppraisalData implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("jobId", jobId)
                 .append("appraisalDate", appraisalDate)
+                .append("isMATI", isMATI)
                 .append("aadDecision", aadDecision)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
-                .append("usage", usage)
-                .append("typeOfUsage", typeOfUsage)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
                 .append("headCollateralDataList", headCollateralDataList)

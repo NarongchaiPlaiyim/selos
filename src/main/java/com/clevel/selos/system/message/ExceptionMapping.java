@@ -46,6 +46,7 @@ public interface ExceptionMapping {
     public static final String COMS_EXCEPTION = "050";
     public static final String COMS_CONNECT_ERROR = "051";
     public static final String COMS_GETDATA_ERROR = "052";
+    public static final String COMS_DATA_NOT_FOUND = "053";
 
     //RM
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
