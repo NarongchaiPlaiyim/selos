@@ -18,6 +18,7 @@ public class OpenAccountView {
 
     private List<AccountNameView> accountNameViewList;
     private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
+    private List<OpenAccountPurposeView> openAccountPurposeViewList;
 
     public OpenAccountView(){
         reset();
@@ -95,6 +96,14 @@ public class OpenAccountView {
 
     public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
         this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
+    }
+
+    public List<OpenAccountPurposeView> getOpenAccountPurposeViewList() {
+        return openAccountPurposeViewList;
+    }
+
+    public void setOpenAccountPurposeViewList(List<OpenAccountPurposeView> openAccountPurposeViewList) {
+        this.openAccountPurposeViewList = openAccountPurposeViewList;
     }
 
     @Override
