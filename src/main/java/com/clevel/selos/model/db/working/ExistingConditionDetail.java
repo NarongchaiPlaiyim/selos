@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_condition_detail")
+@Table(name = "wrk_exist_condition_detail")
 public class ExistingConditionDetail implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_EXT_COND_DETAIL_ID", sequenceName = "SEQ_WRK_NEW_COND_DETAIL_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COND_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_EXT_COND_DETAIL_ID", sequenceName = "SEQ_WRK_EXT_COND_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXT_COND_DETAIL_ID")
     private long id;
 
     @Column(name = "no")

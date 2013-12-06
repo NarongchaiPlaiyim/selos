@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_guarantor_detail")
+@Table(name = "wrk_exist_guarantor_detail")
 public class ExistingGuarantorDetail implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXT_GRT_DETAIL_ID", sequenceName = "SEQ_WRK_EXT_GRT_DETAIL_ID", allocationSize = 1)

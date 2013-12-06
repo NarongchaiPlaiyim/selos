@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_credit_tier_detail")
+@Table(name = "wrk_exist_credit_tier_detail")
 public class ExistingCreditTierDetail implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXT_CRD_TIER_DET_ID", sequenceName = "SEQ_WRK_EXT_CRD_TIER_DET_ID", allocationSize = 1)

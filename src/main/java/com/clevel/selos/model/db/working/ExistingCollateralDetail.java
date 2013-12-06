@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_collateral_detail")
+@Table(name = "wrk_exist_collateral_detail")
 public class ExistingCollateralDetail implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXT_COLL_DETAIL_ID", sequenceName = "SEQ_WRK_EXT_COLL_DETAIL_ID", allocationSize = 1)

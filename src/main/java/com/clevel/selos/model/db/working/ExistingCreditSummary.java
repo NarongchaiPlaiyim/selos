@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_existing_credit_summary")
+@Table(name = "wrk_exist_credit_summary")
 public class ExistingCreditSummary {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", allocationSize = 1)
