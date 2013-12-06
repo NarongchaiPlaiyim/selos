@@ -6,6 +6,7 @@ import com.clevel.selos.model.db.working.CreditTypeDetail;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.view.CreditTypeDetailView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class CreditTypeDetailTransform extends Transform {
             }
 
             creditTypeDetail.setSeq(creditTypeDetailView.getSeq());
-            creditTypeDetail.setNo(creditTypeDetailView.getNo());
+            creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
             creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
@@ -68,7 +69,7 @@ public class CreditTypeDetailTransform extends Transform {
             }
 
             creditTypeDetail.setSeq(creditTypeDetailView.getSeq());
-            creditTypeDetail.setNo(creditTypeDetailView.getNo());
+            creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
             creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
@@ -95,7 +96,7 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetailView.setModifyDate(creditTypeDetail.getModifyDate());
             creditTypeDetailView.setModifyBy(creditTypeDetail.getModifyBy());
             creditTypeDetailView.setSeq(creditTypeDetail.getSeq());
-            creditTypeDetailView.setNo(creditTypeDetail.getNo());
+            creditTypeDetailView.setNoFlag(Util.isTrue(creditTypeDetail.getNo()));
             creditTypeDetailView.setType(creditTypeDetail.getType());
             creditTypeDetailView.setRequestType(creditTypeDetail.getRequestType());
             creditTypeDetailView.setAccount(creditTypeDetail.getAccount());

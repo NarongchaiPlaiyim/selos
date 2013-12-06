@@ -5,17 +5,21 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class NewFeeDetailView implements Serializable {
     private long id;
     private String productProgram;
     private String standardFrontEndFee;
+    private BigDecimal standardFrondEndFeeAmount;
     private String commitmentFee;
+    private String commitmentFeeYears;
     private String extensionFee;
+    private String extensionFeeYears;
     private String prepaymentFee;
+    private String prepaymentFeeYears;
     private String cancellationFee;
-
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -32,6 +36,10 @@ public class NewFeeDetailView implements Serializable {
         this.extensionFee = "";
         this.prepaymentFee = "";
         this.cancellationFee = "";
+        this.standardFrondEndFeeAmount = BigDecimal.ZERO;
+        this.commitmentFeeYears = "";
+        this.extensionFeeYears = "";
+        this.prepaymentFeeYears = "";
     }
 
     public long getId() {
@@ -120,6 +128,38 @@ public class NewFeeDetailView implements Serializable {
 
     public void setCancellationFee(String cancellationFee) {
         this.cancellationFee = cancellationFee;
+    }
+
+    public BigDecimal getStandardFrondEndFeeAmount() {
+        return standardFrondEndFeeAmount;
+    }
+
+    public void setStandardFrondEndFeeAmount(BigDecimal standardFrondEndFeeAmount) {
+        this.standardFrondEndFeeAmount = standardFrondEndFeeAmount;
+    }
+
+    public String getCommitmentFeeYears() {
+        return commitmentFeeYears;
+    }
+
+    public void setCommitmentFeeYears(String commitmentFeeYears) {
+        this.commitmentFeeYears = commitmentFeeYears;
+    }
+
+    public String getExtensionFeeYears() {
+        return extensionFeeYears;
+    }
+
+    public void setExtensionFeeYears(String extensionFeeYears) {
+        this.extensionFeeYears = extensionFeeYears;
+    }
+
+    public String getPrepaymentFeeYears() {
+        return prepaymentFeeYears;
+    }
+
+    public void setPrepaymentFeeYears(String prepaymentFeeYears) {
+        this.prepaymentFeeYears = prepaymentFeeYears;
     }
 
     @Override

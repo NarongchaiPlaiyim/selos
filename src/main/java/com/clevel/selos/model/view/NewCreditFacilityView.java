@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
@@ -67,7 +66,7 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal guarantorBA;
     private String reasonForReduction;
 
-    private CreditCustomerType creditCustomerType;
+    private int creditCustomerType;
     private CreditRequestType  creditRequestType;
     private Country country;
     private BigDecimal totalGuaranteeAmount;
@@ -576,11 +575,11 @@ public class NewCreditFacilityView implements Serializable {
         this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 
-    public CreditCustomerType getCreditCustomerType() {
+    public int getCreditCustomerType() {
         return creditCustomerType;
     }
 
-    public void setCreditCustomerType(CreditCustomerType creditCustomerType) {
+    public void setCreditCustomerType(int creditCustomerType) {
         this.creditCustomerType = creditCustomerType;
     }
 

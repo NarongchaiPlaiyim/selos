@@ -41,7 +41,7 @@
 </div>
 <div id="content_form">
 <!-- start content -->
-<table class="content_table_form">
+<table class="content_table_form" >
 
 <tr>
     <td style="text-align: left" class="title">
@@ -451,13 +451,10 @@
         <table class="table_noborder" style="width: 100%">
             <tr>
                 <td colspan="2">
-                    <p:selectOneRadio  id="creditCustomerTypeValue" value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}" >
-                        <f:selectItems value="#{app.getCreditCustomerTypeValues('Normal|Prime')}" />
-                    </p:selectOneRadio>
-                 <!--   <p:selectOneRadio value="">
+                  <p:selectOneRadio id="creditCustomerTypeValue" value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}">
                         <f:selectItem itemLabel="Normal" itemValue="1"/>
-                        <f:selectItem itemLabel="Prime" itemValue="0"/>
-                    </p:selectOneRadio>-->
+                        <f:selectItem itemLabel="Prime" itemValue="2"/>
+                    </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
@@ -470,7 +467,7 @@
                                      value="#{creditFacPropose.newCreditFacilityView.creditRequestType.id}"
                                      size="1"
                                      style="width: 200px;"
-                                     required="true">
+                                     required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.creditRequestTypeList}"
                                        var="creditRequest"
@@ -489,7 +486,7 @@
                                      value="#{creditFacPropose.newCreditFacilityView.country.id}"
                                      size="1"
                                      style="width: 200px;"
-                                     required="true">
+                                     required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.countryList}"
                                        var="country"
@@ -539,7 +536,7 @@
                 id="btnAddCreditInfo"
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
-                process="@this"
+                process="@form"
                 actionListener="#{creditFacPropose.onAddCreditInfo}"
                 update=":creditInfoDlgForm"
                 oncomplete="creditInfoDlg.show();">
@@ -556,8 +553,8 @@
 
 <tr>
 <td style="background-color:#ffffff">
-
-<table class="table_content"  id="proposeCreditTable" style="width:100%">
+ <p:panel>
+<table class="table_content"  style="width:100%">
 
 <thead>
 <tr>
@@ -578,7 +575,7 @@
 
 <tbody class="ui-datatable-data ui-widget-content">
 <ui:repeat value="#{creditFacPropose.newCreditFacilityView.newCreditDetailViewList}"
-           var="proposeCredit" varStatus="i" >
+           var="proposeCredit" varStatus="i">
     <tr>
         <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -741,7 +738,7 @@
 </tbody>
 
 </table>
-
+ </p:panel>
 </td>
 </tr>
 
@@ -1098,7 +1095,6 @@
                 actionListener="#{creditFacPropose.onAddProposeCollInfo}"
                 update=":collateralDlgForm"
                 oncomplete="collateralInfoDlg.show();">
-            <p:resetInput target=":collateralDlgForm"/>
         </p:commandButton>
     </td>
 </tr>
@@ -1468,7 +1464,7 @@
                 value="#{msg.get('app.credit.facility.propose.button.addGuarantorButton')}"
                 styleClass="smaller"
                 actionListener="#{creditFacPropose.onAddGuarantorInfo()}"
-                process="@this"
+                process="@form"
                 update=":guarantorDlgForm"
                 oncomplete="guarantorInfoDlg.show();">
             <p:resetInput target=":guarantorDlgForm"/>
@@ -1538,7 +1534,7 @@
                             </ui:repeat>
                         </td>
                         <td  class="right top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{newGuarantorDetailView.guaranteeAmount}">
+                            <h:outputText value="#{newGuarantorDetailView.totalLimitGuaranteeAmount}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
                         </td>
@@ -1610,7 +1606,7 @@
                 value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                 styleClass="smaller"
                 actionListener="#{creditFacPropose.onAddConditionInfo()}"
-                process="@this"
+                process="@form"
                 update=":conditionDlgForm"
                 oncomplete="conditionDlg.show();">
             <p:resetInput target=":conditionDlgForm"/>
@@ -1736,7 +1732,9 @@
 
 <tr>
     <td colspan="2" class="center">
-        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+        <p:commandButton id="btnSave"
+                         value="#{msg.get('app.button.save')}"
+                         binding="#{onsaveNewFacility}"
                          styleClass="smaller"
                          process="@form"
                          update=":frmMain, :msgBoxSystemMessagePanel"

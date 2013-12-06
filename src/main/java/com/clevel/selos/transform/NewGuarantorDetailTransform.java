@@ -35,6 +35,7 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetail.setGuarantorName(newGuarantorDetailView.getGuarantorName());
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
             newGuarantorDetail.setNewCreditFacility(newCreditFacility);
+            newGuarantorDetail.setTotalLimitGuaranteeAmount(newGuarantorDetailView.getTotalLimitGuaranteeAmount());
             newGuarantorDetailList.add(newGuarantorDetail);
         }
 
@@ -47,13 +48,14 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             newGuarantorDetailView = new NewGuarantorDetailView();
-            newGuarantorDetail.setCreateDate(newGuarantorDetailView.getCreateDate());
-            newGuarantorDetail.setCreateBy(newGuarantorDetailView.getCreateBy());
-            newGuarantorDetail.setModifyDate(newGuarantorDetailView.getModifyDate());
-            newGuarantorDetail.setModifyBy(newGuarantorDetailView.getModifyBy());
-            newGuarantorDetail.setGuarantorName(newGuarantorDetailView.getGuarantorName());
-            newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
-            newGuarantorDetailList.add(newGuarantorDetail);
+            newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
+            newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());
+            newGuarantorDetailView.setModifyDate(newGuarantorDetail.getModifyDate());
+            newGuarantorDetailView.setModifyBy(newGuarantorDetail.getModifyBy());
+            newGuarantorDetailView.setGuarantorName(newGuarantorDetail.getGuarantorName());
+            newGuarantorDetailView.setTcgLgNo(newGuarantorDetail.getTcgLgNo());
+            newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
+            newGuarantorDetailViews.add(newGuarantorDetailView);
         }
 
         return newGuarantorDetailViews;
