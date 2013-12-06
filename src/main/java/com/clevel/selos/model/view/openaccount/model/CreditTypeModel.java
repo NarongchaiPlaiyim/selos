@@ -1,14 +1,13 @@
-package com.clevel.selos.model.view.openaccount;
-
+package com.clevel.selos.model.view.openaccount.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class OpenAccountCreditTypeView implements Serializable {
+public class CreditTypeModel implements Serializable {
     private String productProgram;
     private String creditFacility;
     private BigDecimal Limit;
 
-    public OpenAccountCreditTypeView() {
+    public CreditTypeModel() {
 
     }
 

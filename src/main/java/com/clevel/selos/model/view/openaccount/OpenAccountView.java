@@ -1,66 +1,33 @@
 package com.clevel.selos.model.view.openaccount;
 
+import com.clevel.selos.model.view.openaccount.model.AccountNameModel;
+import com.clevel.selos.model.view.openaccount.model.CreditTypeModel;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OpenAccountView implements Serializable {
-    private int idOfAccountType;
-    private String productType;
-    private int requestAccountType;
+    private AccountDetailInformationView accountDetailInformationView;
     private String accountName;
-    private String accountNumber;
-    private String term;
-
-    private List<AccountNameView> accountNameViewList;
-    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
+    private AccountNameModel accountNameModel;
+    private List<CreditTypeModel> selectedCreditTypeList;
 
     public OpenAccountView() {
-        onCreation();
+        init();
     }
 
-    private void onCreation() {
-//        accountNameViewList = new ArrayList<AccountNameView>();
+    private void init(){
+        accountDetailInformationView = new AccountDetailInformationView();
     }
 
-    public int getRequestAccountType() {
-        return requestAccountType;
+    public AccountDetailInformationView getAccountDetailInformationView() {
+        return accountDetailInformationView;
     }
 
-    public void setRequestAccountType(int requestAccountType) {
-        this.requestAccountType = requestAccountType;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getTerm() {
-        return term;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
-    }
-
-    public int getIdOfAccountType() {
-        return idOfAccountType;
-    }
-
-    public void setIdOfAccountType(int idOfAccountType) {
-        this.idOfAccountType = idOfAccountType;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setAccountDetailInformationView(AccountDetailInformationView accountDetailInformationView) {
+        this.accountDetailInformationView = accountDetailInformationView;
     }
 
     public String getAccountName() {
@@ -71,19 +38,19 @@ public class OpenAccountView implements Serializable {
         this.accountName = accountName;
     }
 
-    public List<AccountNameView> getAccountNameViewList() {
-        return accountNameViewList;
+    public AccountNameModel getAccountNameModel() {
+        return accountNameModel;
     }
 
-    public void setAccountNameViewList(List<AccountNameView> accountNameViewList) {
-        this.accountNameViewList = accountNameViewList;
+    public void setAccountNameModel(AccountNameModel accountNameModel) {
+        this.accountNameModel = accountNameModel;
     }
 
-    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
-        return openAccountCreditTypeViewList;
+    public List<CreditTypeModel> getSelectedCreditTypeList() {
+        return selectedCreditTypeList;
     }
 
-    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
-        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
+    public void setSelectedCreditTypeList(List<CreditTypeModel> selectedCreditTypeList) {
+        this.selectedCreditTypeList = selectedCreditTypeList;
     }
 }

@@ -2,8 +2,10 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.NewCreditDetailView;
+import com.clevel.selos.model.view.OpenAccountPurposeView;
 import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.openaccount.AccountNameView;
+import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -83,6 +85,7 @@ public class UpdateApproveDetail {
     public void onCreation(){
         approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
         openAccountViews = new ArrayList<OpenAccountView>();
+
         try{
         List<OpenAccountView> openAccountViewList = new ArrayList<OpenAccountView>();
 
@@ -96,9 +99,28 @@ public class UpdateApproveDetail {
 
             openAccountView.setAccountNameViewList(accountNameViews);
             openAccountView.setAccountNumber("1234567890");
+
+
+            List<OpenAccountCreditTypeView> openAccountCreditTypeViews = new ArrayList<OpenAccountCreditTypeView>();
+
+            for(int i=0;i<5;i++){
+                OpenAccountCreditTypeView openAccountCreditTypeView =new OpenAccountCreditTypeView();
+                openAccountCreditTypeView.setLimit(BigDecimal.valueOf(i));
+                openAccountCreditTypeView.setCreditFacility("Credit");
+                openAccountCreditTypeView.setProductProgram("Product");
+                openAccountCreditTypeViews.add(openAccountCreditTypeView);
+            }
+            List<OpenAccountPurposeView> openAccountPurposeViews = new ArrayList<OpenAccountPurposeView>();
+            for(int i=0;i<5;i++){
+                OpenAccountPurposeView openAccountPurposeView = new OpenAccountPurposeView();
+                openAccountPurposeView.setName("AAA");
+                openAccountPurposeViews.add(openAccountPurposeView);
+            }
+            openAccountView.setOpenAccountPurposeViewList(openAccountPurposeViews);
+            openAccountView.setOpenAccountCreditTypeViewList(openAccountCreditTypeViews);
             openAccountViewList.add(openAccountView);
             openAccountViews = openAccountViewList;
-
+            openAccountCreditTypeViews = openAccountCreditTypeViews;
         }catch (Exception e){
 
         }

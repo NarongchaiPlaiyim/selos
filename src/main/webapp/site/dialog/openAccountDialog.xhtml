@@ -17,13 +17,13 @@
 
         <table class="content_table_form">
 
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{'Request Account Type'}"/>
+            <tr >
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.request')}"/>
                 </td>
 
-                <td colspan="2" style="width: 300px;">
-                    <h:selectOneRadio value="#{openAccount.openAccountView.requestAccountType}">
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
+                    <h:selectOneRadio value="#{openAccount.openAccountView.accountDetailInformationView.requestAccountType.id}">
                         <f:selectItem itemLabel="#{'New'}" itemValue="0"/>
                         <f:selectItem itemLabel="#{'Existing'}" itemValue="1"/>
                     </h:selectOneRadio>
@@ -32,49 +32,57 @@
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Account Number'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.account.number')}"/>
                 </td>
 
-                <td style="width: 200px;">
-                    <p:inputText value="#{openAccount.openAccountView.accountNumber}" styleClass="larger"/>
+                <td class="title" style="width: 200px; max-width: 200px; min-width: 200px;">
+                    <p:inputText
+                            style="width: 200px; max-width: 200px; min-width: 200px;"
+                            value="#{openAccount.openAccountView.accountDetailInformationView.accountNumber}"
+                            styleClass="larger"/>
                 </td>
             </tr>
 
-            <!--<tr>-->
-                <!--<td class="title">-->
-                    <!--<h:outputText value="#{'Branch'}"/>-->
-                <!--</td>-->
+            <tr>
+                <td class="title">
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.branch')}"/>
+                </td>
 
-                <!--<td>-->
-                    <!--<p:selectOneMenu styleClass="largest" size="1"-->
-                                     <!--value="#{basicInfo.basicInfoView.requestType.id}"-->
-                                     <!--disabled="#{basicInfo.disRequestType}"-->
-                                     <!--required="#{basicInfo.reqRequestType and not empty param[saveBtn.clientId]}">-->
-                        <!--<f:selectItem itemLabel="- Please Select -" itemValue=""/>-->
-                        <!--<f:selectItems value="#{basicInfo.requestTypeList}"-->
-                                       <!--var="requestType"-->
-                                       <!--itemLabel="#{requestType.name}"-->
-                                       <!--itemValue="#{requestType.id}"/>-->
-                    <!--</p:selectOneMenu>-->
-                <!--</td>-->
-            <!--</tr>-->
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{openAccount.openAccountView.accountDetailInformationView.branch.id}"
+                                     style="width: 160px;
+                                     max-width: 160px;
+                                     min-width: 160px;"
+                            >
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{openAccount.branchModelList}"
+                                       var="branchModel"
+                                       itemLabel="#{branchModel.name}"
+                                       itemValue="#{branchModel.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Account Type'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.account.type')}"/>
                 </td>
 
-                <td>
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
                     <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{openAccount.openAccountView.idOfAccountType}"
-                                        >
+                                     value="#{openAccount.openAccountView.accountDetailInformationView.accountType.id}"
+                                     style="width: 160px;
+                                     max-width: 160px;
+                                     min-width: 160px;"
+                            >
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{openAccount.bankAccountTypeList}"
                                        var="accountType"
                                        itemLabel="#{accountType.name}"
                                        itemValue="#{accountType.id}"/>
                         <p:ajax event="change"
-                                listener="#{openAccount.onChangeAccountType}"
+                                listener="#{openAccount.onChangeAccountType()}"
                                 update=":openAccountDialogForm:productType" />
                     </p:selectOneMenu>
                 </td>
@@ -82,13 +90,17 @@
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Product Type'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.product.type')}"/>
                 </td>
 
-                <td style="width: 300px;">
+                <td class="title" style="width: 160px; max-width: 230px; min-width: 160px;">
                     <p:selectOneMenu id="productType" styleClass="largest" size="1"
-                                     value="#{openAccount.openAccountView.productType}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                     value="#{openAccount.openAccountView.accountDetailInformationView.productType.id}"
+                                     style="width: 160px;
+                                     max-width: 230px;
+                                     min-width: 160px;"
+                            >
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""  />
                         <f:selectItems value="#{openAccount.openAccountProductList}"
                                        var="openAccountProduct"
                                        itemLabel="#{openAccountProduct.name}"
@@ -99,35 +111,42 @@
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Term'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.term')}"/>
                 </td>
 
-                <td style="width: 200px;">
-                    <p:inputText value="#{openAccount.openAccountView.term}" styleClass="larger"/>
+                <td class="title" style="width: 200px; max-width: 200px; min-width: 200px;">
+                    <p:inputText
+                            style="width: 200px; max-width: 200px; min-width: 200px;"
+                            value="#{openAccount.openAccountView.accountDetailInformationView.term}" styleClass="larger"/>
                 </td>
             </tr>
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Account Name'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.account.name')}"/>
                 </td>
 
-                <td>
-                    <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{openAccount.openAccountView.accountName}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{openAccount.accountName}"
-                                     var="accountNameList"
-                                     itemLabel="#{accountNameList}"
-                                     itemValue="#{accountNameList}"/>
-                    </p:selectOneMenu>
-                </td>
-                <td>
-                    <p:commandButton value="#{msg.get('app.button.add')}"
-                                     styleClass="small"
-                                     process="@form"
-                                     action="#{openAccount.addAccountName()}"
-                                     update=":openAccountDialogForm"/>
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
+                    <div style="float:left; margin-top: 4px;">
+                        <p:selectOneMenu styleClass="largest" size="1"
+                                         value="#{openAccount.openAccountView.accountName}"
+                                         style="width: 160px;
+                                         max-width: 230px;
+                                         min-width: 160px;"
+                                >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{openAccount.accountName}"
+                                         var="accountNameList"
+                                         itemLabel="#{accountNameList}"
+                                         itemValue="#{accountNameList}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div style="float:left; margin-left: 5px; margin-bottom: 4px;">
+                        <p:commandButton value="#{msg.get('app.button.add')}"
+                                         process="@form"
+                                         action="#{openAccount.addAccountName()}"
+                                         update=":openAccountDialogForm"/>
+                    </div>
                 </td>
 
             </tr>
@@ -136,26 +155,28 @@
                 <td class="title">
                 </td>
 
-                <td>
-                    <p:dataTable id="resultTableAccountName" var="item" value="#{openAccount.openAccountView.accountNameViewList}"
+                <td class="title" style="width: 260px; max-width: 260px; min-width: 260px;">
+                    <p:dataTable id="resultTableAccountName" var="item" value="#{openAccount.openAccountView.accountDetailInformationView.accountNameModelList}"
                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
-                        <p:column headerText="" styleClass="center" style="width:22px;">
-                            <h:outputText value="#{rowIndex+1}"/>
+                        <p:column headerText="" styleClass="center"
+                                  style="width:10px;  max-width: 10px; min-width: 10px;"
+                                >
+                            <p:outputLabel value="#{rowIndex+1}"/>
                         </p:column>
 
-                        <p:column headerText="#{'Account Name'}" style="width: 110px;">
-                            <h:outputText value="#{item.name}"/>
+                        <p:column headerText="#{msg.get('app.openAccount.dialog.table.account.name')}" style="width: 110px;">
+                            <p:outputLabel value="#{item.name}"/>
                         </p:column>
 
-                        <p:column headerText="" styleClass="center" style="width:54px;">
+                        <p:column headerText="" styleClass="center" style="width:20px;">
                             <p:commandButton title="#{msg.get('app.button.remove')}"
                                              icon="ui-icon-trash"
                                              oncomplete="confirmDeleteAccountNameDlg.show()"
                                              update=":openAccountDialogForm"
                                              process="@form">
                                 <f:setPropertyActionListener value="#{item}"
-                                                             target="#{openAccount.accountNameView}"/>
+                                                             target="#{openAccount.openAccountView.accountNameModel}"/>
                             </p:commandButton>
                         </p:column>
 
@@ -165,56 +186,62 @@
 
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Purpose'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.purpose')}"/>
                 </td>
-                <td>
-                    <p:dataGrid value="#{openAccount.openAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
+
+                <td class="title" style="width: 160px; max-width: 160px; min-width: 160px;">
+                    <p:dataGrid value="#{openAccount.openAccountView.accountDetailInformationView.purposeModelList}" var="purposeList" columns="1" style="border: 0">
                         <p:column>
                             <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
-                            <h:outputText value="#{purposeList.purpose.name}"/>
+                            <h:outputText value="#{purposeList.name}"/>
                         </p:column>
                     </p:dataGrid>
                 </td>
             </tr>
 
-            <!--<tr>-->
-                <!--<td class="left" style="background:none;">#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}</td>-->
-                <!--<ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">-->
-                    <!--<td class="center"-->
-                        <!--style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">-->
-                        <!--<p:inputText value="#{item.overLimitAmount}" styleClass="right">-->
-                            <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>-->
-                        <!--</p:inputText>-->
-                    <!--</td>-->
-                <!--</ui:repeat>-->
-            <!--</tr>-->
-
             <tr>
                 <td class="title">
-                    <h:outputText value="#{'Credit Type'}"/>
+                    <p:outputLabel value="#{msg.get('app.openAccount.dialog.content.credit.type')}"/>
                 </td>
 
-                <td>
-                    <p:dataTable id="resultTableCreditType" var="itemCreditType" value="#{openAccount.openAccountView.openAccountCreditTypeViewList}}"
-                                 paginator="false" rowKey="#{itemCreditType}" rowIndexVar="rowIndex">
+                <td class="title">
+                    <p:dataTable id="creditTyeTable" var="item2" value="#{openAccount.openAccountView.accountDetailInformationView.creditTypeModelList}"
+                                 paginator="false" rowKey="#{item2}" rowIndexVar="rowIndex"
+                                 selection="#{openAccount.openAccountView.selectedCreditTypeList}">
 
-                        <p:column headerText="" styleClass="center" style="width:110px;">
-                            <h:outputText value="#{rowIndex+1}"/>
+                        <p:column selectionMode="multiple"/>
+
+                        <p:column headerText="#{msg.get('app.openAccount.dialog.table.product.program')}" style="width: 110px;">
+                            <p:outputLabel value="#{item2.productProgram}"/>
                         </p:column>
 
-                        <p:column headerText="#{'Product Program'}" style="width: 110px;">
-                            <h:outputText value="#{''}"/>
+                        <p:column headerText="#{msg.get('app.openAccount.dialog.table.credit.facility')}" style="width: 110px;">
+                            <p:outputLabel value="#{item2.creditFacility}"/>
                         </p:column>
 
-                        <p:column headerText="#{'Credit Facility'}" style="width: 110px;">
-                            <h:outputText value="#{''}"/>
-                        </p:column>
-
-                        <p:column headerText="#{'Limit'}" style="width: 110px;">
-                            <h:outputText value="#{''}"/>
+                        <p:column headerText="#{msg.get('app.openAccount.dialog.table.limit')}" style="width: 110px;">
+                            <div class="right">
+                                <p:outputLabel value="#{item2.limit}" styleClass="right">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
+                                </p:outputLabel>
+                            </div>
                         </p:column>
 
                     </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="center" colspan="2" style="margin-top: 20px;">
+                    <p:commandButton id="addAccountBtn"
+                                     value="#{msg.get('app.button.ok')}"
+                                     styleClass="small"
+                                     actionListener="#{openAccount.addAccountDetail()}"
+                                     update=":openAccountDialogForm,:frmMain:accountDetailTable "
+                                     oncomplete="handleOpenAccountRequest(xhr, status, args)"
+                            />
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                     type="button" onclick="openAccountDlg.hide()"/>
                 </td>
             </tr>
 
@@ -226,3 +253,5 @@
 
 </f:view>
 </html>
+
+
