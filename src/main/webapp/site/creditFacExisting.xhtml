@@ -336,6 +336,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditborrowerPerson-->
@@ -417,6 +418,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditborrowerPerson-->
@@ -490,7 +492,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                             <tr>
-                                                <td style="text-align: left;width:300px;background-color:#f4f8b6;" class="title">
+                                                <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
                                                     <h:outputText
                                                             value="Total Commercail"/>
                                                 </td>
@@ -509,12 +511,45 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Commercail and OBOD
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Commercail and OBOD"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalBorrowerRetailLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Exposure
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Exposure"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalBorrowerAppInRLOSLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
@@ -733,6 +768,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditrelatedPerson-->
@@ -811,6 +847,7 @@
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
                                                     <!--Data dtCommercialCreditRelatedPerson-->
@@ -877,17 +914,65 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Commercail
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Commercail"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalRelatedComLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Commercail and OBOD
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Commercail and OBOD"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalRelatedRetailLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Exposure
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Exposure"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalRelatedAppInRLOSLimit}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
@@ -897,17 +982,65 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Commercail
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Commercail"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalGroupCom}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Commercail and OBOD
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Commercail and OBOD"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalGroupComOBOD}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Total Exposure
+                                            <table class="table_content" style="width:100%">
+                                                <tr>
+                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                        <h:outputText
+                                                                value="Total Exposure"/>
+                                                    </td>
+                                                    <td style="text-align: left;width:300px;background-color:#f4f8b6;">
+                                                        <h:outputText value="#{creditFacExisting.existingCreditView.totalGroupExposure}"
+                                                                      style="text-align: right;">
+                                                            <f:convertNumber pattern="#,##0"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>Total
                                         </td>
                                     </tr>
                                     <tr>
@@ -970,7 +1103,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerCollateral.mortgageType}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerCollateral.mortgageType.mortgage}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="">
@@ -1006,7 +1139,7 @@
                                                         <p:column colspan="4" footerText="Totals:" style="text-align:left"/>
                                                         <p:column style="text-align:right">
                                                             <f:facet name="footer">
-                                                                <h:outputText value="">
+                                                                <h:outputText value="#{creditFacExisting.existingCreditView.totalAppraisalValue}" >
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </h:outputText>
@@ -1014,7 +1147,7 @@
                                                         </p:column >
                                                         <p:column style="text-align:right">
                                                             <f:facet name="footer">
-                                                                <h:outputText value="">
+                                                                <h:outputText value="#{creditFacExisting.existingCreditView.totalMortgageValue}" >
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </h:outputText>
@@ -1077,7 +1210,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedCollateral.mortgageType}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedCollateral.mortgageType.mortgage}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="">
@@ -1092,8 +1225,8 @@
                                                     <p:commandButton icon="ui-icon-pencil"
                                                                      action="#{creditFacExisting.onEditExistingCollateral()}"
                                                                      process="@this"
-                                                                     update=":existingCollateralBorrowerDlgForm"
-                                                                     oncomplete="existingCollateralBorrowerDlg.show();">
+                                                                     update=":existingCollateralRelatedDlgForm"
+                                                                     oncomplete="existingCollateralRelatedDlg.show();">
                                                         <f:setPropertyActionListener value="related"  target="#{creditFacExisting.typeOfList}" />
                                                         <f:setPropertyActionListener value="#{relatedCollateral}"
                                                                                      target="#{creditFacExisting.selectCollateralDetail}"/>
@@ -1113,7 +1246,7 @@
                                                         <p:column colspan="4" footerText="Totals:" style="text-align:left"/>
                                                         <p:column style="text-align:right">
                                                             <f:facet name="footer">
-                                                                <h:outputText value="">
+                                                                <h:outputText value="#{creditFacExisting.existingCreditView.totalRelatedAppraisalValue}" >
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </h:outputText>
@@ -1121,7 +1254,7 @@
                                                         </p:column >
                                                         <p:column style="text-align:right">
                                                             <f:facet name="footer">
-                                                                <h:outputText value="">
+                                                                <h:outputText value="#{creditFacExisting.existingCreditView.totalRelatedMortgageValue}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </h:outputText>
@@ -1164,7 +1297,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="#{creditFacExisting.existingGuarantorDetailViewList}" var="existingGuarantor" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.borrowerGuarantorDetailViewList}" var="existingGuarantor" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column style="width:30px;"/>
@@ -1218,20 +1351,15 @@
                                                         <p:column colspan="4" footerText="Totals:" style="text-align:left"/>
                                                         <p:column style="text-align:right">
                                                             <f:facet name="footer">
-                                                                <h:outputText value="">
+                                                                <h:outputText value="#{creditFacExisting.existingCreditView.totalGuaranteeAmount}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
                                                                 </h:outputText>
                                                             </f:facet>
                                                         </p:column >
-                                                        <p:column style="text-align:right">
-                                                            <f:facet name="footer">
-                                                                <h:outputText value="">
-                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                                                     maxIntegerDigits="14"/>
-                                                                </h:outputText>
-                                                            </f:facet>
-                                                        </p:column>
+
+                                                        <p:column/>
+
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>

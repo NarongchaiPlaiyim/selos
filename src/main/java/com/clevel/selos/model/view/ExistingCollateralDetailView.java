@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.Relation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +28,7 @@ public class ExistingCollateralDetailView implements Serializable {
     private String productProgram;
     private String creditFacility;//todo: Change creditFacility to view object?
     private BigDecimal limit;
-    private String mortgageType;//todo: Change mortgageType to view object?
+    private MortgageType mortgageType;//todo: Change mortgageType to view object?
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
 
@@ -153,11 +154,11 @@ public class ExistingCollateralDetailView implements Serializable {
         this.limit = limit;
     }
 
-    public String getMortgageType() {
+    public MortgageType getMortgageType() {
         return mortgageType;
     }
 
-    public void setMortgageType(String mortgageType) {
+    public void setMortgageType(MortgageType mortgageType) {
         this.mortgageType = mortgageType;
     }
 

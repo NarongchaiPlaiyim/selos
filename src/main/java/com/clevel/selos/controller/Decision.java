@@ -267,7 +267,7 @@ public class Decision implements Serializable {
         existingCollateralDetail.setAccountSuffix("001");
         existingCollateralDetail.setProductProgram("SmartBiz");
         existingCollateralDetail.setLimit(BigDecimal.valueOf(123456789));
-        existingCollateralDetail.setMortgageType("Mortgage Type");
+        existingCollateralDetail.setMortgageType(new MortgageType());
         existingCollateralDetail.setAppraisalValue(BigDecimal.valueOf(9000000));
         existingCollateralDetail.setMortgageValue(BigDecimal.valueOf(12000000));
 
