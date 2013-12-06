@@ -30,8 +30,6 @@ public class CreditTypeDetailView implements Serializable {
         reset();
     }
 
-
-
     public void reset() {
         this.id = 0;
         this.no = 0;

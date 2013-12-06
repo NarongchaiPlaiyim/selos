@@ -1,12 +1,13 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralHeadDetail;
 import com.clevel.selos.model.db.working.NewCollateralSubDetail;
 import com.clevel.selos.model.view.NewSubCollateralDetailView;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewSubCollDetailTransform extends Transform {
@@ -15,7 +16,7 @@ public class NewSubCollDetailTransform extends Transform {
     public NewSubCollDetailTransform() {
     }
 
-    public List<NewCollateralSubDetail> transformToModel(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, NewCollateralHeadDetail collateralHeaderDetail) {
+    public List<NewCollateralSubDetail> transformToModel(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, NewCollateralHeadDetail collateralHeaderDetail,User user){
 
         List<NewCollateralSubDetail> subCollateralDetailList = new ArrayList<NewCollateralSubDetail>();
         NewCollateralSubDetail subCollateralDetail;
@@ -23,10 +24,13 @@ public class NewSubCollDetailTransform extends Transform {
         for (NewSubCollateralDetailView newSubCollateralDetailView : newSubCollateralDetailViewList) {
             subCollateralDetail = new NewCollateralSubDetail();
 
-            if(newSubCollateralDetailView.getId()==0){
+            if (newSubCollateralDetailView.getId() != 0) {
                 subCollateralDetail.setId(newSubCollateralDetailView.getId());
+                subCollateralDetail.setCreateDate(newSubCollateralDetailView.getCreateDate());
                 subCollateralDetail.setCreateBy(newSubCollateralDetailView.getCreateBy());
-                subCollateralDetail.setCreateDate(DateTime.now().toDate());
+            } else { // id = 0 create new
+                subCollateralDetail.setCreateDate(new Date());
+                subCollateralDetail.setCreateBy(user);
             }
 
             subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
@@ -34,8 +38,6 @@ public class NewSubCollDetailTransform extends Transform {
             subCollateralDetail.setAddress(newSubCollateralDetailView.getAddress());
             subCollateralDetail.setCollateralOwner(newSubCollateralDetailView.getCollateralOwner());
             subCollateralDetail.setSubCollTypeCaption(newSubCollateralDetailView.getSubCollateralType());
-            subCollateralDetail.setModifyBy(newSubCollateralDetailView.getModifyBy());
-            subCollateralDetail.setModifyDate(newSubCollateralDetailView.getModifyDate());
             subCollateralDetail.setNewCollateralHeadDetail(collateralHeaderDetail);
             subCollateralDetailList.add(subCollateralDetail);
         }

@@ -1,12 +1,13 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.working.CollateralHeaderDetail;
-import com.clevel.selos.model.db.working.SubCollateralDetail;
-import com.clevel.selos.model.view.NewSubCollateralDetailView;
-import org.joda.time.DateTime;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.NewGuarantorDetail;
+import com.clevel.selos.model.view.NewGuarantorDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewGuarantorDetailTransform extends Transform {
@@ -15,54 +16,46 @@ public class NewGuarantorDetailTransform extends Transform {
     public NewGuarantorDetailTransform() {
     }
 
-    public List<SubCollateralDetail> transformToModel(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, CollateralHeaderDetail collateralHeaderDetail) {
+    public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user) {
 
-        List<SubCollateralDetail> subCollateralDetailList = new ArrayList<SubCollateralDetail>();
-        SubCollateralDetail subCollateralDetail;
+        List<NewGuarantorDetail> newGuarantorDetailList = new ArrayList<NewGuarantorDetail>();
+        NewGuarantorDetail newGuarantorDetail;
 
-        for (NewSubCollateralDetailView newSubCollateralDetailView : newSubCollateralDetailViewList) {
-            subCollateralDetail = new SubCollateralDetail();
-            if(newSubCollateralDetailView.getId()==0){
-                subCollateralDetail.setCreateBy(newSubCollateralDetailView.getCreateBy());
-                subCollateralDetail.setCreateDate(DateTime.now().toDate());
+        for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
+            newGuarantorDetail = new NewGuarantorDetail();
+            if (newGuarantorDetailView.getId() != 0) {
+                newGuarantorDetail.setId(newGuarantorDetailView.getId());
+                newGuarantorDetail.setCreateDate(newGuarantorDetailView.getCreateDate());
+                newGuarantorDetail.setCreateBy(newGuarantorDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newGuarantorDetail.setCreateDate(new Date());
+                newGuarantorDetail.setCreateBy(user);
             }
 
-            subCollateralDetail.setNo(newSubCollateralDetailView.getNo());
-            subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
-            subCollateralDetail.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
-            subCollateralDetail.setAddress(newSubCollateralDetailView.getAddress());
-            subCollateralDetail.setCollateralOwner(newSubCollateralDetailView.getCollateralOwner());
-            subCollateralDetail.setSubCollateralType(newSubCollateralDetailView.getSubCollateralType());
-            subCollateralDetail.setModifyBy(newSubCollateralDetailView.getModifyBy());
-            subCollateralDetail.setModifyDate(newSubCollateralDetailView.getModifyDate());
-            subCollateralDetail.setCollateralHeaderDetail(collateralHeaderDetail);
-            subCollateralDetailList.add(subCollateralDetail);
+            newGuarantorDetail.setGuarantorName(newGuarantorDetailView.getGuarantorName());
+            newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
+            newGuarantorDetail.setNewCreditFacility(newCreditFacility);
+            newGuarantorDetailList.add(newGuarantorDetail);
         }
 
-        return subCollateralDetailList;
+        return newGuarantorDetailList;
     }
 
-    public List<NewSubCollateralDetailView> transformToView(List<SubCollateralDetail> subCollateralDetailList) {
+    public List<NewGuarantorDetailView> transformToView(List<NewGuarantorDetail> newGuarantorDetailList) {
+        List<NewGuarantorDetailView> newGuarantorDetailViews = new ArrayList<NewGuarantorDetailView>();
+        NewGuarantorDetailView newGuarantorDetailView;
 
-        List<NewSubCollateralDetailView> newSubCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
-        NewSubCollateralDetailView newSubCollateralDetailView;
-
-        for (SubCollateralDetail subCollateralDetail: subCollateralDetailList) {
-            newSubCollateralDetailView = new NewSubCollateralDetailView();
-            newSubCollateralDetailView.setId(subCollateralDetail.getId());
-            newSubCollateralDetailView.setNo(subCollateralDetail.getNo());
-            newSubCollateralDetailView.setTitleDeed(subCollateralDetail.getTitleDeed());
-            newSubCollateralDetailView.setAppraisalValue(subCollateralDetail.getAppraisalValue());
-            newSubCollateralDetailView.setAddress(subCollateralDetail.getAddress());
-            newSubCollateralDetailView.setCollateralOwner(subCollateralDetail.getCollateralOwner());
-            newSubCollateralDetailView.setSubCollateralType(subCollateralDetail.getSubCollateralType());
-            newSubCollateralDetailView.setCreateBy(subCollateralDetail.getCreateBy());
-            newSubCollateralDetailView.setCreateDate(subCollateralDetail.getCreateDate());
-            newSubCollateralDetailView.setModifyBy(subCollateralDetail.getModifyBy());
-            newSubCollateralDetailView.setModifyDate(subCollateralDetail.getModifyDate());
-            newSubCollateralDetailViewList.add(newSubCollateralDetailView);
+        for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
+            newGuarantorDetailView = new NewGuarantorDetailView();
+            newGuarantorDetail.setCreateDate(newGuarantorDetailView.getCreateDate());
+            newGuarantorDetail.setCreateBy(newGuarantorDetailView.getCreateBy());
+            newGuarantorDetail.setModifyDate(newGuarantorDetailView.getModifyDate());
+            newGuarantorDetail.setModifyBy(newGuarantorDetailView.getModifyBy());
+            newGuarantorDetail.setGuarantorName(newGuarantorDetailView.getGuarantorName());
+            newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
+            newGuarantorDetailList.add(newGuarantorDetail);
         }
 
-        return newSubCollateralDetailViewList;
+        return newGuarantorDetailViews;
     }
 }

@@ -46,9 +46,6 @@ public class NewCollateralSubDetail implements Serializable {
 /*    @Column(name = "collateral_name")
     private String collateralName;
 
-    @Column(name = "mortgage_type")
-    private String mortgageType;
-
     @Column(name = "related_with")
     private String relatedWith;*/
 
@@ -71,6 +68,20 @@ public class NewCollateralSubDetail implements Serializable {
     @ManyToOne
     @JoinColumn(name = "new_collateral_head_detail_id")
     private NewCollateralHeadDetail newCollateralHeadDetail;
+
+/*
+    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<MortgageType> mortgageTypeList;*/
+/*
+
+    public List<MortgageType> getMortgageTypeList() {
+        return mortgageTypeList;
+    }
+
+    public void setMortgageTypeList(List<MortgageType> mortgageTypeList) {
+        this.mortgageTypeList = mortgageTypeList;
+    }
+*/
 
     public long getId() {
         return id;

@@ -634,6 +634,18 @@ function handleBasicInfoAccountRequest(xhr, status, args) {
     }
 }
 
+function handleOpenAccountRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        openAccountDlg.hide();
+    }
+}
+
+function handleInsuranceInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        insuranceInfoDlg.hide();
+    }
+}
+
 function handleContactRecordRequest(xhr, status, args) {
     if (args.functionComplete) {
         contactRecordDetailViewDlg.hide();

@@ -81,6 +81,9 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "seq")
     private int seq;
 
+    @Column(name = "is_approved")
+    private int isApproved;
+
     @OneToOne
     @JoinColumn(name = "product_program_id")
     private ProductProgram productProgram;
