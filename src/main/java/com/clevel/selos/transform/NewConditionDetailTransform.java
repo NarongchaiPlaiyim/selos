@@ -1,12 +1,13 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.working.CollateralHeaderDetail;
-import com.clevel.selos.model.db.working.SubCollateralDetail;
-import com.clevel.selos.model.view.NewSubCollateralDetailView;
-import org.joda.time.DateTime;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.NewConditionDetail;
+import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.view.NewConditionDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewConditionDetailTransform extends Transform {
@@ -15,54 +16,50 @@ public class NewConditionDetailTransform extends Transform {
     public NewConditionDetailTransform() {
     }
 
-    public List<SubCollateralDetail> transformToModel(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, CollateralHeaderDetail collateralHeaderDetail) {
+    public List<NewConditionDetail> transformToModel(List<NewConditionDetailView> newConditionDetailViewList,NewCreditFacility newCreditFacility,User user) {
 
-        List<SubCollateralDetail> subCollateralDetailList = new ArrayList<SubCollateralDetail>();
-        SubCollateralDetail subCollateralDetail;
+        List<NewConditionDetail> newConditionDetails = new ArrayList<NewConditionDetail>();
+        NewConditionDetail newConditionDetail;
 
-        for (NewSubCollateralDetailView newSubCollateralDetailView : newSubCollateralDetailViewList) {
-            subCollateralDetail = new SubCollateralDetail();
-            if(newSubCollateralDetailView.getId()==0){
-                subCollateralDetail.setCreateBy(newSubCollateralDetailView.getCreateBy());
-                subCollateralDetail.setCreateDate(DateTime.now().toDate());
+        for (NewConditionDetailView newConditionDetailView : newConditionDetailViewList) {
+            newConditionDetail = new NewConditionDetail();
+
+            if (newConditionDetailView.getId() != 0) {
+                newConditionDetail.setId(newConditionDetailView.getId());
+                newConditionDetail.setCreateDate(newConditionDetailView.getCreateDate());
+                newConditionDetail.setCreateBy(newConditionDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newConditionDetail.setCreateDate(new Date());
+                newConditionDetail.setCreateBy(user);
             }
 
-            subCollateralDetail.setNo(newSubCollateralDetailView.getNo());
-            subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
-            subCollateralDetail.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
-            subCollateralDetail.setAddress(newSubCollateralDetailView.getAddress());
-            subCollateralDetail.setCollateralOwner(newSubCollateralDetailView.getCollateralOwner());
-            subCollateralDetail.setSubCollateralType(newSubCollateralDetailView.getSubCollateralType());
-            subCollateralDetail.setModifyBy(newSubCollateralDetailView.getModifyBy());
-            subCollateralDetail.setModifyDate(newSubCollateralDetailView.getModifyDate());
-            subCollateralDetail.setCollateralHeaderDetail(collateralHeaderDetail);
-            subCollateralDetailList.add(subCollateralDetail);
+            newConditionDetail.setNo(newConditionDetailView.getNo());
+            newConditionDetail.setConditionDesc(newConditionDetailView.getConditionDesc());
+            newConditionDetail.setLoanType(newConditionDetailView.getLoanType());
+            newConditionDetail.setNewCreditFacility(newCreditFacility);
+            newConditionDetails.add(newConditionDetail);
         }
 
-        return subCollateralDetailList;
+        return newConditionDetails;
     }
 
-    public List<NewSubCollateralDetailView> transformToView(List<SubCollateralDetail> subCollateralDetailList) {
+    public List<NewConditionDetailView> transformToView(List<NewConditionDetail> newConditionDetailList) {
 
-        List<NewSubCollateralDetailView> newSubCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
-        NewSubCollateralDetailView newSubCollateralDetailView;
+        List<NewConditionDetailView> newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
+        NewConditionDetailView newConditionDetailView;
 
-        for (SubCollateralDetail subCollateralDetail: subCollateralDetailList) {
-            newSubCollateralDetailView = new NewSubCollateralDetailView();
-            newSubCollateralDetailView.setId(subCollateralDetail.getId());
-            newSubCollateralDetailView.setNo(subCollateralDetail.getNo());
-            newSubCollateralDetailView.setTitleDeed(subCollateralDetail.getTitleDeed());
-            newSubCollateralDetailView.setAppraisalValue(subCollateralDetail.getAppraisalValue());
-            newSubCollateralDetailView.setAddress(subCollateralDetail.getAddress());
-            newSubCollateralDetailView.setCollateralOwner(subCollateralDetail.getCollateralOwner());
-            newSubCollateralDetailView.setSubCollateralType(subCollateralDetail.getSubCollateralType());
-            newSubCollateralDetailView.setCreateBy(subCollateralDetail.getCreateBy());
-            newSubCollateralDetailView.setCreateDate(subCollateralDetail.getCreateDate());
-            newSubCollateralDetailView.setModifyBy(subCollateralDetail.getModifyBy());
-            newSubCollateralDetailView.setModifyDate(subCollateralDetail.getModifyDate());
-            newSubCollateralDetailViewList.add(newSubCollateralDetailView);
+        for(NewConditionDetail newConditionDetail : newConditionDetailList){
+            newConditionDetailView = new NewConditionDetailView();
+            newConditionDetailView.setCreateBy(newConditionDetail.getCreateBy());
+            newConditionDetailView.setCreateDate(newConditionDetail.getCreateDate());
+            newConditionDetailView.setNo(newConditionDetail.getNo());
+            newConditionDetailView.setLoanType(newConditionDetail.getLoanType());
+            newConditionDetailView.setConditionDesc(newConditionDetail.getConditionDesc());
+            newConditionDetailView.setModifyBy(newConditionDetail.getModifyBy());
+            newConditionDetailView.setModifyDate(newConditionDetail.getModifyDate());
+            newConditionDetailViewList.add(newConditionDetailView);
         }
 
-        return newSubCollateralDetailViewList;
+        return newConditionDetailViewList;
     }
 }

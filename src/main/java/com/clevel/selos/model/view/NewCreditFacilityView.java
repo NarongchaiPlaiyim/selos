@@ -14,7 +14,7 @@ import java.util.List;
 public class NewCreditFacilityView implements Serializable {
     private long id;
     private BigDecimal WCNeed;
-    private BigDecimal totalCreditTurnover;
+    private BigDecimal totalWcTmb;
     private BigDecimal WCNeedDiffer;
     private BigDecimal totalWcDebit;
 
@@ -42,6 +42,8 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalCommercial;
     private BigDecimal totalCommercialAndOBOD;
     private BigDecimal totalExposure;
+    private BigDecimal totalApproveCredit;
+
 
     //hidden
     private BigDecimal totalNumberOfNewOD;
@@ -90,7 +92,7 @@ public class NewCreditFacilityView implements Serializable {
 
     public void reset() {
         this.WCNeed = BigDecimal.ZERO;
-        this.totalCreditTurnover = BigDecimal.ZERO;
+        this.totalWcTmb = BigDecimal.ZERO;
         this.WCNeedDiffer = BigDecimal.ZERO;
         this.totalWcDebit = BigDecimal.ZERO;
         this.case1WcLimit = BigDecimal.ZERO;
@@ -117,6 +119,7 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
         this.totalNumberContingenPropose=BigDecimal.ZERO;
+        this.totalApproveCredit = BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -173,6 +176,14 @@ public class NewCreditFacilityView implements Serializable {
         this.totalProposeLoanDBR = totalProposeLoanDBR;
     }
 
+    public BigDecimal getTotalApproveCredit() {
+        return totalApproveCredit;
+    }
+
+    public void setTotalApproveCredit(BigDecimal totalApproveCredit) {
+        this.totalApproveCredit = totalApproveCredit;
+    }
+
     public BigDecimal getWCNeed() {
         return WCNeed;
     }
@@ -181,12 +192,12 @@ public class NewCreditFacilityView implements Serializable {
         this.WCNeed = WCNeed;
     }
 
-    public BigDecimal getTotalCreditTurnover() {
-        return totalCreditTurnover;
+    public BigDecimal getTotalWcTmb() {
+        return totalWcTmb;
     }
 
-    public void setTotalCreditTurnover(BigDecimal totalCreditTurnover) {
-        this.totalCreditTurnover = totalCreditTurnover;
+    public void setTotalWcTmb(BigDecimal totalWcTmb) {
+        this.totalWcTmb = totalWcTmb;
     }
 
     public BigDecimal getWCNeedDiffer() {
