@@ -9,9 +9,8 @@
 <h:head>
     <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript"
-            src="#{request.contextPath}/resources/js/jquery.filter_input.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js?v=#{msg.get('app.version')}"></script>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.ui.datepicker.min.js?v=#{msg.get('app.version')}"></script>
 </h:head>
 
 <h:body>
@@ -201,6 +200,7 @@
                 </p:commandButton>
                 <p:commandButton title="Remove"
                                  icon="ui-icon-trash"
+                                 rendered="#{borrowerItem.ncbFlag == 0}"
                                  oncomplete="confirmDeleteCustomerDlg.show()">
                     <f:setPropertyActionListener value="#{borrowerItem}"
                                                  target="#{prescreenMaker.selectCustomerInfoItem}"/>
@@ -500,13 +500,21 @@
                      update=":frmMain"
                      oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSpDlg', 'customerDlgForm\\:dlgInputSpCitizenText')"/>
 </p:confirmDialog>
+<p:confirmDialog id="msgBoxInvalidCitizenJrDialog" widgetVar="msgBoxInvalidCitizenJrDlg" styleClass="messageDialog"
+                 closable="false"
+                 header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+    <p:commandButton value="OK"
+                     process="@this"
+                     update=":frmMain"
+                     oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenJrDlg', 'customerDlgForm\\:dlgInputJrRegistrationText')"/>
+</p:confirmDialog>
 <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="400" height="150">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+          onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="850" height="550">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>

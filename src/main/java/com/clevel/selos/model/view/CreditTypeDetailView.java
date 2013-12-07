@@ -19,7 +19,7 @@ public class  CreditTypeDetailView implements Serializable {
     private String creditFacility;
     private BigDecimal  limit;
     private BigDecimal  guaranteeAmount;
-    private int usaCount;
+    private int useCount;
     private int seq;
     private Date createDate;
     private Date modifyDate;
@@ -31,8 +31,6 @@ public class  CreditTypeDetailView implements Serializable {
         reset();
     }
 
-
-
     public void reset() {
         this.id = 0;
         this.no = 0;
@@ -43,7 +41,7 @@ public class  CreditTypeDetailView implements Serializable {
         this.creditFacility  = "";
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
-        this.usaCount = 0;
+        this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
         this.purpose = BigDecimal.ZERO;
@@ -58,15 +56,15 @@ public class  CreditTypeDetailView implements Serializable {
     }
 
     public int getNo() {
-          return no;
+        if(this.noFlag==true){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
     public void setNo(int no) {
-        if(this.noFlag){
-           this.no = 1;
-        }else{
-           this.no = 0;
-        }
+           this.no = no;
     }
 
     public String getAccount() {
@@ -158,12 +156,12 @@ public class  CreditTypeDetailView implements Serializable {
         this.requestType = requestType;
     }
 
-    public int getUsaCount() {
-        return usaCount;
+    public int getUseCount() {
+        return useCount;
     }
 
-    public void setUsaCount(int usaCount) {
-        this.usaCount = usaCount;
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
 
     public int getSeq() {
@@ -195,11 +193,20 @@ public class  CreditTypeDetailView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("noFlag", noFlag)
                 .append("account", account)
                 .append("Type", Type)
+                .append("requestType", requestType)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
                 .append("limit", limit)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("useCount", useCount)
+                .append("seq", seq)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

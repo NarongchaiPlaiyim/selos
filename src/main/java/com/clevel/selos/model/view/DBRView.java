@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.working.WorkCase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,10 +20,12 @@ public class DBRView implements Serializable {
     private BigDecimal currentDBR;
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
-    private String modifyBy;
-    private Date modifyDate;
     private long workCaseId;
     private String userId;
+    private BigDecimal totalMonthDebtBorrower;
+    private BigDecimal totalMonthDebtRelated;
+	private String modifyBy;
+    private Date modifyDate;
 
 
     public DBRView() {
@@ -42,8 +43,9 @@ public class DBRView implements Serializable {
         this.currentDBR = BigDecimal.ZERO;
         this.dbrBeforeRequest = BigDecimal.ZERO;
         this.dbrInterest = BigDecimal.ZERO;
-        this.workCaseId = 0L;
-
+        this.workCaseId = 0;
+        this.totalMonthDebtBorrower = BigDecimal.ZERO;
+        this.totalMonthDebtRelated = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -142,7 +144,23 @@ public class DBRView implements Serializable {
         this.userId = userId;
     }
 
-    public String getModifyBy() {
+    public BigDecimal getTotalMonthDebtBorrower() {
+        return totalMonthDebtBorrower;
+    }
+
+    public void setTotalMonthDebtBorrower(BigDecimal totalMonthDebtBorrower) {
+        this.totalMonthDebtBorrower = totalMonthDebtBorrower;
+    }
+
+    public BigDecimal getTotalMonthDebtRelated() {
+        return totalMonthDebtRelated;
+    }
+
+    public void setTotalMonthDebtRelated(BigDecimal totalMonthDebtRelated) {
+        this.totalMonthDebtRelated = totalMonthDebtRelated;
+    }
+
+	public String getModifyBy() {
         return modifyBy;
     }
 

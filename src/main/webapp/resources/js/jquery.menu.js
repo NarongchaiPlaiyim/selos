@@ -111,7 +111,7 @@ var selosmenu = {
         //setting.$mainparent = $mainparent;
         var $mainmenu = $mainparent.find('>ul'); //reference main menu UL
         var method = smoothmenu.detecttouch ? 'toggle' : setting.method === 'toggle' ? 'toggle' : 'hover';
-        var $topheaders = $mainmenu.find('>li>ul').parent();//has('ul');
+        var $topheaders = $mainmenu.find('>span>li>ul').parent();//has('ul');
         //$mainparent.data('$headers', $topheaders);
         var orient = setting.orientation != 'v' ? 'down' : 'right', $parentshadow = $(document.body);
         $mainmenu.click(function (e) {

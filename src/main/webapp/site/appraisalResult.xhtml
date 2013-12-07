@@ -283,7 +283,7 @@
                                          </td>
                                      </tr>
                                  </table>
-                                 <ui:repeat value="#{collateralDetailView.collateralHeaderDetailViewList}" var="collateralHeaderDetailView">
+                                 <ui:repeat value="#{collateralDetailView.newCollateralHeadDetailViewList}" var="newCollateralHeadDetailView">
                                      <table style="width: 100%">
                                          <colgroup>
                                              <col style="width:250px"/>
@@ -294,7 +294,7 @@
                                                  <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.titleDeed}"/>
+                                                 <p:outputLabel value="#{newCollateralHeadDetailView.titleDeed}"/>
                                              </td>
                                          </tr>
                                          <tr>
@@ -302,7 +302,7 @@
                                                  <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.collateralLocation}"/>
+                                                 <p:outputLabel value="#{newCollateralHeadDetailView.collateralLocation}"/>
                                              </td>
                                          </tr>
                                          <tr>
@@ -310,7 +310,7 @@
                                                  <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.appraisalValue}">
+                                                 <p:outputLabel value="#{newCollateralHeadDetailView.appraisalValue}">
                                                      <f:convertNumber pattern="#,##0" />
                                                  </p:outputLabel>
                                              </td>
@@ -320,17 +320,17 @@
                                                  <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.headCollType')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.headCollType.description}"/>
+                                                 <p:outputLabel value="#{newCollateralHeadDetailView.headCollType.description}"/>
                                              </td>
                                          </tr>
                                          <tr>
                                              <td colspan="2">
                                                  <p:dataTable style="width: auto"
                                                               id="subCollateralDetailViewTable"
-                                                              var="subCollateralDetailView"
-                                                              value="#{collateralHeaderDetailView.subCollateralDetailViewList}"
+                                                              var="newSubCollateralDetailView"
+                                                              value="#{newCollateralHeadDetailView.newSubCollateralDetailViewList}"
                                                               paginator="false"
-                                                              rowKey="#{subCollateralDetailView.id}"
+                                                              rowKey="#{newSubCollateralDetailView.id}"
                                                               rowIndexVar="rowIndex" >
                                                      <p:columnGroup type="header">
                                                          <p:row>
@@ -342,21 +342,21 @@
                                                          </p:row>
                                                      </p:columnGroup>
                                                      <p:column styleClass="center" style="width: 50px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.no}"/>
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.no}"/>
                                                      </p:column>
                                                      <p:column  styleClass="left" style="width: 500px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
-                                                         <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
-                                                         <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.subCollateralType.description}"/> <br/>
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.address}"/><br/>
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.landOffice}"/>
                                                      </p:column>
                                                      <p:column  styleClass="left" style="width: 150px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.titleDeed}"/> <br/>
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.titleDeed}"/> <br/>
                                                      </p:column>
                                                      <p:column styleClass="left" style="width: 250px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.collateralOwner}" />
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.collateralOwner}" />
                                                      </p:column>
                                                      <p:column styleClass="right" style="width: 150px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
+                                                         <p:outputLabel value="#{newSubCollateralDetailView.appraisalValue}">
                                                             <f:convertNumber pattern="#,##0" />
                                                          </p:outputLabel>
                                                      </p:column>

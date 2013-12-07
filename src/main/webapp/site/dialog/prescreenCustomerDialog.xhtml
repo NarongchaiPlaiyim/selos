@@ -3,11 +3,12 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 <p:panel id="customerDlgPanel" styleClass="panel-dialog">
     <h:form id="customerDlgForm">
         <div id="customer_relation">
-            <table class="content_form" border="0" style="width:650px;">
+            <table class="content_form" border="0" style="width:700px;">
                 <tr>
                     <td class="title" style="min-width: 144px; width: 144px; max-width: 144px;">Document Type :</td>
                     <td colspan="3">
@@ -34,7 +35,7 @@
                                           value="#{prescreenMaker.borrowerInfo.searchBy}"
                                           disabled="#{not prescreenMaker.enableSearchForm}"
                                           required="#{not empty param[searchButton.clientId]}">
-                            <f:selectItem itemLabel="Personal ID" itemValue="1"/>
+                            <f:selectItem itemLabel="Personal ID/Registration ID" itemValue="1"/>
                             <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeSearchBy()}"
@@ -51,7 +52,7 @@
                         <p:inputText id="dlgInputSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="13"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)"
-                                     rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 1}"
+                                     rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and (prescreenMaker.borrowerInfo.documentType.id == 1 || prescreenMaker.borrowerInfo.documentType.id == 3)}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <!-- only passport allow free text -->
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
@@ -60,11 +61,11 @@
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <!-- only all for number -->
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
+                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 3}"
-                                     required="#{not empty param[searchButton.clientId]}" />
+                                     required="#{not empty param[searchButton.clientId]}" />-->
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
@@ -112,11 +113,13 @@
                         <p:inputText id="dlgInputBrCitizenText" value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkBorrowerThaiID(this)"
+                                     onclick="onClickReadonlyField(this,'#{not prescreenMaker.enableCitizenId}')"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id != 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onclick="onClickReadonlyField(this,'#{not prescreenMaker.enableCitizenId}')"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                     </td>
@@ -124,15 +127,15 @@
                 <tr>
                     <td class="title">TMB Customer ID :</td>
                     <td>
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableTMBCustomerId}" onclick="onClickReadonlyField(this, '#{prescreenMaker.enableTMBCustomerId}')" />
+                        <p:inputText id="dlgBorrowerCustomerID" value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true" />
                     </td>
                 </tr>
                 <tr>
@@ -220,11 +223,14 @@
                 <tr>
                     <td class="title">Date of Birth :</td>
                     <td>
-                        <p:calendar id="dlgCalBrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
-                                    disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalBrDateOfBirth" showOn="button" showButtonPanel="true" navigator="true"
+                                        disabled="#{not prescreenMaker.enableCustomerForm}"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('borrower')}"
                                     process="@this"
@@ -233,7 +239,7 @@
                                     listener="#{prescreenMaker.onChangeDate('borrower')}"
                                     process="@this"
                                     update=":customerDlgForm:age"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td class="title right">Age :</td>
                     <td>
@@ -261,19 +267,19 @@
                             <tr>
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddress(event);" onkeypress="return onKeyAddress(event);"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
+                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="small"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="large"
                                                  onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
@@ -347,7 +353,7 @@
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small right"
                                      maxlength="10" readonly="#{not prescreenMaker.enableCustomerForm}"
-                                     onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);" onfocus="removeComma(this)">
+                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
                             <p:ajax event="blur" update="customerDlgForm" process="@form"/>
                         </p:inputText>
@@ -411,12 +417,14 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"/>
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true" />
                     </td>
-                    <td class="title right">Service Segment :</td>
+                    <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"/>
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true"/>
                     </td>
                 </tr>
                 <tr>
@@ -485,22 +493,26 @@
                     <td class="title">First Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.firstNameTh}" styleClass="large"
+                                     required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.lastNameTh}" styleClass="large"
+                                     required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">Date of Birth :</td>
                     <td>
-                        <p:calendar id="dlgCalSpDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.spouse.dateOfBirth}"
-                                    pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalSpDateOfBirth" showOn="button" showButtonPanel="true" navigator="true"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.spouse.dateOfBirth}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('spouse')}"
                                     process="@form"
@@ -509,7 +521,7 @@
                                     listener="#{prescreenMaker.onChangeDate('spouse')}"
                                     process="@form"
                                     update=":customerDlgForm"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td class="title right">Age :</td>
                     <td>
@@ -520,7 +532,7 @@
                     <td class="title">Nationality :</td>
                     <td colspan="3">
                         <p:selectOneMenu id="dlgSelSpNationality" value="#{prescreenMaker.borrowerInfo.spouse.nationality.id}"
-                                         size="1" style="width: 200px;">
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.nationalityList}"
                                            var="nationalityItem"
@@ -536,17 +548,17 @@
                             <tr>
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.addressNo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddress(event);" onkeypress="return onKeyAddress(event);"/>
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.addressNo}" styleClass="large"
+                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" />
+                                                 onkeydown="return onKeyAddress(event);" onkeypress="return onKeyAddressMoo(event);" />
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.building}" styleClass="small"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.building}" styleClass="large"
                                                  onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                                 </td>
                             </tr>
@@ -631,9 +643,9 @@
                 <tr>
                     <td class="title" style="min-width: 144px; width:144px; max-width: 144px;">Registration ID :</td>
                     <td colspan="3">
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.registrationId}" styleClass="large" maxlength="13"
+                        <p:inputText id="dlgInputJrRegistrationText" value="#{prescreenMaker.borrowerInfo.registrationId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkJuristicThaiID(this)"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                     </td>
                 </tr>
@@ -641,14 +653,14 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableTMBCustomerId}"/>
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true" />
                     </td>
-                    <td class="title right">Service Segment :</td>
+                    <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     onclick="onClickReadonlyField(this, 0)"
+                                     readonly="true"/>
                     </td>
                 </tr>
                 <tr>
@@ -695,6 +707,7 @@
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" styleClass="small"
                                      onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="#{not prescreenMaker.enableCustomerForm}">
                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                             <f:validateDoubleRange maximum="100"/>
@@ -729,11 +742,14 @@
                 <tr>
                     <td class="title">Date of Register :</td>
                     <td>
-                        <p:calendar id="dlgCalBrDateOfRegister" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
-                                    disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalBrDateOfRegister" showOn="button" showButtonPanel="true" navigator="true"
+                                        disabled="#{not prescreenMaker.enableCustomerForm}"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('juristic')}"
                                     process="@form"
@@ -742,7 +758,7 @@
                                     listener="#{prescreenMaker.onChangeDate('juristic')}"
                                     process="@form"
                                     update=":customerDlgForm"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td id="yearInBusiness" class="title right">Year In Business :</td>
                     <td>
@@ -756,19 +772,19 @@
                             <tr>
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddress(event);" onkeypress="return onKeyAddress(event);"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
+                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="small"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="large"
                                                  onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event)"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>

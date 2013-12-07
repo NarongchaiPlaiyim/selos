@@ -1,10 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.StepLandingPageDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
@@ -26,20 +28,26 @@ import java.util.List;
 @Stateless
 public class InboxControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     BPMInterface bpmInterface;
 
+    @Inject
+    private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
     PrescreenDAO prescreenDAO;
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
+    @Inject
+    StepLandingPageDAO stepLandingPageDAO;
 
     @Inject
     InboxBizTransform inboxBizTransform;
@@ -56,9 +64,9 @@ public class InboxControl extends BusinessControl {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
-        //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
+        List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
-        List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
+        /*List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
 
 
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
@@ -93,7 +101,7 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }
+        }*/
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
@@ -113,6 +121,17 @@ public class InboxControl extends BusinessControl {
         List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.findAll();
 
         return workCasePrescreenList;
+    }
+
+    public String getLandingPage(long stepId){
+        StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepId(stepId);
+        String landingPage = "";
+        if(stepLandingPage != null){
+            landingPage = stepLandingPage.getPageName();
+        } else {
+            landingPage = "LANDING_PAGE_NOT_FOUND";
+        }
+        return landingPage;
     }
 
     public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId) {

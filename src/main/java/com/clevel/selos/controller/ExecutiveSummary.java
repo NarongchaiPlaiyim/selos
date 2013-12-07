@@ -55,8 +55,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    private User user;
-    private Date date;
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
     private ModeForDB modeForDB;
     private String messageHeader;
@@ -117,9 +115,9 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public void onCreation() {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 101);    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        //session.setAttribute("workCaseId", 101);    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 //        user = (User) session.getAttribute("user");
-        user = getCurrentUser();
+        //user = getCurrentUser();
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -167,7 +165,7 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         log.info("onSaveExecutiveSummary ::: ModeForDB  {}", modeForDB);
 
         try {
-            exSummaryControl.saveExSummary(exSummaryView,workCaseId,user);
+            exSummaryControl.saveExSummary(exSummaryView, workCaseId);
 
             messageHeader = msg.get("app.header.save.success");
 //            message = msg.get("Save Ex Summary data success.");
@@ -237,14 +235,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void setExSummaryView(ExSummaryView exSummaryView) {
         this.exSummaryView = exSummaryView;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public List<Reason> getReasonList() {

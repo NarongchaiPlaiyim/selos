@@ -4,18 +4,20 @@ import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
-import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.AccountStatusTransform;
+import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.BankTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import org.joda.time.DateTime;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
@@ -32,8 +34,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @ViewScoped
@@ -102,7 +102,7 @@ public class BankStatementDetail implements Serializable {
     //Session
     private long workCaseId;
     private long stepId;
-    private String userId;
+    //private String userId;
 
     private boolean bankAccTypeSelectRequired;
 
@@ -118,16 +118,16 @@ public class BankStatementDetail implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2);
+        /*HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCaseId", new Long(2));
         session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("userId", 10001);*/
 
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
+            //userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -154,7 +154,7 @@ public class BankStatementDetail implements Serializable {
 
             // if(add new bank statement)
             // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
-            if (null == bankStmtView && null == lastMonthDate && numberOfMonths == 0) {
+            if (summaryView == null || (lastMonthDate == null && numberOfMonths == 0)) {
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
                 return;
             }
@@ -211,44 +211,62 @@ public class BankStatementDetail implements Serializable {
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
 
         if (bankStmtView.getId() == 0) {
-            // add new Bank statement
+            // Add New Bank statement
             if (isTmbBank) {
-                summaryView.getTmbBankStmtViewList().add(bankStmtView);
+                if (summaryView.getTmbBankStmtViewList() != null) {
+                    summaryView.getTmbBankStmtViewList().add(bankStmtView);
+                } else {
+                    List<BankStmtView> tmbBankStmtViewList = new ArrayList<BankStmtView>();
+                    tmbBankStmtViewList.add(bankStmtView);
+                    summaryView.setTmbBankStmtViewList(tmbBankStmtViewList);
+                }
             } else {
-                summaryView.getOthBankStmtViewList().add(bankStmtView);
+                if (summaryView.getOthBankStmtViewList() != null) {
+                    summaryView.getOthBankStmtViewList().add(bankStmtView);
+                } else {
+                    List<BankStmtView> othBankStmtViewList = new ArrayList<BankStmtView>();
+                    othBankStmtViewList.add(bankStmtView);
+                    summaryView.setOthBankStmtViewList(othBankStmtViewList);
+                }
             }
         }
         else {
-            // edit exist Bank statement
+            // Edit exist Bank statement
             boolean foundBankStmt = false;
-            // find from TMB Bank statement list
-            for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
-                BankStmtView tmbBankStmtView = summaryView.getTmbBankStmtViewList().get(i);
-                if (bankStmtView.getId() == tmbBankStmtView.getId()) {
-                    // replace edited Bank statement to old
-                    summaryView.getTmbBankStmtViewList().set(i, bankStmtView);
-                    foundBankStmt = true;
-                    break;
+            // TMB
+            if (summaryView.getTmbBankStmtViewList() != null) {
+                for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
+                    BankStmtView tmbBankStmtView = summaryView.getTmbBankStmtViewList().get(i);
+                    if (bankStmtView.getId() == tmbBankStmtView.getId()) {
+                        // replace edited Bank statement to old
+                        summaryView.getTmbBankStmtViewList().set(i, bankStmtView);
+                        foundBankStmt = true;
+                        break;
+                    }
                 }
             }
 
             if (!foundBankStmt) {
-                // find from Other Bank statement list
-                for (int i=0; i<summaryView.getOthBankStmtViewList().size(); i++) {
-                    BankStmtView othBankStmtView = summaryView.getOthBankStmtViewList().get(i);
-                    if (bankStmtView.getId() == othBankStmtView.getId()) {
-                        // replace edited Bank statement to old
-                        summaryView.getOthBankStmtViewList().set(i, bankStmtView);
-                        break;
+                // OTHER
+                if (summaryView.getOthBankStmtViewList() != null) {
+                    for (int i=0; i<summaryView.getOthBankStmtViewList().size(); i++) {
+                        BankStmtView othBankStmtView = summaryView.getOthBankStmtViewList().get(i);
+                        if (bankStmtView.getId() == othBankStmtView.getId()) {
+                            summaryView.getOthBankStmtViewList().set(i, bankStmtView);
+                            break;
+                        }
                     }
                 }
             }
         }
 
         try {
-            // recalculate and save Bank statement summary
+            // update Main account and Highest inflow
+            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
+            // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0, userId);
+
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
@@ -267,17 +285,15 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        //initViewFormAndSelectItems();
+        initViewFormAndSelectItems();
+        checkRequiredBankAccTypeSelected();
     }
 
     private void checkRequiredBankAccTypeSelected() {
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
-        if (bankAccTypeId == 0 && otherAccType == 0)
-            bankAccTypeSelectRequired = true;
-        else
-            bankAccTypeSelectRequired = false;
+        bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
     }
 
     public void onChangeBankAccTypeSelected() {

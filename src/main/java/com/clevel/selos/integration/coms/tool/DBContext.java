@@ -1,8 +1,12 @@
 package com.clevel.selos.integration.coms.tool;
 
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMS;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -25,6 +29,10 @@ public class DBContext implements Serializable {
     String encryptionEnable;
 
     @Inject
+    @ExceptionMessage
+    Message msg;
+
+    @Inject
     public DBContext() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
@@ -37,7 +45,7 @@ public class DBContext implements Serializable {
         }
     }
 
-    public Connection getConnection(String jdbcURL, String user, String password) {
+    public Connection getConnection(String jdbcURL, String user, String password) throws COMSInterfaceException{
         Connection conn = null;
         log.debug("DB URL: {}, User: {}, Password: HIDDEN", jdbcURL, user);
 
@@ -46,8 +54,9 @@ public class DBContext implements Serializable {
                 password = encryptionService.decrypt(Base64.decodeBase64(password));
             }
             conn = DriverManager.getConnection(jdbcURL, user, password);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("Exception while connect to database!", e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_CONNECT_ERROR, msg.get(ExceptionMapping.COMS_CONNECT_ERROR));
         }
         return conn;
     }

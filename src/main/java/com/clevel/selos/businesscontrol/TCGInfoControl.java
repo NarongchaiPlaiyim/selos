@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.TCG;
@@ -13,6 +14,7 @@ import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
 import com.clevel.selos.transform.TCGDetailTransform;
 import com.clevel.selos.transform.TCGTransform;
+import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,9 +26,14 @@ import java.util.List;
 @Stateless
 public class TCGInfoControl extends BusinessControl {
     @Inject
+    @SELOS
+    private Logger log;
+
+    @Inject
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;
+
     @Inject
     TCGDAO tcgDAO;
     @Inject
@@ -41,12 +48,13 @@ public class TCGInfoControl extends BusinessControl {
 
     }
 
-    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId ,User user) {
+    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
         log.info("onSaveTCGToDB begin");
         log.info("workCaseId {} ", workCaseId);
         log.info("tcgView  {} ", tcgView.toString());
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase ,user);
         log.info("transform comeback {} ", tcg.toString());
         tcgDAO.persist(tcg);
@@ -55,11 +63,12 @@ public class TCGInfoControl extends BusinessControl {
         tcgDetailDAO.persist(tcgDetailList);
     }
 
-    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId,User user) {
+    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
         log.info("onEditTCGToDB begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase,user);
         tcgDAO.persist(tcg);
         log.info("persist tcg");

@@ -58,13 +58,13 @@ public class BankStatementSummary implements Serializable {
     @Column(name = "grand_td_chq_return_percent")
     private BigDecimal grdTotalTDChqRetPercent;
 
-    @Column(name = "grand_total_borrower_income_gross")
+    @Column(name = "grand_total_brw_income_gross")
     private BigDecimal grdTotalBorrowerIncomeGross;
 
-    @Column(name = "grand_total_borrower_income_bdm")
+    @Column(name = "grand_total_brw_income_bdm")
     private BigDecimal grdTotalBorrowerIncomeNetBDM;
 
-    @Column(name = "grand_total_borrower_income_uw")
+    @Column(name = "grand_total_brw_income_uw")
     private BigDecimal grdTotalBorrowerIncomeNetUW;
 
     @Column(name = "grand_avg_os_balance_amt")

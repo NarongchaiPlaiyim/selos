@@ -34,4 +34,21 @@ public class Obligation2DAO extends GenericDAO<Obligation2, Long> {
 
         return null;
     }
+
+    public List<Obligation2> getListByTmbCusId(String tmbCusId) {
+        log.debug("getListByTmbCusId. (tmbCusId: {})", tmbCusId);
+
+        if (tmbCusId != null && tmbCusId.trim().length() > 0) {
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("tmbCusId", tmbCusId));
+
+            List<Obligation2> obligation2List = criteria.list();
+
+            log.debug("getListByTmbCusId. (result size: {})", obligation2List.size());
+
+            return obligation2List;
+        }
+
+        return null;
+    }
 }

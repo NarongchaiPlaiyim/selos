@@ -1,0 +1,18 @@
+package com.clevel.selos.dao.working;
+
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.NewCollateralDetail;
+import org.slf4j.Logger;
+
+import javax.inject.Inject;
+
+public class NewCollateralDetailDAO extends GenericDAO<NewCollateralDetail, Integer> {
+    @Inject
+    @SELOS
+    Logger log;
+    @Inject
+    public NewCollateralDetailDAO() {}
+
+
+}

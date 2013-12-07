@@ -3,14 +3,18 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -27,6 +31,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +57,7 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
-    private User user;
+    //private User user;
     private Date currentDate;
 
     private ReferredExperience referredExperience;
@@ -63,7 +68,8 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal SumWeightAR;
     private BigDecimal SumWeightAP;
     private BigDecimal SumWeightINV;
-
+    double bankStatementAvg = 0;
+    private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
     private String message;
@@ -96,9 +102,16 @@ public class BizInfoSummary implements Serializable {
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     private CountryDAO countryDAO;
+    @Inject
+    BankStmtTransform bankStmtTransform;
+    @Inject
+    BankStatementSummaryDAO bankStmtSummaryDAO;
+
 
     @Inject
     private Util util;
+
+    private long workCaseId;
 
     public BizInfoSummary() {
 
@@ -107,13 +120,52 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
+        HttpSession session = FacesUtil.getSession(true);
+        log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
+        disableOwnerName = false;
+        disableExpiryDate = true;
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
+        log.debug("info WorkCaseId is: {}" + workCaseId);
         onSearchBizInfoSummaryByWorkCase();
+
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
+
+        //user = (User)session.getAttribute("user");
+
+        //log.info("onCreation bizInfoSum " + user.getRole().toString());
+
+        //user.getRole().setId(102);
+
+        bankStatementAvg = 0;
+        if(bankStmtSummaryView != null ){
+
+            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                }
+            }*/
+
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            }else{
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                }
+            }
+        }else{
+           log.info("bankStmtSummaryView is null ");
+        }
+
+        log.info("bankStatementAvg is " + bankStatementAvg);
 
         if (bizInfoSummaryView == null) {
 
@@ -147,8 +199,6 @@ public class BizInfoSummary implements Serializable {
             onChangeDistrict();
             onChangeRental();
         }
-
-
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
@@ -156,10 +206,19 @@ public class BizInfoSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        //session.setAttribute("workCaseId", 10001);
+
         log.info(" get FROM session workCaseId is " + workCaseId);
-        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        try{
+            bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
+        }catch (Exception e){
+            log.info("error");
+
+        }
+
+        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
+        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
 
     }
 
@@ -186,7 +245,7 @@ public class BizInfoSummary implements Serializable {
         if (bizInfoDetailViewList.size() == 0) {
             bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         } else {
-            double bankStatementAvg = 0;
+
             double incomeAmountCal = 0;
             double sumIncomeAmountD = 0;
 
@@ -215,8 +274,6 @@ public class BizInfoSummary implements Serializable {
 
                 incomePercentD = temp.getPercentBiz().doubleValue();
                 sumIncomePercentD += incomePercentD;
-
-                bankStatementAvg = 12000;
                 incomeAmountCal = bankStatementAvg * 12;
                 sumIncomeAmountD += incomeAmountCal;
 
@@ -240,20 +297,14 @@ public class BizInfoSummary implements Serializable {
 
             }
 
-            log.info("sumIncomeAmountX 1111.00 is " + util.formatNumber(1111.00));
-            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(1234.55));
-            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(1234567.55));
-            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(12345678910.55));
-
             sumIncomeAmountDis = util.formatNumber(sumIncomeAmountD);
 
-            sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2);
-            sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2);
-            SumWeightAR = new BigDecimal(sumAR).setScale(2);
-            SumWeightAP = new BigDecimal(sumAP).setScale(2);
-            SumWeightINV = new BigDecimal(sumINV).setScale(2);
-            SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
-
+            sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2, RoundingMode.HALF_UP);
+            sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2,RoundingMode.HALF_UP);
+            SumWeightAR = new BigDecimal(sumAR).setScale(2,RoundingMode.HALF_UP);
+            SumWeightAP = new BigDecimal(sumAP).setScale(2,RoundingMode.HALF_UP);
+            SumWeightINV = new BigDecimal(sumINV).setScale(2,RoundingMode.HALF_UP);
+            SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2,RoundingMode.HALF_UP);
 
             bizInfoSummaryView.setCirculationAmount(sumIncomeAmount);
             bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
@@ -263,12 +314,20 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightAP(SumWeightAP);
             bizInfoSummaryView.setSumWeightINV(SumWeightINV);
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
-            onCalSummaryTable();
+            if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
+                onCalSummaryTable();
+            }
         }
     }
 
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
+        if( bizInfoSummaryView.getCirculationAmount().doubleValue() <= 0){
+            messageHeader = "error";
+            message = "sumIncomeAmount is zero ";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
         double sumIncomeAmount = 0;
         double productCostAmount = 0;
         double productCostPercent = 0;
@@ -295,8 +354,8 @@ public class BizInfoSummary implements Serializable {
 
         if( productCostPercent > 100.01){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่าเกิน 100";
+            messageHeader = "error";
+            message = "error 100";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -316,8 +375,8 @@ public class BizInfoSummary implements Serializable {
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า operatingExpenseAmount > profitMarginPercent";
+            messageHeader = "error";
+            message = "operatingExpenseAmount > profitMarginPercent";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -342,16 +401,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า Interest > earningsBeforeTaxAmount";
+            messageHeader = "error";
+            message = "error Interest > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า tax > earningsBeforeTaxAmount";
+            messageHeader = "error";
+            message = "error tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -359,13 +418,11 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด";
-            message = "ค่า ผลรวม interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "error";
+            message = "error  interest and tax > earningsBeforeTaxAmount";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
-
-
 
         reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
         reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
@@ -390,15 +447,12 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            if (bizInfoSummaryView.getId() == 0) {
-                bizInfoSummaryView.setCreateBy(user);
-                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-            }
-            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
+
+            log.info("Controller getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
+            log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             log.info("bizInfoSummaryControl end");
 
@@ -412,8 +466,11 @@ public class BizInfoSummary implements Serializable {
                 String url = "bizInfoDetail.jsf";
                 FacesContext fc = FacesContext.getCurrentInstance();
                 ExternalContext ec = fc.getExternalContext();
-                log.info("redirect to new page");
-                ec.redirect(url);
+
+                log.info("redirect to new page url is " + url);
+                ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");
+                //ec.redirect(url);
+                log.info("redirect to new page goooo!! 1");
             } else {
                 log.info("not have to redirect ");
             }
@@ -463,15 +520,13 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeRental(){
-        log.info("onChangeRental ");
-        log.info("onChangeRental is " + bizInfoSummaryView.getRental());
-        disableOwnerName = true;
-        disableExpiryDate = true;
         if(bizInfoSummaryView.getRental() == 0 ){
+            disableExpiryDate = true;
             disableOwnerName = false;
             bizInfoSummaryView.setExpiryDate(null);
         }else if(bizInfoSummaryView.getRental() == 1 ){
             disableExpiryDate = false;
+            disableOwnerName = true;
             bizInfoSummaryView.setOwnerName("");
         }
     }

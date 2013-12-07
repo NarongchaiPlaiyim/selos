@@ -44,8 +44,8 @@ public class BizInfoDetail implements Serializable {
     private String stakeType;
 
     double sumBizPercent = 0;
-    private BigDecimal sumSalePercentB ;
-    private BigDecimal sumCreditPercentB ;
+    private BigDecimal sumSalePercentB;
+    private BigDecimal sumCreditPercentB;
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;
@@ -114,12 +114,21 @@ public class BizInfoDetail implements Serializable {
     @PostConstruct
     public void onCreation(){
         try{
-            log.info("onCreation ");
+            log.info("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
+            log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
 
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+
+            log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
+
+            if(!session.getAttribute("bizInfoDetailViewId").toString().equals("")){
+                bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+            }else{
+                bizInfoDetailViewId = -1;
+            }
+
             user = (User)session.getAttribute("user");
 
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
@@ -206,10 +215,18 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setAveragePurchaseAmount( new BigDecimal(y));
             bizInfoDetailView.setAveragePayableAmount( new BigDecimal(x));
             bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
+
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            calSumBizStakeHolderDetailView(supplierDetailList,"1");
+            if(supplierDetailList.size()>0){
+                calSumBizStakeHolderDetailView(supplierDetailList,"1");
+            }
+
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            calSumBizStakeHolderDetailView(buyerDetailList,"2");
+            if(buyerDetailList.size()>0){
+                calSumBizStakeHolderDetailView(buyerDetailList,"2");
+            }
+
+
         }catch (Exception ex){
             log.info("onCreation Exception ");
             if(ex.getCause() != null){
@@ -443,10 +460,14 @@ public class BizInfoDetail implements Serializable {
                          complete = false;
                      }
                 }else if(stakeType.equals("2")){
-                    bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
+                    log.info( " add buyer 1 ");
+                     bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
                      buyerDetailList.add(bizStakeHolderDetailView);
+                    log.info( " add buyer 2 ");
                      buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                    log.info( " add buyer 3 ");
                      if(!buyer){
+                         log.info( " add buyer * ");
                          buyerDetailList.remove(bizStakeHolderDetailView);
                          calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
                          messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
@@ -454,6 +475,7 @@ public class BizInfoDetail implements Serializable {
                          RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                          complete = false;
                      }
+                    log.info( " buyerlist size " + buyerDetailList.size());
                 }
             }else if(modeForButton.equalsIgnoreCase("edit")){
                 if(stakeType.equals("1")){
@@ -503,7 +525,7 @@ public class BizInfoDetail implements Serializable {
         return stakeHolderMaster;
     }
 
-    private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeHolder){
+    private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeType){
         double sumSalePercent = 0;
         double sumCreditPercent = 0;
         double sumCreditTerm = 0;
@@ -535,23 +557,30 @@ public class BizInfoDetail implements Serializable {
         sumSalePercentB = new BigDecimal(sumSalePercent).setScale(2,RoundingMode.HALF_UP);
         sumCreditPercentB = new BigDecimal(sumCreditPercent).setScale(2,RoundingMode.HALF_UP);
         sumCreditTermB = new BigDecimal(sumCreditTerm).setScale(2,RoundingMode.HALF_UP);
+        log.info(" check stakeType " +stakeType );
         if(stakeType.equals("1")){
+            log.info(" stakeType ===== 1" );
             bizInfoDetailView.setSupplierTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
+            log.info(" stakeType ===== 1.1" );
             bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
             bizInfoDetailView.setPurchasePercentCash(new BigDecimal(100-sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPurchasePercentCredit(sumCreditPercentB);
+            log.info(" stakeType ===== 1.5" );
 
         }else if(stakeType.equals("2")){
+            log.info(" stakeType ===== 2" );
             bizInfoDetailView.setBuyerTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
+            log.info(" stakeType ===== 2.1" );
             bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
             bizInfoDetailView.setPayablePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPayablePercentCredit(sumCreditPercentB);
+            log.info(" stakeType ===== 2.5" );
         }
         return true;
     }
@@ -605,6 +634,8 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
             }
             bizInfoDetailView.setModifyBy(user);
+            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
             bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");
@@ -617,6 +648,7 @@ public class BizInfoDetail implements Serializable {
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
+            log.info("ERROR");
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
             if(ex.getCause() != null){
                 message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();

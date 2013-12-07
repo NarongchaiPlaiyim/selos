@@ -39,4 +39,5 @@ public class CustomerCSIDAO extends GenericDAO<CustomerCSI, Long> {
         log.info("getCustomerCSIByCustomer ::: size : {}", customerAccountNameList.size());
         return customerAccountNameList;
     }
+
 }

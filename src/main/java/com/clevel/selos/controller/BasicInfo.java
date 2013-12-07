@@ -36,7 +36,6 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -110,7 +109,6 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     //session
     private long workCaseId;
-    private User user;
 
     //for mandate
     private boolean reqApplicationNo;
@@ -194,15 +192,13 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void preRender(){
-        HttpSession session = FacesUtil.getSession(false);
+        /*HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1004);
+        session.setAttribute("stepId", 1004);*/
 
         log.info("preRender ::: setSession ");
 
-        session = FacesUtil.getSession(true);
-
-        user = getCurrentUser();
+        HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -466,7 +462,6 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void addAccount(){
         if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
-
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
         }else{
             basicInfoAccountView.getBankAccountTypeView().setName("-");
@@ -516,7 +511,7 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onSave(){
         try{
-            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, user);
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             onCreation();
