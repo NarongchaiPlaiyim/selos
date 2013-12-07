@@ -8,15 +8,15 @@
         xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <title>ManageUser</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript"
-            src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer">
 
-    <h:form id="userTableData">
+    <h:form id="baInformationForm">
         <div id="main_container">
 
             <ui:include src="include/header_logo.xhtml" />
@@ -27,13 +27,158 @@
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml" />
             <div id="content_container">
+                <div id="content_name">#{msg.get('app.baInfo.header')}</div>
+                <div id="content">
+                <div id="content_info">
+                    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                </div>
+                <!-- start content -->
+                <table class="content_table_form">
+                   <tr>
+                       <td><div class="left title">ลักษณะการอนุมัติสินเชื่อ</div> </td>
+                       <td> <p:selectOneRadio>
+                                <f:selectItem itemLabel="New" itemValue=""/>
+                                <f:selectItem itemLabel="New + Change" itemValue=""/>
+                            </p:selectOneRadio>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td colspan="2"><div class="separate"/> </td>
+                   </tr>
+                   <tr>
+                       <td>
+                            <div class="title">BA Information</div>
+                       </td>
+                   </tr>
+                   <tr>
+                    <td>
+                        <div class="left title">Apply BA :</div>
+                    </td>
+                    <td>
+                        <p:selectOneRadio>
+                            <f:selectItem itemLabel="Yes"  itemValue="1" />
+                            <f:selectItem itemLabel="No" itemValue="0" />
+                        </p:selectOneRadio>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="left title">จ่ายให้บริษัทประกันหรือไม่ :</div>
+                        </td>
+                        <td>
+                            <p:selectOneRadio>
+                                <f:selectItem itemLabel="Yes"  itemValue="1" />
+                                <f:selectItem itemLabel="No" itemValue="0" />
+                            </p:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p:dataTable value="" selection="" rowIndexVar="">
+                                <p:column headerText="Apply BA">Apply BA</p:column>
+                                <p:column headerText="Customer Name">Customer Name</p:column>
+                                <p:column headerText="Contact Number">Contact Number</p:column>
+                                <p:column headerText="Relationship">Relationship</p:column>
+                                <p:column headerText="Result Healthcheck">Result Healthcheck</p:column>
+                                <p:column headerText="วันที่ตรวจ">วันที่ตรวจ</p:column>
+                                <p:column><p:commandButton icon="ui-icon-pencil" onclick="sdw.show()"/> </p:column>
+                            </p:dataTable>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="separate"/> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="title">BA Information</div>
+                        </td>
+                        <td>
+                            <p:commandButton value="Add" onclick="bapaInfoDialog.show()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p:dataTable value="" selection="" rowIndexVar="">
+                                <p:column headerText="">1</p:column>
+                                <p:column headerText="Type">BA</p:column>
+                                <p:column headerText="Credit Type">sdsd</p:column>
+                                <p:column headerText="ลูกค้าชำระเอง">Relationship</p:column>
+                                <p:column headerText="วงเงิน">Result Healthcheck</p:column>
+                                <p:column headerText="ค่าเบี้ย">วันที่ตรวจ</p:column>
+                                <p:column headerText="ชำระเพิ่ม">วันที่ตรวจ</p:column>
+                                <p:column>
+                                    <p:commandButton icon="ui-icon-pencil"/>
+                                    <p:commandButton icon="ui-icon-trash"/>
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="8" style="height:10px;"/>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column colspan="4" footerText="Total"></p:column>
+                                        <p:column>00000000</p:column>
+                                        <p:column>00000000</p:column>
+                                        <p:column>00000000</p:column>
+                                        <p:column>
+                                            <p:commandButton icon="ui-icon-pencil"/>
+                                            <p:commandButton icon="ui-icon-trash"/>
+                                        </p:column>
+                                    </p:row>
+                                </p:columnGroup>
+                            </p:dataTable>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="separate"/> </td>
+                    </tr>
+                    <tr>
+                        <td><div class="left title">ข้อมูลบริษัทประกันชีวิต</div> </td>
+                    </tr>
+                    <tr>
+                        <td><div class="left title">บริษัทประกันชีวิต :</div> </td>
+                        <td>
+                            <p:selectOneMenu>
+                                <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="left title">เลขที่บัญชี :</div> </td>
+                        <td><h:inputText value=""/> </td>
+                    </tr>
+                    <tr>
+                        <td><div class="separate"/> </td>
+                    </tr>
+                    <tr>
+                        <td><p:commandButton value="Save"/><p:commandButton value="Cancel"/> </td>
+                    </tr>
 
-                <h:outputText value="#{msg.get('')}"/>
+                </table>
 
-            </div>
+                </div>    <!-- content -->
+
+            </div>     <!-- content contantner-->
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
         </div>
     </h:form>
     </p:panel>
+
+    <p:dialog widgetVar="bapaInfoDialog" header="BA/PA Information" resizable="false" modal="true"
+            width="800" height="300">
+
+        <ui:include src="dialog/bapaInfoDialog.xhtml"/>
+    </p:dialog>
+
+    <p:dialog widgetVar="sdw" header="Apply BA Information" height="250" width="700"  modal="true" resizable="false" >
+
+        <!--<ui:include src="dialog/baApplyInfoDialog.xhtml"/>-->
+    </p:dialog>
+
 </h:body>
 
 </f:view>

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CreditTypeDetailView implements Serializable {
+public class  CreditTypeDetailView implements Serializable {
     private long id;
     private int no;
     private boolean noFlag;
@@ -25,6 +25,7 @@ public class CreditTypeDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private BigDecimal purpose;
 
     public CreditTypeDetailView() {
         reset();
@@ -45,6 +46,7 @@ public class CreditTypeDetailView implements Serializable {
         this.usaCount = 0;
         this.seq = 0;
         this.noFlag = false;
+        this.purpose = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -178,6 +180,14 @@ public class CreditTypeDetailView implements Serializable {
 
     public void setNoFlag(boolean noFlag) {
         this.noFlag = noFlag;
+    }
+
+    public BigDecimal getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(BigDecimal purpose) {
+        this.purpose = purpose;
     }
 
     @Override
