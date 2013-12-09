@@ -16,6 +16,7 @@ public class NewGuarantorDetailView implements Serializable {
     private Customer guarantorName;
     private String tcgLgNo;
     private BigDecimal guaranteeAmount;
+    private int isApproved;
 
     private List<CreditTypeDetailView> creditTypeDetailViewList;
 
@@ -107,12 +108,22 @@ public class NewGuarantorDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
+    public int getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(int approved) {
+        isApproved = approved;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("guaranteeAmount", guaranteeAmount)
+                .append("isApproved", isApproved)
                 .append("creditTypeDetailViewList", creditTypeDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
