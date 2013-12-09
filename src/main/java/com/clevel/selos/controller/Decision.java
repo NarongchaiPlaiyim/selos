@@ -731,19 +731,15 @@ public class Decision implements Serializable {
 
     // ---------- Propose Credit Dialog ---------- //
     public void onChangeRequestType() {
-
     }
 
     public void onChangeProductProgram() {
-
     }
 
     public void onChangeCreditType() {
-
     }
 
     public void onChangeSuggestValue() {
-
     }
 
     public void onAddTierInfo() {
