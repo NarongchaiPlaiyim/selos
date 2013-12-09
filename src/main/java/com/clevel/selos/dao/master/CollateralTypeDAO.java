@@ -24,4 +24,12 @@ public class CollateralTypeDAO extends GenericDAO<CollateralType, Integer> {
         CollateralType collateralTypeResult = (CollateralType)criteria.uniqueResult();
         return collateralTypeResult;
     }
+
+    public CollateralType findByCollateralCode(String code) {
+        log.info("findByCollateralCode. (code: {})", code);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("code", code));
+        CollateralType collateralTypeResult = (CollateralType)criteria.uniqueResult();
+        return collateralTypeResult;
+    }
 }

@@ -8,9 +8,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CreditTypeDetailView implements Serializable {
+public class  CreditTypeDetailView implements Serializable {
     private long id;
-    private int no;
     private boolean noFlag;
     private String account;
     private String Type;
@@ -25,6 +24,7 @@ public class CreditTypeDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private BigDecimal purpose;
 
     public CreditTypeDetailView() {
         reset();
@@ -32,7 +32,6 @@ public class CreditTypeDetailView implements Serializable {
 
     public void reset() {
         this.id = 0;
-        this.no = 0;
         this.account = "";
         this.Type  = "";
         this.requestType = 0;
@@ -43,6 +42,7 @@ public class CreditTypeDetailView implements Serializable {
         this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
+        this.purpose = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -51,18 +51,6 @@ public class CreditTypeDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public int getNo() {
-        if(this.noFlag==true){
-            return 1;
-        }else{
-            return 0;
-        }
-    }
-
-    public void setNo(int no) {
-           this.no = no;
     }
 
     public String getAccount() {
@@ -178,11 +166,18 @@ public class CreditTypeDetailView implements Serializable {
         this.noFlag = noFlag;
     }
 
+    public BigDecimal getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(BigDecimal purpose) {
+        this.purpose = purpose;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("no", no)
                 .append("noFlag", noFlag)
                 .append("account", account)
                 .append("Type", Type)

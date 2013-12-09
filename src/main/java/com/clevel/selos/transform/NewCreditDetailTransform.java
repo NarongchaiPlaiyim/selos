@@ -40,10 +40,10 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
             newCreditDetail.setFrontEndFee(newCreditDetailView.getFrontEndFee());
             newCreditDetail.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
-//            newCreditDetail.setInstallment(newCreditDetailView.getFinalPrice());
+            newCreditDetail.setInstallment(newCreditDetailView.getInstallment());
             newCreditDetail.setLimit(newCreditDetailView.getLimit());
             newCreditDetail.setLoanPurpose(newCreditDetailView.getLoanPurpose());
-//            newCreditDetail.setOutstanding(newCreditDetailView.getFinalPrice());
+            newCreditDetail.setOutstanding(newCreditDetailView.getOutstanding());
             newCreditDetail.setPceAmount(newCreditDetailView.getPCEAmount());
             newCreditDetail.setPcePercent(newCreditDetailView.getPCEPercent());
             newCreditDetail.setProductCode(newCreditDetailView.getProductCode());
@@ -87,10 +87,10 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());
             newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
             newCreditDetailView.setHoldLimitAmount(newCreditDetail.getHoldLimitAmount());
-//            newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
+            newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
             newCreditDetailView.setLimit(newCreditDetail.getLimit());
             newCreditDetailView.setLoanPurpose(newCreditDetail.getLoanPurpose());
-//            newCreditDetailView.setOutstanding();
+            newCreditDetailView.setOutstanding(newCreditDetail.getOutstanding());
             newCreditDetailView.setPCEAmount(newCreditDetail.getPceAmount());
             newCreditDetailView.setPCEPercent(newCreditDetail.getPcePercent());
             newCreditDetailView.setProductCode(newCreditDetail.getProductCode());

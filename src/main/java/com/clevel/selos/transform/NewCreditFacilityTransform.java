@@ -81,7 +81,7 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setFrontendFeeDOA(newCreditFacilityView.getFrontendFeeDOA());
         newCreditFacility.setGuarantorBA(newCreditFacilityView.getGuarantorBA());
         newCreditFacility.setReasonForReduction(newCreditFacilityView.getReasonForReduction());
-        newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType().value());
+        newCreditFacility.setCreditCustomerType(newCreditFacilityView.getCreditCustomerType());
 
         if (newCreditFacilityView.getCreditRequestType().getId() != 0) {
             CreditRequestType creditRequestType = creditRequestTypeDAO.findById(newCreditFacilityView.getCreditRequestType().getId());
@@ -148,7 +148,7 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setFrontendFeeDOA(newCreditFacility.getFrontendFeeDOA());
         newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
         newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
-//        newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
+        newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
         newCreditFacilityView.setCreditRequestType(newCreditFacility.getCreditRequestType());
         newCreditFacilityView.setCountry(newCreditFacility.getCountry());
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());

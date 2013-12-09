@@ -462,7 +462,6 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void addAccount(){
         if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
-
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
         }else{
             basicInfoAccountView.getBankAccountTypeView().setName("-");

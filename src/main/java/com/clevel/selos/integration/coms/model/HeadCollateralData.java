@@ -4,12 +4,25 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 public class HeadCollateralData implements Serializable {
+    private String collId;
     private String titleDeed;
     private String collateralLocation;
-    private String appraisalValue;
+    private BigDecimal appraisalValue;
     private String headCollType;
+    private String subCollType;
+    private List<SubCollateralData> subCollateralDataList;
+
+    public String getCollId() {
+        return collId;
+    }
+
+    public void setCollId(String collId) {
+        this.collId = collId;
+    }
 
     public String getTitleDeed() {
         return titleDeed;
@@ -27,11 +40,11 @@ public class HeadCollateralData implements Serializable {
         this.collateralLocation = collateralLocation;
     }
 
-    public String getAppraisalValue() {
+    public BigDecimal getAppraisalValue() {
         return appraisalValue;
     }
 
-    public void setAppraisalValue(String appraisalValue) {
+    public void setAppraisalValue(BigDecimal appraisalValue) {
         this.appraisalValue = appraisalValue;
     }
 
@@ -43,13 +56,32 @@ public class HeadCollateralData implements Serializable {
         this.headCollType = headCollType;
     }
 
+    public String getSubCollType() {
+        return subCollType;
+    }
+
+    public void setSubCollType(String subCollType) {
+        this.subCollType = subCollType;
+    }
+
+    public List<SubCollateralData> getSubCollateralDataList() {
+        return subCollateralDataList;
+    }
+
+    public void setSubCollateralDataList(List<SubCollateralData> subCollateralDataList) {
+        this.subCollateralDataList = subCollateralDataList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("collId", collId)
                 .append("titleDeed", titleDeed)
                 .append("collateralLocation", collateralLocation)
                 .append("appraisalValue", appraisalValue)
                 .append("headCollType", headCollType)
+                .append("subCollateralDataList", subCollateralDataList)
+                .append("subCollateralDataList", subCollateralDataList)
                 .toString();
     }
 }

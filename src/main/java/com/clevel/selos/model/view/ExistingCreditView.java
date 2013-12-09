@@ -37,10 +37,11 @@ public class ExistingCreditView implements Serializable {
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
-    private List<ExistingCollateralDetailView> existingCollateralDetailViewList;
     /* Collateral list for Decision */
     private List<ExistingCollateralDetailView> borrowerCollateralList;
     private List<ExistingCollateralDetailView> relatedCollateralList;
+
+    private List<ExistingGuarantorDetailView> borrowerGuarantorList;
 
     public long getId() {
         return id;
@@ -242,14 +243,6 @@ public class ExistingCreditView implements Serializable {
         this.relatedAppInRLOSCredit = relatedAppInRLOSCredit;
     }
 
-    public List<ExistingCollateralDetailView> getExistingCollateralDetailViewList() {
-        return existingCollateralDetailViewList;
-    }
-
-    public void setExistingCollateralDetailViewList(List<ExistingCollateralDetailView> existingCollateralDetailViewList) {
-        this.existingCollateralDetailViewList = existingCollateralDetailViewList;
-    }
-
     public List<ExistingCollateralDetailView> getBorrowerCollateralList() {
         return borrowerCollateralList;
     }
@@ -264,6 +257,14 @@ public class ExistingCreditView implements Serializable {
 
     public void setRelatedCollateralList(List<ExistingCollateralDetailView> relatedCollateralList) {
         this.relatedCollateralList = relatedCollateralList;
+    }
+
+    public List<ExistingGuarantorDetailView> getBorrowerGuarantorList() {
+        return borrowerGuarantorList;
+    }
+
+    public void setBorrowerGuarantorList(List<ExistingGuarantorDetailView> borrowerGuarantorList) {
+        this.borrowerGuarantorList = borrowerGuarantorList;
     }
 
     public List<ActionStatusView> getStatus() {
@@ -299,9 +300,9 @@ public class ExistingCreditView implements Serializable {
                 .append("relatedComExistingCredit", relatedComExistingCredit)
                 .append("relatedRetailExistingCredit", relatedRetailExistingCredit)
                 .append("relatedAppInRLOSCredit", relatedAppInRLOSCredit)
-                .append("existingCollateralDetailViewList", existingCollateralDetailViewList)
                 .append("borrowerCollateralList", borrowerCollateralList)
                 .append("relatedCollateralList", relatedCollateralList)
+                .append("borrowerGuarantorList", borrowerGuarantorList)
                 .toString();
     }
 }

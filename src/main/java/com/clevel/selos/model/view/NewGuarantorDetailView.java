@@ -15,7 +15,7 @@ public class NewGuarantorDetailView implements Serializable {
     private long id;
     private Customer guarantorName;
     private String tcgLgNo;
-    private BigDecimal guaranteeAmount;
+    private BigDecimal totalLimitGuaranteeAmount;
     private int isApproved;
 
     private List<CreditTypeDetailView> creditTypeDetailViewList;
@@ -32,7 +32,7 @@ public class NewGuarantorDetailView implements Serializable {
     public void reset() {
         this.guarantorName = new Customer();
         this.tcgLgNo = "";
-        this.guaranteeAmount = BigDecimal.ZERO;
+        this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
     }
 
@@ -100,12 +100,12 @@ public class NewGuarantorDetailView implements Serializable {
         this.creditTypeDetailViewList = creditTypeDetailViewList;
     }
 
-    public BigDecimal getGuaranteeAmount() {
-        return guaranteeAmount;
+    public BigDecimal getTotalLimitGuaranteeAmount() {
+        return totalLimitGuaranteeAmount;
     }
 
-    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
-        this.guaranteeAmount = guaranteeAmount;
+    public void setTotalLimitGuaranteeAmount(BigDecimal totalLimitGuaranteeAmount) {
+        this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
     public int getApproved() {
@@ -122,7 +122,6 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("id", id)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
-                .append("guaranteeAmount", guaranteeAmount)
                 .append("isApproved", isApproved)
                 .append("creditTypeDetailViewList", creditTypeDetailViewList)
                 .append("createDate", createDate)

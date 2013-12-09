@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_credit_detail")
+@Table(name = "wrk_exist_credit_detail")
 public class ExistingCreditDetail {
 
     @Id

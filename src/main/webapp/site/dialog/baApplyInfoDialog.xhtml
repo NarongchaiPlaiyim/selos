@@ -1,0 +1,38 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+    <h:form id="baApplyInfoDlgForm">
+        <table class="content_form">
+            <tr>
+                <td><p:outputLabel styleClass="left title" for="customername">Customer Name :</p:outputLabel></td>
+                <td><p:inputText id="customername" value=""/></td>
+            </tr>
+            <tr>
+                <td><p:outputLabel styleClass="left title" for="contactnumber">Contact Number :</p:outputLabel></td>
+                <td><p:inputText id="contactnumber" value=""/></td>
+            </tr>
+            <tr>
+                <td><p:outputLabel styleClass="left title" for="relationship">Relationship :</p:outputLabel></td>
+                <td><p:inputText id="relationship" value="000"/> </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel styleClass="left title" for="resulthealthcheck">Result Healthcheck :</p:outputLabel></td>
+                <td><p:inputText id="resulthealthcheck" value="000"/> </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel styleClass="left title" for="checkdate">วันที่ตรวจ :</p:outputLabel></td>
+                <td>     <clv:BECalendar value="" id="checkdate" showOn="button" pattern="dd/MM/yyyy"
+                                         navigator="true" locale="th_TH" showButtonPanel="true" /> </td>
+            </tr>
+            <tr>
+                <td><p:commandButton value="OK"/><p:commandButton value="Cancel"/> </td>
+            </tr>
+
+        </table>
+    </h:form>
+
+</ui:composition>

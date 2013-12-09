@@ -45,7 +45,7 @@ public class ExistingCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private String accountRef;
 
-    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
+    private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private List<SplitLineDetailView> splitLineDetailViewList;
 
     public long getId() {
@@ -280,12 +280,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountRef = accountRef;
     }
 
-    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
-        return newCreditTierDetailViewList;
+    public List<ExistingCreditTierDetailView> getExistingCreditTierDetailViewList() {
+        return existingCreditTierDetailViewList;
     }
 
-    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
-        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
+    public void setExistingCreditTierDetailViewList(List<ExistingCreditTierDetailView> existingCreditTierDetailViewList) {
+        this.existingCreditTierDetailViewList = existingCreditTierDetailViewList;
     }
 
     public List<SplitLineDetailView> getSplitLineDetailViewList() {
@@ -327,7 +327,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
-                .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
+                .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("splitLineDetailViewList", splitLineDetailViewList)
                 .toString();
     }
