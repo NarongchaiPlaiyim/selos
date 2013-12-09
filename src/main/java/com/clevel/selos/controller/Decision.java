@@ -356,7 +356,7 @@ public class Decision implements Serializable {
         existingCollateralDetail.setAccountSuffix("001");
         existingCollateralDetail.setProductProgram("SmartBiz");
         existingCollateralDetail.setLimit(BigDecimal.valueOf(123456789));
-        existingCollateralDetail.setMortgageType(mortgageType1);
+        existingCollateralDetail.setMortgageType(new MortgageType());
         existingCollateralDetail.setAppraisalValue(BigDecimal.valueOf(9000000));
         existingCollateralDetail.setMortgageValue(BigDecimal.valueOf(12000000));
 
@@ -384,7 +384,26 @@ public class Decision implements Serializable {
         existingCreditFacilityList.add(existingCreditDetail_1);
         existingCreditFacilityList.add(existingCreditDetail_1);
 
-        existingGuarantor.setCreditFacilityList(existingCreditFacilityList);
+
+        ExistingCreditTypeDetailView existingCreditTypeDetailView1 = new ExistingCreditTypeDetailView();
+        existingCreditTypeDetailView1.setAccountName("Mr.A Example");
+        existingCreditTypeDetailView1.setType("New");
+        existingCreditTypeDetailView1.setProductProgram("TMB SME SmartBiz");
+        existingCreditTypeDetailView1.setCreditFacility("Loan");
+        existingCreditTypeDetailView1.setLimit(BigDecimal.valueOf(123456.78));
+
+        ExistingCreditTypeDetailView existingCreditTypeDetailView2 = new ExistingCreditTypeDetailView();
+        existingCreditTypeDetailView2.setAccountName("Mr.B Example");
+        existingCreditTypeDetailView2.setType("Change");
+        existingCreditTypeDetailView2.setProductProgram("TMB SME SmartBiz");
+        existingCreditTypeDetailView2.setCreditFacility("Loan");
+        existingCreditTypeDetailView2.setLimit(BigDecimal.valueOf(123456.78));
+
+        List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
+        existingCreditTypeDetailViewList.add(existingCreditTypeDetailView1);
+        existingCreditTypeDetailViewList.add(existingCreditTypeDetailView2);
+
+        existingGuarantor.setExistingCreditTypeDetailViewList(existingCreditTypeDetailViewList);
         existingGuarantor.setGuaranteeAmount(BigDecimal.valueOf(2030005670));
 
         BigDecimal extTotalGuaranteeAmount = existingGuarantor.getGuaranteeAmount();
