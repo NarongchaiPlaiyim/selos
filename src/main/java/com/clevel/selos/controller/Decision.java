@@ -356,7 +356,7 @@ public class Decision implements Serializable {
         existingCollateralDetail.setAccountSuffix("001");
         existingCollateralDetail.setProductProgram("SmartBiz");
         existingCollateralDetail.setLimit(BigDecimal.valueOf(123456789));
-        existingCollateralDetail.setMortgageType("Mortgage Type");
+        existingCollateralDetail.setMortgageType(mortgageType1);
         existingCollateralDetail.setAppraisalValue(BigDecimal.valueOf(9000000));
         existingCollateralDetail.setMortgageValue(BigDecimal.valueOf(12000000));
 
@@ -600,17 +600,17 @@ public class Decision implements Serializable {
         // Proposed Guarantor
         NewGuarantorDetailView proposeGuarantorDetailView1 = new NewGuarantorDetailView();
         proposeGuarantorDetailView1.setGuarantorName(guarantor1);
-        proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
+        proposeGuarantorDetailView1.setTotalLimitGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
         proposeGuarantorDetailView1.setCreditTypeDetailViewList(creditTypeDetailViewList);
 
         NewGuarantorDetailView proposeGuarantorDetailView2 = new NewGuarantorDetailView();
         proposeGuarantorDetailView2.setGuarantorName(guarantor2);
-        proposeGuarantorDetailView2.setGuaranteeAmount(BigDecimal.valueOf(44555666.77));
+        proposeGuarantorDetailView2.setTotalLimitGuaranteeAmount(BigDecimal.valueOf(44555666.77));
         proposeGuarantorDetailView2.setTcgLgNo("22-56789");
         proposeGuarantorDetailView2.setCreditTypeDetailViewList(creditTypeDetailViewList);
 
-        BigDecimal totalGuaranteeAmount = proposeGuarantorDetailView1.getGuaranteeAmount().add(proposeGuarantorDetailView2.getGuaranteeAmount());
+        BigDecimal totalGuaranteeAmount = proposeGuarantorDetailView1.getTotalLimitGuaranteeAmount().add(proposeGuarantorDetailView2.getTotalLimitGuaranteeAmount());
 
         List<NewGuarantorDetailView> proposeGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
         proposeGuarantorDetailViewList.add(proposeGuarantorDetailView1);
