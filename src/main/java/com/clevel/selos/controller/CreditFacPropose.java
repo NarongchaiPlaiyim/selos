@@ -122,6 +122,7 @@ public class CreditFacPropose implements Serializable {
     private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
     private List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
     private List<MortgageType> mortgageTypeList;
+    private List<NewSubCollateralDetailView> relatedWithList;
 
     private List<SubCollateralType> subCollateralTypeList;
     private List<CollateralType> collateralTypeList;
@@ -313,6 +314,10 @@ public class CreditFacPropose implements Serializable {
             mortgageTypeList = new ArrayList<MortgageType>();
         }
 
+        if(relatedWithList == null){
+            relatedWithList = new ArrayList<NewSubCollateralDetailView>();
+        }
+
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
@@ -332,6 +337,7 @@ public class CreditFacPropose implements Serializable {
         suggestPriceLabel = "";
         standardPriceLabel = "";
         finalPriceRate = "";
+//        relatedWithList = subCollateralTypeDAO.findByHeadAndSubColCode() ;
 
 
     }

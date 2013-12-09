@@ -42,13 +42,7 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal totalCommercialAndOBOD;
     private BigDecimal totalExposure;
     private BigDecimal totalApproveCredit;
-
-
-    //hidden
-    private BigDecimal totalNumberOfNewOD;
-    private BigDecimal totalNumberProposeCreditFac;
-    private BigDecimal totalNumberContingenPropose;
-
+    private BigDecimal totalGuaranteeAmount;
 
     private String contactName;
     private String contactPhoneNo;
@@ -65,11 +59,10 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal frontendFeeDOA;
     private BigDecimal guarantorBA;
     private String reasonForReduction;
-
     private int creditCustomerType;
     private CreditRequestType  creditRequestType;
     private Country country;
-    private BigDecimal totalGuaranteeAmount;
+
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
     private int singleLendingLimit;
@@ -79,6 +72,20 @@ public class NewCreditFacilityView implements Serializable {
     private List<NewCollateralInfoView> newCollateralInfoViewList;
     private List<NewGuarantorDetailView> newGuarantorDetailViewList;
     private List<NewConditionDetailView> newConditionDetailViewList;
+
+    //hidden credit type
+    private BigDecimal totalNumberOfNewOD;
+    private BigDecimal totalNumberProposeCreditFac;
+    private BigDecimal totalNumberContingenPropose;
+    //hidden Collateral
+    private int numberMonthsFromApprDate;
+    private int totalNumberOfCoreAsset;
+    private int totalNumberOfNonCoreAsset;
+    private int totalMortgageValue;
+    //hidden Guarantor
+    private BigDecimal totalTCGGuaranteeAmount;
+    private BigDecimal totalIndvGuaranteeAmount;
+    private BigDecimal totalJurisGuaranteeAmount;
 
     private Date createDate;
     private Date modifyDate;
@@ -119,6 +126,7 @@ public class NewCreditFacilityView implements Serializable {
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
         this.totalNumberContingenPropose=BigDecimal.ZERO;
         this.totalApproveCredit = BigDecimal.ZERO;
+        this.totalGuaranteeAmount = BigDecimal.ZERO;
 
         this.contactName = "";
         this.contactPhoneNo = "";
@@ -141,7 +149,7 @@ public class NewCreditFacilityView implements Serializable {
         this.newGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
         this.newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
 
-        this.totalGuaranteeAmount = BigDecimal.ZERO;
+
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
@@ -149,6 +157,16 @@ public class NewCreditFacilityView implements Serializable {
         this.creditRequestType = new CreditRequestType();
         this.country = new Country();
 
+        this.totalNumberOfNewOD = BigDecimal.ZERO;
+        this.totalNumberProposeCreditFac = BigDecimal.ZERO;
+        this.totalNumberContingenPropose = BigDecimal.ZERO;
+        this.numberMonthsFromApprDate=0;
+        this.totalNumberOfCoreAsset=0;
+        this.totalNumberOfNonCoreAsset=0;
+        this.totalMortgageValue=0;
+        this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
+        this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
+        this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -621,6 +639,62 @@ public class NewCreditFacilityView implements Serializable {
 
     public void setTotalNumberContingenPropose(BigDecimal totalNumberContingenPropose) {
         this.totalNumberContingenPropose = totalNumberContingenPropose;
+    }
+
+    public int getNumberMonthsFromApprDate() {
+        return numberMonthsFromApprDate;
+    }
+
+    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
+        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
+    }
+
+    public int getTotalNumberOfCoreAsset() {
+        return totalNumberOfCoreAsset;
+    }
+
+    public void setTotalNumberOfCoreAsset(int totalNumberOfCoreAsset) {
+        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    }
+
+    public int getTotalNumberOfNonCoreAsset() {
+        return totalNumberOfNonCoreAsset;
+    }
+
+    public void setTotalNumberOfNonCoreAsset(int totalNumberOfNonCoreAsset) {
+        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
+    }
+
+    public int getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(int totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
+    public BigDecimal getTotalTCGGuaranteeAmount() {
+        return totalTCGGuaranteeAmount;
+    }
+
+    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
+        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalIndvGuaranteeAmount() {
+        return totalIndvGuaranteeAmount;
+    }
+
+    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
+        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalJurisGuaranteeAmount() {
+        return totalJurisGuaranteeAmount;
+    }
+
+    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
+        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
     }
 
 
