@@ -2,9 +2,9 @@ package com.clevel.selos.businesscontrol.util.stp;
 
 import com.clevel.selos.integration.SELOS;
 import oracle.jdbc.OracleTypes;
-import oracle.jdbc.oracore.OracleType;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -14,10 +14,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.xml.rpc.ServiceException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Stateless
@@ -47,9 +45,7 @@ public class STPExecutor {
         return applicationNumber;
     }
 
-
-
-    public String addUserFromFile( final Object... params)throws ServiceException{
+    public String addUserFromFile( final Object... params)throws ServiceException { //todo : change this , AS ( To use Hibernate )
        final String result[]=new String[1];
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
