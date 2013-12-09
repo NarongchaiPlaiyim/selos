@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_exist_credit_detail")
@@ -92,6 +94,12 @@ public class ExistingCreditDetail {
     @OneToOne
     @JoinColumn(name = "account_status_id")
     private BankAccountStatus accountstatus;
+
+    @OneToMany(mappedBy = "existingCreditDetail", cascade = CascadeType.ALL)
+    private List<ExistingCreditTierDetail> existingCreditTierDetailList;
+
+    @OneToMany(mappedBy = "existingCreditDetail", cascade = CascadeType.ALL)
+    private List<ExistingSplitLineDetail> existingSplitLineDetailList;
 
     public long getId() {
         return id;
@@ -285,6 +293,22 @@ public class ExistingCreditDetail {
         this.accountstatus = accountstatus;
     }
 
+    public List<ExistingCreditTierDetail> getExistingCreditTierDetailList() {
+        return existingCreditTierDetailList;
+    }
+
+    public void setExistingCreditTierDetailList(List<ExistingCreditTierDetail> existingCreditTierDetailList) {
+        this.existingCreditTierDetailList = existingCreditTierDetailList;
+    }
+
+    public List<ExistingSplitLineDetail> getExistingSplitLineDetailList() {
+        return existingSplitLineDetailList;
+    }
+
+    public void setExistingSplitLineDetailList(List<ExistingSplitLineDetail> existingSplitLineDetailList) {
+        this.existingSplitLineDetailList = existingSplitLineDetailList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -309,6 +333,7 @@ public class ExistingCreditDetail {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("existingCreditSummary", existingCreditSummary)
                 .toString();
     }
 }

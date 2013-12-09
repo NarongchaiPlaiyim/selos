@@ -71,6 +71,15 @@ public class ExistingCreditSummary {
     @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
     private List<ExistingCreditDetail> existingCreditDetailList;
 
+    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    private List<ExistingCollateralDetail> existingCollateralDetailList;
+
+    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    private List<ExistingGuarantorDetail> existingGuarantorDetailList;
+
+    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    private List<ExistingConditionDetail> existingConditionDetailList;
+
     public long getId() {
         return id;
     }
@@ -207,6 +216,30 @@ public class ExistingCreditSummary {
         this.existingCreditDetailList = existingCreditDetailList;
     }
 
+    public List<ExistingCollateralDetail> getExistingCollateralDetailList() {
+        return existingCollateralDetailList;
+    }
+
+    public void setExistingCollateralDetailList(List<ExistingCollateralDetail> existingCollateralDetailList) {
+        this.existingCollateralDetailList = existingCollateralDetailList;
+    }
+
+    public List<ExistingGuarantorDetail> getExistingGuarantorDetailList() {
+        return existingGuarantorDetailList;
+    }
+
+    public void setExistingGuarantorDetailList(List<ExistingGuarantorDetail> existingGuarantorDetailList) {
+        this.existingGuarantorDetailList = existingGuarantorDetailList;
+    }
+
+    public List<ExistingConditionDetail> getExistingConditionDetailList() {
+        return existingConditionDetailList;
+    }
+
+    public void setExistingConditionDetailList(List<ExistingConditionDetail> existingConditionDetailList) {
+        this.existingConditionDetailList = existingConditionDetailList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -227,6 +260,9 @@ public class ExistingCreditSummary {
                 .append("workCase", workCase)
                 .append("workCasePrescreen", workCasePrescreen)
                 .append("existingCreditDetailList", existingCreditDetailList)
+                .append("existingConditionDetailList", existingConditionDetailList)
+                .append("existingCollateralDetailList", existingCollateralDetailList)
+                .append("existingGuarantorDetailList", existingGuarantorDetailList)
                 .toString();
     }
 }

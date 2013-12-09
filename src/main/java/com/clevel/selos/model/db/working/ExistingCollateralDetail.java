@@ -1,7 +1,6 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.PotentialCollateralView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -23,10 +22,13 @@ public class ExistingCollateralDetail implements Serializable {
 
     @Column(name = "collateral_number")
     private String collateralNumber;
+
     @Column(name = "collateral_location")
     private String collateralLocation;
+
     @Column(name = "remark")
     private String remark;
+
     @Column(name = "cus_name")
     private String cusName;
 
@@ -35,8 +37,6 @@ public class ExistingCollateralDetail implements Serializable {
 
     @Column(name = "mortgage_value")
     private BigDecimal mortgageValue;
-
-
 
     @OneToOne
     @JoinColumn(name = "collateral_type")
