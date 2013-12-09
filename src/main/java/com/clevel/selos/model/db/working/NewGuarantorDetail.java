@@ -142,7 +142,6 @@ public class NewGuarantorDetail implements Serializable {
         this.creditTypeDetailList = creditTypeDetailList;
     }
 
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)

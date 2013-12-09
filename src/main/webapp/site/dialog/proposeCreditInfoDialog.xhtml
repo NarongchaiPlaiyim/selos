@@ -332,6 +332,7 @@
         <p:selectOneMenu id="dlgLoanPurpose"
                          value="#{creditFacPropose.newCreditDetailView.loanPurpose.id}"
                          size="1"
+                         required="true"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -378,8 +379,9 @@
         <p:inputText value="#{creditFacPropose.newCreditDetailView.holdLimitAmount}"
                      style="text-align:right"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
                              integerOnly="true" maxIntegerDigits="14"/>
+            <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
 </tr>

@@ -46,7 +46,8 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal purpose;
     private int seq;
     private int isApproved;
-
+    private BigDecimal installment;
+    private BigDecimal outstanding;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
 
     public NewCreditDetailView(){
@@ -66,7 +67,8 @@ public class NewCreditDetailView implements Serializable {
         this.limit = BigDecimal.ZERO;
         this.PCEPercent = BigDecimal.ZERO;
         this.PCEAmount = BigDecimal.ZERO;
-
+        this.installment=BigDecimal.ZERO;
+        this.outstanding=BigDecimal.ZERO;
         this.reducePriceFlag = 0;
         this.reduceFrontEndFee = 0;
         this.frontEndFee = BigDecimal.ZERO;
@@ -182,19 +184,39 @@ public class NewCreditDetailView implements Serializable {
     }
 
     public int getReducePriceFlag() {
+        if(reduceFlag==true){
+            this.reducePriceFlag=1;
+        }else{
+            this.reducePriceFlag=0;
+        }
         return reducePriceFlag;
     }
 
     public void setReducePriceFlag(int reducePriceFlag) {
-        this.reducePriceFlag = reducePriceFlag;
+        if(reduceFlag==true){
+            this.reducePriceFlag=1;
+        }else{
+            this.reducePriceFlag=0;
+        }
+//        this.reducePriceFlag = reducePriceFlag;
     }
 
     public int getReduceFrontEndFee() {
+        if(reduceFrontEndFlag==true){
+            this.reduceFrontEndFee=1;
+        }else{
+            this.reduceFrontEndFee=0;
+        }
         return reduceFrontEndFee;
     }
 
     public void setReduceFrontEndFee(int reduceFrontEndFee) {
-        this.reduceFrontEndFee = reduceFrontEndFee;
+        if(reduceFrontEndFlag==true){
+            this.reduceFrontEndFee=1;
+        }else{
+            this.reduceFrontEndFee=0;
+        }
+//        this.reduceFrontEndFee = reduceFrontEndFee;
     }
 
     public String getStandardPrice() {
@@ -381,6 +403,22 @@ public class NewCreditDetailView implements Serializable {
 
     public void setLoanPurpose(LoanPurpose loanPurpose) {
         this.loanPurpose = loanPurpose;
+    }
+
+    public BigDecimal getInstallment() {
+        return installment;
+    }
+
+    public void setInstallment(BigDecimal installment) {
+        this.installment = installment;
+    }
+
+    public BigDecimal getOutstanding() {
+        return outstanding;
+    }
+
+    public void setOutstanding(BigDecimal outstanding) {
+        this.outstanding = outstanding;
     }
 
     @Override

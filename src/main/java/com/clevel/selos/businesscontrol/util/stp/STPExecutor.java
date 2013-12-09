@@ -1,6 +1,10 @@
 package com.clevel.selos.businesscontrol.util.stp;
 
 import com.clevel.selos.integration.SELOS;
+import oracle.jdbc.OracleTypes;
+import oracle.jdbc.oracore.OracleType;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -10,6 +14,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.xml.rpc.ServiceException;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Stateless
@@ -41,28 +49,25 @@ public class STPExecutor {
 
 
 
-    public String addUserFromFile(String sql, Object... params) {
+    public String addUserFromFile( final Object... params)throws ServiceException{
+       final String result[]=new String[1];
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
 
-        String result="";
-        try{
+                CallableStatement callStmt=connection.prepareCall("call SLOS.PUSERFILEUPLOAD ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
 
-            Query query=em.createNativeQuery("CALL SLOS.pUserprofileUpload(:userId,:userName,:email,:buCode,:phoneExt,:phoneNumber,:active,8,9,10" +
-                                            ",11,12,13,14,15,16,17)");
-
-            for(int i =0;i<params.length;i++){
-                query.setParameter(i+1,params[i]);
-                result=(String)query.getSingleResult();
+                for(int i =0;i < params.length;i++){
+                    System.out.println("data "+params[i]);
+                    callStmt.setString(i + 1, params[i].toString());
+                }
+                    callStmt.registerOutParameter(params.length+1, OracleTypes.VARCHAR);
+                    callStmt.executeUpdate();
+                     result[0]=(String)callStmt.getObject(params.length+1);
+                System.out.println("result : "+result[0]);
             }
-                query.executeUpdate();
+        });
 
-        }catch (Exception e){
-
-        }finally {
-            try{
-
-            }catch (Exception ex){ }
-        }
-        return result;
+         return result[0];
     }
-
 }

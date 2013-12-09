@@ -292,4 +292,12 @@ public class Util {
         if (s == null) return "";
         return s.replaceAll("\\D", "");
     }
+
+    public static int returnNumForFlag(boolean flag) {
+        if (flag == true) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

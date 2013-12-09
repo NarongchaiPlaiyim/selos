@@ -28,6 +28,7 @@ public class IndividualModel implements Serializable {
     private String nationality;
     private String numberOfChild;
 
+
     private Telephone telephoneNumber1;
     private Telephone telephoneNumber2;
     private Telephone telephoneNumber3;
