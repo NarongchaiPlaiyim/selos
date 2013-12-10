@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,6 +18,13 @@ public class ApprovalHistory implements Serializable {
     private Date approveDate;
 
     public ApprovalHistory() {
+    }
+
+    public void reset() {
+        this.action = "";
+        this.comment = "";
+        this.approveDecision = RadioValue.NOT_SELECTED.value();
+        this.approveDate = DateTimeUtil.getCurrentDateTH();
     }
 
     public long getId() {

@@ -56,11 +56,15 @@ public class DecisionView implements Serializable {
     private BigDecimal proposeTotalCreditLimit;
     private BigDecimal proposeTotalGuaranteeAmt;
 
+    private BigDecimal existingSMELimit;
+    private BigDecimal maximumSMELimit;
+
     // Approve
     private List<NewCreditDetailView> approveCreditList;
     private List<NewCollateralInfoView> approveCollateralList;
     private List<NewGuarantorDetailView> approveGuarantorList;
 
+    private BigDecimal approveTotalCreditLimit;
     private BigDecimal approveBrwTotalCommercial;
     private BigDecimal approveBrwTotalComAndOBOD;
     private BigDecimal approveTotalExposure;
@@ -580,5 +584,29 @@ public class DecisionView implements Serializable {
 
     public void setApprovalHistoryList(List<ApprovalHistory> approvalHistoryList) {
         this.approvalHistoryList = approvalHistoryList;
+    }
+
+    public BigDecimal getApproveTotalCreditLimit() {
+        return approveTotalCreditLimit;
+    }
+
+    public void setApproveTotalCreditLimit(BigDecimal approveTotalCreditLimit) {
+        this.approveTotalCreditLimit = approveTotalCreditLimit;
+    }
+
+    public BigDecimal getExistingSMELimit() {
+        return existingSMELimit;
+    }
+
+    public void setExistingSMELimit(BigDecimal existingSMELimit) {
+        this.existingSMELimit = existingSMELimit;
+    }
+
+    public BigDecimal getMaximumSMELimit() {
+        return maximumSMELimit;
+    }
+
+    public void setMaximumSMELimit(BigDecimal maximumSMELimit) {
+        this.maximumSMELimit = maximumSMELimit;
     }
 }
