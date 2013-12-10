@@ -516,8 +516,8 @@ public class Decision implements Serializable {
         subCollateralDetailView1.setLandOffice("Ladpraow");
         subCollateralDetailView1.setTitleDeed("12, 1234");
         subCollateralDetailView1.setCollateralOwnerAAD("Mr.A Example");
-        subCollateralDetailView1.setCollateralOwnerUW("Mr.A Example");
-        subCollateralDetailView1.setMortgageList(new ArrayList<String>());
+//        subCollateralDetailView1.setCollateralOwnerUW("Mr.A Example");
+//        subCollateralDetailView1.setMortgageList(new ArrayList<String>());
         subCollateralDetailView1.setAppraisalValue(BigDecimal.valueOf(2000000.00));
         subCollateralDetailView1.setMortgageValue(BigDecimal.valueOf(3200000.00));
 
@@ -541,7 +541,7 @@ public class Decision implements Serializable {
         guarantor.setNameTh("Guarantor Name");
         guarantor.setLastNameTh("Last name");
         proposeGuarantorDetailView1.setGuarantorName(guarantor);
-        proposeGuarantorDetailView1.setGuaranteeAmount(BigDecimal.valueOf(11222333.44));
+        proposeGuarantorDetailView1.setTotalLimitGuaranteeAmount(BigDecimal.valueOf(11222333.44));
         proposeGuarantorDetailView1.setTcgLgNo("11-23456");
         proposeGuarantorDetailView1.setCreditTypeDetailViewList(creditTypeDetailViewList);
         proposeGuarantorDetailViewList.add(proposeGuarantorDetailView1);

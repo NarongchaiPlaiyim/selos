@@ -116,7 +116,18 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("relation.id", 2));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("criteria.list() :: {}",criteria.list());
+        return customerList;
+    }
 
+    public List<Customer>  findCollateralOwnerUWByWorkCaseId(long workCaseId) {
+        log.info("findByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.or(Restrictions.eq("relation.id", 1),Restrictions.eq("relation.id", 2)));
+        criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
         log.info("criteria.list() :: {}",criteria.list());
         return customerList;

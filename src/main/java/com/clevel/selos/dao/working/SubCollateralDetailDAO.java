@@ -30,16 +30,5 @@ public class SubCollateralDetailDAO extends GenericDAO<SubCollateralDetail, Long
 
         return subCollateralDetailList;
     }
-
-    public List<SubCollateralDetail> findByCollateralHeader(CollateralHeaderDetail collateralHeaderDetail ){
-        log.info("findByCollateralHeaderDetail begin ");
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("collateralHeaderDetail", collateralHeaderDetail));
-        criteria.addOrder(Order.asc("no"));
-        List<SubCollateralDetail> subCollateralDetailList = criteria.list();
-        log.info("findByCollateralHeaderDetail. (result size: {})", subCollateralDetailList.size());
-
-        return subCollateralDetailList;
-    }
 }
 
