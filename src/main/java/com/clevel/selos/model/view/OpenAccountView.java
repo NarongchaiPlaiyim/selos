@@ -20,6 +20,8 @@ public class OpenAccountView {
 //    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList; //todo : change this , AS ( Comment OpenAccountCreditTypeView )
     private List<OpenAccountPurposeView> openAccountPurposeViewList;
 
+    private
+
     public OpenAccountView(){
         reset();
     }

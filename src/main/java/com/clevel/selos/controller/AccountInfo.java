@@ -8,10 +8,10 @@ import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.view.openaccount.AccountDetailInformationView;
+import com.clevel.selos.model.view.openaccount.AccountInfoView;
 import com.clevel.selos.model.view.openaccount.model.AccountNameModel;
 import com.clevel.selos.model.view.openaccount.model.BranchModel;
 import com.clevel.selos.model.view.openaccount.model.CreditTypeModel;
-import com.clevel.selos.model.view.openaccount.OpenAccountView;
 import com.clevel.selos.model.view.openaccount.model.PurposeModel;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "openAccount")
-public class OpenAccount {
+@ManagedBean(name = "accountInfo")
+public class AccountInfo {
     @Inject
     @SELOS
     Logger log;
@@ -50,9 +50,12 @@ public class OpenAccount {
     private int rowIndex;
 
     //*** View ***//
-    private OpenAccountView openAccountView;
+    private AccountInfoView accountInfoView;
     private List<AccountDetailInformationView> accountDetailInformationViewList;
     private AccountDetailInformationView accountDetailInformationViewSelected;
+
+    //New / New + Change
+    private int approvedType;
 
     //*** Drop down List ***//
     private List<BankAccountType> bankAccountTypeList;
@@ -73,7 +76,7 @@ public class OpenAccount {
     private CreditTypeModel openAccountCreditTypeView;
 
     @Inject
-    public OpenAccount() {
+    public AccountInfo() {
 
     }
 
