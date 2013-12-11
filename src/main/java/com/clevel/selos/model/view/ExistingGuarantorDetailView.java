@@ -14,7 +14,7 @@ public class ExistingGuarantorDetailView implements Serializable {
 
     private String guarantorName;
     private String tcgLgNo;
-    private BigDecimal guaranteeAmount;
+    private BigDecimal totalLimitGuaranteeAmount;
 
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 
@@ -30,7 +30,7 @@ public class ExistingGuarantorDetailView implements Serializable {
     public void reset() {
         this.guarantorName = "";
         this.tcgLgNo = "";
-        this.guaranteeAmount = BigDecimal.ZERO;
+        this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
     }
 
@@ -90,12 +90,12 @@ public class ExistingGuarantorDetailView implements Serializable {
         this.existingCreditTypeDetailViewList = existingCreditTypeDetailViewList;
     }
 
-    public BigDecimal getGuaranteeAmount() {
-        return guaranteeAmount;
+    public BigDecimal getTotalLimitGuaranteeAmount() {
+        return totalLimitGuaranteeAmount;
     }
 
-    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
-        this.guaranteeAmount = guaranteeAmount;
+    public void setTotalLimitGuaranteeAmount(BigDecimal totalLimitGuaranteeAmount) {
+        this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class ExistingGuarantorDetailView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
-                .append("guaranteeAmount", guaranteeAmount)
+                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("existingCreditTypeDetailViewList", existingCreditTypeDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
