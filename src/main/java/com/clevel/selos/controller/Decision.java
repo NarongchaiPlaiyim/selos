@@ -398,9 +398,9 @@ public class Decision implements Serializable {
         existingCreditTypeDetailViewList.add(existingCreditTypeDetailView1);
         existingCreditTypeDetailViewList.add(existingCreditTypeDetailView2);
         existingGuarantor.setExistingCreditTypeDetailViewList(existingCreditTypeDetailViewList);
-        existingGuarantor.setGuaranteeAmount(extTotalGuaranteeLimitPerProduct);
+        existingGuarantor.setTotalLimitGuaranteeAmount(extTotalGuaranteeLimitPerProduct);
 
-        BigDecimal extTotalGuaranteeAmount = existingGuarantor.getGuaranteeAmount();
+        BigDecimal extTotalGuaranteeAmount = existingGuarantor.getTotalLimitGuaranteeAmount();
 
         List<ExistingGuarantorDetailView> extGuarantorList = new ArrayList<ExistingGuarantorDetailView>();
         extGuarantorList.add(existingGuarantor);
