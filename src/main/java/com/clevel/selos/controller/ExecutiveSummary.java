@@ -87,45 +87,18 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public ExecutiveSummary() {
     }
 
-    public void preRender(){
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("workCaseId", 101);
-//        session.setAttribute("stepId", 1004);
-//
-//        log.info("preRender ::: setSession ");
-//
-//        session = FacesUtil.getSession(true);
-//
-//        user = getCurrentUser();
-//
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//        }else{
-//            log.info("preRender ::: workCaseId is null.");
-//            try{
-//                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-//            }catch (Exception ex){
-//                log.info("Exception :: {}",ex);
-//            }
-//        }
-    }
-
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        //session.setAttribute("workCaseId", 101);    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-//        user = (User) session.getAttribute("user");
-        //user = getCurrentUser();
 
-        if (session.getAttribute("workCaseId") != null) {
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
@@ -141,8 +114,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
         }
-
-
 
         /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
         ec.reset();
