@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 public class AccountInfoCreditTypeView {
 
     private long id;
-    private String name;
+    private String productProgram;
     private BigDecimal limit;
+    private String CreditFacility;
+
 
     public AccountInfoCreditTypeView(){}
 
@@ -21,12 +23,12 @@ public class AccountInfoCreditTypeView {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductProgram() {
+        return productProgram;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
     }
 
     public BigDecimal getLimit() {
@@ -37,12 +39,21 @@ public class AccountInfoCreditTypeView {
         this.limit = limit;
     }
 
+    public String getCreditFacility() {
+        return CreditFacility;
+    }
+
+    public void setCreditFacility(String creditFacility) {
+        CreditFacility = creditFacility;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("name", name)
+                .append("productProgram", productProgram)
                 .append("limit", limit)
+                .append("CreditFacility", CreditFacility)
                 .toString();
     }
 }
