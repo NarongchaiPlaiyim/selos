@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.MortgageSummaryControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -36,6 +37,9 @@ public class MortgageSummary implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    @Inject
+    MortgageSummaryControl mortgageSummaryControl;
+
     //session
     private long workCaseId;
 
@@ -44,9 +48,8 @@ public class MortgageSummary implements Serializable {
     public MortgageSummary(){
     }
 
-    public void preRender(){
-        log.info("preRender ::: setSession ");
-
+    @PostConstruct
+    public void onCreation() {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
@@ -54,17 +57,14 @@ public class MortgageSummary implements Serializable {
         }else{
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
         }
-    }
 
-    @PostConstruct
-    public void onCreation() {
-        preRender();
+        mortgageSummaryView = mortgageSummaryControl.getMortgageSummaryViewByWorkCaseId(workCaseId);
     }
 
     public void onSave() {

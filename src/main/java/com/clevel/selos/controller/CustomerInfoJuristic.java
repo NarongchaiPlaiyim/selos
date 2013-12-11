@@ -132,9 +132,6 @@ public class CustomerInfoJuristic implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    /*private String userId;
-    private User user;*/
 
     private int caseBorrowerTypeId;
 
@@ -248,37 +245,21 @@ public class CustomerInfoJuristic implements Serializable {
     public CustomerInfoJuristic(){
     }
 
-    public void preRender(){
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
-
-        log.info("preRender ::: setSession ");
-
+    @PostConstruct
+    public void onCreation() {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            //userId = session.getAttribute("userId").toString();
-            //user = userDAO.findById(userId);
         }else{
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
         }
-    }
-
-    @PostConstruct
-    public void onCreation() {
-        preRender();
 
         onAddNewJuristic();
 

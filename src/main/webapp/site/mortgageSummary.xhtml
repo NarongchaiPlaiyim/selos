@@ -14,7 +14,6 @@
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{mortSum.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -157,15 +156,6 @@
                                                                                  target="#{basicInfo.rowIndex}"/>
                                                     <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                 </p:commandButton>
-
-                                                <p:commandButton title="#{msg.get('app.button.remove')}"
-                                                                 icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteAccountDlg.show()"
-                                                                 update=":frmMain:resultTableOpeningAccount"
-                                                                 process="@form">
-                                                    <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{basicInfo.selectAccount}"/>
-                                                </p:commandButton>
                                             </p:column>-->
                                         </p:dataTable>
                                     </td>
@@ -228,15 +218,6 @@
                                                                                  target="#{basicInfo.rowIndex}"/>
                                                     <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                 </p:commandButton>
-
-                                                <p:commandButton title="#{msg.get('app.button.remove')}"
-                                                                 icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteAccountDlg.show()"
-                                                                 update=":frmMain:resultTableOpeningAccount"
-                                                                 process="@form">
-                                                    <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{basicInfo.selectAccount}"/>
-                                                </p:commandButton>
                                             </p:column>-->
                                         </p:dataTable>
                                     </td>
@@ -298,15 +279,6 @@
                                                     <f:setPropertyActionListener value="#{rowIndex}"
                                                                                  target="#{basicInfo.rowIndex}"/>
                                                     <p:resetInput target=":basicInfoAccountDlgForm"/>
-                                                </p:commandButton>
-
-                                                <p:commandButton title="#{msg.get('app.button.remove')}"
-                                                                 icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteAccountDlg.show()"
-                                                                 update=":frmMain:resultTableOpeningAccount"
-                                                                 process="@form">
-                                                    <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{basicInfo.selectAccount}"/>
                                                 </p:commandButton>
                                             </p:column>-->
                                         </p:dataTable>
