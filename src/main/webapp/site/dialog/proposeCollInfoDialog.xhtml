@@ -341,7 +341,7 @@
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
                                var="collateralOwnerUW"  varStatus="a">
-                         <h:outputText value="#{collateralOwnerUW.nameTh}"/><br/>
+                         <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">

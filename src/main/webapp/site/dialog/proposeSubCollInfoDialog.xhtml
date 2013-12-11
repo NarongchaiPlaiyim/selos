@@ -72,13 +72,13 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgCollateralOwnerUW"
-                                     value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUW.id}"
+                                     value="#{creditFacPropose.collateralOwnerUW.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
                                        var="collateralOwnerUWItem"
-                                       itemLabel="#{collateralOwnerUWItem.nameTh} #{collateralOwnerUWItem.lastNameTh}"
+                                       itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
                                        itemValue="#{collateralOwnerUWItem.id}"/>
                     </p:selectOneMenu>
                 </td>
@@ -104,7 +104,7 @@
         <p:dataTable id="CollOwnerUWTb"
                      value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUWList}"
                      var="collateralOwnerUWItem"
-                     rowKey="#{collateralOwnerUWItem.Customer}"
+                     rowKey="#{collateralOwnerUWItem}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
@@ -120,7 +120,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{collateralOwnerUWItem.nameTh}"/>
+                <h:outputText value="#{collateralOwnerUWItem.firstNameTh}"/>
             </p:column>
 
             <p:column styleClass="center">

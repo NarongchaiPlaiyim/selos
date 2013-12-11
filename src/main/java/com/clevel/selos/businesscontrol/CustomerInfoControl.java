@@ -11,7 +11,10 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.CustomerCSI;
+import com.clevel.selos.model.db.working.NCB;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -393,5 +396,24 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: success!!");
         log.info("getCustomerInfoFromRM ::: customerInfoSearch : {}", customerInfoResultSearch);
         return customerInfoResultSearch;
+    }
+
+
+    public List<CustomerInfoView> getGuarantorByWorkCase(long workCaseId){
+        log.info("getGuarantorByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getCollateralOwnerUWByWorkCase(long workCaseId){
+        log.info("getCollateralOwnerUWByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
     }
 }

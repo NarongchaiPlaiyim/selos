@@ -42,13 +42,9 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCreditTierTransform newCreditTierTransform;
     @Inject
-    CustomerDAO customerDAO;
-    @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     CollateralTypeDAO collateralTypeDAO;
-    @Inject
-    BasicInfoDAO basicInfoDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -74,22 +70,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
 
     public CreditFacProposeControl() {
-    }
-
-    public List<Customer> getListOfGuarantor(long workCaseId) {
-        log.info("workCaseId getListOfGuarantor:: {}", workCaseId);
-        return customerDAO.findGuarantorByWorkCaseId(workCaseId);
-    }
-
-    public List<Customer> getListOfCollateralOwnerUW(long workCaseId) {
-        log.info("workCaseId findCollateralOwnerUWByWorkCaseId :: {}", workCaseId);
-        return customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
-    }
-
-    public BasicInfo getBasicByWorkCaseId(long workCaseId) {
-        log.info("workCaseId :: {}", workCaseId);
-        return basicInfoDAO.findByWorkCaseId(workCaseId);
-
     }
 
     public NewCreditFacility getNewCreditFacilityViewByWorkCaseId(long workCaseId) {
