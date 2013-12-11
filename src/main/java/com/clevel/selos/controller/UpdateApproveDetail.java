@@ -5,8 +5,6 @@ import com.clevel.selos.model.view.AccountInfoCreditTypeView;
 import com.clevel.selos.model.view.AccountInfoDetailView;
 import com.clevel.selos.model.view.AccountInfoPurposeView;
 import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.model.view.openaccount.AccountNameView;
-//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView; //todo : change this , AS ( Comment OpenAccountCreditTypeView )
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -90,32 +88,7 @@ public class UpdateApproveDetail {
         try{
         List<AccountInfoDetailView> accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
 
-        AccountInfoDetailView accountInfoDetailView = new AccountInfoDetailView();
-            List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
-            for(int i =0; i<10; i++){
-                AccountNameView accountNameView = new AccountNameView();
-                accountNameView.setName(String.valueOf(i));
-                accountNameViews.add(accountNameView);
-            }
 
-            //openAccountView.setAccountNameViewList(accountNameViews);
-            accountInfoDetailView.setAccountNumber("1234567890");
-
-            //todo : change this , AS ( Comment OpenAccountCreditTypeView )
-            List<AccountInfoCreditTypeView> accountInfoCreditTypeViews = new ArrayList<AccountInfoCreditTypeView>();
-
-            for(int i=0;i<5;i++){
-                AccountInfoCreditTypeView accountInfoCreditTypeView =new AccountInfoCreditTypeView();
-                accountInfoCreditTypeView.setLimit(BigDecimal.valueOf(i));
-
-            }
-            List<AccountInfoPurposeView> accountInfoPurposeViews = new ArrayList<AccountInfoPurposeView>();
-            for(int i=0;i<5;i++){
-                AccountInfoPurposeView accountInfoPurposeView = new AccountInfoPurposeView();
-                accountInfoPurposeView.setName("AAA");
-                accountInfoPurposeViews.add(accountInfoPurposeView);
-            }
-            accountInfoDetailView.setAccountInfoPurposeViews(accountInfoPurposeViews);
 
         }catch (Exception e){
 

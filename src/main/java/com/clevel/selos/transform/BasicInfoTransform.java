@@ -120,7 +120,6 @@ public class BasicInfoTransform extends Transform {
 
         basicInfoView.setId(basicInfo.getId());
 
-
         basicInfoView.setRequestType(basicInfo.getRequestType());
         if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
