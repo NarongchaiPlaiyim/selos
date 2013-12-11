@@ -1,7 +1,7 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.view.openaccount.AccountNameView;
-import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
+//import com.clevel.selos.model.view.openaccount.AccountNameView;
+//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,8 +16,8 @@ public class OpenAccountView {
     private String accountNumber;
     private String term;
 
-    private List<AccountNameView> accountNameViewList;
-    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
+//    private List<AccountNameView> accountNameViewList;
+//    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
 
     public OpenAccountView(){
         reset();
@@ -29,8 +29,8 @@ public class OpenAccountView {
         this.idOfAccountType = 0;
         this.productType = "";
         this.term = "";
-        this.accountNameViewList = new ArrayList<AccountNameView>();
-        this.openAccountCreditTypeViewList = new ArrayList<OpenAccountCreditTypeView>();
+//        this.accountNameViewList = new ArrayList<AccountNameView>();
+//        this.openAccountCreditTypeViewList = new ArrayList<OpenAccountCreditTypeView>();
     }
 
     public int getIdOfAccountType() {
@@ -81,21 +81,21 @@ public class OpenAccountView {
         this.term = term;
     }
 
-    public List<AccountNameView> getAccountNameViewList() {
-        return accountNameViewList;
-    }
-
-    public void setAccountNameViewList(List<AccountNameView> accountNameViewList) {
-        this.accountNameViewList = accountNameViewList;
-    }
-
-    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
-        return openAccountCreditTypeViewList;
-    }
-
-    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
-        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
-    }
+//    public List<AccountNameView> getAccountNameViewList() {
+//        return accountNameViewList;
+//    }
+//
+//    public void setAccountNameViewList(List<AccountNameView> accountNameViewList) {
+//        this.accountNameViewList = accountNameViewList;
+//    }
+//
+//    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
+//        return openAccountCreditTypeViewList;
+//    }
+//
+//    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
+//        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
+//    }
 
     @Override
     public String toString() {
@@ -106,8 +106,8 @@ public class OpenAccountView {
                 .append("accountName", accountName)
                 .append("accountNumber", accountNumber)
                 .append("term", term)
-                .append("accountNameViewList", accountNameViewList)
-                .append("openAccountCreditTypeViewList", openAccountCreditTypeViewList)
+//                .append("accountNameViewList", accountNameViewList)
+//                .append("openAccountCreditTypeViewList", openAccountCreditTypeViewList)
                 .toString();
     }
 }
