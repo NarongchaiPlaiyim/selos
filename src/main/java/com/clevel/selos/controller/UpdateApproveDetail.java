@@ -90,12 +90,21 @@ public class UpdateApproveDetail {
             AccountInfoDetailView accountInfoDetailView = new AccountInfoDetailView();
             AccountInfoCreditTypeView accountInfoCreditTypeView = new AccountInfoCreditTypeView();
             accountInfoCreditTypeView.setLimit(BigDecimal.TEN);
+
             accountInfoCreditTypeView.setCreditFacility("Facility");
             accountInfoCreditTypeView.setProductProgram("product");
             List<AccountInfoCreditTypeView> accountInfoCreditTypeViews = new ArrayList<AccountInfoCreditTypeView>();
             accountInfoCreditTypeViews.add(accountInfoCreditTypeView);
-            accountInfoDetailView.setAccountInfoCreditTypeViews(accountInfoCreditTypeViews);
+            accountInfoDetailView.setAccountInfoCreditTypeViewList(accountInfoCreditTypeViews);
 
+            AccountNameView accountNameView = new AccountNameView();
+            accountNameView.setName("sdsd");
+            List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
+            accountNameViews.add(accountNameView);
+            accountInfoDetailView.setAccountNameViewList(accountNameViews);
+            accountInfoDetailView.setAccountNumber("1212121212");
+
+            accountInfoDetailViews.add(accountInfoDetailView);
 
 
 
