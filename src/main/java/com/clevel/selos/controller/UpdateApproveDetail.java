@@ -1,11 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.AccountInfoCreditTypeView;
 import com.clevel.selos.model.view.AccountInfoDetailView;
+import com.clevel.selos.model.view.AccountInfoPurposeView;
 import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.model.view.OpenAccountPurposeView;
-import com.clevel.selos.model.view.openaccount.AccountNameView;
-//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView; //todo : change this , AS ( Comment OpenAccountCreditTypeView )
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -87,40 +86,10 @@ public class UpdateApproveDetail {
         openAccountViews = new ArrayList<AccountInfoDetailView>();
 
         try{
-        List<AccountInfoDetailView> openAccountViewList = new ArrayList<AccountInfoDetailView>();
+        List<AccountInfoDetailView> accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
 
-        AccountInfoDetailView openAccountView = new AccountInfoDetailView();
-            List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
-            for(int i =0; i<10; i++){
-                AccountNameView accountNameView = new AccountNameView();
-                accountNameView.setName(String.valueOf(i));
-                accountNameViews.add(accountNameView);
-            }
 
-            //openAccountView.setAccountNameViewList(accountNameViews);
-            openAccountView.setAccountNumber("1234567890");
 
-            //todo : change this , AS ( Comment OpenAccountCreditTypeView )
-//            List<OpenAccountCreditTypeView> openAccountCreditTypeViews = new ArrayList<OpenAccountCreditTypeView>();
-
-//            for(int i=0;i<5;i++){
-//                OpenAccountCreditTy/peView openAccountCreditTypeView =new OpenAccountCreditTypeView();
-//                openAccountCreditTypeView.setLimit(BigDecimal.valueOf(i));
-//                openAccountCreditTypeView.setCreditFacility("Credit");
-//                openAccountCreditTypeView.setProductProgram("Product");
-//                openAccountCreditTypeViews.add(openAccountCreditTypeView);
-//            }
-            List<OpenAccountPurposeView> openAccountPurposeViews = new ArrayList<OpenAccountPurposeView>();
-            for(int i=0;i<5;i++){
-                OpenAccountPurposeView openAccountPurposeView = new OpenAccountPurposeView();
-                openAccountPurposeView.setName("AAA");
-                openAccountPurposeViews.add(openAccountPurposeView);
-            }
-            //openAccountView.setOpenAccountPurposeViewList(openAccountPurposeViews);
-//            openAccountView.setOpenAccountCreditTypeViewList(openAccountCreditTypeViews);
-            openAccountViewList.add(openAccountView);
-            openAccountViews = openAccountViewList;
-//            openAccountCreditTypeViews = openAccountCreditTypeViews;
         }catch (Exception e){
 
         }
