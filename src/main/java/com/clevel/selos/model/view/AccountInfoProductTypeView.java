@@ -1,24 +1,16 @@
-package com.clevel.selos.model.view.insurance.model;
+package com.clevel.selos.model.view;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class InsurerNameModel implements Serializable {
-    private int id;
+public class AccountInfoProductTypeView implements Serializable {
     private String name;
+    private long id;
 
-    public InsurerNameModel() {
+    public AccountInfoProductTypeView() {
 
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -29,11 +21,19 @@ public class InsurerNameModel implements Serializable {
         this.name = name;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
                 .append("name", name)
+                .append("id", id)
                 .toString();
     }
 }

@@ -1,9 +1,9 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui" xmlns="http://java.sun.com/jsf/composite">
+        xmlns:p="http://primefaces.org/ui">
 
     <p:panel id="existingGuarantorDlgPanel" styleClass="panel-dialog">
         <h:form id="existingGuarantorDlgForm">
@@ -42,8 +42,8 @@
                     </td>
                     <td class="center">
                         <p:dataTable id="resultCreditCollateralBorrower" var="creditTypeBorrower"
-                                     value="#{creditFacExisting.borrowerExistingCreditDetailViewList}"
-                                     rowKey="#{creditTypeBorrower.no}" rowIndexVar="rowIndex" style="width: 100%">
+                                     value="#{creditFacExisting.existingGuarantorDetailView.existingCreditTypeDetailViewList}"
+                                     rowKey="#{creditTypeBorrower.no}" rowIndexVar="rowIndexVar" style="width: 100%">
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column style="width:50px;"/>
@@ -69,21 +69,20 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existProductProgram.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.productProgram}" />
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existCreditType.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.creditFacility}" />
                             </p:column>
                             <p:column styleClass="center">
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />
                             </p:column>
-                            <p:column styleClass="center">
-                                <facet name="">
-                                    <p:inputText  />
-
-                                </facet>
-
+                            <p:column styleClass="right">
+                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -91,7 +90,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveGuarantor"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
@@ -110,10 +109,8 @@
             </table>
         </h:form>
     </p:panel>
-    <!--
-    <p:blockUI widgetVar="blockExistingGuarantorDlg" block="existingGuarantorDlgPanel" trigger=":existingGuarantorDlgForm:save">
+    <p:blockUI widgetVar="blockExistingGuarantorDlg" block="existingGuarantorDlgPanel" trigger=":existingGuarantorDlgForm:saveGuarantor">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
-    -->
 </ui:composition>

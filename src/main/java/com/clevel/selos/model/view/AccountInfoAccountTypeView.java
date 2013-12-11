@@ -1,18 +1,16 @@
-package com.clevel.selos.model.view.openaccount;
+package com.clevel.selos.model.view;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class AccountNameView implements Serializable {
+public class AccountInfoAccountTypeView implements Serializable {
     private String name;
+    private long id;
 
-    public AccountNameView() {
-    }
+    public AccountInfoAccountTypeView() {
 
-    public AccountNameView(String name) {
-        this.name = name;
     }
 
     public String getName() {
@@ -23,11 +21,19 @@ public class AccountNameView implements Serializable {
         this.name = name;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("name", name)
+                .append("id", id)
                 .toString();
     }
 }
-

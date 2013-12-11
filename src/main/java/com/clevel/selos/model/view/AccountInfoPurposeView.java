@@ -3,18 +3,10 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class OpenAccountPurposeView {
+public class AccountInfoPurposeView {
+    private boolean isSelected;
     private long id;
     private String name;
-
-    public OpenAccountPurposeView(){
-        reset();
-    }
-
-    public void reset(){
-        this.id = 0L;
-        this.name = "";
-    }
 
     public long getId() {
         return id;
@@ -32,9 +24,18 @@ public class OpenAccountPurposeView {
         this.name = name;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("isSelected", isSelected)
                 .append("id", id)
                 .append("name", name)
                 .toString();
