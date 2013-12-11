@@ -414,6 +414,15 @@ textarea {
     text-decoration: underline;
 }
 
+.bottom_menu:hover{
+    color: white;
+    text-decoration: underline;
+}
+
+.bottom_menu{
+    color: white;
+}
+
 /** end content decoration **/
 
 .ui-button-text-only .ui-button-text {

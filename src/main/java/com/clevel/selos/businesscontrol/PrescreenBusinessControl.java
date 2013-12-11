@@ -1215,6 +1215,11 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     }
 
+    public void duplicateData(long workCasePreScreenId) throws Exception{
+        prescreenDAO.duplicatePreScreenData(workCasePreScreenId);
+    }
+
+    // *** Function for BPM *** //
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
@@ -1261,15 +1266,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         return bdmMakerName;
     }
 
-    /*public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
-        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-        List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-        log.info("getBorrowerListByWorkCaseId ::: customerList : {}", customerList);
-        customerInfoViewList = customerTransform.transformToViewList(customerList);
-        log.info("getBorrowerListByWorkCaseId ::: customerInfoViewList : {}", customerInfoViewList);
-
-        return customerInfoViewList;
-    }*/
     public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
@@ -1324,8 +1320,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoViewList;
     }
 
-
-
     public void save(WorkCasePrescreen workCasePrescreen){
         workCasePrescreenDAO.persist(workCasePrescreen);
     }
@@ -1373,285 +1367,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         return relationList;
-    }
-
-    public CustomerInfoView cloneCustomer(CustomerInfoView customerInfoView){
-        CustomerInfoView customer = new CustomerInfoView();
-
-        customer.setIndividualId(customerInfoView.getIndividualId());
-        customer.setJuristicId(customerInfoView.getJuristicId());
-        customer.setListIndex(customerInfoView.getListIndex());
-        customer.setSubIndex(customerInfoView.getSubIndex());
-        customer.setListName(customerInfoView.getListName());
-        customer.setIsSpouse(customerInfoView.getIsSpouse());
-        customer.setSearchBy(customerInfoView.getSearchBy());
-        customer.setSearchId(customerInfoView.getSearchId());
-        customer.setInputId(customerInfoView.getInputId());
-        customer.setValidId(customerInfoView.getValidId());
-        customer.setNcbResult(customerInfoView.getNcbResult());
-        customer.setNcbReason(customerInfoView.getNcbReason());
-        customer.setId(customerInfoView.getId());
-        customer.setAge(customerInfoView.getAge());
-        customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
-        customer.setTitleTh(customerInfoView.getTitleTh());
-        customer.setTitleEn(customerInfoView.getTitleEn());
-        customer.setFirstNameTh(customerInfoView.getFirstNameTh());
-        customer.setLastNameTh(customerInfoView.getLastNameTh());
-        customer.setFirstNameEn(customerInfoView.getFirstNameEn());
-        customer.setLastNameEn(customerInfoView.getLastNameEn());
-        customer.setNcbFlag(customerInfoView.getNcbFlag());
-        customer.setCustomerEntity(customerInfoView.getCustomerEntity());
-        customer.setDocumentType(customerInfoView.getDocumentType());
-        customer.setRelation(customerInfoView.getRelation());
-        customer.setReference(customerInfoView.getReference());
-        customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
-        customer.setServiceSegment(customerInfoView.getServiceSegment());
-        customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
-        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
-        customer.setPercentShare(customerInfoView.getPercentShare());
-        customer.setApproxIncome(customerInfoView.getApproxIncome());
-        customer.setDateOfBirth(customerInfoView.getDateOfBirth());
-        customer.setCitizenId(customerInfoView.getCitizenId());
-        customer.setGender(customerInfoView.getGender());
-        customer.setNumberOfChild(customerInfoView.getNumberOfChild());
-        customer.setEducation(customerInfoView.getEducation());
-        customer.setMaritalStatus(customerInfoView.getMaritalStatus());
-        customer.setNationality(customerInfoView.getNationality());
-        customer.setSndNationality(customerInfoView.getSndNationality());
-        customer.setOrigin(customerInfoView.getOrigin());
-        customer.setOccupation(customerInfoView.getOccupation());
-        customer.setCapital(customerInfoView.getCapital());
-        customer.setFinancialYear(customerInfoView.getFinancialYear());
-        customer.setDateOfRegister(customerInfoView.getDateOfRegister());
-        customer.setPaidCapital(customerInfoView.getPaidCapital());
-        customer.setRegistrationId(customerInfoView.getRegistrationId());
-        customer.setSignCondition(customerInfoView.getSignCondition());
-        customer.setTotalShare(customerInfoView.getTotalShare());
-
-        AddressView addressView = new AddressView();
-        AddressView oldAddress = customerInfoView.getCurrentAddress();
-
-        addressView.setId(oldAddress.getId());
-        addressView.setAddressType(oldAddress.getAddressType());
-        addressView.setAddressNo(oldAddress.getAddressNo());
-        addressView.setMoo(oldAddress.getMoo());
-        addressView.setBuilding(oldAddress.getBuilding());
-        addressView.setRoad(oldAddress.getRoad());
-        addressView.setProvince(oldAddress.getProvince());
-        addressView.setDistrict(oldAddress.getDistrict());
-        addressView.setSubDistrict(oldAddress.getSubDistrict());
-        addressView.setPostalCode(oldAddress.getPostalCode());
-        addressView.setCountry(oldAddress.getCountry());
-        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-        addressView.setExtension(oldAddress.getExtension());
-        addressView.setContactName(oldAddress.getContactName());
-        addressView.setContactPhone(oldAddress.getContactPhone());
-        addressView.setAddress(oldAddress.getAddress());
-
-        customer.setCurrentAddress(addressView);
-
-        addressView = new AddressView();
-        oldAddress = customerInfoView.getWorkAddress();
-
-        addressView.setId(oldAddress.getId());
-        addressView.setAddressType(oldAddress.getAddressType());
-        addressView.setAddressNo(oldAddress.getAddressNo());
-        addressView.setMoo(oldAddress.getMoo());
-        addressView.setBuilding(oldAddress.getBuilding());
-        addressView.setRoad(oldAddress.getRoad());
-        addressView.setProvince(oldAddress.getProvince());
-        addressView.setDistrict(oldAddress.getDistrict());
-        addressView.setSubDistrict(oldAddress.getSubDistrict());
-        addressView.setPostalCode(oldAddress.getPostalCode());
-        addressView.setCountry(oldAddress.getCountry());
-        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-        addressView.setExtension(oldAddress.getExtension());
-        addressView.setContactName(oldAddress.getContactName());
-        addressView.setContactPhone(oldAddress.getContactPhone());
-        addressView.setAddress(oldAddress.getAddress());
-
-        customer.setWorkAddress(addressView);
-
-        addressView = new AddressView();
-        oldAddress = customerInfoView.getRegisterAddress();
-
-        addressView.setId(oldAddress.getId());
-        addressView.setAddressType(oldAddress.getAddressType());
-        addressView.setAddressNo(oldAddress.getAddressNo());
-        addressView.setMoo(oldAddress.getMoo());
-        addressView.setBuilding(oldAddress.getBuilding());
-        addressView.setRoad(oldAddress.getRoad());
-        addressView.setProvince(oldAddress.getProvince());
-        addressView.setDistrict(oldAddress.getDistrict());
-        addressView.setSubDistrict(oldAddress.getSubDistrict());
-        addressView.setPostalCode(oldAddress.getPostalCode());
-        addressView.setCountry(oldAddress.getCountry());
-        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-        addressView.setExtension(oldAddress.getExtension());
-        addressView.setContactName(oldAddress.getContactName());
-        addressView.setContactPhone(oldAddress.getContactPhone());
-        addressView.setAddress(oldAddress.getAddress());
-
-        customer.setRegisterAddress(addressView);
-        customer.setMailingAddressType(customerInfoView.getMailingAddressType());
-        customer.setCitizenCountry(customerInfoView.getCitizenCountry());
-        customer.setRegistrationCountry(customerInfoView.getRegistrationCountry());
-        customer.setMobileNumber(customerInfoView.getMobileNumber());
-        customer.setFaxNumber(customerInfoView.getFaxNumber());
-        customer.setEmail(customerInfoView.getEmail());
-
-        //KYCLevel kycLevel;
-
-        customer.setConvenantFlag(customerInfoView.getConvenantFlag());
-//        customer.setEwsFlag(customerInfoView.getEwsFlag());
-        customer.setReviewFlag(customerInfoView.getReviewFlag());
-        customer.setReason(customerInfoView.getReason());
-        customer.setBusinessType(customerInfoView.getBusinessType());
-        if(customerInfoView.getSpouse() != null){
-            CustomerInfoView spouse = new CustomerInfoView();
-            CustomerInfoView oldSpouse = customerInfoView.getSpouse();
-
-            spouse.setIndividualId(oldSpouse.getIndividualId());
-            spouse.setJuristicId(oldSpouse.getJuristicId());
-            spouse.setListIndex(oldSpouse.getListIndex());
-            spouse.setSubIndex(oldSpouse.getSubIndex());
-            spouse.setListName(oldSpouse.getListName());
-            spouse.setIsSpouse(oldSpouse.getIsSpouse());
-            spouse.setSearchBy(oldSpouse.getSearchBy());
-            spouse.setSearchId(oldSpouse.getSearchId());
-            spouse.setInputId(oldSpouse.getInputId());
-            spouse.setValidId(oldSpouse.getValidId());
-            spouse.setNcbResult(oldSpouse.getNcbResult());
-            spouse.setNcbReason(oldSpouse.getNcbReason());
-            spouse.setId(oldSpouse.getId());
-            spouse.setAge(oldSpouse.getAge());
-            spouse.setDocumentExpiredDate(oldSpouse.getDocumentExpiredDate());
-            spouse.setTitleTh(oldSpouse.getTitleTh());
-            spouse.setTitleEn(oldSpouse.getTitleEn());
-            spouse.setFirstNameTh(oldSpouse.getFirstNameTh());
-            spouse.setLastNameTh(oldSpouse.getLastNameTh());
-            spouse.setFirstNameEn(oldSpouse.getFirstNameEn());
-            spouse.setLastNameEn(oldSpouse.getLastNameEn());
-            spouse.setNcbFlag(oldSpouse.getNcbFlag());
-            spouse.setCustomerEntity(oldSpouse.getCustomerEntity());
-            spouse.setDocumentType(oldSpouse.getDocumentType());
-
-            Relation relation = new Relation();
-            relation.setId(oldSpouse.getRelation().getId());
-            spouse.setRelation(relation);
-
-            Reference reference = new Reference();
-            reference.setId(oldSpouse.getReference().getId());
-            spouse.setReference(oldSpouse.getReference());
-
-            spouse.setDocumentAuthorizeBy(oldSpouse.getDocumentAuthorizeBy());
-            spouse.setServiceSegment(oldSpouse.getServiceSegment());
-            spouse.setTmbCustomerId(oldSpouse.getTmbCustomerId());
-            spouse.setCollateralOwner(oldSpouse.getCollateralOwner());
-            spouse.setPercentShare(oldSpouse.getPercentShare());
-            spouse.setApproxIncome(oldSpouse.getApproxIncome());
-            spouse.setDateOfBirth(oldSpouse.getDateOfBirth());
-            spouse.setCitizenId(oldSpouse.getCitizenId());
-            spouse.setGender(oldSpouse.getGender());
-            spouse.setNumberOfChild(oldSpouse.getNumberOfChild());
-            spouse.setEducation(oldSpouse.getEducation());
-            spouse.setMaritalStatus(oldSpouse.getMaritalStatus());
-            spouse.setNationality(oldSpouse.getNationality());
-            spouse.setSndNationality(oldSpouse.getSndNationality());
-            spouse.setOrigin(oldSpouse.getOrigin());
-            spouse.setOccupation(oldSpouse.getOccupation());
-            spouse.setCapital(oldSpouse.getCapital());
-            spouse.setFinancialYear(oldSpouse.getFinancialYear());
-            spouse.setDateOfRegister(oldSpouse.getDateOfRegister());
-            spouse.setPaidCapital(oldSpouse.getPaidCapital());
-            spouse.setRegistrationId(oldSpouse.getRegistrationId());
-            spouse.setSignCondition(oldSpouse.getSignCondition());
-            spouse.setTotalShare(oldSpouse.getTotalShare());
-
-            addressView = new AddressView();
-            oldAddress = oldSpouse.getCurrentAddress();
-
-            addressView.setId(oldAddress.getId());
-            addressView.setAddressType(oldAddress.getAddressType());
-            addressView.setAddressNo(oldAddress.getAddressNo());
-            addressView.setMoo(oldAddress.getMoo());
-            addressView.setBuilding(oldAddress.getBuilding());
-            addressView.setRoad(oldAddress.getRoad());
-            addressView.setProvince(oldAddress.getProvince());
-            addressView.setDistrict(oldAddress.getDistrict());
-            addressView.setSubDistrict(oldAddress.getSubDistrict());
-            addressView.setPostalCode(oldAddress.getPostalCode());
-            addressView.setCountry(oldAddress.getCountry());
-            addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-            addressView.setExtension(oldAddress.getExtension());
-            addressView.setContactName(oldAddress.getContactName());
-            addressView.setContactPhone(oldAddress.getContactPhone());
-            addressView.setAddress(oldAddress.getAddress());
-
-            spouse.setCurrentAddress(addressView);
-
-            addressView = new AddressView();
-            oldAddress = oldSpouse.getWorkAddress();
-
-            addressView.setId(oldAddress.getId());
-            addressView.setAddressType(oldAddress.getAddressType());
-            addressView.setAddressNo(oldAddress.getAddressNo());
-            addressView.setMoo(oldAddress.getMoo());
-            addressView.setBuilding(oldAddress.getBuilding());
-            addressView.setRoad(oldAddress.getRoad());
-            addressView.setProvince(oldAddress.getProvince());
-            addressView.setDistrict(oldAddress.getDistrict());
-            addressView.setSubDistrict(oldAddress.getSubDistrict());
-            addressView.setPostalCode(oldAddress.getPostalCode());
-            addressView.setCountry(oldAddress.getCountry());
-            addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-            addressView.setExtension(oldAddress.getExtension());
-            addressView.setContactName(oldAddress.getContactName());
-            addressView.setContactPhone(oldAddress.getContactPhone());
-            addressView.setAddress(oldAddress.getAddress());
-
-            spouse.setWorkAddress(addressView);
-
-            addressView = new AddressView();
-            oldAddress = oldSpouse.getRegisterAddress();
-
-            addressView.setId(oldAddress.getId());
-            addressView.setAddressType(oldAddress.getAddressType());
-            addressView.setAddressNo(oldAddress.getAddressNo());
-            addressView.setMoo(oldAddress.getMoo());
-            addressView.setBuilding(oldAddress.getBuilding());
-            addressView.setRoad(oldAddress.getRoad());
-            addressView.setProvince(oldAddress.getProvince());
-            addressView.setDistrict(oldAddress.getDistrict());
-            addressView.setSubDistrict(oldAddress.getSubDistrict());
-            addressView.setPostalCode(oldAddress.getPostalCode());
-            addressView.setCountry(oldAddress.getCountry());
-            addressView.setPhoneNumber(oldAddress.getPhoneNumber());
-            addressView.setExtension(oldAddress.getExtension());
-            addressView.setContactName(oldAddress.getContactName());
-            addressView.setContactPhone(oldAddress.getContactPhone());
-            addressView.setAddress(oldAddress.getAddress());
-
-            spouse.setRegisterAddress(addressView);
-            spouse.setMailingAddressType(oldSpouse.getMailingAddressType());
-            spouse.setCitizenCountry(oldSpouse.getCitizenCountry());
-            spouse.setRegistrationCountry(oldSpouse.getRegistrationCountry());
-            spouse.setMobileNumber(oldSpouse.getMobileNumber());
-            spouse.setFaxNumber(oldSpouse.getFaxNumber());
-            spouse.setEmail(oldSpouse.getEmail());
-
-            //KYCLevel kycLevel;
-
-            spouse.setConvenantFlag(oldSpouse.getConvenantFlag());
-//            spouse.setEwsFlag(oldSpouse.getEwsFlag());
-            spouse.setReviewFlag(oldSpouse.getReviewFlag());
-            spouse.setReason(oldSpouse.getReason());
-            spouse.setBusinessType(oldSpouse.getBusinessType());
-            customer.setSpouse(spouse);
-        }
-
-        //WarningCode csi;
-        return customer;
     }
 
 }

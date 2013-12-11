@@ -620,6 +620,13 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onCloseSale(){
+        //TODO clone data for Full Application
+        try{
+            prescreenBusinessControl.duplicateData(workCasePreScreenId);
+        } catch (Exception ex){
+            log.error("duplicate data failed : ", ex);
+        }
+
         log.debug("onCloseSale ::: queueName : {}", queueName);
         //TODO get nextStep
         String actionCode = "1008";
