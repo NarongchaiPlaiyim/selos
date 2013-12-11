@@ -7,6 +7,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.master.OpenAccountPurpose;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import org.primefaces.context.RequestContext;
@@ -16,13 +17,14 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "accountInfo")
-public class AccountInfo {
+public class AccountInfo implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -30,44 +32,44 @@ public class AccountInfo {
     @Inject
     @NormalMessage
     Message msg;
-    @Inject
-    private OpenAccountProductDAO openAccountProductDAO;
-    @Inject
-    private BankAccountTypeDAO bankAccountTypeDAO;
-    @Inject
-    private OpenAccountPurposeDAO openAccountPurposeDAO;
 
-    private List<OpenAccountPurpose> openAccountPurposeList;
+    @Inject
+    private OpenAccountProductDAO productTypeDAO;
+    @Inject
+    private BankAccountTypeDAO accountTypeDAO;
+    @Inject
+    private OpenAccountPurposeDAO purposeDAO;
+
+    private List<OpenAccountPurpose> purposeList;
 
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
     private int rowIndex;
 
     //*** View ***//
-//    private AccountInfoView accountInfoView;
-//    private List<AccountDetailInformationView> accountDetailInformationViewList;
-//    private AccountDetailInformationView accountDetailInformationViewSelected;
+    private AccountInfoView accountInfoViewSelected;
+    private List<AccountInfoView> accountInfoViewList;
+    private AccountInfoDetailView accountInfoDetailView;
 
-    //New / New + Change
-    private int approvedType;
 
     //*** Drop down List ***//
-    private List<BankAccountType> bankAccountTypeList;
-    private List<OpenAccountProduct> openAccountProductList;
-//    private List<BranchModel> branchModelList;
+    private List<BankAccountType> accountTypeList;
+    private List<OpenAccountProduct> productTypeList;
+    private List<AccountInfoBranchView> branchList;
 
     //*** Check box ***//
-//    private List<PurposeModel> purposeModelList;
+    private List<AccountInfoPurposeView> purposeViewList;
+
 
     private List<String> accountName;
 
     //*** Account Name (Table) ***//
-//    private List<AccountNameModel> accountNameViewList;
-//    private AccountNameModel accountNameView;
+    private List<AccountNameView> accountNameViewList;
+    private AccountNameView accountNameView;
 
     //*** Credit Type (Table) ***//
-//    private List<CreditTypeModel> openAccountCreditTypeViewList;
-//    private CreditTypeModel openAccountCreditTypeView;
+    private List<AccountInfoCreditTypeView> creditTypeViewList;
+    private AccountInfoCreditTypeView creditTypeView;
 
     @Inject
     public AccountInfo() {
@@ -225,145 +227,50 @@ public class AccountInfo {
 //        openAccountView.setAccountDetailInformationView(accountDetailInformationViewSelected);
 //    }
 //
-//    public AccountDetailInformationView getAccountDetailInformationViewSelected() {
-//        return accountDetailInformationViewSelected;
-//    }
-//
-//    public void setAccountDetailInformationViewSelected(AccountDetailInformationView accountDetailInformationViewSelected) {
-//        this.accountDetailInformationViewSelected = accountDetailInformationViewSelected;
-//    }
-
-    public List<OpenAccountPurpose> getOpenAccountPurposeList() {
-        return openAccountPurposeList;
-    }
-
-    public void setOpenAccountPurposeList(List<OpenAccountPurpose> openAccountPurposeList) {
-        this.openAccountPurposeList = openAccountPurposeList;
-    }
-
-//    public OpenAccountView getOpenAccountView() {
-//        return openAccountView;
-//    }
-//
-//    public void setOpenAccountView(OpenAccountView openAccountView) {
-//        this.openAccountView = openAccountView;
-//    }
-
-    public List<BankAccountType> getBankAccountTypeList() {
-        return bankAccountTypeList;
-    }
-
-    public void setBankAccountTypeList(List<BankAccountType> bankAccountTypeList) {
-        this.bankAccountTypeList = bankAccountTypeList;
-    }
-
-    public List<OpenAccountProduct> getOpenAccountProductList() {
-        return openAccountProductList;
-    }
-
-    public void setOpenAccountProductList(List<OpenAccountProduct> openAccountProductList) {
-        this.openAccountProductList = openAccountProductList;
-    }
-
-    public List<String> getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(List<String> accountName) {
-        this.accountName = accountName;
-    }
-
-//    public AccountNameModel getAccountNameView() {
-//        return accountNameView;
-//    }
-//
-//    public void setAccountNameView(AccountNameModel accountNameView) {
-//        this.accountNameView = accountNameView;
-//    }
-//
-//    public List<AccountNameModel> getAccountNameViewList() {
-//        return accountNameViewList;
-//    }
-//
-//    public void setAccountNameViewList(List<AccountNameModel> accountNameViewList) {
-//        this.accountNameViewList = accountNameViewList;
-//    }
-//
-//    public List<AccountDetailInformationView> getAccountDetailInformationViewList() {
-//        return accountDetailInformationViewList;
-//    }
-//
-//    public void setAccountDetailInformationViewList(List<AccountDetailInformationView> accountDetailInformationViewList) {
-//        this.accountDetailInformationViewList = accountDetailInformationViewList;
-//    }
-//
-//    public List<BranchModel> getBranchModelList() {
-//        return branchModelList;
-//    }
-//
-//    public void setBranchModelList(List<BranchModel> branchModelList) {
-//        this.branchModelList = branchModelList;
-//    }
-//
-//    public List<PurposeModel> getPurposeModelList() {
-//        return purposeModelList;
-//    }
-//
-//    public void setPurposeModelList(List<PurposeModel> purposeModelList) {
-//        this.purposeModelList = purposeModelList;
-//    }
-
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
 
     private void init(){
-//        openAccountView = new OpenAccountView();
-//
-//        //branchModelList
-//        branchModelList = new ArrayList<BranchModel>();
-//        BranchModel branchModel = null;
-//
-//        branchModel = new BranchModel();
-//        branchModel.setId(01);
-//        branchModel.setName("Branch");
-//        branchModelList.add(branchModel);
-//        branchModel = new BranchModel();
-//        branchModel.setId(02);
-//        branchModel.setName("Branch 2");
-//        branchModelList.add(branchModel);
-//
-//        //Account Type
-//        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-//
-//        //Purpose
-//        openAccountPurposeList = openAccountPurposeDAO.findAll();
-//
-//        List<PurposeModel> purposeModelList = new ArrayList<PurposeModel>();
-//        PurposeModel purposeModel = null;
-//        for(OpenAccountPurpose purpose : openAccountPurposeList){
-//            purposeModel = new PurposeModel();
-//            purposeModel.setName(purpose.getName());
-//            purposeModel.setId(purpose.getId());
-//            purposeModelList.add(purposeModel);
-//        }
-//        openAccountView.getAccountDetailInformationView().setPurposeModelList(purposeModelList);
-//
-//        //Account Name for test
-//        accountName = new ArrayList<String>();
-//        accountName.add("Mr. Ki mu ji");
-//        accountName.add("Mr. Sbay D");
-//        accountName.add("Mr. Kim ji");
-//
+        accountInfoDetailView = new AccountInfoDetailView();
+
+        //branchModelList
+        branchList = new ArrayList<AccountInfoBranchView>();
+        AccountInfoBranchView branchView = null;
+
+        branchView = new AccountInfoBranchView();
+        branchView.setId(01);
+        branchView.setName("Branch");
+        branchList.add(branchView);
+        branchView = new AccountInfoBranchView();
+        branchView.setId(02);
+        branchView.setName("Branch 2");
+        branchList.add(branchView);
+
+        //Account Type
+        accountTypeList = accountTypeDAO.findOpenAccountType();
+
+        //Purpose
+        purposeList = purposeDAO.findAll();
+
+        purposeViewList = new ArrayList<AccountInfoPurposeView>();
+        AccountInfoPurposeView purposeView = null;
+        for(OpenAccountPurpose purpose : purposeList){
+            purposeView = new AccountInfoPurposeView();
+            purposeView.setName(purpose.getName());
+            purposeView.setId(purpose.getId());
+            purposeViewList.add(purposeView);
+        }
+        accountInfoDetailView.setAccountInfoPurposeViewList(purposeViewList);
+
+        //Account Name for test
+        accountName = new ArrayList<String>();
+        accountName.add("Mr. Ki mu ji");
+        accountName.add("Mr. Sbay D");
+        accountName.add("Mr. Kim ji");
+
 //        //Account Name (Table) for test
 //        accountNameViewList = new ArrayList<AccountNameModel>();
 //
 //        //Credit Type (Table) for test
-//        openAccountCreditTypeViewList = new ArrayList<CreditTypeModel>();
+//        openAccountCreditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
 //
 //        openAccountCreditTypeView = new CreditTypeModel();
 //        openAccountCreditTypeView.setProductProgram("ProductProgram");
