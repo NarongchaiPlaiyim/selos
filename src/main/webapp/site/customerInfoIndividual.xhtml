@@ -2116,11 +2116,11 @@
 
                             <tr>
                                 <td colspan="6" class="center">
-                                    <p:commandButton value="#{msg.get('app.button.save')}" styleClass="smaller" id="btnSave"
+                                    <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumIndi.onSave}" binding="#{saveCustomer}"
                                                      rendered="#{not custInfoSumIndi.fromJuristic}"/>
-                                    <p:commandButton value="#{msg.get('app.button.save')}" styleClass="smaller" id="btnSave2"
+                                    <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                      rendered="#{custInfoSumIndi.fromJuristic}"/>

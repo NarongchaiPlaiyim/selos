@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 @ViewScoped
-@ManagedBean(name = "mortgageSummary")
+@ManagedBean(name = "mortSum")
 public class MortgageSummary implements Serializable {
     @Inject
     @SELOS
@@ -37,6 +38,8 @@ public class MortgageSummary implements Serializable {
 
     //session
     private long workCaseId;
+
+    private MortgageSummaryView mortgageSummaryView;
 
     public MortgageSummary(){
     }
@@ -62,5 +65,17 @@ public class MortgageSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         preRender();
+    }
+
+    public void onSave() {
+
+    }
+
+    public MortgageSummaryView getMortgageSummaryView() {
+        return mortgageSummaryView;
+    }
+
+    public void setMortgageSummaryView(MortgageSummaryView mortgageSummaryView) {
+        this.mortgageSummaryView = mortgageSummaryView;
     }
 }

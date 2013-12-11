@@ -14,7 +14,7 @@
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{mortgageSummary.preRender()}" />
+    <f:event type="preRenderView" listener="#{mortSum.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -40,9 +40,288 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td style="padding-left: 50px;">
-                                        <table>
-                                        </table>
+                                    <td class="title" style="width: 150px;">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.approvedType')}" for="approveTypeRadio"/>
+                                    </td>
+                                    <td>
+                                        <p:selectOneRadio id="approveTypeRadio" value="#{mortSum.mortgageSummaryView.approvedType}">
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageSummary.content.radio.new')}" itemValue="1"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageSummary.content.radio.newChange')}" itemValue="2"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.agreement')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.loanDate')}" for="loanDateInput"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="loanDateInput" value="#{mortSum.mortgageSummaryView.loanDate}"
+                                                    pattern="dd/MM/yyyy" showOn="button"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.signContract')}" for="singContrackRadio"/>
+                                    </td>
+                                    <td>
+                                        <p:selectOneRadio id="singContrackRadio" value="#{mortSum.mortgageSummaryView.signContract}">
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageSummary.content.radio.branch')}" itemValue="1"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageSummary.content.radio.zone')}" itemValue="2"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortSum.mortgageSummaryView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="sing"
+                                                           itemLabel="#{sing}"
+                                                           itemValue="#{sing}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 150px;">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.comsNo')}" for="comsNoInput"/>
+                                    </td>
+                                    <td>
+                                        <p:inputText id="comsNoInput" value="#{mortSum.mortgageSummaryView.comsNo}" styleClass="largest"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <!-- Mortgage Summary -->
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.mortgageSummary')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="mortgageSummaryTable" var="mortSummary" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.mortgageType')}" style="width: 400px;">
+                                                <h:outputText value="#{mortSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.mortgageAmount')}" style="width: 200px;">
+                                                <h:outputText value="#{mortSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.mortgageSingingDate')}" style="width: 200px;">
+                                                <h:outputText value="#{mortSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.landOffice')}" style="width: 300px;">
+                                                <h:outputText value="#{mortSummary}"/>
+                                            </p:column>
+
+                                            <p:column style="width: 60px;">
+                                                <!--Edit Button-->
+                                            </p:column>
+
+                                            <!--<p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{basicInfo.onEditAccount()}"
+                                                                 update=":basicInfoAccountDlgForm"
+                                                                 oncomplete="basicInfoAccountDlg.show();">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{basicInfo.rowIndex}"/>
+                                                    <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                </p:commandButton>
+
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteAccountDlg.show()"
+                                                                 update=":frmMain:resultTableOpeningAccount"
+                                                                 process="@form">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                </p:commandButton>
+                                            </p:column>-->
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 15px;"/>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 5px;"/>
+
+                                <!-- Pledge Summary -->
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.pledgeSummary')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="pledgeSummaryTable" var="pledgeSummary" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.accountNumber')}" style="width: 400px;">
+                                                <h:outputText value="#{pledgeSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.pledgeType')}" style="width: 300px;">
+                                                <h:outputText value="#{pledgeSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.pledgeAmount')}" style="width: 200px;">
+                                                <h:outputText value="#{pledgeSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.pledgeSingingDate')}" style="width: 200px;">
+                                                <h:outputText value="#{pledgeSummary}"/>
+                                            </p:column>
+
+                                            <p:column style="width: 60px;">
+                                                <!--Edit Button-->
+                                            </p:column>
+
+                                            <!--<p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{basicInfo.onEditAccount()}"
+                                                                 update=":basicInfoAccountDlgForm"
+                                                                 oncomplete="basicInfoAccountDlg.show();">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{basicInfo.rowIndex}"/>
+                                                    <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                </p:commandButton>
+
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteAccountDlg.show()"
+                                                                 update=":frmMain:resultTableOpeningAccount"
+                                                                 process="@form">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                </p:commandButton>
+                                            </p:column>-->
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 15px;"/>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 5px;"/>
+
+                                <!-- Guarantor Summary -->
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <h:outputLabel value="#{msg.get('app.mortgageSummary.content.guarantorSummary')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="guarantorSummaryTable" var="guarantorSummary" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.guarantorName')}" style="width: 450px;">
+                                                <h:outputText value="#{guarantorSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.guarantorType')}" style="width: 330px;">
+                                                <h:outputText value="#{guarantorSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.guarantorAmount')}" style="width: 150px;">
+                                                <h:outputText value="#{guarantorSummary}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageSummary.content.table.guarantorSingingDate')}" style="width: 170px;">
+                                                <h:outputText value="#{guarantorSummary}"/>
+                                            </p:column>
+
+                                            <p:column style="width: 60px;">
+                                                <!--Edit Button-->
+                                            </p:column>
+
+                                            <!--<p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{basicInfo.onEditAccount()}"
+                                                                 update=":basicInfoAccountDlgForm"
+                                                                 oncomplete="basicInfoAccountDlg.show();">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                 target="#{basicInfo.rowIndex}"/>
+                                                    <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                </p:commandButton>
+
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteAccountDlg.show()"
+                                                                 update=":frmMain:resultTableOpeningAccount"
+                                                                 process="@form">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{basicInfo.selectAccount}"/>
+                                                </p:commandButton>
+                                            </p:column>-->
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 15px;"/>
+
+                                <tr>
+                                    <td colspan="2" class="center">
+                                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
+                                                         process="@form" update=":frmMain"
+                                                         actionListener="#{mortSum.onSave()}"  binding="#{saveBtn}"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                                         actionListener="#{mortSum.onCreation()}"/>
                                     </td>
                                 </tr>
                             </table>
