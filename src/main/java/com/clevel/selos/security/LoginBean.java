@@ -51,7 +51,7 @@ public class LoginBean {
     @Inject
     SecurityAuditor securityAuditor;
 
-    private String userName;
+    private String userName = "10001";
     private String password;
     private String loginExceptionMessage;
 
