@@ -1,9 +1,9 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui" xmlns="http://java.sun.com/jsf/composite">
+        xmlns:p="http://primefaces.org/ui">
 
     <p:panel id="existingGuarantorDlgPanel" styleClass="panel-dialog">
         <h:form id="existingGuarantorDlgForm">
@@ -91,7 +91,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveGuarantor"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addGuarantorDlg}"
                                 styleClass="small"
@@ -110,10 +110,8 @@
             </table>
         </h:form>
     </p:panel>
-    <!--
-    <p:blockUI widgetVar="blockExistingGuarantorDlg" block="existingGuarantorDlgPanel" trigger=":existingGuarantorDlgForm:save">
+    <p:blockUI widgetVar="blockExistingGuarantorDlg" block="existingGuarantorDlgPanel" trigger=":existingGuarantorDlgForm:saveGuarantor">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
-    -->
 </ui:composition>

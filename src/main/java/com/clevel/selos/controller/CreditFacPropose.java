@@ -6,20 +6,24 @@ import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.NewCollateralInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
@@ -122,6 +126,9 @@ public class CreditFacPropose implements Serializable {
     private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
     private List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
     private List<MortgageType> mortgageTypeList;
+    private List<NewSubCollateralDetailView> relatedWithAllList;
+    private NewSubCollateralDetailView relatedWithSelected;
+    private List<Customer> collateralOwnerUwAllList;
 
     private List<SubCollateralType> subCollateralTypeList;
     private List<CollateralType> collateralTypeList;
@@ -183,6 +190,11 @@ public class CreditFacPropose implements Serializable {
     SpecialProgramDAO specialProgramDAO;
     @Inject
     TCGDAO tcgdao;
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
+    @Inject
+    CustomerTransform customerTransform;
+
 
     public CreditFacPropose() {}
 
@@ -207,8 +219,6 @@ public class CreditFacPropose implements Serializable {
                 log.info("newCreditFacilityView ::: {}",newCreditFacilityView.getId());
                 if (newCreditFacilityView != null) {
                     modeForDB = ModeForDB.EDIT_DB;
-                } else if (newCreditFacilityView == null) {
-                    newCreditFacilityView = new NewCreditFacilityView();
                 }
             } catch (Exception ex) {
                 log.info("Exception :: {}", ex);
@@ -219,6 +229,12 @@ public class CreditFacPropose implements Serializable {
             if (guarantorList == null) {
                 guarantorList = new ArrayList<Customer>();
                 guarantorList = creditFacProposeControl.getListOfGuarantor(workCaseId);
+            }
+
+            if(collateralOwnerUwAllList==null){
+                collateralOwnerUwAllList  = new ArrayList<Customer>();
+                collateralOwnerUwAllList  = creditFacProposeControl.getListOfCollateralOwnerUW(workCaseId);
+                log.info("collateralOwnerUwAllList size :: {}",collateralOwnerUwAllList.size());
             }
 
             if (productGroup == null) {
@@ -313,7 +329,14 @@ public class CreditFacPropose implements Serializable {
             mortgageTypeList = new ArrayList<MortgageType>();
         }
 
-        prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
+        if(relatedWithAllList == null ){
+            relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();
+        }
+
+        if(relatedWithSelected == null){
+            relatedWithSelected = new NewSubCollateralDetailView();
+        }
+
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         mortgageTypeList = mortgageTypeDAO.findAll();
@@ -332,7 +355,6 @@ public class CreditFacPropose implements Serializable {
         suggestPriceLabel = "";
         standardPriceLabel = "";
         finalPriceRate = "";
-
 
     }
 
@@ -451,18 +473,21 @@ public class CreditFacPropose implements Serializable {
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
-                log.info("onChangeCreditType :: prdProgramToCreditType :: {}",prdProgramToCreditType.getId());
-                log.info("onChangeCreditType :: newCreditFacilityView.getCreditCustomerType() :: {}", newCreditFacilityView.getCreditCustomerType());
-                log.info("onChangeCreditType :: specialProgramBasicInfo :: {}",specialProgramBasicInfo.getId());
-                log.info("onChangeCreditType :: applyTCG :: {}",applyTCG);
-                if((prdProgramToCreditType.getId()!=0) && (newCreditFacilityView.getCreditCustomerType()!=0) && (specialProgramBasicInfo.getId()!=0) && (applyTCG != 0)){
+                if((prdProgramToCreditType.getId()!=0) && (newCreditFacilityView.getCreditCustomerType() != CreditCustomerType.NOT_SELECTED.value()) && (specialProgramBasicInfo.getId()!=0) && (applyTCG != 0)){
+                    log.info("onChangeCreditType :: prdProgramToCreditType :: {}",prdProgramToCreditType.getId());
+                    log.info("onChangeCreditType :: newCreditFacilityView.getCreditCustomerType() :: {}", newCreditFacilityView.getCreditCustomerType());
+                    log.info("onChangeCreditType :: specialProgramBasicInfo :: {}",specialProgramBasicInfo.getId());
+                    log.info("onChangeCreditType :: applyTCG :: {}",applyTCG);
                     SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
-                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), specialProgram,applyTCG );
-                    log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
+                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(),specialProgram,applyTCG );
 
                     if (productFormula != null) {
+                        log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
                         newCreditDetailView.setProductCode(productFormula.getProductCode());
                         newCreditDetailView.setProjectCode(productFormula.getProjectCode());
+                    }else{
+                        newCreditDetailView.setProductCode("-");
+                        newCreditDetailView.setProjectCode("-");
                     }
                 }
             }
@@ -485,9 +510,18 @@ public class CreditFacPropose implements Serializable {
 
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
-        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
-        newCreditDetailView = new NewCreditDetailView();
-        modeForButton = ModeForButton.ADD;
+        if(newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NOT_SELECTED.value()){
+            messageHeader = "Warning !!!!";
+            message = "กรูณาระบุ Credit Customer Type";
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }else{
+            RequestContext.getCurrentInstance().execute("creditInfoDlg.show()");
+            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+            newCreditDetailView = new NewCreditDetailView();
+            modeForButton = ModeForButton.ADD;
+            onChangeRequestType();
+        }
 
     }
 
@@ -654,6 +688,7 @@ public class CreditFacPropose implements Serializable {
             log.info("use > 0 ");
             messageHeader = "เกิดข้อผิดพลาด";
             message = "มีการใช้งาน Credit Type Record นี้แล้ว";
+            messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -704,7 +739,6 @@ public class CreditFacPropose implements Serializable {
             standardPriceLabel = baseRate2.getName() + " + " + newCreditDetailView.getStandardInterest();
         }
 
-
         log.info("baseRate1 getValue :: {}", baseRate1.getValue());
         log.info("getSuggestInterest :: {}", newCreditDetailView.getSuggestInterest());
         log.info("baseRate2 getValue :: {}", baseRate2.getValue());
@@ -745,6 +779,28 @@ public class CreditFacPropose implements Serializable {
                 creditTypeDetailView.setLimit(newCreditFacilityView.getNewCreditDetailViewList().get(i).getLimit());
                 creditTypeDetailList.add(creditTypeDetailView);
             }
+        }
+
+        List<ExistingCreditDetail> existingCreditDetailList;
+        existingCreditDetailList = existingCreditDetailDAO.findAll();
+        log.info("existingCreditDetailList ::: {}",existingCreditDetailList.size());
+
+        int seq  = 0;
+        if(existingCreditDetailList.size()>0){
+            seq = newCreditFacilityView.getNewCreditDetailViewList().size()+1;
+        }
+
+        log.info("seq :: {}",seq);
+        for(ExistingCreditDetail existingCreditDetail :existingCreditDetailList){
+            creditTypeDetailView = new CreditTypeDetailView();
+            creditTypeDetailView.setSeq(seq);
+            creditTypeDetailView.setAccount(existingCreditDetail.getAccountName() + existingCreditDetail.getAccountNumber()+ existingCreditDetail.getAccountSuf()+ existingCreditDetail.getAccountstatus());
+            creditTypeDetailView.setRequestType(1);
+            creditTypeDetailView.setProductProgram(existingCreditDetail.getProductProgram());
+            creditTypeDetailView.setCreditFacility(existingCreditDetail.getCreditType());
+            creditTypeDetailView.setLimit(existingCreditDetail.getLimit());
+            creditTypeDetailList.add(creditTypeDetailView);
+            seq++;
         }
 
         return creditTypeDetailList;
@@ -924,8 +980,8 @@ public class CreditFacPropose implements Serializable {
     // for sub collateral dialog
     public void onAddCollateralOwnerUW() {
         log.info("onAddCollateralOwnerUW :: {} ", newSubCollateralDetailView.getCollateralOwnerUW());
-        newSubCollateralDetailView.getCollateralOwnerUWList().add(newSubCollateralDetailView.getCollateralOwnerUW());
-        newSubCollateralDetailView.setCollateralOwnerUW("");
+        Customer collateralOwnerUW = customerDAO.findById(newSubCollateralDetailView.getCollateralOwnerUW().getId());
+        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerUW);
     }
 
     public void onDeleteCollateralOwnerUW(int row) {
@@ -944,9 +1000,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onAddRelatedWith() {
-        log.info("onAddRelatedWith :: {} ", newSubCollateralDetailView.getRelatedWith());
-        newSubCollateralDetailView.getRelatedWithList().add(newSubCollateralDetailView.getRelatedWith());
-        newSubCollateralDetailView.setRelatedWith("");
+        log.info("relatedWithSelected ::: {}",relatedWithSelected.getId());
+        newSubCollateralDetailView.getRelatedWithList().add(relatedWithSelected);
     }
 
     public void onDeleteRelatedWith(int row) {
@@ -961,7 +1016,22 @@ public class CreditFacPropose implements Serializable {
     public void onAddSubCollateral() {
         log.info("onAddSubCollateral and rowCollHeadIndex :: {}", rowCollHeadIndex);
         newSubCollateralDetailView = new NewSubCollateralDetailView();
-        modeForSubColl = ModeForButton.ADD;
+        modeForSubColl  = ModeForButton.ADD;
+        log.info(" newCreditFacilityView.getNewCollateralInfoViewList().size ::{}", newCreditFacilityView.getNewCollateralInfoViewList().size());
+        if(newCreditFacilityView.getNewCollateralInfoViewList().size()>0){
+            for(NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()){
+                for(NewCollateralHeadDetailView newCollateralHeadDetail : newCollateralInfoView.getNewCollateralHeadDetailViewList()){
+
+                    if(newCollateralHeadDetail.getNewSubCollateralDetailViewList().size()>0){
+
+                        for(NewSubCollateralDetailView newSubCollateralDetailView : newCollateralHeadDetail.getNewSubCollateralDetailViewList()){
+                            relatedWithAllList.add(newSubCollateralDetailView);
+                        }
+                    }
+                }
+            }
+            log.info("relatedWithAllList:: {}",relatedWithAllList.size());
+        }
 
     }
 
@@ -977,7 +1047,7 @@ public class CreditFacPropose implements Serializable {
         newSubCollateralDetailView.setMortgageValue(subCollateralDetailItem.getMortgageValue());
         newSubCollateralDetailView.setCollateralOwnerUWList(subCollateralDetailItem.getCollateralOwnerUWList());
         newSubCollateralDetailView.setMortgageList(subCollateralDetailItem.getMortgageList());
-        newSubCollateralDetailView.setRelatedWithList(subCollateralDetailItem.getRelatedWithList());
+//        newSubCollateralDetailView.setRelatedWithList(subCollateralDetailItem.getRelatedWithList());
     }
 
     public void onSaveSubCollateral() {
@@ -998,7 +1068,7 @@ public class CreditFacPropose implements Serializable {
             subCollAdd.setMortgageValue(newSubCollateralDetailView.getMortgageValue());
             subCollAdd.setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
             subCollAdd.setMortgageList(newSubCollateralDetailView.getMortgageList());
-            subCollAdd.setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
+//            subCollAdd.setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().add(subCollAdd);
 
         } else if (modeForSubColl != null && modeForSubColl.equals(ModeForButton.EDIT)) {
@@ -1013,7 +1083,7 @@ public class CreditFacPropose implements Serializable {
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setMortgageValue(newSubCollateralDetailView.getMortgageValue());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setMortgageList(newSubCollateralDetailView.getMortgageList());
-            newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
+//            newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
         } else {
             log.info("onSaveSubCollateral ::: Undefined modeForButton !!");
             complete = false;
@@ -1621,6 +1691,30 @@ public class CreditFacPropose implements Serializable {
 
     public void setNewSubCollateralDetailViewList(List<NewSubCollateralDetailView> newSubCollateralDetailViewList) {
         this.newSubCollateralDetailViewList = newSubCollateralDetailViewList;
+    }
+
+    public List<NewSubCollateralDetailView> getRelatedWithAllList() {
+        return relatedWithAllList;
+    }
+
+    public void setRelatedWithAllList(List<NewSubCollateralDetailView> relatedWithAllList) {
+        this.relatedWithAllList = relatedWithAllList;
+    }
+
+    public NewSubCollateralDetailView getRelatedWithSelected() {
+        return relatedWithSelected;
+    }
+
+    public void setRelatedWithSelected(NewSubCollateralDetailView relatedWithSelected) {
+        this.relatedWithSelected = relatedWithSelected;
+    }
+
+    public List<Customer> getCollateralOwnerUwAllList() {
+        return collateralOwnerUwAllList;
+    }
+
+    public void setCollateralOwnerUwAllList(List<Customer> collateralOwnerUwAllList) {
+        this.collateralOwnerUwAllList = collateralOwnerUwAllList;
     }
 }
 

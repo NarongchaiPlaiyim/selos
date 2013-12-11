@@ -340,20 +340,20 @@
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
-                               var="String"  varStatus="a">
-                         <h:outputText value="#{String}"/><br/>
+                               var="collateralOwnerUW"  varStatus="a">
+                         <h:outputText value="#{collateralOwnerUW.nameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.mortgageList}"
-                               var="Mortgage"  varStatus="b">
-                        <h:outputText value="#{Mortgage.mortgage}"/><br/>
+                               var="mortgage"  varStatus="b">
+                        <h:outputText value="#{mortgage.mortgage}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
-                               var="String"  varStatus="c">
-                        <h:outputText value="#{String}"/><br/>
+                               var="relatedWith"  varStatus="c">
+                        <h:outputText value="#{relatedWith.titleDeed}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">

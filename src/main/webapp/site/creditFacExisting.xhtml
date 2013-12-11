@@ -230,13 +230,16 @@
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <p:spacer width="5px"/>
-                                                        </td><td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <p:spacer width="5px"/>
-                                                    </td>
+                                                        </td>
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                          <p:spacer width="5px"/>
+                                                        </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <p:spacer width="5px"/>
                                                         </td>
-
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                            <p:spacer width="5px"/>
+                                                        </td>
                                                     </tr>
                                                 </ui:repeat>
 
@@ -368,17 +371,18 @@
                                                     <p:outputLabel value="#{borrowerRetailCredit.projectCode}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.limit}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.limit}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.outstanding}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.outstanding}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.intFeePercent}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.tenor}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.tenor}" />
                                                 </p:column>
+                                                <p:column/>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
@@ -390,7 +394,7 @@
                                                                 </p:outputLabel>
                                                             </f:facet>
                                                         </p:column>
-                                                        <p:column colspan="4"/>
+                                                        <p:column colspan="5"/>
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>
@@ -450,17 +454,18 @@
                                                     <p:outputLabel value="#{borrowerRLOSCredit.projectCode}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRLOSCredit.limit}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.limit}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRLOSCredit.outstanding}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.outstanding}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.intFeePercent}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRLOSCredit.tenor}" /><br/>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.tenor}" />
                                                 </p:column>
+                                                <p:column/>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
@@ -472,7 +477,7 @@
                                                                 </p:outputLabel>
                                                             </f:facet>
                                                         </p:column>
-                                                        <p:column colspan="4"/>
+                                                        <p:column colspan="5"/>
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>
@@ -723,9 +728,13 @@
                                                                     </td>
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <p:spacer width="5px"/>
-                                                                    </td><td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                    <p:spacer width="5px"/>
-                                                                </td>
+                                                                    </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td>
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                        <p:spacer width="5px"/>
+                                                                    </td>
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <p:spacer width="5px"/>
                                                                     </td>
@@ -747,7 +756,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><br/></td>
+                                        <td><p:spacer width="5px" /> </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -800,17 +809,18 @@
                                                     <p:outputLabel value="#{relatedRetailCredit.projectCode}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.limit}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.limit}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.outstanding}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.outstanding}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.intFeePercent}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.tenor}" /><br/>
+                                                    <p:outputLabel value="#{relatedRetailCredit.tenor}" />
                                                 </p:column>
+                                                <p:column/>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
@@ -822,7 +832,7 @@
                                                                 </p:outputLabel>
                                                             </f:facet>
                                                         </p:column>
-                                                        <p:column colspan="4"/>
+                                                        <p:column colspan="5"/>
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>
@@ -879,17 +889,18 @@
                                                     <p:outputLabel value="#{relatedRLOSCredit.projectCode}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRLOSCredit.limit}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.limit}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRLOSCredit.outstanding}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.outstanding}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.intFeePercent}" />
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRLOSCredit.tenor}" /><br/>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.tenor}" />
                                                 </p:column>
+                                                <p:column/>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
                                                         <p:column colspan="5" style="text-align:right" footerText=" #{msg.get('app.label.total')}"/>
@@ -901,7 +912,7 @@
                                                                 </p:outputLabel>
                                                             </f:facet>
                                                         </p:column>
-                                                        <p:column colspan="4"/>
+                                                        <p:column colspan="5"/>
                                                     </p:row>
                                                 </p:columnGroup>
                                             </p:dataTable>
@@ -1040,7 +1051,7 @@
                                                         </h:outputText>
                                                     </td>
                                                 </tr>
-                                            </table>Total
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1074,7 +1085,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="#{creditFacExisting.borrowerExistingCollateralDetailViewList}" var="borrowerCollateral" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.existingCreditView.borrowerCollateralList}" var="borrowerCollateral" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column style="width:30px;"/>
@@ -1095,7 +1106,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                   <ui:repeat value="#{borrowerCollateral.creditFacilityList}" var="creditFacility">
+                                                   <ui:repeat value="#{borrowerCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                        <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                        <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
                                                        <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
@@ -1181,7 +1192,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="#{creditFacExisting.relatedExistingCollateralDetailViewList}" var="relatedCollateral" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.existingCreditView.relatedCollateralList}" var="relatedCollateral" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column style="width:30px;"/>
@@ -1202,7 +1213,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <ui:repeat value="#{relatedCollateral.creditFacilityList}" var="creditFacility">
+                                                    <ui:repeat value="#{relatedCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                         <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
@@ -1297,7 +1308,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <p:dataTable value="#{creditFacExisting.borrowerGuarantorDetailViewList}" var="existingGuarantor" rowIndexVar="rowIndex">
+                                            <p:dataTable value="#{creditFacExisting.existingCreditView.borrowerGuarantorList}" var="existingGuarantor" rowIndexVar="rowIndex">
                                                 <p:columnGroup type="header">
                                                     <p:row>
                                                         <p:column style="width:30px;"/>
@@ -1318,7 +1329,7 @@
                                                     <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <ui:repeat value="#{existingGuarantor.creditFacilityList}" var="creditFacility">
+                                                    <ui:repeat value="#{existingGuarantor.existingCreditTypeDetailViewList}" var="creditFacility">
                                                         <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
@@ -1429,19 +1440,23 @@
             <ui:param name="update" value=":frmMain"/>
         </ui:include>
 
-        <p:dialog id="existingCreditDialog" header="existing Credit Information" widgetVar="existingCreditDlg" height="550">
+        <p:dialog id="existingCreditDialog" header="existing Credit Information" widgetVar="existingCreditDlg" height="550"
+                  modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCreditInfoDialog.xhtml"/>
         </p:dialog>
 
-        <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg">
+        <p:dialog id="existingCollateraBorrowerlDialog" header="Existing Collateral Borrower Information" widgetVar="existingCollateralBorrowerDlg"
+                  modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCollateralBorrowerDialog.xhtml" />
         </p:dialog>
 
-        <p:dialog id="existingCollateraRelatedlDialog" header="Existing Collateral Related Information" widgetVar="existingCollateralRelatedDlg">
+        <p:dialog id="existingCollateraRelatedlDialog" header="Existing Collateral Related Information" widgetVar="existingCollateralRelatedDlg"
+                  modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingCollateralRelatedDialog.xhtml" />
         </p:dialog>
 
-        <p:dialog id="existingGuarantorDialog" header="existing Collateral Information" widgetVar="existingGuarantorDlg">
+        <p:dialog id="existingGuarantorDialog" header="existing Collateral Information" widgetVar="existingGuarantorDlg"
+                  modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" >
             <ui:include src="dialog/existingGuarantorDialog.xhtml" />
         </p:dialog>
 
