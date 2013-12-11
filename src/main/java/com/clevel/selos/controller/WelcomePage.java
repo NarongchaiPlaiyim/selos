@@ -10,6 +10,7 @@ import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.brms.service.EndPointImp;
+import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
@@ -21,6 +22,8 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
+import com.clevel.selos.model.view.CollateralDetailResultView;
+import com.clevel.selos.model.view.CollateralDetailView;
 import com.clevel.selos.report.ReportService;
 import com.clevel.selos.report.SimpleReport;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -29,6 +32,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.business.CallateralBizTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -94,6 +98,8 @@ public class WelcomePage implements Serializable {
     RLOSInterface rlos;
     @Inject
     DWHInterface dwh;
+    @Inject
+    COMSInterface coms;
 
     @Inject
     EndPointImp endPointImp;
@@ -111,6 +117,9 @@ public class WelcomePage implements Serializable {
 
     @Inject
     RMTitleDAO rmTitleDAO;
+
+    @Inject
+    CallateralBizTransform callateralBizTransform;
 
 //    @Inject
 //    @Config(name = "system.name")
@@ -205,6 +214,19 @@ public class WelcomePage implements Serializable {
             Date fromDate = Util.strToDateFormat("082013", "MMyyyy");
             bankStatementResult = dwh.getBankStatementData("BDM001", "3042582720", fromDate, 12);
             log.debug("BankStatement result : {}", bankStatementResult);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testCOMS() {
+        try {
+            AppraisalDataResult appraisalDataResult = new AppraisalDataResult();
+            appraisalDataResult = coms.getAppraisalData("BDM001","PR5401-036-00001");
+            log.debug("appraisalDataResult result : {}", appraisalDataResult);
+            CollateralDetailView collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
+            log.debug("collateralDetailView result : {}", collateralDetailView);
         } catch (Exception e) {
             log.error("", e);
         }

@@ -3,7 +3,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui" xmlns="http://java.sun.com/jsf/composite">
 
     <p:panel id="existingGuarantorDlgPanel" styleClass="panel-dialog">
         <h:form id="existingGuarantorDlgForm">
@@ -55,6 +55,8 @@
                                               headerText="Credit Facility"/>
                                     <p:column style="width:200px;"
                                               headerText="Limit"/>
+                                    <p:column style="width:200px;"
+                                              headerText="Guarantee Amt"/>
                                 </p:row>
                             </p:columnGroup>
                             <p:column styleClass="center">
@@ -75,6 +77,13 @@
                             </p:column>
                             <p:column styleClass="center">
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />
+                            </p:column>
+                            <p:column styleClass="center">
+                                <facet name="">
+                                    <p:inputText  />
+
+                                </facet>
+
                             </p:column>
                         </p:dataTable>
                     </td>

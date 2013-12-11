@@ -7,44 +7,57 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class SubCollateralData implements Serializable {
-    private String subcollTypeCaption;
-    private String collateralType;
-    private String address;
-    private String landOffice;
+    private String collId;
+    private String headCollId;
+    private long runningNumber;
+    private String headCollType;
+    private String subCollType;
     private String titleDeed;
+    private String collateralOwnerId; //TMB_CUSTID
     private String collateralOwner;
     private BigDecimal appraisalValue;
+    private String usage;
+    private String typeOfUsage;
+    private String address;
 
-    public String getSubcollTypeCaption() {
-        return subcollTypeCaption;
+    public String getCollId() {
+        return collId;
     }
 
-    public void setSubcollTypeCaption(String subcollTypeCaption) {
-        this.subcollTypeCaption = subcollTypeCaption;
+    public void setCollId(String collId) {
+        this.collId = collId;
     }
 
-    public String getCollateralType() {
-        return collateralType;
+    public String getHeadCollId() {
+        return headCollId;
     }
 
-    public void setCollateralType(String collateralType) {
-        this.collateralType = collateralType;
+    public void setHeadCollId(String headCollId) {
+        this.headCollId = headCollId;
     }
 
-    public String getAddress() {
-        return address;
+    public long getRunningNumber() {
+        return runningNumber;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setRunningNumber(long runningNumber) {
+        this.runningNumber = runningNumber;
     }
 
-    public String getLandOffice() {
-        return landOffice;
+    public String getHeadCollType() {
+        return headCollType;
     }
 
-    public void setLandOffice(String landOffice) {
-        this.landOffice = landOffice;
+    public void setHeadCollType(String headCollType) {
+        this.headCollType = headCollType;
+    }
+
+    public String getSubCollType() {
+        return subCollType;
+    }
+
+    public void setSubCollType(String subCollType) {
+        this.subCollType = subCollType;
     }
 
     public String getTitleDeed() {
@@ -53,6 +66,14 @@ public class SubCollateralData implements Serializable {
 
     public void setTitleDeed(String titleDeed) {
         this.titleDeed = titleDeed;
+    }
+
+    public String getCollateralOwnerId() {
+        return collateralOwnerId;
+    }
+
+    public void setCollateralOwnerId(String collateralOwnerId) {
+        this.collateralOwnerId = collateralOwnerId;
     }
 
     public String getCollateralOwner() {
@@ -71,16 +92,45 @@ public class SubCollateralData implements Serializable {
         this.appraisalValue = appraisalValue;
     }
 
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("subcollTypeCaption", subcollTypeCaption)
-                .append("collateralType", collateralType)
-                .append("address", address)
-                .append("landOffice", landOffice)
+                .append("collId", collId)
+                .append("headCollId", headCollId)
+                .append("runningNumber", runningNumber)
+                .append("headCollType", headCollType)
+                .append("subCollType", subCollType)
                 .append("titleDeed", titleDeed)
+                .append("collateralOwnerId", collateralOwnerId)
                 .append("collateralOwner", collateralOwner)
                 .append("appraisalValue", appraisalValue)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
+                .append("address", address)
                 .toString();
     }
 }

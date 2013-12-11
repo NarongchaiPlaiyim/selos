@@ -9,8 +9,11 @@ import com.clevel.selos.util.Util;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.component.fileupload.FileUpload;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
@@ -20,6 +23,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,15 +54,24 @@ public class IsaUpload implements Serializable {
 
 
     private List<UserUploadView> userUploadViews;
-
+    private String downloadFilePart;
+    private StreamedContent file;
     private final static String UPLOAD_FOLDER = "_userUpload";
     public final static String RESULT_FILENAME = "UPLOAD_RESULT_";
-    private final static String PATH_FILE = "C:\\Users\\sahawat\\Desktop\\test";
+    private final static String PATH_FILE = "C:\\Users\\sahawat\\Desktop\\FileUploadTest";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
 
     public void initForm() {
         log.debug("initForm()");
+
+        if(PATH_FILE==""||PATH_FILE.length()==0){
+            log.debug("PATH_FILE IS NULL");
+        }else{
+            if(!new File(PATH_FILE).isDirectory()){
+                new File(PATH_FILE).mkdir();
+            }
+        }
 
         FilenameFilter dirFilter = new FilenameFilter() {
 
@@ -102,7 +115,8 @@ public class IsaUpload implements Serializable {
                         for (int subidx = 0; subidx < subFiles.length; subidx++) {
                             System.out.println("nb "+subFiles[subidx].getName());
                             if (subFiles[subidx].getName().startsWith(IsaUpload.RESULT_FILENAME)) {
-                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
+//                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
+                                userUploadView.setResultFile(subFiles[subidx].getName());
 //                                System.out.println("1 "+userUploadView.getResultFile());
                             }
 //                            System.out.println("2 " + userUploadView.getResultFile());
@@ -122,13 +136,13 @@ public class IsaUpload implements Serializable {
         }
 //        model.addAttribute("userUploadViews", userUploadViews);
         System.out.println("n " + userUploadViews.size());
-        if (isaUploadService.isFileProcessing()) {
-        }
-//            model.addAttribute("isUploadWorking", "true");
-        else {
-            System.out.println();
-        }
-//            model.addAttribute("isUploadWorking", "false");
+//        if (isaUploadService.isFileProcessing()) {
+//        }
+////            model.addAttribute("isUploadWorking", "true");
+//        else {
+//            System.out.println();
+//        }
+////            model.addAttribute("isUploadWorking", "false");
 
         RequestContext.getCurrentInstance().update(":okl");
 
@@ -180,7 +194,7 @@ public class IsaUpload implements Serializable {
 
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
-                isaUploadService.processUserUploadFiles(PATH_FILE, fileDir.listFiles()[0].getName());
+                isaUploadService.processingUploadFile(PATH_FILE, fileDir.listFiles()[0].getName());
 
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -192,6 +206,24 @@ public class IsaUpload implements Serializable {
         }
     }
 
+    public StreamedContent getFile() {
+        log.debug("downloadFile()");
+
+        String filename="C:\\Users\\sahawat\\Desktop\\FileUploadTest\\"+downloadFilePart;
+        File file1 =new File(filename);
+        System.out.println(filename);
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(file1);
+            file = new DefaultStreamedContent(stream,"text/csv",downloadFilePart);
+        } catch (FileNotFoundException e) {
+
+        }
+
+        return file;
+    }
+
+
     public List<UserUploadView> getUserUploadViews() {
         return userUploadViews;
     }
@@ -199,4 +231,14 @@ public class IsaUpload implements Serializable {
     public void setUserUploadViews(List<UserUploadView> userUploadViews) {
         this.userUploadViews = userUploadViews;
     }
+
+    public String getDownloadFilePart() {
+        return downloadFilePart;
+    }
+
+    public void setDownloadFilePart(String downloadFilePart) {
+        this.downloadFilePart = downloadFilePart;
+    }
+
+
 }

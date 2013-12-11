@@ -288,7 +288,7 @@
                     id="btnAddSubCollateralInfo"
                     value="#{msg.get('app.addButton')}"
                     styleClass="smaller"
-                    process="@this"
+                    process="@form"
                     action="#{creditFacPropose.onAddSubCollateral}"
                     update=":subCollateralDlgForm"
                     oncomplete="subCollateralInfoDlg.show();">
@@ -346,8 +346,8 @@
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.mortgageList}"
-                               var="String"  varStatus="b">
-                        <h:outputText value="#{String}"/><br/>
+                               var="Mortgage"  varStatus="b">
+                        <h:outputText value="#{Mortgage.mortgage}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
@@ -410,6 +410,7 @@
     <td colspan="4" style="text-align: center">
         <p:commandButton id="btnSaveCollateral"
                          styleClass="small"
+                         binding="#{btnSaveCollateral}"
                          value="#{msg.get('app.button.ok')}"
                          action="#{creditFacPropose.onSaveProposeCollInfo}"
                          process=":collateralDlgForm"

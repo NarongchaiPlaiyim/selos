@@ -32,7 +32,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.titleDeed}"/>
+        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.titleDeed}" required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -40,7 +40,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.address}" style="width:300px;"/>
+        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.address}" style="width:300px;" required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.landOffice}"/>
+        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.landOffice}" required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -56,7 +56,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerAAD}"/>
+        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerAAD}"  required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -247,11 +247,12 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.appraisalValue}"
-                     style="text-align: right;">
+                     style="text-align: right;"
+                     required="#{not empty param[addSubCollDlg.clientId]}">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="14"  />
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -262,7 +263,8 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.mortgageValue}"
-                     style="text-align: right;">
+                     style="text-align: right;"
+                     required="#{not empty param[addSubCollDlg.clientId]}">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
@@ -280,7 +282,7 @@
                 styleClass="small"
                 actionListener="#{creditFacPropose.onSaveSubCollateral()}"
                 process=":subCollateralDlgForm"
-                update=":collateralDlgForm"
+                update=":collateralDlgForm,:frmMain"
                 oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
 
         <p:commandButton

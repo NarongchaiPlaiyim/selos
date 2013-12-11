@@ -147,7 +147,7 @@
             <tr>
                 <td>
                     <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing" value="#{decision.selectedAppProposeCredit.reduceFlag}"
-                                             disabled="#{decision.modeEdit}}">
+                                             disabled="#{decision.modeEditCreditCredit}}">
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel for="dlgCheckBoxReducePricing" value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
@@ -155,7 +155,7 @@
                 <td></td>
                 <td colspan="2">
                     <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront" value="#{decision.selectedAppProposeCredit.reduceFrontEndFlag}"
-                                             disabled="#{decision.modeEdit}">
+                                             disabled="#{decision.modeEditCredit}">
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel for="dlgCheckBoxReduceFront" value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
@@ -203,7 +203,7 @@
                                 <p:selectOneMenu id="dlgSelectSuggestPrice"
                                                  value="#{decision.selectedAppProposeCredit.suggestBasePrice.id}"
                                                  style="width: 50px;"
-                                                 disabled="#{decision.modeEdit}">
+                                                 disabled="#{decision.modeEditCredit}">
                                     <f:selectItems value="#{decision.baseRateList}"
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
@@ -217,7 +217,7 @@
                                 <p:inputText id="dlgSuggestInterest" value="#{decision.selectedAppProposeCredit.suggestInterest}"
                                              styleClass="right"
                                              style="width:50px;"
-                                             disabled="#{decision.modeEdit}">
+                                             disabled="#{decision.modeEditCredit}">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                     <p:ajax event="blur"
                                             listener="#{decision.onChangeSuggestValue}"
@@ -233,7 +233,7 @@
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.final')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:commandButton id="dlgAddTierBtn" value="#{msg.get('app.button.add')}" readonly="#{decision.modeEdit}"
+                    <p:commandButton id="dlgAddTierBtn" value="#{msg.get('app.button.add')}" readonly="#{decision.modeEditCredit}"
                                      actionListener="#{decision.onAddTierInfo()}" process="@form"
                                      styleClass="smaller">
                     </p:commandButton>
@@ -245,7 +245,7 @@
                     <p:dataTable id="dlgDtCreditTier"
                                  var="item" value="#{decision.selectedAppProposeCredit.newCreditTierDetailViewList}"
                                  paginator="false" rowKey="#{item.newCreditTierDetailView}" rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px!important;">
+                                 style="width: 100%; font-size: 12px !important;">
 
                         <p:columnGroup type="header">
                             <p:row>
@@ -323,7 +323,7 @@
                 <td colspan="3">
                     <p:inputText id="dlgFrontEndFee" value="#{decision.selectedAppProposeCredit.frontEndFee}"
                                  styleClass="right"
-                                 disabled="#{decision.modeEdit}">
+                                 disabled="#{decision.modeEditCredit}">
                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                     </p:inputText>
                 </td>
@@ -336,7 +336,7 @@
                     <p:selectOneMenu id="dlgSelectLoanPurpose"
                                      value=""
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     disabled="#{decision.modeEdit}">
+                                     disabled="#{decision.modeEditCredit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <!--   <f:selectItems value="#{}"
                                           var=""
@@ -352,7 +352,7 @@
                 <td colspan="3">
                     <p:inputTextarea id="dlgRemark" value="#{decision.selectedAppProposeCredit.remark}"
                                      rows="2" cols="95"
-                                     disabled="#{decision.modeEdit}"/>
+                                     disabled="#{decision.modeEditCredit}"/>
                 </td>
             </tr>
             <tr>
@@ -364,7 +364,7 @@
                                      value="#{decision.selectedAppProposeCredit.disbursement.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="true"
-                                     disabled="#{decision.modeEdit}">
+                                     disabled="#{decision.modeEditCredit}">
                         <f:selectItems value="#{decision.disbursementList}"
                                        var="disbursementItem"
                                        itemLabel="#{disbursementItem.disbursement}"
@@ -378,7 +378,7 @@
                 <td>
                     <p:inputText id="dlgHoldLimitAmt" value="#{decision.selectedAppProposeCredit.holdLimitAmount}"
                                  styleClass="right"
-                                 disabled="#{decision.modeEdit}">
+                                 disabled="#{decision.modeEditCredit}">
                         <f:convertNumber pattern="#,##0.00" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                     </p:inputText>
                 </td>

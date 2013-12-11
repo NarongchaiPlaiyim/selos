@@ -32,13 +32,15 @@ public class IsaUploadService extends BusinessControl {
     private final static String COMMA_DELIMITTED = ",";
     public final static String RESULT_FILENAME = "UPLOAD_RESULT_";
 
-    static FileProcessor worker = null;
+//    static FileProcessor worker = null;
 
-    protected class FileProcessor implements Runnable {
+//    protected class FileProcessore {
 
         
-        public void run() {
+        public void processingUploadFile(String folder,String fileName) {
             try {
+                this.folder=folder;
+                processFileName=fileName;
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddmmsss");
                 Date now = Calendar.getInstance().getTime();
@@ -152,7 +154,7 @@ public class IsaUploadService extends BusinessControl {
                 log.error("Upload User, Unexpected:", err);
 
             } finally {
-                worker = null;
+//                worker = null;
             }
         }
 
@@ -187,7 +189,7 @@ public class IsaUploadService extends BusinessControl {
 //            String params[] = new String[] {command, userid, username, userbu, usergroup, userrole, userImportRole, userActive, create_by};
             try {
 //                todo
-                result = stpExecutor.addUserFromFile("{CALL USERPROFILE_PACKAGE.pUserprofileUpload(?,?,?,?,?,?,?,?,?,?)}", stringParams);
+                result = stpExecutor.addUserFromFile(stringParams);
             }catch (Exception e) {
                 log.error("Exception", e);
                 throw new Exception(e.getMessage());
@@ -229,21 +231,21 @@ public class IsaUploadService extends BusinessControl {
 
             return tokens;
         }
-    }
+//    }
 
-    public static boolean isFileProcessing() {
-        if (worker != null)
-            return true;
-        return false;
-    }
-
-    public void processUserUploadFiles(String folder, String fileName) {
-        processFileName = fileName;
-        this.folder = folder;
-        FileProcessor fileProcessor = new FileProcessor();
-        this.worker = fileProcessor;
-        fileProcessor.run();
-    }
+//    public static boolean isFileProcessing() {
+//        if (worker != null)
+//            return true;
+//        return false;
+//    }
+//
+//    public void processUserUploadFiles(String folder, String fileName) {
+//        processFileName = fileName;
+//        this.folder = folder;
+//        FileProcessor fileProcessor = new FileProcessor();
+//        this.worker = fileProcessor;
+//        fileProcessor.run();
+//    }
 
     private enum UploadResult {
         FAILED("Failed", "FAILED"),

@@ -152,7 +152,7 @@
         </td>
         <td colspan="3">
             <p:dataTable id="resultTier" var="creditTier"
-                         value="#{creditFacExisting.newCreditTierDetailViewList}"
+                         value="#{creditFacExisting.existingCreditTierDetailViewList}"
                          rowKey="#{creditTier.no}" rowIndexVar="rowIndex" style="width: 100%">
                 <p:columnGroup type="header">
                     <p:row>
@@ -277,7 +277,7 @@
 
             <p:commandButton type="button" styleClass="small"
                              value="#{msg.get('app.button.cancel')}"
-                             onclick="existingCreditInfoDlg.hide()"
+                             onclick="existingCreditDlg.hide()"
                              />
         </td>
     </tr>
