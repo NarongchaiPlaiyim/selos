@@ -77,8 +77,13 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public List<Customer> getListOfGuarantor(long workCaseId) {
-        log.info("workCaseId :: {}", workCaseId);
+        log.info("workCaseId getListOfGuarantor:: {}", workCaseId);
         return customerDAO.findGuarantorByWorkCaseId(workCaseId);
+    }
+
+    public List<Customer> getListOfCollateralOwnerUW(long workCaseId) {
+        log.info("workCaseId findCollateralOwnerUWByWorkCaseId :: {}", workCaseId);
+        return customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
     }
 
     public BasicInfo getBasicByWorkCaseId(long workCaseId) {

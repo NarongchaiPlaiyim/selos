@@ -78,15 +78,15 @@ public class ExistingCreditTierDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "new_credit_detail_id")
-    private NewCreditDetail newCreditDetail;
+    @JoinColumn(name = "existing_credit_detail_id")
+    private ExistingCreditDetail existingCreditDetail;
 
-    public NewCreditDetail getNewCreditDetail() {
-        return newCreditDetail;
+    public ExistingCreditDetail getExistingCreditDetail() {
+        return existingCreditDetail;
     }
 
-    public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
-        this.newCreditDetail = newCreditDetail;
+    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+        this.existingCreditDetail = existingCreditDetail;
     }
 
     public long getId() {

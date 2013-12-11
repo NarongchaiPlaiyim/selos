@@ -1,14 +1,14 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.view.openaccount.AccountNameView;
-//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
+
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenAccountView {
+public class AccountInfoDetailView {
     private int idOfAccountType;
     private String productType;
     private int requestAccountType;
@@ -17,10 +17,10 @@ public class OpenAccountView {
     private String term;
 
     private List<AccountNameView> accountNameViewList;
-//    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList; //todo : change this , AS ( Comment OpenAccountCreditTypeView )
-    private List<OpenAccountPurposeView> openAccountPurposeViewList;
+    private List<AccountInfoCreditTypeView> accountInfoCreditTypeViews;
+    private List<AccountInfoPurposeView> accountInfoPurposeViews;
 
-    public OpenAccountView(){
+    public AccountInfoDetailView(){
         reset();
     }
 
@@ -30,8 +30,7 @@ public class OpenAccountView {
         this.idOfAccountType = 0;
         this.productType = "";
         this.term = "";
-        this.accountNameViewList = new ArrayList<AccountNameView>();
-//        this.openAccountCreditTypeViewList = new ArrayList<OpenAccountCreditTypeView>();
+
     }
 
     public int getIdOfAccountType() {
@@ -90,20 +89,20 @@ public class OpenAccountView {
         this.accountNameViewList = accountNameViewList;
     }
 
-//    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
-//        return openAccountCreditTypeViewList;
-//    }
-//
-//    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
-//        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
-//    }
-
-    public List<OpenAccountPurposeView> getOpenAccountPurposeViewList() {
-        return openAccountPurposeViewList;
+    public List<AccountInfoCreditTypeView> getAccountInfoCreditTypeViews() {
+        return accountInfoCreditTypeViews;
     }
 
-    public void setOpenAccountPurposeViewList(List<OpenAccountPurposeView> openAccountPurposeViewList) {
-        this.openAccountPurposeViewList = openAccountPurposeViewList;
+    public void setAccountInfoCreditTypeViews(List<AccountInfoCreditTypeView> accountInfoCreditTypeViews) {
+        this.accountInfoCreditTypeViews = accountInfoCreditTypeViews;
+    }
+
+    public List<AccountInfoPurposeView> getAccountInfoPurposeViews() {
+        return accountInfoPurposeViews;
+    }
+
+    public void setAccountInfoPurposeViews(List<AccountInfoPurposeView> accountInfoPurposeViews) {
+        this.accountInfoPurposeViews = accountInfoPurposeViews;
     }
 
     @Override

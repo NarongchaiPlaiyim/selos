@@ -5,7 +5,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <p:panel id="existingCollateraRelatedlDlgPanel" styleClass="panel-dialog">
+    <p:panel id="existingCollateralRelatedDlgPanel" styleClass="panel-dialog">
         <h:form id="existingCollateralRelatedDlgForm">
             <table class="content_form">
                 <tr>
@@ -147,7 +147,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveRelatedCollateral"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 binding="#{saveRelatedCollateral}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"
@@ -165,10 +165,9 @@
             </table>
         </h:form>
     </p:panel>
-
-    <!--<p:blockUI widgetVar="blockExistingSplitLineDlgForm" block="existingCollateralDlgPanel" trigger="existingCollateralDlgForm:save">
+    <p:blockUI widgetVar="blockExistingCollateralRelatedDlgFrom" block="existingCollateralRelatedDlgPanel" trigger="existingCollateralRelatedDlgForm:saveRelatedCollateral">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>  -->
+    </p:blockUI>
 
 </ui:composition>

@@ -1,29 +1,32 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_exist_condition_detail")
-public class ExistingConditionDetail implements Serializable {
+@Table(name = "wrk_exist_split_line_detail")
+public class ExistingSplitLineDetail  implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_EXT_COND_DETAIL_ID", sequenceName = "SEQ_WRK_EXT_COND_DETAIL_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXT_COND_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_EXT_SPLIT_LINE_DET_ID", sequenceName = "SEQ_WRK_EXT_SPLIT_LINE_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXT_SPLIT_LINE_DET_ID")
     private long id;
 
     @Column(name = "no")
-    private int no ;
+    private int no;
 
-    @Column(name = "loan_type")
-    private String loanType ;
+    @OneToOne
+    @JoinColumn(name = "product_program_id")
 
-    @Column(name = "condition_desc")
-    private String conditionDesc;
+    private ProductProgram productProgram;
+    @Column(name = "limit")
+    private BigDecimal limit;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -32,6 +35,7 @@ public class ExistingConditionDetail implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
+
 
     @OneToOne
     @JoinColumn(name = "create_user_id")
@@ -42,8 +46,8 @@ public class ExistingConditionDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "existing_credit_summary_id")
-    private ExistingCreditSummary existingCreditSummary;
+    @JoinColumn(name = "existing_credit_detail_id")
+    private ExistingCreditDetail existingCreditDetail;
 
     public long getId() {
         return id;
@@ -61,20 +65,20 @@ public class ExistingConditionDetail implements Serializable {
         this.no = no;
     }
 
-    public String getLoanType() {
-        return loanType;
+    public ProductProgram getProductProgram() {
+        return productProgram;
     }
 
-    public void setLoanType(String loanType) {
-        this.loanType = loanType;
+    public void setProductProgram(ProductProgram productProgram) {
+        this.productProgram = productProgram;
     }
 
-    public String getConditionDesc() {
-        return conditionDesc;
+    public BigDecimal getLimit() {
+        return limit;
     }
 
-    public void setConditionDesc(String conditionDesc) {
-        this.conditionDesc = conditionDesc;
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
     public Date getCreateDate() {
@@ -109,12 +113,12 @@ public class ExistingConditionDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary() {
-        return existingCreditSummary;
+    public ExistingCreditDetail getExistingCreditDetail() {
+        return existingCreditDetail;
     }
 
-    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
-        this.existingCreditSummary = existingCreditSummary;
+    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+        this.existingCreditDetail = existingCreditDetail;
     }
 
     @Override
@@ -122,13 +126,13 @@ public class ExistingConditionDetail implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
-                .append("loanType", loanType)
-                .append("conditionDesc", conditionDesc)
+                .append("productProgram", productProgram)
+                .append("limit", limit)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("existingCreditSummary", existingCreditSummary)
+                .append("existingCreditDetail",existingCreditDetail)
                 .toString();
     }
 }

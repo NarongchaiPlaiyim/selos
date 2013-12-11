@@ -55,7 +55,7 @@ public class NewCreditDetailView implements Serializable {
     }
 
     public void reset(){
-        this.requestType=0;
+        this.requestType=1;
         this.isRefinance=1;
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
