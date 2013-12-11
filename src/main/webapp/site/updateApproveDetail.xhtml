@@ -284,18 +284,20 @@
                                 <tr>
                                     <td style="min-width: 30px; width: 30px; max-width: 30px;"></td>
                                     <td>
-                                        <p:dataTable id="tagConditionApprovalTB" value="" var="itemTCA" rowIndexVar="rowIndex">
+                                        <p:dataTable id="tagConditionApprovalTB" value="#{updateApproveDetail.followUpConditionViews}" var="itemCondition" rowIndexVar="rowIndex">
                                             <p:column styleClass="center" style="min-width: 30px; width: 30px; max-width: 30px;">
                                                 <p:outputLabel value="#{rowIndex+1}"/>
                                             </p:column>
-                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.condition')}">
-                                                <p:outputLabel value="" />
+                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.condition')}"  style="min-width: 700px; width: 700px; max-width: 700px;">
+                                                <p:outputLabel value="#{itemCondition.condition}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.detail')}">
-                                                <p:outputLabel value="" />
+                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.detail')}"  style="min-width: 400px; width: 400px; max-width: 400px;">
+                                                <p:outputLabel value="#{itemCondition.detailOfFollowUp}" />
                                             </p:column>
-                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.date')}">
-                                                <p:outputLabel value="" />
+                                            <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.date')}"  style="min-width: 70px; width: 70px; max-width: 70px;">
+                                                <p:outputLabel value="#{itemCondition.dateOfFollowUp}">
+                                                    <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
+                                                </p:outputLabel>
                                             </p:column>
                                         </p:dataTable>
                                     </td>
@@ -314,7 +316,7 @@
                                 <tr>
                                     <td style="min-width: 30px; width: 30px; max-width: 30px;"/>
                                     <td>
-                                        <p:dataTable id="accountDepositTB" value="#{updateApproveDetail}" var="itemAccount"  rowIndexVar="rowIndex">
+                                        <p:dataTable id="accountDepositTB" value="#{updateApproveDetail.accountInfoDetailViews}" var="itemAccount"  rowIndexVar="rowIndex">
                                             <p:column headerText="" style="min-width: 30px; width: 30px; max-width: 30px; vertical-align: text-top">
                                                 <p:outputLabel value="#{rowIndex+1}" />
                                             </p:column>
@@ -328,10 +330,9 @@
                                             </p:column>
                                             <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.creditType')}"  style="min-width: 500px; width: 500px; max-width: 500px; vertical-align: text-top;">
 
-                                                    <ui:repeat value="#{itemAccount.openAccountCreditTypeViewList}" var="creditType" >
+                                                    <ui:repeat value="#{itemAccount.accountInfoCreditTypeViews}" var="creditType" >
                                                         <p:panelGrid columns="3" >
                                                         <p:outputLabel  value="#{creditType.creditFacility}"/>
-
                                                         <p:outputLabel value="#{creditType.productProgram}"/>
                                                         <p:outputLabel value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
@@ -367,7 +368,7 @@
 
                                             </p:column>
                                             <p:column headerText="#{msg.get('app.updateApproveDetail.table.tr.th.purpose')}"  style="min-width: 200px; width: 200px; max-width: 200px; vertical-align: text-top;">
-                                              <ui:repeat value="#{itemAccount.openAccountPurposeViewList}" var="purpose">
+                                              <ui:repeat value="#{itemAccount.accountInfoCreditTypeViews}" var="purpose">
                                                 <p:outputLabel value="#{purpose.name}"/><br/>
                                               </ui:repeat>
                                             </p:column>
