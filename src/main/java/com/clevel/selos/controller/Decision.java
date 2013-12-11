@@ -21,7 +21,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.DecisionTransform;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
@@ -581,9 +580,9 @@ public class Decision implements Serializable {
         subCollateral1.setLandOffice("Ladpraow");
         subCollateral1.setTitleDeed("12, 1234");
         subCollateral1.setCollateralOwnerAAD("Mr.A Example");
-        subCollateral1.setCollateralOwnerUWList(collateralOwnerUWList);
+//        subCollateral1.setCollateralOwnerUWList(collateralOwnerUWList);
         subCollateral1.setMortgageList(mortgageTypeList);
-        subCollateral1.setRelatedWithList(relatedWithList);
+//        subCollateral1.setRelatedWithList(relatedWithList);
         subCollateral1.setAppraisalValue(BigDecimal.valueOf(2000000.00));
         subCollateral1.setMortgageValue(BigDecimal.valueOf(3200000.00));
 
@@ -593,9 +592,9 @@ public class Decision implements Serializable {
         subCollateral2.setLandOffice("Ladpraow 17");
         subCollateral2.setTitleDeed("15, 888");
         subCollateral2.setCollateralOwnerAAD("Mr.C Example");
-        subCollateral2.setCollateralOwnerUWList(collateralOwnerUWList);
+//        subCollateral2.setCollateralOwnerUWList(collateralOwnerUWList);
         subCollateral2.setMortgageList(mortgageTypeList);
-        subCollateral2.setRelatedWithList(relatedWithList);
+//        subCollateral2.setRelatedWithList(relatedWithList);
         subCollateral2.setAppraisalValue(BigDecimal.valueOf(2457000.00));
         subCollateral2.setMortgageValue(BigDecimal.valueOf(520000.00));
 
