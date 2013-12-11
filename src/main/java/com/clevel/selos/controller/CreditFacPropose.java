@@ -127,7 +127,7 @@ public class CreditFacPropose implements Serializable {
     private List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
     private List<MortgageType> mortgageTypeList;
     private List<NewSubCollateralDetailView> relatedWithAllList;
-    private NewSubCollateralDetailView relatedWithSelected;
+    private long relatedWithSelected;
     private List<Customer> collateralOwnerUwAllList;
 
     private List<SubCollateralType> subCollateralTypeList;
@@ -333,9 +333,6 @@ public class CreditFacPropose implements Serializable {
             relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();
         }
 
-        if(relatedWithSelected == null){
-            relatedWithSelected = new NewSubCollateralDetailView();
-        }
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
@@ -1000,8 +997,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onAddRelatedWith() {
-        log.info("relatedWithSelected ::: {}",relatedWithSelected.getId());
-        newSubCollateralDetailView.getRelatedWithList().add(relatedWithSelected);
+        log.info("relatedWithSelected ::: {}",relatedWithSelected);
+//        newSubCollateralDetailView.getRelatedWithList().add(relatedWithSelected);
     }
 
     public void onDeleteRelatedWith(int row) {
@@ -1018,11 +1015,13 @@ public class CreditFacPropose implements Serializable {
         newSubCollateralDetailView = new NewSubCollateralDetailView();
         modeForSubColl  = ModeForButton.ADD;
         log.info(" newCreditFacilityView.getNewCollateralInfoViewList().size ::{}", newCreditFacilityView.getNewCollateralInfoViewList().size());
+
         if(newCreditFacilityView.getNewCollateralInfoViewList().size()>0){
             for(NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()){
                 for(NewCollateralHeadDetailView newCollateralHeadDetail : newCollateralInfoView.getNewCollateralHeadDetailViewList()){
 
                     if(newCollateralHeadDetail.getNewSubCollateralDetailViewList().size()>0){
+                        log.info("newCollateralHeadDetail . getId:: {}",newCollateralHeadDetail.getId());
 
                         for(NewSubCollateralDetailView newSubCollateralDetailView : newCollateralHeadDetail.getNewSubCollateralDetailViewList()){
                             relatedWithAllList.add(newSubCollateralDetailView);
@@ -1030,7 +1029,7 @@ public class CreditFacPropose implements Serializable {
                     }
                 }
             }
-            log.info("relatedWithAllList:: {}",relatedWithAllList.size());
+
         }
 
     }
@@ -1701,11 +1700,11 @@ public class CreditFacPropose implements Serializable {
         this.relatedWithAllList = relatedWithAllList;
     }
 
-    public NewSubCollateralDetailView getRelatedWithSelected() {
+    public long getRelatedWithSelected() {
         return relatedWithSelected;
     }
 
-    public void setRelatedWithSelected(NewSubCollateralDetailView relatedWithSelected) {
+    public void setRelatedWithSelected(long relatedWithSelected) {
         this.relatedWithSelected = relatedWithSelected;
     }
 

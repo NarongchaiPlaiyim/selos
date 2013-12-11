@@ -38,7 +38,6 @@ public class NewSubCollateralDetailView {
     }
 
     public void reset() {
-        this.id = 0;
         this.address    = "";
         this.titleDeed  = "";
         this.landOffice = "";

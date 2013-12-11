@@ -216,7 +216,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWithSelected.id}"
+                                     value="#{creditFacPropose.relatedWithSelected}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- relatedWith -" itemValue=""/>
@@ -231,8 +231,8 @@
                             id="addRelatedWithButton"
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
-                            actionListener="#{creditFacPropose.onAddRelatedWith()}"
-                            process=":subCollateralDlgForm:dlgRelatedWith"
+                            action="#{creditFacPropose.onAddRelatedWith()}"
+                            process="@form"
                             update=":subCollateralDlgForm">
                     </p:commandButton>
                 </td>
