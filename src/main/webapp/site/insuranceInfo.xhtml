@@ -155,13 +155,13 @@
                                         </ui:repeat>
                                         <tr>
                                             <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.insurance.total')}"/>
+                                                <p: value="#{msg.get('app.insurance.total')}"/>
                                             </td>
 
                                             <td colspan="3">
-                                                <p:inputText value="#{insuranceInfo.total}" styleClass="right" id="total">
+                                                <p:outputLabel value="#{insuranceInfo.total}" styleClass="right" id="total">
                                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
-                                                </p:inputText>
+                                                </p:outputLabel>
                                             </td>
                                         </tr>
                                         <tr>

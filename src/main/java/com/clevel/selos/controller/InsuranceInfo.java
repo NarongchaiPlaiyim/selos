@@ -34,7 +34,6 @@ public class InsuranceInfo implements Serializable {
     private List<InsuranceInfoView> insuranceInfoViewList;
     private InsuranceInfoView insuranceInfoView;
 
-
     //New / New + Change
     private int approvedType;
 
