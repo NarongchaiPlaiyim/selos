@@ -11,6 +11,7 @@ public class AccountInfoCreditTypeView {
     private String name;
     private BigDecimal limit;
 
+
     public AccountInfoCreditTypeView(){}
 
     public long getId() {
