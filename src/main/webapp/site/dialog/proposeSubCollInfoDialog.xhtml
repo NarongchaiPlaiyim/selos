@@ -207,8 +207,6 @@
         </p:dataTable>
     </td>
 </tr>
-<!--
-
 <tr>
     <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
@@ -218,7 +216,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWith.id}"
+                                     value="#{creditFacPropose.relatedWithSelected.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- relatedWith -" itemValue=""/>
@@ -234,7 +232,7 @@
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
                             actionListener="#{creditFacPropose.onAddRelatedWith()}"
-                            process="@this"
+                            process=":subCollateralDlgForm:dlgRelatedWith"
                             update=":subCollateralDlgForm">
                     </p:commandButton>
                 </td>
@@ -280,7 +278,6 @@
         </p:dataTable>
     </td>
 </tr>
--->
 
 <tr>
     <td class="title" style="width: 150px;">

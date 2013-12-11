@@ -127,7 +127,7 @@ public class CreditFacPropose implements Serializable {
     private List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
     private List<MortgageType> mortgageTypeList;
     private List<NewSubCollateralDetailView> relatedWithAllList;
-    private NewSubCollateralDetailView relatedWith;
+    private NewSubCollateralDetailView relatedWithSelected;
     private List<Customer> collateralOwnerUwAllList;
 
     private List<SubCollateralType> subCollateralTypeList;
@@ -195,6 +195,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     CustomerTransform customerTransform;
 
+
     public CreditFacPropose() {}
 
 
@@ -218,8 +219,6 @@ public class CreditFacPropose implements Serializable {
                 log.info("newCreditFacilityView ::: {}",newCreditFacilityView.getId());
                 if (newCreditFacilityView != null) {
                     modeForDB = ModeForDB.EDIT_DB;
-                } else if (newCreditFacilityView == null) {
-                    newCreditFacilityView = new NewCreditFacilityView();
                 }
             } catch (Exception ex) {
                 log.info("Exception :: {}", ex);
@@ -332,6 +331,10 @@ public class CreditFacPropose implements Serializable {
 
         if(relatedWithAllList == null ){
             relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();
+        }
+
+        if(relatedWithSelected == null){
+            relatedWithSelected = new NewSubCollateralDetailView();
         }
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
@@ -736,7 +739,6 @@ public class CreditFacPropose implements Serializable {
             standardPriceLabel = baseRate2.getName() + " + " + newCreditDetailView.getStandardInterest();
         }
 
-
         log.info("baseRate1 getValue :: {}", baseRate1.getValue());
         log.info("getSuggestInterest :: {}", newCreditDetailView.getSuggestInterest());
         log.info("baseRate2 getValue :: {}", baseRate2.getValue());
@@ -998,8 +1000,8 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onAddRelatedWith() {
-        log.info("relatedWith ::: {}",relatedWith.getId());
-        newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
+        log.info("relatedWithSelected ::: {}",relatedWithSelected.getId());
+        newSubCollateralDetailView.getRelatedWithList().add(relatedWithSelected);
     }
 
     public void onDeleteRelatedWith(int row) {
@@ -1699,12 +1701,12 @@ public class CreditFacPropose implements Serializable {
         this.relatedWithAllList = relatedWithAllList;
     }
 
-    public NewSubCollateralDetailView getRelatedWith() {
-        return relatedWith;
+    public NewSubCollateralDetailView getRelatedWithSelected() {
+        return relatedWithSelected;
     }
 
-    public void setRelatedWith(NewSubCollateralDetailView relatedWith) {
-        this.relatedWith = relatedWith;
+    public void setRelatedWithSelected(NewSubCollateralDetailView relatedWithSelected) {
+        this.relatedWithSelected = relatedWithSelected;
     }
 
     public List<Customer> getCollateralOwnerUwAllList() {
