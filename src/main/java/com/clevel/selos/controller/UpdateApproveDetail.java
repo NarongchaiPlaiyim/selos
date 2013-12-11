@@ -1,9 +1,9 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.AccountInfoDetailView;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.OpenAccountPurposeView;
-import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.openaccount.AccountNameView;
 //import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView; //todo : change this , AS ( Comment OpenAccountCreditTypeView )
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -55,7 +55,7 @@ public class UpdateApproveDetail {
 
     // content //
     private List<NewCreditDetailView> approveCreditDetailViews;
-    private List<OpenAccountView> openAccountViews;
+    private List<AccountInfoDetailView> openAccountViews;
 
     public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
@@ -84,12 +84,12 @@ public class UpdateApproveDetail {
     @PostConstruct
     public void onCreation(){
         approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
-        openAccountViews = new ArrayList<OpenAccountView>();
+        openAccountViews = new ArrayList<AccountInfoDetailView>();
 
         try{
-        List<OpenAccountView> openAccountViewList = new ArrayList<OpenAccountView>();
+        List<AccountInfoDetailView> openAccountViewList = new ArrayList<AccountInfoDetailView>();
 
-        OpenAccountView openAccountView = new OpenAccountView();
+        AccountInfoDetailView openAccountView = new AccountInfoDetailView();
             List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
             for(int i =0; i<10; i++){
                 AccountNameView accountNameView = new AccountNameView();
@@ -97,7 +97,7 @@ public class UpdateApproveDetail {
                 accountNameViews.add(accountNameView);
             }
 
-            openAccountView.setAccountNameViewList(accountNameViews);
+            //openAccountView.setAccountNameViewList(accountNameViews);
             openAccountView.setAccountNumber("1234567890");
 
             //todo : change this , AS ( Comment OpenAccountCreditTypeView )
@@ -116,7 +116,7 @@ public class UpdateApproveDetail {
                 openAccountPurposeView.setName("AAA");
                 openAccountPurposeViews.add(openAccountPurposeView);
             }
-            openAccountView.setOpenAccountPurposeViewList(openAccountPurposeViews);
+            //openAccountView.setOpenAccountPurposeViewList(openAccountPurposeViews);
 //            openAccountView.setOpenAccountCreditTypeViewList(openAccountCreditTypeViews);
             openAccountViewList.add(openAccountView);
             openAccountViews = openAccountViewList;
@@ -174,11 +174,11 @@ public class UpdateApproveDetail {
         this.approveCreditDetailViews = approveCreditDetailViews;
     }
 
-    public List<OpenAccountView> getOpenAccountViews() {
+    public List<AccountInfoDetailView> getOpenAccountViews() {
         return openAccountViews;
     }
 
-    public void setOpenAccountViews(List<OpenAccountView> openAccountViews) {
+    public void setOpenAccountViews(List<AccountInfoDetailView> openAccountViews) {
         this.openAccountViews = openAccountViews;
     }
 }
