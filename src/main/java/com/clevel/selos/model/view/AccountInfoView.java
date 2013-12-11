@@ -3,15 +3,21 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AccountInfoView {
+public class AccountInfoView implements Serializable {
     private long id;
     private int approvedType;
-    private List<AccountInfoDetailView> accountInfoDetailViews;
+    private List<AccountInfoDetailView> accountInfoDetailViewList;
 
     public AccountInfoView(){
+        init();
+    }
 
+    private void init(){
+        accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
     }
 
     public long getId() {
@@ -30,18 +36,20 @@ public class AccountInfoView {
         this.approvedType = approvedType;
     }
 
-    public List<AccountInfoDetailView> getAccountInfoDetailViews() {
-        return accountInfoDetailViews;
+    public List<AccountInfoDetailView> getAccountInfoDetailViewList() {
+        return accountInfoDetailViewList;
     }
 
-    public void setAccountInfoDetailViews(List<AccountInfoDetailView> accountInfoDetailViews) {
-        this.accountInfoDetailViews = accountInfoDetailViews;
+    public void setAccountInfoDetailViewList(List<AccountInfoDetailView> accountInfoDetailViewList) {
+        this.accountInfoDetailViewList = accountInfoDetailViewList;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountInfoDetailViews", accountInfoDetailViews)
+                .append("id", id)
+                .append("approvedType", approvedType)
+                .append("accountInfoDetailViewList", accountInfoDetailViewList)
                 .toString();
     }
 }
