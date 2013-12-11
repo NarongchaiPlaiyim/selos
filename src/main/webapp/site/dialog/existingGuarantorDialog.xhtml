@@ -42,8 +42,8 @@
                     </td>
                     <td class="center">
                         <p:dataTable id="resultCreditCollateralBorrower" var="creditTypeBorrower"
-                                     value="#{creditFacExisting.borrowerExistingCreditDetailViewList}"
-                                     rowKey="#{creditTypeBorrower.no}" rowIndexVar="rowIndex" style="width: 100%">
+                                     value="#{creditFacExisting.existingGuarantorDetailView.existingCreditTypeDetailViewList}"
+                                     rowKey="#{creditTypeBorrower.no}" rowIndexVar="rowIndexVar" style="width: 100%">
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column style="width:50px;"/>
@@ -69,21 +69,20 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existProductProgram.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.productProgram}" />
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existCreditType.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.creditFacility}" />
                             </p:column>
                             <p:column styleClass="center">
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />
                             </p:column>
-                            <p:column styleClass="center">
-                                <facet name="">
-                                    <p:inputText  />
-
-                                </facet>
-
+                            <p:column styleClass="right">
+                                <p:inputText value="#{creditTypeBorrower.guaranteeAmount}" style="text-align:right">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    <p:ajax event="blur" update="@this"/>
+                                </p:inputText>
                             </p:column>
                         </p:dataTable>
                     </td>
