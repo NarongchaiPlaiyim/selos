@@ -927,7 +927,7 @@ public class CreditFacPropose implements Serializable {
                 log.info("creditTypeDetail.isNoFlag()  :: {}", creditTypeDetail.isNoFlag());
                 if (creditTypeDetail.isNoFlag()) {
                     proposeCollateralInfoAdd.getCreditTypeDetailViewList().add(creditTypeDetail);
-                    seqTemp = creditTypeDetailView.getSeq();
+                    seqTemp = creditTypeDetail.getSeq();
                     hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                 }
             }
