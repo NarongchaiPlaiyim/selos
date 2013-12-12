@@ -35,6 +35,9 @@ public class DBExecute implements Serializable {
     @Inject
     @Config(name = "interface.coms.oracle.password")
     String comsPassword;
+    @Inject
+    @Config(name = "interface.coms.oracle.schema")
+    String schema;
 
     @Inject
     DBContext dbContext;
@@ -46,68 +49,6 @@ public class DBExecute implements Serializable {
     Connection conn = null;
     transient ResultSet rs = null;
 
-    private String SQL_COLLATERAL_JOBLEVEL =  "SELECT " +
-                                                "APPR_PRICE.JOB_NO as jobNo, " +
-                                                "APPR_PRICE.CUR_APPR_DATE as curApprDate, " +
-                                                "APPR_PRICE.IS_MATI as isMATI, " +
-                                                "APPR_PRICE.DECISION as decision " +
-                                            "FROM APPR_PRICE " +
-                                            "WHERE APPR_PRICE.JOB_NO = ?";
-
-    private String SQL_COLLATERAL_DECISIONDETAIL =  "SELECT " +
-                                                        "APPR_COND.COND_NO as condNo, " +
-                                                        "APPR_COND.COND_REMARK as remark, " +
-                                                        "APPR_COND.COND_TYPE as condType " +
-                                                    "FROM APPR_COND " +
-                                                    "WHERE (APPR_COND.COND_TYPE = 'REA' OR APPR_COND.COND_TYPE = 'CON') " +
-                                                        "AND APPR_COND.JOB_NO = ?";
-
-    private String SQL_COLLATERAL_HEAD =    "SELECT " +
-                                                "APPR_PRICE_TR.COL_ID as colId, " +
-                                                "APPR_PRICE_TR.COL_NO as colNo, " +
-                                                "APPR_PRICE_TR.CRM_LOCATION as crmLocation, " +
-                                                "APPR_PRICE_TR.ADD_DISTRICT as addDistrict, " +
-                                                "APPR_PRICE_TR.ADD_CITY as addCity, " +
-                                                "APPR_PRICE_TR.CITY_EXPAND as cityExpand, " +
-                                                "APPR_PRICE_TR.PROV_EXPAND as provExpand, " +
-                                                "SET_COUNTRY.CODE as countryCode, "+
-                                                "SET_COUNTRY.NAME_THAI as countryNameThai, " +
-                                                "CITY.CITY_ID as cityId, " +
-                                                "CITY.CITY as city, " +
-                                                "CITY.PROVINCE_ID as cityProvinceId, " +
-                                                "PROVINCE.PROV_ID as provId, " +
-                                                "PROVINCE.PROV_NAME as provName, " +
-                                                "APPR_PRICE_TR.C_PRICE as cPrice, " +
-                                                "APPR_PRICE_TR.MATI_PRICE as matiPrice, " +
-                                                "APPR_PRICE_TR.COL_TYPE as colType, " +
-                                                "APPR_PRICE_TR.COL_SUB_TYPE as colSubType " +
-                                                "FROM APPR_PRICE_TR " +
-                                            "LEFT JOIN SET_COUNTRY ON APPR_PRICE_TR.CRM_LOCATION = SET_COUNTRY.CODE " +
-                                            "LEFT JOIN CITY ON APPR_PRICE_TR.ADD_CITY = CITY.CITY_ID " +
-                                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                                            "WHERE APPR_PRICE_TR.JOB_NO = ?";
-
-    private String SQL_COLLATERAL_SUB =     "SELECT " +
-                                                "APPR_PRICE_TR_ONE.COL_ID as colId, " +
-                                                "APPR_PRICE_TR_ONE.HEAD_COL_ID as headColId, " +
-                                                "APPR_PRICE_TR_ONE.LINE_NO as lineNo, " +
-                                                "APPR_PRICE_TR_ONE.COL_TYPE as colType, " +
-                                                "APPR_PRICE_TR_ONE.COL_SUB_TYPE as colSubType, " +
-                                                "APPR_PRICE_TR_ONE.OWN_DOC_NO as ownDocNo, " +
-                                                "APPR_PRICE_TR_OWNER.CUS_ID as cusId, " +
-                                                "PRENAME.PRE_NAME as preName, " +
-                                                "ONL_PERSON.NAME as name, " +
-                                                "ONL_PERSON.SIR_NAME as sirName, " +
-                                                "APPR_PRICE_TR_ONE.C_PRICE as cPrice, " +
-                                                "APPR_PRICE_TR_ONE.MATI_PRICE as matiPrice, " +
-                                                "APPR_PRICE_TR_ONE.ONL_TYPE as onlType " +
-                                            "FROM APPR_PRICE_TR_ONE " +
-                                            "LEFT JOIN APPR_PRICE_TR_OWNER ON APPR_PRICE_TR_ONE.HEAD_COL_ID = APPR_PRICE_TR_OWNER.HEAD_COL_ID AND APPR_PRICE_TR_ONE.COL_ID = APPR_PRICE_TR_OWNER.ONE_COL_ID " +
-                                            "LEFT JOIN ONL_PERSON ON APPR_PRICE_TR_OWNER.CUS_ID = ONL_PERSON.CUS_ID " +
-                                            "LEFT JOIN PRENAME ON ONL_PERSON.PRE_NAME = PRENAME.PRE_ID " +
-                                            "WHERE APPR_PRICE_TR_ONE.HEAD_COL_ID = ? " +
-                                                "AND APPR_PRICE_TR_ONE.JOB_NO = ?";
-
     @Inject
     public DBExecute() {
 
@@ -116,6 +57,24 @@ public class DBExecute implements Serializable {
     public CollateralJobLevel getCollateralJobLevel(String jobNo){
         log.debug("getCollateralJobLevel jobNo: {}",jobNo);
         CollateralJobLevel collateralJobLevel = null;
+        String SQL_COLLATERAL_JOBLEVEL =    "SELECT " +
+                                                "APPR_PRICE.JOB_NO as jobNo, " +
+                                                "APPR_PRICE.CUR_APPR_DATE as curApprDate, " +
+                                                "APPR_PRICE.IS_MATI as isMATI, " +
+                                                "APPR_PRICE.DECISION as decision " +
+                                            "FROM APPR_PRICE " +
+                                            "WHERE APPR_PRICE.JOB_NO = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_COLLATERAL_JOBLEVEL =   "SELECT " +
+                                            "A.JOB_NO as jobNo, " +
+                                            "A.CUR_APPR_DATE as curApprDate, " +
+                                            "A.IS_MATI as isMATI, " +
+                                            "A.DECISION as decision " +
+                                        "FROM "+schema+".APPR_PRICE A " +
+                                        "WHERE A.JOB_NO = ?";
+        }
+
         try{
             conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
@@ -152,6 +111,24 @@ public class DBExecute implements Serializable {
     public CollateralDecisionDetail getCollateralDecisionDetail(String jobNo){
         log.debug("geCollateralDecisionDetail jobNo: {}",jobNo);
         CollateralDecisionDetail collateralDecisionDetail = null;
+        String SQL_COLLATERAL_DECISIONDETAIL =  "SELECT " +
+                                                    "APPR_COND.COND_NO as condNo, " +
+                                                    "APPR_COND.COND_REMARK as remark, " +
+                                                    "APPR_COND.COND_TYPE as condType " +
+                                                "FROM APPR_COND " +
+                                                "WHERE (APPR_COND.COND_TYPE = 'REA' OR APPR_COND.COND_TYPE = 'CON') " +
+                                                "AND APPR_COND.JOB_NO = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_COLLATERAL_DECISIONDETAIL =     "SELECT " +
+                                                    "A.COND_NO as condNo, " +
+                                                    "A.COND_REMARK as remark, " +
+                                                    "A.COND_TYPE as condType " +
+                                                "FROM "+schema+".APPR_COND A " +
+                                                "WHERE (A.COND_TYPE = 'REA' OR A.COND_TYPE = 'CON') " +
+                                                "AND A.JOB_NO = ?";
+        }
+
         try{
             conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
@@ -226,6 +203,59 @@ public class DBExecute implements Serializable {
     public List<HeadCollateral> getHeadCollateral(String jobNo){
         log.debug("getHeadCollateral jobNo: {}",jobNo);
         List<HeadCollateral> headCollateralList = new ArrayList<HeadCollateral>();
+
+        String SQL_COLLATERAL_HEAD =    "SELECT " +
+                                            "APPR_PRICE_TR.COL_ID as colId, " +
+                                            "APPR_PRICE_TR.COL_NO as colNo, " +
+                                            "APPR_PRICE_TR.CRM_LOCATION as crmLocation, " +
+                                            "APPR_PRICE_TR.ADD_DISTRICT as addDistrict, " +
+                                            "APPR_PRICE_TR.ADD_CITY as addCity, " +
+                                            "APPR_PRICE_TR.CITY_EXPAND as cityExpand, " +
+                                            "APPR_PRICE_TR.PROV_EXPAND as provExpand, " +
+                                            "SET_COUNTRY.CODE as countryCode, "+
+                                            "SET_COUNTRY.NAME_THAI as countryNameThai, " +
+                                            "CITY.CITY_ID as cityId, " +
+                                            "CITY.CITY as city, " +
+                                            "CITY.PROVINCE_ID as cityProvinceId, " +
+                                            "PROVINCE.PROV_ID as provId, " +
+                                            "PROVINCE.PROV_NAME as provName, " +
+                                            "APPR_PRICE_TR.C_PRICE as cPrice, " +
+                                            "APPR_PRICE_TR.MATI_PRICE as matiPrice, " +
+                                            "APPR_PRICE_TR.COL_TYPE as colType, " +
+                                            "APPR_PRICE_TR.COL_SUB_TYPE as colSubType " +
+                                        "FROM APPR_PRICE_TR " +
+                                        "LEFT JOIN SET_COUNTRY ON APPR_PRICE_TR.CRM_LOCATION = SET_COUNTRY.CODE " +
+                                        "LEFT JOIN CITY ON APPR_PRICE_TR.ADD_CITY = CITY.CITY_ID " +
+                                        "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                                        "WHERE APPR_PRICE_TR.JOB_NO = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_COLLATERAL_HEAD =   "SELECT " +
+                                        "A.COL_ID as colId, " +
+                                        "A.COL_NO as colNo, " +
+                                        "A.CRM_LOCATION as crmLocation, " +
+                                        "A.ADD_DISTRICT as addDistrict, " +
+                                        "A.ADD_CITY as addCity, " +
+                                        "A.CITY_EXPAND as cityExpand, " +
+                                        "A.PROV_EXPAND as provExpand, " +
+                                        "B.CODE as countryCode, "+
+                                        "B.NAME_THAI as countryNameThai, " +
+                                        "C.CITY_ID as cityId, " +
+                                        "C.CITY as city, " +
+                                        "C.PROVINCE_ID as cityProvinceId, " +
+                                        "D.PROV_ID as provId, " +
+                                        "D.PROV_NAME as provName, " +
+                                        "A.C_PRICE as cPrice, " +
+                                        "A.MATI_PRICE as matiPrice, " +
+                                        "A.COL_TYPE as colType, " +
+                                        "A.COL_SUB_TYPE as colSubType " +
+                                    "FROM "+schema+".APPR_PRICE_TR A " +
+                                    "LEFT JOIN "+schema+".SET_COUNTRY B ON A.CRM_LOCATION = B.CODE " +
+                                    "LEFT JOIN "+schema+".CITY C ON A.ADD_CITY = C.CITY_ID " +
+                                    "LEFT JOIN "+schema+".PROVINCE D ON C.PROVINCE_ID = D.PROV_ID " +
+                                    "WHERE A.JOB_NO = ?";
+        }
+
         try{
             conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
@@ -277,6 +307,51 @@ public class DBExecute implements Serializable {
     public List<SubCollateral> getSubCollateral(String jobNo, String headColId){
         log.debug("getSubCollateral jobNo: {}, headColId: {}",jobNo, headColId);
         List<SubCollateral> subCollateralList = new ArrayList<SubCollateral>();
+
+        String SQL_COLLATERAL_SUB = "SELECT " +
+                                        "APPR_PRICE_TR_ONE.COL_ID as colId, " +
+                                        "APPR_PRICE_TR_ONE.HEAD_COL_ID as headColId, " +
+                                        "APPR_PRICE_TR_ONE.LINE_NO as lineNo, " +
+                                        "APPR_PRICE_TR_ONE.COL_TYPE as colType, " +
+                                        "APPR_PRICE_TR_ONE.COL_SUB_TYPE as colSubType, " +
+                                        "APPR_PRICE_TR_ONE.OWN_DOC_NO as ownDocNo, " +
+                                        "APPR_PRICE_TR_OWNER.CUS_ID as cusId, " +
+                                        "PRENAME.PRE_NAME as preName, " +
+                                        "ONL_PERSON.NAME as name, " +
+                                        "ONL_PERSON.SIR_NAME as sirName, " +
+                                        "APPR_PRICE_TR_ONE.C_PRICE as cPrice, " +
+                                        "APPR_PRICE_TR_ONE.MATI_PRICE as matiPrice, " +
+                                        "APPR_PRICE_TR_ONE.ONL_TYPE as onlType " +
+                                    "FROM APPR_PRICE_TR_ONE " +
+                                    "LEFT JOIN APPR_PRICE_TR_OWNER ON APPR_PRICE_TR_ONE.HEAD_COL_ID = APPR_PRICE_TR_OWNER.HEAD_COL_ID AND APPR_PRICE_TR_ONE.COL_ID = APPR_PRICE_TR_OWNER.ONE_COL_ID " +
+                                    "LEFT JOIN ONL_PERSON ON APPR_PRICE_TR_OWNER.CUS_ID = ONL_PERSON.CUS_ID " +
+                                    "LEFT JOIN PRENAME ON ONL_PERSON.PRE_NAME = PRENAME.PRE_ID " +
+                                    "WHERE APPR_PRICE_TR_ONE.HEAD_COL_ID = ? " +
+                                    "AND APPR_PRICE_TR_ONE.JOB_NO = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_COLLATERAL_SUB =    "SELECT " +
+                                        "A.COL_ID as colId, " +
+                                        "A.HEAD_COL_ID as headColId, " +
+                                        "A.LINE_NO as lineNo, " +
+                                        "A.COL_TYPE as colType, " +
+                                        "A.COL_SUB_TYPE as colSubType, " +
+                                        "A.OWN_DOC_NO as ownDocNo, " +
+                                        "B.CUS_ID as cusId, " +
+                                        "D.PRE_NAME as preName, " +
+                                        "C.NAME as name, " +
+                                        "C.SIR_NAME as sirName, " +
+                                        "A.C_PRICE as cPrice, " +
+                                        "A.MATI_PRICE as matiPrice, " +
+                                        "A.ONL_TYPE as onlType " +
+                                    "FROM "+schema+".APPR_PRICE_TR_ONE A " +
+                                    "LEFT JOIN "+schema+".APPR_PRICE_TR_OWNER B ON A.HEAD_COL_ID = B.HEAD_COL_ID AND A.COL_ID = B.ONE_COL_ID " +
+                                    "LEFT JOIN "+schema+".ONL_PERSON C ON B.CUS_ID = C.CUS_ID " +
+                                    "LEFT JOIN "+schema+".PRENAME D ON C.PRE_NAME = D.PRE_ID " +
+                                    "WHERE A.HEAD_COL_ID = ? " +
+                                    "AND A.JOB_NO = ?";
+        }
+
         try{
             conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
