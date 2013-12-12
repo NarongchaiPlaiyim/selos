@@ -816,7 +816,8 @@ public class CreditFacPropose implements Serializable {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
         modeForButton = ModeForButton.ADD;
         newCollateralInfoView = new NewCollateralInfoView();
-        newCollateralInfoView.setCreditTypeDetailViewList(findCreditFacility());
+//        newCollateralInfoView.setCreditTypeDetailViewList(findCreditFacility());
+        newCollateralInfoView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
         newCollateralInfoView.getNewCollateralHeadDetailViewList().add(new NewCollateralHeadDetailView());
 
     }
@@ -841,7 +842,8 @@ public class CreditFacPropose implements Serializable {
         newCollateralInfoView.setNewCollateralHeadDetailViewList(selectCollateralDetailView.getNewCollateralHeadDetailViewList());
 
         int tempSeq = 0;
-        creditTypeDetailList = findCreditFacility();  //all creditType that add this time
+//        creditTypeDetailList = findCreditFacility();  //all creditType that add this time
+        creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());
         newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailList);
 
         for (int i = 0; i < selectCollateralDetailView.getCreditTypeDetailViewList().size(); i++) {
@@ -1113,8 +1115,8 @@ public class CreditFacPropose implements Serializable {
     public void onAddGuarantorInfo() {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
-        newGuarantorDetailView.setCreditTypeDetailViewList(findCreditFacility());
-
+//        newGuarantorDetailView.setCreditTypeDetailViewList(findCreditFacility());
+        newGuarantorDetailView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
     }
 
     public void onEditGuarantorInfo() {
@@ -1126,7 +1128,8 @@ public class CreditFacPropose implements Serializable {
         if (newGuarantorDetailViewItem != null) {
             newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
-            creditTypeDetailList = findCreditFacility();  //all creditType that add this time
+//            creditTypeDetailList = findCreditFacility();  //all creditType that add this time
+            creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());  //all creditType that add this time
             newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
 
             for (int i = 0; i < newGuarantorDetailViewItem.getCreditTypeDetailViewList().size(); i++) {

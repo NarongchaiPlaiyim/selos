@@ -1,20 +1,22 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.businesscontrol.DecisionControl;
-import com.clevel.selos.dao.master.BaseRateDAO;
-import com.clevel.selos.dao.master.CountryDAO;
-import com.clevel.selos.dao.master.CreditRequestTypeDAO;
-import com.clevel.selos.dao.master.DisbursementDAO;
+import com.clevel.selos.businesscontrol.TCGInfoControl;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.DecisionDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -23,6 +25,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.DecisionTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.ValidationUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -57,6 +60,12 @@ public class Decision implements Serializable {
     //Business logic
     @Inject
     DecisionControl decisionControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
+    @Inject
+    BasicInfoControl basicInfoControl;
+    @Inject
+    TCGInfoControl tcgInfoControl;
 
     //DAO
     @Inject
@@ -75,6 +84,14 @@ public class Decision implements Serializable {
     DisbursementDAO disbursementDAO;
     @Inject
     CustomerDAO customerDAO;
+    @Inject
+    ProductProgramDAO productProgramDAO;
+    @Inject
+    CreditTypeDAO creditTypeDAO;
+    @Inject
+    SpecialProgramDAO specialProgramDAO;
+    @Inject
+    ProductFormulaDAO productFormulaDAO;
 
     //Transform
     @Inject
@@ -83,8 +100,6 @@ public class Decision implements Serializable {
     //Session
     private long workCaseId;
     private long workCasePrescreenId;
-    private long stepId;
-    private String userId;
 
     private DecisionView decisionView;
     private FollowUpConditionView followUpConditionView;
@@ -93,6 +108,20 @@ public class Decision implements Serializable {
     private int creditCustomerType;
     private CreditRequestType creditRequestType;
     private Country country;
+    private ProductGroup productGroup;
+
+    private BasicInfoView basicInfoView;
+    private TCGView tcgView;
+    private SpecialProgram specialProgramBasicInfo;
+    private int applyTCG;
+
+    private BigDecimal suggestPrice;
+    private String suggestPriceLabel;
+    private BigDecimal standardPrice;
+    private String standardPriceLabel;
+    private BaseRate finalBaseRate;
+    private BigDecimal finalInterest;
+    private String finalPriceRate;
 
     // View Selected for Add/Edit/Delete
     private NewCreditDetailView selectedAppProposeCredit;
@@ -111,6 +140,11 @@ public class Decision implements Serializable {
     // Propose Guarantor Dialog
     private List<Customer> guarantorList;
 
+    //Message Dialog
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
+
     // Mode
     enum ModeForButton {ADD, EDIT}
     private ModeForButton modeForButton;
@@ -123,16 +157,9 @@ public class Decision implements Serializable {
 
     private void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2l);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
-
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
             roleUW = decisionControl.isRoleUW();
         } else {
             //TODO return to inbox
@@ -155,10 +182,10 @@ public class Decision implements Serializable {
         baseRateList = baseRateDAO.findAll();
         disbursementList = disbursementDAO.findAll();
         // Propose Guarantor Dialog
-        guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+        guarantorList = creditFacProposeControl.getListOfGuarantor(workCaseId);
     }
 
-    private void initSelectedView() {
+    private void initSelectedApproveCredit() {
         selectedAppProposeCredit = new NewCreditDetailView();
         selectedAppProposeCredit.setProductProgram(new ProductProgram());
         selectedAppProposeCredit.setCreditType(new CreditType());
@@ -174,7 +201,6 @@ public class Decision implements Serializable {
         } else {
             selectedAppProposeCredit.setDisbursement(new Disbursement());
         }
-
     }
 
     private void setDummyData() {
@@ -646,13 +672,29 @@ public class Decision implements Serializable {
 
     @PostConstruct
     public void onCreation() {
+        preRender();
+
         decisionView = decisionTransform.getDecisionView(decisionDAO.findByWorkCaseId(workCaseId));
         if (decisionView == null || decisionView.getId() == 0) {
             decisionView = new DecisionView();
         }
+
         initSelectItemsList();
-        initSelectedView();
-        setDummyData();
+        initSelectedApproveCredit();
+
+        selectedAppProposeCollateral = new NewCollateralInfoView();
+        selectedAppProposeGuarantor = new NewGuarantorDetailView();
+
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+        if (basicInfoView != null) {
+            productGroup = basicInfoView.getProductGroup();
+            specialProgramBasicInfo = basicInfoView.getSpecialProgram();
+        }
+
+        tcgView  = tcgInfoControl.getTcgView(workCaseId);
+        if(tcgView != null){
+            applyTCG = tcgView.getTCG();
+        }
 
         // Retrieve Pricing/Fee
         creditCustomerType = RadioValue.NOT_SELECTED.value();
@@ -663,21 +705,8 @@ public class Decision implements Serializable {
         approvalHistory = new ApprovalHistory();
         approvalHistory.setAction("Approve CA");
         approvalHistory.setApprover(decisionControl.getApprover());
-    }
 
-    public void onAddAppProposeCredit() {
-        log.debug("onAddAppProposeCredit()");
-        selectedAppProposeCredit = new NewCreditDetailView();
-        initSelectedView();
-        modeEditCredit = false;
-        modeForButton = ModeForButton.ADD;
-    }
-
-    public void onAddAppProposeGuarantor() {
-        log.debug("onAddAppProposeGuarantor()");
-        selectedAppProposeGuarantor = new NewGuarantorDetailView();
-        modeEditGuarantor = false;
-        modeForButton = ModeForButton.ADD;
+        setDummyData();
     }
 
     public void onAddFollowUpCondition() {
@@ -744,20 +773,133 @@ public class Decision implements Serializable {
     }
 
     // ---------- Propose Credit Dialog ---------- //
-    public void onChangeRequestType() {
+    public void onAddAppProposeCredit() {
+        log.debug("onAddAppProposeCredit()");
+        if(CreditCustomerType.NOT_SELECTED.value() == creditCustomerType){
+            messageHeader = "Warning !!!!";
+            message = "Credit Customer Type is required";
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } else {
+            initSelectedApproveCredit();
+            onChangeRequestType();
+            modeEditCredit = false;
+            modeForButton = ModeForButton.ADD;
+            RequestContext.getCurrentInstance().execute("proposeCreditDlg.show()");
+        }
+    }
 
+    public void onChangeRequestType() {
+        log.info("onChangeRequestType() requestType = {}", selectedAppProposeCredit.getRequestType());
+        prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+
+        if (RequestTypes.CHANGE.value() == selectedAppProposeCredit.getRequestType()) {   //change
+            prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
+        }
+        else if (RequestTypes.NEW.value() == selectedAppProposeCredit.getRequestType()) {  //new
+            if (productGroup != null) {
+                prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+            }
+        }
     }
 
     public void onChangeProductProgram() {
+        log.debug("onChangeProductProgram() productProgram.id = {}", selectedAppProposeCredit.getProductProgram().getId());
+        ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
 
+        prdProgramToCreditTypeList = null;
+        selectedAppProposeCredit.setProductCode("");
+        selectedAppProposeCredit.setProjectCode("");
+
+        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        if (prdProgramToCreditTypeList == null) {
+            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        }
+        log.debug("onChangeProductProgram() prdProgramToCreditTypeList.size = {}" + prdProgramToCreditTypeList.size());
     }
 
     public void onChangeCreditType() {
+        log.debug("onChangeCreditType() creditType.id: {}", selectedAppProposeCredit.getCreditType().getId());
+        if ((selectedAppProposeCredit.getProductProgram().getId() != 0) && (selectedAppProposeCredit.getCreditType().getId() != 0)) {
+            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
+            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
+            //productFormulaDAO
+            //where 4 ตัว ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
+            if (productProgram != null && creditType != null) {
+                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
+                if((prdProgramToCreditType.getId() != 0)
+                        && (creditCustomerType != CreditCustomerType.NOT_SELECTED.value())
+                        && (specialProgramBasicInfo.getId() != 0) && (applyTCG != 0)){
+                    log.info("onChangeCreditType() :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
+                    log.info("onChangeCreditType() :: creditCustomerType :: {}", creditCustomerType);
+                    log.info("onChangeCreditType() :: specialProgramBasicInfo :: {}",specialProgramBasicInfo.getId());
+                    log.info("onChangeCreditType() :: applyTCG :: {}", applyTCG);
+                    SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
+                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType, creditCustomerType, specialProgram, applyTCG);
+
+                    if (productFormula != null) {
+                        log.debug("onChangeCreditType() :::: productFormula : {}", productFormula.getId());
+                        selectedAppProposeCredit.setProductCode(productFormula.getProductCode());
+                        selectedAppProposeCredit.setProjectCode(productFormula.getProjectCode());
+                    } else {
+                        selectedAppProposeCredit.setProductCode("-");
+                        selectedAppProposeCredit.setProjectCode("-");
+                    }
+                }
+            }
+        }
     }
 
     public void onChangeSuggestValue() {
+        log.info("onChangeSuggestValue() :: {}");
+        suggestPrice = BigDecimal.ZERO;
+        standardPrice = BigDecimal.ZERO;
+        finalBaseRate = new BaseRate();
+        finalInterest = BigDecimal.ZERO;
+        suggestPriceLabel = "";
+        standardPriceLabel = "";
+        finalPriceRate = "";
 
+        BaseRate baseRate1 = baseRateDAO.findById(selectedAppProposeCredit.getSuggestBasePrice().getId());
+        BaseRate baseRate2 = baseRateDAO.findById(selectedAppProposeCredit.getStandardBasePrice().getId());
+
+        suggestPrice = baseRate1.getValue().add(selectedAppProposeCredit.getSuggestInterest());
+
+        if (ValidationUtil.isValueLessThanZero(selectedAppProposeCredit.getSuggestInterest())) {
+            suggestPriceLabel = baseRate1.getName() + " " + selectedAppProposeCredit.getSuggestInterest();
+        } else {
+            suggestPriceLabel = baseRate1.getName() + " + " + selectedAppProposeCredit.getSuggestInterest();
+        }
+
+        standardPrice = baseRate2.getValue().add(selectedAppProposeCredit.getStandardInterest());
+
+        if (ValidationUtil.isValueLessThanZero(selectedAppProposeCredit.getStandardInterest())) {
+            standardPriceLabel = baseRate2.getName() + " " + selectedAppProposeCredit.getStandardInterest();
+        } else {
+            standardPriceLabel = baseRate2.getName() + " + " + selectedAppProposeCredit.getStandardInterest();
+        }
+
+        log.info("baseRate1 getValue :: {}", baseRate1.getValue());
+        log.info("getSuggestInterest :: {}", selectedAppProposeCredit.getSuggestInterest());
+        log.info("baseRate2 getValue :: {}", baseRate2.getValue());
+        log.info("getStandardInterest :: {}", selectedAppProposeCredit.getStandardInterest());
+        log.info("suggestPrice :: {}", suggestPrice);
+        log.info("standardPrice :: {}", standardPrice);
+
+//        if (standardPrice.doubleValue() > suggestPrice.doubleValue()) {
+        if (ValidationUtil.isGreaterThan(standardPrice, suggestPrice)) {
+            finalBaseRate = baseRate1;
+            finalInterest = selectedAppProposeCredit.getStandardInterest();
+            finalPriceRate = standardPriceLabel;
+        }
+//        else if (suggestPrice.doubleValue() > standardPrice.doubleValue()) {
+        else if (ValidationUtil.isLessThan(standardPrice, suggestPrice)) {
+            finalBaseRate = baseRate2;
+            finalInterest = selectedAppProposeCredit.getSuggestInterest();
+            finalPriceRate = suggestPriceLabel;
+        }
     }
 
     public void onAddTierInfo() {
@@ -826,6 +968,15 @@ public class Decision implements Serializable {
             newApproveCreditList.add(selectedAppProposeCredit);
             decisionView.setApproveCreditList(newApproveCreditList);
         }
+    }
+
+    // ---------- Propose Credit Dialog ---------- //
+    public void onAddAppProposeGuarantor() {
+        log.debug("onAddAppProposeGuarantor()");
+        selectedAppProposeGuarantor = new NewGuarantorDetailView();
+        selectedAppProposeGuarantor.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(decisionView.getProposeCreditList()));
+        modeEditGuarantor = false;
+        modeForButton = ModeForButton.ADD;
     }
 
     // ---------- Propose Collateral Dialog ---------- //
@@ -998,5 +1149,29 @@ public class Decision implements Serializable {
 
     public void setModeEditGuarantor(boolean modeEditGuarantor) {
         this.modeEditGuarantor = modeEditGuarantor;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
