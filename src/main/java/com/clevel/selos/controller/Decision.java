@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.CreditFacProposeControl;
-import com.clevel.selos.businesscontrol.DecisionControl;
-import com.clevel.selos.businesscontrol.TCGInfoControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -66,6 +63,8 @@ public class Decision implements Serializable {
     BasicInfoControl basicInfoControl;
     @Inject
     TCGInfoControl tcgInfoControl;
+    @Inject
+    CustomerInfoControl customerInfoControl;
 
     //DAO
     @Inject
@@ -138,7 +137,7 @@ public class Decision implements Serializable {
     private List<BaseRate> baseRateList;
     private List<Disbursement> disbursementList;
     // Propose Guarantor Dialog
-    private List<Customer> guarantorList;
+    private List<CustomerInfoView> guarantorList;
 
     //Message Dialog
     private String messageHeader;
@@ -182,7 +181,7 @@ public class Decision implements Serializable {
         baseRateList = baseRateDAO.findAll();
         disbursementList = disbursementDAO.findAll();
         // Propose Guarantor Dialog
-        guarantorList = creditFacProposeControl.getListOfGuarantor(workCaseId);
+        guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
     }
 
     private void initSelectedApproveCredit() {
@@ -283,12 +282,12 @@ public class Decision implements Serializable {
         relatedWithList.add("Related with C");
         relatedWithList.add("Related with D");
 
-        Customer guarantor1 = new Customer();
-        guarantor1.setNameTh("Guarantor1");
+        CustomerInfoView guarantor1 = new CustomerInfoView();
+        guarantor1.setFirstNameTh("Guarantor1");
         guarantor1.setLastNameTh("LastName1");
 
-        Customer guarantor2 = new Customer();
-        guarantor2.setNameTh("Guarantor2");
+        CustomerInfoView guarantor2 = new CustomerInfoView();
+        guarantor2.setFirstNameTh("Guarantor2");
         guarantor2.setLastNameTh("LastName2");
 
         //========================================= Existing =========================================//
@@ -467,8 +466,8 @@ public class Decision implements Serializable {
         proposeCreditDetailView1.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView1.setFrontEndFee(BigDecimal.valueOf(1.75));
         proposeCreditDetailView1.setNewCreditTierDetailViewList(tierDetailViewList1);
-        proposeCreditDetailView1.setRequestType(0);
-        proposeCreditDetailView1.setRefinance(0);
+        proposeCreditDetailView1.setRequestType(1);
+        proposeCreditDetailView1.setRefinance(RadioValue.YES.value());
         proposeCreditDetailView1.setLoanPurpose(loanPurpose);
         proposeCreditDetailView1.setRemark("Purpose Detail Example");
         proposeCreditDetailView1.setDisbursement(disbursement);
@@ -509,7 +508,7 @@ public class Decision implements Serializable {
         proposeCreditDetailView2.setFrontEndFee(BigDecimal.valueOf(1.75));
         proposeCreditDetailView2.setNewCreditTierDetailViewList(tierDetailViewList2);
         proposeCreditDetailView2.setRequestType(1);
-        proposeCreditDetailView2.setRefinance(1);
+        proposeCreditDetailView2.setRefinance(RadioValue.NO.value());
         proposeCreditDetailView2.setLoanPurpose(loanPurpose);
         proposeCreditDetailView2.setRemark("Purpose Detail Example 2");
         proposeCreditDetailView2.setDisbursement(disbursement);
@@ -524,8 +523,8 @@ public class Decision implements Serializable {
         proposeCreditDetailView3.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView3.setFrontEndFee(BigDecimal.valueOf(2.25));
         proposeCreditDetailView3.setNewCreditTierDetailViewList(null);
-        proposeCreditDetailView3.setRequestType(0);
-        proposeCreditDetailView3.setRefinance(1);
+        proposeCreditDetailView3.setRequestType(2);
+        proposeCreditDetailView3.setRefinance(RadioValue.NO.value());
         proposeCreditDetailView3.setLoanPurpose(loanPurpose);
         proposeCreditDetailView3.setRemark("Purpose Detail Example 3");
         proposeCreditDetailView3.setDisbursement(disbursement);
@@ -540,8 +539,8 @@ public class Decision implements Serializable {
         proposeCreditDetailView4.setLimit(BigDecimal.valueOf(123456.78));
         proposeCreditDetailView4.setFrontEndFee(BigDecimal.valueOf(2.75));
         proposeCreditDetailView4.setNewCreditTierDetailViewList(new ArrayList<NewCreditTierDetailView>());
-        proposeCreditDetailView4.setRequestType(1);
-        proposeCreditDetailView4.setRefinance(0);
+        proposeCreditDetailView4.setRequestType(2);
+        proposeCreditDetailView4.setRefinance(RadioValue.NO.value());
         proposeCreditDetailView4.setLoanPurpose(loanPurpose);
         proposeCreditDetailView4.setRemark("Purpose Detail Example 4");
         proposeCreditDetailView4.setDisbursement(disbursement);
@@ -1087,11 +1086,11 @@ public class Decision implements Serializable {
         this.disbursementList = disbursementList;
     }
 
-    public List<Customer> getGuarantorList() {
+    public List<CustomerInfoView> getGuarantorList() {
         return guarantorList;
     }
 
-    public void setGuarantorList(List<Customer> guarantorList) {
+    public void setGuarantorList(List<CustomerInfoView> guarantorList) {
         this.guarantorList = guarantorList;
     }
 
