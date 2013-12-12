@@ -246,7 +246,9 @@ public class Decision implements Serializable {
         splitLineList.add(splitLineDetail_1);
 
         CreditTypeDetailView creditTypeDetailView1 = new CreditTypeDetailView();
-        creditTypeDetailView1.setAccount("Mr.A Example");
+        creditTypeDetailView1.setAccountName("Mr.A Example");
+        creditTypeDetailView1.setAccountNumber("101-1-11111-1");
+        creditTypeDetailView1.setAccountSuf("111");
         creditTypeDetailView1.setType("New");
         creditTypeDetailView1.setProductProgram("TMB SME SmartBiz");
         creditTypeDetailView1.setCreditFacility("Loan");
@@ -254,7 +256,9 @@ public class Decision implements Serializable {
         creditTypeDetailView1.setGuaranteeAmount(BigDecimal.valueOf(1000000));
 
         CreditTypeDetailView creditTypeDetailView2 = new CreditTypeDetailView();
-        creditTypeDetailView2.setAccount("Mr.B Example");
+        creditTypeDetailView2.setAccountName("Mr.B Example");
+        creditTypeDetailView2.setAccountNumber("102-2-22222-2");
+        creditTypeDetailView2.setAccountSuf("222");
         creditTypeDetailView2.setType("Change");
         creditTypeDetailView2.setProductProgram("TMB SME SmartBiz");
         creditTypeDetailView2.setCreditFacility("Loan");
@@ -1017,6 +1021,63 @@ public class Decision implements Serializable {
         modeForButton = ModeForButton.EDIT;
     }
 
+    public void onSaveGuarantorInfo() {
+        log.debug("onSaveGuarantorInfo() modeEditGuarantor: {}", modeEditGuarantor);
+        log.debug("selectedGuarantorCrdTypeItems.length = {}", selectedGuarantorCrdTypeItems.length);
+        log.debug("selectedGuarantorCrdTypeItems: {}", selectedGuarantorCrdTypeItems);
+        boolean complete = false;
+        BigDecimal sumGuaranteeAmtPerCrdType = BigDecimal.ZERO;
+        int seqTemp;
+
+        if (!modeEditGuarantor) {
+            log.debug("===> Add New - Guarantor: {}", selectedAppProposeGuarantor);
+            NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
+            guarantorDetailAdd.setGuarantorName(selectedAppProposeGuarantor.getGuarantorName());
+            guarantorDetailAdd.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
+
+
+            for (CreditTypeDetailView creditTypeDetailView : selectedGuarantorCrdTypeItems) {
+                guarantorDetailAdd.getCreditTypeDetailViewList().add(creditTypeDetailView);
+                sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeDetailView.getGuaranteeAmount());
+                seqTemp = creditTypeDetailView.getSeq();
+                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
+            }
+
+            log.debug("Summary of Guarantee Amount per Credit Type = {}", sumGuaranteeAmtPerCrdType);
+            guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
+
+            if (guarantorDetailAdd.getCreditTypeDetailViewList().size() > 0) {
+                decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
+                complete = true;
+                log.debug("Add new Guarantor to ApproveGuarantorList.");
+            } else {
+                //dialog error
+                log.error("Can not add new Guarantor to ApproveGuarantorList because NO selected credit type!");
+            }
+        }
+        else if (modeEditGuarantor) {
+            log.debug("===> Edit - Guarantor: {}", selectedAppProposeGuarantor);
+            NewGuarantorDetailView guarantorDetailEdit = decisionView.getApproveGuarantorList().get(rowIndexGuarantor);
+            guarantorDetailEdit.setGuarantorName(selectedAppProposeGuarantor.getGuarantorName());
+            guarantorDetailEdit.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
+            // Clear old CreditType list
+            guarantorDetailEdit.getCreditTypeDetailViewList().clear();
+            for (int i=0; i<selectedGuarantorCrdTypeItems.length; i++) {
+                CreditTypeDetailView crdTypeItem = selectedGuarantorCrdTypeItems[i];
+                guarantorDetailEdit.getCreditTypeDetailViewList().add(crdTypeItem);
+                sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(crdTypeItem.getGuaranteeAmount());
+            }
+
+            log.debug("Summary of Guarantee Amount per Credit Type = {}", sumGuaranteeAmtPerCrdType);
+            guarantorDetailEdit.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
+            complete = true;
+        }
+
+        decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+    }
+
     public void onDeleteAppProposeGuarantor() {
         log.debug("onDeleteAppProposeGuarantor() selectedAppProposeGuarantor: {}", selectedAppProposeGuarantor);
         for (int i=0; i < Util.safetyList(selectedAppProposeGuarantor.getCreditTypeDetailViewList()).size(); i++) {
@@ -1026,96 +1087,6 @@ public class Decision implements Serializable {
         }
         decisionView.getApproveGuarantorList().remove(selectedAppProposeGuarantor);
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
-    }
-
-    public void onSaveGuarantorInfo() {
-        log.debug("onSaveGuarantorInfo() modeEditGuarantor: {}", modeEditGuarantor);
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        BigDecimal summary = BigDecimal.ZERO;
-        int seqTemp;
-
-//        if (newGuarantorDetailView.getGuarantorName() != null) {
-            if (!modeEditGuarantor) {
-                log.debug("===> Add New - Guarantor: {}", selectedAppProposeGuarantor);
-                NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
-                guarantorDetailAdd.setGuarantorName(selectedAppProposeGuarantor.getGuarantorName());
-                guarantorDetailAdd.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
-
-                log.debug("Length of selectedGuarantorCrdTypeItems = {}", selectedGuarantorCrdTypeItems.length);
-                for (CreditTypeDetailView creditTypeDetailView : selectedGuarantorCrdTypeItems) {
-                    guarantorDetailAdd.getCreditTypeDetailViewList().add(creditTypeDetailView);
-                    summary = summary.add(creditTypeDetailView.getGuaranteeAmount());
-                    seqTemp = creditTypeDetailView.getSeq();
-                    hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-                }
-
-                log.debug("Summary of Guarantee Amount per Credit Type = {}", summary);
-                guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
-
-                if (guarantorDetailAdd.getCreditTypeDetailViewList().size() > 0) {
-                    decisionView.getApproveGuarantorList().add(guarantorDetailAdd);
-                    log.debug("Add new Guarantor to ApproveGuarantorList.");
-                } else {
-                    //dialog error
-                    log.error("Can not add new Guarantor to ApproveGuarantorList because NO selected credit type!");
-                }
-            }
-            else if (modeEditGuarantor) {
-                decisionView.getApproveGuarantorList().get(rowIndexGuarantor).setGuarantorName(selectedAppProposeGuarantor.getGuarantorName());
-                decisionView.getApproveGuarantorList().get(rowIndexGuarantor).setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
-
-                if (selectedAppProposeGuarantor.getCreditTypeDetailViewList() != null) {
-                    selectedAppProposeGuarantor.setCreditTypeDetailViewList(new ArrayList<CreditTypeDetailView>());
-                    boolean checkPlus;
-
-                    for (int i=0; i < selectedGuarantorCrdTypeItems.length; i++) {
-                        CreditTypeDetailView crdTypeItem = selectedGuarantorCrdTypeItems[i];
-
-                        selectedAppProposeGuarantor.getCreditTypeDetailViewList().add(crdTypeItem);
-                        summary = summary.add(crdTypeItem.getGuaranteeAmount());
-                        seqTemp = crdTypeItem.getSeq();
-                        checkPlus = true;
-
-//                        if (creditTypeDetailList.get(i).isNoFlag() == true) {
-//                            newGuarantorDetailView.getCreditTypeDetailViewList().add(creditTypeDetailList.get(i));
-//                            summary = summary.add(creditTypeDetailList.get(i).getGuaranteeAmount());
-//                            seqTemp = creditTypeDetailList.get(i).getSeq();
-//                            checkPlus = true;
-//
-//                            for (int j = 0; j < newGuarantorDetailViewItem.getCreditTypeDetailViewList().size(); j++) {
-//                                if (newGuarantorDetailViewItem.getCreditTypeDetailViewList().get(j).getSeq() == seqTemp) {
-//                                    checkPlus = false;
-//                                }
-//                            }
-//
-//                            if (checkPlus) {
-//                                hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
-//                            }
-//
-//                        } else if (creditTypeDetailList.get(i).isNoFlag() == false) {
-//                            if (Integer.parseInt(hashSeqCredit.get(i).toString()) > 0) {
-//                                hashSeqCredit.put(i, Integer.parseInt(hashSeqCredit.get(i).toString()) - 1);
-//                            }
-//                        }
-
-                    }
-
-                    decisionView.getApproveGuarantorList().get(rowIndexGuarantor).setCreditTypeDetailViewList(selectedAppProposeGuarantor.getCreditTypeDetailViewList());
-                }
-
-                decisionView.getApproveGuarantorList().get(rowIndexGuarantor).setTotalLimitGuaranteeAmount(summary);
-
-            } else {
-                log.info("onSaveGuarantorInfoDlg ::: Undefined modeForButton !!");
-                complete = false;
-            }
-//        }
-
-        complete = true;
-        decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
-        log.info("  complete >>>>  :  {}", complete);
-        context.addCallbackParam("functionComplete", complete);
     }
 
     // ----------------------------------------------- Getter/Setter -----------------------------------------------//

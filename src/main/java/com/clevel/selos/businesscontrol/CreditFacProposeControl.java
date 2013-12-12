@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -244,7 +245,9 @@ public class CreditFacProposeControl extends BusinessControl {
             for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
                 creditTypeDetailView = new CreditTypeDetailView();
                 creditTypeDetailView.setSeq(newCreditDetailView.getSeq());
-                creditTypeDetailView.setAccount("-");
+                creditTypeDetailView.setAccountName("-");
+                creditTypeDetailView.setAccountNumber("-");
+                creditTypeDetailView.setAccountSuf("-");
                 creditTypeDetailView.setRequestType(newCreditDetailView.getRequestType());
                 creditTypeDetailView.setProductProgram(newCreditDetailView.getProductProgram().getName());
                 creditTypeDetailView.setCreditFacility(newCreditDetailView.getCreditType().getName());
@@ -265,8 +268,10 @@ public class CreditFacProposeControl extends BusinessControl {
         for(ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
             creditTypeDetailView = new CreditTypeDetailView();
             creditTypeDetailView.setSeq(seq);
-            creditTypeDetailView.setAccount(existingCreditDetail.getAccountName() + existingCreditDetail.getAccountNumber()+ existingCreditDetail.getAccountSuf()+ existingCreditDetail.getAccountstatus());
-            creditTypeDetailView.setRequestType(1);
+            creditTypeDetailView.setAccountName(existingCreditDetail.getAccountName());
+            creditTypeDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+            creditTypeDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
+            creditTypeDetailView.setRequestType(RequestTypes.NEW.value());
             creditTypeDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             creditTypeDetailView.setCreditFacility(existingCreditDetail.getCreditType());
             creditTypeDetailView.setLimit(existingCreditDetail.getLimit());

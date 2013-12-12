@@ -791,7 +791,9 @@ public class CreditFacPropose implements Serializable {
             for (int i = 0; i < newCreditFacilityView.getNewCreditDetailViewList().size(); i++) {
                 creditTypeDetailView = new CreditTypeDetailView();
                 creditTypeDetailView.setSeq(newCreditFacilityView.getNewCreditDetailViewList().get(i).getSeq());
-                creditTypeDetailView.setAccount("-");
+                creditTypeDetailView.setAccountName("-");
+                creditTypeDetailView.setAccountNumber("-");
+                creditTypeDetailView.setAccountSuf("-");
                 creditTypeDetailView.setRequestType(newCreditFacilityView.getNewCreditDetailViewList().get(i).getRequestType());
                 creditTypeDetailView.setProductProgram(newCreditFacilityView.getNewCreditDetailViewList().get(i).getProductProgram().getName());
                 creditTypeDetailView.setCreditFacility(newCreditFacilityView.getNewCreditDetailViewList().get(i).getCreditType().getName());
@@ -813,7 +815,10 @@ public class CreditFacPropose implements Serializable {
         for(ExistingCreditDetail existingCreditDetail :existingCreditDetailList){
             creditTypeDetailView = new CreditTypeDetailView();
             creditTypeDetailView.setSeq(seq);
-            creditTypeDetailView.setAccount(existingCreditDetail.getAccountName() + existingCreditDetail.getAccountNumber()+ existingCreditDetail.getAccountSuf()+ existingCreditDetail.getAccountstatus());
+//            creditTypeDetailView.setAccount(existingCreditDetail.getAccountName() + existingCreditDetail.getAccountNumber()+ existingCreditDetail.getAccountSuf()+ existingCreditDetail.getAccountstatus());
+            creditTypeDetailView.setAccountName(existingCreditDetail.getAccountName());
+            creditTypeDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+            creditTypeDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
             creditTypeDetailView.setRequestType(1);
             creditTypeDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             creditTypeDetailView.setCreditFacility(existingCreditDetail.getCreditType());
