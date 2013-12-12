@@ -34,11 +34,11 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
-    @Inject
     DBRDAO dbrDAO;
     @Inject
     DecisionDAO decisionDAO;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
 
     @Inject
     ExSummaryTransform exSummaryTransform;
@@ -51,6 +51,8 @@ public class ExSummaryControl extends BusinessControl {
     BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
     QualitativeControl qualitativeControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -92,8 +94,12 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-
+        NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
+            exSummaryView.setTradeFinance(newCreditFacilityView);
+        } else {
+            exSummaryView.setTradeFinance(null);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
