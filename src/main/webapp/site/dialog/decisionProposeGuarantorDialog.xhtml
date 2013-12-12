@@ -31,7 +31,7 @@
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.guarantorList}"
                                        var="guarantorList"
-                                       itemLabel="#{guarantorList.nameTh}"
+                                       itemLabel="#{guarantorList.titleTh.titleTh}#{guarantorList.firstNameTh} #{guarantorList.lastNameTh}"
                                        itemValue="#{guarantorList.id}"/>
                     </p:selectOneMenu>
                 </td>
@@ -41,7 +41,8 @@
                     <p:outputLabel for="dlgTcgLgNo" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"/>
+                    <!--<p:inputText id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"/>-->
+                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}" mask="99-9999"/>
                 </td>
             </tr>
             <tr>
@@ -89,7 +90,7 @@
                         </p:column>
 
                         <p:column styleClass="center top">
-                            <h:outputText value="#{creditTypeItem.type == 0 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
+                            <h:outputText value="#{creditTypeItem.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
                         </p:column>
 
                         <p:column styleClass="center top">

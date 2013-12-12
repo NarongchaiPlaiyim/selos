@@ -2420,9 +2420,7 @@
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{guarantor.guarantorName.title.titleTh}"
-                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.title}"/>
-                                        <h:outputText value="#{guarantor.guarantorName.nameTh}#{guarantor.guarantorName.lastNameTh}"
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
 
@@ -2491,7 +2489,7 @@
                         <tr>
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor" value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeGuarantor()}" process="@this"
+                                                 actionListener="#{decision.onAddAppProposeGuarantor()}" process="@form"
                                                  update=":guarantorDlgForm" oncomplete="proposeGuarantorDlg.show()"
                                                  styleClass="smaller"/>
                             </td>
@@ -2522,9 +2520,7 @@
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{guarantor.guarantorName.title.titleTh}"
-                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.title}"/>
-                                        <h:outputText value="#{guarantor.guarantorName.nameTh}#{guarantor.guarantorName.lastNameTh}"
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
 
