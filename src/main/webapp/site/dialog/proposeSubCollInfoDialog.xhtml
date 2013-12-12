@@ -72,7 +72,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgCollateralOwnerUW"
-                                     value="#{creditFacPropose.collateralOwnerUW.id}"
+                                     value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUW.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -104,7 +104,7 @@
         <p:dataTable id="CollOwnerUWTb"
                      value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUWList}"
                      var="collateralOwnerUWItem"
-                     rowKey="#{collateralOwnerUWItem}"
+                     rowKey="#{collateralOwnerUWItem.id}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
