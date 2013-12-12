@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -42,13 +43,9 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewCreditTierTransform newCreditTierTransform;
     @Inject
-    CustomerDAO customerDAO;
-    @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     CollateralTypeDAO collateralTypeDAO;
-    @Inject
-    BasicInfoDAO basicInfoDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -71,25 +68,11 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralSubDetailDAO newCollateralSubDetailDAO;
     @Inject
     NewCollateralHeadDetailDAO newCollateralHeadDetailDAO;
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
 
 
     public CreditFacProposeControl() {
-    }
-
-    public List<Customer> getListOfGuarantor(long workCaseId) {
-        log.info("workCaseId getListOfGuarantor:: {}", workCaseId);
-        return customerDAO.findGuarantorByWorkCaseId(workCaseId);
-    }
-
-    public List<Customer> getListOfCollateralOwnerUW(long workCaseId) {
-        log.info("workCaseId findCollateralOwnerUWByWorkCaseId :: {}", workCaseId);
-        return customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
-    }
-
-    public BasicInfo getBasicByWorkCaseId(long workCaseId) {
-        log.info("workCaseId :: {}", workCaseId);
-        return basicInfoDAO.findByWorkCaseId(workCaseId);
-
     }
 
     public NewCreditFacility getNewCreditFacilityViewByWorkCaseId(long workCaseId) {
@@ -251,5 +234,45 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
+    public List<CreditTypeDetailView> findCreditFacility(List<NewCreditDetailView> newCreditDetailViewList) {
+        // todo: find credit existing and propose in this workCase
+        List<CreditTypeDetailView> creditTypeDetailList = new ArrayList<CreditTypeDetailView>();
+        CreditTypeDetailView creditTypeDetailView;
 
+        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
+                creditTypeDetailView = new CreditTypeDetailView();
+                creditTypeDetailView.setSeq(newCreditDetailView.getSeq());
+                creditTypeDetailView.setAccount("-");
+                creditTypeDetailView.setRequestType(newCreditDetailView.getRequestType());
+                creditTypeDetailView.setProductProgram(newCreditDetailView.getProductProgram().getName());
+                creditTypeDetailView.setCreditFacility(newCreditDetailView.getCreditType().getName());
+                creditTypeDetailView.setLimit(newCreditDetailView.getLimit());
+                creditTypeDetailList.add(creditTypeDetailView);
+            }
+        }
+
+        List<ExistingCreditDetail> existingCreditDetailList;
+        existingCreditDetailList = existingCreditDetailDAO.findAll();
+
+        int seq  = 0;
+        if(existingCreditDetailList != null && existingCreditDetailList.size() > 0) {
+            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : 1;
+        }
+
+        log.info("seq :: {}", seq);
+        for(ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
+            creditTypeDetailView = new CreditTypeDetailView();
+            creditTypeDetailView.setSeq(seq);
+            creditTypeDetailView.setAccount(existingCreditDetail.getAccountName() + existingCreditDetail.getAccountNumber()+ existingCreditDetail.getAccountSuf()+ existingCreditDetail.getAccountstatus());
+            creditTypeDetailView.setRequestType(1);
+            creditTypeDetailView.setProductProgram(existingCreditDetail.getProductProgram());
+            creditTypeDetailView.setCreditFacility(existingCreditDetail.getCreditType());
+            creditTypeDetailView.setLimit(existingCreditDetail.getLimit());
+            creditTypeDetailList.add(creditTypeDetailView);
+            seq++;
+        }
+
+        return creditTypeDetailList;
+    }
 }

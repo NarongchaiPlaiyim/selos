@@ -1397,7 +1397,7 @@
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
                                var="collateralOwnerUW"  varStatus="a">
-                        <h:outputText value="#{collateralOwnerUW.nameTh}"/><br/>
+                        <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
@@ -1499,7 +1499,7 @@
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{newGuarantorDetailView.guarantorName.nameTh}"/>
+                            <h:outputText value="#{newGuarantorDetailView.guarantorName.firstNameTh}  #{newGuarantorDetailView.guarantorName.lastNameTh}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">

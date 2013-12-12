@@ -3,7 +3,6 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,8 +20,7 @@ public class NewSubCollateralDetailView {
     private String titleDeed;
     private String collateralOwner;
     private String collateralOwnerAAD;
-    private Customer collateralOwnerUW;
-    private List<Customer> collateralOwnerUWList;
+    private List<CustomerInfoView> collateralOwnerUWList;
     private MortgageType mortgageType;
     private List<MortgageType> mortgageList;
     private List<NewSubCollateralDetailView> relatedWithList;
@@ -38,7 +36,6 @@ public class NewSubCollateralDetailView {
     }
 
     public void reset() {
-        this.id = 0;
         this.address    = "";
         this.titleDeed  = "";
         this.landOffice = "";
@@ -47,9 +44,8 @@ public class NewSubCollateralDetailView {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue  = BigDecimal.ZERO;
         this.subCollateralType    = new SubCollateralType();
-        this.collateralOwnerUW = new Customer();
         this.mortgageType= new MortgageType();
-        this.collateralOwnerUWList = new ArrayList<Customer>();
+        this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewSubCollateralDetailView>();
     }
@@ -183,19 +179,11 @@ public class NewSubCollateralDetailView {
         this.mortgageList = mortgageList;
     }
 
-    public Customer getCollateralOwnerUW() {
-        return collateralOwnerUW;
-    }
-
-    public void setCollateralOwnerUW(Customer collateralOwnerUW) {
-        this.collateralOwnerUW = collateralOwnerUW;
-    }
-
-    public List<Customer> getCollateralOwnerUWList() {
+    public List<CustomerInfoView> getCollateralOwnerUWList() {
         return collateralOwnerUWList;
     }
 
-    public void setCollateralOwnerUWList(List<Customer> collateralOwnerUWList) {
+    public void setCollateralOwnerUWList(List<CustomerInfoView> collateralOwnerUWList) {
         this.collateralOwnerUWList = collateralOwnerUWList;
     }
 
@@ -218,7 +206,6 @@ public class NewSubCollateralDetailView {
                 .append("titleDeed", titleDeed)
                 .append("collateralOwner", collateralOwner)
                 .append("collateralOwnerAAD", collateralOwnerAAD)
-                .append("collateralOwnerUW", collateralOwnerUW)
                 .append("collateralOwnerUWList", collateralOwnerUWList)
                 .append("mortgageType", mortgageType)
                 .append("mortgageList", mortgageList)
