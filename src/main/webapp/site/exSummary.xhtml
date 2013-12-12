@@ -145,12 +145,12 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.reference.description}"
+                                            <h:outputText value="#{item.indLv}"
                                                           style="min-width: 140px; max-width: 140px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.reference.description}"
+                                            <h:outputText value="#{item.jurLv}"
                                                           style="min-width: 140px; max-width: 140px;"/>
                                         </p:column>
 
@@ -258,39 +258,38 @@
                                                 <p:column style="width:200px;"
                                                           headerText="#{msg.get('app.exSummary.trade.table.label.ownerBranchCode')}"/>
                                             </p:row>
-
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.contactName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.contactPhoneNo}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.interService}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.currentAddress}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.importMail}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.exportMail}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.depositBranchCode}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{executiveSummary.exSummaryView.tradeFinance.ownerBranchCode}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
