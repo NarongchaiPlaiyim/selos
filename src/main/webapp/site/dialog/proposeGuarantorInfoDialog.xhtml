@@ -21,7 +21,7 @@
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacPropose.guarantorList}"
                                            var="guarantorList"
-                                           itemLabel="#{guarantorList.nameTh}"
+                                           itemLabel="#{guarantorList.firstNameTh}"
                                            itemValue="#{guarantorList.id}"/>
                         </p:selectOneMenu>
                     </td>
@@ -79,7 +79,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.type == 0 ? 'New' : 'Change'}"/>
+                                            <h:outputText value="#{creditTypeItem.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">

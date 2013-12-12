@@ -4,8 +4,9 @@ public class AccountNameView {
     private String name;
     private long id;
 
-    public AccountNameView(){}
+    public AccountNameView(){
 
+    }
 
     public String getName() {
         return name;

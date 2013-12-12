@@ -1288,7 +1288,7 @@
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extGuarantor.guaranteeAmount}">
+                                        <h:outputText value="#{extGuarantor.totalLimitGuaranteeAmount}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
@@ -1591,8 +1591,8 @@
                         <tr>
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedCredit" value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeCredit}" process="@this"
-                                                 update=":proposeCreditDlgForm" oncomplete="proposeCreditDlg.show()"
+                                                 actionListener="#{decision.onAddAppProposeCredit}" process="@form"
+                                                 update=":proposeCreditDlgForm,:proposeCreditDialog" oncomplete="proposeCreditDlg.show()"
                                                  styleClass="smaller"/>
                                 <p:spacer width="10" height="0"/>
                                 <p:commandButton id="btnRetrievePricingFee" value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
@@ -2420,9 +2420,7 @@
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{guarantor.guarantorName.title.titleTh}"
-                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.title}"/>
-                                        <h:outputText value="#{guarantor.guarantorName.nameTh}#{guarantor.guarantorName.lastNameTh}"
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
 
@@ -2491,7 +2489,7 @@
                         <tr>
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor" value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeGuarantor()}" process="@this"
+                                                 actionListener="#{decision.onAddAppProposeGuarantor()}" process="@form"
                                                  update=":guarantorDlgForm" oncomplete="proposeGuarantorDlg.show()"
                                                  styleClass="smaller"/>
                             </td>
@@ -2522,9 +2520,7 @@
                                     </p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{guarantor.guarantorName.title.titleTh}"
-                                                      rendered="#{not empty guarantor.guarantorName and not empty guarantor.guarantorName.title}"/>
-                                        <h:outputText value="#{guarantor.guarantorName.nameTh}#{guarantor.guarantorName.lastNameTh}"
+                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty guarantor.guarantorName}"/>
                                     </p:column>
 
@@ -2996,7 +2992,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="" message="">
+                     header="#{decision.messageHeader}" message="#{decision.message}">
         <p:commandButton value="OK"
                          process="@this"
                          update="frmMain"
