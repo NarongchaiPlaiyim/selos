@@ -17,7 +17,6 @@ import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -570,7 +569,7 @@ public class CreditFacPropose implements Serializable {
             newCreditDetailView.setSuggestBasePrice(proposeCreditDetailSelected.getSuggestBasePrice());
             newCreditDetailView.setSuggestInterest(proposeCreditDetailSelected.getSuggestInterest());
             newCreditDetailView.setFrontEndFee(proposeCreditDetailSelected.getFrontEndFee());
-            //newCreditDetailView.setLoanPurpose(newCreditDetailView.getLoanPurpose());
+            newCreditDetailView.setLoanPurpose(newCreditDetailView.getLoanPurpose());
             newCreditDetailView.setRemark(proposeCreditDetailSelected.getRemark());
             newCreditDetailView.setDisbursement(proposeCreditDetailSelected.getDisbursement());
             newCreditDetailView.setHoldLimitAmount(proposeCreditDetailSelected.getHoldLimitAmount());
@@ -768,6 +767,7 @@ public class CreditFacPropose implements Serializable {
     }
 
     //  END Tier Dialog //
+/*
 
     public List<CreditTypeDetailView> findCreditFacility() {
 
@@ -810,13 +810,13 @@ public class CreditFacPropose implements Serializable {
 
         return creditTypeDetailList;
     }
+*/
 
     //  Start Propose Collateral Information  //
     public void onAddProposeCollInfo() {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
         modeForButton = ModeForButton.ADD;
         newCollateralInfoView = new NewCollateralInfoView();
-//        newCollateralInfoView.setCreditTypeDetailViewList(findCreditFacility());
         newCollateralInfoView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
         newCollateralInfoView.getNewCollateralHeadDetailViewList().add(new NewCollateralHeadDetailView());
 
@@ -842,7 +842,6 @@ public class CreditFacPropose implements Serializable {
         newCollateralInfoView.setNewCollateralHeadDetailViewList(selectCollateralDetailView.getNewCollateralHeadDetailViewList());
 
         int tempSeq = 0;
-//        creditTypeDetailList = findCreditFacility();  //all creditType that add this time
         creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());
         newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailList);
 
@@ -988,7 +987,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddCollateralOwnerUW() {
         log.info("onAddCollateralOwnerUW :: {} ", newSubCollateralDetailView.getCollateralOwner());
 
-        log.info("first name ::: {}",newSubCollateralDetailView.getCollateralOwnerUW().getFirstNameTh());
+        log.info("first name ::: {}", newSubCollateralDetailView.getCollateralOwnerUW().getFirstNameTh());
         log.info("last name ::: {}",newSubCollateralDetailView.getCollateralOwnerUW().getLastNameTh());
 
         CustomerInfoView collateralOwnerAdd = new CustomerInfoView();
@@ -1123,7 +1122,6 @@ public class CreditFacPropose implements Serializable {
     public void onAddGuarantorInfo() {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
-//        newGuarantorDetailView.setCreditTypeDetailViewList(findCreditFacility());
         newGuarantorDetailView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
     }
 
@@ -1136,7 +1134,6 @@ public class CreditFacPropose implements Serializable {
         if (newGuarantorDetailViewItem != null) {
             newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
-//            creditTypeDetailList = findCreditFacility();  //all creditType that add this time
             creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());  //all creditType that add this time
             newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
 
@@ -1152,9 +1149,8 @@ public class CreditFacPropose implements Serializable {
                     }
                     continue;
                 }
-                newGuarantorDetailView.setTotalLimitGuaranteeAmount(summary);
             }
-
+            newGuarantorDetailView.setTotalLimitGuaranteeAmount(summary);
         }
     }
 
@@ -1180,9 +1176,9 @@ public class CreditFacPropose implements Serializable {
                         seqTemp = creditTypeDetailView.getSeq();
                         hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                     }
-
-                    guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
                 }
+
+                guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
 
                 if (guarantorDetailAdd.getCreditTypeDetailViewList().size() > 0) {
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
