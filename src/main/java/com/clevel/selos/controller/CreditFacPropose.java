@@ -1170,16 +1170,15 @@ public class CreditFacPropose implements Serializable {
                 guarantorDetailAdd.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
 
                 for (CreditTypeDetailView creditTypeDetailView : newGuarantorDetailView.getCreditTypeDetailViewList()) {
-
                     if (creditTypeDetailView.isNoFlag()) {
                         guarantorDetailAdd.getCreditTypeDetailViewList().add(creditTypeDetailView);
                         summary = summary.add(creditTypeDetailView.getGuaranteeAmount());
                         seqTemp = creditTypeDetailView.getSeq();
                         hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
                     }
-
-                    guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
                 }
+
+                guarantorDetailAdd.setTotalLimitGuaranteeAmount(summary);
 
                 if (guarantorDetailAdd.getCreditTypeDetailViewList().size() > 0) {
                     newCreditFacilityView.getNewGuarantorDetailViewList().add(guarantorDetailAdd);
@@ -1233,7 +1232,8 @@ public class CreditFacPropose implements Serializable {
         }
 
         complete = true;
-        calculationSummaryGuarantor();
+//        calculationSummaryGuarantor();
+        newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
         log.info("  complete >>>>  :  {}", complete);
         context.addCallbackParam("functionComplete", complete);
 
@@ -1250,16 +1250,17 @@ public class CreditFacPropose implements Serializable {
 
         newCreditFacilityView.getNewGuarantorDetailViewList().remove(newGuarantorDetailViewItem);
         log.info("delete success");
-        calculationSummaryGuarantor();
+//        calculationSummaryGuarantor();
+        newCreditFacilityView.setTotalGuaranteeAmount(creditFacProposeControl.calTotalGuaranteeAmount(newCreditFacilityView.getNewGuarantorDetailViewList()));
     }
 
-    public void calculationSummaryGuarantor() {
-        sumTotalGuarantor = BigDecimal.ZERO;
-        for (int i = 0; i < newCreditFacilityView.getNewGuarantorDetailViewList().size(); i++) {
-            sumTotalGuarantor = sumTotalGuarantor.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(i).getTotalLimitGuaranteeAmount());
-        }
-        newCreditFacilityView.setTotalGuaranteeAmount(sumTotalGuarantor);
-    }
+//    public void calculationSummaryGuarantor() {
+//        sumTotalGuarantor = BigDecimal.ZERO;
+//        for (int i = 0; i < newCreditFacilityView.getNewGuarantorDetailViewList().size(); i++) {
+//            sumTotalGuarantor = sumTotalGuarantor.add(newCreditFacilityView.getNewGuarantorDetailViewList().get(i).getTotalLimitGuaranteeAmount());
+//        }
+//        newCreditFacilityView.setTotalGuaranteeAmount(sumTotalGuarantor);
+//    }
     //  END Guarantor //
 
     //Start Condition Information //
