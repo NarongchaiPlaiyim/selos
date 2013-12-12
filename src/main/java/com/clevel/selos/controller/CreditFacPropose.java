@@ -987,7 +987,12 @@ public class CreditFacPropose implements Serializable {
     // for sub collateral dialog
     public void onAddCollateralOwnerUW() {
         log.info("onAddCollateralOwnerUW :: {} ", collateralOwnerUW);
-        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerUW);
+        CustomerInfoView collateralOwnerAdd = new CustomerInfoView();
+        collateralOwnerAdd.setTitleTh(collateralOwnerUW.getTitleTh());
+        collateralOwnerAdd.setFirstNameTh(collateralOwnerUW.getFirstNameTh());
+        collateralOwnerAdd.setLastNameTh(collateralOwnerUW.getLastNameTh());
+        log.info("first name ::: {}",collateralOwnerAdd.getFirstNameTh());
+        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
     }
 
     public void onDeleteCollateralOwnerUW(int row) {
