@@ -82,7 +82,7 @@
                     <td class="title" style="width:145px;">Credit Type :</td>
                     <td>
                         <p:dataTable id="resultCreditCollateralBorrower" var="creditTypeBorrower"
-                                     value="#{creditFacExisting.borrowerExistingCreditDetailViewList}"
+                                     value="#{creditFacExisting.existingCollateralDetailView.existingCreditTypeDetailViewList}"
                                      rowKey="#{creditTypeBorrower.no}" rowIndexVar="rowIndex" style="width: 100%">
                             <p:columnGroup type="header">
                                 <p:row>
@@ -107,11 +107,11 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existProductProgram.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.productProgram}" />
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeBorrower.existCreditType.name}" />
+                                <p:outputLabel  value="#{creditTypeBorrower.creditFacility}" />
                             </p:column>
                             <p:column styleClass="center">
                                 <p:outputLabel  value="#{creditTypeBorrower.limit}" />

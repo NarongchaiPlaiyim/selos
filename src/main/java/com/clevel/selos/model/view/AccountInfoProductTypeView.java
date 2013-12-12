@@ -3,17 +3,14 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AccountInfoPurposeView {
-    private boolean isSelected;
-    private long id;
+import java.io.Serializable;
+
+public class AccountInfoProductTypeView implements Serializable {
     private String name;
+    private long id;
 
-    public long getId() {
-        return id;
-    }
+    public AccountInfoProductTypeView() {
 
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -24,20 +21,19 @@ public class AccountInfoPurposeView {
         this.name = name;
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    public long getId() {
+        return id;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("isSelected", isSelected)
-                .append("id", id)
                 .append("name", name)
+                .append("id", id)
                 .toString();
     }
 }
