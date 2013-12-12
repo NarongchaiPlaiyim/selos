@@ -8,16 +8,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class  CreditTypeDetailView implements Serializable {
+public class CreditTypeDetailView implements Serializable {
     private long id;
     private boolean noFlag;
-    private String account;
+    private String accountName;
+    private String accountNumber;
+    private String accountSuf;
     private String Type;
     private int requestType;
     private String productProgram;
     private String creditFacility;
-    private BigDecimal  limit;
-    private BigDecimal  guaranteeAmount;
+    private BigDecimal limit;
+    private BigDecimal guaranteeAmount;
     private int useCount;
     private int seq;
     private Date createDate;
@@ -32,7 +34,9 @@ public class  CreditTypeDetailView implements Serializable {
 
     public void reset() {
         this.id = 0;
-        this.account = "";
+        this.accountName = "";
+        this.accountNumber = "";
+        this.accountSuf = "";
         this.Type  = "";
         this.requestType = 0;
         this.productProgram = "";
@@ -53,12 +57,12 @@ public class  CreditTypeDetailView implements Serializable {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getType() {
@@ -174,12 +178,30 @@ public class  CreditTypeDetailView implements Serializable {
         this.purpose = purpose;
     }
 
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("noFlag", noFlag)
-                .append("account", account)
+                .append("accountName", accountName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
                 .append("Type", Type)
                 .append("requestType", requestType)
                 .append("productProgram", productProgram)
@@ -192,6 +214,7 @@ public class  CreditTypeDetailView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("purpose", purpose)
                 .toString();
     }
 }
