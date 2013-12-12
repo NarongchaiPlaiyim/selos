@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -274,5 +275,17 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         return creditTypeDetailList;
+    }
+
+    public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
+        BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
+        if (guarantorDetailViewList == null || guarantorDetailViewList.size() == 0) {
+            return sumTotalGuaranteeAmount;
+        }
+
+        for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
+            sumTotalGuaranteeAmount = sumTotalGuaranteeAmount.add(guarantorDetailView.getTotalLimitGuaranteeAmount());
+        }
+        return sumTotalGuaranteeAmount;
     }
 }
