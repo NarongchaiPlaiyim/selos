@@ -120,7 +120,7 @@
     </td>
     <td style="text-align: left" class="title">
         <h:outputText
-                value="#{msg.get('app.credit.facility.propose.label.totalCreditTurnover')}"/>
+                value="#{msg.get('app.credit.facility.propose.label.totalWCTMB')}"/>
     </td>
     <td>
         <p:inputText styleClass="large"
@@ -452,19 +452,19 @@
             <tr>
                 <td colspan="2">
                   <p:selectOneRadio id="creditCustomerTypeValue" value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}">
-                        <f:selectItem itemLabel="Normal" itemValue="1"/>
-                        <f:selectItem itemLabel="Prime" itemValue="2"/>
+                        <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.normal')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.prime')}" itemValue="2"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
                 <td style="text-align: left;width:400px;" class="title">
                     <h:outputText
-                            value="#{msg.get('app.credit.facility.propose.label.proposed.credit.type')}"/>
+                            value="#{msg.get('app.credit.facility.propose.label.proposed.credit.loanRequestType')}"/>
                 </td>
                 <td>
                     <p:selectOneMenu id="creditRequest"
-                                     value="#{creditFacPropose.newCreditFacilityView.creditRequestType.id}"
+                                     value="#{creditFacPropose.newCreditFacilityView.loanRequestType.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
@@ -483,7 +483,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="countryItem"
-                                     value="#{creditFacPropose.newCreditFacilityView.country.id}"
+                                     value="#{creditFacPropose.newCreditFacilityView.investedCountry.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
@@ -513,10 +513,10 @@
                     </p:inputText>
                     <p:spacer width="5px;"/>
                     <h:outputText
-                            value="#{msg.get('app.credit.facility.propose.label.maximumExistingSMELimit')}"/>
+                            value="#{msg.get('app.credit.facility.propose.label.maximumSMELimit')}"/>
                     <p:spacer width="5px;"/>
                     <p:inputText styleClass="medium"
-                                 value="#{creditFacPropose.newCreditFacilityView.maximumExistingSMELimit}"
+                                 value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                  style="text-align: right;">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
@@ -538,7 +538,7 @@
                 styleClass="smaller"
                 process="@form"
                 actionListener="#{creditFacPropose.onAddCreditInfo}"
-                update=":creditInfoDlgForm" >
+                update=":creditInfoDlgForm,:msgBoxSystemMessagePanel" >
             <p:resetInput target=":creditInfoDlgForm"/>
         </p:commandButton>
         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
@@ -1234,11 +1234,13 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.account}"/>
+                <h:outputText value="#{creditTypeDetailItem.accountName}"/><br/>
+                <h:outputText value="#{creditTypeDetailItem.accountNumber}"/><br/>
+                <h:outputText value="#{creditTypeDetailItem.accountSuf}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.type == 0 ? 'New' : 'Change'}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? 'New' : 'Change'}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1397,7 +1399,7 @@
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
                                var="collateralOwnerUW"  varStatus="a">
-                        <h:outputText value="#{collateralOwnerUW.nameTh}"/><br/>
+                        <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
@@ -1499,7 +1501,7 @@
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{newGuarantorDetailView.guarantorName.nameTh}"/>
+                            <h:outputText value="#{newGuarantorDetailView.guarantorName.firstNameTh}  #{newGuarantorDetailView.guarantorName.lastNameTh}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1512,7 +1514,9 @@
                                 <table class="table_noborder">
                                      <tr>
                                          <td  style="width: 100px;" class="left top">
-                                             <h:outputText value="#{creditTypeDetail.account}"/>
+                                             <h:outputText value="#{creditTypeDetail.accountName}"/><br/>
+                                             <h:outputText value="#{creditTypeDetail.accountNumber}"/><br/>
+                                             <h:outputText value="#{creditTypeDetail.accountSuf}"/>
                                          </td>
                                          <td  style="width: 100px;" class="center top">
                                              <h:outputText value="#{creditTypeDetail.productProgram}"/><br/>
@@ -1725,6 +1729,7 @@
 
 <tr>
     <!-- Hidden -->
+    <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalLoanWCTMB}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberOfNewOD}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberProposeCreditFac}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberContingenPropose}"/>
@@ -1788,7 +1793,7 @@
     <ui:param name="formId" value="frmConfirmDeleteCreditInfo"/>
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteCreditInfo"/>
-    <ui:param name="update" value=":frmMain"/>
+    <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
 <!-- Propose Collateral Dialog -->

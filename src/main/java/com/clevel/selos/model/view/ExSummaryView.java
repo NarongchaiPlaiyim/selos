@@ -24,7 +24,7 @@ public class ExSummaryView  implements Serializable {
     private String owner;
 
     //Trade Finance
-
+    private NewCreditFacilityView tradeFinance;
 
     //Borrower Characteristic & Business Information Summary
     private ExSumCharacteristicView exSumCharacteristicView;
@@ -369,5 +369,13 @@ public class ExSummaryView  implements Serializable {
 
     public void setYearInBusinessMonth(String yearInBusinessMonth) {
         this.yearInBusinessMonth = yearInBusinessMonth;
+    }
+
+    public NewCreditFacilityView getTradeFinance() {
+        return tradeFinance;
+    }
+
+    public void setTradeFinance(NewCreditFacilityView tradeFinance) {
+        this.tradeFinance = tradeFinance;
     }
 }

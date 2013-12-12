@@ -78,7 +78,7 @@
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
                                        var="collateralOwnerUWItem"
-                                       itemLabel="#{collateralOwnerUWItem.nameTh} #{collateralOwnerUWItem.lastNameTh}"
+                                       itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
                                        itemValue="#{collateralOwnerUWItem.id}"/>
                     </p:selectOneMenu>
                 </td>
@@ -104,7 +104,7 @@
         <p:dataTable id="CollOwnerUWTb"
                      value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUWList}"
                      var="collateralOwnerUWItem"
-                     rowKey="#{collateralOwnerUWItem.Customer}"
+                     rowKey="#{collateralOwnerUWItem.id}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
@@ -120,7 +120,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{collateralOwnerUWItem.nameTh}"/>
+                <h:outputText value="#{collateralOwnerUWItem.firstNameTh}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -216,7 +216,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWithSelected.id}"
+                                     value="#{creditFacPropose.relatedWithSelected}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- relatedWith -" itemValue=""/>
@@ -231,8 +231,8 @@
                             id="addRelatedWithButton"
                             value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                             styleClass="smaller"
-                            actionListener="#{creditFacPropose.onAddRelatedWith()}"
-                            process=":subCollateralDlgForm:dlgRelatedWith"
+                            action="#{creditFacPropose.onAddRelatedWith()}"
+                            process="@form"
                             update=":subCollateralDlgForm">
                     </p:commandButton>
                 </td>
