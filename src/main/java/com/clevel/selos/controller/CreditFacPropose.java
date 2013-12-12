@@ -1307,7 +1307,7 @@ public class CreditFacPropose implements Serializable {
         log.info("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 
         try {
-            if ((newCreditFacilityView.getCountry().getId() != 0) && (newCreditFacilityView.getCreditRequestType().getId() != 0)) {
+            if ((newCreditFacilityView.getInvestedCountry().getId() != 0) && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
                 if ((newCreditFacilityView.getNewCreditDetailViewList().size() > 0) && (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0)
                         && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {

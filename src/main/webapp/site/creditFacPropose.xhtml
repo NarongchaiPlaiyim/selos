@@ -120,7 +120,7 @@
     </td>
     <td style="text-align: left" class="title">
         <h:outputText
-                value="#{msg.get('app.credit.facility.propose.label.totalCreditTurnover')}"/>
+                value="#{msg.get('app.credit.facility.propose.label.totalWCTMB')}"/>
     </td>
     <td>
         <p:inputText styleClass="large"
@@ -452,19 +452,19 @@
             <tr>
                 <td colspan="2">
                   <p:selectOneRadio id="creditCustomerTypeValue" value="#{creditFacPropose.newCreditFacilityView.creditCustomerType}">
-                        <f:selectItem itemLabel="Normal" itemValue="1"/>
-                        <f:selectItem itemLabel="Prime" itemValue="2"/>
+                        <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.normal')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.credit.facility.propose.radio.creditCusType.prime')}" itemValue="2"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
                 <td style="text-align: left;width:400px;" class="title">
                     <h:outputText
-                            value="#{msg.get('app.credit.facility.propose.label.proposed.credit.type')}"/>
+                            value="#{msg.get('app.credit.facility.propose.label.proposed.credit.loanRequestType')}"/>
                 </td>
                 <td>
                     <p:selectOneMenu id="creditRequest"
-                                     value="#{creditFacPropose.newCreditFacilityView.creditRequestType.id}"
+                                     value="#{creditFacPropose.newCreditFacilityView.loanRequestType.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
@@ -483,7 +483,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="countryItem"
-                                     value="#{creditFacPropose.newCreditFacilityView.country.id}"
+                                     value="#{creditFacPropose.newCreditFacilityView.investedCountry.id}"
                                      size="1"
                                      style="width: 200px;"
                                      required="#{not empty param[onsaveNewFacility.clientId]}">
@@ -513,10 +513,10 @@
                     </p:inputText>
                     <p:spacer width="5px;"/>
                     <h:outputText
-                            value="#{msg.get('app.credit.facility.propose.label.maximumExistingSMELimit')}"/>
+                            value="#{msg.get('app.credit.facility.propose.label.maximumSMELimit')}"/>
                     <p:spacer width="5px;"/>
                     <p:inputText styleClass="medium"
-                                 value="#{creditFacPropose.newCreditFacilityView.maximumExistingSMELimit}"
+                                 value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                  style="text-align: right;">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
@@ -1725,6 +1725,7 @@
 
 <tr>
     <!-- Hidden -->
+    <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalLoanWCTMB}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberOfNewOD}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberProposeCreditFac}"/>
     <h:inputHidden value="#{creditFacPropose.newCreditFacilityView.totalNumberContingenPropose}"/>
