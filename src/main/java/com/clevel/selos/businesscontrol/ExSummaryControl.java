@@ -186,8 +186,10 @@ public class ExSummaryControl extends BusinessControl {
             //For footer borrower
             //todo: this
             StringBuilder bizPermission = new StringBuilder();
-            for(BizInfoDetailView bizInfoDetailView : bizInfoSummaryView.getBizInfoDetailViewList()){
-                bizPermission = bizPermission.append(bizInfoDetailView.getBizPermission());
+            if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+                for(BizInfoDetailView bizInfoDetailView : bizInfoSummaryView.getBizInfoDetailViewList()){
+                    bizPermission = bizPermission.append(bizInfoDetailView.getBizPermission()+", "); //todo: this
+                }
             }
 //            แสดงประเภทการค้าขายของธุรกิจที่มีสัดส่วนมากที่สุด กรณีมีธุรกิจที่มีสัดส่วนมากที่สุดเท่ากันมากว่า 1 ธุรกิจให้แสดงธุรกิจแรก
             exSummaryView.setBusinessOperationActivity("");
