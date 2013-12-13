@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.LoanPaymentDetailView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -36,6 +37,7 @@ public class PledgeDetail {
 
     //session
     private long workCaseId;
+
 
     public PledgeDetail(){}
 
