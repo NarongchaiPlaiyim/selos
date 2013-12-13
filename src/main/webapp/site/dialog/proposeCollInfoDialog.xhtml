@@ -415,7 +415,7 @@
                          value="#{msg.get('app.button.ok')}"
                          action="#{creditFacPropose.onSaveProposeCollInfo}"
                          process=":collateralDlgForm"
-                         update=":collateralDlgForm,:frmMain"
+                         update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                          oncomplete="handleProposeCollateralDetailRequest(xhr, status, args)"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
                          styleClass="small"
