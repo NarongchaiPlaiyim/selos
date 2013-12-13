@@ -1,10 +1,7 @@
 package com.clevel.selos.model.view;
 
-
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ public class AccountInfoDetailView implements Serializable {
 
     //Account Number
     private String accountNumber;
+    private String accountNumberForShow;
 
     //Branch
     private AccountInfoBranchView branchView;
@@ -28,9 +26,11 @@ public class AccountInfoDetailView implements Serializable {
 
     //term
     private String term;
+    private String termForShow;
 
     //Account Name
     private List<AccountNameView> accountNameViewList;
+    private AccountNameView accountNameViewSelected;
     private String accountNameViewListForShow;
 
     //Purpose
@@ -39,7 +39,6 @@ public class AccountInfoDetailView implements Serializable {
 
     //Credit Type
     private List<AccountInfoCreditTypeView> accountInfoCreditTypeViewList;
-
 
     public AccountInfoDetailView(){
         init();
@@ -55,6 +54,7 @@ public class AccountInfoDetailView implements Serializable {
         productTypeView = new AccountInfoProductTypeView();
         accountNameViewList = new ArrayList<AccountNameView>();
         accountInfoCreditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
+        accountNameViewSelected = new AccountNameView();
     }
 
     public int getReqAccountType() {
@@ -151,6 +151,30 @@ public class AccountInfoDetailView implements Serializable {
 
     public void setAccountInfoCreditTypeViewList(List<AccountInfoCreditTypeView> accountInfoCreditTypeViewList) {
         this.accountInfoCreditTypeViewList = accountInfoCreditTypeViewList;
+    }
+
+    public AccountNameView getAccountNameViewSelected() {
+        return accountNameViewSelected;
+    }
+
+    public void setAccountNameViewSelected(AccountNameView accountNameViewSelected) {
+        this.accountNameViewSelected = accountNameViewSelected;
+    }
+
+    public String getAccountNumberForShow() {
+        return accountNumberForShow;
+    }
+
+    public void setAccountNumberForShow(String accountNumberForShow) {
+        this.accountNumberForShow = accountNumberForShow;
+    }
+
+    public String getTermForShow() {
+        return termForShow;
+    }
+
+    public void setTermForShow(String termForShow) {
+        this.termForShow = termForShow;
     }
 
     @Override
