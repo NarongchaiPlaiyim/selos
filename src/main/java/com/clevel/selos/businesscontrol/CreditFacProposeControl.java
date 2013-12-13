@@ -71,9 +71,12 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralHeadDetailDAO newCollateralHeadDetailDAO;
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
+    @Inject
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
+    @Inject
+    CreditFacExistingControl creditFacExistingControl;
 
-    public CreditFacProposeControl() {
-    }
+    public CreditFacProposeControl() {}
 
     public NewCreditFacility getNewCreditFacilityViewByWorkCaseId(long workCaseId) {
         log.info("workCaseId :: {}", workCaseId);
@@ -243,7 +246,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
-    public List<CreditTypeDetailView> findCreditFacility(List<NewCreditDetailView> newCreditDetailViewList) {
+    public List<CreditTypeDetailView> findCreditFacility(List<NewCreditDetailView> newCreditDetailViewList , long workCaseId) {
         // todo: find credit existing and propose in this workCase
         List<CreditTypeDetailView> creditTypeDetailList = new ArrayList<CreditTypeDetailView>();
         CreditTypeDetailView creditTypeDetailView;
@@ -263,17 +266,16 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-//        ExistingCreditView existingCreditView = transformExiting.getExistingCredit(); call business control  to find Existing  and transform to view
-
-        ExistingCreditView existingCreditView = new ExistingCreditView(); //test
+//        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.getExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
+        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
         int seq  = 0;
-        if(existingCreditView.getBorrowerComExistingCredit() != null && existingCreditView.getBorrowerComExistingCredit().size() > 0)
+        if(existingCreditFacilityView.getBorrowerComExistingCredit() != null && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0)
         {
             seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : 1;
             log.info("seq :: {}", seq);
 
             //type of Borrower Existing
-            for(ExistingCreditDetailView existingCreditDetailView : existingCreditView.getBorrowerComExistingCredit()) {
+            for(ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 creditTypeDetailView = new CreditTypeDetailView();
                 creditTypeDetailView.setSeq(seq);
                 creditTypeDetailView.setAccountName(existingCreditDetailView.getAccountName());
@@ -287,12 +289,12 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-        if(existingCreditView.getBorrowerRetailExistingCredit() != null && existingCreditView.getBorrowerRetailExistingCredit().size() > 0)
+        /*if(existingCreditFacilityView.getBorrowerRetailExistingCredit() != null && existingCreditFacilityView.getBorrowerRetailExistingCredit().size() > 0)
         {
-            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : existingCreditView.getBorrowerRetailExistingCredit() != null ? existingCreditView.getBorrowerRetailExistingCredit().size() + 1 : 1;
+            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : existingCreditFacilityView.getBorrowerRetailExistingCredit() != null ? existingCreditFacilityView.getBorrowerRetailExistingCredit().size() + 1 : 1;
             log.info("seq :: {}", seq);
             //type of Retail Existing
-            for(ExistingCreditDetailView existingCreditDetailView : existingCreditView.getBorrowerRetailExistingCredit()) {
+            for(ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerRetailExistingCredit()) {
                 creditTypeDetailView = new CreditTypeDetailView();
                 creditTypeDetailView.setSeq(seq);
                 creditTypeDetailView.setAccountName(existingCreditDetailView.getAccountName());
@@ -304,7 +306,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 creditTypeDetailList.add(creditTypeDetailView);
                 seq++;
             }
-        }
+        }*/
 
         return creditTypeDetailList;
     }

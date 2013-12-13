@@ -788,7 +788,7 @@ public class CreditFacPropose implements Serializable {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
         modeForButton = ModeForButton.ADD;
         newCollateralInfoView = new NewCollateralInfoView();
-        newCollateralInfoView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
+        newCollateralInfoView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList(),workCaseId));
         newCollateralInfoView.getNewCollateralHeadDetailViewList().add(new NewCollateralHeadDetailView());
 
     }
@@ -812,7 +812,7 @@ public class CreditFacPropose implements Serializable {
         newCollateralInfoView.setNewCollateralHeadDetailViewList(selectCollateralDetailView.getNewCollateralHeadDetailViewList());
 
         int tempSeq = 0;
-        creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());
+        creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList(),workCaseId);
         newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailList);
 
         if(selectCollateralDetailView.getCreditTypeDetailViewList().size()>0){
@@ -878,7 +878,7 @@ public class CreditFacPropose implements Serializable {
 
                 for (CreditTypeDetailView creditTypeDetail : newCollateralInfoView.getCreditTypeDetailViewList()) {
                     log.info("creditTypeDetail.isNoFlag()  :: {}", creditTypeDetail.isNoFlag());
-                    if (creditTypeDetail.isNoFlag()) {
+                    if (creditTypeDetail.isNoFlag()){
                         proposeCollateralInfoAdd.getCreditTypeDetailViewList().add(creditTypeDetail);
                         seqTemp = creditTypeDetail.getSeq();
                         hashSeqCredit.put(seqTemp, Integer.parseInt(hashSeqCredit.get(seqTemp).toString()) + 1);
@@ -966,20 +966,19 @@ public class CreditFacPropose implements Serializable {
     // for sub collateral dialog
     public void onAddCollateralOwnerUW() {
         log.info("onAddCollateralOwnerUW :: {} ", newSubCollateralDetailView.getCollateralOwner());
-
-        log.info("first name ::: {}", newSubCollateralDetailView.getCollateralOwnerUW().getFirstNameTh());
-        log.info("last name ::: {}", newSubCollateralDetailView.getCollateralOwnerUW().getLastNameTh());
-
-        CustomerInfoView collateralOwnerAdd = new CustomerInfoView();
-        collateralOwnerAdd.setTitleTh(collateralOwnerUW.getTitleTh());
-        collateralOwnerAdd.setFirstNameTh(collateralOwnerUW.getFirstNameTh());
-        collateralOwnerAdd.setLastNameTh(collateralOwnerUW.getLastNameTh());
-        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
+//        log.info("first name ::: {}", newSubCollateralDetailView.getCollateralOwnerUW().getFirstNameTh());
+//        log.info("last name ::: {}", newSubCollateralDetailView.getCollateralOwnerUW().getLastNameTh());
+//
+//        CustomerInfoView collateralOwnerAdd = new CustomerInfoView();
+//        collateralOwnerAdd.setTitleTh(collateralOwnerUW.getTitleTh());
+//        collateralOwnerAdd.setFirstNameTh(collateralOwnerUW.getFirstNameTh());
+//        collateralOwnerAdd.setLastNameTh(collateralOwnerUW.getLastNameTh());
+//        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
     }
 
     public void onDeleteCollateralOwnerUW(int row) {
         log.info("row :: {} ", row);
-        newSubCollateralDetailView.getCollateralOwnerUWList().remove(row);
+//        newSubCollateralDetailView.getCollateralOwnerUWList().remove(row);
     }
 
     public void onAddMortgageType() {
@@ -1040,7 +1039,7 @@ public class CreditFacPropose implements Serializable {
         newSubCollateralDetailView.setCollateralOwnerAAD(subCollateralDetailItem.getCollateralOwnerAAD());
         newSubCollateralDetailView.setAppraisalValue(subCollateralDetailItem.getAppraisalValue());
         newSubCollateralDetailView.setMortgageValue(subCollateralDetailItem.getMortgageValue());
-        newSubCollateralDetailView.setCollateralOwnerUWList(subCollateralDetailItem.getCollateralOwnerUWList());
+//        newSubCollateralDetailView.setCollateralOwnerUWList(subCollateralDetailItem.getCollateralOwnerUWList());
         newSubCollateralDetailView.setMortgageList(subCollateralDetailItem.getMortgageList());
 //        newSubCollateralDetailView.setRelatedWithList(subCollateralDetailItem.getRelatedWithList());
     }
@@ -1061,7 +1060,7 @@ public class CreditFacPropose implements Serializable {
             subCollAdd.setCollateralOwnerAAD(newSubCollateralDetailView.getCollateralOwnerAAD());
             subCollAdd.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
             subCollAdd.setMortgageValue(newSubCollateralDetailView.getMortgageValue());
-            subCollAdd.setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
+//            subCollAdd.setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
             subCollAdd.setMortgageList(newSubCollateralDetailView.getMortgageList());
 //            subCollAdd.setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().add(subCollAdd);
@@ -1076,7 +1075,7 @@ public class CreditFacPropose implements Serializable {
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setCollateralOwnerAAD(newSubCollateralDetailView.getCollateralOwnerAAD());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setMortgageValue(newSubCollateralDetailView.getMortgageValue());
-            newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
+//            newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setCollateralOwnerUWList(newSubCollateralDetailView.getCollateralOwnerUWList());
             newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setMortgageList(newSubCollateralDetailView.getMortgageList());
 //            newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().get(rowSubIndex).setRelatedWithList(newSubCollateralDetailView.getRelatedWithList());
         } else {
@@ -1100,7 +1099,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddGuarantorInfo() {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
-        newGuarantorDetailView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList()));
+        newGuarantorDetailView.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList(),workCaseId));
     }
 
     public void onEditGuarantorInfo() {
@@ -1112,7 +1111,7 @@ public class CreditFacPropose implements Serializable {
         if (newGuarantorDetailViewItem != null) {
             newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
-            creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList());  //all creditType that add this time
+            creditTypeDetailList = creditFacProposeControl.findCreditFacility(newCreditFacilityView.getNewCreditDetailViewList(),workCaseId);  //all creditType that add this time
             newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailList);
 
             if (newGuarantorDetailViewItem.getCreditTypeDetailViewList().size() > 0) {
