@@ -16,8 +16,8 @@ public class ExistingConditionDetailTransform extends Transform {
     public ExistingConditionDetailTransform() {
     }
 
-    public List<ExistingConditionDetail> transformToModel(List<ExistingConditionDetailView> existingConditionDetailViewList,ExistingCreditFacility existingCreditFacility,User user) {
-        log.info("transformToModel ExistingConditionDetail begin ");
+    public List<ExistingConditionDetail> transformsToModel(List<ExistingConditionDetailView> existingConditionDetailViewList,ExistingCreditFacility existingCreditFacility,User user) {
+        log.info("transformsToModel ExistingConditionDetail begin ");
         List<ExistingConditionDetail> existingConditionDetailList = new ArrayList<ExistingConditionDetail>();
         ExistingConditionDetail existingConditionDetail;
 
@@ -39,12 +39,12 @@ public class ExistingConditionDetailTransform extends Transform {
             existingConditionDetail.setExistingCreditFacility(existingCreditFacility);
             existingConditionDetailList.add(existingConditionDetail);
         }
-        log.info("transformToModel ExistingConditionDetail end ");
+        log.info("transformsToModel ExistingConditionDetail end ");
 
         return existingConditionDetailList;
     }
 
-    public List<ExistingConditionDetailView> transformToView(List<ExistingConditionDetail> existingConditionDetailList) {
+    public List<ExistingConditionDetailView> transformsToView(List<ExistingConditionDetail> existingConditionDetailList) {
 
         List<ExistingConditionDetailView> existingConditionDetailViewList = new ArrayList<ExistingConditionDetailView>();
         ExistingConditionDetailView existingConditionDetailView;
