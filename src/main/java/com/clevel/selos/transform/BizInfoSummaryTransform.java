@@ -56,8 +56,6 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setAddressBuilding(bizInfoSummaryView.getAddressBuilding());
         bizInfoSummary.setAddressStreet(bizInfoSummaryView.getAddressStreet());
 
-        log.info("find transformToModel xxx2");
-
         log.info("find transformToModel province" + bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
 
         if(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode() != 0){
@@ -96,6 +94,7 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummary.setCountry(null);
         }
 
+        bizInfoSummary.setAddressEng(bizInfoSummaryView.getAddressEng());
 
         bizInfoSummary.setPostCode(bizInfoSummaryView.getPostCode());
         bizInfoSummary.setPhoneNo(bizInfoSummaryView.getPhoneNo());
@@ -148,8 +147,6 @@ public class BizInfoSummaryTransform extends Transform {
         }else{
             bizInfoSummary.setProfitMarginPercentage(BigDecimal.ZERO);
         }
-
-
 
         if(bizInfoSummaryView.getOperatingExpenseAmount() != null){
             bizInfoSummary.setOperatingExpenseAmount(bizInfoSummaryView.getOperatingExpenseAmount());
@@ -256,10 +253,12 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setAddressBuilding(bizInfoSummary.getAddressBuilding());
         bizInfoSummaryView.setAddressStreet(bizInfoSummary.getAddressStreet());
 
+
         bizInfoSummaryView.setProvince(bizInfoSummary.getSubDistrict().getDistrict().getProvince());
         bizInfoSummaryView.setDistrict(bizInfoSummary.getSubDistrict().getDistrict());
         bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         bizInfoSummaryView.setCountry(bizInfoSummary.getCountry());
+        bizInfoSummaryView.setAddressEng(bizInfoSummary.getAddressEng());
 
         bizInfoSummaryView.setPostCode(bizInfoSummary.getPostCode());
         bizInfoSummaryView.setPhoneNo(bizInfoSummary.getPhoneNo());
@@ -286,7 +285,6 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setReduceInterestAmount(bizInfoSummary.getReduceInterestAmount());
         bizInfoSummaryView.setReduceInterestPercentage(bizInfoSummary.getReduceInterestAmount());
-
 
         bizInfoSummaryView.setEarningsBeforeTaxAmount(bizInfoSummary.getEarningsBeforeTaxAmount());
         bizInfoSummaryView.setEarningsBeforeTaxPercentage(bizInfoSummary.getEarningsBeforeTaxPercentage());
