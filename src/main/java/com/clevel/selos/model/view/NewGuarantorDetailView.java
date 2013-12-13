@@ -1,7 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class NewGuarantorDetailView implements Serializable {
     private long id;
-    private Customer guarantorName;
+    private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
     private int isApproved;
@@ -30,7 +29,7 @@ public class NewGuarantorDetailView implements Serializable {
     }
 
     public void reset() {
-        this.guarantorName = new Customer();
+        this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
@@ -76,11 +75,11 @@ public class NewGuarantorDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public Customer getGuarantorName() {
+    public CustomerInfoView getGuarantorName() {
         return guarantorName;
     }
 
-    public void setGuarantorName(Customer guarantorName) {
+    public void setGuarantorName(CustomerInfoView guarantorName) {
         this.guarantorName = guarantorName;
     }
 

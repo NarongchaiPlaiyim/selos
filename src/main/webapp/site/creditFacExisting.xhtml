@@ -1109,7 +1109,7 @@
                                                    <ui:repeat value="#{borrowerCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                        <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                        <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
-                                                       <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                       <p:outputLabel value="#{creditFacility.productProgram}"/> , <p:outputLabel value="#{creditFacility.creditFacility}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
                                                     </ui:repeat>
                                                 </p:column>
 
@@ -1216,7 +1216,7 @@
                                                     <ui:repeat value="#{relatedCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                         <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
-                                                        <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.productProgram}"/> , <p:outputLabel value="#{creditFacility.creditFacility}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
                                                     </ui:repeat>
                                                 </p:column>
 
@@ -1332,11 +1332,11 @@
                                                     <ui:repeat value="#{existingGuarantor.existingCreditTypeDetailViewList}" var="creditFacility">
                                                         <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                         <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
-                                                        <p:outputLabel value="#{creditFacility.existProductProgram.name}"/> , <p:outputLabel value="#{creditFacility.existCreditType.name}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
+                                                        <p:outputLabel value="#{creditFacility.productProgram}"/> , <p:outputLabel value="#{creditFacility.creditFacility}"/><p:spacer width="10px"/><p:outputLabel value="#{creditFacility.limit}"/><br/>
                                                     </ui:repeat>
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{existingGuarantor.guaranteeAmount}"></p:outputLabel>
+                                                    <p:outputLabel value="#{existingGuarantor.totalLimitGuaranteeAmount}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:commandButton icon="ui-icon-pencil"

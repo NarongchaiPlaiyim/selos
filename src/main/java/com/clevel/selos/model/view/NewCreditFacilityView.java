@@ -33,7 +33,7 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal case3WcDebitCoreWc;
 
     private BigDecimal existingSMELimit;
-    private BigDecimal maximumExistingSMELimit;
+    private BigDecimal maximumSMELimit;
 
     private BigDecimal totalPropose;
     private BigDecimal totalProposeLoanDBR;
@@ -60,8 +60,8 @@ public class NewCreditFacilityView implements Serializable {
     private BigDecimal guarantorBA;
     private String reasonForReduction;
     private int creditCustomerType;
-    private CreditRequestType  creditRequestType;
-    private Country country;
+    private CreditRequestType  loanRequestType;
+    private Country investedCountry;
 
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
@@ -74,6 +74,7 @@ public class NewCreditFacilityView implements Serializable {
     private List<NewConditionDetailView> newConditionDetailViewList;
 
     //hidden credit type
+    private BigDecimal totalLoanWCTMB;  //Existing Core W/Loan Credit limit with TMB
     private BigDecimal totalNumberOfNewOD;
     private BigDecimal totalNumberProposeCreditFac;
     private BigDecimal totalNumberContingenPropose;
@@ -114,7 +115,7 @@ public class NewCreditFacilityView implements Serializable {
         this.case3Wc50CoreWc = BigDecimal.ZERO;
         this.case3WcDebitCoreWc = BigDecimal.ZERO;
         this.existingSMELimit = BigDecimal.ZERO;
-        this.maximumExistingSMELimit = BigDecimal.ZERO;
+        this.maximumSMELimit = BigDecimal.ZERO;
 
         this.totalPropose = BigDecimal.ZERO;
         this.totalProposeLoanDBR = BigDecimal.ZERO;
@@ -154,8 +155,8 @@ public class NewCreditFacilityView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
 
-        this.creditRequestType = new CreditRequestType();
-        this.country = new Country();
+        this.loanRequestType = new CreditRequestType();
+        this.investedCountry = new Country();
 
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
@@ -167,6 +168,7 @@ public class NewCreditFacilityView implements Serializable {
         this.totalTCGGuaranteeAmount = BigDecimal.ZERO;
         this.totalIndvGuaranteeAmount = BigDecimal.ZERO;
         this.totalJurisGuaranteeAmount = BigDecimal.ZERO;
+        this.totalLoanWCTMB = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -353,12 +355,20 @@ public class NewCreditFacilityView implements Serializable {
         this.existingSMELimit = existingSMELimit;
     }
 
-    public BigDecimal getMaximumExistingSMELimit() {
-        return maximumExistingSMELimit;
+    public BigDecimal getMaximumSMELimit() {
+        return maximumSMELimit;
     }
 
-    public void setMaximumExistingSMELimit(BigDecimal maximumExistingSMELimit) {
-        this.maximumExistingSMELimit = maximumExistingSMELimit;
+    public void setMaximumSMELimit(BigDecimal maximumSMELimit) {
+        this.maximumSMELimit = maximumSMELimit;
+    }
+
+    public Country getInvestedCountry() {
+        return investedCountry;
+    }
+
+    public void setInvestedCountry(Country investedCountry) {
+        this.investedCountry = investedCountry;
     }
 
     public Date getCreateDate() {
@@ -601,20 +611,12 @@ public class NewCreditFacilityView implements Serializable {
         this.creditCustomerType = creditCustomerType;
     }
 
-    public CreditRequestType getCreditRequestType() {
-        return creditRequestType;
+    public CreditRequestType getLoanRequestType() {
+        return loanRequestType;
     }
 
-    public void setCreditRequestType(CreditRequestType creditRequestType) {
-        this.creditRequestType = creditRequestType;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setLoanRequestType(CreditRequestType loanRequestType) {
+        this.loanRequestType = loanRequestType;
     }
 
     public BigDecimal getTotalNumberOfNewOD() {
@@ -697,5 +699,11 @@ public class NewCreditFacilityView implements Serializable {
         this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
     }
 
+    public BigDecimal getTotalLoanWCTMB() {
+        return totalLoanWCTMB;
+    }
 
+    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
+        this.totalLoanWCTMB = totalLoanWCTMB;
+    }
 }

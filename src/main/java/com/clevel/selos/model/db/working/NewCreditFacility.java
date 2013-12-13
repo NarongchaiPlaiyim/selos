@@ -3,8 +3,6 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -75,8 +73,8 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "existing_sme_limit")
     private BigDecimal existingSMELimit;
 
-    @Column(name = "maximum_existing_sme_limit")
-    private BigDecimal maximumExistingSMELimit;
+    @Column(name = "maximum_sme_limit")
+    private BigDecimal maximumSMELimit;
 
     @Column(name = "total_approve_credit")
     private BigDecimal totalApproveCredit;
@@ -165,13 +163,37 @@ public class NewCreditFacility implements Serializable {
     @Column(name = "credit_customer_type")
     private int creditCustomerType;
 
+    @Column(name = "num_months_appr_date")
+    private int numberMonthsFromApprDate;
+
+    @Column(name = "total_core_asset")
+    private int totalNumberOfCoreAsset;
+
+    @Column(name = "total_non_core_asset")
+    private int totalNumberOfNonCoreAsset;
+
+    @Column(name = "total_mortgage_value")
+    private int totalMortgageValue;
+
+    @Column(name = "total_TCG_guarantee_amt")
+    private BigDecimal totalTCGGuaranteeAmount;
+
+    @Column(name = "total_indv_guarantee_amt")
+    private BigDecimal totalIndvGuaranteeAmount;
+
+    @Column(name = "total_juris_guarantee_amt")
+    private BigDecimal totalJurisGuaranteeAmount;
+
+    @Column(name = "total_loan_wc_tmb")
+    private BigDecimal totalLoanWCTMB;
+
     @OneToOne
     @JoinColumn(name = "credit_request_type")
-    private  CreditRequestType creditRequestType;
+    private  CreditRequestType loanRequestType;
 
     @OneToOne
     @JoinColumn(name = "country_id")
-    private Country country;
+    private Country investedCountry;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -356,12 +378,12 @@ public class NewCreditFacility implements Serializable {
         this.existingSMELimit = existingSMELimit;
     }
 
-    public BigDecimal getMaximumExistingSMELimit() {
-        return maximumExistingSMELimit;
+    public BigDecimal getMaximumSMELimit() {
+        return maximumSMELimit;
     }
 
-    public void setMaximumExistingSMELimit(BigDecimal maximumExistingSMELimit) {
-        this.maximumExistingSMELimit = maximumExistingSMELimit;
+    public void setMaximumSMELimit(BigDecimal maximumSMELimit) {
+        this.maximumSMELimit = maximumSMELimit;
     }
 
     public BigDecimal getTotalNumberOfNewOD() {
@@ -588,20 +610,20 @@ public class NewCreditFacility implements Serializable {
         this.creditCustomerType = creditCustomerType;
     }
 
-    public CreditRequestType getCreditRequestType() {
-        return creditRequestType;
+    public CreditRequestType getLoanRequestType() {
+        return loanRequestType;
     }
 
-    public void setCreditRequestType(CreditRequestType creditRequestType) {
-        this.creditRequestType = creditRequestType;
+    public void setLoanRequestType(CreditRequestType loanRequestType) {
+        this.loanRequestType = loanRequestType;
     }
 
-    public Country getCountry() {
-        return country;
+    public Country getInvestedCountry() {
+        return investedCountry;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setInvestedCountry(Country investedCountry) {
+        this.investedCountry = investedCountry;
     }
 
     public Date getCreateDate() {
@@ -684,67 +706,68 @@ public class NewCreditFacility implements Serializable {
         this.newConditionDetailList = newConditionDetailList;
     }
 
-
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("wcNeed", wcNeed)
-                .append("totalWcTmb", totalWcTmb)
-                .append("WCNeedDiffer", WCNeedDiffer)
-                .append("totalWcDebit", totalWcDebit)
-                .append("case1WcLimit", case1WcLimit)
-                .append("case1WcMinLimit", case1WcMinLimit)
-                .append("case1Wc50CoreWc", case1Wc50CoreWc)
-                .append("case1WcDebitCoreWc", case1WcDebitCoreWc)
-                .append("case2WcLimit", case2WcLimit)
-                .append("case2WcMinLimit", case2WcMinLimit)
-                .append("case2Wc50CoreWc", case2Wc50CoreWc)
-                .append("case2WcDebitCoreWc", case2WcDebitCoreWc)
-                .append("case3WcLimit", case3WcLimit)
-                .append("case3WcMinLimit", case3WcMinLimit)
-                .append("case3Wc50CoreWc", case3Wc50CoreWc)
-                .append("case3WcDebitCoreWc", case3WcDebitCoreWc)
-                .append("existingSMELimit", existingSMELimit)
-                .append("maximumExistingSMELimit", maximumExistingSMELimit)
-                .append("totalPropose", totalPropose)
-                .append("totalProposeLoanDBR", totalProposeLoanDBR)
-                .append("totalProposeNonLoanDBR", totalProposeNonLoanDBR)
-                .append("totalCommercial", totalCommercial)
-                .append("totalCommercialAndOBOD", totalCommercialAndOBOD)
-                .append("totalExposure", totalExposure)
-                .append("totalGuaranteeAmount", totalGuaranteeAmount)
-                .append("relatedTMBLending", relatedTMBLending)
-                .append("twentyFivePercentShareRelatedTMBLending", twentyFivePercentShareRelatedTMBLending)
-                .append("singleLendingLimit", singleLendingLimit)
-                .append("contactName", contactName)
-                .append("contactPhoneNo", contactPhoneNo)
-                .append("interService", interService)
-                .append("currentAddress", currentAddress)
-                .append("registeredAddress", registeredAddress)
-                .append("emailAddress", emailAddress)
-                .append("importMail", importMail)
-                .append("exportMail", exportMail)
-                .append("depositBranchCode", depositBranchCode)
-                .append("ownerBranchCode", ownerBranchCode)
-                .append("reasonForReduction", reasonForReduction)
-                .append("intFeeDOA", intFeeDOA)
-                .append("frontendFeeDOA", frontendFeeDOA)
-                .append("guarantorBA", guarantorBA)
-                .append("creditCustomerType", creditCustomerType)
-                .append("creditRequestType", creditRequestType)
-                .append("country", country)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .append("newFeeDetailList", newFeeDetailList)
-                .append("newCreditDetailList", newCreditDetailList)
-                .append("newCollateralDetailList", newCollateralDetailList)
-                .append("newGuarantorDetailList", newGuarantorDetailList)
-                .append("newConditionDetailList", newConditionDetailList)
-                .toString();
+    public int getNumberMonthsFromApprDate() {
+        return numberMonthsFromApprDate;
     }
+
+    public void setNumberMonthsFromApprDate(int numberMonthsFromApprDate) {
+        this.numberMonthsFromApprDate = numberMonthsFromApprDate;
+    }
+
+    public int getTotalNumberOfCoreAsset() {
+        return totalNumberOfCoreAsset;
+    }
+
+    public void setTotalNumberOfCoreAsset(int totalNumberOfCoreAsset) {
+        this.totalNumberOfCoreAsset = totalNumberOfCoreAsset;
+    }
+
+    public int getTotalNumberOfNonCoreAsset() {
+        return totalNumberOfNonCoreAsset;
+    }
+
+    public void setTotalNumberOfNonCoreAsset(int totalNumberOfNonCoreAsset) {
+        this.totalNumberOfNonCoreAsset = totalNumberOfNonCoreAsset;
+    }
+
+    public int getTotalMortgageValue() {
+        return totalMortgageValue;
+    }
+
+    public void setTotalMortgageValue(int totalMortgageValue) {
+        this.totalMortgageValue = totalMortgageValue;
+    }
+
+    public BigDecimal getTotalTCGGuaranteeAmount() {
+        return totalTCGGuaranteeAmount;
+    }
+
+    public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
+        this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalIndvGuaranteeAmount() {
+        return totalIndvGuaranteeAmount;
+    }
+
+    public void setTotalIndvGuaranteeAmount(BigDecimal totalIndvGuaranteeAmount) {
+        this.totalIndvGuaranteeAmount = totalIndvGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalJurisGuaranteeAmount() {
+        return totalJurisGuaranteeAmount;
+    }
+
+    public void setTotalJurisGuaranteeAmount(BigDecimal totalJurisGuaranteeAmount) {
+        this.totalJurisGuaranteeAmount = totalJurisGuaranteeAmount;
+    }
+
+    public BigDecimal getTotalLoanWCTMB() {
+        return totalLoanWCTMB;
+    }
+
+    public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
+        this.totalLoanWCTMB = totalLoanWCTMB;
+    }
+
 }

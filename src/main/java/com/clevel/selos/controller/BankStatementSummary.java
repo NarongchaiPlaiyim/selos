@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
+import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
@@ -50,6 +52,10 @@ public class BankStatementSummary implements Serializable {
     BankStmtControl bankStmtControl;
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
+    @Inject
+    DBRControl dbrControl;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
     //DAO
     @Inject
@@ -75,8 +81,6 @@ public class BankStatementSummary implements Serializable {
     //Session
     private long workCaseId;
     private long workCasePreScreenId;
-    private long stepId;
-    //private String userId;
 
     //Message Dialog
     private String messageHeader;
@@ -110,8 +114,6 @@ public class BankStatementSummary implements Serializable {
             if (session.getAttribute("workCasePreScreenId") != null) {
                 workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             }
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            //userId = session.getAttribute("userId").toString();
             // check user (ABDM/BDM)
             isABDM_BDM = bankStmtControl.isBDMUser();
         } else {
@@ -256,6 +258,8 @@ public class BankStatementSummary implements Serializable {
 
         try {
             bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+            dbrControl.updateValueOfDBR(workCaseId);
+            exSummaryControl.calForBankStmtSummary(workCaseId);
 
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
