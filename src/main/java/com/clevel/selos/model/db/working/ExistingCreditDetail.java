@@ -6,13 +6,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "wrk_exist_credit_detail")
-public class ExistingCreditDetail {
+public class ExistingCreditDetail implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_DET_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_DET_ID", allocationSize = 1)
