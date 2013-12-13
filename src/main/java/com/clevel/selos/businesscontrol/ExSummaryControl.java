@@ -94,12 +94,12 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
-        NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
-            exSummaryView.setTradeFinance(newCreditFacilityView);
-        } else {
-            exSummaryView.setTradeFinance(null);
-        }
+//        NewCreditFacilityView newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+//        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
+//            exSummaryView.setTradeFinance(newCreditFacilityView);
+//        } else {
+//            exSummaryView.setTradeFinance(null);
+//        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
