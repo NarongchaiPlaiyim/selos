@@ -26,8 +26,8 @@
                 </td>
                 <td colspan="3">
                     <p:selectOneRadio id="dlgRequestType" value="#{decision.selectedAppProposeCredit.requestType}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="2"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeRequestType()}"
                                 process="@this"
@@ -147,7 +147,7 @@
             <tr>
                 <td>
                     <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing" value="#{decision.selectedAppProposeCredit.reduceFlag}"
-                                             disabled="#{decision.modeEditCreditCredit}}">
+                                             disabled="#{decision.modeEditCredit}">
                     </p:selectBooleanCheckbox>
                     <p:spacer width="5" height="0"/>
                     <p:outputLabel for="dlgCheckBoxReducePricing" value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>

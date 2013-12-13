@@ -11,7 +11,10 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.CustomerCSI;
+import com.clevel.selos.model.db.working.NCB;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -81,6 +84,35 @@ public class CustomerInfoControl extends BusinessControl {
                 } else {
                     cV.setPercentShareSummary(BigDecimal.ZERO);
                 }
+            }
+
+            //for show jurLv
+            if(cV.getIsCommittee() == 1){
+                for(CustomerInfoView cusView : customerInfoViewList){
+                    if(cusView.getId() == cV.getCommitteeId()){
+                        cV.setJurLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
+                    }
+                }
+            } else {
+                cV.setJurLv("-");
+            }
+
+            //for show indLv
+            if(cV.getIsSpouse() == 1){ // is spouse
+                for(CustomerInfoView cusView : customerInfoViewList){ // is main spouse
+                    if(cusView.getSpouseId() == cV.getId()){
+                        cV.setIndLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
+                        if(cusView.getIsCommittee() == 1){ // is main spouse is committee
+                            for(CustomerInfoView cusViewJur : customerInfoViewList){
+                                if(cusViewJur.getId() == cusView.getCommitteeId()){
+                                    cV.setJurLv(cusView.getReference().getDescription()+" of "+cusViewJur.getFirstNameTh()+" "+cusViewJur.getLastNameTh());
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                cV.setIndLv("-");
             }
         }
 
@@ -288,7 +320,9 @@ public class CustomerInfoControl extends BusinessControl {
 
         //for check customer ncb
         NCB ncb = ncbDAO.findNcbByCustomer(customer.getId());
-        ncbDAO.delete(ncb);
+        if(ncb != null){
+            ncbDAO.delete(ncb);
+        }
 
         customerDAO.delete(customer);
     }
@@ -393,5 +427,24 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: success!!");
         log.info("getCustomerInfoFromRM ::: customerInfoSearch : {}", customerInfoResultSearch);
         return customerInfoResultSearch;
+    }
+
+
+    public List<CustomerInfoView> getGuarantorByWorkCase(long workCaseId){
+        log.info("getGuarantorByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getCollateralOwnerUWByWorkCase(long workCaseId){
+        log.info("getCollateralOwnerUWByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findCollateralOwnerUWByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
     }
 }

@@ -117,6 +117,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     // for show in Summary
     private BigDecimal percentShareSummary;
+    private String indLv; // new 11-12-13
+    private String jurLv; // new 11-12-13
 
     //for new field
     //age , customer entity
@@ -979,6 +981,22 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setNoPendingClaimLG(int noPendingClaimLG) {
         this.noPendingClaimLG = noPendingClaimLG;
+    }
+
+    public String getJurLv() {
+        return jurLv;
+    }
+
+    public void setJurLv(String jurLv) {
+        this.jurLv = jurLv;
+    }
+
+    public String getIndLv() {
+        return indLv;
+    }
+
+    public void setIndLv(String indLv) {
+        this.indLv = indLv;
     }
 
     @Override

@@ -39,7 +39,9 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
-            creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
+            creditTypeDetail.setAccount(creditTypeDetailView.getAccountName());
+            creditTypeDetail.setAccountNumber(creditTypeDetailView.getAccountNumber());
+            creditTypeDetail.setAccountSuf(creditTypeDetailView.getAccountSuf());
             creditTypeDetail.setCreditFacility(creditTypeDetailView.getCreditFacility());
             creditTypeDetail.setGuaranteeAmount(creditTypeDetailView.getGuaranteeAmount());
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
@@ -72,7 +74,9 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
-            creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
+            creditTypeDetail.setAccount(creditTypeDetailView.getAccountName());
+            creditTypeDetail.setAccountNumber(creditTypeDetailView.getAccountNumber());
+            creditTypeDetail.setAccountSuf(creditTypeDetailView.getAccountSuf());
             creditTypeDetail.setCreditFacility(creditTypeDetailView.getCreditFacility());
             creditTypeDetail.setGuaranteeAmount(creditTypeDetailView.getGuaranteeAmount());
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
@@ -99,7 +103,9 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetailView.setNoFlag(Util.isTrue(creditTypeDetail.getNo()));
             creditTypeDetailView.setType(creditTypeDetail.getType());
             creditTypeDetailView.setRequestType(creditTypeDetail.getRequestType());
-            creditTypeDetailView.setAccount(creditTypeDetail.getAccount());
+            creditTypeDetailView.setAccountName(creditTypeDetail.getAccount());
+            creditTypeDetailView.setAccountNumber(creditTypeDetail.getAccountNumber());
+            creditTypeDetailView.setAccountSuf(creditTypeDetail.getAccountSuf());
             creditTypeDetailView.setCreditFacility(creditTypeDetail.getCreditFacility());
             creditTypeDetailView.setGuaranteeAmount(creditTypeDetail.getGuaranteeAmount());
             creditTypeDetailView.setLimit(creditTypeDetail.getLimit());
