@@ -2,7 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ReferenceDAO;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
-import com.clevel.selos.dao.working.ExistingCreditSummaryDAO;
+import com.clevel.selos.dao.working.ExistingCreditFacilityDAO;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.SELOS;
@@ -15,13 +15,13 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.ExistingCreditSummary;
+import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ActionStatusView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
-import com.clevel.selos.model.view.ExistingCreditView;
+import com.clevel.selos.model.view.ExistingCreditFacilityView;
 import com.clevel.selos.transform.business.ExistingCreditTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -48,10 +48,9 @@ public class ExistingCreditControl extends BusinessControl {
     @Inject
     ReferenceDAO referenceDAO;
     @Inject
-    ExistingCreditSummaryDAO existingCreditSummaryDAO;
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
-
     @Inject
     ExistingCreditTransform existingCreditTransform;
 
@@ -65,27 +64,27 @@ public class ExistingCreditControl extends BusinessControl {
      * @param customerInfoViewList
      * @return
      */
-    public ExistingCreditView refreshExistingCredit(List<CustomerInfoView> customerInfoViewList) {
+    public ExistingCreditFacilityView refreshExistingCredit(List<CustomerInfoView> customerInfoViewList) {
         log.info("Start refreshExistingCredit with customerInfo{}", customerInfoViewList);
 
-        ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
-        ExistingCreditView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
+        ExistingCreditFacilityView existingCreditFacilityView = getExistingCreditObligation(customerInfoViewList);
+        ExistingCreditFacilityView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
 
-        existingCreditView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
-        existingCreditView.setRelatedAppInRLOSCredit(_tmpRLOSAppIn.getRelatedAppInRLOSCredit());
-        existingCreditView.setTotalBorrowerAppInRLOSLimit(_tmpRLOSAppIn.getTotalBorrowerAppInRLOSLimit());
-        existingCreditView.setTotalRelatedAppInRLOSLimit(_tmpRLOSAppIn.getTotalRelatedAppInRLOSLimit());
+        existingCreditFacilityView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
+        existingCreditFacilityView.setRelatedAppInRLOSCredit(_tmpRLOSAppIn.getRelatedAppInRLOSCredit());
+        existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit(_tmpRLOSAppIn.getTotalBorrowerAppInRLOSLimit());
+        existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(_tmpRLOSAppIn.getTotalRelatedAppInRLOSLimit());
 
         List<ActionStatusView> actionStatusViewList = new ArrayList<ActionStatusView>();
 
 
-        existingCreditView.setStatus(actionStatusViewList);
+        existingCreditFacilityView.setStatus(actionStatusViewList);
 
-        log.info("return existing credit view {}", existingCreditView);
-        return existingCreditView;
+        log.info("return existing credit view {}", existingCreditFacilityView);
+        return existingCreditFacilityView;
     }
 
-    private ExistingCreditView getExistingCreditObligation(List<CustomerInfoView> customerInfoViewList) {
+    private ExistingCreditFacilityView getExistingCreditObligation(List<CustomerInfoView> customerInfoViewList) {
         List<String> tmbCusIDList = new ArrayList<String>();
         List<String> _borrowerTMBCusID = new ArrayList<String>();
         for (CustomerInfoView customerInfoView : customerInfoViewList) {
@@ -118,7 +117,7 @@ public class ExistingCreditControl extends BusinessControl {
             }
         }
 
-        ExistingCreditView existingCreditView = new ExistingCreditView();
+        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
         if (tmbCusIDList.size() > 0) {
 
             //Retrieve Obligation
@@ -156,10 +155,10 @@ public class ExistingCreditControl extends BusinessControl {
                     }
                 }
 
-                existingCreditView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>(borrowerComCreditDetailHashMap.values()));
-                existingCreditView.setTotalBorrowerComLimit(_totalBorrowerComLimit);
-                existingCreditView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>(relatedComCreditDetailHashMap.values()));
-                existingCreditView.setTotalRelatedComLimit(_totalRelatedComLimit);
+                existingCreditFacilityView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>(borrowerComCreditDetailHashMap.values()));
+                existingCreditFacilityView.setTotalBorrowerComLimit(_totalBorrowerComLimit);
+                existingCreditFacilityView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>(relatedComCreditDetailHashMap.values()));
+                existingCreditFacilityView.setTotalRelatedComLimit(_totalRelatedComLimit);
 
             }
             ActionStatusView actionStatusView = new ActionStatusView();
@@ -167,15 +166,15 @@ public class ExistingCreditControl extends BusinessControl {
             actionStatusView.setStatusDesc(obligationResult.getReason());
 
 
-            log.info("return existing credit view {}", existingCreditView);
+            log.info("return existing credit view {}", existingCreditFacilityView);
 
         }
-        return existingCreditView;
+        return existingCreditFacilityView;
     }
 
-    private ExistingCreditView getRLOSAppInProcess(List<CustomerInfoView> customerInfoViewList) {
+    private ExistingCreditFacilityView getRLOSAppInProcess(List<CustomerInfoView> customerInfoViewList) {
 
-        ExistingCreditView existingCreditView = new ExistingCreditView();
+        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
 
         List<String> personalIDList = new ArrayList<String>();
         List<String> _borrowerPersonalID = new ArrayList<String>();
@@ -243,16 +242,16 @@ public class ExistingCreditControl extends BusinessControl {
                     }
 
                 }
-                existingCreditView.setBorrowerAppInRLOSCredit(borrowerRLOSApp);
-                existingCreditView.setTotalBorrowerAppInRLOSLimit(totalBorrowerRLOSApp);
+                existingCreditFacilityView.setBorrowerAppInRLOSCredit(borrowerRLOSApp);
+                existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit(totalBorrowerRLOSApp);
 
-                existingCreditView.setRelatedAppInRLOSCredit(relatedRLOSApp);
-                existingCreditView.setTotalRelatedAppInRLOSLimit(totalRelatedRLOSApp);
+                existingCreditFacilityView.setRelatedAppInRLOSCredit(relatedRLOSApp);
+                existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(totalRelatedRLOSApp);
             }
 
             //TODO: Update Retrieving Status.
         }
-        return existingCreditView;
+        return existingCreditFacilityView;
     }
 
     /**
@@ -261,39 +260,39 @@ public class ExistingCreditControl extends BusinessControl {
      * @param workCasePrescreenId
      * @return
      */
-    public ExistingCreditView getExistingCredit(long workCasePrescreenId) {
-        ExistingCreditSummary existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreenId);
-        ExistingCreditView existingCreditView = existingCreditTransform.getExistingCreditView(existingCreditSummary);
-        return existingCreditView;
+    public ExistingCreditFacilityView getExistingCredit(long workCasePrescreenId) {
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCasePreScreenId(workCasePrescreenId);
+        ExistingCreditFacilityView existingCreditFacilityView = existingCreditTransform.getExistingCreditView(existingCreditFacility);
+        return existingCreditFacilityView;
     }
 
-    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCasePrescreen workCasePrescreen) {
-        ExistingCreditSummary existingCreditSummary = null;
+    public void saveExistingCredit(ExistingCreditFacilityView existingCreditFacilityView, WorkCasePrescreen workCasePrescreen) {
+        ExistingCreditFacility existingCreditFacility = null;
         if (workCasePrescreen != null && workCasePrescreen.getId() != 0) {
-            existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreen.getId());
-            if (existingCreditSummary != null) {
-                deleteExistingCreditDetail(existingCreditSummary);
+            existingCreditFacility = existingCreditFacilityDAO.findByWorkCasePreScreenId(workCasePrescreen.getId());
+            if (existingCreditFacility != null) {
+                deleteExistingCreditDetail(existingCreditFacility);
             }
         }
 
-        existingCreditSummary = existingCreditTransform.getExistingCreditSummary(existingCreditView, existingCreditSummary, getCurrentUser());
-        existingCreditSummary.setWorkCasePrescreen(workCasePrescreen);
-        existingCreditSummaryDAO.persist(existingCreditSummary);
-        //existingCreditDetailDAO.persist(existingCreditSummary.getExistingCreditDetailList());
+        existingCreditFacility = existingCreditTransform.getExistingCreditFacility(existingCreditFacilityView, existingCreditFacility, getCurrentUser());
+        existingCreditFacility.setWorkCasePrescreen(workCasePrescreen);
+        existingCreditFacilityDAO.persist(existingCreditFacility);
+        //existingCreditDetailDAO.persist(existingCreditFacility.getExistingCreditDetailList());
     }
 
-    public void deleteExistingCreditDetail(ExistingCreditSummary existingCreditSummary) {
-        log.info("start delete {}", existingCreditSummary);
-        List<ExistingCreditDetail> existingCreditDetailList = existingCreditSummary.getExistingCreditDetailList();
+    public void deleteExistingCreditDetail(ExistingCreditFacility existingCreditFacility) {
+        log.info("start delete {}", existingCreditFacility);
+        List<ExistingCreditDetail> existingCreditDetailList = existingCreditFacility.getExistingCreditDetailList();
 
         log.info("list of existing detail {}", existingCreditDetailList);
         existingCreditDetailDAO.delete(existingCreditDetailList);
-        existingCreditSummary.setExistingCreditDetailList(null);
-        existingCreditSummaryDAO.persist(existingCreditSummary);
-        log.info("end delete {}", existingCreditSummary);
+        existingCreditFacility.setExistingCreditDetailList(null);
+        existingCreditFacilityDAO.persist(existingCreditFacility);
+        log.info("end delete {}", existingCreditFacility);
     }
 
-    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCase workCase) {
+    public void saveExistingCredit(ExistingCreditFacilityView existingCreditFacilityView, WorkCase workCase) {
 
     }
 }

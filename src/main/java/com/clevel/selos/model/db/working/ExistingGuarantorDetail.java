@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_exist_guarantor_detail")
@@ -26,9 +27,8 @@ public class ExistingGuarantorDetail implements Serializable {
     @Column(name = "tcglg_no")
     private String tcglgNo;
 
-    @Column(name = "gurantee_Amount")
-    private BigDecimal guaranteeAmount;
-
+    @Column(name = "total_gurantee_Amount")
+    private BigDecimal totalLimitGuaranteeAmount;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -48,7 +48,10 @@ public class ExistingGuarantorDetail implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "exisitng_credit_summary_id")
-    private ExistingCreditSummary existingCreditSummary;
+    private ExistingCreditFacility existingCreditFacility;
+
+    @OneToMany(mappedBy = "existingGuarantorDetail", cascade = CascadeType.ALL)
+    private List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
 
     public long getId() {
         return id;
@@ -82,12 +85,12 @@ public class ExistingGuarantorDetail implements Serializable {
         this.tcglgNo = tcglgNo;
     }
 
-    public BigDecimal getGuaranteeAmount() {
-        return guaranteeAmount;
+    public BigDecimal getTotalLimitGuaranteeAmount() {
+        return totalLimitGuaranteeAmount;
     }
 
-    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
-        this.guaranteeAmount = guaranteeAmount;
+    public void setTotalLimitGuaranteeAmount(BigDecimal totalLimitGuaranteeAmount) {
+        this.totalLimitGuaranteeAmount = totalLimitGuaranteeAmount;
     }
 
     public Date getCreateDate() {
@@ -122,12 +125,20 @@ public class ExistingGuarantorDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary() {
-        return existingCreditSummary;
+    public ExistingCreditFacility getExistingCreditFacility() {
+        return existingCreditFacility;
     }
 
-    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
-        this.existingCreditSummary = existingCreditSummary;
+    public void setExistingCreditFacility(ExistingCreditFacility existingCreditFacility) {
+        this.existingCreditFacility = existingCreditFacility;
+    }
+
+    public List<ExistingCreditTypeDetail> getExistingCreditTypeDetailList() {
+        return existingCreditTypeDetailList;
+    }
+
+    public void setExistingCreditTypeDetailList(List<ExistingCreditTypeDetail> existingCreditTypeDetailList) {
+        this.existingCreditTypeDetailList = existingCreditTypeDetailList;
     }
 
     @Override
@@ -137,12 +148,13 @@ public class ExistingGuarantorDetail implements Serializable {
                 .append("no", no)
                 .append("guarantorName", guarantorName)
                 .append("tcglgNo", tcglgNo)
-                .append("conditionDesc", guaranteeAmount)
+                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("existingCreditSummary", existingCreditSummary)
+                .append("existingCreditFacility", existingCreditFacility)
+                .append("existingCreditTypeDetailList", existingCreditTypeDetailList)
                 .toString();
     }
 }

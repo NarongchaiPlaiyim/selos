@@ -47,10 +47,9 @@ public class AccountInfo implements Serializable {
     private int rowIndex;
 
     //*** View ***//
-    private AccountInfoView accountInfoViewSelected;
-    private List<AccountInfoView> accountInfoViewList;
+    private AccountInfoView accountInfoView;
+    private List<AccountInfoDetailView> accountInfoDetailViewList;
     private AccountInfoDetailView accountInfoDetailView;
-
 
     //*** Drop down List ***//
     private List<BankAccountType> accountTypeList;
@@ -59,7 +58,6 @@ public class AccountInfo implements Serializable {
 
     //*** Check box ***//
     private List<AccountInfoPurposeView> purposeViewList;
-
 
     private List<String> accountName;
 
@@ -79,156 +77,159 @@ public class AccountInfo implements Serializable {
     @PostConstruct
     public void onCreation(){
         init();
-//        accountDetailInformationViewList = new ArrayList<AccountDetailInformationView>();
+        accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
     }
 
     public void onAddAccountDetail(){
         modeForButton = ModeForButton.ADD;
-        log.debug("Mode : {}", modeForButton);
         init();
     }
 
     public void onChangeAccountType(){
-//        int id = openAccountView.getAccountDetailInformationView().getAccountType().getId();
-        //Product
-//        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(id);
+        int id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
+        productTypeList = productTypeDAO.findByBankAccountTypeId(id);
     }
 
     public void addAccountName(){
-        //Add The Account Name from Account Name List
-//        AccountNameModel accountNameModel = new AccountNameModel();
-//        accountNameModel.setName(openAccountView.getAccountName());
-//
-//        openAccountView.getAccountDetailInformationView().getAccountNameModelList().add(accountNameModel);
+        accountNameView = new AccountNameView();
+        accountNameView.setName(accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected().getName());
+        accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().add(accountNameView);
     }
 
-//    public void addAccountDetail(){
-//        int id = 0;
-//        String value = null;
-//        StringBuilder stringBuilder = null;
-//        List<AccountNameModel> accountNameModelList;
-//
-//        //Request Account Type
-//        id = openAccountView.getAccountDetailInformationView().getRequestAccountType().getId();
-//        if(1 == id){
-//            openAccountView.getAccountDetailInformationView().getRequestAccountType().setName("Existing");
-//        } else {
-//            openAccountView.getAccountDetailInformationView().getRequestAccountType().setName("New");
-//        }
-//
-//        //Account Number
-//        value = openAccountView.getAccountDetailInformationView().getAccountNumber();
-//        if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
-//            openAccountView.getAccountDetailInformationView().setAccountNumber(" - ");
-//        }
-//
-//        //Branch
-//        id = openAccountView.getAccountDetailInformationView().getBranch().getId();
-//        if(0 != id){
-//            for (BranchModel branch : branchModelList){
-//                if (branch.getId() == id){
-//                    openAccountView.getAccountDetailInformationView().getBranch().setName(branch.getName());
-//                }
-//            }
-//        }
-//
-//        //Account Name
-//        accountNameModelList = openAccountView.getAccountDetailInformationView().getAccountNameModelList();
-//        if(accountNameModelList.size() > 0){
-//            stringBuilder = new StringBuilder();
-//            for (AccountNameModel accountName : accountNameModelList){
-//                stringBuilder.append(", ");
-//                stringBuilder.append(accountName.getName());
-//            }
-//            String show = stringBuilder.toString();
-//            if(show.length() > 1){
-//                openAccountView.getAccountDetailInformationView().setAccountNameForShow(show.substring(2, show.length()));
-//            } else {
-//                openAccountView.getAccountDetailInformationView().setAccountNameForShow(" - ");
-//            }
-//        } else {
-//            openAccountView.getAccountDetailInformationView().setAccountNameForShow(" - ");
-//        }
-//
-//
-//        id = openAccountView.getAccountDetailInformationView().getAccountType().getId();
-//        if(0 != id){
-//            for (BankAccountType accountType : bankAccountTypeList){
-//                if (accountType.getId() == id){
-//                    openAccountView.getAccountDetailInformationView().getAccountType().setName(accountType.getName());
-//                }
-//            }
-//        }
+    public void addAccountDetail(){
+        int id = 0;
+        long idLong = 0L;
+        String value = null;
+        StringBuilder stringBuilder = null;
 
-//        //Product Type
-//        id = openAccountView.getAccountDetailInformationView().getProductType().getId();
-//        if(0 != id){
-//            for (OpenAccountProduct productType : openAccountProductList){
-//                if (productType.getId() == id){
-//                    openAccountView.getAccountDetailInformationView().getProductType().setName(productType.getName());
-//                }
-//            }
-//        }
+        //Request Account Type
+        id = accountInfoView.getAccountInfoDetailViewSelected().getReqAccountType();
+        if(1 == id){
+            accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("Existing");
+        } else {
+            accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("New");
+        }
+
+        //Account Number
+        value = accountInfoView.getAccountInfoDetailViewSelected().getAccountNumber();
+        if(value == null || "".equals(value)){
+            accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(" - ");
+        } else {
+            accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(value);
+        }
+
+        //Branch
+        idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
+        if(0 != id){
+            for (AccountInfoBranchView branchView : branchList){
+                if (branchView.getId() == idLong){
+                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branchView.getName());
+                    break;
+                }
+            }
+        }
+
+        //Account Name
+        accountNameViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList();
+        if(accountNameViewList.size() > 0){
+            stringBuilder = new StringBuilder();
+            for (AccountNameView accountNameView : accountNameViewList){
+                stringBuilder.append(", ");
+                stringBuilder.append(accountNameView.getName());
+            }
+            String show = stringBuilder.toString();
+            if(show.length() > 1){
+                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(show.substring(2, show.length()));
+            } else {
+                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
+            }
+        } else {
+            accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
+        }
+
+        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
+        if(0 != id){
+            for (BankAccountType accountType : accountTypeList){
+                if (accountType.getId() == id){
+                    accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().setName(accountType.getName());
+                    break;
+                }
+            }
+        }
+
+        //Product Type
+        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();
+        if(0 != id){
+            for (OpenAccountProduct productType : productTypeList){
+                if (productType.getId() == id){
+                    accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().setName(productType.getName());
+                    break;
+                }
+            }
+        }
 
         //Term
-//        value = openAccountView.getAccountDetailInformationView().getTerm();
-//        if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
-//            openAccountView.getAccountDetailInformationView().setTerm(" - ");
-//        }
+        value = accountInfoView.getAccountInfoDetailViewSelected().getTerm();
+        if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
+            accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(" - ");
+        } else {
+            accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(value);
+        }
 
         //Purpose
-//        purposeModelList = openAccountView.getAccountDetailInformationView().getPurposeModelList();
-//        if(purposeModelList.size() > 0){
+//        purposeViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountInfoPurposeViewList();
+//        if(purposeViewList.size() > 0){
 //            stringBuilder = new StringBuilder();
-//            for (PurposeModel purpose : purposeModelList){
-//                if(purpose.isSelected()){
+//            for (AccountInfoPurposeView purposeView : purposeViewList){
+//                if(purposeView.isSelected()){
 //                    stringBuilder.append(", ");
-//                    stringBuilder.append(purpose.getName());
+//                    stringBuilder.append(purposeView.getName());
 //                }
 //            }
 //            String show = stringBuilder.toString();
 //            if(show.length() > 1){
-//                openAccountView.getAccountDetailInformationView().setPurposeForShow(show.substring(2, show.length()));
+//                accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(show.substring(2, show.length()));
 //            } else {
-//                openAccountView.getAccountDetailInformationView().setPurposeForShow(" - ");
+//                accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(" - ");
 //            }
 //        } else {
-//            openAccountView.getAccountDetailInformationView().setPurposeForShow(" - ");
+//            accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(" - ");
 //        }
-//
-//        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
-//            accountDetailInformationViewSelected = openAccountView.getAccountDetailInformationView();
-//            accountDetailInformationViewList.add(accountDetailInformationViewSelected);
-//        } else {
-//            accountDetailInformationViewSelected = openAccountView.getAccountDetailInformationView();
-//            accountDetailInformationViewList.set(rowIndex, accountDetailInformationViewSelected);
-//        }
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
+            accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
+            accountInfoDetailViewList.add(accountInfoDetailView);
+            accountInfoView.setAccountInfoDetailViewList(accountInfoDetailViewList);
+        } else {
+            accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
+            accountInfoDetailViewList.set(rowIndex, accountInfoDetailView);
+        }
 
         boolean complete = true;
         RequestContext context = RequestContext.getCurrentInstance();
-//        context.addCallbackParam("functionComplete", complete);
+        context.addCallbackParam("functionComplete", complete);
 
-//    }
+    }
 
-//    public void removeAccountName() {
-//        //Remove The Account Name from Account Name List
-//        openAccountView.getAccountDetailInformationView().getAccountNameModelList().remove(openAccountView.getAccountNameModel());
-//    }
-//
-//    public void removeAccountDetail() {
-//        //Remove The Account Detail from Account Detail List
-//        accountDetailInformationViewList.remove(accountDetailInformationViewSelected);
-//    }
-//
-//    public void editAccountDetail(){
-//        modeForButton = ModeForButton.EDIT;
-//        log.debug("Mode : {}", modeForButton);
-//        //Edit Account Detail
-//        openAccountView.setAccountDetailInformationView(accountDetailInformationViewSelected);
-//    }
-//
+    public void removeAccountName() {
+        AccountNameView accountNameViewSelected = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected();
+        accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().remove(accountNameViewSelected);
+    }
+
+    public void removeAccountDetail() {
+        accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
+        accountInfoDetailViewList.remove(accountInfoDetailView);
+    }
+
+    public void editAccountDetail(){
+        modeForButton = ModeForButton.EDIT;
+        accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
+        accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
+    }
+
 
     private void init(){
+        accountInfoView = new AccountInfoView();
         accountInfoDetailView = new AccountInfoDetailView();
 
         //branchModelList
@@ -266,24 +267,171 @@ public class AccountInfo implements Serializable {
         accountName.add("Mr. Sbay D");
         accountName.add("Mr. Kim ji");
 
-//        //Account Name (Table) for test
-//        accountNameViewList = new ArrayList<AccountNameModel>();
-//
-//        //Credit Type (Table) for test
-//        openAccountCreditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
-//
-//        openAccountCreditTypeView = new CreditTypeModel();
-//        openAccountCreditTypeView.setProductProgram("ProductProgram");
-//        openAccountCreditTypeView.setCreditFacility("Loan");
-//        openAccountCreditTypeView.setLimit(new BigDecimal("99999"));
-//        openAccountCreditTypeViewList.add(openAccountCreditTypeView);
-//
-//        openAccountCreditTypeView = new CreditTypeModel();
-//        openAccountCreditTypeView.setProductProgram("ProductProgram2");
-//        openAccountCreditTypeView.setCreditFacility("OD");
-//        openAccountCreditTypeView.setLimit(new BigDecimal("99999999999999"));
-//        openAccountCreditTypeViewList.add(openAccountCreditTypeView);
-//
-//        openAccountView.getAccountDetailInformationView().setCreditTypeModelList(openAccountCreditTypeViewList);
+        //Account Name (Table) for test
+        accountNameViewList = new ArrayList<AccountNameView>();
+
+        //Credit Type (Table) for test
+        creditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
+        creditTypeView = new AccountInfoCreditTypeView();
+        creditTypeView.setProductProgram("ProductProgram");
+        creditTypeView.setCreditFacility("Loan");
+        creditTypeView.setLimit(new BigDecimal("99999"));
+        creditTypeViewList.add(creditTypeView);
+        creditTypeView = new AccountInfoCreditTypeView();
+        creditTypeView.setProductProgram("ProductProgram2");
+        creditTypeView.setCreditFacility("OD");
+        creditTypeView.setLimit(new BigDecimal("99999999999999"));
+        creditTypeViewList.add(creditTypeView);
+
+        accountInfoDetailView.setAccountInfoCreditTypeViewList(creditTypeViewList);
+
+        accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
+
+    }
+
+
+
+    public OpenAccountProductDAO getProductTypeDAO() {
+        return productTypeDAO;
+    }
+
+    public void setProductTypeDAO(OpenAccountProductDAO productTypeDAO) {
+        this.productTypeDAO = productTypeDAO;
+    }
+
+    public BankAccountTypeDAO getAccountTypeDAO() {
+        return accountTypeDAO;
+    }
+
+    public void setAccountTypeDAO(BankAccountTypeDAO accountTypeDAO) {
+        this.accountTypeDAO = accountTypeDAO;
+    }
+
+    public OpenAccountPurposeDAO getPurposeDAO() {
+        return purposeDAO;
+    }
+
+    public void setPurposeDAO(OpenAccountPurposeDAO purposeDAO) {
+        this.purposeDAO = purposeDAO;
+    }
+
+    public List<OpenAccountPurpose> getPurposeList() {
+        return purposeList;
+    }
+
+    public void setPurposeList(List<OpenAccountPurpose> purposeList) {
+        this.purposeList = purposeList;
+    }
+
+    public ModeForButton getModeForButton() {
+        return modeForButton;
+    }
+
+    public void setModeForButton(ModeForButton modeForButton) {
+        this.modeForButton = modeForButton;
+    }
+
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public AccountInfoView getAccountInfoView() {
+        return accountInfoView;
+    }
+
+    public void setAccountInfoView(AccountInfoView accountInfoView) {
+        this.accountInfoView = accountInfoView;
+    }
+
+    public List<AccountInfoDetailView> getAccountInfoDetailViewList() {
+        return accountInfoDetailViewList;
+    }
+
+    public void setAccountInfoDetailViewList(List<AccountInfoDetailView> accountInfoDetailViewList) {
+        this.accountInfoDetailViewList = accountInfoDetailViewList;
+    }
+
+    public AccountInfoDetailView getAccountInfoDetailView() {
+        return accountInfoDetailView;
+    }
+
+    public void setAccountInfoDetailView(AccountInfoDetailView accountInfoDetailView) {
+        this.accountInfoDetailView = accountInfoDetailView;
+    }
+
+    public List<BankAccountType> getAccountTypeList() {
+        return accountTypeList;
+    }
+
+    public void setAccountTypeList(List<BankAccountType> accountTypeList) {
+        this.accountTypeList = accountTypeList;
+    }
+
+    public List<OpenAccountProduct> getProductTypeList() {
+        return productTypeList;
+    }
+
+    public void setProductTypeList(List<OpenAccountProduct> productTypeList) {
+        this.productTypeList = productTypeList;
+    }
+
+    public List<AccountInfoBranchView> getBranchList() {
+        return branchList;
+    }
+
+    public void setBranchList(List<AccountInfoBranchView> branchList) {
+        this.branchList = branchList;
+    }
+
+    public List<AccountInfoPurposeView> getPurposeViewList() {
+        return purposeViewList;
+    }
+
+    public void setPurposeViewList(List<AccountInfoPurposeView> purposeViewList) {
+        this.purposeViewList = purposeViewList;
+    }
+
+    public List<String> getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(List<String> accountName) {
+        this.accountName = accountName;
+    }
+
+    public List<AccountNameView> getAccountNameViewList() {
+        return accountNameViewList;
+    }
+
+    public void setAccountNameViewList(List<AccountNameView> accountNameViewList) {
+        this.accountNameViewList = accountNameViewList;
+    }
+
+    public AccountNameView getAccountNameView() {
+        return accountNameView;
+    }
+
+    public void setAccountNameView(AccountNameView accountNameView) {
+        this.accountNameView = accountNameView;
+    }
+
+    public List<AccountInfoCreditTypeView> getCreditTypeViewList() {
+        return creditTypeViewList;
+    }
+
+    public void setCreditTypeViewList(List<AccountInfoCreditTypeView> creditTypeViewList) {
+        this.creditTypeViewList = creditTypeViewList;
+    }
+
+    public AccountInfoCreditTypeView getCreditTypeView() {
+        return creditTypeView;
+    }
+
+    public void setCreditTypeView(AccountInfoCreditTypeView creditTypeView) {
+        this.creditTypeView = creditTypeView;
     }
 }
