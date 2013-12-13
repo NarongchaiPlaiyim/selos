@@ -14,7 +14,7 @@ public class CreditTypeDetailView implements Serializable {
     private String accountName;
     private String accountNumber;
     private String accountSuf;
-    private String Type;
+    private String type;
     private int requestType;
     private String productProgram;
     private String creditFacility;
@@ -37,7 +37,7 @@ public class CreditTypeDetailView implements Serializable {
         this.accountName = "";
         this.accountNumber = "";
         this.accountSuf = "";
-        this.Type  = "";
+        this.type  = "";
         this.requestType = 0;
         this.productProgram = "";
         this.creditFacility  = "";
@@ -66,11 +66,11 @@ public class CreditTypeDetailView implements Serializable {
     }
 
     public String getType() {
-        return Type;
+        return type;
     }
 
     public void setType(String type) {
-        Type = type;
+        this.type = type;
     }
 
     public String getProductProgram() {
@@ -202,7 +202,7 @@ public class CreditTypeDetailView implements Serializable {
                 .append("accountName", accountName)
                 .append("accountNumber", accountNumber)
                 .append("accountSuf", accountSuf)
-                .append("Type", Type)
+                .append("type", type)
                 .append("requestType", requestType)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
