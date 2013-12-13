@@ -211,9 +211,10 @@ public class CreditFacPropose implements Serializable {
         session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
         user = (User) session.getAttribute("user");
 
-
         if (workCaseId != null) {
+
             modeForDB = ModeForDB.ADD_DB;
+
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.info("newCreditFacilityView ::: {}", newCreditFacilityView.getId());
@@ -226,15 +227,16 @@ public class CreditFacPropose implements Serializable {
 
             log.info("onCreation :: modeForDB :: {}", modeForDB);
 
+            guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+            log.info("guarantorList size :: {}", guarantorList.size());
             if (guarantorList == null) {
                 guarantorList = new ArrayList<CustomerInfoView>();
-                guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
             }
 
+            collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
+            log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
             if (collateralOwnerUwAllList == null) {
                 collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
-                collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
-                log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
             }
 
            /* if (productGroup == null) {
@@ -253,23 +255,26 @@ public class CreditFacPropose implements Serializable {
                     applyTCG = tcgView.getTCG();
                 }
             }*/
-            if (productGroup == null) {
-                  basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                    if (basicInfo != null) {
-                        log.info("basicInfo.id ::: {}",basicInfo.getId());
-                        productGroup = basicInfo.getProductGroup();
-                        specialProgramBasicInfo = basicInfo.getSpecialProgram();
-                 }
+
+            basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if(basicInfo == null) {
+                productGroup=null;
+                specialProgramBasicInfo=null;
+            }else{
+                log.info("basicInfo.id ::: {}",basicInfo.getId());
+                productGroup = basicInfo.getProductGroup();
+                specialProgramBasicInfo = basicInfo.getSpecialProgram();
             }
 
-            if (tcg == null) {
-                    applyTCG = 0;
-                    tcg = tcgdao.findByWorkCaseId(workCaseId);
-                    log.info("tcg.id ::: {}",tcg.getId());
-                    if (tcg != null) {
-                        applyTCG = tcg.getTcgFlag();
-                  }
+            tcg = tcgdao.findByWorkCaseId(workCaseId);
+
+            if (tcg == null){
+                applyTCG = 0;
+            }else{
+                log.info("tcg.id ::: {}",tcg.getId());
+                applyTCG = tcg.getTcgFlag();
             }
+
         }
 
         if (collateralOwnerUW == null) {
@@ -486,7 +491,7 @@ public class CreditFacPropose implements Serializable {
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
-                if ((prdProgramToCreditType.getId() != 0) && (newCreditFacilityView.getCreditCustomerType() != CreditCustomerType.NOT_SELECTED.value()) && (specialProgramBasicInfo.getId() != 0)) {
+                if ((prdProgramToCreditType.getId() != 0) && (newCreditFacilityView.getCreditCustomerType() != CreditCustomerType.NOT_SELECTED.value()) && (specialProgramBasicInfo != null)) {
                     log.info("onChangeCreditType :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
                     log.info("onChangeCreditType :: newCreditFacilityView.getCreditCustomerType() :: {}", newCreditFacilityView.getCreditCustomerType());
                     log.info("onChangeCreditType :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
