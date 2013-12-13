@@ -438,6 +438,14 @@ public class BasicInfo extends MandatoryFieldsControl {
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
         onChangeAccountType();
+
+        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
+        for(OpenAccountPurpose oap : openAccountPurposeList){
+            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+            purposeView.setPurpose(oap);
+            basicInfoAccountPurposeViewList.add(purposeView);
+        }
+
         for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
             if(biapv.isSelected()){
                 for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
