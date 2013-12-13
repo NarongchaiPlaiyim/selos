@@ -701,9 +701,11 @@
             <table class="table_noborder" >
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.requestType')}</td>
-                    <td>#{proposeCredit.requestType == 1 ? 'New' : 'Change'}</td>
+                    <td>#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
+                            proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.refinance')}</td>
-                    <td>#{proposeCredit.refinance == 1 ? 'No' : 'Yes'}</td>
+                    <td>#{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
+                            proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}</td>
                 </tr>
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.purpose')}</td>
@@ -1235,12 +1237,11 @@
 
             <p:column styleClass="center">
                 <h:outputText value="#{creditTypeDetailItem.accountName}"/><br/>
-                <h:outputText value="#{creditTypeDetailItem.accountNumber}"/><br/>
-                <h:outputText value="#{creditTypeDetailItem.accountSuf}"/>
+                <h:outputText value="#{creditTypeDetailItem.accountNumber}  #{creditTypeDetailItem.accountSuf}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? 'New' : 'Change'}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 2 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1515,8 +1516,7 @@
                                      <tr>
                                          <td  style="width: 100px;" class="left top">
                                              <h:outputText value="#{creditTypeDetail.accountName}"/><br/>
-                                             <h:outputText value="#{creditTypeDetail.accountNumber}"/><br/>
-                                             <h:outputText value="#{creditTypeDetail.accountSuf}"/>
+                                             <h:outputText value="#{creditTypeDetail.accountNumber}  #{creditTypeDetail.accountSuf}"/>
                                          </td>
                                          <td  style="width: 100px;" class="center top">
                                              <h:outputText value="#{creditTypeDetail.productProgram}"/><br/>
