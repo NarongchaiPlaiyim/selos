@@ -207,7 +207,7 @@
                     id="addSplitLineinfo"
                     value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                     styleClass="smaller"
-                    actionListener="#{creditFacExisting.onAddSplitLineDetailView()}"
+                    actionListener="#{creditFacExisting.onAddExistingSplitLineDetailView()}"
                     update=":existingCreditDlgForm:spiltResult"
                     >
             </p:commandButton>
@@ -217,9 +217,9 @@
         <td class="title">
         </td>
         <td colspan="3">
-            <p:dataTable id="spiltResult" var="splitLine"
-                         value="#{creditFacExisting.splitLineDetailViewList}"
-                         rowKey="#{splitLine.no}" rowIndexVar="rowIndex" style="width: 100%">
+            <p:dataTable id="spiltResult" var="existingSplitLine"
+                         value="#{creditFacExisting.existingSplitLineDetailViewList}"
+                         rowKey="#{existingSplitLine.no}" rowIndexVar="rowIndex" style="width: 100%">
 
                 <p:columnGroup type="header">
                     <p:row>
@@ -237,7 +237,7 @@
                 </p:column>
 
                 <p:column styleClass="center">
-                    <p:selectOneMenu id="dlgSplitProdProgram" value="#{splitLine.productProgram.id}"
+                    <p:selectOneMenu id="dlgSplitProdProgram" value="#{existingSplitLine.productProgram.id}"
                                      size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{creditFacExisting.productProgramList}"
@@ -247,14 +247,14 @@
                     </p:selectOneMenu>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText value="#{splitLine.limit}"/>
+                    <p:inputText value="#{existingSplitLine.limit}"/>
                 </p:column>
                 <p:column styleClass="center">
                     <p:column styleClass="center">
                         <p:commandButton title="Remove" process="@form"
                                          icon="ui-icon-trash"
                                          update=":existingCreditDlgForm:spiltResult"
-                                         actionListener="#{creditFacExisting.onDeleteSplitLineDetailView(rowIndex)}" >
+                                         actionListener="#{creditFacExisting.onDeleteExistingSplitLineDetailView(rowIndex)}" >
                         </p:commandButton>
                     </p:column>
                 </p:column>
@@ -270,7 +270,7 @@
                              styleClass="small"
                              binding="#{saveCreditBtn}"
                              value="#{msg.get('app.button.ok')}"
-                             action="#{creditFacExisting.onSaveCreditInfo()}"
+                             action="#{creditFacExisting.onSaveCreditDetail()}"
                              process="@form"
                              update=":existingCreditDlgForm :frmMain"
                              oncomplete="handleExistingCreditRequest(xhr, status, args)"/>

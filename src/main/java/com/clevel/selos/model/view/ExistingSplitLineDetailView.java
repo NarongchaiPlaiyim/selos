@@ -1,15 +1,30 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
-public class SplitLineDetailView {
+public class ExistingSplitLineDetailView implements Serializable {
+    private int id;
     private int no;
     private ProductProgram productProgram;
     private BigDecimal limit;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getNo() {
         return no;
@@ -33,6 +48,38 @@ public class SplitLineDetailView {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override

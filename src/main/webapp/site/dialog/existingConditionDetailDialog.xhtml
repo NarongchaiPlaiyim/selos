@@ -14,7 +14,7 @@
                     <td style="width: 200px;">
                         <p:inputText styleClass="large"
                                      id="loanType"
-                                     value="#{creditFacExisting.conditionInfoDetailView.loanType}"
+                                     value="#{creditFacExisting.existingConditionDetailView.loanType}"
                                      required="#{not empty param[addConditionDlg.clientId]}"
                                      style="width:200px;">
                         </p:inputText>
@@ -28,7 +28,7 @@
                         <p:inputTextarea cols="50"
                                          rows="3"
                                          id="conditionDesc"
-                                         value="#{creditFacExisting.conditionInfoDetailView.conditionDesc}"
+                                         value="#{creditFacExisting.existingConditionDetailView.conditionDesc}"
                                          required="#{not empty param[addConditionDlg.clientId]}" >
                         </p:inputTextarea>
                     </td>
@@ -40,9 +40,9 @@
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
                                 binding="#{addConditionDlg}"
                                 styleClass="small"
-                                actionListener="#{creditFacExisting.onSaveConditionInfoDlg()}"
+                                actionListener="#{creditFacExisting.onSaveConditionDetailDlg()}"
                                 process=":conditionDlgForm"
-                                update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
+                                update=":conditionDlgForm,:frmMain:conditionDetailTable"
                                 oncomplete="handleExistingConditionRequest(xhr, status, args)"/>
 
                         <p:commandButton
