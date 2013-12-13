@@ -311,6 +311,7 @@ public class ExSummaryTransform extends Transform {
 //        If Borrower is Juristic use Customer Info Detail else if Borrower is Individual use Bank Statement Summary
         exSumBusinessInfoView.setBizSize(bizSize);
 
+        //todo:income factor percent
 //        exSumBusinessInfoView.setBDM();
 //        exSumBusinessInfoView.setUW();
         exSumBusinessInfoView.setAR(bizInfoSummaryView.getSumWeightAR());

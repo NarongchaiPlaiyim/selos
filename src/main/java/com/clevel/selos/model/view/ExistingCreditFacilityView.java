@@ -11,16 +11,27 @@ import java.util.List;
 
 public class ExistingCreditFacilityView implements Serializable {
 
-    private List<ActionStatusView> status;
     private long id;
     private long workcasePrescreenId;
     private long getWorkcaseFullAppId;
+    private List<ActionStatusView> status;
+
     private BigDecimal totalBorrowerComLimit;
     private BigDecimal totalBorrowerRetailLimit;
     private BigDecimal totalBorrowerAppInRLOSLimit;
+    private BigDecimal totalBorrowerCom;
+    private BigDecimal totalBorrowerComOBOD;
+    private BigDecimal totalBorrowerExposure;
+    private BigDecimal totalBorrowerNumberOfExistingOD;
+
     private BigDecimal totalRelatedComLimit;
     private BigDecimal totalRelatedRetailLimit;
     private BigDecimal totalRelatedAppInRLOSLimit;
+    private BigDecimal totalRelatedCom;
+    private BigDecimal totalRelatedComOBOD;
+    private BigDecimal totalRelatedExposure;
+    private BigDecimal totalRelatedNumberOfExistingOD;
+
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
     private BigDecimal totalGroupExposure;
@@ -75,6 +86,14 @@ public class ExistingCreditFacilityView implements Serializable {
         this.getWorkcaseFullAppId = getWorkcaseFullAppId;
     }
 
+    public List<ActionStatusView> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<ActionStatusView> status) {
+        this.status = status;
+    }
+
     public BigDecimal getTotalBorrowerComLimit() {
         return totalBorrowerComLimit;
     }
@@ -97,6 +116,38 @@ public class ExistingCreditFacilityView implements Serializable {
 
     public void setTotalBorrowerAppInRLOSLimit(BigDecimal totalBorrowerAppInRLOSLimit) {
         this.totalBorrowerAppInRLOSLimit = totalBorrowerAppInRLOSLimit;
+    }
+
+    public BigDecimal getTotalBorrowerCom() {
+        return totalBorrowerCom;
+    }
+
+    public void setTotalBorrowerCom(BigDecimal totalBorrowerCom) {
+        this.totalBorrowerCom = totalBorrowerCom;
+    }
+
+    public BigDecimal getTotalBorrowerComOBOD() {
+        return totalBorrowerComOBOD;
+    }
+
+    public void setTotalBorrowerComOBOD(BigDecimal totalBorrowerComOBOD) {
+        this.totalBorrowerComOBOD = totalBorrowerComOBOD;
+    }
+
+    public BigDecimal getTotalBorrowerExposure() {
+        return totalBorrowerExposure;
+    }
+
+    public void setTotalBorrowerExposure(BigDecimal totalBorrowerExposure) {
+        this.totalBorrowerExposure = totalBorrowerExposure;
+    }
+
+    public BigDecimal getTotalBorrowerNumberOfExistingOD() {
+        return totalBorrowerNumberOfExistingOD;
+    }
+
+    public void setTotalBorrowerNumberOfExistingOD(BigDecimal totalBorrowerNumberOfExistingOD) {
+        this.totalBorrowerNumberOfExistingOD = totalBorrowerNumberOfExistingOD;
     }
 
     public BigDecimal getTotalRelatedComLimit() {
@@ -123,6 +174,38 @@ public class ExistingCreditFacilityView implements Serializable {
         this.totalRelatedAppInRLOSLimit = totalRelatedAppInRLOSLimit;
     }
 
+    public BigDecimal getTotalRelatedCom() {
+        return totalRelatedCom;
+    }
+
+    public void setTotalRelatedCom(BigDecimal totalRelatedCom) {
+        this.totalRelatedCom = totalRelatedCom;
+    }
+
+    public BigDecimal getTotalRelatedComOBOD() {
+        return totalRelatedComOBOD;
+    }
+
+    public void setTotalRelatedComOBOD(BigDecimal totalRelatedComOBOD) {
+        this.totalRelatedComOBOD = totalRelatedComOBOD;
+    }
+
+    public BigDecimal getTotalRelatedExposure() {
+        return totalRelatedExposure;
+    }
+
+    public void setTotalRelatedExposure(BigDecimal totalRelatedExposure) {
+        this.totalRelatedExposure = totalRelatedExposure;
+    }
+
+    public BigDecimal getTotalRelatedNumberOfExistingOD() {
+        return totalRelatedNumberOfExistingOD;
+    }
+
+    public void setTotalRelatedNumberOfExistingOD(BigDecimal totalRelatedNumberOfExistingOD) {
+        this.totalRelatedNumberOfExistingOD = totalRelatedNumberOfExistingOD;
+    }
+
     public BigDecimal getTotalGroupCom() {
         return totalGroupCom;
     }
@@ -146,8 +229,6 @@ public class ExistingCreditFacilityView implements Serializable {
     public void setTotalGroupExposure(BigDecimal totalGroupExposure) {
         this.totalGroupExposure = totalGroupExposure;
     }
-
-
 
     public BigDecimal getTotalGuaranteeAmount() {
         return totalGuaranteeAmount;
@@ -269,14 +350,6 @@ public class ExistingCreditFacilityView implements Serializable {
         this.borrowerGuarantorList = borrowerGuarantorList;
     }
 
-    public List<ActionStatusView> getStatus() {
-        return status;
-    }
-
-    public void setStatus(List<ActionStatusView> status) {
-        this.status = status;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -312,29 +385,46 @@ public class ExistingCreditFacilityView implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("status", status)
                 .append("id", id)
                 .append("workcasePrescreenId", workcasePrescreenId)
                 .append("getWorkcaseFullAppId", getWorkcaseFullAppId)
+                .append("status", status)
                 .append("totalBorrowerComLimit", totalBorrowerComLimit)
                 .append("totalBorrowerRetailLimit", totalBorrowerRetailLimit)
                 .append("totalBorrowerAppInRLOSLimit", totalBorrowerAppInRLOSLimit)
+                .append("totalBorrowerCom", totalBorrowerCom)
+                .append("totalBorrowerComOBOD", totalBorrowerComOBOD)
+                .append("totalBorrowerExposure", totalBorrowerExposure)
+                .append("totalBorrowerNumberOfExistingOD", totalBorrowerNumberOfExistingOD)
                 .append("totalRelatedComLimit", totalRelatedComLimit)
                 .append("totalRelatedRetailLimit", totalRelatedRetailLimit)
                 .append("totalRelatedAppInRLOSLimit", totalRelatedAppInRLOSLimit)
+                .append("totalRelatedCom", totalRelatedCom)
+                .append("totalRelatedComOBOD", totalRelatedComOBOD)
+                .append("totalRelatedExposure", totalRelatedExposure)
+                .append("totalRelatedNumberOfExistingOD", totalRelatedNumberOfExistingOD)
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)
                 .append("totalGuaranteeAmount", totalGuaranteeAmount)
+                .append("totalBorrowerAppraisalValue", totalBorrowerAppraisalValue)
+                .append("totalBorrowerMortgageValue", totalBorrowerMortgageValue)
+                .append("totalRelatedAppraisalValue", totalRelatedAppraisalValue)
+                .append("totalRelatedMortgageValue", totalRelatedMortgageValue)
                 .append("borrowerComExistingCredit", borrowerComExistingCredit)
                 .append("borrowerRetailExistingCredit", borrowerRetailExistingCredit)
                 .append("borrowerAppInRLOSCredit", borrowerAppInRLOSCredit)
+                .append("existingConditionDetailViewList", existingConditionDetailViewList)
                 .append("relatedComExistingCredit", relatedComExistingCredit)
                 .append("relatedRetailExistingCredit", relatedRetailExistingCredit)
                 .append("relatedAppInRLOSCredit", relatedAppInRLOSCredit)
                 .append("borrowerCollateralList", borrowerCollateralList)
                 .append("relatedCollateralList", relatedCollateralList)
                 .append("borrowerGuarantorList", borrowerGuarantorList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }
