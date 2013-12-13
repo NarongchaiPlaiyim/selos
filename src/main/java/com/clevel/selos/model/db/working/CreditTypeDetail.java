@@ -23,6 +23,12 @@ public class CreditTypeDetail  implements Serializable {
     @Column(name = "account")
     private String account;
 
+    @Column(name = "account_number")
+    private String accountNumber;
+
+    @Column(name = "account_suf")
+    private String accountSuf;
+
     @Column(name = "type")
     private String type;
 
@@ -209,7 +215,21 @@ public class CreditTypeDetail  implements Serializable {
         this.newGuarantorDetail = newGuarantorDetail;
     }
 
+    public String getAccountNumber() {
+        return accountNumber;
+    }
 
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
+    }
 
     @Override
     public String toString() {
@@ -217,6 +237,8 @@ public class CreditTypeDetail  implements Serializable {
                 .append("id", id)
                 .append("no", no)
                 .append("account", account)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
                 .append("type", type)
                 .append("requestType", requestType)
                 .append("productProgram", productProgram)
@@ -229,6 +251,8 @@ public class CreditTypeDetail  implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("newCollateralDetail", newCollateralDetail)
+                .append("newGuarantorDetail", newGuarantorDetail)
                 .toString();
     }
 }

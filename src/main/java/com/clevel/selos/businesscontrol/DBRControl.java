@@ -48,6 +48,8 @@ public class DBRControl extends BusinessControl {
     DBRTransform dbrTransform;
     @Inject
     DBRDetailTransform dbrDetailTransform;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
 
     @Inject
     NCBInfoControl ncbInfoControl;
@@ -252,9 +254,12 @@ public class DBRControl extends BusinessControl {
 
     private BigDecimal calculateFinalDBR(BigDecimal totalMonthDebtBorrower, BigDecimal totalMonthDebtRelated,BigDecimal netMonthlyIncome, WorkCase workCase){
         BigDecimal result = BigDecimal.ZERO;
-        BigDecimal totalPurposeForDBR = BigDecimal.valueOf(200);
+        BigDecimal totalPurposeForDBR = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
-        //todo waiting totalPurposeForDBR from Exsiting purpose
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+        //todo non confirm
+
+        totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
         if(roleId == RoleUser.UW.getValue()){
 
         }else if(roleId == RoleUser.BDM.getValue()){

@@ -43,6 +43,14 @@ public class Obligation implements Serializable {
     private String tdrFlag;
     private BigDecimal numMonthIntPastDue;
     private BigDecimal numMonthIntPastDueTDRAcc;
+    private BigDecimal tmbInstallmentAmt;
+    private String covenantFlag;
+    private String reviewFlag;
+    private BigDecimal tmbUnusedBalance;
+    private String tmbExtProductTypeCD;
+    private String tmbTypeCRD;
+    private String tmbRMRef;
+
 
     public long getId() {
         return id;
@@ -324,6 +332,62 @@ public class Obligation implements Serializable {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 
+    public BigDecimal getTmbInstallmentAmt() {
+        return tmbInstallmentAmt;
+    }
+
+    public void setTmbInstallmentAmt(BigDecimal tmbInstallmentAmt) {
+        this.tmbInstallmentAmt = tmbInstallmentAmt;
+    }
+
+    public String getCovenantFlag() {
+        return covenantFlag;
+    }
+
+    public void setCovenantFlag(String covenantFlag) {
+        this.covenantFlag = covenantFlag;
+    }
+
+    public String getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(String reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public BigDecimal getTmbUnusedBalance() {
+        return tmbUnusedBalance;
+    }
+
+    public void setTmbUnusedBalance(BigDecimal tmbUnusedBalance) {
+        this.tmbUnusedBalance = tmbUnusedBalance;
+    }
+
+    public String getTmbExtProductTypeCD() {
+        return tmbExtProductTypeCD;
+    }
+
+    public void setTmbExtProductTypeCD(String tmbExtProductTypeCD) {
+        this.tmbExtProductTypeCD = tmbExtProductTypeCD;
+    }
+
+    public String getTmbTypeCRD() {
+        return tmbTypeCRD;
+    }
+
+    public void setTmbTypeCRD(String tmbTypeCRD) {
+        this.tmbTypeCRD = tmbTypeCRD;
+    }
+
+    public String getTmbRMRef() {
+        return tmbRMRef;
+    }
+
+    public void setTmbRMRef(String tmbRMRef) {
+        this.tmbRMRef = tmbRMRef;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -362,6 +426,13 @@ public class Obligation implements Serializable {
                 .append("tdrFlag", tdrFlag)
                 .append("numMonthIntPastDue", numMonthIntPastDue)
                 .append("numMonthIntPastDueTDRAcc", numMonthIntPastDueTDRAcc)
+                .append("tmbInstallmentAmt", tmbInstallmentAmt)
+                .append("covenantFlag", covenantFlag)
+                .append("reviewFlag", reviewFlag)
+                .append("tmbUnusedBalance", tmbUnusedBalance)
+                .append("tmbExtProductTypeCD", tmbExtProductTypeCD)
+                .append("tmbTypeCRD", tmbTypeCRD)
+                .append("tmbRMRef", tmbRMRef)
                 .toString();
     }
 }

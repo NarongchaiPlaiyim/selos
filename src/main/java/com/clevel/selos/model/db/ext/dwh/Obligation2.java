@@ -120,6 +120,27 @@ public class Obligation2 implements Serializable {
     @Column(name = "num_month_int_past_due_tdr_acc")
     private BigDecimal numMonthIntPastDueTDRAcc;
 
+    @Column(name = "tmb_installment_amt")
+    private BigDecimal tmbInstallmentAmt;
+
+    @Column(name = "covenant_flag", length = 1)
+    private String covenantFlag;
+
+    @Column(name = "review_flag", length = 1)
+    private String reviewFlag;
+
+    @Column(name = "tmb_unused_bal")
+    private BigDecimal tmbUnusedBalance;
+
+    @Column(name = "tmb_ext_product_type_cd", length = 3)
+    private String tmbExtProductTypeCD;
+
+    @Column(name = "tmb_type_crd", length = 4)
+    private String tmbTypeCRD;
+
+    @Column(name = "tmb_rm_ref", length = 6)
+    private String tmbRMRef;
+
     public Obligation2() {
     }
 
@@ -430,6 +451,62 @@ public class Obligation2 implements Serializable {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 
+    public BigDecimal getTmbInstallmentAmt() {
+        return tmbInstallmentAmt;
+    }
+
+    public void setTmbInstallmentAmt(BigDecimal tmbInstallmentAmt) {
+        this.tmbInstallmentAmt = tmbInstallmentAmt;
+    }
+
+    public String getCovenantFlag() {
+        return covenantFlag;
+    }
+
+    public void setCovenantFlag(String covenantFlag) {
+        this.covenantFlag = covenantFlag;
+    }
+
+    public String getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(String reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public BigDecimal getTmbUnusedBalance() {
+        return tmbUnusedBalance;
+    }
+
+    public void setTmbUnusedBalance(BigDecimal tmbUnusedBalance) {
+        this.tmbUnusedBalance = tmbUnusedBalance;
+    }
+
+    public String getTmbExtProductTypeCD() {
+        return tmbExtProductTypeCD;
+    }
+
+    public void setTmbExtProductTypeCD(String tmbExtProductTypeCD) {
+        this.tmbExtProductTypeCD = tmbExtProductTypeCD;
+    }
+
+    public String getTmbTypeCRD() {
+        return tmbTypeCRD;
+    }
+
+    public void setTmbTypeCRD(String tmbTypeCRD) {
+        this.tmbTypeCRD = tmbTypeCRD;
+    }
+
+    public String getTmbRMRef() {
+        return tmbRMRef;
+    }
+
+    public void setTmbRMRef(String tmbRMRef) {
+        this.tmbRMRef = tmbRMRef;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -468,6 +545,13 @@ public class Obligation2 implements Serializable {
                 .append("tdrFlag", tdrFlag)
                 .append("numMonthIntPastDue", numMonthIntPastDue)
                 .append("numMonthIntPastDueTDRAcc", numMonthIntPastDueTDRAcc)
+                .append("tmbInstallmentAmt", tmbInstallmentAmt)
+                .append("covenantFlag", covenantFlag)
+                .append("reviewFlag", reviewFlag)
+                .append("tmbUnusedBalance", tmbUnusedBalance)
+                .append("tmbExtProductTypeCD", tmbExtProductTypeCD)
+                .append("tmbTypeCRD", tmbTypeCRD)
+                .append("tmbRMRef", tmbRMRef)
                 .toString();
     }
 }

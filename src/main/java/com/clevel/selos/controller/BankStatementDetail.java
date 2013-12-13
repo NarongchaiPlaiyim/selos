@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
+import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
@@ -57,6 +59,10 @@ public class BankStatementDetail implements Serializable {
     //Business logic
     @Inject
     BankStmtControl bankStmtControl;
+    @Inject
+    DBRControl dbrControl;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
     //DAO
     @Inject
@@ -265,8 +271,9 @@ public class BankStatementDetail implements Serializable {
             bankStmtControl.updateMainAccAndHighestInflow(summaryView);
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-
             bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+            dbrControl.updateValueOfDBR(workCaseId);
+            exSummaryControl.calForBankStmtSummary(workCaseId);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";

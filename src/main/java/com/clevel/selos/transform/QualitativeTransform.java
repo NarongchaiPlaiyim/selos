@@ -5,6 +5,7 @@ import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -363,14 +364,10 @@ public class QualitativeTransform extends Transform {
 
 
     public boolean convertToView(int dbObject) {
-        return dbObject == 1 ? true : false;
+        return Util.isTrue(dbObject);
     }
 
     public int convertToDB(boolean viewObject) {
-        if (viewObject == true) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return Util.returnNumForFlag(viewObject);
     }
 }

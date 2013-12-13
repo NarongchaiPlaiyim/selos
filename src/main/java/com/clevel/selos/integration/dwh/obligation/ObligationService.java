@@ -181,6 +181,13 @@ public class ObligationService implements Serializable {
                 obligation.setTdrFlag(obligation1.getTdrFlag());
                 obligation.setNumMonthIntPastDue(obligation1.getNumMonthIntPastDue());
                 obligation.setNumMonthIntPastDueTDRAcc(obligation1.getNumMonthIntPastDueTDRAcc());
+                obligation.setTmbInstallmentAmt(obligation1.getTmbInstallmentAmt());
+                obligation.setCovenantFlag(obligation1.getCovenantFlag());
+                obligation.setReviewFlag(obligation1.getReviewFlag());
+                obligation.setTmbUnusedBalance(obligation1.getTmbUnusedBalance());
+                obligation.setTmbExtProductTypeCD(obligation1.getTmbExtProductTypeCD());
+                obligation.setTmbTypeCRD(obligation1.getTmbTypeCRD());
+                obligation.setTmbRMRef(obligation1.getTmbRMRef());
                 obligationList.add(obligation);
             }
         } else if (obligation2List != null) {
@@ -220,6 +227,13 @@ public class ObligationService implements Serializable {
                 obligation.setTdrFlag(obligation2.getTdrFlag());
                 obligation.setNumMonthIntPastDue(obligation2.getNumMonthIntPastDue());
                 obligation.setNumMonthIntPastDueTDRAcc(obligation2.getNumMonthIntPastDueTDRAcc());
+                obligation.setTmbInstallmentAmt(obligation2.getTmbInstallmentAmt());
+                obligation.setCovenantFlag(obligation2.getCovenantFlag());
+                obligation.setReviewFlag(obligation2.getReviewFlag());
+                obligation.setTmbUnusedBalance(obligation2.getTmbUnusedBalance());
+                obligation.setTmbExtProductTypeCD(obligation2.getTmbExtProductTypeCD());
+                obligation.setTmbTypeCRD(obligation2.getTmbTypeCRD());
+                obligation.setTmbRMRef(obligation2.getTmbRMRef());
                 obligationList.add(obligation);
             }
         }
