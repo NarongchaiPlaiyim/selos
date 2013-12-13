@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +96,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditBorrower() {
         long customerId;
         if(selectedItemCustomerBorrower.getSpouse() != null && selectedItemCustomerBorrower.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerBorrower.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerBorrower.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerBorrower.getId();
@@ -117,7 +114,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditGuarantor() {
         long customerId;
         if(selectedItemCustomerGuarantor.getSpouse() != null && selectedItemCustomerGuarantor.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerGuarantor.getId();
@@ -135,7 +132,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditRelated() {
         long customerId;
         if(selectedItemCustomerRelated.getSpouse() != null && selectedItemCustomerRelated.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerRelated.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerRelated.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerRelated.getId();

@@ -6,7 +6,10 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.ExistingCollateralDetailView;
+import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.model.view.ExistingCreditFacilityView;
+import com.clevel.selos.model.view.ExistingGuarantorDetailView;
 import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
@@ -93,6 +96,14 @@ public class CreditFacExistingControl extends BusinessControl {
         return existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
     }
+
+    public ExistingCreditFacilityView getExistingCreditFacility(long workCaseId) {
+        log.info("workCaseId :: {}", workCaseId);
+        ExistingCreditFacilityView existingCreditFacilityView =  existingCreditFacilityTransform.transformToView(existingCreditFacilityDAO.findByWorkCaseId(workCaseId));
+        return existingCreditFacilityView;
+    }
+
+
     /*
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
