@@ -16,7 +16,7 @@ public class ExistingCreditTierTransform extends Transform {
     public ExistingCreditTierTransform() {
     }
 
-    public List<ExistingCreditTierDetail> transformToModel(List<ExistingCreditTierDetailView> existingCreditTierDetailViewList,ExistingCreditDetail existingCreditDetail,User user){
+    public List<ExistingCreditTierDetail> transformsToModel(List<ExistingCreditTierDetailView> existingCreditTierDetailViewList,ExistingCreditDetail existingCreditDetail,User user){
 
         List<ExistingCreditTierDetail> existingCreditTierDetailList = new ArrayList<ExistingCreditTierDetail>();
         ExistingCreditTierDetail existingCreditTierDetail;
@@ -69,7 +69,7 @@ public class ExistingCreditTierTransform extends Transform {
         return existingCreditTierDetailList;
     }
 
-    public List<ExistingCreditTierDetailView> transformToView(List<ExistingCreditTierDetail> existingCreditTierDetailList) {
+    public List<ExistingCreditTierDetailView> transformsToView(List<ExistingCreditTierDetail> existingCreditTierDetailList) {
 
         List<ExistingCreditTierDetailView> existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
         ExistingCreditTierDetailView existingFeeDetailView;

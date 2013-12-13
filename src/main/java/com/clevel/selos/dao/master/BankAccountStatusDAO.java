@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class BankAccountStatusDAO extends GenericDAO<BankAccountStatus, Integer> {
     @Inject
@@ -28,4 +29,16 @@ public class BankAccountStatusDAO extends GenericDAO<BankAccountStatus, Integer>
 
         return bankAccountStatus;
     }
+
+    public List<BankAccountStatus> findByBankAccountType(int type){
+        log.info("findByBankAccountType. ( type: {})", type);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("bankAccountType.id", type));
+        List<BankAccountStatus> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+        return list;
+
+    }
+
 }
