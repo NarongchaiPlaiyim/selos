@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 public class ExistingGuarantorDetailView implements Serializable {
-
+    private long id;
+    private int no;
     private String guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
@@ -32,6 +33,22 @@ public class ExistingGuarantorDetailView implements Serializable {
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public Date getCreateDate() {
