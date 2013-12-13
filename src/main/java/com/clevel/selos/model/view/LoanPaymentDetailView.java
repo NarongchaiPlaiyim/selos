@@ -3,9 +3,10 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LoanPaymentDetailView {
+public class LoanPaymentDetailView implements Serializable {
     private Date signDate;
     private Date firstPayDate;
     private int payDate;
