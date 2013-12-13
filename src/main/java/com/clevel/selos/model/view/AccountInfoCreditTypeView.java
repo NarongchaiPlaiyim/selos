@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class AccountInfoCreditTypeView {
 
     private long id;
+    private boolean isSelected;
     private String productProgram;
     private BigDecimal limit;
     private String CreditFacility;
@@ -45,6 +46,14 @@ public class AccountInfoCreditTypeView {
 
     public void setCreditFacility(String creditFacility) {
         CreditFacility = creditFacility;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override

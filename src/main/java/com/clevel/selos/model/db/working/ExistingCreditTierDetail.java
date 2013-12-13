@@ -81,14 +81,6 @@ public class ExistingCreditTierDetail implements Serializable {
     @JoinColumn(name = "existing_credit_detail_id")
     private ExistingCreditDetail existingCreditDetail;
 
-    public ExistingCreditDetail getExistingCreditDetail() {
-        return existingCreditDetail;
-    }
-
-    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
-        this.existingCreditDetail = existingCreditDetail;
-    }
-
     public long getId() {
         return id;
     }
@@ -231,6 +223,14 @@ public class ExistingCreditTierDetail implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public ExistingCreditDetail getExistingCreditDetail() {
+        return existingCreditDetail;
+    }
+
+    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+        this.existingCreditDetail = existingCreditDetail;
     }
 
     @Override

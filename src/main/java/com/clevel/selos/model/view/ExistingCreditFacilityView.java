@@ -1,13 +1,15 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
-public class ExistingCreditView implements Serializable {
+public class ExistingCreditFacilityView implements Serializable {
 
     private List<ActionStatusView> status;
     private long id;
@@ -22,8 +24,6 @@ public class ExistingCreditView implements Serializable {
     private BigDecimal totalGroupCom;
     private BigDecimal totalGroupComOBOD;
     private BigDecimal totalGroupExposure;
-    private BigDecimal totalAppraisalValue;
-    private BigDecimal totalMortgageValue;
     private BigDecimal totalGuaranteeAmount;
     /* Total for Decision */
     private BigDecimal totalBorrowerAppraisalValue;
@@ -34,6 +34,9 @@ public class ExistingCreditView implements Serializable {
     private List<ExistingCreditDetailView> borrowerComExistingCredit;
     private List<ExistingCreditDetailView> borrowerRetailExistingCredit;
     private List<ExistingCreditDetailView> borrowerAppInRLOSCredit;
+
+    private List<ExistingConditionDetailView> existingConditionDetailViewList;
+
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
@@ -42,6 +45,11 @@ public class ExistingCreditView implements Serializable {
     private List<ExistingCollateralDetailView> relatedCollateralList;
 
     private List<ExistingGuarantorDetailView> borrowerGuarantorList;
+
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
     public long getId() {
         return id;
@@ -139,21 +147,7 @@ public class ExistingCreditView implements Serializable {
         this.totalGroupExposure = totalGroupExposure;
     }
 
-    public BigDecimal getTotalMortgageValue() {
-        return totalMortgageValue;
-    }
 
-    public void setTotalMortgageValue(BigDecimal totalMortgageValue) {
-        this.totalMortgageValue = totalMortgageValue;
-    }
-
-    public BigDecimal getTotalAppraisalValue() {
-        return totalAppraisalValue;
-    }
-
-    public void setTotalAppraisalValue(BigDecimal totalAppraisalValue) {
-        this.totalAppraisalValue = totalAppraisalValue;
-    }
 
     public BigDecimal getTotalGuaranteeAmount() {
         return totalGuaranteeAmount;
@@ -219,6 +213,14 @@ public class ExistingCreditView implements Serializable {
         this.borrowerAppInRLOSCredit = borrowerAppInRLOSCredit;
     }
 
+    public List<ExistingConditionDetailView> getExistingConditionDetailViewList() {
+        return existingConditionDetailViewList;
+    }
+
+    public void setExistingConditionDetailViewList(List<ExistingConditionDetailView> existingConditionDetailViewList) {
+        this.existingConditionDetailViewList = existingConditionDetailViewList;
+    }
+
     public List<ExistingCreditDetailView> getRelatedComExistingCredit() {
         return relatedComExistingCredit;
     }
@@ -275,6 +277,38 @@ public class ExistingCreditView implements Serializable {
         this.status = status;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -291,8 +325,6 @@ public class ExistingCreditView implements Serializable {
                 .append("totalGroupCom", totalGroupCom)
                 .append("totalGroupComOBOD", totalGroupComOBOD)
                 .append("totalGroupExposure", totalGroupExposure)
-                .append("totalAppraisalValue", totalAppraisalValue)
-                .append("totalMortgageValue", totalMortgageValue)
                 .append("totalGuaranteeAmount", totalGuaranteeAmount)
                 .append("borrowerComExistingCredit", borrowerComExistingCredit)
                 .append("borrowerRetailExistingCredit", borrowerRetailExistingCredit)
