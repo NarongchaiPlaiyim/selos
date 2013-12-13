@@ -85,7 +85,7 @@ public class ExistingCollateralDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "existing_credit_summary_id")
+    @JoinColumn(name = "existing_credit_facility_id")
     private ExistingCreditFacility existingCreditFacility;
 
     @OneToMany(mappedBy = "existingCollateralDetail", cascade = CascadeType.ALL)

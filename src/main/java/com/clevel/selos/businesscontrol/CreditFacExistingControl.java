@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -93,159 +94,7 @@ public class CreditFacExistingControl extends BusinessControl {
         return existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
     }
-    /*
-    public NewCreditFacilityView findNewCreditFacilityByWorkCase(long workCaseId) {
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
-
-        NewCreditFacilityView newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
-
-        if (newCreditFacility.getNewFeeDetailList() != null) {
-            List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newCreditFacility.getNewFeeDetailList());
-            newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
-        }
-
-        if (newCreditFacility.getNewCreditDetailList() != null) {
-            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditFacility.getNewCreditDetailList());
-
-            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-
-                for (NewCreditDetail newCreditDetail : newCreditFacility.getNewCreditDetailList()) {
-                    if (newCreditDetail.getProposeCreditTierDetailList() != null) {
-                        List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditDetail.getProposeCreditTierDetailList());
-                        newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-                    }
-                }
-
-            }
-
-            newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
-        }
-
-        if (newCreditFacility.getNewCollateralDetailList() != null) {
-            List<NewCollateralInfoView> newCollateralInfoViewList = newCollateralInfoTransform.transformsToView(newCreditFacility.getNewCollateralDetailList());
-            for (NewCollateralInfoView newCollateralInfoView : newCollateralInfoViewList) {
-                for (NewCollateralDetail newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
-                    if (newCollateralDetail.getNewCollateralHeadDetailList() != null) {
-                        List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralDetail.getNewCollateralHeadDetailList());
-
-                        for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralHeadDetailViews) {
-                            for (NewCollateralHeadDetail newCollateralHeadDetail : newCollateralDetail.getNewCollateralHeadDetailList()) {
-                                if (newCollateralHeadDetail.getNewCollateralSubDetailList() != null) {
-                                    List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(newCollateralHeadDetail.getNewCollateralSubDetailList());
-                                    newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
-                                }
-                            }
-                        }
-
-                        newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
-                    }
-
-                    if (newCollateralDetail.getCreditTypeDetailList() != null) {
-                        List<CreditTypeDetailView> creditTypeDetailViews = creditTypeDetailTransform.transformToView(newCollateralDetail.getCreditTypeDetailList());
-                        newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailViews);
-                    }
-                }
-            }
-
-            newCreditFacilityView.setNewCollateralInfoViewList(newCollateralInfoViewList);
-        }
-
-       if (newCreditFacility.getNewGuarantorDetailList() != null) {
-            List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newCreditFacility.getNewGuarantorDetailList());
-
-            for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
-                for (NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()) {
-                    if (newGuarantorDetail.getCreditTypeDetailList() != null) {
-                        List<CreditTypeDetailView> creditTypeDetailViewList = creditTypeDetailTransform.transformToView(newGuarantorDetail.getCreditTypeDetailList());
-                        newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailViewList);
-
-                    }
-                }
-
-            }
-
-            newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
-        }
-
-
-        if (newCreditFacility.getNewConditionDetailList() != null) {
-            List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newCreditFacility.getNewConditionDetailList());
-            newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
-        }
-
-
-        return newCreditFacilityView;
-    }
-
-    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, Long workCaseId, User user) {
-        log.info("onSaveNewCreditFacility begin");
-        log.info("workCaseId {} ", workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
-        newCreditFacilityDAO.persist(newCreditFacility);
-        log.info("persist :: creditFacilityPropose...");
-
-        List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(), newCreditFacility, user);
-        newFeeCreditDAO.persist(newFeeDetailList);
-        log.info("persist :: newFeeDetailList...");
-
-        List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, user);
-        newConditionDetailDAO.persist(newConditionDetailList);
-        log.info("persist :: newConditionDetail ...");
-
-        List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, user);
-        newCreditDetailDAO.persist(newCreditDetailList);
-        log.info("persist newCreditDetailList...");
-
-        for (NewCreditDetail newCreditDetail : newCreditDetailList) {
-            for (NewCreditDetailView newCreditDetailView : newCreditFacilityView.getNewCreditDetailViewList()) {
-                List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList(), newCreditDetail, user);
-                newCreditTierDetailDAO.persist(newCreditTierDetailList);
-                log.info("persist newCreditTierDetailList...");
-            }
-        }
-
-        List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
-        newGuarantorDetailDAO.persist(newGuarantorDetailList);
-        log.info("persist newGuarantorDetailList...");
-
-        for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
-            for (NewGuarantorDetailView newGuarantorDetailView : newCreditFacilityView.getNewGuarantorDetailViewList()) {
-                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForGuarantor(newGuarantorDetailView.getCreditTypeDetailViewList(), newGuarantorDetail, user);
-                creditTypeDetailDAO.persist(creditTypeDetailList);
-                log.info("persist creditTypeDetailList...");
-            }
-
-        }
-
-        List<NewCollateralDetail> newCollateralDetailList = newCollateralInfoTransform.transformsToModel(newCreditFacilityView.getNewCollateralInfoViewList(), newCreditFacility, user);
-        newCollateralDetailDAO.persist(newCollateralDetailList);
-        log.info("persist newCollateralDetailList...");
-
-        for (NewCollateralDetail newCollateralDetail : newCollateralDetailList) {
-            for (NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()) {
-                List<NewCollateralHeadDetail> newCollateralHeadDetailList = newCollHeadDetailTransform.transformToModel(newCollateralInfoView.getNewCollateralHeadDetailViewList(), newCollateralDetail, user);
-                newCollateralHeadDetailDAO.persist(newCollateralHeadDetailList);
-                log.info("persist newCollateralHeadDetailList...");
-
-                for (NewCollateralHeadDetail newCollateralHeadDetail : newCollateralHeadDetailList) {
-                    for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
-                        List<NewCollateralSubDetail> newCollateralSubDetails = newSubCollDetailTransform.transformToModel(newCollateralHeadDetailView.getNewSubCollateralDetailViewList(), newCollateralHeadDetail, user);
-                        newCollateralSubDetailDAO.persist(newCollateralSubDetails);
-                        log.info("persist newCollateralSubDetailList...");
-                    }
-                }
-
-                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForCollateral(newCollateralInfoView.getCreditTypeDetailViewList(), newCollateralDetail, user);
-                creditTypeDetailDAO.persist(creditTypeDetailList);
-                log.info("persist creditTypeDetailList...");
-
-            }
-        }
-
-    }*/
     public void onSaveExistingCreditFacility(ExistingCreditFacilityView existingCreditFacilityView, Long workCaseId, User user) {
         log.info("onSaveExistingCreditFacility begin");
 
@@ -253,17 +102,17 @@ public class CreditFacExistingControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         log.info("workCase Id  "+ workCase.getId() + " getCaNumber " + workCase.getCaNumber());
 
-        ExistingCreditFacility existingCreditFacility = existingCreditFacilityTransform.transformToModelDB(existingCreditFacilityView, workCase, user);
+        ExistingCreditFacility existingCreditFacility = existingCreditFacilityTransform.transformsToModelDB(existingCreditFacilityView, workCase, user);
         existingCreditFacilityDAO.persist(existingCreditFacility);
         log.info("persist :: existingCreditFacility..." + existingCreditFacility.getId());
 
         log.info("getExistingConditionDetailViewList size = ... " + existingCreditFacilityView.getExistingConditionDetailViewList().size());
-        List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailTransform.transformToModel(existingCreditFacilityView.getExistingConditionDetailViewList(), existingCreditFacility, user);
+        List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailTransform.transformsToModel(existingCreditFacilityView.getExistingConditionDetailViewList(), existingCreditFacility, user);
         existingConditionDetailDAO.persist(existingConditionDetailList);
         log.info("persist :: existingConditionDetailList ...");
 
         log.info("persist borrower getBorrowerComExistingCredit size ..." + existingCreditFacilityView.getBorrowerComExistingCredit());
-        List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(borrowerComExistingCreditList);
         log.info("persist borrower existingCreditDetailList...");
 
@@ -271,46 +120,46 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist borrower existingCreditDetailList..." + existingCreditDetail.getId() );
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 log.info("persist borrower getExistingCreditTierDetailViewList... " + existingCreditDetailView.getExistingCreditTierDetailViewList().size());
-                List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformToModel(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
+                List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformsToModel(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
                 existingCreditTierDetailDAO.persist(existingCreditTierDetailList);
                 log.info("persist borrower existingCreditTierDetailList...");
 
                 log.info("persist borrower getExistingSplitLineDetailViewList... " + existingCreditDetailView.getExistingSplitLineDetailViewList().size());
-                List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformToModel(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
+                List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformsToModel(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
                 existingSplitLineDetailDAO.persist(existingSplitLineDetailList);
                 log.info("persist borrower existingCreditTierDetailList...");
             }
         }
 
-        List<ExistingCreditDetail> borrowerRetailExistingCredit = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getBorrowerRetailExistingCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> borrowerRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerRetailExistingCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(borrowerRetailExistingCredit);
         log.info("persist borrower Retail existingCreditDetailList...");
 
-        List<ExistingCreditDetail> borrowerAppInRLOSCredit = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getBorrowerAppInRLOSCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> borrowerAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerAppInRLOSCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(borrowerRetailExistingCredit);
         log.info("persist borrower RLOS existingCreditDetailList...");
         
 
-        List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getRelatedComExistingCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedComExistingCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(relatedComExistingCreditList);
         log.info("persist related existingCreditDetailList...");
 
         for (ExistingCreditDetail existingCreditDetail : relatedComExistingCreditList) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getRelatedComExistingCredit()) {
-                List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformToModel(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
+                List<ExistingCreditTierDetail> existingCreditTierDetailList = existingCreditTierTransform.transformsToModel(existingCreditDetailView.getExistingCreditTierDetailViewList(), existingCreditDetail, user);
                 existingCreditTierDetailDAO.persist(existingCreditTierDetailList);
                 log.info("persist related existingCreditTierDetailList...");
-                List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformToModel(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
+                List<ExistingSplitLineDetail> existingSplitLineDetailList = existingSplitLineTransform.transformsToModel(existingCreditDetailView.getExistingSplitLineDetailViewList(), existingCreditDetail, user);
                 existingSplitLineDetailDAO.persist(existingSplitLineDetailList);
                 log.info("persist related existingSplitLineDetailList...");
             }
         }
 
-        List<ExistingCreditDetail> relatedRetailExistingCredit = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getRelatedRetailExistingCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> relatedRetailExistingCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedRetailExistingCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(relatedRetailExistingCredit);
         log.info("persist related Retail existingCreditDetailList...");
 
-        List<ExistingCreditDetail> relatedAppInRLOSCredit = existingCreditDetailTransform.transformToModel(existingCreditFacilityView.getRelatedAppInRLOSCredit(), existingCreditFacility, user);
+        List<ExistingCreditDetail> relatedAppInRLOSCredit = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedAppInRLOSCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(relatedRetailExistingCredit);
         log.info("persist related RLOS existingCreditDetailList..."); 
 
@@ -320,7 +169,7 @@ public class CreditFacExistingControl extends BusinessControl {
 
         for (ExistingCollateralDetail existingCollateralDetail : borrowerCollateralDetailList) {
             for (ExistingCollateralDetailView existingCollateralDetailView : existingCreditFacilityView.getBorrowerCollateralList()) {
-                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformToModelForCollateral(existingCollateralDetailView.getExistingCreditTypeDetailViewList(), existingCollateralDetail, user);
+                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformsToModelForCollateral(existingCollateralDetailView.getExistingCreditTypeDetailViewList(), existingCollateralDetail, user);
                 existingCreditTypeDetailDAO.persist(existingCreditTypeDetailList);
                 log.info("persist borrower Collateral  existingCreditTypeDetailList...");
             }
@@ -332,22 +181,164 @@ public class CreditFacExistingControl extends BusinessControl {
 
         for (ExistingCollateralDetail existingCollateralDetail : relatedCollateralDetailList) {
             for (ExistingCollateralDetailView existingCollateralDetailView : existingCreditFacilityView.getBorrowerCollateralList()) {
-                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformToModelForCollateral(existingCollateralDetailView.getExistingCreditTypeDetailViewList(), existingCollateralDetail, user);
+                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformsToModelForCollateral(existingCollateralDetailView.getExistingCreditTypeDetailViewList(), existingCollateralDetail, user);
                 existingCreditTypeDetailDAO.persist(existingCreditTypeDetailList);
                 log.info("persist related Collateral existingCreditTypeDetailList...");
             }
         }
 
-        List<ExistingGuarantorDetail> borrowerGuarantorDetailList = existingGuarantorDetailTransform.transformToModel(existingCreditFacilityView.getBorrowerGuarantorList(), existingCreditFacility, user);
+        List<ExistingGuarantorDetail> borrowerGuarantorDetailList = existingGuarantorDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerGuarantorList(), existingCreditFacility, user);
         existingGuarantorDetailDAO.persist(borrowerGuarantorDetailList);
         log.info("persist borrowerGuarantorDetailList...");
 
         for (ExistingGuarantorDetail existingGuarantorDetail : borrowerGuarantorDetailList) {
             for (ExistingGuarantorDetailView existingGuarantorDetailView : existingCreditFacilityView.getBorrowerGuarantorList()) {
-                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformToModelForGuarantor(existingGuarantorDetailView.getExistingCreditTypeDetailViewList(), existingGuarantorDetail, user);
+                List<ExistingCreditTypeDetail> existingCreditTypeDetailList = existingCreditTypeDetailTransform.transformsToModelForGuarantor(existingGuarantorDetailView.getExistingCreditTypeDetailViewList(), existingGuarantorDetail, user);
                 existingCreditTypeDetailDAO.persist(existingCreditTypeDetailList);
                 log.info("persist existingCreditTypeDetailList...");
             }
         }
+    }
+
+    public List<ExistingCreditDetailView> onFindBorrowerExistingCreditFacility(Long workCaseId) {
+        log.info("onFindBorrowerExistingCreditFacility begin");
+
+        log.info("workCaseId {} ", workCaseId);
+        ExistingCreditFacility existingCreditFacility;
+        List<ExistingCreditDetailView> borrowerCreditDetailViewList;
+        existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        borrowerCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+
+        if(existingCreditFacility != null){
+            List<ExistingCreditDetail> borrowerCreditDetailList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,1);
+            borrowerCreditDetailViewList = existingCreditDetailTransform.transformsToView(borrowerCreditDetailList);
+            log.info("find :: borrowerCreditDetailViewList ...");
+        }
+
+        return  borrowerCreditDetailViewList;
+    }
+
+    public ExistingCreditFacilityView onFindExistingCreditFacility(Long workCaseId) {
+        log.info("onSaveExistingCreditFacility begin");
+
+        log.info("workCaseId {} ", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        log.info("workCase Id  "+ workCase.getId() + " getCaNumber " + workCase.getCaNumber());
+        ExistingCreditFacility existingCreditFacility;
+        ExistingCreditFacilityView existingCreditFacilityView;
+
+        existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
+        if(existingCreditFacility != null){
+            existingCreditFacilityView = existingCreditFacilityTransform.transformsToView(existingCreditFacility);
+            List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+            List<ExistingConditionDetailView> existingConditionDetailListView = existingConditionDetailTransform.transformsToView(existingConditionDetailList);
+            log.info("onFind :: existingConditionDetailList ...");
+            existingCreditFacilityView.setExistingConditionDetailViewList(existingConditionDetailListView);
+            
+            List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,1);
+            List<ExistingCreditDetailView> borrowerComExistingCreditViewList = onFindCreditDetailChild(borrowerComExistingCreditList);
+            log.info("onFind :: borrowerComExistingCreditList ...");
+            existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComExistingCreditViewList);
+
+            List<ExistingCreditDetail> borrowerRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,2);
+            List<ExistingCreditDetailView> borrowerRetailExistingCreditViewList = onFindCreditDetailChild(borrowerRetailExistingCreditList);
+            log.info("onFind :: borrowerRetailExistingCreditList ...");
+            existingCreditFacilityView.setBorrowerRetailExistingCredit(borrowerRetailExistingCreditViewList);
+
+            List<ExistingCreditDetail> borrowerAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,3);
+            List<ExistingCreditDetailView> borrowerAppInRLOSCreditViewList = onFindCreditDetailChild(borrowerAppInRLOSCreditList);
+            log.info("onFind :: borrowerAppInRLOSCreditList ...");
+            existingCreditFacilityView.setBorrowerAppInRLOSCredit(borrowerAppInRLOSCreditViewList);
+
+            List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,1);
+            List<ExistingCreditDetailView> relatedComExistingCreditViewList = onFindCreditDetailChild(relatedComExistingCreditList);
+            log.info("onFind :: relatedComExistingCreditList ...");
+            existingCreditFacilityView.setRelatedComExistingCredit(relatedComExistingCreditViewList);
+
+            List<ExistingCreditDetail> relatedRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,2);
+            List<ExistingCreditDetailView> relatedRetailExistingCreditViewList = onFindCreditDetailChild(relatedRetailExistingCreditList);
+            log.info("onFind :: relatedRetailExistingCreditList ...");
+            existingCreditFacilityView.setRelatedRetailExistingCredit(relatedRetailExistingCreditViewList);
+
+            List<ExistingCreditDetail> relatedAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,3);
+            List<ExistingCreditDetailView> relatedAppInRLOSCreditViewList = onFindCreditDetailChild(relatedAppInRLOSCreditList);
+            log.info("onFind :: relatedAppInRLOSCreditList ...");
+            existingCreditFacilityView.setRelatedAppInRLOSCredit(relatedAppInRLOSCreditViewList);
+
+            List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+            List<ExistingCollateralDetailView> borrowerCollateralDetailViewList = onFindCollateralDetailChild(borrowerCollateralDetailList);
+            log.info("onFind :: borrowerCollateralDetailList ...");
+            existingCreditFacilityView.setBorrowerCollateralList(borrowerCollateralDetailViewList);
+
+            List<ExistingCollateralDetail> relatedCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,2);
+            List<ExistingCollateralDetailView> relatedCollateralDetailViewList = onFindCollateralDetailChild(relatedCollateralDetailList);
+            log.info("onFind :: relatedCollateralDetailList ...");
+            existingCreditFacilityView.setRelatedCollateralList(relatedCollateralDetailViewList);
+
+
+            List<ExistingGuarantorDetail> borrowerGuarantorDetailList = existingGuarantorDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+            List<ExistingGuarantorDetailView> borrowerGuarantorDetailViewList = onFindGuarantorDetailChild(borrowerGuarantorDetailList);
+            log.info("onFind :: borrowerGuarantorDetailList ...");
+            existingCreditFacilityView.setBorrowerGuarantorList(borrowerGuarantorDetailViewList);
+            return existingCreditFacilityView;
+        }
+
+        return null;
+    }
+
+    public List<ExistingCreditDetailView> onFindCreditDetailChild(List<ExistingCreditDetail> existingCreditDetailList) {
+        List<ExistingSplitLineDetail> existingSplitLineDetailList;
+        List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
+        List<ExistingCreditTierDetail> existingCreditTierDetailList;
+        List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
+        List<ExistingCreditDetailView>      existingCreditDetailViewList;
+
+        existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
+
+        for(int i =0;i<existingCreditDetailViewList.size();i++){
+            existingCreditTierDetailList = existingCreditTierDetailDAO.findByExistingCreditDetail(existingCreditDetailList.get(i));
+            existingCreditTierDetailViewList = existingCreditTierTransform.transformsToView(existingCreditTierDetailList);
+            existingCreditDetailViewList.get(i).setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
+            
+            existingSplitLineDetailList = existingSplitLineDetailDAO.findByExistingCreditDetail(existingCreditDetailList.get(i));
+            existingSplitLineDetailViewList = existingSplitLineTransform.transformsToView(existingSplitLineDetailList);
+            existingCreditDetailViewList.get(i).setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
+        }
+
+        return existingCreditDetailViewList;
+
+    }
+
+    public List<ExistingCollateralDetailView> onFindCollateralDetailChild(List<ExistingCollateralDetail> existingCollateralDetailList) {
+        List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
+        List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
+        List<ExistingCollateralDetailView> existingCollateralDetailViewList;
+
+        existingCollateralDetailViewList = existingCollateralDetailTransform.transformsToView(existingCollateralDetailList);
+
+        for(int i =0;i<existingCollateralDetailViewList.size();i++){
+            existingCreditTypeDetailList = existingCreditTypeDetailDAO.findByExistingCollateralDetail(existingCollateralDetailList.get(i));
+            existingCreditTypeDetailViewList = existingCreditTypeDetailTransform.transformsToView(existingCreditTypeDetailList);
+            existingCollateralDetailViewList.get(i).setExistingCreditTypeDetailViewList(existingCreditTypeDetailViewList);
+        }
+
+        return existingCollateralDetailViewList;
+    }
+
+    public List<ExistingGuarantorDetailView> onFindGuarantorDetailChild(List<ExistingGuarantorDetail> existingGuarantorDetailList) {
+        List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
+        List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
+        List<ExistingGuarantorDetailView> existingGuarantorDetailViewList;
+
+        existingGuarantorDetailViewList = existingGuarantorDetailTransform.transformsToView(existingGuarantorDetailList);
+
+        for(int i =0;i<existingGuarantorDetailViewList.size();i++){
+            existingCreditTypeDetailList = existingCreditTypeDetailDAO.findByExistingGuarantorDetail(existingGuarantorDetailList.get(i));
+            existingCreditTypeDetailViewList = existingCreditTypeDetailTransform.transformsToView(existingCreditTypeDetailList);
+            existingGuarantorDetailViewList.get(i).setExistingCreditTypeDetailViewList(existingCreditTypeDetailViewList);
+        }
+
+        return existingGuarantorDetailViewList;
     }
 }

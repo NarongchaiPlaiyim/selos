@@ -17,7 +17,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
     public ExistingGuarantorDetailTransform() {
     }
 
-    public List<ExistingGuarantorDetail> transformToModel(List<ExistingGuarantorDetailView> existingGuarantorDetailViewList, ExistingCreditFacility existingCreditFacility, User user) {
+    public List<ExistingGuarantorDetail> transformsToModel(List<ExistingGuarantorDetailView> existingGuarantorDetailViewList, ExistingCreditFacility existingCreditFacility, User user) {
 
         List<ExistingGuarantorDetail> existingGuarantorDetailList = new ArrayList<ExistingGuarantorDetail>();
         ExistingGuarantorDetail existingGuarantorDetail;
@@ -43,7 +43,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
         return existingGuarantorDetailList;
     }
 
-    public List<ExistingGuarantorDetailView> transformToView(List<ExistingGuarantorDetail> existingGuarantorDetailList) {
+    public List<ExistingGuarantorDetailView> transformsToView(List<ExistingGuarantorDetail> existingGuarantorDetailList) {
         List<ExistingGuarantorDetailView> existingGuarantorDetailViews = new ArrayList<ExistingGuarantorDetailView>();
         ExistingGuarantorDetailView existingGuarantorDetailView;
 
