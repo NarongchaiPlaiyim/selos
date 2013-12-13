@@ -83,85 +83,92 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        NewCreditFacilityView newCreditFacilityView = null;
 
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
 
-        NewCreditFacilityView newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
+        try{
+             newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
-        if (newCreditFacility.getNewFeeDetailList() != null) {
-            List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newCreditFacility.getNewFeeDetailList());
-            newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
-        }
-
-        if (newCreditFacility.getNewCreditDetailList() != null) {
-            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditFacility.getNewCreditDetailList());
-
-            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-
-                for (NewCreditDetail newCreditDetail : newCreditFacility.getNewCreditDetailList()) {
-                    if (newCreditDetail.getProposeCreditTierDetailList() != null) {
-                        List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditDetail.getProposeCreditTierDetailList());
-                        newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-                    }
-                }
-
+            if (newCreditFacility.getNewFeeDetailList() != null) {
+                List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newCreditFacility.getNewFeeDetailList());
+                newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
             }
 
-            newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
-        }
+            if (newCreditFacility.getNewCreditDetailList() != null) {
+                List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditFacility.getNewCreditDetailList());
 
-        if (newCreditFacility.getNewCollateralDetailList() != null) {
-            List<NewCollateralInfoView> newCollateralInfoViewList = newCollateralInfoTransform.transformsToView(newCreditFacility.getNewCollateralDetailList());
-            for (NewCollateralInfoView newCollateralInfoView : newCollateralInfoViewList) {
-                for (NewCollateralDetail newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
-                    if (newCollateralDetail.getNewCollateralHeadDetailList() != null) {
-                        List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralDetail.getNewCollateralHeadDetailList());
+                for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
 
-                        for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralHeadDetailViews) {
-                            for (NewCollateralHeadDetail newCollateralHeadDetail : newCollateralDetail.getNewCollateralHeadDetailList()) {
-                                if (newCollateralHeadDetail.getNewCollateralSubDetailList() != null) {
-                                    List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(newCollateralHeadDetail.getNewCollateralSubDetailList());
-                                    newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
+                    for (NewCreditDetail newCreditDetail : newCreditFacility.getNewCreditDetailList()) {
+                        if (newCreditDetail.getProposeCreditTierDetailList() != null) {
+                            List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditDetail.getProposeCreditTierDetailList());
+                            newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
+                        }
+                    }
+
+                }
+
+                newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
+            }
+
+            if (newCreditFacility.getNewCollateralDetailList() != null) {
+                List<NewCollateralInfoView> newCollateralInfoViewList = newCollateralInfoTransform.transformsToView(newCreditFacility.getNewCollateralDetailList());
+                for (NewCollateralInfoView newCollateralInfoView : newCollateralInfoViewList) {
+                    for (NewCollateralDetail newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
+                        if (newCollateralDetail.getNewCollateralHeadDetailList() != null) {
+                            List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralDetail.getNewCollateralHeadDetailList());
+
+                            for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralHeadDetailViews) {
+                                for (NewCollateralHeadDetail newCollateralHeadDetail : newCollateralDetail.getNewCollateralHeadDetailList()) {
+                                    if (newCollateralHeadDetail.getNewCollateralSubDetailList() != null) {
+                                        List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(newCollateralHeadDetail.getNewCollateralSubDetailList());
+                                        newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
+                                    }
                                 }
                             }
+
+                            newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
                         }
 
-                        newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
-                    }
-
-                    if (newCollateralDetail.getCreditTypeDetailList() != null) {
-                        List<CreditTypeDetailView> creditTypeDetailViews = creditTypeDetailTransform.transformToView(newCollateralDetail.getCreditTypeDetailList());
-                        newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailViews);
-                    }
-                }
-            }
-
-            newCreditFacilityView.setNewCollateralInfoViewList(newCollateralInfoViewList);
-        }
-
-       if (newCreditFacility.getNewGuarantorDetailList() != null) {
-            List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newCreditFacility.getNewGuarantorDetailList());
-
-            for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
-                for (NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()) {
-                    if (newGuarantorDetail.getCreditTypeDetailList() != null) {
-                        List<CreditTypeDetailView> creditTypeDetailViewList = creditTypeDetailTransform.transformToView(newGuarantorDetail.getCreditTypeDetailList());
-                        newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailViewList);
-
+                        if (newCollateralDetail.getCreditTypeDetailList() != null) {
+                            List<CreditTypeDetailView> creditTypeDetailViews = creditTypeDetailTransform.transformToView(newCollateralDetail.getCreditTypeDetailList());
+                            newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailViews);
+                        }
                     }
                 }
 
+                newCreditFacilityView.setNewCollateralInfoViewList(newCollateralInfoViewList);
             }
 
-            newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
+           if (newCreditFacility.getNewGuarantorDetailList() != null) {
+                List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newCreditFacility.getNewGuarantorDetailList());
+
+                for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
+                    for (NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()) {
+                        if (newGuarantorDetail.getCreditTypeDetailList() != null) {
+                            List<CreditTypeDetailView> creditTypeDetailViewList = creditTypeDetailTransform.transformToView(newGuarantorDetail.getCreditTypeDetailList());
+                            newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailViewList);
+
+                        }
+                    }
+
+                }
+
+                newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
+            }
+
+
+            if (newCreditFacility.getNewConditionDetailList() != null) {
+                List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newCreditFacility.getNewConditionDetailList());
+                newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
+            }
+
+        }catch(Exception e){
+            log.error( "findNewCreditFacilityByWorkCase  error ::: {}" , e.getMessage());
+        }finally {
+            log.info("findNewCreditFacilityByWorkCase end");
         }
-
-
-        if (newCreditFacility.getNewConditionDetailList() != null) {
-            List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newCreditFacility.getNewConditionDetailList());
-            newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
-        }
-
 
         return newCreditFacilityView;
     }
