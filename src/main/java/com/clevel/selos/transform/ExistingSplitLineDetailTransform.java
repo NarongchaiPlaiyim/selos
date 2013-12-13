@@ -16,7 +16,7 @@ public class ExistingSplitLineDetailTransform extends Transform {
     public ExistingSplitLineDetailTransform() {
     }
 
-    public List<ExistingSplitLineDetail> transformToModel(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList,ExistingCreditDetail existingCreditDetail,User user) {
+    public List<ExistingSplitLineDetail> transformsToModel(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList,ExistingCreditDetail existingCreditDetail,User user) {
 
         List<ExistingSplitLineDetail> existingSplitLineDetails = new ArrayList<ExistingSplitLineDetail>();
         ExistingSplitLineDetail existingSplitLineDetail;
@@ -43,7 +43,7 @@ public class ExistingSplitLineDetailTransform extends Transform {
         return existingSplitLineDetails;
     }
 
-    public List<ExistingSplitLineDetailView> transformToView(List<ExistingSplitLineDetail> existingSplitLineDetailList) {
+    public List<ExistingSplitLineDetailView> transformsToView(List<ExistingSplitLineDetail> existingSplitLineDetailList) {
 
         List<ExistingSplitLineDetailView> existingSplitLineDetailViewList = new ArrayList<ExistingSplitLineDetailView>();
         ExistingSplitLineDetailView existingSplitLineDetailView;

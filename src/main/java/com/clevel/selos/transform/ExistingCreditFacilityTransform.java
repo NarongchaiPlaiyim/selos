@@ -15,7 +15,7 @@ public class ExistingCreditFacilityTransform extends Transform {
     public ExistingCreditFacilityTransform() {}
 
 
-    public ExistingCreditFacility transformToModelDB(ExistingCreditFacilityView existingCreditFacilityView, WorkCase workCase, User user) {
+    public ExistingCreditFacility transformsToModelDB(ExistingCreditFacilityView existingCreditFacilityView, WorkCase workCase, User user) {
 
         ExistingCreditFacility existingCreditFacility = new ExistingCreditFacility();
 
@@ -56,7 +56,7 @@ public class ExistingCreditFacilityTransform extends Transform {
         return existingCreditFacility;
     }
 
-    public ExistingCreditFacilityView transformToView(ExistingCreditFacility existingCreditFacility) {
+    public ExistingCreditFacilityView transformsToView(ExistingCreditFacility existingCreditFacility) {
         ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
 
         existingCreditFacilityView.setCreateDate(existingCreditFacility.getCreateDate());

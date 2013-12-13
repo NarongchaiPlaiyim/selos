@@ -42,7 +42,7 @@ public class ExistingConditionDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "existing_credit_summary_id")
+    @JoinColumn(name = "existing_credit_facility_id")
     private ExistingCreditFacility existingCreditFacility;
 
     public long getId() {

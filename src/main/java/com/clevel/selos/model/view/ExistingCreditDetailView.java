@@ -20,11 +20,14 @@ public class ExistingCreditDetailView implements Serializable {
     private int no;
     private int seq;
     private boolean noFlag;
+    private int borrowerType;
+    private int existingCreditFrom;
     private String stage;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
+
     private BankAccountStatusView accountStatus;
 
     private AccountStatus existAccountStatus;
@@ -85,6 +88,22 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setNoFlag(boolean noFlag) {
         this.noFlag = noFlag;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
+    }
+
+    public int getExistingCreditFrom() {
+        return existingCreditFrom;
+    }
+
+    public void setExistingCreditFrom(int existingCreditFrom) {
+        this.existingCreditFrom = existingCreditFrom;
     }
 
     public String getStage() {

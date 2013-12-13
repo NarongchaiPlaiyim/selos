@@ -12,6 +12,9 @@ import java.util.List;
 
 public class ExistingCollateralDetailView implements Serializable {
     private long id;
+    private int no;
+    private int borrowerType;
+
     private PotentialCollateral potentialCollateral;
     private CollateralType collateralType;
     private String owner;
@@ -67,6 +70,22 @@ public class ExistingCollateralDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
     }
 
     public PotentialCollateral getPotentialCollateral() {
