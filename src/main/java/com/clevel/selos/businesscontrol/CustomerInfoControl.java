@@ -86,34 +86,34 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
 
-            //for show jurLv
-            if(cV.getIsCommittee() == 1){
-                for(CustomerInfoView cusView : customerInfoViewList){
-                    if(cusView.getId() == cV.getCommitteeId()){
-                        cV.setJurLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
-                    }
-                }
-            } else {
-                cV.setJurLv("-");
-            }
-
-            //for show indLv
-            if(cV.getIsSpouse() == 1){ // is spouse
-                for(CustomerInfoView cusView : customerInfoViewList){ // is main spouse
-                    if(cusView.getSpouseId() == cV.getId()){
-                        cV.setIndLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
-                        if(cusView.getIsCommittee() == 1){ // is main spouse is committee
-                            for(CustomerInfoView cusViewJur : customerInfoViewList){
-                                if(cusViewJur.getId() == cusView.getCommitteeId()){
-                                    cV.setJurLv(cusView.getReference().getDescription()+" of "+cusViewJur.getFirstNameTh()+" "+cusViewJur.getLastNameTh());
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                cV.setIndLv("-");
-            }
+//            //for show jurLv
+//            if(cV.getIsCommittee() == 1){
+//                for(CustomerInfoView cusView : customerInfoViewList){
+//                    if(cusView.getId() == cV.getCommitteeId()){
+//                        cV.setJurLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
+//                    }
+//                }
+//            } else {
+//                cV.setJurLv("-");
+//            }
+//
+//            //for show indLv
+//            if(cV.getIsSpouse() == 1){ // is spouse
+//                for(CustomerInfoView cusView : customerInfoViewList){ // is main spouse
+//                    if(cusView.getSpouseId() == cV.getId()){
+//                        cV.setIndLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
+//                        if(cusView.getIsCommittee() == 1){ // is main spouse is committee
+//                            for(CustomerInfoView cusViewJur : customerInfoViewList){
+//                                if(cusViewJur.getId() == cusView.getCommitteeId()){
+//                                    cV.setJurLv(cusView.getReference().getDescription()+" of "+cusViewJur.getFirstNameTh()+" "+cusViewJur.getLastNameTh());
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            } else {
+//                cV.setIndLv("-");
+//            }
         }
 
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
@@ -300,7 +300,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(customer.getIsSpouse() == 1){ // if this is spouse
-            Customer cus = customerDAO.findCustomerBySpouseId(customer.getId());
+            Customer cus = customerDAO.findMainCustomerBySpouseId(customer.getId());
             cus.setSpouseId(0);
             customerDAO.persist(cus);
         }
