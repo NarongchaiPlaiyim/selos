@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>#{msg.get('app.dbr.title')}</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+                    <!-- End Header Logo -->
+                    <!-- Start Header Detail -->
+                    <ui:include src="include/header_detail.xhtml"/>
+                    <!-- End Header Detail -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar.xhtml"/>
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.pledgeDetail.head')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_trackchange">[ View Track Change ]</div>
+                                <div id="content_lastupdate">Last update by <h:outputText
+                                        value="modifyby"/>,
+                                    <p:outputLabel value="modifyDate">
+                                        <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
+                                    </p:outputLabel></div>
+                            </div>
+                            <div id="content_form">
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="bottom_line"/>
+                    </div>
+                    <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                </div>
+                <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+                    LOADING<br/>
+                    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                </p:blockUI>
+            </h:form>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}">
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>
