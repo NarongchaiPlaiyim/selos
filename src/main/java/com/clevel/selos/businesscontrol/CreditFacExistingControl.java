@@ -95,6 +95,13 @@ public class CreditFacExistingControl extends BusinessControl {
 
     }
 
+
+    public ExistingCreditFacilityView getExistingCreditFacility(long workCaseId) {
+        log.info("workCaseId :: {}", workCaseId);
+        ExistingCreditFacilityView existingCreditFacilityView =  existingCreditFacilityTransform.transformsToView(existingCreditFacilityDAO.findByWorkCaseId(workCaseId));
+        return existingCreditFacilityView;
+    }
+
     public void onSaveExistingCreditFacility(ExistingCreditFacilityView existingCreditFacilityView, Long workCaseId, User user) {
         log.info("onSaveExistingCreditFacility begin");
 
