@@ -12,7 +12,6 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
@@ -209,7 +208,14 @@ public class CreditFacPropose implements Serializable {
         //test
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-        user = (User) session.getAttribute("user");
+
+        user = (User)session.getAttribute("user");
+
+        if (session.getAttribute("workCaseId") != null) {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            log.info("workCaseId :: {} ", workCaseId);
+        }
+
 
         if (workCaseId != null) {
 
@@ -227,36 +233,9 @@ public class CreditFacPropose implements Serializable {
 
             log.info("onCreation :: modeForDB :: {}", modeForDB);
 
-            guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
-            log.info("guarantorList size :: {}", guarantorList.size());
-            if (guarantorList == null) {
-                guarantorList = new ArrayList<CustomerInfoView>();
-            }
-
-            collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
-            log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
-            if (collateralOwnerUwAllList == null) {
-                collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
-            }
-
-           /* if (productGroup == null) {
-                basicInfo = basicInfoControl.getBasicInfo(workCaseId);
-
-                if (basicInfo != null) {
-                    productGroup = basicInfo.getProductGroup();
-                    specialProgramBasicInfo = basicInfo.getSpecialProgram();
-                }
-            }
-
-            if (tcgView == null) {
-                applyTCG = 0;
-                tcgView = tcgInfoControl.getTcgView(workCaseId);
-                if (tcgView != null) {
-                    applyTCG = tcgView.getTCG();
-                }
-            }*/
-
             basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            log.info("basicInfo:: {}",basicInfo.getId());
+            log.info("basicInfo:: {}",basicInfo.getProductGroup());
             if(basicInfo == null) {
                 productGroup=null;
                 specialProgramBasicInfo=null;
@@ -275,6 +254,18 @@ public class CreditFacPropose implements Serializable {
                 applyTCG = tcg.getTcgFlag();
             }
 
+
+            guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+            log.info("guarantorList size :: {}", guarantorList.size());
+            if (guarantorList == null) {
+                guarantorList = new ArrayList<CustomerInfoView>();
+            }
+
+            collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
+            log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
+            if (collateralOwnerUwAllList == null) {
+                collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
+            }
         }
 
         if (collateralOwnerUW == null) {
@@ -491,7 +482,7 @@ public class CreditFacPropose implements Serializable {
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
-                if ((prdProgramToCreditType.getId() != 0) && (newCreditFacilityView.getCreditCustomerType() != CreditCustomerType.NOT_SELECTED.value()) && (specialProgramBasicInfo != null)) {
+                if ((prdProgramToCreditType.getId() != 0) && (specialProgramBasicInfo.getId() != 0)) {
                     log.info("onChangeCreditType :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
                     log.info("onChangeCreditType :: newCreditFacilityView.getCreditCustomerType() :: {}", newCreditFacilityView.getCreditCustomerType());
                     log.info("onChangeCreditType :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
@@ -530,18 +521,18 @@ public class CreditFacPropose implements Serializable {
 
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
-        if (newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NOT_SELECTED.value()) {
-            messageHeader = "Warning !!!!";
-            message = "กรุณาระบุ Credit Customer Type";
-            messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } else {
+//        if (newCreditFacilityView.getCreditCustomerType() == CreditCustomerType.NOT_SELECTED.value()) {
+//            messageHeader = "Warning !!!!";
+//            message = "กรุณาระบุ Credit Customer Type";
+//            messageErr = true;
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        } else {
             RequestContext.getCurrentInstance().execute("creditInfoDlg.show()");
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
             newCreditDetailView = new NewCreditDetailView();
             modeForButton = ModeForButton.ADD;
             onChangeRequestType();
-        }
+//        }
 
     }
 

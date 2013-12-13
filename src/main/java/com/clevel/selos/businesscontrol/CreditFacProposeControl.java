@@ -266,47 +266,30 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-//        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.getExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
-        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
-        int seq  = 0;
-        if(existingCreditFacilityView.getBorrowerComExistingCredit() != null && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0)
-        {
-            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : 1;
-            log.info("seq :: {}", seq);
+//        List<ExistingCreditDetailView> existingCreditDetailViewList  = creditFacExistingControl.getExistingCreditTypeDetail(workCaseId); //call business control  to find Existing  and transform to view
+        //existingCreditType >>> Commercial
+//        int seq  = 0;
+//        if()
+//        {
+//            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : 1;
+//            log.info("seq :: {}", seq);
 
-            //type of Borrower Existing
-            for(ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
-                creditTypeDetailView = new CreditTypeDetailView();
-                creditTypeDetailView.setSeq(seq);
-                creditTypeDetailView.setAccountName(existingCreditDetailView.getAccountName());
-                creditTypeDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                creditTypeDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                creditTypeDetailView.setProductProgram(existingCreditDetailView.getProductProgram());
-                creditTypeDetailView.setCreditFacility(existingCreditDetailView.getCreditType());
-                creditTypeDetailView.setLimit(existingCreditDetailView.getLimit());
-                creditTypeDetailList.add(creditTypeDetailView);
-                seq++;
-            }
-        }
+              //type of Borrower Existing
+//            for(ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
+//                creditTypeDetailView = new CreditTypeDetailView();
+//                creditTypeDetailView.setSeq(seq);
+//                creditTypeDetailView.setAccountName(existingCreditDetailView.getAccountName());
+//                creditTypeDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
+//                creditTypeDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
+//                creditTypeDetailView.setProductProgram(existingCreditDetailView.getProductProgram());
+//                creditTypeDetailView.setCreditFacility(existingCreditDetailView.getCreditType());
+//                creditTypeDetailView.setLimit(existingCreditDetailView.getLimit());
+//                creditTypeDetailList.add(creditTypeDetailView);
+//                seq++;
+//            }
+//        }
 
-        /*if(existingCreditFacilityView.getBorrowerRetailExistingCredit() != null && existingCreditFacilityView.getBorrowerRetailExistingCredit().size() > 0)
-        {
-            seq = newCreditDetailViewList != null ? newCreditDetailViewList.size() + 1 : existingCreditFacilityView.getBorrowerRetailExistingCredit() != null ? existingCreditFacilityView.getBorrowerRetailExistingCredit().size() + 1 : 1;
-            log.info("seq :: {}", seq);
-            //type of Retail Existing
-            for(ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerRetailExistingCredit()) {
-                creditTypeDetailView = new CreditTypeDetailView();
-                creditTypeDetailView.setSeq(seq);
-                creditTypeDetailView.setAccountName(existingCreditDetailView.getAccountName());
-                creditTypeDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
-                creditTypeDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                creditTypeDetailView.setProductProgram(existingCreditDetailView.getProductProgram());
-                creditTypeDetailView.setCreditFacility(existingCreditDetailView.getCreditType());
-                creditTypeDetailView.setLimit(existingCreditDetailView.getLimit());
-                creditTypeDetailList.add(creditTypeDetailView);
-                seq++;
-            }
-        }*/
+
 
         return creditTypeDetailList;
     }

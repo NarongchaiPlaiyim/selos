@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
@@ -157,6 +158,7 @@ public class NewCreditFacilityView implements Serializable {
 
         this.loanRequestType = new CreditRequestType();
         this.investedCountry = new Country();
+        this.creditCustomerType = CreditCustomerType.NOT_SELECTED.value();
 
         this.totalNumberOfNewOD = BigDecimal.ZERO;
         this.totalNumberProposeCreditFac = BigDecimal.ZERO;
