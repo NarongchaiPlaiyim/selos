@@ -75,7 +75,8 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.account}"/>
+                                            <h:outputText value="#{creditTypeItem.accountName}"/><br/>
+                                            <h:outputText value="#{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -118,7 +119,7 @@
                                 styleClass="small"
                                 action="#{creditFacPropose.onSaveGuarantorInfoDlg}"
                                 process=":guarantorDlgForm"
-                                update=":guarantorDlgForm,:frmMain"
+                                update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                 oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
 
                         <p:commandButton

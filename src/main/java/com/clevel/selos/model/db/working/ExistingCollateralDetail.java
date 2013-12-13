@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_exist_collateral_detail")
@@ -19,6 +20,9 @@ public class ExistingCollateralDetail implements Serializable {
 
     @Column(name = "no")
     private int no ;
+
+    @Column(name = "borrower_type")
+    private int borrowerType;
 
     @Column(name = "collateral_number")
     private String collateralNumber;
@@ -50,6 +54,16 @@ public class ExistingCollateralDetail implements Serializable {
     @JoinColumn(name = "relation")
     private Relation relation;
 
+    @Column(name = "owner")
+    private String owner;
+
+    @Column(name = "account_number")
+    private String accountNumber;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "appraisal_date")
+    private Date appraisalDate;
+
     @OneToOne
     @JoinColumn(name = "mortgage_type")
     private MortgageType mortgageType;
@@ -72,7 +86,10 @@ public class ExistingCollateralDetail implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "existing_credit_summary_id")
-    private ExistingCreditSummary existingCreditSummary;
+    private ExistingCreditFacility existingCreditFacility;
+
+    @OneToMany(mappedBy = "existingCollateralDetail", cascade = CascadeType.ALL)
+    private List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
 
     public long getId() {
         return id;
@@ -88,6 +105,14 @@ public class ExistingCollateralDetail implements Serializable {
 
     public void setNo(int no) {
         this.no = no;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
     }
 
     public String getCollateralNumber() {
@@ -170,6 +195,30 @@ public class ExistingCollateralDetail implements Serializable {
         this.mortgageType = mortgageType;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public Date getAppraisalDate() {
+        return appraisalDate;
+    }
+
+    public void setAppraisalDate(Date appraisalDate) {
+        this.appraisalDate = appraisalDate;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -202,12 +251,20 @@ public class ExistingCollateralDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary() {
-        return existingCreditSummary;
+    public ExistingCreditFacility getExistingCreditFacility() {
+        return existingCreditFacility;
     }
 
-    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
-        this.existingCreditSummary = existingCreditSummary;
+    public void setExistingCreditFacility(ExistingCreditFacility existingCreditFacility) {
+        this.existingCreditFacility = existingCreditFacility;
+    }
+
+    public List<ExistingCreditTypeDetail> getExistingCreditTypeDetailList() {
+        return existingCreditTypeDetailList;
+    }
+
+    public void setExistingCreditTypeDetailList(List<ExistingCreditTypeDetail> existingCreditTypeDetailList) {
+        this.existingCreditTypeDetailList = existingCreditTypeDetailList;
     }
 
     @Override
@@ -229,7 +286,8 @@ public class ExistingCollateralDetail implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("existingCreditSummary", existingCreditSummary)
+                .append("existingCreditFacility", existingCreditFacility)
+                .append("existingCreditTypeDetailList", existingCreditTypeDetailList)
                 .toString();
     }
 }

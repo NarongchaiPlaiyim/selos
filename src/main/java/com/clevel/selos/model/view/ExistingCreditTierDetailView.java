@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ExistingCreditTierDetailView implements Serializable {
+    private long id;
     private int no;
     private BigDecimal finalInterest;
     private BaseRate finalBasePrice;
@@ -43,6 +44,14 @@ public class ExistingCreditTierDetailView implements Serializable {
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
         this.finalBasePrice = new BaseRate();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getNo() {

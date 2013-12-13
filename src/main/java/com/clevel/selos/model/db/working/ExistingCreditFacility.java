@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_exist_credit_summary")
-public class ExistingCreditSummary {
+@Table(name = "wrk_exist_credit_facility")
+public class ExistingCreditFacility {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXISTING_CREDIT_SUM_ID")
@@ -44,6 +44,21 @@ public class ExistingCreditSummary {
     @Column(name = "total_group_ret_limit")
     private BigDecimal totalGroupExposure;
 
+    @Column(name = "total_borrower_appraisal")
+    private BigDecimal totalBorrowerAppraisalValue;
+
+    @Column(name = "total_borrower_mortgage")
+    private BigDecimal totalBorrowerMortgageValue;
+
+    @Column(name = "total_related_appraisal")
+    private BigDecimal totalRelatedAppraisalValue;
+
+    @Column(name = "total_related_mortgage")
+    private BigDecimal totalRelatedMortgageValue;
+
+    @Column(name = "total_guarantee_amount")
+    private BigDecimal totalGuaranteeAmount;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -68,16 +83,16 @@ public class ExistingCreditSummary {
     @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "existingCreditFacility", cascade = CascadeType.ALL)
     private List<ExistingCreditDetail> existingCreditDetailList;
 
-    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "existingCreditFacility", cascade = CascadeType.ALL)
     private List<ExistingCollateralDetail> existingCollateralDetailList;
 
-    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "existingCreditFacility", cascade = CascadeType.ALL)
     private List<ExistingGuarantorDetail> existingGuarantorDetailList;
 
-    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "existingCreditFacility", cascade = CascadeType.ALL)
     private List<ExistingConditionDetail> existingConditionDetailList;
 
     public long getId() {
@@ -158,6 +173,46 @@ public class ExistingCreditSummary {
 
     public void setTotalGroupExposure(BigDecimal totalGroupExposure) {
         this.totalGroupExposure = totalGroupExposure;
+    }
+
+    public BigDecimal getTotalBorrowerAppraisalValue() {
+        return totalBorrowerAppraisalValue;
+    }
+
+    public void setTotalBorrowerAppraisalValue(BigDecimal totalBorrowerAppraisalValue) {
+        this.totalBorrowerAppraisalValue = totalBorrowerAppraisalValue;
+    }
+
+    public BigDecimal getTotalBorrowerMortgageValue() {
+        return totalBorrowerMortgageValue;
+    }
+
+    public void setTotalBorrowerMortgageValue(BigDecimal totalBorrowerMortgageValue) {
+        this.totalBorrowerMortgageValue = totalBorrowerMortgageValue;
+    }
+
+    public BigDecimal getTotalRelatedAppraisalValue() {
+        return totalRelatedAppraisalValue;
+    }
+
+    public void setTotalRelatedAppraisalValue(BigDecimal totalRelatedAppraisalValue) {
+        this.totalRelatedAppraisalValue = totalRelatedAppraisalValue;
+    }
+
+    public BigDecimal getTotalRelatedMortgageValue() {
+        return totalRelatedMortgageValue;
+    }
+
+    public void setTotalRelatedMortgageValue(BigDecimal totalRelatedMortgageValue) {
+        this.totalRelatedMortgageValue = totalRelatedMortgageValue;
+    }
+
+    public BigDecimal getTotalGuaranteeAmount() {
+        return totalGuaranteeAmount;
+    }
+
+    public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
+        this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 
     public Date getCreateDate() {

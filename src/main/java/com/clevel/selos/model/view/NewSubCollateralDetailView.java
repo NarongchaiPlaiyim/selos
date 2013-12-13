@@ -20,6 +20,7 @@ public class NewSubCollateralDetailView {
     private String titleDeed;
     private String collateralOwner;
     private String collateralOwnerAAD;
+    private CustomerInfoView collateralOwnerUW;
     private List<CustomerInfoView> collateralOwnerUWList;
     private MortgageType mortgageType;
     private List<MortgageType> mortgageList;
@@ -48,6 +49,7 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewSubCollateralDetailView>();
+        this.collateralOwnerUW = new CustomerInfoView();
     }
 
     public long getId() {
@@ -193,6 +195,14 @@ public class NewSubCollateralDetailView {
 
     public void setRelatedWithList(List<NewSubCollateralDetailView> relatedWithList) {
         this.relatedWithList = relatedWithList;
+    }
+
+    public CustomerInfoView getCollateralOwnerUW() {
+        return collateralOwnerUW;
+    }
+
+    public void setCollateralOwnerUW(CustomerInfoView collateralOwnerUW) {
+        this.collateralOwnerUW = collateralOwnerUW;
     }
 
     @Override
