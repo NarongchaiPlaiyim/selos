@@ -9,9 +9,7 @@
     <h:head>
         <title>SE-LOS : Inbox</title>
         <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+        <h:outputScript library="js" name="custom.js" />
     </h:head>
 
     <h:body>
@@ -94,7 +92,8 @@
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">
             LOADING<br/>
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            <!--<p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>-->
+            <h:graphicImage library="images" name="shared/ajax-loader.gif" />
         </p:blockUI>
     </h:body>
 </f:view>
