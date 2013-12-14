@@ -104,7 +104,8 @@ textarea {
     width: 100%;
     min-height: 100%;
     display: table;
-    background: url('../images/shared/content_bg.jpg');
+    /*background: url('../images/shared/content_bg.jpg');*/
+    background: url(#{resource['images:shared/content_bg.jpg']});
 }
 
 #main_container_login {
@@ -113,7 +114,8 @@ textarea {
     width: 100%;
     min-height: 100%;
     display: table;
-    background: url('../images/login/login_backgrd.jpg');
+    /*background: url('../images/login/login_backgrd.jpg');*/
+    background: url(#{resource['images:login/login_backgrd.jpg']});
 }
 
 #pnl_maincontainer {
@@ -127,7 +129,8 @@ textarea {
     width: 100%;
     height: 71px;
     background-color: #3f5473;
-    background-image: url('../images/shared/header_bg.jpg');
+    /*background-image: url('../images/shared/header_bg.jpg');*/
+    background-image: url(#{resource['images:shared/header_bg.jpg']});
 }
 
 #header_logo_image {
@@ -171,12 +174,14 @@ textarea {
 }
 
 #header_detail {
-    background-image: url('../images/shared/header_detail_bg.jpg');
+    /*background-image: url('../images/shared/header_detail_bg.jpg');*/
+    background-image: url(#{resource['images:shared/header_detail_bg.jpg']});
     padding-bottom: 10px;
 }
 
 #header_collapse.open {
-    background: url('../images/shared/collapse_open.png') no-repeat;
+    /*background: url('../images/shared/collapse_open.png') no-repeat;*/
+    background: url(#{resource['images:shared/collapse_open.png']}) no-repeat;
     min-width: 30px;
     width: 30px;
     min-height: 18px;
@@ -187,7 +192,8 @@ textarea {
 }
 
 #header_collapse.close {
-    background: url('../images/shared/collapse_close.png') no-repeat;
+    /*background: url('../images/shared/collapse_close.png') no-repeat;*/
+    background: url(#{resource['images:shared/collapse_close.png']}) no-repeat;
     min-width: 30px;
     width: 30px;
     min-height: 18px;
@@ -231,12 +237,14 @@ textarea {
     min-height: 100%;
     padding-bottom: 240px;
     /*padding: 0 5px 0 5px;*/
-    background: url('../images/shared/content_bg.jpg');
+    /*background: url('../images/shared/content_bg.jpg');*/
+    background: url(#{resource['images:shared/content_bg.jpg']});
 }
 #content_container_login {
     min-height: 100%;
     padding-bottom: 210px;
-    background: url('../images/login/login_backgrd.jpg');
+    /*background: url('../images/login/login_backgrd.jpg');*/
+    background: url(#{resource['images:login/login_backgrd.jpg']});
 }
 #pnl_maincontainer{
     position: relative;
@@ -263,7 +271,8 @@ textarea {
 }
 
 .login-inp {
-    background: url(../images/login/inp_login.jpg) no-repeat;
+    /*background: url(../images/login/inp_login.jpg) no-repeat;*/
+    background: url(#{resource['images:login/inp_login.jpg']}) no-repeat;
     border: none!important;
     color: #000!important;
     /*font-size: 18px!important;*/
@@ -274,7 +283,8 @@ textarea {
 }
 .login-button {
     /* background: url(../images/login/submit_login.gif) no-repeat; */
-    background: url(../images/login/login_btn_nor.jpg) no-repeat;
+    /*background: url(../images/login/login_btn_nor.jpg) no-repeat;*/
+    background: url(#{resource['images:login/login_btn_nor.jpg']}) no-repeat;
     border: none;
     cursor: pointer;
     display: block;
@@ -289,7 +299,8 @@ textarea {
 
 .login-button:hover {
     /* background: url(../images/login/submit_login.gif) no-repeat; */
-    background: url(../images/login/login_btn_hover.jpg) no-repeat;
+    /*background: url(../images/login/login_btn_hover.jpg) no-repeat;*/
+    background: url(#{resource['images:login/login_btn_hover.jpg']}) no-repeat;
     border: none;
     cursor: pointer;
     display: block;
@@ -556,7 +567,8 @@ table.table_result {
 .table_result th {
     text-align: center;
     height: 21px;
-    background: url('../images/table/table_header_bg.jpg') repeat-x;
+    /*background: url('../images/table/table_header_bg.jpg') repeat-x;*/
+    background: url(#{resource['images:table/table_header_bg.jpg']}) repeat-x;
     background-color: #3f3f3f;
     font-weight: bold;
     color: white;
@@ -604,7 +616,8 @@ table.table_content {
 .table_content th {
     text-align: center;
     height: 21px;
-    background: url('../images/table/table_header_bg.jpg') repeat-x;
+    /*background: url('../images/table/table_header_bg.jpg') repeat-x;*/
+    background:  url(#{resource['images:table/table_header_bg.jpg']}) repeat-x;
     background-color: #3f3f3f;
     font-weight: bold;
     color: white;
@@ -647,7 +660,8 @@ table.table_content {
 }
 
 .deleteButton {
-    background-image: url('../images/table/delete_icon.gif');
+    /*background-image: url('../images/table/delete_icon.gif');*/
+    background-image: url(#{resource['images:table/delete_icon.gif']});
     border: none;
     color: white;
     font-weight: normal;
@@ -661,7 +675,8 @@ table.table_content {
 }
 
 .deleteButton:hover {
-    background-image: url('../images/table/delete_icon_hover.gif');
+    /*background-image: url('../images/table/delete_icon_hover.gif');*/
+    background-image: url(#{resource['images:table/delete_icon_hover.gif']});
     border: none;
     color: white;
     font-weight: normal;
