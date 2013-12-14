@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Date;
 
 @Stateless
 @BRMS
-public class BRMSAuditor implements SystemAuditor {
+public class BRMSAuditor implements SystemAuditor, Serializable {
     @Inject
     @SELOS
     Logger log;

@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.parser.AttributeList;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "updateApproveDetail")
-public class UpdateApproveDetail {
+public class UpdateApproveDetail implements Serializable {
 
     @Inject
     @SELOS

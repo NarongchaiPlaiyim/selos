@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
@@ -122,6 +123,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     BPMInterface bpmInterface;
     @Inject
     RLOSInterface rlosInterface;
+
+    @Inject
+    STPExecutor stpExecutor;
 
     /*@Inject
     NCBInterface ncbInterface;  */
@@ -789,6 +793,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
         log.debug("savePreScreenInitial ::: saving prescreen : {}", prescreen);
         prescreenDAO.persist(prescreen);
+        log.debug("savePreScreenInitial ::: after saving prescreen : {}", prescreen);
 
         //Remove all Facility before add new
         List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
@@ -1216,7 +1221,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     public void duplicateData(long workCasePreScreenId) throws Exception{
-        prescreenDAO.duplicatePreScreenData(workCasePreScreenId);
+        stpExecutor.duplicateData(workCasePreScreenId);
+        //prescreenDAO.duplicatePreScreenData(workCasePreScreenId);
     }
 
     // *** Function for BPM *** //

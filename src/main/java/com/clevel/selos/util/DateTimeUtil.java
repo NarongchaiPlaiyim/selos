@@ -10,11 +10,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class DateTimeUtil {
+public class DateTimeUtil implements Serializable {
     private static Logger log = LoggerFactory.getLogger(DateTimeUtil.class);
     private static final Locale defaultLocale = new Locale("th", "EN");
 

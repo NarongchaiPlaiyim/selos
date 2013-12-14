@@ -11,10 +11,11 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Date;
 
 @Stateless
-public class SecurityAuditor {
+public class SecurityAuditor implements Serializable {
     @Inject
     @SELOS
     Logger log;

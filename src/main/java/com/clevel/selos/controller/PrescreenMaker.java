@@ -47,7 +47,8 @@ import java.util.List;
 public class PrescreenMaker implements Serializable {
     @Inject
     @SELOS
-    Logger log;    @Inject
+    Logger log;
+    @Inject
     @NormalMessage
     Message msg;
 
@@ -621,29 +622,21 @@ public class PrescreenMaker implements Serializable {
 
     public void onCloseSale(){
         //TODO clone data for Full Application
+        log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
             prescreenBusinessControl.duplicateData(workCasePreScreenId);
+
+            //TODO get nextStep
+            String actionCode = "1008";
+            prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+
+            messageHeader = "Information";
+            message = "Close Sale Complete.";
+            //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            FacesUtil.redirect("/site/inbox.jsf");
         } catch (Exception ex){
             log.error("duplicate data failed : ", ex);
         }
-
-        log.debug("onCloseSale ::: queueName : {}", queueName);
-        //TODO get nextStep
-        String actionCode = "1008";
-        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
-
-        messageHeader = "Information";
-        message = "Close Sale Complete.";
-        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
-        try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-            return;
-        } catch (Exception ex) {
-            log.error("Error to redirect : {}", ex.getMessage());
-        }
-
     }
 
     // *** Function For Facility *** //
