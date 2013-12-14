@@ -25,7 +25,8 @@ public class  CreditTypeDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    private BigDecimal purpose;
+    private String purpose;
+
 
     public CreditTypeDetailView() {
         reset();
@@ -44,7 +45,7 @@ public class  CreditTypeDetailView implements Serializable {
         this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
-        this.purpose = BigDecimal.ZERO;
+        this.purpose = "";
     }
 
     public long getId() {
@@ -180,11 +181,11 @@ public class  CreditTypeDetailView implements Serializable {
         this.noFlag = noFlag;
     }
 
-    public BigDecimal getPurpose() {
+    public String getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(BigDecimal purpose) {
+    public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
 

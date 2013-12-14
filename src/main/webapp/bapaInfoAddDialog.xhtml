@@ -7,26 +7,23 @@
     <h:form id="bapaInfoDlgForm">
         <table class="content_form">
             <tr>
-                <td><p:outputLabel styleClass="left title">Type :</p:outputLabel></td>
+                <td><p:outputLabel styleClass="left title" value="#{msg.get('app.baInfo.dialog.bapa.type')}"></p:outputLabel></td>
                 <td>
-                    <p:selectOneMenu value="#{baInfo.bapaInfoView.type}" >
-                        <f:selectItem itemLabel="- โปรดเลือก -" itemValue=""/>
+                    <p:selectOneMenu value="#{baInfo.baPaInfoAddView.type}" >
                         <f:selectItems  value="#{baInfo.getbapaType()}" />
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title">Credit Type :</p:outputLabel></td>
+                <td><p:outputLabel styleClass="left title" value="#{msg.get('app.baInfo.dialog.bapa.creditType')}"></p:outputLabel></td>
                 <td>
-                    <p:dataTable value="#{baInfo.bapaInfoView.creditType}"
-                        var="creditType"
-                        rowKey="#{creditType.id}">
+                    <p:dataTable value="#{baInfo.creditTypeDetailList}" var="creditType">
 
-                        <p:column><p:selectBooleanCheckbox value="#{creditType.noFlag}"></p:selectBooleanCheckbox></p:column>
+                        <p:column><p:selectBooleanCheckbox value="#{creditType.noFlag}"/></p:column>
 
-                        <p:column headerText="Product Program"><p:outputLabel value="#{creditType.productProgram}"/> </p:column>
-                        <p:column headerText="Credit Facility"><p:outputLabel value="#{creditType.creditFacility}"/></p:column>
-                        <p:column headerText="Purpose">
+                        <p:column headerText="#{msg.get('app.baInfo.dialog.bapa.tb.productProgram')}"><p:outputLabel value="#{creditType.productProgram}"/></p:column>
+                        <p:column headerText="#{msg.get('app.baInfo.dialog.bapa.tb.creditFac')}"><p:outputLabel value="#{creditType.creditFacility}"/></p:column>
+                        <p:column headerText="#{msg.get('app.baInfo.dialog.bapa.tb.purpose')}">
                             <p:outputLabel value="#{creditType.purpose}">
                                 <f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
@@ -34,7 +31,7 @@
                                                  maxIntegerDigits="14"/>
                             </p:outputLabel>
                         </p:column>
-                        <p:column headerText="Limit">
+                        <p:column headerText="#{msg.get('app.baInfo.dialog.bapa.tb.limit')}">
                             <p:outputLabel value="#{creditType.limit}">
                                                 <f:convertNumber pattern="#,##0"
                                                                  minFractionDigits="2"
@@ -45,8 +42,8 @@
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title">ค่าเบี้ย :</p:outputLabel></td>
-                <td><p:inputText value="#{baInfo.bapaInfoView.premium}">
+                <td><p:outputLabel styleClass="left title" value="#{msg.get('app.baInfo.dialog.bapa.premium')}"></p:outputLabel></td>
+                <td><p:inputText value="#{baInfo.baPaInfoAddView.premium}">
                     <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -55,8 +52,8 @@
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title">ส่วนต่าง (ชำระเพิ่ม) :</p:outputLabel></td>
-                <td><p:inputText value="#{baInfo.bapaInfoView.morePay}">
+                <td><p:outputLabel styleClass="left title" value="#{msg.get('app.baInfo.dialog.bapa.morePay')}"></p:outputLabel></td>
+                <td><p:inputText value="#{baInfo.baPaInfoAddView.morePay}">
                     <f:convertNumber pattern="#,##0"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
@@ -65,9 +62,9 @@
             </tr>
             <tr>
                 <td>
-                    <p:commandButton value="OK" action="#{baInfo.submitBaPaInfoDialog()}"
-                            update=":baInformationForm"/>
-                    <p:commandButton value="Cancel" onclick="bapaInfoDialog.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.ok')}" action="#{baInfo.onSubmitBaPaInfoDialog()}"
+                            update=":baInformationForm,:bapaInfoDlgForm"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bapaInfoDialog.hide()"/>
                 </td>
             </tr>
 
