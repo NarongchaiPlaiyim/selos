@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>#{msg.get('app.dbr.title')}</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+                    <!-- End Header Logo -->
+                    <!-- Start Header Detail -->
+                    <ui:include src="include/header_detail.xhtml"/>
+                    <!-- End Header Detail -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar.xhtml"/>
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.pledgeDetail.head')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_trackchange">[ View Track Change ]</div>
+                                <div id="content_lastupdate">Last update by <h:outputText
+                                        value="#{dbrInfo.dbr.modifyBy}"/>,
+                                    <p:outputLabel value="#{dbrInfo.dbr.modifyDate}">
+                                        <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
+                                    </p:outputLabel></div>
+                            </div>
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td class="title" style="min-width: 180px; max-width: 180px; width: 180px;">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.approvedType')}" />
+                                        </td>
+                                        <td>
+                                            <p:selectOneRadio>
+                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.new')}" itemValue=""/>
+                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.newChange')}" itemValue=""/>
+                                            </p:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="separate"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.pledgeInfoDetail')}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeSingningDate')}"/>
+                                        </td>
+                                        <td>
+                                            <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                            yearRange="1950:2100"
+                                                            pattern="dd/MM/yyyy"
+                                                            locale="th_TH" >
+                                            </clv:BECalendar>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeType')}" />
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeAmount')}"/>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            </p:outputLabel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.creditType')}"/>
+                                        </td>
+                                        <td>
+                                            <p:dataTable value="" var="creditType" rowIndexVar="rowIndex">
+                                                <p:column headerText="" style="min-width: 30px; max-width: 30px; width: 30px;">
+                                                    <p:outputLabel value="#{rowIndex+1}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.account')}" style="min-width: 300px; max-width: 300px; width: 300px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.type')}" style="min-width: 80px; max-width: 80px; width: 80px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.productProgram')}" style="min-width: 150px; max-width: 150px; width: 150px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.creditFacility')}" style="min-width: 150px; max-width: 150px; width: 150px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.limit')}" style="min-width: 150px; max-width: 150px; width: 150px;">
+
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr><td><br/></td></tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="separate"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.pledgeA/C')}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.accountNumber')}"/>
+                                        </td>
+                                        <td >
+                                            <p:inputMask value="" mask="999-9-99999-9"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.numberOfDep')}"/>
+                                        </td>
+                                        <td>
+                                            <p:inputText id="numberOfDep" >
+                                                <f:convertNumber type="number" minIntegerDigits="2" maxFractionDigits="0" />
+                                                <p:ajax event="change" update=":frmMain:numberOfDep" />
+                                            </p:inputText>
+                                            <p:spacer width="10" />
+                                            <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
+                                                             styleClass="smaller">
+                                            </p:commandButton>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                        <td colspan="2">
+                                            <p:dataTable value="" var="item"  rowIndexVar="rowindex">
+                                                <p:column headerText="" style="min-width: 30px; max-width: 30px" styleClass="left">
+                                                    <p:outputLabel value="#{rowindex+1}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.dep')}" style="min-width: 150px; max-width: 150px">
+                                                    <p:outputLabel value="" >
+                                                        <f:convertNumber />
+                                                    </p:outputLabel>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.holdAmount')}" style="min-width: 200px; max-width: 200px">
+                                                    <p:outputLabel value="" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    </p:outputLabel>
+                                                </p:column>
+                                                <p:column  styleClass="center">
+                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                     icon="ui-icon-pencil">
+                                                    </p:commandButton>
+                                                    <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                                     icon="ui-icon-trash">
+                                                    </p:commandButton>
+                                                </p:column>
+                                                <p:columnGroup type="footer">
+                                                    <p:row>
+                                                        <p:column colspan="2" footerText="#{msg.get('app.pledgeDetail.content.table.total.holdAmount')}" style="text-align:right" styleClass="summary_column"/>
+                                                        <p:column style="text-align:right" styleClass="summary_column">
+                                                            <f:facet name="footer">
+                                                                <h:outputText >
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                                     maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </f:facet>
+                                                        </p:column >
+                                                        <p:column styleClass="summary_column" />
+                                                    </p:row>
+                                                </p:columnGroup>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr><td><br/></td></tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="separate"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="title">
+                                            <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.collateralDepositsDetail')}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <p:dataTable value="" var="item" rowIndexVar="rowIndex">
+                                                <p:column style="min-width: 30px; max-width: 30px" >
+                                                    <p:outputLabel value="#{rowIndex+1}"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.customerName')}" style="min-width: 200px; max-width: 200px">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.citizen')}" style="min-width: 200px; max-width: 200px">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.customerId')}" style="min-width: 150px; max-width: 150px">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.relationship')}" style="min-width: 200px; max-width: 200px">
+
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr><td><br/></td></tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="separate" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="center">
+                                                <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                                 styleClass="medium"
+
+                                                                 onclick="onOneClick('frmMain:btnSave', true);"
+                                                                 oncomplete="onOneClick('frmMain:btnSave', false);"
+                                                                 update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                                </p:commandButton>
+                                                <p:spacer  width="10"/>
+                                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                                                                 styleClass="medium"></p:commandButton>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="bottom_line"/>
+                    </div>
+                        <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                </div>
+                    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+                        LOADING<br/>
+                        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                    </p:blockUI>
+            </h:form>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}">
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>

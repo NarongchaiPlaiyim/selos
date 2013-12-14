@@ -17,6 +17,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.parser.AttributeList;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class UpdateApproveDetail {
     private List<NewCreditDetailView> approveCreditDetailViews;
     private List<AccountInfoDetailView> accountInfoDetailViews;
     private List<FollowUpConditionView>  followUpConditionViews;
+    private LoanPaymentDetailView loanPaymentDetailView;
 
     public void preRender() {
 
@@ -79,8 +81,11 @@ public class UpdateApproveDetail {
         followUpConditionViews = new ArrayList<FollowUpConditionView>();
         approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
         accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
+        loanPaymentDetailView = new LoanPaymentDetailView();
         try{
-
+            loanPaymentDetailView.setPayDate(3);
+            loanPaymentDetailView.setFirstPayDate(null);
+            loanPaymentDetailView.setSignDate(new Date());
             FollowUpConditionView followUpConditionView = new FollowUpConditionView();
             followUpConditionView.setCondition("ให้ Operation");
             followUpConditionView.setDetailOfFollowUp("dfdfdfdfdf");
@@ -175,5 +180,13 @@ public class UpdateApproveDetail {
 
     public void setFollowUpConditionViews(List<FollowUpConditionView> followUpConditionViews) {
         this.followUpConditionViews = followUpConditionViews;
+    }
+
+    public LoanPaymentDetailView getLoanPaymentDetailView() {
+        return loanPaymentDetailView;
+    }
+
+    public void setLoanPaymentDetailView(LoanPaymentDetailView loanPaymentDetailView) {
+        this.loanPaymentDetailView = loanPaymentDetailView;
     }
 }
