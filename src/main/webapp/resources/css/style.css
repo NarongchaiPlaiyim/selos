@@ -105,7 +105,7 @@ textarea {
     min-height: 100%;
     display: table;
     /*background: url('../images/shared/content_bg.jpg');*/
-    background: url(#{resource['images:shared/content_bg.jpg']});
+    background: url("#{resource['images:shared/content_bg.jpg']}");
 }
 
 #main_container_login {
@@ -115,7 +115,7 @@ textarea {
     min-height: 100%;
     display: table;
     /*background: url('../images/login/login_backgrd.jpg');*/
-    background: url(#{resource['images:login/login_backgrd.jpg']});
+    background: url("#{resource['images:login/login_backgrd.jpg']}");
 }
 
 #pnl_maincontainer {
@@ -130,7 +130,7 @@ textarea {
     height: 71px;
     background-color: #3f5473;
     /*background-image: url('../images/shared/header_bg.jpg');*/
-    background-image: url(#{resource['images:shared/header_bg.jpg']});
+    background-image: url("#{resource['images:shared/header_bg.jpg']}");
 }
 
 #header_logo_image {
@@ -175,13 +175,13 @@ textarea {
 
 #header_detail {
     /*background-image: url('../images/shared/header_detail_bg.jpg');*/
-    background-image: url(#{resource['images:shared/header_detail_bg.jpg']});
+    background-image: url("#{resource['images:shared/header_detail_bg.jpg']}");
     padding-bottom: 10px;
 }
 
 #header_collapse.open {
     /*background: url('../images/shared/collapse_open.png') no-repeat;*/
-    background: url(#{resource['images:shared/collapse_open.png']}) no-repeat;
+    background: url("#{resource['images:shared/collapse_open.png']}") no-repeat;
     min-width: 30px;
     width: 30px;
     min-height: 18px;
@@ -193,7 +193,7 @@ textarea {
 
 #header_collapse.close {
     /*background: url('../images/shared/collapse_close.png') no-repeat;*/
-    background: url(#{resource['images:shared/collapse_close.png']}) no-repeat;
+    background: url("#{resource['images:shared/collapse_close.png']}") no-repeat;
     min-width: 30px;
     width: 30px;
     min-height: 18px;
