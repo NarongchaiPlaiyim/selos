@@ -27,6 +27,8 @@ public class CreditTypeDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
     private BigDecimal purpose;
+    private BigDecimal PCEPercent;
+    private BigDecimal PCEAmount;
 
     public CreditTypeDetailView() {
         reset();
@@ -47,6 +49,8 @@ public class CreditTypeDetailView implements Serializable {
         this.seq = 0;
         this.noFlag = false;
         this.purpose = BigDecimal.ZERO;
+        this.PCEPercent = BigDecimal.ZERO;
+        this.PCEAmount = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -192,6 +196,22 @@ public class CreditTypeDetailView implements Serializable {
 
     public void setAccountSuf(String accountSuf) {
         this.accountSuf = accountSuf;
+    }
+
+    public BigDecimal getPCEPercent() {
+        return PCEPercent;
+    }
+
+    public void setPCEPercent(BigDecimal PCEPercent) {
+        this.PCEPercent = PCEPercent;
+    }
+
+    public BigDecimal getPCEAmount() {
+        return PCEAmount;
+    }
+
+    public void setPCEAmount(BigDecimal PCEAmount) {
+        this.PCEAmount = PCEAmount;
     }
 
     @Override

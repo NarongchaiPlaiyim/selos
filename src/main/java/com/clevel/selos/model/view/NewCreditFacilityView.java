@@ -708,4 +708,5 @@ public class NewCreditFacilityView implements Serializable {
     public void setTotalLoanWCTMB(BigDecimal totalLoanWCTMB) {
         this.totalLoanWCTMB = totalLoanWCTMB;
     }
+
 }
