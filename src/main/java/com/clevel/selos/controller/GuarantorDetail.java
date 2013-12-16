@@ -1,13 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.LoanPaymentDetailView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
-import com.filenet.apiimpl.wsi.serialization.Serialization;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -20,8 +18,9 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 @ViewScoped
-@ManagedBean(name = "pledgeDetail")
-public class PledgeDetail implements Serializable {
+@ManagedBean(name = "guarantorDetail")
+public class GuarantorDetail implements Serializable {
+
     @Inject
     @SELOS
     Logger log;
@@ -41,11 +40,13 @@ public class PledgeDetail implements Serializable {
     private long workCaseId;
 
 
-    public PledgeDetail(){}
+    public GuarantorDetail(){}
 
     public void preRender() {
-        log.info("preRender ::: setSession ");
 
+        log.info("preRender ::: setSession ");
+//        HttpSession session = FacesUtil.getSession(false);
+//        session.setAttribute("workCaseId", "2001");
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -67,10 +68,7 @@ public class PledgeDetail implements Serializable {
     @PostConstruct
     public void onCreation(){
 
-        try {
-
-        }catch (Exception e){
-
-        }
     }
+
+
 }
