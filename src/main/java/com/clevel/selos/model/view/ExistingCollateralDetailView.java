@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
-import com.clevel.selos.model.db.master.MortgageType;
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.Relation;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,6 +12,9 @@ import java.util.List;
 
 public class ExistingCollateralDetailView implements Serializable {
     private long id;
+    private int no;
+    private int borrowerType;
+
     private PotentialCollateral potentialCollateral;
     private CollateralType collateralType;
     private String owner;
@@ -27,12 +27,15 @@ public class ExistingCollateralDetailView implements Serializable {
     private String accountNumber;
     private String accountSuffix;
     private String productProgram;
-    private String creditFacility;//todo: Change creditFacility to view object?
+    private String creditFacility;
     private BigDecimal limit;
-    private MortgageType mortgageType;//todo: Change mortgageType to view object?
+    private MortgageType mortgageType;
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
-
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
     private List<ExistingCreditTypeDetailView> existingCreditTypeDetailViewList;
 
 
@@ -67,6 +70,22 @@ public class ExistingCollateralDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
     }
 
     public PotentialCollateral getPotentialCollateral() {
@@ -203,6 +222,38 @@ public class ExistingCollateralDetailView implements Serializable {
 
     public void setMortgageValue(BigDecimal mortgageValue) {
         this.mortgageValue = mortgageValue;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public List<ExistingCreditTypeDetailView> getExistingCreditTypeDetailViewList() {

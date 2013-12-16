@@ -70,14 +70,14 @@ public class NewCollateralSubDetail implements Serializable {
     private List<MortgageType> mortgageList;
 
     @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
-    private List<Customer> collateralOwnerUWList;
+    private List<NewCollateralSubCustomer> newCollateralSubCustomerList;
 
-    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
     private List<NewCollateralSubDetail> relatedWithList;
 
     @ManyToOne
     @JoinColumn(name = "new_collateral_sub_detail_id")
-    private NewCollateralSubDetail newCollateralSubDetail;
+    private NewCollateralSubDetail newCollateralSubDetail;*/
 
 
     public long getId() {
@@ -190,30 +190,6 @@ public class NewCollateralSubDetail implements Serializable {
 
     public void setNewCollateralHeadDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
         this.newCollateralHeadDetail = newCollateralHeadDetail;
-    }
-
-    public List<Customer> getCollateralOwnerUWList() {
-        return collateralOwnerUWList;
-    }
-
-    public void setCollateralOwnerUWList(List<Customer> collateralOwnerUWList) {
-        this.collateralOwnerUWList = collateralOwnerUWList;
-    }
-
-    public List<NewCollateralSubDetail> getRelatedWithList() {
-        return relatedWithList;
-    }
-
-    public void setRelatedWithList(List<NewCollateralSubDetail> relatedWithList) {
-        this.relatedWithList = relatedWithList;
-    }
-
-    public NewCollateralSubDetail getNewCollateralSubDetail() {
-        return newCollateralSubDetail;
-    }
-
-    public void setNewCollateralSubDetail(NewCollateralSubDetail newCollateralSubDetail) {
-        this.newCollateralSubDetail = newCollateralSubDetail;
     }
 
     public List<MortgageType> getMortgageList() {

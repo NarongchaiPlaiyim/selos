@@ -58,7 +58,7 @@ public class NewSubCollDetailTransform extends Transform {
             }
 
             subCollateralDetail.setMortgageList(newSubCollateralDetailView.getMortgageList());
-            subCollateralDetail.setCollateralOwnerUWList(collateralOwnerUWList);
+            //subCollateralDetail.setCollateralOwnerUWList(collateralOwnerUWList);
             subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
             subCollateralDetail.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
             subCollateralDetail.setAddress(newSubCollateralDetailView.getAddress());
@@ -91,19 +91,19 @@ public class NewSubCollDetailTransform extends Transform {
             newSubCollateralDetailView.setMortgageList(subCollateralDetail.getMortgageList());
             List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
 
-            for(Customer customer:subCollateralDetail.getCollateralOwnerUWList()){
+            /*for(Customer customer:subCollateralDetail.getCollateralOwnerUWList()){
                 CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
                 collateralOwnerUWList.add(customerInfoView);
-            }
+            }*/
 
             newSubCollateralDetailView.setCollateralOwnerUWList(collateralOwnerUWList);
 
             List<NewSubCollateralDetailView> newSubCollateralDetailViews = new ArrayList<NewSubCollateralDetailView>();
-            for( NewCollateralSubDetail newCollateralSubDetail:subCollateralDetail.getRelatedWithList())
+           /* for( NewCollateralSubDetail newCollateralSubDetail:subCollateralDetail.getRelatedWithList())
             {
 //                NewSubCollateralDetailView newSubCollateralDetailView = newCollateralSubDetailDAO.findById(newCollateralSubDetail.getId());
 //                newSubCollateralDetailViews.add(newCollateralSubDetailSave);
-            }
+            }*/
 
             newSubCollateralDetailViewList.add(newSubCollateralDetailView);
         }

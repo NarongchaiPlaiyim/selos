@@ -4,7 +4,7 @@ import com.clevel.selos.dao.master.BankAccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.DWHBankDataSourceDAO;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
-import com.clevel.selos.dao.working.ExistingCreditSummaryDAO;
+import com.clevel.selos.dao.working.ExistingCreditFacilityDAO;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
@@ -16,10 +16,10 @@ import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
-import com.clevel.selos.model.db.working.ExistingCreditSummary;
+import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.BankAccountStatusView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
-import com.clevel.selos.model.view.ExistingCreditView;
+import com.clevel.selos.model.view.ExistingCreditFacilityView;
 import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
@@ -34,7 +34,7 @@ import java.util.List;
 public class ExistingCreditTransform extends BusinessTransform {
 
     @Inject
-    ExistingCreditSummaryDAO existingCreditSummaryDAO;
+    ExistingCreditFacilityDAO existingCreditFacilityDAO;
 
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
@@ -139,44 +139,44 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailViewList;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary(ExistingCreditView existingCreditView, ExistingCreditSummary existingCreditSummary, User user) {
-        log.info("Transform ExistingCreditSummary with ExistingCreditView{}", existingCreditView);
+    public ExistingCreditFacility getExistingCreditFacility(ExistingCreditFacilityView existingCreditFacilityView, ExistingCreditFacility existingCreditFacility, User user) {
+        log.info("Transform ExistingCreditFacility with ExistingCreditFacilityView{}", existingCreditFacilityView);
         Date now = new Date();
-        if (existingCreditSummary != null) {
-            existingCreditSummary.setModifyBy(user);
-            existingCreditSummary.setModifyDate(now);
+        if (existingCreditFacility != null) {
+            existingCreditFacility.setModifyBy(user);
+            existingCreditFacility.setModifyDate(now);
         } else {
-            existingCreditSummary = new ExistingCreditSummary();
-            existingCreditSummary.setCreateBy(user);
-            existingCreditSummary.setCreateDate(now);
-            existingCreditSummary.setModifyBy(user);
-            existingCreditSummary.setModifyDate(now);
+            existingCreditFacility = new ExistingCreditFacility();
+            existingCreditFacility.setCreateBy(user);
+            existingCreditFacility.setCreateDate(now);
+            existingCreditFacility.setModifyBy(user);
+            existingCreditFacility.setModifyDate(now);
         }
 
-        existingCreditSummary.setTotalBorrowerAppInRLOSLimit(existingCreditView.getTotalBorrowerAppInRLOSLimit());
-        existingCreditSummary.setTotalBorrowerComLimit(existingCreditView.getTotalBorrowerComLimit());
-        existingCreditSummary.setTotalBorrowerRetailLimit(existingCreditView.getTotalBorrowerRetailLimit());
+        existingCreditFacility.setTotalBorrowerAppInRLOSLimit(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
+        existingCreditFacility.setTotalBorrowerComLimit(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerRetailLimit(existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
-        existingCreditSummary.setTotalRelatedAppInRLOSLimit(existingCreditView.getTotalRelatedAppInRLOSLimit());
-        existingCreditSummary.setTotalRelatedComLimit(existingCreditView.getTotalRelatedComLimit());
-        existingCreditSummary.setTotalRelatedRetailLimit(existingCreditView.getTotalRelatedRetailLimit());
+        existingCreditFacility.setTotalRelatedAppInRLOSLimit(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
+        existingCreditFacility.setTotalRelatedComLimit(existingCreditFacilityView.getTotalRelatedComLimit());
+        existingCreditFacility.setTotalRelatedRetailLimit(existingCreditFacilityView.getTotalRelatedRetailLimit());
 
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getBorrowerComExistingCredit(), existingCreditSummary, user));
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getBorrowerRetailExistingCredit(), existingCreditSummary, user));
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getBorrowerAppInRLOSCredit(), existingCreditSummary, user));
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getRelatedComExistingCredit(), existingCreditSummary, user));
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getRelatedRetailExistingCredit(), existingCreditSummary, user));
-        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditView.getRelatedAppInRLOSCredit(), existingCreditSummary, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerRetailExistingCredit(), existingCreditFacility, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerAppInRLOSCredit(), existingCreditFacility, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getRelatedComExistingCredit(), existingCreditFacility, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getRelatedRetailExistingCredit(), existingCreditFacility, user));
+        existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getRelatedAppInRLOSCredit(), existingCreditFacility, user));
 
-        existingCreditSummary.setExistingCreditDetailList(existingCreditDetailList);
+        existingCreditFacility.setExistingCreditDetailList(existingCreditDetailList);
 
-        log.info("Transform Result ExistingCreditSummary {}", existingCreditSummary);
+        log.info("Transform Result ExistingCreditFacility {}", existingCreditFacility);
 
-        return existingCreditSummary;
+        return existingCreditFacility;
     }
 
-    public List<ExistingCreditDetail> getExistingCreditDetail(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditSummary existingCreditSummary, User user) {
+    public List<ExistingCreditDetail> getExistingCreditDetail(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user) {
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         if (existingCreditDetailViewList != null) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
@@ -208,7 +208,7 @@ public class ExistingCreditTransform extends BusinessTransform {
                     existingCreditDetail.setAccountstatus(null);
                 }
                 existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
-                existingCreditDetail.setExistingCreditSummary(existingCreditSummary);
+                existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
                 existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
                 existingCreditDetail.setCreditRelationType(existingCreditDetailView.getCreditRelationType().value());
 
@@ -224,17 +224,17 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailList;
     }
 
-    public ExistingCreditView getExistingCreditView(ExistingCreditSummary existingCreditSummary) {
-        ExistingCreditView existingCreditView = new ExistingCreditView();
+    public ExistingCreditFacilityView getExistingCreditView(ExistingCreditFacility existingCreditFacility) {
+        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
 
-        if (existingCreditSummary != null) {
-            existingCreditView.setId(existingCreditSummary.getId());
-            existingCreditView.setTotalBorrowerAppInRLOSLimit(existingCreditSummary.getTotalBorrowerAppInRLOSLimit());
-            existingCreditView.setTotalBorrowerComLimit(existingCreditSummary.getTotalBorrowerComLimit());
-            existingCreditView.setTotalBorrowerRetailLimit(existingCreditSummary.getTotalBorrowerRetailLimit());
-            existingCreditView.setTotalRelatedAppInRLOSLimit(existingCreditSummary.getTotalRelatedAppInRLOSLimit());
-            existingCreditView.setTotalRelatedComLimit(existingCreditSummary.getTotalRelatedComLimit());
-            existingCreditView.setTotalRelatedRetailLimit(existingCreditSummary.getTotalRelatedRetailLimit());
+        if (existingCreditFacility != null) {
+            existingCreditFacilityView.setId(existingCreditFacility.getId());
+            existingCreditFacilityView.setTotalBorrowerAppInRLOSLimit(existingCreditFacility.getTotalBorrowerAppInRLOSLimit());
+            existingCreditFacilityView.setTotalBorrowerComLimit(existingCreditFacility.getTotalBorrowerComLimit());
+            existingCreditFacilityView.setTotalBorrowerRetailLimit(existingCreditFacility.getTotalBorrowerRetailLimit());
+            existingCreditFacilityView.setTotalRelatedAppInRLOSLimit(existingCreditFacility.getTotalRelatedAppInRLOSLimit());
+            existingCreditFacilityView.setTotalRelatedComLimit(existingCreditFacility.getTotalRelatedComLimit());
+            existingCreditFacilityView.setTotalRelatedRetailLimit(existingCreditFacility.getTotalRelatedRetailLimit());
 
             List<ExistingCreditDetailView> _borrowerComList = new ArrayList<ExistingCreditDetailView>();
             List<ExistingCreditDetailView> _borrowerRetList = new ArrayList<ExistingCreditDetailView>();
@@ -245,7 +245,7 @@ public class ExistingCreditTransform extends BusinessTransform {
             List<ExistingCreditDetailView> _relatedRLOSList = new ArrayList<ExistingCreditDetailView>();
 
 
-            List<ExistingCreditDetail> existingCreditDetailList = existingCreditSummary.getExistingCreditDetailList();
+            List<ExistingCreditDetail> existingCreditDetailList = existingCreditFacility.getExistingCreditDetailList();
             for (ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
                 ExistingCreditDetailView existingCreditDetailView = getExistingCreditDetailView(existingCreditDetail);
                 if (existingCreditDetailView.getCreditCategory().equals(CreditCategory.COMMERCIAL)) {
@@ -268,16 +268,16 @@ public class ExistingCreditTransform extends BusinessTransform {
 
 
 
-            existingCreditView.setBorrowerComExistingCredit(_borrowerComList);
-            existingCreditView.setBorrowerRetailExistingCredit(_borrowerRetList);
-            existingCreditView.setBorrowerAppInRLOSCredit(_borrowerRLOSList);
+            existingCreditFacilityView.setBorrowerComExistingCredit(_borrowerComList);
+            existingCreditFacilityView.setBorrowerRetailExistingCredit(_borrowerRetList);
+            existingCreditFacilityView.setBorrowerAppInRLOSCredit(_borrowerRLOSList);
 
-            existingCreditView.setRelatedComExistingCredit(_relatedComList);
-            existingCreditView.setRelatedRetailExistingCredit(_relatedRetList);
-            existingCreditView.setRelatedAppInRLOSCredit(_relatedRLOSList);
+            existingCreditFacilityView.setRelatedComExistingCredit(_relatedComList);
+            existingCreditFacilityView.setRelatedRetailExistingCredit(_relatedRetList);
+            existingCreditFacilityView.setRelatedAppInRLOSCredit(_relatedRLOSList);
         }
 
-        return existingCreditView;
+        return existingCreditFacilityView;
     }
 
     public ExistingCreditDetailView getExistingCreditDetailView(ExistingCreditDetail existingCreditDetail) {

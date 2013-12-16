@@ -23,6 +23,15 @@ public class ExistingCreditTypeDetail implements Serializable {
     @Column(name = "account")
     private String account;
 
+    @Column(name = "account_name")
+    private String accountName;
+
+    @Column(name = "account_number")
+    private String accountNumber;
+
+    @Column(name = "account_suff")
+    private String accountSuf;
+
     @Column(name = "type")
     private String type;
 
@@ -71,8 +80,6 @@ public class ExistingCreditTypeDetail implements Serializable {
     @JoinColumn(name = "existing_guarantor_detail_id")
     private ExistingGuarantorDetail existingGuarantorDetail;
 
-
-
     public long getId() {
         return id;
     }
@@ -95,6 +102,30 @@ public class ExistingCreditTypeDetail implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
     }
 
     public String getType() {
@@ -215,6 +246,9 @@ public class ExistingCreditTypeDetail implements Serializable {
                 .append("id", id)
                 .append("no", no)
                 .append("account", account)
+                .append("accountName", accountName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
                 .append("type", type)
                 .append("requestType", requestType)
                 .append("productProgram", productProgram)

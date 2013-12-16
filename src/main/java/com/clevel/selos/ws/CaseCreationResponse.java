@@ -3,7 +3,9 @@ package com.clevel.selos.ws;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class CaseCreationResponse {
+import java.io.Serializable;
+
+public class CaseCreationResponse implements Serializable {
     int code;
     String message;
     String appRefNumber;

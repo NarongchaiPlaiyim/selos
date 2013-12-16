@@ -361,8 +361,6 @@
                                     </td>
                                 </tr>
                                 <tr>
-
-
                                     <td>
                                         <table>
                                             <tr>
@@ -375,7 +373,7 @@
                                                     <p:outputLabel value="#{msg.get('app.updateApproveDetail.label.agreementSigningDate')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText readonly="true" >
+                                                    <p:inputText readonly="true" value="#{updateApproveDetail.loanPaymentDetailView.signDate}">
                                                         <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
                                                     </p:inputText>
                                                 </td>
@@ -385,8 +383,8 @@
                                                     <p:outputLabel value="#{msg.get('app.updateApproveDetail.label.firstPaymentDate')}"/>
                                                 </td>
                                                 <td>
-                                                    <clv:BECalendar  showOn="button" showButtonPanel="true" navigator="true"
-                                                                     yearRange="1950:2100">
+                                                    <clv:BECalendar  showOn="button" showButtonPanel="true" navigator="true" value="#{updateApproveDetail.loanPaymentDetailView.firstPayDate}"
+                                                                     yearRange="1950:2100" pattern="dd/MM/yyyy">
                                                     </clv:BECalendar>
                                                 </td>
                                             </tr>
@@ -395,7 +393,7 @@
                                                     <p:outputLabel value="#{msg.get('app.updateApproveDetail.label.payDate')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText >
+                                                    <p:inputText value="#{updateApproveDetail.loanPaymentDetailView.payDate}">
                                                         <f:convertNumber id="payDate" pattern="#,###" minFractionDigits="0" maxFractionDigits="0" type="number"/>
                                                         <p:ajax event="change" update=":frmMain"/>
                                                     </p:inputText>

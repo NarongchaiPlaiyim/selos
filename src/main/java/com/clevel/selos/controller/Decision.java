@@ -13,7 +13,6 @@ import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -239,8 +238,8 @@ public class Decision implements Serializable {
         Disbursement disbursement = new Disbursement();
         disbursement.setDisbursement("Normal Disbursement");
 
-        List<SplitLineDetailView> splitLineList = new ArrayList<SplitLineDetailView>();
-        SplitLineDetailView splitLineDetail_1 = new SplitLineDetailView();
+        List<ExistingSplitLineDetailView> splitLineList = new ArrayList<ExistingSplitLineDetailView>();
+        ExistingSplitLineDetailView splitLineDetail_1 = new ExistingSplitLineDetailView();
         splitLineDetail_1.setProductProgram(productProgram);
         splitLineDetail_1.setLimit(BigDecimal.valueOf(34220000));
         splitLineList.add(splitLineDetail_1);
@@ -320,7 +319,7 @@ public class Decision implements Serializable {
         existingCreditDetail_1.setInstallment(BigDecimal.valueOf(200000));
         existingCreditDetail_1.setIntFeePercent(BigDecimal.valueOf(2.00));
         existingCreditDetail_1.setTenor(BigDecimal.valueOf(48));
-        existingCreditDetail_1.setSplitLineDetailViewList(splitLineList);
+        existingCreditDetail_1.setExistingSplitLineDetailViewList(splitLineList);
 
         BigDecimal extTotalLimit = existingCreditDetail_1.getLimit();
 
@@ -980,7 +979,7 @@ public class Decision implements Serializable {
     public void onAddAppProposeGuarantor() {
         log.debug("onAddAppProposeGuarantor()");
         selectedAppProposeGuarantor = new NewGuarantorDetailView();
-        selectedAppProposeGuarantor.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(decisionView.getProposeCreditList()));
+        selectedAppProposeGuarantor.setCreditTypeDetailViewList(creditFacProposeControl.findCreditFacility(decisionView.getProposeCreditList(),workCaseId));
         modeEditGuarantor = false;
         modeForButton = ModeForButton.ADD;
     }

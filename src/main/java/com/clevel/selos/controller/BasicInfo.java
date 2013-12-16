@@ -438,6 +438,14 @@ public class BasicInfo extends MandatoryFieldsControl {
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
         onChangeAccountType();
+
+        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
+        for(OpenAccountPurpose oap : openAccountPurposeList){
+            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+            purposeView.setPurpose(oap);
+            basicInfoAccountPurposeViewList.add(purposeView);
+        }
+
         for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
             if(biapv.isSelected()){
                 for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
@@ -628,8 +636,10 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onRefreshInterfaceInfo(){
         try{
-            messageHeader = "Refresh Interface Info complete.";
-            message = "Refresh Interface Info complete.";
+//            messageHeader = "Refresh Interface Info Complete.";
+            messageHeader = "Refresh Interface Info Failed.";
+//            message = "Refresh Interface Info Complete.";
+            message = "Waiting for this function.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("refreshInterfaceInfo Exception : {}", ex);
@@ -641,8 +651,10 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onDuplicateApplication(){
         try{
-            messageHeader = "Duplicate Application complete.";
-            message = "Duplicate Application complete.";
+//            messageHeader = "Duplicate Application Complete.";
+            messageHeader = "Duplicate Application Failed.";
+//            message = "Duplicate Application Complete.";
+            message = "Waiting for this function.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("duplicateApplication Exception : {}", ex);

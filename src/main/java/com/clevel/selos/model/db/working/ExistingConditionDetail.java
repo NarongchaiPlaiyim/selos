@@ -42,8 +42,8 @@ public class ExistingConditionDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "existing_credit_summary_id")
-    private ExistingCreditSummary existingCreditSummary;
+    @JoinColumn(name = "existing_credit_facility_id")
+    private ExistingCreditFacility existingCreditFacility;
 
     public long getId() {
         return id;
@@ -109,12 +109,12 @@ public class ExistingConditionDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary() {
-        return existingCreditSummary;
+    public ExistingCreditFacility getExistingCreditFacility() {
+        return existingCreditFacility;
     }
 
-    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
-        this.existingCreditSummary = existingCreditSummary;
+    public void setExistingCreditFacility(ExistingCreditFacility existingCreditFacility) {
+        this.existingCreditFacility = existingCreditFacility;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ExistingConditionDetail implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("existingCreditSummary", existingCreditSummary)
+                .append("existingCreditFacility", existingCreditFacility)
                 .toString();
     }
 }

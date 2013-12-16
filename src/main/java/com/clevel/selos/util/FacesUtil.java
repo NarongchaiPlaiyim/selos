@@ -9,8 +9,9 @@ import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
-public class FacesUtil {
+public class FacesUtil implements Serializable {
     private static Logger log = LoggerFactory.getLogger(FacesUtil.class);
 
     public static HttpServletRequest getRequest() {

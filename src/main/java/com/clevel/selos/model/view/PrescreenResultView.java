@@ -8,7 +8,7 @@ import java.util.List;
 public class PrescreenResultView extends PrescreenView {
     private String interfaceResult;
     private String interfaceReason;
-    private ExistingCreditView existingCreditView;
+    private ExistingCreditFacilityView existingCreditFacilityView;
     private BankStmtSummaryView bankStmtSummaryView;
 
     private List<UWRuleResult> groupRuleResults;
@@ -30,12 +30,12 @@ public class PrescreenResultView extends PrescreenView {
         this.interfaceReason = interfaceReason;
     }
 
-    public ExistingCreditView getExistingCreditView() {
-        return existingCreditView;
+    public ExistingCreditFacilityView getExistingCreditFacilityView() {
+        return existingCreditFacilityView;
     }
 
-    public void setExistingCreditView(ExistingCreditView existingCreditView) {
-        this.existingCreditView = existingCreditView;
+    public void setExistingCreditFacilityView(ExistingCreditFacilityView existingCreditFacilityView) {
+        this.existingCreditFacilityView = existingCreditFacilityView;
     }
 
     public List<UWRuleResult> getGroupRuleResults() {
@@ -67,7 +67,7 @@ public class PrescreenResultView extends PrescreenView {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("interfaceResult", interfaceResult)
                 .append("interfaceReason", interfaceReason)
-                .append("existingCreditView", existingCreditView)
+                .append("existingCreditFacilityView", existingCreditFacilityView)
                 .append("bankStmtSummaryView", bankStmtSummaryView)
                 .append("groupRuleResults", groupRuleResults)
                 .append("customerRuleResults", customerRuleResults)

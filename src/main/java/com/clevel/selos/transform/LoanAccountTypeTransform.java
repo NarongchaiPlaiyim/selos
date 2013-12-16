@@ -7,10 +7,11 @@ import com.clevel.selos.model.view.LoanAccountTypeView;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoanAccountTypeTransform {
+public class LoanAccountTypeTransform implements Serializable {
     @Inject
     @SELOS
     Logger log;

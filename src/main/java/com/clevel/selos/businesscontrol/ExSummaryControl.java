@@ -168,19 +168,34 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
-            exSummaryView.setBusinessLocationAddress(bizInfoSummaryView.getAddressBuilding()); //todo: change this or not?
+
+            String addressTH = bizInfoSummaryView.getAddressNo()+" "+bizInfoSummaryView.getAddressMoo()+" "+
+                    bizInfoSummaryView.getAddressBuilding()+" "+bizInfoSummaryView.getAddressStreet()+" "+
+                    bizInfoSummaryView.getProvince().getName()+" "+bizInfoSummaryView.getDistrict().getName()+" "+
+                    bizInfoSummaryView.getSubDistrict().getName()+" "+bizInfoSummaryView.getCountry().getName();
+
+            exSummaryView.setBusinessLocationAddress(addressTH);
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
-            //todo: if isRental = N, display ownerName. If isRental = Y, display expiryDate
+            //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
                 exSummaryView.setOwner(bizInfoSummaryView.getExpiryDate().toString());
             } else {
-//                exSummaryView.setOwner();
+                exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
             }
 
             //For footer borrower
             //todo: this
+            StringBuilder bizPermission = new StringBuilder();
+            if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+                for(BizInfoDetailView bizInfoDetailView : bizInfoSummaryView.getBizInfoDetailViewList()){
+                    bizPermission = bizPermission.append(bizInfoDetailView.getBizPermission()+", "); //todo: this
+                }
+            }
+//            แสดงประเภทการค้าขายของธุรกิจที่มีสัดส่วนมากที่สุด กรณีมีธุรกิจที่มีสัดส่วนมากที่สุดเท่ากันมากว่า 1 ธุรกิจให้แสดงธุรกิจแรก
             exSummaryView.setBusinessOperationActivity("");
-            exSummaryView.setBusinessPermission("");
+//            แสดง Business Permission จากทุกๆ ธุรกิจ โดยมีเครื่องหมายจุลภาค คั่น
+            exSummaryView.setBusinessPermission(bizPermission.toString());
+//            แสดงวันที่ Expiration Date ของ Business Permission ที่ Update ที่สุด (หมดอายุ ช้าที่สุด)
             exSummaryView.setExpiryDate(bizInfoSummaryView.getExpiryDate());
         } else {
             exSummaryView.setExSumBusinessInfoView(null);
@@ -208,6 +223,19 @@ public class ExSummaryControl extends BusinessControl {
         exSumCharacteristicView.setGroupSaleUW(exSummary.getGroupSaleUW());
         exSumCharacteristicView.setGroupExposureBDM(exSummary.getGroupExposureBDM());
         exSumCharacteristicView.setGroupExposureUW(exSummary.getGroupExposureUW());
+
+        if(newCreditFacilityView != null && newCreditFacilityView.getId() != 0){
+            if(newCreditFacilityView.getCreditCustomerType() == 1){ // normal 1, prime 2
+                exSumCharacteristicView.setCustomer("Normal");
+            } else {
+                exSumCharacteristicView.setCustomer("Prime");
+            }
+        }
+
+        exSumCharacteristicView.setIncome(exSummary.getIncome());
+        exSumCharacteristicView.setRecommendedWCNeed(exSummary.getRecommendedWCNeed());
+        exSumCharacteristicView.setActualWC(exSummary.getActualWC());
+        exSumCharacteristicView.setYearInBusiness(exSummary.getYearInBusiness());
 
         exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 

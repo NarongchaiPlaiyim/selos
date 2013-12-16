@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.OpenAccount;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -22,6 +23,7 @@ public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
         log.info("findByBasicInfoId : {}", basicInfoId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("basicInfo.id", basicInfoId));
+        criteria.addOrder(Order.asc("id"));
         List<OpenAccount> openAccountList = criteria.list();
 
         return openAccountList;

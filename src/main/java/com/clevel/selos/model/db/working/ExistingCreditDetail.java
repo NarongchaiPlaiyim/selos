@@ -1,24 +1,39 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "wrk_exist_credit_detail")
-public class ExistingCreditDetail {
+public class ExistingCreditDetail implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_DET_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_DET_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXISTING_CREDIT_DET_ID")
     private long id;
+
+    @Column(name = "no")
+    private int no;
+
+    @Column(name = "seq")
+    private int seq;
+
+    @Column(name = "in_used")
+    private int inUsed;
+
+    @Column(name = "borrower_type")
+    private int borrowerType;
+
+    @Column(name = "existing_credit_from")
+    private int existingCreditFrom;
 
     @Column(name = "account_name")
     private String accountName;
@@ -89,7 +104,7 @@ public class ExistingCreditDetail {
 
     @ManyToOne
     @JoinColumn(name = "existing_credit_id")
-    private ExistingCreditSummary existingCreditSummary;
+    private ExistingCreditFacility existingCreditFacility;
 
     @OneToOne
     @JoinColumn(name = "account_status_id")
@@ -107,6 +122,46 @@ public class ExistingCreditDetail {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public int getInUsed() {
+        return inUsed;
+    }
+
+    public void setInUsed(int inUsed) {
+        this.inUsed = inUsed;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
+    }
+
+    public int getExistingCreditFrom() {
+        return existingCreditFrom;
+    }
+
+    public void setExistingCreditFrom(int existingCreditFrom) {
+        this.existingCreditFrom = existingCreditFrom;
     }
 
     public String getAccountName() {
@@ -277,12 +332,12 @@ public class ExistingCreditDetail {
         this.modifyBy = modifyBy;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary() {
-        return existingCreditSummary;
+    public ExistingCreditFacility getExistingCreditFacility() {
+        return existingCreditFacility;
     }
 
-    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
-        this.existingCreditSummary = existingCreditSummary;
+    public void setExistingCreditFacility(ExistingCreditFacility existingCreditFacility) {
+        this.existingCreditFacility = existingCreditFacility;
     }
 
     public BankAccountStatus getAccountstatus() {
@@ -313,6 +368,11 @@ public class ExistingCreditDetail {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("no", no)
+                .append("seq", seq)
+                .append("inUsed", inUsed)
+                .append("borrowerType", borrowerType)
+                .append("existingCreditFrom", existingCreditFrom)
                 .append("accountName", accountName)
                 .append("accountNumber", accountNumber)
                 .append("accountSuf", accountSuf)
@@ -333,7 +393,7 @@ public class ExistingCreditDetail {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("existingCreditSummary", existingCreditSummary)
+                .append("existingCreditFacility", existingCreditFacility)
                 .toString();
     }
 }
