@@ -9,9 +9,9 @@
 
     <h:head>
         <title>#{msg.get('app.dbr.title')}</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+        <h:outputStylesheet name="css/style.css" />
+        <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+        <h:outputScript library="js" name="custom.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
