@@ -3,12 +3,13 @@ package com.clevel.selos.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.*;
 import java.util.*;
 
-public class Util {
+public class Util implements Serializable {
     private static Logger log = LoggerFactory.getLogger(Util.class);
     private static Locale defaultLocale = new Locale("th", "EN");
     private static NumberFormat numberFormat = new DecimalFormat(",##0.00");

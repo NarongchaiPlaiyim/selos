@@ -69,9 +69,15 @@ public class NewCollateralSubDetail implements Serializable {
     @JoinColumn(name = "mortgage_type_id")
     private List<MortgageType> mortgageList;
 
+    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubCustomer> newCollateralSubCustomerList;
+
+    /*@OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubDetail> relatedWithList;
+
     @ManyToOne
     @JoinColumn(name = "new_collateral_sub_detail_id")
-    private NewCollateralSubDetail newCollateralSubDetail;
+    private NewCollateralSubDetail newCollateralSubDetail;*/
 
 
     public long getId() {
@@ -184,14 +190,6 @@ public class NewCollateralSubDetail implements Serializable {
 
     public void setNewCollateralHeadDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
         this.newCollateralHeadDetail = newCollateralHeadDetail;
-    }
-
-    public NewCollateralSubDetail getNewCollateralSubDetail() {
-        return newCollateralSubDetail;
-    }
-
-    public void setNewCollateralSubDetail(NewCollateralSubDetail newCollateralSubDetail) {
-        this.newCollateralSubDetail = newCollateralSubDetail;
     }
 
     public List<MortgageType> getMortgageList() {

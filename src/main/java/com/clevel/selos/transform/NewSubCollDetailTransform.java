@@ -3,8 +3,10 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NewCollateralSubDetailDAO;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NewCollateralHeadDetail;
 import com.clevel.selos.model.db.working.NewCollateralSubDetail;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.NewSubCollateralDetailView;
 
 import javax.inject.Inject;
@@ -41,7 +43,22 @@ public class NewSubCollDetailTransform extends Transform {
                 subCollateralDetail.setCreateBy(user);
             }
 
-//            subCollateralDetail.setMortgageList(newSubCollateralDetailView.getMortgageList());
+            List<Customer> collateralOwnerUWList = new ArrayList<Customer>();
+            for(CustomerInfoView collateralOwnerUW:newSubCollateralDetailView.getCollateralOwnerUWList())
+            {
+                Customer collateralOwnerUWSave = customerDAO.findById(collateralOwnerUW.getId());
+                collateralOwnerUWList.add(collateralOwnerUWSave);
+            }
+
+            List<NewCollateralSubDetail> newCollateralSubDetails = new ArrayList<NewCollateralSubDetail>();
+            for(NewSubCollateralDetailView newSubCollateralView:newSubCollateralDetailView.getRelatedWithList())
+            {
+//                NewCollateralSubDetail newCollateralSubDetailSave = newCollateralSubDetailDAO.findById(newSubCollateralView.getId());
+//                newCollateralSubDetails.add(newCollateralSubDetailSave);
+            }
+
+            subCollateralDetail.setMortgageList(newSubCollateralDetailView.getMortgageList());
+            //subCollateralDetail.setCollateralOwnerUWList(collateralOwnerUWList);
             subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
             subCollateralDetail.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
             subCollateralDetail.setAddress(newSubCollateralDetailView.getAddress());
@@ -71,7 +88,23 @@ public class NewSubCollDetailTransform extends Transform {
             newSubCollateralDetailView.setCreateDate(subCollateralDetail.getCreateDate());
             newSubCollateralDetailView.setModifyBy(subCollateralDetail.getModifyBy());
             newSubCollateralDetailView.setModifyDate(subCollateralDetail.getModifyDate());
-//            newSubCollateralDetailView.setMortgageList(subCollateralDetail.getMortgageList());
+            newSubCollateralDetailView.setMortgageList(subCollateralDetail.getMortgageList());
+            List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
+
+            /*for(Customer customer:subCollateralDetail.getCollateralOwnerUWList()){
+                CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
+                collateralOwnerUWList.add(customerInfoView);
+            }*/
+
+            newSubCollateralDetailView.setCollateralOwnerUWList(collateralOwnerUWList);
+
+            List<NewSubCollateralDetailView> newSubCollateralDetailViews = new ArrayList<NewSubCollateralDetailView>();
+           /* for( NewCollateralSubDetail newCollateralSubDetail:subCollateralDetail.getRelatedWithList())
+            {
+//                NewSubCollateralDetailView newSubCollateralDetailView = newCollateralSubDetailDAO.findById(newCollateralSubDetail.getId());
+//                newSubCollateralDetailViews.add(newCollateralSubDetailSave);
+            }*/
+
             newSubCollateralDetailViewList.add(newSubCollateralDetailView);
         }
 

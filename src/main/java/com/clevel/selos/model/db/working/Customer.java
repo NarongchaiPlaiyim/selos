@@ -212,10 +212,6 @@ public class Customer implements Serializable {
     @Column(name="no_pending_claim_LG", nullable=false, columnDefinition="int default 0")
     private int noPendingClaimLG;
 
-    @ManyToOne
-    @JoinColumn(name = "new_collateral_sub_detail_id")
-    private NewCollateralSubDetail newCollateralSubDetail;
-
     public Customer() {
     }
 
@@ -713,14 +709,6 @@ public class Customer implements Serializable {
 
     public void setNoPendingClaimLG(int noPendingClaimLG) {
         this.noPendingClaimLG = noPendingClaimLG;
-    }
-
-    public NewCollateralSubDetail getNewCollateralSubDetail() {
-        return newCollateralSubDetail;
-    }
-
-    public void setNewCollateralSubDetail(NewCollateralSubDetail newCollateralSubDetail) {
-        this.newCollateralSubDetail = newCollateralSubDetail;
     }
 
     @Override

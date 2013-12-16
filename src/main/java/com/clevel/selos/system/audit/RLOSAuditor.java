@@ -9,11 +9,12 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Date;
 
 @Stateless
 @RLOS
-public class RLOSAuditor implements SystemAuditor {
+public class RLOSAuditor implements SystemAuditor, Serializable {
     @Inject
     @SELOS
     Logger log;
