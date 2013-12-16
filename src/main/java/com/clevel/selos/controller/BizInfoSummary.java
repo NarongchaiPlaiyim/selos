@@ -322,7 +322,14 @@ public class BizInfoSummary implements Serializable {
 
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
+
         if( bizInfoSummaryView.getCirculationAmount().doubleValue() <= 0){
+
+            bizInfoSummaryView.setProductionCostsPercentage(BigDecimal.ZERO);
+            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
+
             messageHeader = "error";
             message = "sumIncomeAmount is zero ";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
