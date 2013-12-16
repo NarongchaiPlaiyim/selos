@@ -1,12 +1,12 @@
-package com.clevel.selos.model.view.insurance.model;
+package com.clevel.selos.model.view.insurance;
 
 import java.io.Serializable;
 
-public class HeadCollModel implements Serializable {
+public class InsuranceInfoHeadCollView implements Serializable {
     private String titleDeed;
     private int exitingCredit;
 
-    public HeadCollModel() {
+    public InsuranceInfoHeadCollView() {
 
     }
 
