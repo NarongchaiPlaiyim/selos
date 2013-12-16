@@ -47,7 +47,7 @@ public class ExistingGuarantorDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "exisitng_credit_summary_id")
+    @JoinColumn(name = "existing_credit_facility_id")
     private ExistingCreditFacility existingCreditFacility;
 
     @OneToMany(mappedBy = "existingGuarantorDetail", cascade = CascadeType.ALL)

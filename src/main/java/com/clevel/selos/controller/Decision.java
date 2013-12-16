@@ -819,7 +819,7 @@ public class Decision implements Serializable {
             ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
             CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
             //productFormulaDAO
-            //where 4 à¸•à¸±à¸§ ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
+            //where 4 µÑÇ ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 

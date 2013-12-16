@@ -20,18 +20,6 @@ public class ExistingCollateralDetailTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
-    @Inject
-    CustomerTransform customerTransform;
-    @Inject
-    CustomerDAO customerDAO;
-    @Inject
-    SubCollateralTypeDAO subCollateralTypeDAO;
-    @Inject
-    CollateralTypeDAO collateralTypeDAO;
-    @Inject
-    BasicInfoDAO basicInfoDAO;
-    @Inject
-    ExistingCreditTypeDetailTransform existingCreditTypeDetailTransform;
 
     public List<ExistingCollateralDetail> transformsToModel(List<ExistingCollateralDetailView> existingCollateralDetailViewList, ExistingCreditFacility existingCreditFacility, User user) {
         List<ExistingCollateralDetail> existingCollateralDetailList = new ArrayList<ExistingCollateralDetail>();
@@ -49,7 +37,7 @@ public class ExistingCollateralDetailTransform extends Transform {
                 existingCollateralDetail.setCreateBy(user);
             }
 
-
+            existingCollateralDetail.setBorrowerType(existingCollateralDetailView.getBorrowerType());
             existingCollateralDetail.setCollateralType(existingCollateralDetailView.getCollateralType());
             existingCollateralDetail.setPotentialCollateral(existingCollateralDetailView.getPotentialCollateral());
             existingCollateralDetail.setRelation(existingCollateralDetailView.getRelation());
@@ -74,7 +62,8 @@ public class ExistingCollateralDetailTransform extends Transform {
 
         for (ExistingCollateralDetail existingCollateralDetail : existingCollateralDetailList) {
             existingCollateralDetailView = new ExistingCollateralDetailView();
-
+            existingCollateralDetailView.setId(existingCollateralDetail.getId());
+            existingCollateralDetailView.setBorrowerType(existingCollateralDetail.getBorrowerType());
             existingCollateralDetailView.setCollateralType(existingCollateralDetail.getCollateralType());
             existingCollateralDetailView.setPotentialCollateral(existingCollateralDetail.getPotentialCollateral());
             existingCollateralDetailView.setRelation(existingCollateralDetail.getRelation());

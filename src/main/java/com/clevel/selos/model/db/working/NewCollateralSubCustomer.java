@@ -15,7 +15,7 @@ public class NewCollateralSubCustomer implements Serializable {
     @JoinColumn(name = "new_collateral_sub_id")
     private NewCollateralSubDetail newCollateralSubDetail;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
