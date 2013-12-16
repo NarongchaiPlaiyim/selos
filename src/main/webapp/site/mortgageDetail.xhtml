@@ -39,10 +39,10 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.approvedType')}" for="approveTypeRadio"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:selectOneRadio id="approveTypeRadio" value="#{mortDetail.mortgageDetailView.approvedType}">
                                             <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.content.radio.new')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.content.radio.newChange')}" itemValue="2"/>
@@ -62,7 +62,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.mortSignDate')}" for="mortSignDateInput"/>
                                     </td>
                                     <td>
@@ -71,7 +71,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.outsourceCompany')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -101,7 +101,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.mortgageType')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -124,7 +124,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.totalMortgageValue')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -133,7 +133,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.creditType')}"/>
                                     </td>
                                     <td colspan="3">
@@ -167,7 +167,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;" colspan="4">
+                                    <td class="title" style="width: 100px;" colspan="4">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.collateralDetail')}"/>
                                     </td>
                                 </tr>
@@ -236,10 +236,10 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.poa')}" for="poaRadio"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:selectOneRadio id="poaRadio" value="">
                                             <f:selectItem itemLabel="#{msg.get('app.label.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.label.no')}" itemValue="1"/>
@@ -248,7 +248,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.collateralOwner')}"/>
                                     </td>
                                     <td colspan="3">
@@ -286,10 +286,10 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.relationshipDepositary')}" for="relationRadio"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:selectOneRadio id="relationRadio" value="">
                                             <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.radio.relationshipDepositary.borrower')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.radio.relationshipDepositary.other')}" itemValue="2"/>
@@ -330,16 +330,16 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.powerAttorney')}"/>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.documentType')}"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:selectOneMenu styleClass="largest" size="1"
                                                          value="#{mortDetail.mortgageDetailView}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
@@ -352,16 +352,16 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.personalID')}" for="personalIDInput"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:inputText value="" id="personalIDInput"/>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.cusNameTH')}"/>
                                     </td>
                                     <td colspan="5">
@@ -388,11 +388,11 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.dateOfBirth')}" for="dateOfBirthInput"/>
                                     </td>
-                                    <td>
-                                        <p:calendar id="dateOfBirthInput" value=""
+                                    <td style="width: 200px;">
+                                        <p:calendar id="dateOfBirthInput"
                                                     pattern="dd/MM/yyyy" showOn="button"/>
                                     </td>
                                     <td class="title">
@@ -404,10 +404,10 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.gender')}"/>
                                     </td>
-                                    <td>
+                                    <td style="width: 200px;">
                                         <p:selectOneMenu styleClass="largest" size="1"
                                                          value="#{mortDetail.mortgageDetailView}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -418,7 +418,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.race')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -432,7 +432,7 @@
                                         </p:selectOneMenu>
                                     </td>
 
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.nation')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -452,7 +452,7 @@
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.registrationAddress')}"/>
                                     </td>
                                     <td colspan="3">
-                                        <table>
+                                        <table style="margin-left: -6px;">
                                             <tr>
                                                 <td class="title left">
                                                     <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.addressNo')}"/>
@@ -561,7 +561,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <p:outputLabel value="#{msg.get('app.mortgageDetail.content.marriageStatus')}"/>
                                     </td>
                                     <td style="width: 200px;">
@@ -577,7 +577,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.marriageNameTH')}"/>
                                     </td>
                                     <td colspan="5">
@@ -604,7 +604,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.fatherNameTH')}"/>
                                     </td>
                                     <td colspan="5">
@@ -631,7 +631,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.motherNameTH')}"/>
                                     </td>
                                     <td colspan="5">
@@ -658,22 +658,22 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="width: 200px;">
+                                    <td class="title" style="width: 100px;">
                                         <h:outputText value="#{msg.get('app.mortgageDetail.content.contactNumber')}"/>
                                     </td>
                                     <td colspan="5">
-                                        <table style="margin-left: -3px;">
+                                        <table style="margin-left: -6px;">
                                             <tr>
-                                                <td class="title">
+                                                <td class="title left" style="width: 130px;">
                                                     <h:outputText value="#{msg.get('app.mortgageDetail.content.homeNumber')}"/>
                                                 </td>
-                                                <td>
+                                                <td style="width: 200px;">
                                                     <p:inputText value=""/>
                                                 </td>
-                                                <td class="title">
+                                                <td class="title left" style="width: 130px;">
                                                     <h:outputText value="#{msg.get('app.mortgageDetail.content.extNumber')}"/>
                                                 </td>
-                                                <td>
+                                                <td style="width: 200px;">
                                                     <p:inputText value=""/>
                                                 </td>
                                             </tr>
@@ -684,18 +684,18 @@
                                 <tr>
                                     <td></td>
                                     <td colspan="5">
-                                        <table style="margin-left: -3px;">
+                                        <table style="margin-left: -6px;">
                                             <tr>
-                                                <td class="title">
+                                                <td class="title left" style="width: 130px;">
                                                     <h:outputText value="#{msg.get('app.mortgageDetail.content.mobile1Number')}"/>
                                                 </td>
-                                                <td>
+                                                <td style="width: 200px;">
                                                     <p:inputText value=""/>
                                                 </td>
-                                                <td class="title">
+                                                <td class="title left" style="width: 130px;">
                                                     <h:outputText value="#{msg.get('app.mortgageDetail.content.mobile2Number')}"/>
                                                 </td>
-                                                <td>
+                                                <td style="width: 200px;">
                                                     <p:inputText value=""/>
                                                 </td>
                                             </tr>
@@ -714,7 +714,7 @@
                                 <tr style="height: 15px;"/>
 
                                 <tr>
-                                    <td colspan="2" class="center">
+                                    <td colspan="8" class="center">
                                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain"
                                                          actionListener="#{mortDetail.onSave()}"  binding="#{saveBtn}"/>

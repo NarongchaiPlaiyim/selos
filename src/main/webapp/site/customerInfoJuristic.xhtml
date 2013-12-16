@@ -68,7 +68,8 @@
                                 </td>
                                 <td style="width: 150px;">
                                     <p:inputText value="#{custInfoSumJuris.customerInfoSearch.searchId}" maxlength="15"
-                                                 onkeydown="return numberOnly(event);"
+                                                 onkeydown="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyDownNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
                                                  disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
                                 </td>
