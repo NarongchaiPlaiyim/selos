@@ -15,10 +15,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 @ViewScoped
 @ManagedBean(name = "guarantorDetail")
-public class GuarantorDetail {
+public class GuarantorDetail implements Serializable {
 
     @Inject
     @SELOS

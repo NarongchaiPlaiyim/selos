@@ -7,6 +7,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.filenet.apiimpl.wsi.serialization.Serialization;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -16,10 +17,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 @ViewScoped
 @ManagedBean(name = "pledgeDetail")
-public class PledgeDetail {
+public class PledgeDetail implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -43,9 +45,8 @@ public class PledgeDetail {
 
     public void preRender() {
         log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", "2001");
-        session = FacesUtil.getSession(true);
+
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 //            stepId = Long.parseLong(session.getAttribute("stepId").toString());
@@ -65,7 +66,7 @@ public class PledgeDetail {
 
     @PostConstruct
     public void onCreation(){
-        preRender();
+
         try {
 
         }catch (Exception e){
