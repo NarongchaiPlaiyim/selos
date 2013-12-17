@@ -11,6 +11,7 @@
         <title>#{msg.get('app.dbr.title')}</title>
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -67,6 +68,8 @@
                                         <td>
                                             <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
                                                             yearRange="1950:2100"
+                                                            mindate="#{pledgeDetail.currentDateDDMMYY}"
+                                                            defaultdate="#{pledgeDetail.currentDateDDMMYY}"
                                                             pattern="dd/MM/yyyy"
                                                             locale="th_TH" >
                                             </clv:BECalendar>
@@ -96,22 +99,49 @@
                                         </td>
                                         <td>
                                             <p:dataTable value="" var="creditType" rowIndexVar="rowIndex">
-                                                <p:column headerText="" style="min-width: 30px; max-width: 30px; width: 30px;">
+                                                <p:column headerText="" style="min-width: 30px; max-width: 30px; width: 30px;"  styleClass="left top">
                                                     <p:outputLabel value="#{rowIndex+1}"/>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.account')}" style="min-width: 300px; max-width: 300px; width: 300px;">
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.account')}" style="min-width: 400px; max-width: 400px; width: 400px;">
+                                                    <h:panelGroup rendered="true">  <!--If Value = null -->
+                                                       -
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="false"> <!--If Value =! null -->
+                                                        <table style="margin:-1px 0 -1px -10px;" >
+                                                            <tr >
+                                                                <td colspan="2" style="border-style: none !important;">
+                                                                    <h:outputText value="Mr.A Example" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.accNo')}"/>
+                                                                    <h:outputText value="012-3-45678-9"/>
+                                                                </td>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.suf')}"/>
+                                                                    <h:outputText value="001"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.pledgeDetail.content.table.td.accStatus')}"/>
+                                                                    <h:outputText value="01=Normal"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </h:panelGroup>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.type')}" style="min-width: 80px; max-width: 80px; width: 80px;" styleClass="center top">
+                                                    <h:outputText value="Type"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.productProgram')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="left top">
 
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.type')}" style="min-width: 80px; max-width: 80px; width: 80px;">
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.creditFacility')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="left top">
 
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.productProgram')}" style="min-width: 150px; max-width: 150px; width: 150px;">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.creditFacility')}" style="min-width: 150px; max-width: 150px; width: 150px;">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.limit')}" style="min-width: 150px; max-width: 150px; width: 150px;">
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.limit')}" style="min-width: 150px; max-width: 150px; width: 150px;" styleClass="right top">
 
                                                 </p:column>
                                             </p:dataTable>

@@ -12,6 +12,7 @@
 
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -67,7 +68,11 @@
                                         </td>
                                         <td>
                                             <clv:BECalendar  showOn="button" showButtonPanel="true" navigator="true"
-                                                             yearRange="1950:2100" pattern="dd/MM/yyyy" locale="th_TH">
+                                                             yearRange="1950:2100"
+                                                             pattern="dd/MM/yyyy"
+                                                             mindate="#{guarantorDetail.currentDateDDMMYY}"
+
+                                                             locale="th_TH">
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -95,22 +100,49 @@
                                         </td>
                                         <td>
                                             <p:dataTable value=""  var="itemCT" rowIndexVar="rowIndex">
-                                                <p:column >
-                                                    <p:outputLabel value="#{rowIndex+1}" styleClass="center"  style="min-width: 30px; width: 30px; max-width: 30px;"/>
+                                                <p:column style="min-width: 30px; width: 30px; max-width: 30px;" styleClass="left top">
+                                                    <p:outputLabel value="#{rowIndex+1}"   />
                                                 </p:column>
                                                 <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.account')}" style="max-width: 300px; width: 300px; max-width: 300px;">
+                                                    <h:panelGroup rendered="true">  <!--If Value = null -->
+                                                        -
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="false"> <!--If Value =! null -->
+                                                        <table style="margin:-1px 0 -1px -10px;" >
+                                                            <tr >
+                                                                <td colspan="2" style="border-style: none !important;">
+                                                                    <h:outputText value="Mr.A Example" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.guarantorDetail.content.table.td.accNo')}"/>
+                                                                    <h:outputText value="012-3-45678-9"/>
+                                                                </td>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.guarantorDetail.content.table.td.suf')}"/>
+                                                                    <h:outputText value="001"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="border-style: none !important;">
+                                                                    <p:outputLabel value="#{msg.get('app.guarantorDetail.content.table.td.accStatus')}"/>
+                                                                    <h:outputText value="01=Normal"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </h:panelGroup>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.type')}" style="max-width: 100px; width: 100px; max-width: 100px;"  styleClass="left top">
 
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.type')}" style="max-width: 100px; width: 100px; max-width: 100px;">
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.productProgram')}" style="max-width: 200px; width: 200px; max-width: 200px;"  styleClass="left top">
 
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.productProgram')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.creditFacility')}" style="max-width: 2000px; width: 200px; max-width: 200px;"  styleClass="left top">
 
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.creditFacility')}" style="max-width: 2000px; width: 200px; max-width: 200px;">
-
-                                                </p:column>
-                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.limit')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.limit')}" style="max-width: 200px; width: 200px; max-width: 200px;"  styleClass="right top">
 
                                                 </p:column>
                                             </p:dataTable>
