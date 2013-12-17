@@ -483,28 +483,28 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
 
                     //for spouse
-                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
-                        customerInfoView.getSpouse().setSearchBy(1);
-                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
-                        try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
-                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                                if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
-                                    enableSpouseDocumentType = false;
-                                    enableSpouseCitizenId = false;
-                                } else {
-                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
-                                    enableSpouseDocumentType = true;
-                                    enableSpouseCitizenId = true;
-                                }
-                            }
-                        } catch (Exception ex) {
-                            enableSpouseDocumentType = true;
-                            enableSpouseCitizenId = true;
-                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
-                        }
-                    }
+//                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
+//                        customerInfoView.getSpouse().setSearchBy(1);
+//                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+//                        try {
+//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
+//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+//                                if(cusSpouseResultView.getCustomerInfoView() != null){
+//                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+//                                    enableSpouseDocumentType = false;
+//                                    enableSpouseCitizenId = false;
+//                                } else {
+//                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
+//                                    enableSpouseDocumentType = true;
+//                                    enableSpouseCitizenId = true;
+//                                }
+//                            }
+//                        } catch (Exception ex) {
+//                            enableSpouseDocumentType = true;
+//                            enableSpouseCitizenId = true;
+//                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
+//                        }
+//                    }
 
                     enableDocumentType = false;
                     enableCitizenId = false;
@@ -552,16 +552,16 @@ public class CustomerInfoJuristic implements Serializable {
                         log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
 
-                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
-                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
-                                if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
-                                }
-                            }
-                        }
+//                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
+//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
+//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+//                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
+//                                if(cusSpouseResultView.getCustomerInfoView() != null){
+//                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+//                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
+//                                }
+//                            }
+//                        }
 
                         messageHeader = "Refresh Interface Info complete.";
                         message = "Customer found.";
