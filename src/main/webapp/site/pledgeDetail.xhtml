@@ -11,6 +11,7 @@
         <title>#{msg.get('app.dbr.title')}</title>
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -67,6 +68,8 @@
                                         <td>
                                             <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
                                                             yearRange="1950:2100"
+                                                            mindate="#{pledgeDetail.currentDateDDMMYY}"
+                                                            defaultdate="#{pledgeDetail.currentDateDDMMYY}"
                                                             pattern="dd/MM/yyyy"
                                                             locale="th_TH" >
                                             </clv:BECalendar>
