@@ -103,7 +103,7 @@ public class ExistingCreditDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "existing_credit_id")
+    @JoinColumn(name = "existing_credit_facility_id")
     private ExistingCreditFacility existingCreditFacility;
 
     @OneToOne

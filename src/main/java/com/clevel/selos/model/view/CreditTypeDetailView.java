@@ -29,6 +29,8 @@ public class CreditTypeDetailView implements Serializable {
     private BigDecimal purpose;
     private BigDecimal PCEPercent;
     private BigDecimal PCEAmount;
+    private String purpose;
+
 
     public CreditTypeDetailView() {
         reset();
@@ -48,6 +50,7 @@ public class CreditTypeDetailView implements Serializable {
         this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
+        this.purpose = "";
         this.purpose = BigDecimal.ZERO;
         this.PCEPercent = BigDecimal.ZERO;
         this.PCEAmount = BigDecimal.ZERO;
@@ -174,11 +177,11 @@ public class CreditTypeDetailView implements Serializable {
         this.noFlag = noFlag;
     }
 
-    public BigDecimal getPurpose() {
+    public String getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(BigDecimal purpose) {
+    public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
 
