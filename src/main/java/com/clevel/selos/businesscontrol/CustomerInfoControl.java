@@ -375,12 +375,12 @@ public class CustomerInfoControl extends BusinessControl {
 
         DocumentType masterDocumentType = new DocumentType();
 
-        RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+        RMInterface.SearchBy searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
-            searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+            searchBy = RMInterface.SearchBy.CUSTOMER_ID;
             masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
-            searcyBy = RMInterface.SearchBy.TMBCUS_ID;
+            searchBy = RMInterface.SearchBy.TMBCUS_ID;
             masterDocumentType = documentTypeDAO.findById(1);
         }
 
@@ -410,16 +410,16 @@ public class CustomerInfoControl extends BusinessControl {
             customerInfoView.setCustomerEntity(customerEntity);
         }
 
-        log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
+        log.info("getCustomerInfoFromRM ::: searchBy : {}", searchBy);
         log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
 
 
         if(customerInfoView.getCustomerEntity().getId() == 1) {
-            IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searchBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
         } else if(customerInfoView.getCustomerEntity().getId() == 2){
-            CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searchBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
         }
