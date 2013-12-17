@@ -9,8 +9,8 @@
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
     <h:outputStylesheet name="css/style.css" />
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
 </h:head>
 
 <h:body>
@@ -68,7 +68,8 @@
                                 </td>
                                 <td style="width: 150px;">
                                     <p:inputText value="#{custInfoSumJuris.customerInfoSearch.searchId}" maxlength="15"
-                                                 onkeydown="return numberOnly(event);"
+                                                 onkeydown="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyDownNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
                                                  disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
                                 </td>

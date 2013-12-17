@@ -113,6 +113,10 @@ public class CreditFacExistingControl extends BusinessControl {
         existingCreditFacilityDAO.persist(existingCreditFacility);
         log.info("persist :: existingCreditFacility..." + existingCreditFacility.getId());
 
+        if (existingCreditFacilityView.getExistingConditionDetailViewList().size() > 0) {
+            List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+            existingConditionDetailDAO.delete(existingConditionDetailList);
+        }
         log.info("getExistingConditionDetailViewList size = ... " + existingCreditFacilityView.getExistingConditionDetailViewList().size());
         List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailTransform.transformsToModel(existingCreditFacilityView.getExistingConditionDetailViewList(), existingCreditFacility, user);
         existingConditionDetailDAO.persist(existingConditionDetailList);
@@ -238,49 +242,59 @@ public class CreditFacExistingControl extends BusinessControl {
 
         if(existingCreditFacility != null){
             existingCreditFacilityView = existingCreditFacilityTransform.transformsToView(existingCreditFacility);
+
             List<ExistingConditionDetail> existingConditionDetailList = existingConditionDetailDAO.findByExistingCreditFacility(existingCreditFacility);
+            log.info("onFind :: existingConditionDetailList ..." + existingConditionDetailList.size());
             List<ExistingConditionDetailView> existingConditionDetailListView = existingConditionDetailTransform.transformsToView(existingConditionDetailList);
             log.info("onFind :: existingConditionDetailList ...");
             existingCreditFacilityView.setExistingConditionDetailViewList(existingConditionDetailListView);
             
             List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,1);
+            log.info("onFind :: borrowerComExistingCreditList ..." + borrowerComExistingCreditList.size());
             List<ExistingCreditDetailView> borrowerComExistingCreditViewList = onFindCreditDetailChild(borrowerComExistingCreditList);
             log.info("onFind :: borrowerComExistingCreditList ...");
             existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComExistingCreditViewList);
 
             List<ExistingCreditDetail> borrowerRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,2);
+            log.info("onFind :: borrowerRetailExistingCreditList ..." + borrowerRetailExistingCreditList.size());
             List<ExistingCreditDetailView> borrowerRetailExistingCreditViewList = onFindCreditDetailChild(borrowerRetailExistingCreditList);
             log.info("onFind :: borrowerRetailExistingCreditList ...");
             existingCreditFacilityView.setBorrowerRetailExistingCredit(borrowerRetailExistingCreditViewList);
 
             List<ExistingCreditDetail> borrowerAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,1,3);
+            log.info("onFind :: borrowerAppInRLOSCreditList ..." + borrowerAppInRLOSCreditList.size());
             List<ExistingCreditDetailView> borrowerAppInRLOSCreditViewList = onFindCreditDetailChild(borrowerAppInRLOSCreditList);
             log.info("onFind :: borrowerAppInRLOSCreditList ...");
             existingCreditFacilityView.setBorrowerAppInRLOSCredit(borrowerAppInRLOSCreditViewList);
 
             List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,1);
+            log.info("onFind :: relatedComExistingCreditList ..." + relatedComExistingCreditList.size());
             List<ExistingCreditDetailView> relatedComExistingCreditViewList = onFindCreditDetailChild(relatedComExistingCreditList);
             log.info("onFind :: relatedComExistingCreditList ...");
             existingCreditFacilityView.setRelatedComExistingCredit(relatedComExistingCreditViewList);
 
             List<ExistingCreditDetail> relatedRetailExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,2);
+            log.info("onFind :: relatedRetailExistingCreditList ..." + relatedRetailExistingCreditList.size());
             List<ExistingCreditDetailView> relatedRetailExistingCreditViewList = onFindCreditDetailChild(relatedRetailExistingCreditList);
             log.info("onFind :: relatedRetailExistingCreditList ...");
             existingCreditFacilityView.setRelatedRetailExistingCredit(relatedRetailExistingCreditViewList);
 
             List<ExistingCreditDetail> relatedAppInRLOSCreditList = existingCreditDetailDAO.findByExistingCreditFacility(existingCreditFacility,2,3);
+            log.info("onFind :: relatedAppInRLOSCreditList ..." + relatedAppInRLOSCreditList.size());
             List<ExistingCreditDetailView> relatedAppInRLOSCreditViewList = onFindCreditDetailChild(relatedAppInRLOSCreditList);
             log.info("onFind :: relatedAppInRLOSCreditList ...");
             existingCreditFacilityView.setRelatedAppInRLOSCredit(relatedAppInRLOSCreditViewList);
 
             List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+            log.info("onFind :: borrowerCollateralDetailList ..." + borrowerCollateralDetailList.size());
             List<ExistingCollateralDetailView> borrowerCollateralDetailViewList = onFindCollateralDetailChild(borrowerCollateralDetailList);
-            log.info("onFind :: borrowerCollateralDetailList ...");
+            log.info("onFind :: borrowerCollateralDetailViewList ...");
             existingCreditFacilityView.setBorrowerCollateralList(borrowerCollateralDetailViewList);
 
             List<ExistingCollateralDetail> relatedCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,2);
+            log.info("onFind :: relatedCollateralDetailList ..." + relatedCollateralDetailList.size());
             List<ExistingCollateralDetailView> relatedCollateralDetailViewList = onFindCollateralDetailChild(relatedCollateralDetailList);
-            log.info("onFind :: relatedCollateralDetailList ...");
+            log.info("onFind :: relatedCollateralDetailViewList ...");
             existingCreditFacilityView.setRelatedCollateralList(relatedCollateralDetailViewList);
 
 
@@ -295,6 +309,7 @@ public class CreditFacExistingControl extends BusinessControl {
     }
 
     public List<ExistingCreditDetailView> onFindCreditDetailChild(List<ExistingCreditDetail> existingCreditDetailList) {
+        log.info("onFindCreditDetailChild begin");
         List<ExistingSplitLineDetail> existingSplitLineDetailList;
         List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
         List<ExistingCreditTierDetail> existingCreditTierDetailList;
@@ -304,15 +319,19 @@ public class CreditFacExistingControl extends BusinessControl {
         existingCreditDetailViewList = existingCreditDetailTransform.transformsToView(existingCreditDetailList);
 
         for(int i =0;i<existingCreditDetailViewList.size();i++){
+            log.info("existingCreditDetail at  " + i + " ID  " + existingCreditDetailList.get(i).getId());
+
             existingCreditTierDetailList = existingCreditTierDetailDAO.findByExistingCreditDetail(existingCreditDetailList.get(i));
+            log.info("existingCreditTierDetailList size " + existingCreditTierDetailList.size());
             existingCreditTierDetailViewList = existingCreditTierTransform.transformsToView(existingCreditTierDetailList);
             existingCreditDetailViewList.get(i).setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
             
             existingSplitLineDetailList = existingSplitLineDetailDAO.findByExistingCreditDetail(existingCreditDetailList.get(i));
+            log.info("existingSplitLineDetailList size " + existingSplitLineDetailList.size());
             existingSplitLineDetailViewList = existingSplitLineTransform.transformsToView(existingSplitLineDetailList);
             existingCreditDetailViewList.get(i).setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
         }
-
+        log.info("onFindCreditDetailChild end ");
         return existingCreditDetailViewList;
 
     }

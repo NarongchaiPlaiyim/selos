@@ -8,28 +8,47 @@
     <h:form id="baApplyInfoDlgForm">
         <table class="content_form">
             <tr>
-                <td><p:outputLabel styleClass="left title" for="customername">Customer Name :</p:outputLabel></td>
-                <td><p:inputText id="customername" value=""/></td>
+                <td class="title" style="width: 250px;"><p:outputLabel  for="customername" value="#{msg.get('app.baInfo.dialog.applyBa.cusName')}"></p:outputLabel></td>
+                <td><p:inputText id="customername" value="#{baInfo.applyBaInfoView.cusName}"/></td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title" for="contactnumber">Contact Number :</p:outputLabel></td>
-                <td><p:inputText id="contactnumber" value=""/></td>
+                <td class="title" style="width: 250px;"><p:outputLabel  for="contactnumber" value="#{msg.get('app.baInfo.dialog.applyBa.contactNumber')}"></p:outputLabel></td>
+                <td><p:inputMask id="contactnumber" value="#{baInfo.applyBaInfoView.contactNumber}" mask="99-9-999-9999"/></td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title" for="relationship">Relationship :</p:outputLabel></td>
-                <td><p:inputText id="relationship" value="000"/> </td>
+                <td class="title" style="width: 250px;"><p:outputLabel  for="relationship" value="#{msg.get('app.baInfo.dialog.applyBa.relationship')}"></p:outputLabel></td>
+                <td><p:inputText id="relationship" value="#{baInfo.applyBaInfoView.relationship}"/> </td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title" for="resulthealthcheck">Result Healthcheck :</p:outputLabel></td>
-                <td><p:inputText id="resulthealthcheck" value="000"/> </td>
+                <td class="title" style="width: 250px;"><p:outputLabel  for="resulthealthcheck" value="#{msg.get('app.baInfo.dialog.applyBa.resultHealthCheck')}"></p:outputLabel></td>
+                <td>
+                    <p:selectOneMenu id="resulthealthcheck" value="#{baInfo.applyBaInfoView.resultHealtcheck}">
+                        <f:selectItems value="#{baInfo.getHealCheckList()}" />
+                    </p:selectOneMenu>
+                </td>
             </tr>
             <tr>
-                <td><p:outputLabel styleClass="left title" for="checkdate">วันที่ตรวจ :</p:outputLabel></td>
-                <td>     <clv:BECalendar value="" id="checkdate" showOn="button" pattern="dd/MM/yyyy"
-                                         navigator="true" locale="th_TH" showButtonPanel="true" /> </td>
+                <td class="title" style="width: 250px;"><p:outputLabel  for="checkdate" value="#{msg.get('app.baInfo.dialog.applyBa.checkDate')}"></p:outputLabel></td>
+                <td>
+                    <p:calendar size="10" id="checkdate" showOn="button" navigator="true"
+                                value="#{baInfo.applyBaInfoView.checkDate}"
+                                pattern="dd/MM/yyyy"
+                                locale="th_TH"
+                                timeZone="Asia/Bangkok"
+                                yearRange="2440:3000">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                    </p:calendar>
+                </td>
             </tr>
             <tr>
-                <td><p:commandButton value="OK"/><p:commandButton value="Cancel"/> </td>
+                <td colspan="100%" style="text-align: center"><p:commandButton value="#{msg.get('app.button.ok')}"
+                                     actionListener="#{baInfo.onSubmitApplyBaDialog()}"
+                                     update=":baInformationForm,:baApplyInfoDlgForm"
+                                     styleClass="smaller"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                     onclick="applyBaInfoDialog.hide()"
+                                     styleClass="smaller"/>
+                </td>
             </tr>
 
         </table>
