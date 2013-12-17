@@ -526,6 +526,8 @@ public class CustomerInfoJuristic implements Serializable {
                 message = customerInfoResultView.getReason();
 
             }
+            onChangeProvinceEditForm1();
+            onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;

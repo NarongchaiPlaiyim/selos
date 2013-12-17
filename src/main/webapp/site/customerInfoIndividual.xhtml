@@ -4,13 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
     <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -207,11 +209,16 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                    value="#{custInfoSumIndi.customerInfoView.dateOfBirth}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
                                         <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
                                         <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
-                                    </p:calendar>
+                                    </clv:BECalendar>
                                 </td>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -233,9 +240,13 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
-                                                pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"/>
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                    value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -243,9 +254,12 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
-                                                pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"/>
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1311,7 +1325,12 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1319,7 +1338,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1327,10 +1350,15 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button">
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}">
                                             <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
                                             <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
-                                        </p:calendar>
+                                        </clv:BECalendar>
                                     </td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
@@ -2135,7 +2163,7 @@
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                      rendered="#{custInfoSumIndi.fromJuristic}"/>
-                                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumIndi.onCreation}"/>
                                 </td>
                             </tr>
@@ -2153,7 +2181,12 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+
+            <p:blockUI block=":frmMain" widgetVar="blockUI">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

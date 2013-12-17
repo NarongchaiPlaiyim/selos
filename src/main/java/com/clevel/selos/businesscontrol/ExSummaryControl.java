@@ -285,6 +285,10 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeBorrowerCharacteristic(workCaseId);
     }
 
+    public void calForBizInfoSummary(long workCaseId){
+        calYearInBusinessBorrowerCharacteristic(workCaseId);
+    }
+
     //TODO : Business login here
     //Borrower Characteristic - income ( Line 45 )
     //Credit Facility-Propose + DBR + Decision
@@ -418,11 +422,28 @@ public class ExSummaryControl extends BusinessControl {
 //            exSumCharacteristicView.setGroupSaleUW();
         }
     }
+
     //Borrower Characteristic - groupExposureBDM , groupExposureUW ( Line 58-59 )
     //Decision
 //    groupExposureBDM - Group Total Exposure + Total Propose Credit
 //    groupExposureUW - Group Total Exposure + Total Approved Credit
-    public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Pls Call me !!
+    public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        BigDecimal groupExposureBDM = newCreditFacility.getTotalExposure().add(newCreditFacility.getTotalPropose());
+        BigDecimal groupExposureUW = newCreditFacility.getTotalExposure().add(newCreditFacility.getTotalApproveCredit());
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        exSummary.setGroupExposureBDM(groupExposureBDM);
+        exSummary.setGroupExposureUW(groupExposureUW);
+
+        exSummaryDAO.persist(exSummary);
+    }
+
+    //Borrower Characteristic - yearInBusiness , yearInBusinessMonth ( Line 49-50 )
+    //Business Info Summary
+//    Max of (วันก่อตั้ง หรือ วันจดทะเบียนพาณิชย์ in businessInfoSummary)
+//    calculate months from yearInBusiness fields.
+    public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
     }
 }
