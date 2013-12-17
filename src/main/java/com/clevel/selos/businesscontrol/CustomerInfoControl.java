@@ -353,7 +353,9 @@ public class CustomerInfoControl extends BusinessControl {
 
         //for check customer ncb
         NCB ncb = ncbDAO.findNcbByCustomer(customer.getId());
-        ncbDAO.delete(ncb);
+        if(ncb != null && ncb.getId() != 0){
+            ncbDAO.delete(ncb);
+        }
 
         customerDAO.delete(customer);
     }
