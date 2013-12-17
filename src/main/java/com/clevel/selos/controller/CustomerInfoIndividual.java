@@ -952,7 +952,7 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchBy(1);
                         customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                         try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
@@ -1145,6 +1145,24 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onSave(){
         //check citizen id
+        if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                messageHeader = "Save Individual Failed.";
+                message = "Citizen Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
+            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
+            if(customer != null && customer.getId() != 0){
+                if(customer.getId() != customerInfoView.getId()){
+                    messageHeader = "Save Individual Failed.";
+                    message = "Citizen Id is already exist";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            }
+        }
+
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
