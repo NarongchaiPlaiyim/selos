@@ -621,6 +621,12 @@ public class BasicInfo extends MandatoryFieldsControl {
             disNoRevokedLicense = false;
             disNoLateWorkDelivery = false;
             disIsAdequateOfCapitalResource = false;
+            basicInfoView.setCharFCIns(false);
+            basicInfoView.setCharFCCom(false);
+            basicInfoView.setCharFCAba(false);
+            basicInfoView.setCharFCLate(false);
+            basicInfoView.setCharFCFund(false);
+
         } else {
             disIsAbleToGettingGuarantorJob = true;
             disNoClaimLGHistory = true;

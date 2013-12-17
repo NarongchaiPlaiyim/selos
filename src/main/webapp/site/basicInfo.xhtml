@@ -4,13 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Basic Info</title>
     <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -371,10 +373,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.lastRev')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:calendar value="#{basicInfo.basicInfoView.lastReviewDate}"
-                                                                pattern="dd/MM/yyyy" showOn="button"
-                                                                disabled="#{basicInfo.disLastReviewDate}"
-                                                                required="#{basicInfo.reqLastReviewDate and not empty param[saveBtn.clientId]}"/>
+                                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                                    yearRange="1950:2100"
+                                                                    pattern="dd/MM/yyyy"
+                                                                    mindate="01/01/1950"
+                                                                    value="#{basicInfo.basicInfoView.lastReviewDate}"
+                                                                    disabled="#{basicInfo.disLastReviewDate}"
+                                                                    required="#{basicInfo.reqLastReviewDate and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -382,10 +387,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.extRev')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:calendar value="#{basicInfo.basicInfoView.extReviewDate}"
-                                                                pattern="dd/MM/yyyy" showOn="button"
-                                                                disabled="#{basicInfo.disExtendedReviewDate}"
-                                                                required="#{basicInfo.reqExtendedReviewDate and not empty param[saveBtn.clientId]}"/>
+                                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                                    yearRange="1950:2100"
+                                                                    pattern="dd/MM/yyyy"
+                                                                    mindate="01/01/1950"
+                                                                    value="#{basicInfo.basicInfoView.extReviewDate}"
+                                                                    disabled="#{basicInfo.disExtendedReviewDate}"
+                                                                    required="#{basicInfo.reqExtendedReviewDate and not empty param[saveBtn.clientId]}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -620,7 +628,8 @@
                                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
                                                          actionListener="#{basicInfo.onSave}"  binding="#{saveBtn}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="cancelBtn"
+                                                         styleClass="small" process="@form" update=":frmMain"
                                                          actionListener="#{basicInfo.onCreation}"/>
                                     </td>
                                 </tr>
@@ -637,7 +646,7 @@
             </div>
         </h:form>
 
-        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn">
+        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
