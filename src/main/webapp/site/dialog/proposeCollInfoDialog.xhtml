@@ -126,11 +126,12 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.account}"/>
+                <h:outputText value="#{creditTypeDetailItem.accountName}"/><br/>
+                <h:outputText value="#{creditTypeDetailItem.accountNumber}  #{creditTypeDetailItem.accountSuf}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 0 ? 'New' : 'Change'}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? 'New' : 'Change'}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -288,7 +289,7 @@
                     id="btnAddSubCollateralInfo"
                     value="#{msg.get('app.addButton')}"
                     styleClass="smaller"
-                    process="@this"
+                    process="@form"
                     action="#{creditFacPropose.onAddSubCollateral}"
                     update=":subCollateralDlgForm"
                     oncomplete="subCollateralInfoDlg.show();">
@@ -340,20 +341,20 @@
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
-                               var="String"  varStatus="a">
-                         <h:outputText value="#{String}"/><br/>
+                               var="collateralOwnerUW"  varStatus="a">
+                         <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.mortgageList}"
-                               var="String"  varStatus="b">
-                        <h:outputText value="#{String}"/><br/>
+                               var="mortgage"  varStatus="b">
+                        <h:outputText value="#{mortgage.mortgage}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
-                               var="String"  varStatus="c">
-                        <h:outputText value="#{String}"/><br/>
+                               var="relatedWith"  varStatus="c">
+                        <h:outputText value="#{relatedWith.titleDeed}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
@@ -410,10 +411,11 @@
     <td colspan="4" style="text-align: center">
         <p:commandButton id="btnSaveCollateral"
                          styleClass="small"
+                         binding="#{btnSaveCollateral}"
                          value="#{msg.get('app.button.ok')}"
                          action="#{creditFacPropose.onSaveProposeCollInfo}"
                          process=":collateralDlgForm"
-                         update=":collateralDlgForm,:frmMain"
+                         update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                          oncomplete="handleProposeCollateralDetailRequest(xhr, status, args)"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}"
                          styleClass="small"

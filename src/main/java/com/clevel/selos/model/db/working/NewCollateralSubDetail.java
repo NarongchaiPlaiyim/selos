@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "wrk_new_collateral_sub_detail")
@@ -43,12 +45,6 @@ public class NewCollateralSubDetail implements Serializable {
     @Column(name = "mortgage_value")
     private BigDecimal mortgageValue;
 
-/*    @Column(name = "collateral_name")
-    private String collateralName;
-
-    @Column(name = "related_with")
-    private String relatedWith;*/
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -69,19 +65,20 @@ public class NewCollateralSubDetail implements Serializable {
     @JoinColumn(name = "new_collateral_head_detail_id")
     private NewCollateralHeadDetail newCollateralHeadDetail;
 
-/*
+    @OneToMany
+    @JoinColumn(name = "mortgage_type_id")
+    private List<MortgageType> mortgageList;
+
     @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
-    private List<MortgageType> mortgageTypeList;*/
-/*
+    private List<NewCollateralSubCustomer> newCollateralSubCustomerList;
 
-    public List<MortgageType> getMortgageTypeList() {
-        return mortgageTypeList;
-    }
+    /*@OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubDetail> relatedWithList;
 
-    public void setMortgageTypeList(List<MortgageType> mortgageTypeList) {
-        this.mortgageTypeList = mortgageTypeList;
-    }
-*/
+    @ManyToOne
+    @JoinColumn(name = "new_collateral_sub_detail_id")
+    private NewCollateralSubDetail newCollateralSubDetail;*/
+
 
     public long getId() {
         return id;
@@ -193,6 +190,14 @@ public class NewCollateralSubDetail implements Serializable {
 
     public void setNewCollateralHeadDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
         this.newCollateralHeadDetail = newCollateralHeadDetail;
+    }
+
+    public List<MortgageType> getMortgageList() {
+        return mortgageList;
+    }
+
+    public void setMortgageList(List<MortgageType> mortgageList) {
+        this.mortgageList = mortgageList;
     }
 
     @Override

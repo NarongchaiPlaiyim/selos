@@ -27,8 +27,6 @@ public class BasicInfoControl extends BusinessControl {
     @SELOS
     Logger log;
     @Inject
-    private UserDAO userDAO;
-    @Inject
     BasicInfoDAO basicInfoDAO;
     @Inject
     CustomerDAO customerDAO;

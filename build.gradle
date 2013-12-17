@@ -129,6 +129,7 @@ task buildLibrary(dependsOn: classes, type: Jar) {
     include 'com/clevel/selos/*.properties'
     include 'com/clevel/selos/system/Config.*'
     include 'com/clevel/selos/system/ConfigurationProducer.*'
+    include 'com/clevel/selos/system/CustomNamingStrategy.*'
 
     //************* Security and Encryption ***********************
     include 'com/clevel/selos/security/encryption/**/*'
@@ -213,6 +214,7 @@ war {
     war.rootSpec.exclude 'com/clevel/selos/*.properties'
     war.rootSpec.exclude 'com/clevel/selos/system/Config.*'
     war.rootSpec.exclude 'com/clevel/selos/system/ConfigurationProducer.*'
+    war.rootSpec.exclude 'com/clevel/selos/system/CustomNamingStrategy.*'
 
     //************* Encryption ***********************
     war.rootSpec.exclude 'com/clevel/selos/security/encryption'

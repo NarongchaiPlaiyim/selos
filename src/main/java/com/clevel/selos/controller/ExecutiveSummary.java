@@ -1,9 +1,7 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
-import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
@@ -11,9 +9,8 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.ExSumReasonView;
+import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -25,13 +22,8 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -87,45 +79,18 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     public ExecutiveSummary() {
     }
 
-    public void preRender(){
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("workCaseId", 101);
-//        session.setAttribute("stepId", 1004);
-//
-//        log.info("preRender ::: setSession ");
-//
-//        session = FacesUtil.getSession(true);
-//
-//        user = getCurrentUser();
-//
-//        if(session.getAttribute("workCaseId") != null){
-//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//        }else{
-//            log.info("preRender ::: workCaseId is null.");
-//            try{
-//                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-//            }catch (Exception ex){
-//                log.info("Exception :: {}",ex);
-//            }
-//        }
-    }
-
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        //session.setAttribute("workCaseId", 101);    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-//        user = (User) session.getAttribute("user");
-        //user = getCurrentUser();
 
-        if (session.getAttribute("workCaseId") != null) {
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
@@ -141,8 +106,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
         }
-
-
 
         /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
         ec.reset();

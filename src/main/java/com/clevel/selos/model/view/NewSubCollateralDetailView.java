@@ -20,12 +20,11 @@ public class NewSubCollateralDetailView {
     private String titleDeed;
     private String collateralOwner;
     private String collateralOwnerAAD;
-    private String collateralOwnerUW;
-    private List<String> collateralOwnerUWList;
+    private CustomerInfoView collateralOwnerUW;
+    private List<CustomerInfoView> collateralOwnerUWList;
     private MortgageType mortgageType;
     private List<MortgageType> mortgageList;
-    private String  relatedWith;
-    private List<String> relatedWithList;
+    private List<NewSubCollateralDetailView> relatedWithList;
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
     private Date createDate;
@@ -38,7 +37,6 @@ public class NewSubCollateralDetailView {
     }
 
     public void reset() {
-        this.id = 0;
         this.address    = "";
         this.titleDeed  = "";
         this.landOffice = "";
@@ -47,12 +45,11 @@ public class NewSubCollateralDetailView {
         this.appraisalValue = BigDecimal.ZERO;
         this.mortgageValue  = BigDecimal.ZERO;
         this.subCollateralType    = new SubCollateralType();
-        this.collateralOwnerUW = "";
         this.mortgageType= new MortgageType();
-        this.relatedWith = "";
-        this.collateralOwnerUWList = new ArrayList<String>();
+        this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         this.mortgageList = new ArrayList<MortgageType>();
-        this.relatedWithList = new ArrayList<String>();
+        this.relatedWithList = new ArrayList<NewSubCollateralDetailView>();
+        this.collateralOwnerUW = new CustomerInfoView();
     }
 
     public long getId() {
@@ -119,14 +116,6 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerAAD = collateralOwnerAAD;
     }
 
-    public String getCollateralOwnerUW() {
-        return collateralOwnerUW;
-    }
-
-    public void setCollateralOwnerUW(String collateralOwnerUW) {
-        this.collateralOwnerUW = collateralOwnerUW;
-    }
-
     public MortgageType getMortgageType() {
         return mortgageType;
     }
@@ -135,13 +124,6 @@ public class NewSubCollateralDetailView {
         this.mortgageType = mortgageType;
     }
 
-    public String getRelatedWith() {
-        return relatedWith;
-    }
-
-    public void setRelatedWith(String relatedWith) {
-        this.relatedWith = relatedWith;
-    }
 
     public BigDecimal getMortgageValue() {
         return mortgageValue;
@@ -199,20 +181,28 @@ public class NewSubCollateralDetailView {
         this.mortgageList = mortgageList;
     }
 
-    public List<String> getCollateralOwnerUWList() {
+    public List<CustomerInfoView> getCollateralOwnerUWList() {
         return collateralOwnerUWList;
     }
 
-    public void setCollateralOwnerUWList(List<String> collateralOwnerUWList) {
+    public void setCollateralOwnerUWList(List<CustomerInfoView> collateralOwnerUWList) {
         this.collateralOwnerUWList = collateralOwnerUWList;
     }
 
-    public List<String> getRelatedWithList() {
+    public List<NewSubCollateralDetailView> getRelatedWithList() {
         return relatedWithList;
     }
 
-    public void setRelatedWithList(List<String> relatedWithList) {
+    public void setRelatedWithList(List<NewSubCollateralDetailView> relatedWithList) {
         this.relatedWithList = relatedWithList;
+    }
+
+    public CustomerInfoView getCollateralOwnerUW() {
+        return collateralOwnerUW;
+    }
+
+    public void setCollateralOwnerUW(CustomerInfoView collateralOwnerUW) {
+        this.collateralOwnerUW = collateralOwnerUW;
     }
 
     @Override
@@ -226,11 +216,9 @@ public class NewSubCollateralDetailView {
                 .append("titleDeed", titleDeed)
                 .append("collateralOwner", collateralOwner)
                 .append("collateralOwnerAAD", collateralOwnerAAD)
-                .append("collateralOwnerUW", collateralOwnerUW)
                 .append("collateralOwnerUWList", collateralOwnerUWList)
                 .append("mortgageType", mortgageType)
                 .append("mortgageList", mortgageList)
-                .append("relatedWith", relatedWith)
                 .append("relatedWithList", relatedWithList)
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)

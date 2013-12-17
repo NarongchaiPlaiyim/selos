@@ -8,17 +8,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class  CreditTypeDetailView implements Serializable {
+public class CreditTypeDetailView implements Serializable {
     private long id;
-    private int no;
     private boolean noFlag;
-    private String account;
-    private String Type;
+    private String accountName;
+    private String accountNumber;
+    private String accountSuf;
+    private String type;
     private int requestType;
     private String productProgram;
     private String creditFacility;
-    private BigDecimal  limit;
-    private BigDecimal  guaranteeAmount;
+    private BigDecimal limit;
+    private BigDecimal guaranteeAmount;
     private int useCount;
     private int seq;
     private Date createDate;
@@ -34,9 +35,10 @@ public class  CreditTypeDetailView implements Serializable {
 
     public void reset() {
         this.id = 0;
-        this.no = 0;
-        this.account = "";
-        this.Type  = "";
+        this.accountName = "";
+        this.accountNumber = "";
+        this.accountSuf = "";
+        this.type  = "";
         this.requestType = 0;
         this.productProgram = "";
         this.creditFacility  = "";
@@ -56,32 +58,20 @@ public class  CreditTypeDetailView implements Serializable {
         this.id = id;
     }
 
-    public int getNo() {
-        if(this.noFlag==true){
-            return 1;
-        }else{
-            return 0;
-        }
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setNo(int no) {
-           this.no = no;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getType() {
-        return Type;
+        return type;
     }
 
     public void setType(String type) {
-        Type = type;
+        this.type = type;
     }
 
     public String getProductProgram() {
@@ -189,14 +179,31 @@ public class  CreditTypeDetailView implements Serializable {
         this.purpose = purpose;
     }
 
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("no", no)
                 .append("noFlag", noFlag)
-                .append("account", account)
-                .append("Type", Type)
+                .append("accountName", accountName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
+                .append("type", type)
                 .append("requestType", requestType)
                 .append("productProgram", productProgram)
                 .append("creditFacility", creditFacility)
@@ -208,6 +215,7 @@ public class  CreditTypeDetailView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("purpose", purpose)
                 .toString();
     }
 }

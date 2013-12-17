@@ -3,9 +3,10 @@ package com.clevel.selos.ui.component.calendar;
 import org.primefaces.component.calendar.Calendar;
 
 import javax.faces.component.FacesComponent;
+import java.io.Serializable;
 
 @FacesComponent(BECalendar.COMPONENT_TYPE)
-public class BECalendar extends Calendar {
+public class BECalendar extends Calendar implements Serializable {
     public static final String COMPONENT_FAMILY = "com.clevel.selos.ui";
     public static final String COMPONENT_TYPE = "com.clevel.selos.ui.component.calendar.BECalendar";
 

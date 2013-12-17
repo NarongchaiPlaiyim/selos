@@ -9,10 +9,8 @@
         xmlns:clv="http://clevel.com/ui">
     <h:head>
         <title>Isa Report</title>
-        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer">

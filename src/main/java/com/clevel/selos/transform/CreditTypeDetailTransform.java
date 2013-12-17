@@ -6,6 +6,7 @@ import com.clevel.selos.model.db.working.CreditTypeDetail;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.view.CreditTypeDetailView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -35,10 +36,12 @@ public class CreditTypeDetailTransform extends Transform {
             }
 
             creditTypeDetail.setSeq(creditTypeDetailView.getSeq());
-            creditTypeDetail.setNo(creditTypeDetailView.getNo());
+            creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
-            creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
+            creditTypeDetail.setAccount(creditTypeDetailView.getAccountName());
+            creditTypeDetail.setAccountNumber(creditTypeDetailView.getAccountNumber());
+            creditTypeDetail.setAccountSuf(creditTypeDetailView.getAccountSuf());
             creditTypeDetail.setCreditFacility(creditTypeDetailView.getCreditFacility());
             creditTypeDetail.setGuaranteeAmount(creditTypeDetailView.getGuaranteeAmount());
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
@@ -68,10 +71,12 @@ public class CreditTypeDetailTransform extends Transform {
             }
 
             creditTypeDetail.setSeq(creditTypeDetailView.getSeq());
-            creditTypeDetail.setNo(creditTypeDetailView.getNo());
+            creditTypeDetail.setNo(Util.returnNumForFlag(creditTypeDetailView.isNoFlag()));
             creditTypeDetail.setType(creditTypeDetailView.getType());
             creditTypeDetail.setRequestType(creditTypeDetailView.getRequestType());
-            creditTypeDetail.setAccount(creditTypeDetailView.getAccount());
+            creditTypeDetail.setAccount(creditTypeDetailView.getAccountName());
+            creditTypeDetail.setAccountNumber(creditTypeDetailView.getAccountNumber());
+            creditTypeDetail.setAccountSuf(creditTypeDetailView.getAccountSuf());
             creditTypeDetail.setCreditFacility(creditTypeDetailView.getCreditFacility());
             creditTypeDetail.setGuaranteeAmount(creditTypeDetailView.getGuaranteeAmount());
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
@@ -95,10 +100,12 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetailView.setModifyDate(creditTypeDetail.getModifyDate());
             creditTypeDetailView.setModifyBy(creditTypeDetail.getModifyBy());
             creditTypeDetailView.setSeq(creditTypeDetail.getSeq());
-            creditTypeDetailView.setNo(creditTypeDetail.getNo());
+            creditTypeDetailView.setNoFlag(Util.isTrue(creditTypeDetail.getNo()));
             creditTypeDetailView.setType(creditTypeDetail.getType());
             creditTypeDetailView.setRequestType(creditTypeDetail.getRequestType());
-            creditTypeDetailView.setAccount(creditTypeDetail.getAccount());
+            creditTypeDetailView.setAccountName(creditTypeDetail.getAccount());
+            creditTypeDetailView.setAccountNumber(creditTypeDetail.getAccountNumber());
+            creditTypeDetailView.setAccountSuf(creditTypeDetail.getAccountSuf());
             creditTypeDetailView.setCreditFacility(creditTypeDetail.getCreditFacility());
             creditTypeDetailView.setGuaranteeAmount(creditTypeDetail.getGuaranteeAmount());
             creditTypeDetailView.setLimit(creditTypeDetail.getLimit());

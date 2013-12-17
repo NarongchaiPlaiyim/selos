@@ -38,11 +38,11 @@ public class ProductFormula {
     private int reducePricing;
     @Column(name = "reduce_frontend_fee")
     private int reduceFrontEndFee;
-    @Column(name = "dbrCalculate")
+    @Column(name = "dbr_calculate")
     private int dbrCalculate;
     @Column(name = "dbr_method")
     private int dbrMethod;
-    @Column(name = "dbrSpread", length = 10)
+    @Column(name = "dbr_spread", length = 10)
     private BigDecimal dbrSpread;
     @Column(name = "active")
     private int active;

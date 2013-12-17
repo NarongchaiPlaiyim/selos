@@ -5,11 +5,13 @@ import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class ExistingCreditDetailView implements Serializable {
@@ -18,11 +20,14 @@ public class ExistingCreditDetailView implements Serializable {
     private int no;
     private int seq;
     private boolean noFlag;
+    private int borrowerType;
+    private int existingCreditFrom;
     private String stage;
     private String accountName;
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
+
     private BankAccountStatusView accountStatus;
 
     private AccountStatus existAccountStatus;
@@ -45,8 +50,13 @@ public class ExistingCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private String accountRef;
 
-    private List<NewCreditTierDetailView> newCreditTierDetailViewList;
-    private List<SplitLineDetailView> splitLineDetailViewList;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+
+    private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
+    private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
 
     public long getId() {
         return id;
@@ -78,6 +88,22 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setNoFlag(boolean noFlag) {
         this.noFlag = noFlag;
+    }
+
+    public int getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(int borrowerType) {
+        this.borrowerType = borrowerType;
+    }
+
+    public int getExistingCreditFrom() {
+        return existingCreditFrom;
+    }
+
+    public void setExistingCreditFrom(int existingCreditFrom) {
+        this.existingCreditFrom = existingCreditFrom;
     }
 
     public String getStage() {
@@ -280,20 +306,52 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountRef = accountRef;
     }
 
-    public List<NewCreditTierDetailView> getNewCreditTierDetailViewList() {
-        return newCreditTierDetailViewList;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setNewCreditTierDetailViewList(List<NewCreditTierDetailView> newCreditTierDetailViewList) {
-        this.newCreditTierDetailViewList = newCreditTierDetailViewList;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public List<SplitLineDetailView> getSplitLineDetailViewList() {
-        return splitLineDetailViewList;
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setSplitLineDetailViewList(List<SplitLineDetailView> splitLineDetailViewList) {
-        this.splitLineDetailViewList = splitLineDetailViewList;
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public List<ExistingCreditTierDetailView> getExistingCreditTierDetailViewList() {
+        return existingCreditTierDetailViewList;
+    }
+
+    public void setExistingCreditTierDetailViewList(List<ExistingCreditTierDetailView> existingCreditTierDetailViewList) {
+        this.existingCreditTierDetailViewList = existingCreditTierDetailViewList;
+    }
+
+    public List<ExistingSplitLineDetailView> getExistingSplitLineDetailViewList() {
+        return existingSplitLineDetailViewList;
+    }
+
+    public void setExistingSplitLineDetailViewList(List<ExistingSplitLineDetailView> existingSplitLineDetailViewList) {
+        this.existingSplitLineDetailViewList = existingSplitLineDetailViewList;
     }
 
     @Override
@@ -327,8 +385,8 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("source", source)
                 .append("tenor", tenor)
                 .append("accountRef", accountRef)
-                .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
-                .append("splitLineDetailViewList", splitLineDetailViewList)
+                .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
+                .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
                 .toString();
     }
 }

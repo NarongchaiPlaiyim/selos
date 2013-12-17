@@ -8,6 +8,7 @@ import org.primefaces.util.WidgetBuilder;
 import javax.faces.context.FacesContext;
 import javax.faces.render.FacesRenderer;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 
@@ -15,7 +16,7 @@ import java.util.Locale;
         componentFamily = BECalendar.COMPONENT_FAMILY,
         rendererType = BECalendarRenderer.RENDERER_TYPE
 )
-public class BECalendarRenderer extends CalendarRenderer {
+public class BECalendarRenderer extends CalendarRenderer implements Serializable {
     public static final String RENDERER_TYPE = "com.clevel.selos.ui.component.calendar.BECalendarRenderer";
 
     @Override

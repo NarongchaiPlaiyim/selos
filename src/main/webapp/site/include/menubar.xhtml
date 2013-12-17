@@ -20,53 +20,53 @@
 
     <div id="selosmenu" class="selosmenu">
         <ul>
-            <li id="mnuinbox"><a href="inbox.jsf" title="Inbox">Inbox</a></li>
+            <li id="mnuinbox"><a href="inbox.jsf" title="#{msg.get('app.menu.inbox')}">#{msg.get('app.menu.inbox')}</a></li>
             <h:panelGroup id="pnl_menu_prescreen" rendered="#{baseController.stepId == 1001 || baseController.stepId == 1002 || baseController.stepId == 1003}"
                      styleClass="panel">
             <li id="mnuprescreen">
-                <a href="prescreen.jsf" title="Prescreen">Prescreen</a>
+                <a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a>
                 <ul>
-                    <li id="submnuprescreen"><a href="prescreen.jsf" title="Prescreen">Prescreen</a></li>
+                    <li id="submnuprescreen"><a href="prescreen.jsf" title="#{msg.get('app.menu.prescreen')}">#{msg.get('app.menu.prescreen')}</a></li>
                     <p:panel id="pnl_menu_prescreen_result" rendered="#{baseController.stepId == 1003}"
                              styleClass="panel">
                         <li id="submnuprescreenresult"><a href="prescreenResult.jsf"
-                                                          title="Prescreen Result">Prescreen Result</a></li>
+                                                          title="#{msg.get('app.menu.prescreenResult')}">#{msg.get('app.menu.prescreenResult')}</a></li>
                     </p:panel>
                 </ul>
             </li>
             </h:panelGroup>
-            <h:panelGroup id="pnl_menu_fullapp" rendered="#{baseController.stepId == 1004}"
+            <h:panelGroup id="pnl_menu_fullapp" rendered="#{baseController.stepId == 2001}"
                      styleClass="panel">
-                <li id="mnubasicinfo"><a href="basicInfo.jsf" title="Basic Info.">Basic Info.</a></li>
+                <li id="mnubasicinfo"><a href="basicInfo.jsf" title="#{msg.get('app.menu.basicInfo')}">#{msg.get('app.menu.basicInfo')}</a></li>
                 <li id="mnuborrowerinfo">
-                    <a href="borrowerinfoSummary.jsf" title="Borrower Info.">Borrower Info.</a>
+                    <a href="borrowerinfoSummary.jsf" title="#{msg.get('app.menu.borrowerInfo')}">#{msg.get('app.menu.borrowerInfo')}</a>
                     <ul>
-                        <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="Prescreen">Customer Info.</a></li>
-                        <li id="submnucredithistory"><a href="NCBSummary.jsf" title="Credit History">Credit History</a></li>
+                        <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.customerInfo')}">#{msg.get('app.menu.customerInfo')}</a></li>
+                        <li id="submnucredithistory"><a href="NCBSummary.jsf" title="#{msg.get('app.menu.creditHistory')}">#{msg.get('app.menu.creditHistory')}</a></li>
                         <h:panelGroup id="pnl_mnu_qualitative_a" rendered="#{baseController.qualitativeType == 1}" styleClass="panel">
-                            <li id="submnuqualitativea"><a href="qualitativeA.jsf" title="Qualitative A">Qualitative A</a></li>
+                            <li id="submnuqualitativea"><a href="qualitativeA.jsf" title="#{msg.get('app.menu.qualitativeA')}">#{msg.get('app.menu.qualitativeA')}</a></li>
                         </h:panelGroup>
                         <h:panelGroup id="pnl_mnu_qualitative_b" rendered="#{baseController.qualitativeType == 2}" styleClass="panel">
-                            <li id="submnuqualitativeb"><a href="qualitativeB.jsf" title="Qualitative B">Qualitative B</a></li>
+                            <li id="submnuqualitativeb"><a href="qualitativeB.jsf" title="#{msg.get('app.menu.qualitativeB')}">#{msg.get('app.menu.qualitativeB')}</a></li>
                         </h:panelGroup>
-                        <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="TCG Calculation">TCG Calculation</a></li>
+                        <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="#{msg.get('app.menu.tcgCalculation')}">#{msg.get('app.menu.tcgCalculation')}</a></li>
                     </ul>
                 </li>
-                <li id="mnubusinessinfo"><a href="bizInfoSummary.jsf" title="Business Info.">Business Info.</a></li>
+                <li id="mnubusinessinfo"><a href="bizInfoSummary.jsf" title="#{msg.get('app.menu.businessInfo')}">#{msg.get('app.menu.businessInfo')}</a></li>
                 <li id="mnufinancialinfo">
-                    <a href="bankstatementSummary.jsf" title="Financial Info.">Financial Info.</a>
+                    <a href="bankstatementSummary.jsf" title="#{msg.get('app.menu.financialInfo')}">#{msg.get('app.menu.financialInfo')}</a>
                     <ul>
-                        <li id="submnubankstatement"><a href="bankStatementSummary.jsf" title="Bank Statement">Bank Statement</a></li>
-                        <li id="submnudbr"><a href="dbrInfo.jsf" title="DBR">DBR</a></li>
-                        <li id="submnuexistingline"><a href="creditFacExisting.jsf" title="Existing Line">Existing Line</a></li>
-                        <li id="submnuproposeline"><a href="creditFacPropose.jsf" title="Propose Line">Propose Line</a></li>
+                        <li id="submnubankstatement"><a href="bankStatementSummary.jsf" title="#{msg.get('app.menu.bankStatement')}">#{msg.get('app.menu.bankStatement')}</a></li>
+                        <li id="submnudbr"><a href="dbrInfo.jsf" title="#{msg.get('app.menu.dbr')}">#{msg.get('app.menu.dbr')}</a></li>
+                        <li id="submnuexistingline"><a href="creditFacExisting.jsf" title="#{msg.get('app.menu.existingLine')}">#{msg.get('app.menu.existingLine')}</a></li>
+                        <li id="submnuproposeline"><a href="creditFacPropose.jsf" title="#{msg.get('app.menu.proposeLine')}">#{msg.get('app.menu.proposeLine')}</a></li>
                     </ul>
                 </li>
                 <li id="mnudecision">
-                    <a href="exSummary.jsf" title="Decision">Decision</a>
+                    <a href="exSummary.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a>
                     <ul>
-                        <li id="submnuexsum"><a href="exSummary.jsf" title="Ex Summary">Ex Summary</a></li>
-                        <li id="submnudecision"><a href="decision.jsf" title="Decision">Decision</a></li>
+                        <li id="submnuexsum"><a href="exSummary.jsf" title="#{msg.get('app.menu.exSummary')}">#{msg.get('app.menu.exSummary')}</a></li>
+                        <li id="submnudecision"><a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a></li>
                     </ul>
                 </li>
             </h:panelGroup>

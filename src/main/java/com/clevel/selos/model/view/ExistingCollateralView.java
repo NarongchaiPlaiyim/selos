@@ -11,6 +11,7 @@ public class ExistingCollateralView implements Serializable {
     private BigDecimal totalAppraisalValue;
     private BigDecimal totalMortgageValue;
 
+
     public long getId() {
         return id;
     }

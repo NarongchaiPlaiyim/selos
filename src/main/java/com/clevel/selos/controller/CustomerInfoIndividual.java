@@ -5,10 +5,10 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.*;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -150,9 +148,6 @@ public class CustomerInfoIndividual implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    //private String userId;
-    //private User user;
 
     //
     private int caseBorrowerTypeId;
@@ -216,6 +211,8 @@ public class CustomerInfoIndividual implements Serializable {
     private boolean reqIndMobNo;
     private boolean reqIndKYCLev;
 
+    private boolean reqSpoRelation;
+    private boolean reqSpoReference;
     private boolean reqSpoDocType;
     private boolean reqSpoCitId;
     private boolean reqSpoDOB;
@@ -274,38 +271,21 @@ public class CustomerInfoIndividual implements Serializable {
     public CustomerInfoIndividual(){
     }
 
-    public void preRender(){
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
-
-        log.info("preRender ::: setSession ");
-
+    @PostConstruct
+    public void onCreation() {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            //userId = session.getAttribute("userId").toString();
-            //user = userDAO.findById(userId);
         }else{
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
         }
-    }
-
-    @PostConstruct
-    public void onCreation() {
-
-        preRender();
 
         //default value
         isFromJuristic = false;
@@ -340,7 +320,8 @@ public class CustomerInfoIndividual implements Serializable {
 
         if(isEditFromJuristic){                          // select edit individual from juristic
             if(cusInfoParams != null){
-                customerInfoView = (CustomerInfoView) cusInfoParams.get("individualView");
+                CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
+                customerInfoView = customerInfoControl.getCustomerIndividualById(cusView.getId());
                 onEditIndividual();
             }
         }
@@ -407,6 +388,18 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setCollateralOwner(1);
         customerInfoView.getSpouse().setCollateralOwner(1);
 
+        customerInfoView.getNationality().setId(178);
+        customerInfoView.getCitizenCountry().setId(211);
+        customerInfoView.getCurrentAddress().getCountry().setId(211);
+        customerInfoView.getRegisterAddress().getCountry().setId(211);
+        customerInfoView.getWorkAddress().getCountry().setId(211);
+
+        customerInfoView.getSpouse().getNationality().setId(178);
+        customerInfoView.getSpouse().getCitizenCountry().setId(211);
+        customerInfoView.getSpouse().getCurrentAddress().getCountry().setId(211);
+        customerInfoView.getSpouse().getRegisterAddress().getCountry().setId(211);
+        customerInfoView.getSpouse().getWorkAddress().getCountry().setId(211);
+
         onChangeReference();
         onChangeReferenceSpouse();
     }
@@ -467,17 +460,42 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeRelation(){
-//        referenceIndividualList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
         referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
+//        customerInfoView.setReference(new Reference());
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
         }
+
+//      - การแสดง Relationship ของ Spouse ไม่สามารถเลือกได้สูงกว่า Customer เช่น A = Guarantor, B ไม่สามารถเลือกเป็น Borrower ได้ แต่เลือก Guarantor ได้
+        int relationId = customerInfoView.getRelation().getId();
+        Relation tmp1 = new Relation();
+        Relation tmp2 = new Relation();
+        if(relationId == 3 || relationId == 4) {
+            for(Relation relationSpouse : relationSpouseList){
+                if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
+                    tmp1 = relationSpouse;
+                }
+                if(relationId == 4){ // if main cus = 4 remove 3
+                    if(relationSpouse.getId() == 3){
+                        tmp2 = relationSpouse;
+                    }
+                }
+            }
+            relationSpouseList.remove(tmp1);
+            if(relationId == 4){
+                relationSpouseList.remove(tmp2);
+            }
+        } else {
+            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+        }
     }
 
     public void onChangeRelationSpouse(){
-//        referenceSpouseList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId());
         referenceSpouseList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, customerInfoView.getSpouse().getRelation().getId(),0,1);
+//        if(customerInfoView.getSpouse() != null){
+//            customerInfoView.getSpouse().setReference(new Reference());
+//        }
 
         //this condition for spouse
         Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
@@ -787,6 +805,7 @@ public class CustomerInfoIndividual implements Serializable {
                 CustomerInfoView cusView = new CustomerInfoView();
                 cusView.reset();
                 customerInfoView.setSpouse(cusView);
+                onChangeRelation();
             }
         }
     }
@@ -850,14 +869,17 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeReferenceSpouse(){
-//        reqSpoDocType =
-//        reqSpoCitId =
+        reqSpoRelation = true;
+        reqSpoReference = true;
+        reqSpoDocType = true;
+        reqSpoCitId = true;
+        reqSpoTitTh = true;
+        reqSpoStNameTh = true;
+        reqSpoLastNameTh = true;
+
 //        reqSpoDOB =
 //        reqSpoCOB =
 //        reqSpoDID =
-//        reqSpoTitTh =
-//        reqSpoStNameTh =
-//        reqSpoLastNameTh =
 //        reqSpoTitEn =
 //        reqSpoStNameEn =
 //        reqSpoLastNameEn =
@@ -2352,5 +2374,21 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setFromJuristic(boolean fromJuristic) {
         isFromJuristic = fromJuristic;
+    }
+
+    public boolean isReqSpoReference() {
+        return reqSpoReference;
+    }
+
+    public void setReqSpoReference(boolean reqSpoReference) {
+        this.reqSpoReference = reqSpoReference;
+    }
+
+    public boolean isReqSpoRelation() {
+        return reqSpoRelation;
+    }
+
+    public void setReqSpoRelation(boolean reqSpoRelation) {
+        this.reqSpoRelation = reqSpoRelation;
     }
 }

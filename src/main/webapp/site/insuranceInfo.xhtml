@@ -8,9 +8,9 @@
 
 <h:head>
     <title>SE-LOS : Open Account</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
 </h:head>
 
 <h:body>
@@ -42,16 +42,13 @@
 
                             <tr>
                                 <td class="title" style="width: 150px;">
-
-                                        <p:outputLabel value="#{'ลักษณะการอนุมัติสินเชื่อ'}"/>
+                                    <p:outputLabel value="#{msg.get('app.insurance.approved')}"/>
                                  </td>
                                 <td class="left">
-
-                                        <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
-                                            <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new')}" itemValue="0"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.openAccount.content.radio.new.change')}" itemValue="1"/>
-                                        </h:selectOneRadio>
-
+                                    <p:selectOneRadio value="#{insuranceInfo.approvedType}" layout="grid" columns="2">
+                                        <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new')}"         itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new.change')}" itemValue="1"/>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
 
@@ -61,153 +58,18 @@
                                     <div class="separate"></div>
                                 </td>
                             </tr>
-                            
 
                             <tr>
-                                <td colspan="2">
-                                    <p:dataTable id="resultTableInsuranceDetail"
-                                                 var="insuranceInfoModel"
-                                                 value="#{insuranceInfo.insuranceInfoDetailViewList}"
-                                                 paginator="false"
-                                                 rowKey="#{insuranceInfoModel}"
-                                                 style="width:100%;"
-                                                 rowIndexVar="rowIndex">
 
-                                        <p:column headerText="" styleClass="center" >
+                                <td colspan="2">
+                                    <table border="0">
+                                        <ui:repeat value="#{insuranceInfo.insuranceInfoViewList}" var="insuranceList" varStatus="rowInsuranceIndex">
                                             <tr>
                                                 <td class="title" style="width: 150px; max-width: 150px; min-width: 150px;">
+                                                    <h:outputText value="#{msg.get('app.insurance.job.id')}"/>
                                                 </td>
-
-                                                <td class="title" style="width: 900px; max-width: 900px; min-width: 900px;" >
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                    <p:outputLabel value="#{'JOB ID : '}"/>
-                                                </td>
-                                                <td colspan="3">
-                                                    <p:outputLabel value="#{'#001'}"/>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>
-                                                </td>
-                                                <td class="title" style="width: 850px; max-width: 850px; min-width: 850px;">
-                                                    <p:dataTable id="resultTableInsuranceDetail2"
-                                                                var="insuranceInfoModel2"
-                                                                value="#{insuranceInfo.insuranceInfoDetailViewList}"
-                                                                paginator="false"
-                                                                rowKey="#{insuranceInfoModel}"
-                                                                rowIndexVar="rowIndex2">
-                                                        <tr>
-                                                            <td>
-                                                                <p:column >
-                                                                    <tr>
-                                                                        <td class="title" style="width: 200px; max-width: 200px; min-width: 200px;">
-                                                                        </td>
-
-                                                                        <td class="title" style="width: 400px; max-width: 400px; min-width: 400px;" >
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'Head Coll Title Deed : '}"/>
-                                                                        </td>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'test'}"/>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'Insurance Company : '}"/>
-                                                                        </td>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'test'}"/>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'หลักประกันเดิมมีประกันอยู่แล้วหรือไม่'}"/>
-                                                                        </td>
-                                                                        <td>
-                                                                            <p:outputLabel value="#{'test'}"/>
-                                                                        </td>
-                                                                    </tr>
-
-                                                                </p:column>
-                                                            </td>
-                                                        </tr>
-                                                    </p:dataTable>
-                                                </td>
-                                            </tr>
-
-
-                                            <tr>
-                                                <td>
-                                                <p:outputLabel value="#{'Premium : '}"/>
-                                                </td>
-
-                                                <td colspan="3">
-                                                    <p:inputText value="#{insuranceInfo.insuranceInfoView.insuranceInfoDetailView.premium}" styleClass="right">
-                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
-                                                    </p:inputText>
-                                                </td>
-                                            </tr>
-                                        </p:column>
-                                    </p:dataTable>
-                                </td>
-
-                                <!--<td class="title" style="width: 150px; max-width: 150px; min-width: 150px;">-->
-                                <!--</td>-->
-
-                                <!--<td class="title" style="width: 900px; max-width: 900px; min-width: 900px;" >-->
-                                <!--</td>-->
-                                <!--<td>-->
-                                    <!--<p:outputLabel value="#{'Total Premium : '}"/>-->
-                                <!--</td>-->
-
-                                <!--<td colspan="3">-->
-                                    <!--<p:inputText value="#{insuranceInfo.insuranceInfoView.insuranceInfoDetailView.premium}" styleClass="right">-->
-                                        <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />-->
-                                    <!--</p:inputText>-->
-                                <!--</td>-->
-
-                            </tr>
-
-                            <!--<tr>-->
-                                <!--<td class="title" style="width: 150px; max-width: 150px; min-width: 150px;">-->
-                                <!--</td>-->
-
-                                <!--<td class="title" style="width: 900px; max-width: 900px; min-width: 900px;" >-->
-                                <!--</td>-->
-                            <!--</tr>-->
-
-                            <!--<tr>-->
-                                <!--<td>-->
-                                    <!--<div-->
-                                    <!--<p:outputLabel value="#{'Total Premium : '}"/>-->
-                                <!--</td>-->
-
-                                <!--<td colspan="3">-->
-                                    <!--<p:inputText value="#{insuranceInfo.insuranceInfoView.insuranceInfoDetailView.premium}" styleClass="right">-->
-                                        <!--<f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />-->
-                                    <!--</p:inputText>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-
-
-                            <tr>
-                                <td colspan="2">
-                                    <table border="2">
-                                        <ui:repeat value="#{insuranceInfo.insuranceInfoDetailViewList}" var="insuranceInfo">
-                                            <tr>
-                                                <td class="title">
-                                                    <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
-                                                </td>
-                                                <td class="left">
-                                                    <h:outputText value="#001"/>
+                                                <td class="left" style="width: 900px; max-width: 900px; min-width: 900px;" >
+                                                    <p:outputLabel value="#{insuranceList.jobID}"/>
                                                 </td>
                                             </tr>
 
@@ -215,36 +77,51 @@
                                                 <td class="title"/>
                                                 <td class="left">
 
-                                                    <table border="2">
-                                                        <ui:repeat value="#{insuranceInfo.insuranceInfoDetailViewList}" var="insuranceInfo2" varStatus="j">
+                                                    <table border="0" >
+                                                        <ui:repeat value="#{insuranceList.sectionList}" var="sectionList" varStatus="rowSectionIndex">
                                                             <tr>
-                                                                <td>
-                                                                    <p:outputLabel value="#{'Head Coll Title Deed : '}"/>
+                                                                <td class="title" style="width: 300px; max-width: 300px; min-width: 300px;">
+                                                                </td>
+
+                                                                <td class="left" style="width: 600px; max-width: 600px; min-width: 600px;" >
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td class="title">
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.title')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:outputLabel value="#{'test'}"/>
+                                                                    <p:outputLabel value="#{sectionList.headColl.titleDeed}"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>
-                                                                    <p:outputLabel value="#{'Insurance Company : '}"/>
+                                                                <td class="title">
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.company')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:outputLabel value="#{'test'}"/>
+                                                                    <p:selectOneRadio value="#{sectionList.insurance.company}" layout="grid" columns="2">
+                                                                        <f:selectItem itemLabel="#{msg.get('app.insurance.company.partner')}"     itemValue="1"/>
+                                                                        <f:selectItem itemLabel="#{msg.get('app.insurance.company.non.partner')}" itemValue="2"/>
+                                                                    </p:selectOneRadio>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>
-                                                                    <p:outputLabel value="#{'หลักประกันเดิมมีประกันอยู่แล้วหรือไม่'}"/>
+                                                                <td class="title">
+                                                                    <p:outputLabel value="#{msg.get('app.insurance.head.coll.exiting.credit')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:outputLabel value="#{'test'}"/>
+                                                                    <p:selectOneRadio value="#{sectionList.headColl.exitingCredit}" layout="grid" columns="3" >
+                                                                        <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.yes')}"    itemValue="1"/>
+                                                                        <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.no')}"     itemValue="2"/>
+                                                                        <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.add')}" itemValue="3"/>
+                                                                    </p:selectOneRadio>
                                                                 </td>
                                                             </tr>
 
                                                             <tr>
                                                                 <td colspan="2">
-                                                                    <h:panelGroup rendered="#{!j.last}">
+                                                                    <h:panelGroup rendered="#{!rowSectionIndex.last}">
                                                                         <div class="separate"></div>
                                                                     </h:panelGroup>
                                                                 </td>
@@ -256,17 +133,44 @@
                                             </tr>
 
                                             <tr>
-                                                <td>
-                                                    <p:outputLabel value="#{'Premium : '}"/>
+                                                <td class="title">
+                                                    <p:outputLabel value="#{msg.get('app.insurance.premium')}"/>
                                                 </td>
 
                                                 <td colspan="3">
-                                                    <p:inputText value="#{insuranceInfo.insuranceInfoView.insuranceInfoDetailView.premium}" styleClass="right">
+                                                    <p:inputText value="#{insuranceList.premium}" styleClass="right">
                                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
+                                                        <p:ajax event="change"
+                                                                process="@this"
+                                                                listener="#{insuranceInfo.addition()}"
+                                                                update=":frmMain"/>
                                                     </p:inputText>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="separate"></div>
+                                                </td>
+                                            </tr>
                                         </ui:repeat>
+                                        <tr>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.insurance.total')}"/>
+                                            </td>
+
+                                            <td colspan="3">
+                                                <p:outputLabel value="#{insuranceInfo.total}" styleClass="right" id="total">
+                                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
+                                                </p:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="center" colspan="2" style="margin-top: 20px;">
+                                                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="small" />
+                                                <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
+                                            </td>
+                                        </tr>
+
                                     </table>
                                 </td>
                             </tr>

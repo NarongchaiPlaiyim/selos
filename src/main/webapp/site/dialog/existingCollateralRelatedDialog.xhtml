@@ -5,7 +5,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <p:panel id="existingCollateraRelatedlDlgPanel" styleClass="panel-dialog">
+    <p:panel id="existingCollateralRelatedDlgPanel" styleClass="panel-dialog">
         <h:form id="existingCollateralRelatedDlgForm">
             <table class="content_form">
                 <tr>
@@ -82,7 +82,7 @@
                     <td class="title" style="width:145px;">Credit Type :</td>
                     <td>
                         <p:dataTable id="resultCreditCollateralRelated" var="creditTypeRelated"
-                                     value="#{creditFacExisting.relatedExistingCreditDetailViewList}"
+                                     value="#{creditFacExisting.existingCollateralDetailView.existingCreditTypeDetailViewList}"
                                      rowKey="#{creditTypeRelated.no}" rowIndexVar="rowIndex" style="width: 100%">
                             <p:columnGroup type="header">
                                 <p:row>
@@ -107,11 +107,11 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeRelated.existProductProgram.name}" />
+                                <p:outputLabel  value="#{creditTypeRelated.productProgram}" />
                             </p:column>
 
                             <p:column styleClass="center">
-                                <p:outputLabel  value="#{creditTypeRelated.existCreditType.name}" />
+                                <p:outputLabel  value="#{creditTypeRelated.creditFacility}" />
                             </p:column>
                             <p:column styleClass="center">
                                 <p:outputLabel  value="#{creditTypeRelated.limit}" />
@@ -122,7 +122,14 @@
                 <tr>
                     <td class="title" style="width:145px;">ประเภท :</td>
                     <td>
-                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.mortgageType}" />
+                        <p:selectOneMenu id="mortgageType" value="#{creditFacExisting.existingCollateralDetailView.mortgageType.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{creditFacExisting.mortgageTypeList}"
+                                           var="mortgage"
+                                           itemLabel="#{mortgage.mortgage}"
+                                           itemValue="#{mortgage.id}"/>
+                        </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
@@ -140,14 +147,13 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
-                                id="save"
+                                id="saveRelatedCollateral"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
                                 binding="#{saveRelatedCollateral}"
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"
                                 process="@form"
                                 update=":existingCollateralRelatedDlgForm,:frmMain"
                                 oncomplete="handleExistingCollateralRelatedRequest(xhr, status, args)" />
-                                />
 
                         <p:commandButton
                                 value="#{msg.get('app.tcg.dlg.button.cancel')}"
@@ -159,10 +165,9 @@
             </table>
         </h:form>
     </p:panel>
-
-    <!--<p:blockUI widgetVar="blockExistingSplitLineDlgForm" block="existingCollateralDlgPanel" trigger="existingCollateralDlgForm:save">
+    <p:blockUI widgetVar="blockExistingCollateralRelatedDlgFrom" block="existingCollateralRelatedDlgPanel" trigger="existingCollateralRelatedDlgForm:saveRelatedCollateral">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>  -->
+    </p:blockUI>
 
 </ui:composition>

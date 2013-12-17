@@ -20,10 +20,11 @@ import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import java.io.Serializable;
 import java.util.Date;
 
 @WebService
-public class CaseCreation implements WSCaseCreation {
+public class CaseCreation implements WSCaseCreation, Serializable {
     @Inject
     @WS
     Logger log;

@@ -14,8 +14,8 @@
     </td>
     <td colspan="3">
         <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}">
-            <f:selectItem itemLabel="New" itemValue="1"/>
-            <f:selectItem itemLabel="Change" itemValue="2"/>
+            <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="1"/>
+            <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="2"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeRequestType()}"
                     process="@this"
@@ -29,8 +29,8 @@
     </td>
     <td colspan="3">
         <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.refinance}">
-            <f:selectItem itemLabel="Yes" itemValue="2"/>
-            <f:selectItem itemLabel="No" itemValue="1"/>
+            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -332,6 +332,7 @@
         <p:selectOneMenu id="dlgLoanPurpose"
                          value="#{creditFacPropose.newCreditDetailView.loanPurpose.id}"
                          size="1"
+                         required="true"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -378,8 +379,9 @@
         <p:inputText value="#{creditFacPropose.newCreditDetailView.holdLimitAmount}"
                      style="text-align:right"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
                              integerOnly="true" maxIntegerDigits="14"/>
+            <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
 </tr>

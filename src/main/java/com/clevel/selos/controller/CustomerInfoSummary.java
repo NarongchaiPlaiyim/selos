@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +60,6 @@ public class CustomerInfoSummary implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    private String userId;
 
     private CustomerInfoView selectedItemCustomerBorrower;
     private CustomerInfoView selectedItemCustomerGuarantor;
@@ -76,37 +71,22 @@ public class CustomerInfoSummary implements Serializable {
     public CustomerInfoSummary(){
     }
 
-    public void preRender(){
-        /*HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);*/
-
-        log.info("preRender ::: setSession ");
-
+    @PostConstruct
+    public void onCreation() {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            //userId = session.getAttribute("userId").toString();
         }else{
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
             try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
         }
-    }
 
-
-    @PostConstruct
-    public void onCreation() {
-        preRender();
         customerEntityList = customerEntityDAO.findAll();
         customerInfoSummaryView = new CustomerInfoSummaryView();
 
@@ -116,7 +96,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditBorrower() {
         long customerId;
         if(selectedItemCustomerBorrower.getSpouse() != null && selectedItemCustomerBorrower.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerBorrower.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerBorrower.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerBorrower.getId();
@@ -134,7 +114,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditGuarantor() {
         long customerId;
         if(selectedItemCustomerGuarantor.getSpouse() != null && selectedItemCustomerGuarantor.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerGuarantor.getId();
@@ -152,7 +132,7 @@ public class CustomerInfoSummary implements Serializable {
     public String onLinkToEditRelated() {
         long customerId;
         if(selectedItemCustomerRelated.getSpouse() != null && selectedItemCustomerRelated.getIsSpouse() == 1){
-            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerRelated.getId());
+            Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerRelated.getId());
             customerId = customer.getId();
         }else{
             customerId = selectedItemCustomerRelated.getId();

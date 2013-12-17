@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Mortgage Information Detail</title>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml"/>
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name">#{msg.get('app.mortgageDetail.header')}</div>
+                    <div id="content">
+                        <div id="content_info">
+                            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                            </div>
+                        </div>
+                        <div id="content_form">
+                            <!-- start content -->
+                            <table class="content_table_form">
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.approvedType')}" for="approveTypeRadio"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneRadio id="approveTypeRadio" value="#{mortDetail.mortgageDetailView.approvedType}">
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.content.radio.new')}" itemValue="1"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.content.radio.newChange')}" itemValue="2"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" colspan="2">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.header')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.mortSignDate')}" for="mortSignDateInput"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="mortSignDateInput" value="#{mortDetail.mortgageDetailView.loanDate}"
+                                                    pattern="dd/MM/yyyy" showOn="button"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.outsourceCompany')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="outsource"
+                                                           itemLabel="#{outsource}"
+                                                           itemValue="#{outsource}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+
+                                    <td class="title" style="width: 120px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.landOffice')}"/>
+                                    </td>
+                                    <td>
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="land"
+                                                           itemLabel="#{land}"
+                                                           itemValue="#{land}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.mortgageType')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <h:outputText />
+                                    </td>
+
+                                    <td class="title" style="width: 120px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.mortgageOrder')}"/>
+                                    </td>
+                                    <td>
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="order"
+                                                           itemLabel="#{order}"
+                                                           itemValue="#{order}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.totalMortgageValue')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <h:outputText />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.creditType')}"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <p:dataTable id="creditTypeTable" var="creditTypeTable" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.creditType.account')}" style="width: 400px;">
+                                                <h:outputText value="#{creditTypeTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.creditType.type')}" style="width: 100px;">
+                                                <h:outputText value="#{creditTypeTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.creditType.productProgram')}" style="width: 250px;">
+                                                <h:outputText value="#{creditTypeTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.creditType.creditFacility')}" style="width: 250px;">
+                                                <h:outputText value="#{creditTypeTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.creditType.limit')}" style="width: 250px;">
+                                                <h:outputText value="#{creditTypeTable}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;" colspan="4">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.collateralDetail')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="4">
+                                        <p:dataTable id="collateralDetailTable" var="collateralDetailTable" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.JB')}" style="width: 80px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.HC')}" style="width: 80px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.sub')}" style="width: 150px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.UW')}" style="width: 150px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.type')}" style="width: 150px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.ID')}" style="width: 100px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.details')}" style="width: 250px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.related')}" style="width: 150px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralDetail.appraisalValue')}" style="width: 100px;">
+                                                <h:outputText value="#{collateralDetailTable}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 25px;"/>
+
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 15px;"/>
+
+                                <tr>
+                                    <td class="title" colspan="4">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.descriptionAppointee')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.poa')}" for="poaRadio"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneRadio id="poaRadio" value="">
+                                            <f:selectItem itemLabel="#{msg.get('app.label.yes')}" itemValue="2"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.label.no')}" itemValue="1"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.collateralOwner')}"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <p:dataTable id="collateralOwnerTable" var="collateralOwnerTable" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralOwner.cusName')}" style="width: 200px;">
+                                                <h:outputText value="#{collateralOwnerTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralOwner.personalID')}" style="width: 200px;">
+                                                <h:outputText value="#{collateralOwnerTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralOwner.tmbCusID')}" style="width: 150px;">
+                                                <h:outputText value="#{collateralOwnerTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralOwner.relationshipType')}" style="width: 200px;">
+                                                <h:outputText value="#{collateralOwnerTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.collateralOwner.poa')}" style="width: 100px;">
+                                                <h:outputText value="#{collateralOwnerTable}"/>
+                                            </p:column>
+
+                                            <p:column>
+                                                <!-- edit -->
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.relationshipDepositary')}" for="relationRadio"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneRadio id="relationRadio" value="">
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.radio.relationshipDepositary.borrower')}" itemValue="1"/>
+                                            <f:selectItem itemLabel="#{msg.get('app.mortgageDetail.radio.relationshipDepositary.other')}" itemValue="2"/>
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="3">
+                                        <p:dataTable id="relationshipDepositaryTable" var="relationshipDepositaryTable" value=""
+                                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.relationshipDepositary.cusName')}" style="width: 200px;">
+                                                <h:outputText value="#{relationshipDepositaryTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.relationshipDepositary.personalID')}" style="width: 200px;">
+                                                <h:outputText value="#{relationshipDepositaryTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.relationshipDepositary.tmbCusID')}" style="width: 150px;">
+                                                <h:outputText value="#{relationshipDepositaryTable}"/>
+                                            </p:column>
+
+                                            <p:column headerText="#{msg.get('app.mortgageDetail.table.relationshipDepositary.relationshipType')}" style="width: 200px;">
+                                                <h:outputText value="#{relationshipDepositaryTable}"/>
+                                            </p:column>
+
+                                            <p:column>
+                                                <!-- edit -->
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.powerAttorney')}"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.documentType')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="docType"
+                                                           itemLabel="#{docType}"
+                                                           itemValue="#{docType}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.personalID')}" for="personalIDInput"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:inputText value="" id="personalIDInput"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.cusNameTH')}"/>
+                                    </td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -3px;">
+                                            <tr>
+                                                <td>
+                                                    <p:selectOneMenu size="1" style="width: 200px;" value="">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <!--<f:selectItems value="#{mortDetail.titleList}"
+                                                                       var="titleTh"
+                                                                       itemLabel="#{titleList.titleTh}"
+                                                                       itemValue="#{titleList.id}"/>-->
+                                                    </p:selectOneMenu>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.dateOfBirth')}" for="dateOfBirthInput"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:calendar id="dateOfBirthInput"
+                                                    pattern="dd/MM/yyyy" showOn="button"/>
+                                    </td>
+                                    <td class="title">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.age')}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value=""/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.gender')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                            <f:selectItem itemLabel="Male" itemValue="1"/>
+                                            <f:selectItem itemLabel="Female" itemValue="2"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.race')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="race"
+                                                           itemLabel="#{race}"
+                                                           itemValue="#{race}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.nation')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="nation"
+                                                           itemLabel="#{nation}"
+                                                           itemValue="#{nation}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title top">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.registrationAddress')}"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <table style="margin-left: -6px;">
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.addressNo')}"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value=""/>
+                                                </td>
+                                                <td class="title right">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.addressMoo')}"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value=""/>
+                                                </td>
+                                                <td class="small title right">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.addressBuilding')}"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:inputText styleClass="large" value=""/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.addressStreet')}"/>
+                                                </td>
+                                                <td class="left" colspan="5">
+                                                    <p:inputText style="width:400px;" value=""/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="5">
+                                                    <table style="margin-left: -3px;">
+                                                        <tr>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.currentAddress.province.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.provinceForm1List}"
+                                                                                   var="province"
+                                                                                   itemLabel="#{province.name}"
+                                                                                   itemValue="#{province.code}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm1()}"
+                                                                            update=":frmMain:districtForm1,:frmMain:subDistrictForm1"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm1"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.currentAddress.district.id}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.districtForm1List}"
+                                                                                   var="district"
+                                                                                   itemLabel="#{district.name}"
+                                                                                   itemValue="#{district.id}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm1()}"
+                                                                            update=":frmMain:subDistrictForm1"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm1"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.currentAddress.subDistrict.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.subDistrictForm1List}"
+                                                                                   var="subDistrict"
+                                                                                   itemLabel="#{subDistrict.name}"
+                                                                                   itemValue="#{subDistrict.code}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.postcode')}"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputMask mask="99999" styleClass="smaller" maxlength="5" value=""/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.country')}"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:selectOneMenu size="1" style="width: 200px;" value="">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value=""
+                                                                       var="country"
+                                                                       itemLabel="#{country.name}"
+                                                                       itemValue="#{country.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.registration.phoneNo')}"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputText styleClass="large" value=""/>
+                                                    <h:outputText value=" #{msg.get('app.mortgageDetail.content.registration.extension')} " styleClass="title"/>
+                                                    <p:inputText styleClass="smaller" value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <p:outputLabel value="#{msg.get('app.mortgageDetail.content.marriageStatus')}"/>
+                                    </td>
+                                    <td style="width: 200px;">
+                                        <p:selectOneMenu styleClass="largest" size="1"
+                                                         value="#{mortDetail.mortgageDetailView}">
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                            <f:selectItems value=""
+                                                           var="marriageStatus"
+                                                           itemLabel="#{marriageStatus}"
+                                                           itemValue="#{marriageStatus}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.marriageNameTH')}"/>
+                                    </td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -3px;">
+                                            <tr>
+                                                <td>
+                                                    <p:selectOneMenu size="1" style="width: 200px;" value="">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value=""
+                                                                       var="titleTh"
+                                                                       itemLabel="#{titleTh}"
+                                                                       itemValue="#{titleTh}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.fatherNameTH')}"/>
+                                    </td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -3px;">
+                                            <tr>
+                                                <td>
+                                                    <p:selectOneMenu size="1" style="width: 200px;" value="">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value=""
+                                                                       var="titleTh"
+                                                                       itemLabel="#{titleTh}"
+                                                                       itemValue="#{titleTh}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.motherNameTH')}"/>
+                                    </td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -3px;">
+                                            <tr>
+                                                <td>
+                                                    <p:selectOneMenu size="1" style="width: 200px;" value="">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value=""
+                                                                       var="titleTh"
+                                                                       itemLabel="#{titleTh}"
+                                                                       itemValue="#{titleTh}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title" style="width: 100px;">
+                                        <h:outputText value="#{msg.get('app.mortgageDetail.content.contactNumber')}"/>
+                                    </td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -6px;">
+                                            <tr>
+                                                <td class="title left" style="width: 130px;">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.homeNumber')}"/>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td class="title left" style="width: 130px;">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.extNumber')}"/>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="5">
+                                        <table style="margin-left: -6px;">
+                                            <tr>
+                                                <td class="title left" style="width: 130px;">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.mobile1Number')}"/>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <p:inputText value=""/>
+                                                </td>
+                                                <td class="title left" style="width: 130px;">
+                                                    <h:outputText value="#{msg.get('app.mortgageDetail.content.mobile2Number')}"/>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <p:inputText value=""/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 25px;"/>
+
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+
+                                <tr style="height: 15px;"/>
+
+                                <tr>
+                                    <td colspan="8" class="center">
+                                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
+                                                         process="@form" update=":frmMain"
+                                                         actionListener="#{mortDetail.onSave()}"  binding="#{saveBtn}"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                                         actionListener="#{mortDetail.onCreation()}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- end content -->
+                        </div>
+                    </div>
+                    <div id="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="include/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
+        </h:form>
+
+        <!--<p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>-->
+
+    </p:panel>
+</h:body>
+</f:view>
+</html>

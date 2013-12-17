@@ -36,4 +36,10 @@ public class PrescreenDAO extends GenericDAO<Prescreen, Long> {
 
         return prescreen;
     }
+
+    public void duplicatePreScreenData(long workCasePreScreenId) throws Exception{
+        log.debug("duplicatePreScreenData ::: workCasePreScreenId : {}", workCasePreScreenId);
+        String query = "CALL SLOS.SP_CREATE_WORKCASE(" + workCasePreScreenId + ")";
+        getSession().createQuery(query).executeUpdate();
+    }
 }

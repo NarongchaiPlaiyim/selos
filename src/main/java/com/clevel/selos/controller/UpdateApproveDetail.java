@@ -1,11 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.model.view.OpenAccountPurposeView;
-import com.clevel.selos.model.view.OpenAccountView;
-import com.clevel.selos.model.view.openaccount.AccountNameView;
-//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -21,13 +17,16 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.parser.AttributeList;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "updateApproveDetail")
-public class UpdateApproveDetail {
+public class UpdateApproveDetail implements Serializable {
 
     @Inject
     @SELOS
@@ -55,19 +54,16 @@ public class UpdateApproveDetail {
 
     // content //
     private List<NewCreditDetailView> approveCreditDetailViews;
-    private List<OpenAccountView> openAccountViews;
+    private List<AccountInfoDetailView> accountInfoDetailViews;
+    private List<FollowUpConditionView>  followUpConditionViews;
+    private LoanPaymentDetailView loanPaymentDetailView;
 
     public void preRender() {
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 2001);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+
         log.info("preRender ::: setSession ");
-        session = FacesUtil.getSession(true);
+        HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-//            userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -83,44 +79,41 @@ public class UpdateApproveDetail {
 
     @PostConstruct
     public void onCreation(){
+        followUpConditionViews = new ArrayList<FollowUpConditionView>();
         approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
-        openAccountViews = new ArrayList<OpenAccountView>();
-
+        accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
+        loanPaymentDetailView = new LoanPaymentDetailView();
         try{
-        List<OpenAccountView> openAccountViewList = new ArrayList<OpenAccountView>();
+            loanPaymentDetailView.setPayDate(3);
+            loanPaymentDetailView.setFirstPayDate(null);
+            loanPaymentDetailView.setSignDate(new Date());
+            FollowUpConditionView followUpConditionView = new FollowUpConditionView();
+            followUpConditionView.setCondition("ให้ Operation");
+            followUpConditionView.setDetailOfFollowUp("dfdfdfdfdf");
+            followUpConditionView.setDateOfFollowUp(new Date());
+            followUpConditionViews.add(followUpConditionView);
 
-        OpenAccountView openAccountView = new OpenAccountView();
+            AccountInfoDetailView accountInfoDetailView = new AccountInfoDetailView();
+            AccountInfoCreditTypeView accountInfoCreditTypeView = new AccountInfoCreditTypeView();
+            accountInfoCreditTypeView.setLimit(BigDecimal.TEN);
+
+            accountInfoCreditTypeView.setCreditFacility("Facility");
+            accountInfoCreditTypeView.setProductProgram("product");
+            List<AccountInfoCreditTypeView> accountInfoCreditTypeViews = new ArrayList<AccountInfoCreditTypeView>();
+            accountInfoCreditTypeViews.add(accountInfoCreditTypeView);
+            accountInfoDetailView.setAccountInfoCreditTypeViewList(accountInfoCreditTypeViews);
+
+            AccountNameView accountNameView = new AccountNameView();
+            accountNameView.setName("sdsd");
             List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
-            for(int i =0; i<10; i++){
-                AccountNameView accountNameView = new AccountNameView();
-                accountNameView.setName(String.valueOf(i));
-                accountNameViews.add(accountNameView);
-            }
+            accountNameViews.add(accountNameView);
+            accountInfoDetailView.setAccountNameViewList(accountNameViews);
+            accountInfoDetailView.setAccountNumber("1212121212");
 
-            openAccountView.setAccountNameViewList(accountNameViews);
-            openAccountView.setAccountNumber("1234567890");
+            accountInfoDetailViews.add(accountInfoDetailView);
 
 
-//            List<OpenAccountCreditTypeView> openAccountCreditTypeViews = new ArrayList<OpenAccountCreditTypeView>();
-//
-//            for(int i=0;i<5;i++){
-//                OpenAccountCreditTypeView openAccountCreditTypeView =new OpenAccountCreditTypeView();
-//                openAccountCreditTypeView.setLimit(BigDecimal.valueOf(i));
-//                openAccountCreditTypeView.setCreditFacility("Credit");
-//                openAccountCreditTypeView.setProductProgram("Product");
-//                openAccountCreditTypeViews.add(openAccountCreditTypeView);
-//            }
-//            List<OpenAccountPurposeView> openAccountPurposeViews = new ArrayList<OpenAccountPurposeView>();
-//            for(int i=0;i<5;i++){
-//                OpenAccountPurposeView openAccountPurposeView = new OpenAccountPurposeView();
-//                openAccountPurposeView.setName("AAA");
-//                openAccountPurposeViews.add(openAccountPurposeView);
-//            }
-//            openAccountView.setOpenAccountPurposeViewList(openAccountPurposeViews);
-//            openAccountView.setOpenAccountCreditTypeViewList(openAccountCreditTypeViews);
-//            openAccountViewList.add(openAccountView);
-//            openAccountViews = openAccountViewList;
-//            openAccountCreditTypeViews = openAccountCreditTypeViews;
+
         }catch (Exception e){
 
         }
@@ -174,11 +167,27 @@ public class UpdateApproveDetail {
         this.approveCreditDetailViews = approveCreditDetailViews;
     }
 
-    public List<OpenAccountView> getOpenAccountViews() {
-        return openAccountViews;
+    public List<AccountInfoDetailView> getAccountInfoDetailViews() {
+        return accountInfoDetailViews;
     }
 
-    public void setOpenAccountViews(List<OpenAccountView> openAccountViews) {
-        this.openAccountViews = openAccountViews;
+    public void setAccountInfoDetailViews(List<AccountInfoDetailView> accountInfoDetailViews) {
+        this.accountInfoDetailViews = accountInfoDetailViews;
+    }
+
+    public List<FollowUpConditionView> getFollowUpConditionViews() {
+        return followUpConditionViews;
+    }
+
+    public void setFollowUpConditionViews(List<FollowUpConditionView> followUpConditionViews) {
+        this.followUpConditionViews = followUpConditionViews;
+    }
+
+    public LoanPaymentDetailView getLoanPaymentDetailView() {
+        return loanPaymentDetailView;
+    }
+
+    public void setLoanPaymentDetailView(LoanPaymentDetailView loanPaymentDetailView) {
+        this.loanPaymentDetailView = loanPaymentDetailView;
     }
 }

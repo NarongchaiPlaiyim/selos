@@ -8,9 +8,9 @@
 
 <h:head>
     <title>SE-LOS : Customer Info. Summary</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
     <style>
         .ui-datatable td,.ui-datatable th,.ui-datatable span {
             white-space: normal!important;
@@ -19,7 +19,7 @@
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{custInfoSummary.preRender()}" />
+    <!--<f:event type="preRenderView" listener="#{custInfoSummary.preRender()}" />-->
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -161,12 +161,12 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"
+                                                <h:outputText value="#{item.indLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"
+                                                <h:outputText value="#{item.jurLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
@@ -310,12 +310,12 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.reference.description}"
+                                                <h:outputText value="#{item2.indLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.reference.description}"
+                                                <h:outputText value="#{item2.jurLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
@@ -465,12 +465,12 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.reference.description}"
+                                                <h:outputText value="#{item3.indLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.reference.description}"
+                                                <h:outputText value="#{item3.jurLv}"
                                                               style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 

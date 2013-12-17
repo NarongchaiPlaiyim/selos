@@ -8,13 +8,13 @@
 
 <h:head>
     <title>SE-LOS : Basic Info</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{basicInfo.preRender()}" />
+    <!--<f:event type="preRenderView" listener="#{basicInfo.preRender()}" />-->
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -40,18 +40,18 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td style="padding-left: 50px;">
+                                    <td style="padding-left: 10px;">
                                         <table>
                                             <tr>
                                                 <td style="padding-bottom: 20px;" colspan="4">
                                                     <p:commandButton value="#{msg.get('app.basicInfo.content.button.refresh')}"
                                                                      process="@form" styleClass="largest" id="refBtn"
                                                                      actionListener="#{basicInfo.onRefreshInterfaceInfo()}"
-                                                                     update=":msgBoxSystemMessagePanel,:frmMain" />
+                                                                     update=":msgBoxSystemMessagePanel,:frmMain"/>
                                                     <p:commandButton value="#{msg.get('app.basicInfo.content.button.duplicate')}"
                                                                      process="@form" styleClass="largest" id="dupBtn"
                                                                      actionListener="#{basicInfo.onDuplicateApplication()}"
-                                                                     update=":msgBoxSystemMessagePanel,:frmMain" />
+                                                                     update=":msgBoxSystemMessagePanel,:frmMain"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -488,7 +488,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td style="padding-left: 50px;">
+                                    <td style="padding-left: 10px;">
                                         <table>
 
                                             <tr>
@@ -556,8 +556,6 @@
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
-
-
                                                         </p:column>
                                                     </p:dataTable>
                                                 </td>
@@ -573,7 +571,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td style="padding-left: 50px;">
+                                    <td style="padding-left: 10px;">
                                         <table>
                                             <tr>
                                                 <td class="title">
@@ -619,7 +617,7 @@
 
                                 <tr>
                                     <td colspan="4" class="center">
-                                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
                                                          actionListener="#{basicInfo.onSave}"  binding="#{saveBtn}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"

@@ -91,8 +91,8 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         return customerList;
     }
 
-    public Customer findCustomerBySpouseId(long spouseId) {
-        log.debug("findSpouseById ::: spouseId : {}", spouseId);
+    public Customer findMainCustomerBySpouseId(long spouseId) {
+        log.debug("findMainCustomerBySpouseId ::: spouseId : {}", spouseId);
         Customer customer = new Customer();
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("spouseId", spouseId));
@@ -102,7 +102,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
     }
 
     public List<Customer> findCustomerByCommitteeId(long committeeId) {
-        log.debug("findSpouseById ::: committeeId : {}", committeeId);
+        log.debug("findCustomerByCommitteeId ::: committeeId : {}", committeeId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("juristicId", committeeId));
         criteria.addOrder(Order.asc("id"));
@@ -116,7 +116,18 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("relation.id", 2));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("criteria.list() :: {}",criteria.list());
+        return customerList;
+    }
 
+    public List<Customer>  findCollateralOwnerUWByWorkCaseId(long workCaseId) {
+        log.info("findByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.or(Restrictions.eq("relation.id", 1),Restrictions.eq("relation.id", 2)));
+        criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
         log.info("criteria.list() :: {}",criteria.list());
         return customerList;

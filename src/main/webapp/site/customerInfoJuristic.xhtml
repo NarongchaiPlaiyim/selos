@@ -8,13 +8,13 @@
 
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{custInfoSumJuris.preRender()}" />
+    <!--<f:event type="preRenderView" listener="#{custInfoSumJuris.preRender()}" />-->
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -68,7 +68,8 @@
                                 </td>
                                 <td style="width: 150px;">
                                     <p:inputText value="#{custInfoSumJuris.customerInfoSearch.searchId}" maxlength="15"
-                                                 onkeydown="return numberOnly(event);"
+                                                 onkeydown="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyDownNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
                                                  disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
                                 </td>
@@ -485,12 +486,12 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.reference.description}"
+                                            <h:outputText value="#{item.indLv}"
                                                           style="min-width: 140px; max-width: 140px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.reference.description}"
+                                            <h:outputText value="#{item.jurLv}"
                                                           style="min-width: 140px; max-width: 140px;"/>
                                         </p:column>
 
@@ -1027,7 +1028,7 @@
 
                             <tr>
                                 <td colspan="6" class="center">
-                                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="small"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"

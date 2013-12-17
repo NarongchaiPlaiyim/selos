@@ -634,9 +634,9 @@ function handleBasicInfoAccountRequest(xhr, status, args) {
     }
 }
 
-function handleOpenAccountRequest(xhr, status, args) {
+function handleAccountInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
-        openAccountDlg.hide();
+        accountInfoDlg.hide();
     }
 }
 

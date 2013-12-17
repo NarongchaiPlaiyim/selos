@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <title>#{msg.get('app.dbr.title')}</title>
+
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+                    <!-- End Header Logo -->
+                    <!-- Start Header Detail -->
+                    <ui:include src="include/header_detail.xhtml"/>
+                    <!-- End Header Detail -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar.xhtml"/>
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{msg.get('app.guarantorDetail.head')}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_trackchange">[ View Track Change ]</div>
+                                <div id="content_lastupdate">Last update by
+                                    <p:outputLabel value=""/>,
+                                    <p:outputLabel value="">
+                                        <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
+                                    </p:outputLabel></div>
+                            </div>
+                            <div id="content_form">
+                                <table class="content_table_form">
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.label.approvedType')}" />
+                                        </td>
+                                        <td>
+                                            <p:selectOneRadio id="kindApproval" >
+                                                <f:selectItem itemLabel="#{msg.get('app.guarantorDetail.content.radio.new')}" itemValue=""/>
+
+                                                <f:selectItem itemLabel="#{msg.get('app.guarantorDetail.content.radio.newChange')}" itemValue=""/>
+                                            </p:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.head.guarantorInfoDetail')}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.label.guarantorSigningDate')}"/>
+                                        </td>
+                                        <td>
+                                            <clv:BECalendar  showOn="button" showButtonPanel="true" navigator="true"
+                                                             yearRange="1950:2100" pattern="dd/MM/yyyy" locale="th_TH">
+                                            </clv:BECalendar>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.label.guarantorType')}" />
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.label.guarantorAmount')}"/>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="" >
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            </p:outputLabel>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.label.creditType')}"/>
+                                        </td>
+                                        <td>
+                                            <p:dataTable value=""  var="itemCT" rowIndexVar="rowIndex">
+                                                <p:column >
+                                                    <p:outputLabel value="#{rowIndex+1}" styleClass="center"  style="min-width: 30px; width: 30px; max-width: 30px;"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.account')}" style="max-width: 300px; width: 300px; max-width: 300px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.type')}" style="max-width: 100px; width: 100px; max-width: 100px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.productProgram')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.creditFacility')}" style="max-width: 2000px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.limit')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="title">
+                                            <p:outputLabel value="#{msg.get('app.guarantorDetail.content.head.guarantorDetail')}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <p:dataTable value=""  var="itemGD" rowIndexVar="rowIndex">
+                                                <p:column >
+                                                    <p:outputLabel value="#{rowIndex+1}" style="max-width: 30px; width: 30px; max-width: 30px;"/>
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.customerName')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.citizen')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.customerId')}" style="max-width: 150px; width: 150px; max-width: 150px;">
+
+                                                </p:column>
+                                                <p:column headerText="#{msg.get('app.guarantorDetail.content.table.th.relationship')}" style="max-width: 200px; width: 200px; max-width: 200px;">
+
+                                                </p:column>
+                                                <p:column styleClass="center">
+                                                    <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                     icon="ui-icon-pencil">
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="center">
+                                                <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                                 styleClass="medium"
+
+                                                                 onclick="onOneClick('frmMain:btnSave', true);"
+                                                                 oncomplete="onOneClick('frmMain:btnSave', false);"
+                                                                 update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                                </p:commandButton>
+                                                <p:spacer  width="10"/>
+                                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                                                                 styleClass="medium"
+
+                                                                 update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                                </p:commandButton>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div id="bottom_line"/>
+                    </div>
+                    <div class="clear"/>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                </div>
+                <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+                    LOADING<br/>
+                    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                </p:blockUI>
+            </h:form>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}">
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>
