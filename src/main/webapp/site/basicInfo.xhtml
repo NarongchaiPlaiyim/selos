@@ -628,7 +628,8 @@
                                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
                                                          actionListener="#{basicInfo.onSave}"  binding="#{saveBtn}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" id="cancelBtn"
+                                                         styleClass="small" process="@form" update=":frmMain"
                                                          actionListener="#{basicInfo.onCreation}"/>
                                     </td>
                                 </tr>
@@ -645,7 +646,7 @@
             </div>
         </h:form>
 
-        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn">
+        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

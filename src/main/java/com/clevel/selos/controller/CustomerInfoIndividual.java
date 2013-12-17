@@ -795,6 +795,10 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeMaritalStatus(){
+        if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
+            return;
+        }
+
         MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
         if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
             maritalStatusFlag = true;
