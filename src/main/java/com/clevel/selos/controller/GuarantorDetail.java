@@ -38,6 +38,10 @@ public class GuarantorDetail implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    // message //
+    private String messageHeader;
+    private String message;
+
     //session
     private long workCaseId;
 
@@ -74,5 +78,21 @@ public class GuarantorDetail implements Serializable {
 
     public String getCurrentDateDDMMYY(){
         return  DateTimeUtil.convertToStringDDMMYYYY(new Date());
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
