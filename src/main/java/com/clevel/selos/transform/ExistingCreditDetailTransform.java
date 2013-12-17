@@ -32,23 +32,29 @@ public class ExistingCreditDetailTransform extends Transform {
                 existingCreditDetail.setCreateBy(user);
             }
 
+            existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
+            existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
-            existingCreditDetail.setCreateDate(existingCreditDetail.getCreateDate());
-            existingCreditDetail.setCreateBy(existingCreditDetail.getCreateBy());
-            existingCreditDetail.setModifyDate(existingCreditDetail.getModifyDate());
-            existingCreditDetail.setModifyBy(existingCreditDetail.getModifyBy());
-            existingCreditDetail.setBorrowerType(existingCreditDetail.getBorrowerType());
-            existingCreditDetail.setExistingCreditFrom(existingCreditDetail.getExistingCreditFrom());
-            existingCreditDetail.setCreditType(existingCreditDetail.getCreditType());
-            existingCreditDetail.setProductProgram(existingCreditDetail.getProductProgram());
-            existingCreditDetail.setInstallment(existingCreditDetail.getInstallment());
-            existingCreditDetail.setLimit(existingCreditDetail.getLimit());
-            existingCreditDetail.setOutstanding(existingCreditDetail.getOutstanding());
-            existingCreditDetail.setPceLimit(existingCreditDetail.getPceLimit());
-            existingCreditDetail.setPcePercent(existingCreditDetail.getPcePercent());
-            existingCreditDetail.setProductCode(existingCreditDetail.getProductCode());
-            existingCreditDetail.setProjectCode(existingCreditDetail.getProjectCode());
-            existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
+            existingCreditDetail.setInUsed(existingCreditDetailView.getInUsed());
+            existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
+            existingCreditDetail.setCreateBy(existingCreditDetailView.getCreateBy());
+            existingCreditDetail.setModifyDate(existingCreditDetailView.getModifyDate());
+            existingCreditDetail.setModifyBy(existingCreditDetailView.getModifyBy());
+            existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
+            existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
+            existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
+            existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
+            existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
+            existingCreditDetail.setCreditType(existingCreditDetailView.getCreditType());
+            existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
+            existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
+            existingCreditDetail.setLimit(existingCreditDetailView.getLimit());
+            existingCreditDetail.setOutstanding(existingCreditDetailView.getOutstanding());
+            existingCreditDetail.setPceLimit(existingCreditDetailView.getPceLimit());
+            existingCreditDetail.setPcePercent(existingCreditDetailView.getPcePercent());
+            existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
+            existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
+            existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
             existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
             existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
 
@@ -66,18 +72,21 @@ public class ExistingCreditDetailTransform extends Transform {
         for (ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
             existingCreditDetailView = new ExistingCreditDetailView();
 
+            existingCreditDetailView.setId(existingCreditDetail.getId());
+            existingCreditDetailView.setBorrowerType(existingCreditDetail.getBorrowerType());
+            existingCreditDetailView.setExistingCreditFrom(existingCreditDetail.getExistingCreditFrom());
+            existingCreditDetailView.setSeq(existingCreditDetail.getSeq());
+            existingCreditDetailView.setInUsed(existingCreditDetail.getInUsed());
             existingCreditDetailView.setCreateDate(existingCreditDetail.getCreateDate());
             existingCreditDetailView.setCreateBy(existingCreditDetail.getCreateBy());
             existingCreditDetailView.setModifyDate(existingCreditDetail.getModifyDate());
             existingCreditDetailView.setModifyBy(existingCreditDetail.getModifyBy());
             existingCreditDetailView.setSeq(existingCreditDetail.getSeq());
-            /*existingCreditDetailView.setBorrowerName(existingCreditDetail.getBorrowerName());
-            existingCreditDetailView.setDisbursement(existingCreditDetail.getDisbursement());
-            existingCreditDetailView.setFinalPrice(existingCreditDetail.getFinalPrice());*/
+            existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+            existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
+            existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
             existingCreditDetailView.setCreditType(existingCreditDetail.getCreditType());
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
-            /*existingCreditDetailView.setFrontEndFee(existingCreditDetail.getFrontEndFee());
-            existingCreditDetailView.setHoldLimitAmount(existingCreditDetail.getHoldLimitAmount());*/
             existingCreditDetailView.setInstallment(existingCreditDetail.getInstallment());
             existingCreditDetailView.setLimit(existingCreditDetail.getLimit());
             //existingCreditDetailView.setLoanPurpose(existingCreditDetail.getLoanPurpose());

@@ -12,7 +12,7 @@ public class ApplyBaInfoView implements Serializable{
 
     private boolean checked;
     private String cusName;
-    private BigDecimal contactNumber;
+    private String contactNumber;
     private String relationship;
     private String resultHealtcheck;
     private Date checkDate;
@@ -34,11 +34,11 @@ public class ApplyBaInfoView implements Serializable{
         this.cusName = cusName;
     }
 
-    public BigDecimal getContactNumber() {
+    public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(BigDecimal contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 

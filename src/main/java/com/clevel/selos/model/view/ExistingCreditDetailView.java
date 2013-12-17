@@ -19,6 +19,7 @@ public class ExistingCreditDetailView implements Serializable {
     private long id;
     private int no;
     private int seq;
+    private int inUsed;
     private boolean noFlag;
     private int borrowerType;
     private int existingCreditFrom;
@@ -80,6 +81,14 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+
+    public int getInUsed() {
+        return inUsed;
+    }
+
+    public void setInUsed(int inUsed) {
+        this.inUsed = inUsed;
     }
 
     public boolean isNoFlag() {

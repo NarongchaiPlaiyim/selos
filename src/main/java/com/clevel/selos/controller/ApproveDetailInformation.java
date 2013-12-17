@@ -89,7 +89,7 @@ public class ApproveDetailInformation implements Serializable {
 
             loanPaymentDetailView.setSignDate(new Date());
             FollowUpConditionView followUpConditionView = new FollowUpConditionView();
-            followUpConditionView.setCondition("à¹ƒà¸«à¹‰ Operation");
+            followUpConditionView.setCondition("ãËé Operation");
             followUpConditionView.setDetailOfFollowUp("dfdfdfdfdf");
             followUpConditionView.setDateOfFollowUp(new Date());
             followUpConditionViews.add(followUpConditionView);
