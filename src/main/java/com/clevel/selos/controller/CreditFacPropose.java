@@ -487,7 +487,7 @@ public class CreditFacPropose implements Serializable {
                     log.info("onChangeCreditType :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
                     log.info("onChangeCreditType :: applyTCG :: {}", applyTCG);
                     SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
-                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType,newCreditFacilityView.getCreditCustomerType(),specialProgram,applyTCG);
+                    ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType,newCreditFacilityView.getCreditCustomerType(),specialProgram,applyTCG);
 
                     if (productFormula != null) {
                         log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
