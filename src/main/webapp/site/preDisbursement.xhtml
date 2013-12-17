@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Pre-Disbursement</title>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+
+        <h:outputStylesheet name="css/style.css" />
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
+
+    <h:body>
+        <!--<f:event type="preRenderView" listener="{basicInfo.preRender()}"/>-->
+        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+                    <!-- End Header Logo -->
+                    <!-- Start Header Detail -->
+                    <ui:include src="include/header_detail.xhtml"/>
+                    <!-- End Header Detail -->
+                    <!-- Start Menu -->
+                    <ui:include src="include/menubar.xhtml"/>
+                    <!-- End Menu -->
+                    <div id="content_container">
+                        <div id="content_name">#{'Pre-Disbursement'}</div>
+                        <div id="content">
+                            <div id="content_info">
+                                <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                                <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+                                        id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                            </div>
+                            <div id="content_form">
+
+                                <!-- start content -->
+                                <table class="content_table_form" border="0">
+
+                                    <tr>
+                                        <td class="title" style="width: 150px;">
+                                            <p:outputLabel value="#{msg.get('app.insurance.approved')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
+                                                <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new')}"         itemValue="0"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new.change')}" itemValue="1"/>
+                                            </p:selectOneRadio>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="title" colspan="2">
+                                            <p:outputLabel value="#{'Pre Disbursement Checklist'}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <table border="1">
+                                                <tr>
+                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
+                                                        <p:outputLabel value="#{''}"/>
+                                                    </td>
+
+                                                    <td class="center title" style="width: 800px; max-width: 800px; min-width: 800px;">
+                                                        <h:outputText value="#{'Description'}" />
+                                                    </td>
+                                                    <td class="center title" style="width: 250px; max-width: 250px; min-width: 250px;">
+                                                        <h:outputText value="#{'Submission Date'}"/>
+                                                    </td>
+                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
+                                                        <h:outputText value="#{'Y'}"/>
+                                                    </td>
+                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
+                                                        <h:outputText value="#{'N'}"/>
+                                                    </td>
+                                                </tr>
+
+
+
+                                                <tr>
+                                                    <td class="left title">
+                                                        <h:outputText value="#{'1'}"/>
+                                                    </td>
+                                                    <td colspan="4" class="left title">
+                                                        <h:outputText value="#{'Basic Condition'}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
+                                                    </td>
+
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมหนังสือค้ำประกัน(L/G) ค้างมากกว่า 30 วัน'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีการค้างการทบทวน Annual Review เกินกว่า 90 วัน'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีภาระหนี้ RPD ของสินเชื่อทุกประเภท'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่ติด Legal Status'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- ไม่มีรายการค้างชำระ (DPD)ในสินเชื่อทุกประเภทมากกว่า 7 วัน'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td class="left title">
+                                                        <h:outputText value="#{'2'}"/>
+                                                    </td>
+                                                    <td colspan="4" class="left title">
+                                                        <h:outputText value="#{'SmartBiz Condition'}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="center">
+                                                        <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
+                                                    </td>
+                                                    <td colspan="4" class="left title">
+                                                        <h:outputText value="#{'1. วัตถุประสงค์เพื่อลงทุนต่างๆในธุรกิจ เช่น ซื้อที่ดิน ที่ดินพร้อมสิ่งปลูกสร้าง เครื่องจักร'}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'a. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'b. เอกสารประกอบการเบิกใช้ตามวัตถุประสงค์ที่ระบุใน Opt Sheet'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="center">
+                                                        <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
+                                                    </td>
+                                                    <td colspan="4" class="left title">
+                                                        <h:outputText value="#{'2. กรณี SmartBiz Construction'}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'a. ผ่านประเมิณตามหลักทรัพย์ตามเกณฑ์ 30 70 100% ของความคืบหน้าโครงการ/ เบิกตามความคืบหน้าของมูลงานที่กำหนดไว้ใน Construction form'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'b. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'c. เอกสารประกอบการเบิกใช้'}"/>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                </tr>
+
+
+                                            </table>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+
+                                    </tr>
+
+                                    <tr>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="title">
+                                            <p:outputLabel value="#{'Remark'}"/>
+                                        </td>
+                                        <td >
+                                            <p:inputTextarea value="#{preDisbursement.preDisbursementView.test}" rows="3" cols="130" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="separate"></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="center" colspan="2" style="margin-top: 20px;">
+                                            <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="small" />
+                                            <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                                <!-- end content -->
+                            </div>
+
+                        </div>
+                        <div id="bottom_line"><!-- --></div>
+                    </div>
+
+                    <div class="clear"></div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                    <!-- End Footer -->
+                </div>
+            </h:form>
+
+        </p:panel>
+
+    </h:body>
+</f:view>
+</html>
