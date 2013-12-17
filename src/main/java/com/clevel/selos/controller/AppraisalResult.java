@@ -710,7 +710,7 @@ public class AppraisalResult implements Serializable {
         log.info("collateralTypeDAO.findByCollateralCode ID is " + headCollType.getId());
         newCollateralHeadDetailView.setHeadCollType(headCollType);
         log.info("convertCollateralHeader end");*/
-        return newCollateralHeadDetailView;
+        return null;
     }
 
     private SubCollateralDetailView convertSubCollateral(SubCollateralData subCollateralData ){

@@ -1,7 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.view.openaccount.AccountNameView;
-import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
+//import com.clevel.selos.model.view.openaccount.OpenAccountCreditTypeView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,7 +17,7 @@ public class OpenAccountView {
     private String term;
 
     private List<AccountNameView> accountNameViewList;
-    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
+//    private List<OpenAccountCreditTypeView> openAccountCreditTypeViewList;
     private List<OpenAccountPurposeView> openAccountPurposeViewList;
 
     public OpenAccountView(){
@@ -31,7 +31,7 @@ public class OpenAccountView {
         this.productType = "";
         this.term = "";
         this.accountNameViewList = new ArrayList<AccountNameView>();
-        this.openAccountCreditTypeViewList = new ArrayList<OpenAccountCreditTypeView>();
+//        this.openAccountCreditTypeViewList = new ArrayList<OpenAccountCreditTypeView>();
     }
 
     public int getIdOfAccountType() {
@@ -90,13 +90,13 @@ public class OpenAccountView {
         this.accountNameViewList = accountNameViewList;
     }
 
-    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
-        return openAccountCreditTypeViewList;
-    }
-
-    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
-        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
-    }
+//    public List<OpenAccountCreditTypeView> getOpenAccountCreditTypeViewList() {
+//        return openAccountCreditTypeViewList;
+//    }
+//
+//    public void setOpenAccountCreditTypeViewList(List<OpenAccountCreditTypeView> openAccountCreditTypeViewList) {
+//        this.openAccountCreditTypeViewList = openAccountCreditTypeViewList;
+//    }
 
     public List<OpenAccountPurposeView> getOpenAccountPurposeViewList() {
         return openAccountPurposeViewList;
@@ -116,7 +116,7 @@ public class OpenAccountView {
                 .append("accountNumber", accountNumber)
                 .append("term", term)
                 .append("accountNameViewList", accountNameViewList)
-                .append("openAccountCreditTypeViewList", openAccountCreditTypeViewList)
+//                .append("openAccountCreditTypeViewList", openAccountCreditTypeViewList)
                 .toString();
     }
 }

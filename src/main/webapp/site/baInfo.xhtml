@@ -8,23 +8,23 @@
         xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <title>ManageUser</title>
-    <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-    <script type="text/javascript" src="resources/js/superfish.js"></script>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer">
         <h:form id="baInformationForm">
         <div id="main_container">
 
-            <!--<ui:include src="site/include/header_logo.xhtml" />-->
+            <ui:include src="include/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <!--<ui:include src="site/include/header_detail.xhtml" />-->
+            <ui:include src="include/header_detail.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <!--<ui:include src="site/include/menubar.xhtml" />-->
+            <ui:include src="include/menubar.xhtml" />
             <div id="content_container">
                 <div id="content_name"><h:outputText value="#{msg.get('app.baInfo.header.bapaInfo')}"/></div>
                 <div id="content">
@@ -84,7 +84,7 @@
                                 <p:column headerText="#{msg.get('app.baInfo.tb.resultHealthCheck')}" style="width: 250px;"><h:outputText value="#{item.resultHealtcheck}"/></p:column>
                                 <p:column headerText="#{msg.get('app.baInfo.tb.checkDate')}" style="width: 200px;">
                                     <h:outputText value="#{item.checkDate}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column style="width: 50px;"><p:commandButton icon="ui-icon-pencil"
@@ -106,7 +106,10 @@
                             <div class="title">BA/PA Information</div>
                         </td>
                         <td>
-                            <p:commandButton value="#{msg.get('app.button.add')}"  actionListener="#{baInfo.openAddDialog()}" update=":bapaInfoDlgForm" oncomplete="bapaInfoDialog.show()"/>
+                            <p:commandButton value="#{msg.get('app.button.add')}"  actionListener="#{baInfo.openAddDialog()}"
+                                             update=":bapaInfoDlgForm"
+                                             oncomplete="bapaInfoDialog.show()"
+                                             styleClass="smaller"/>
                         </td>
                     </tr>
                     <tr>
@@ -178,7 +181,7 @@
                                     </p:row>
                                     <p:row>
                                         <p:column colspan="4" footerText="#{msg.get('app.label.total')}" styleClass="summary_column"></p:column>
-                                        <p:column styleClass="summary_column right">
+                                        <p:column styleClass="summary_column " style="text-align: right">
                                             <f:facet name="footer">
                                             <h:outputText value="#{baInfo.baPaInfoView.totalLimit}">
                                             <f:convertNumber pattern="#,##0"
@@ -188,7 +191,7 @@
                                             </h:outputText>
                                             </f:facet>
                                         </p:column>
-                                        <p:column styleClass="summary_column right" >
+                                        <p:column styleClass="summary_column" style="text-align: right">
                                             <f:facet name="footer">
                                             <h:outputText value="#{baInfo.baPaInfoView.totalPremium}">
                                                 <f:convertNumber pattern="#,##0"
@@ -198,7 +201,7 @@
                                             </h:outputText>
                                             </f:facet>
                                         </p:column>
-                                        <p:column styleClass="summary_column right">
+                                        <p:column styleClass="summary_column" style="text-align: right">
                                             <f:facet name="footer">
                                             <h:outputText value="#{baInfo.baPaInfoView.totalMorePay}">
                                                 <f:convertNumber pattern="#,##0"
@@ -236,7 +239,10 @@
                         <td colspan="100%"><div class="separate"/> </td>
                     </tr>
                     <tr>
-                        <td><p:commandButton value="#{msg.get('app.button.save')}" action="#{baInfo.save}"/><p:commandButton value="#{msg.get('app.button.cancel')}"/> </td>
+                        <td colspan="2" style="text-align: center">
+                            <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" action="#{baInfo.save}" styleClass="smaller"/>
+                            <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"/>
+                        </td>
                     </tr>
 
                 </table>
@@ -246,24 +252,24 @@
             </div>     <!-- content contantner-->
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="site/include/footer.xhtml" />
+            <ui:include src="include/footer.xhtml" />
             <!-- End Footer -->
         </div>
     </h:form>
     </p:panel>
 
     <p:dialog widgetVar="bapaInfoDialog" header="#{msg.get('app.baInfo.dialog.bapa.header.bapa')}" resizable="false" modal="true"
-            width="800" height="300">
+            width="900" height="200">
 
-        <ui:include src="bapaInfoAddDialog.xhtml"/>
+        <ui:include src="dialog/bapaInfoAddDialog.xhtml"/>
     </p:dialog>
 
-    <p:dialog widgetVar="applyBaInfoDialog" header="#{msg.get('app.baInfo.dialog.applyBa.header.applyBa')}" height="250" width="700"  modal="true" resizable="false" >
+    <p:dialog widgetVar="applyBaInfoDialog" header="#{msg.get('app.baInfo.dialog.applyBa.header.applyBa')}" height="200" width="600"  modal="true" resizable="false" >
 
-        <ui:include src="baApplyInfoDialog.xhtml"/>
+        <ui:include src="dialog/baApplyInfoDialog.xhtml"/>
     </p:dialog>
 
-    <ui:include src="site/dialog/confirmDeleteDlg.xhtml">
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteBaPaInfoDialog"/>
         <ui:param name="name" value="confirmDeleteBaPaInfoDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteBaPaInfo"/>

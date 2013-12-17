@@ -517,7 +517,7 @@ public class Decision implements Serializable {
         subCollateralDetailView1.setTitleDeed("12, 1234");
         subCollateralDetailView1.setCollateralOwnerAAD("Mr.A Example");
         subCollateralDetailView1.setCollateralOwnerUW("Mr.A Example");
-        subCollateralDetailView1.setMortgageList(new ArrayList<String>());
+//        subCollateralDetailView1.setMortgageList(new ArrayList<String>());
         subCollateralDetailView1.setAppraisalValue(BigDecimal.valueOf(2000000.00));
         subCollateralDetailView1.setMortgageValue(BigDecimal.valueOf(3200000.00));
 
