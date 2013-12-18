@@ -139,6 +139,7 @@ function checkAllowKeyNumber(keyCode){
     }
     return true;
 }
+
 function onKeyPressNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -167,6 +168,7 @@ function onKeyPressNumber(evt){
         return checkAllowKeyNumber(keyCode);
     }
 }
+
 function onKeyDownNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -191,6 +193,7 @@ function checkAllowKeyMoney(keyCode){
     }
     return true;
 }
+
 function onKeyPressMoney(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -222,6 +225,7 @@ function onKeyPressMoney(evt){
         return checkAllowKeyMoney(keyCode);
     }
 }
+
 function onKeyDownMoney(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -262,6 +266,7 @@ function onKeyPressText(evt){
 
     return true;
 }
+
 function onKeyDownText(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -294,6 +299,7 @@ function onKeyPressAddress(evt){
 
     return true;
 }
+
 function onKeyDownAddress(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -303,28 +309,6 @@ function onKeyDownAddress(evt){
 
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function onKeyNumber(evt) {
     var validNums = '0123456789';
@@ -681,6 +665,13 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     }
 }
 
+function handleDialogOpen(xhr, status, args, widgetVarName) {
+    if (args.functionComplete) {
+        var name = widgetVarName;
+        PF(name).show();
+    }
+}
+
 function handleExistingCreditRequest(xhr, status, args) {
     if (args.functionComplete) {
         existingCreditDlg.hide();
@@ -713,7 +704,6 @@ function handleExistingGuarantorRequest(xhr, status, args) {
     }
 }
 
-
 // Credit Facility Propose Credit Dialog
 function handleDlgCreditProposeRequest(xhr, status, args) {
     if (args.functionComplete) {
@@ -726,7 +716,6 @@ function handleTierDlgRequest(xhr, status, args) {
         proposeTierDlg.hide();
     }
 }
-
 
 // Credit Facility Propose Collateral Dialog
 function handleProposeCollateralDetailRequest(xhr, status, args) {
@@ -749,7 +738,6 @@ function handleGuarantorInfoRequest(xhr, status, args) {
     }
 }
 
-
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
@@ -757,19 +745,6 @@ function handleConditionInfoRequest(xhr, status, args) {
 }
 
 // Credit Facility Propose Credit Dialog
-
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
-}
-function handleDlgCreditProposeRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        creditInfoDlg.hide();
-    }
-}
-
-
-function handleConditionInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        conditionDlg.hide();
-    }
 }

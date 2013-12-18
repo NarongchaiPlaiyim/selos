@@ -7,12 +7,14 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.ProductProgram;
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
+import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -410,5 +412,77 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public void wcCalculation(long workCaseId) {
 
+    }
+
+    /**
+     * Formula: <br/>
+     * if(standard > suggest) -> final = standard <br/>
+     * else if(standard < suggest) -> final = suggest <br/>
+     * else *(standard == suggest) -> final = (standard | suggest)
+     * @param standardBaseRateId
+     * @param standardInterest
+     * @param suggestBaseRateId
+     * @param suggestInterest
+     * @return Object[0]: (BaseRate) finalBaseRate, Object[1]: (BigDecimal) finalInterest, Object[2]: (String) finalPriceLabel,<br/>
+     * Object[3]: (BaseRate) standardBaseRate, Object[4]: (String) standardPriceLabel,<br/>
+     * Object[5]: (BaseRate) suggestBaseRate, Object[6]: (String) suggestPriceLabel
+     */
+    public Object[] findFinalPriceRate(int standardBaseRateId, BigDecimal standardInterest, int suggestBaseRateId, BigDecimal suggestInterest) {
+        Object[] returnValues = new Object[7];
+
+        BigDecimal standardPrice = BigDecimal.ZERO;
+        StringBuilder standardPriceLabel = new StringBuilder("");
+
+        BigDecimal suggestPrice = BigDecimal.ZERO;
+        StringBuilder suggestPriceLabel = new StringBuilder("");
+
+        BaseRate finalBaseRate = new BaseRate();
+        BigDecimal finalInterest = BigDecimal.ZERO;
+        String finalPriceLabel = "";
+
+        // Standard Price Rate
+        BaseRate standardBaseRate = baseRateDAO.findById(standardBaseRateId);
+        if (standardBaseRate != null && standardInterest != null) {
+            standardPrice = standardBaseRate.getValue().add(standardInterest);
+
+            if (ValidationUtil.isValueLessThanZero(standardInterest)) {
+                standardPriceLabel.append(standardBaseRate.getName()).append(" ").append(standardInterest);
+            } else {
+                standardPriceLabel.append(standardBaseRate.getName()).append(" + ").append(standardInterest);
+            }
+        }
+
+        // Suggest Price Rate
+        BaseRate suggestBaseRate = baseRateDAO.findById(suggestBaseRateId);
+        if (suggestBaseRate != null && suggestInterest != null) {
+            suggestPrice = suggestBaseRate.getValue().add(suggestInterest);
+
+            if (ValidationUtil.isValueLessThanZero(suggestInterest)) {
+                suggestPriceLabel.append(suggestBaseRate.getName()).append(" ").append(suggestInterest);
+            } else {
+                suggestPriceLabel.append(suggestBaseRate.getName()).append(" + ").append(suggestInterest);
+            }
+        }
+
+        // Compare for Final Price
+        if (ValidationUtil.isGreaterThan(standardPrice, suggestPrice) || ValidationUtil.isValueEqual(standardPrice, suggestPrice)) {
+            finalBaseRate = standardBaseRate;
+            finalInterest = standardInterest;
+            finalPriceLabel = standardPriceLabel.toString();
+        }
+        else {
+            finalBaseRate = suggestBaseRate;
+            finalInterest = suggestInterest;
+            finalPriceLabel = suggestPriceLabel.toString();
+        }
+
+        returnValues[0] = finalBaseRate;
+        returnValues[1] = finalInterest;
+        returnValues[2] = finalPriceLabel;
+        returnValues[3] = standardBaseRate != null ? standardBaseRate : new BaseRate();
+        returnValues[4] = standardPriceLabel.toString();
+        returnValues[5] = suggestBaseRate != null ? suggestBaseRate : new BaseRate();
+        returnValues[6] = suggestPriceLabel.toString();
+        return returnValues;
     }
 }
