@@ -34,7 +34,7 @@ public class ExistingCreditTierTransform extends Transform {
             }
 
             existingCreditTierDetail.setNo(existingCreditTierDetailView.getNo());
-            if(existingCreditTierDetailView.getFinalBasePrice().getId()!=0){
+            if(existingCreditTierDetailView.getFinalBasePrice()!=null && existingCreditTierDetailView.getFinalBasePrice().getId()!=0){
                 existingCreditTierDetail.setFinalBasePrice(existingCreditTierDetailView.getFinalBasePrice());
             }else{
                 existingCreditTierDetail.setFinalBasePrice(null);
@@ -44,7 +44,7 @@ public class ExistingCreditTierTransform extends Transform {
 
             existingCreditTierDetail.setInstallment(existingCreditTierDetailView.getInstallment());
 
-            if(existingCreditTierDetailView.getStandardBasePrice().getId()!=0){
+            if(existingCreditTierDetailView.getStandardBasePrice()!=null && existingCreditTierDetailView.getStandardBasePrice().getId()!=0){
                 existingCreditTierDetail.setStandardBasePrice(existingCreditTierDetailView.getStandardBasePrice());
             }else{
                 existingCreditTierDetail.setStandardBasePrice(null);
@@ -52,7 +52,7 @@ public class ExistingCreditTierTransform extends Transform {
             existingCreditTierDetail.setStandardInterest(existingCreditTierDetailView.getStandardInterest());
             existingCreditTierDetail.setStandardPrice(existingCreditTierDetailView.getStandardPrice());
 
-            if(existingCreditTierDetailView.getSuggestBasePrice().getId()!=0){
+            if(existingCreditTierDetailView.getSuggestBasePrice()!=null && existingCreditTierDetailView.getSuggestBasePrice().getId()!=0){
                 existingCreditTierDetail.setSuggestBasePrice(existingCreditTierDetailView.getSuggestBasePrice());
             }else{
                 existingCreditTierDetail.setSuggestBasePrice(null);

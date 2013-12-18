@@ -378,8 +378,12 @@ public class ExSummaryControl extends BusinessControl {
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-            exSummary.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
-            exSummary.setSalePerYearUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+            if(bankStatementSummary.getGrdTotalIncomeNetBDM() != null){
+                exSummary.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
+            }
+            if(bankStatementSummary.getGrdTotalIncomeNetUW() != null){
+                exSummary.setSalePerYearUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+            }
             exSummaryDAO.persist(exSummary);
         }
     }

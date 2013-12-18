@@ -1,7 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.BankAccountStatus;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -44,20 +43,32 @@ public class ExistingCreditDetail implements Serializable {
     @Column(name = "account_suf")
     private String accountSuf;
 
+    @OneToOne
+    @JoinColumn(name = "exist_account_status_id")
+    private BankAccountStatus existAccountStatus;
+
+    @OneToOne
+    @JoinColumn(name = "exist_product_program_id")
+    private ProductProgram existProductProgram;
+
+    @OneToOne
+    @JoinColumn(name = "exist_credit_type_id")
+    private CreditType existCreditType;
+
     @Column(name = "product_group")
     private String productGroup;
 
     @Column(name = "product_program")
     private String productProgram;
 
+    @Column(name = "credit_type")
+    private String creditType;
+
     @Column(name = "project_code")
     private String projectCode;
 
     @Column(name = "product_code")
     private String productCode;
-
-    @Column(name = "credit_type")
-    private String creditType;
 
     @Column(name = "credit_category")
     private int creditCategory;
@@ -186,6 +197,30 @@ public class ExistingCreditDetail implements Serializable {
 
     public void setAccountSuf(String accountSuf) {
         this.accountSuf = accountSuf;
+    }
+
+    public BankAccountStatus getExistAccountStatus() {
+        return existAccountStatus;
+    }
+
+    public void setExistAccountStatus(BankAccountStatus existAccountStatus) {
+        this.existAccountStatus = existAccountStatus;
+    }
+
+    public ProductProgram getExistProductProgram() {
+        return existProductProgram;
+    }
+
+    public void setExistProductProgram(ProductProgram existProductProgram) {
+        this.existProductProgram = existProductProgram;
+    }
+
+    public CreditType getExistCreditType() {
+        return existCreditType;
+    }
+
+    public void setExistCreditType(CreditType existCreditType) {
+        this.existCreditType = existCreditType;
     }
 
     public String getProductGroup() {
