@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>SE-LOS : Customer Info. Detail - Individual</title>
+    <title>SE-LOS : Customer Info. Detail - Juristic</title>
     <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
@@ -1031,7 +1031,7 @@
                                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="small"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"/>
-                                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumJuris.onCreation}"/>
                                 </td>
                             </tr>
@@ -1049,7 +1049,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,frmMain:btnCancel">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

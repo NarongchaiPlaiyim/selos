@@ -6,6 +6,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.filenet.apiimpl.wsi.serialization.Serialization;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.Date;
 
 @ViewScoped
 @ManagedBean(name = "pledgeDetail")
@@ -36,6 +38,10 @@ public class PledgeDetail implements Serializable {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    // message //
+    private String messageHeader;
+    private String message;
 
     //session
     private long workCaseId;
@@ -72,5 +78,25 @@ public class PledgeDetail implements Serializable {
         }catch (Exception e){
 
         }
+    }
+
+    public String getCurrentDateDDMMYY(){
+        return  DateTimeUtil.convertToStringDDMMYYYY(new Date());
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
