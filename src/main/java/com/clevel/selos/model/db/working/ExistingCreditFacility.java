@@ -60,7 +60,6 @@ public class ExistingCreditFacility implements Serializable{
     @Column(name = "total_related_number_od")
     private BigDecimal totalRelatedNumberOfExistingOD;
 
-
     @Column(name = "total_group_com_limit")
     private BigDecimal totalGroupCom;
 

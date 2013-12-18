@@ -183,6 +183,8 @@ public class BizInfoSummary implements Serializable {
             subDistrict.setDistrict(district);
             subDistrict.setProvince(province);
             bizInfoSummaryView.setSubDistrict(subDistrict);
+            bizInfoSummaryView.setDistrict(district);
+            bizInfoSummaryView.setProvince(province);
             bizInfoSummaryView.setReferredExperience(referredExperience);
             bizInfoSummaryView.setCountry(country);
 
@@ -450,6 +452,12 @@ public class BizInfoSummary implements Serializable {
         log.info("onCalSummaryTable end");
     }
 
+    public void onCheckSave(){
+        if (redirect != null && !redirect.equals("")) {
+            RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
+        }
+    }
+
     public void onSaveBizInfoSummary() {
 
         try {
@@ -457,6 +465,10 @@ public class BizInfoSummary implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
             log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
+            if (redirect != null && !redirect.equals("")) {
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+
 
             log.info("Controller getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
             log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());

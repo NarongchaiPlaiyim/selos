@@ -58,7 +58,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         log.info("find transformToModel province" + bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
 
-        if(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode() != 0){
+        if(bizInfoSummaryView.getProvince()!=null && bizInfoSummaryView.getProvince().getCode() != 0){
             province = provinceDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
             log.info("find transformToModel findById  is " + province.toString());
             bizInfoSummary.setProvince(province);
@@ -68,7 +68,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         log.info("find transformToModel district" + bizInfoSummaryView.getSubDistrict().getDistrict().getId());
 
-        if(bizInfoSummaryView.getSubDistrict().getDistrict()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getId() != 0){
+        if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
             district = districtDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getId());
             log.info("find transformToModel findById  is " + district.toString());
             bizInfoSummary.setDistrict(district);
@@ -254,8 +254,8 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setAddressStreet(bizInfoSummary.getAddressStreet());
 
 
-        bizInfoSummaryView.setProvince(bizInfoSummary.getSubDistrict().getDistrict().getProvince());
-        bizInfoSummaryView.setDistrict(bizInfoSummary.getSubDistrict().getDistrict());
+        bizInfoSummaryView.setProvince(bizInfoSummary.getProvince());
+        bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         bizInfoSummaryView.setCountry(bizInfoSummary.getCountry());
         bizInfoSummaryView.setAddressEng(bizInfoSummary.getAddressEng());

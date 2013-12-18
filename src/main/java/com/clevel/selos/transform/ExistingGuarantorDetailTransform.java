@@ -49,6 +49,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
 
         for (ExistingGuarantorDetail existingGuarantorDetail : existingGuarantorDetailList) {
             existingGuarantorDetailView = new ExistingGuarantorDetailView();
+            existingGuarantorDetailView.setId(existingGuarantorDetail.getId());
             existingGuarantorDetailView.setCreateDate(existingGuarantorDetail.getCreateDate());
             existingGuarantorDetailView.setCreateBy(existingGuarantorDetail.getCreateBy());
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());
