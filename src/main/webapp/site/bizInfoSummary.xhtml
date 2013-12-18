@@ -131,7 +131,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td>
-                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[addBizInfoSummary.clientId]}"
+                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.province.code}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                          id="provinceCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
@@ -143,7 +143,7 @@
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.district.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                                          id="districtCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
