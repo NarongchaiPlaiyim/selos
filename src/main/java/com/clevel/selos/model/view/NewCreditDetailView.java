@@ -22,10 +22,8 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal limit;
     private BigDecimal PCEPercent;
     private BigDecimal PCEAmount;
-    private int reducePriceFlag;
-    private int reduceFrontEndFee;
-    private boolean reduceFlag;
-    private boolean reduceFrontEndFlag;
+    private boolean reducePriceFlag;
+    private boolean reduceFrontEndFee;
     private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
@@ -69,8 +67,8 @@ public class NewCreditDetailView implements Serializable {
         this.PCEAmount = BigDecimal.ZERO;
         this.installment=BigDecimal.ZERO;
         this.outstanding=BigDecimal.ZERO;
-        this.reducePriceFlag = 0;
-        this.reduceFrontEndFee = 0;
+        this.reducePriceFlag = false;
+        this.reduceFrontEndFee = false;
         this.frontEndFee = BigDecimal.ZERO;
         this.remark = "";
         this.holdLimitAmount = BigDecimal.ZERO;
@@ -85,6 +83,7 @@ public class NewCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+
     }
 
     public long getId() {
@@ -183,40 +182,20 @@ public class NewCreditDetailView implements Serializable {
         this.PCEAmount = PCEAmount;
     }
 
-    public int getReducePriceFlag() {
-        if(reduceFlag==true){
-            this.reducePriceFlag=1;
-        }else{
-            this.reducePriceFlag=0;
-        }
+    public boolean isReducePriceFlag() {
         return reducePriceFlag;
     }
 
-    public void setReducePriceFlag(int reducePriceFlag) {
-        if(reduceFlag==true){
-            this.reducePriceFlag=1;
-        }else{
-            this.reducePriceFlag=0;
-        }
-//        this.reducePriceFlag = reducePriceFlag;
+    public void setReducePriceFlag(boolean reducePriceFlag) {
+        this.reducePriceFlag = reducePriceFlag;
     }
 
-    public int getReduceFrontEndFee() {
-        if(reduceFrontEndFlag==true){
-            this.reduceFrontEndFee=1;
-        }else{
-            this.reduceFrontEndFee=0;
-        }
+    public boolean isReduceFrontEndFee() {
         return reduceFrontEndFee;
     }
 
-    public void setReduceFrontEndFee(int reduceFrontEndFee) {
-        if(reduceFrontEndFlag==true){
-            this.reduceFrontEndFee=1;
-        }else{
-            this.reduceFrontEndFee=0;
-        }
-//        this.reduceFrontEndFee = reduceFrontEndFee;
+    public void setReduceFrontEndFee(boolean reduceFrontEndFee) {
+        this.reduceFrontEndFee = reduceFrontEndFee;
     }
 
     public String getStandardPrice() {
@@ -331,32 +310,6 @@ public class NewCreditDetailView implements Serializable {
         this.purpose = purpose;
     }
 
-    public boolean isReduceFlag() {
-        if(this.reducePriceFlag==1 ){
-            reduceFlag =  true;
-        }else if(this.reducePriceFlag==0 ){
-            reduceFlag = false;
-        }
-        return reduceFlag;
-    }
-
-    public void setReduceFlag(boolean reduceFlag) {
-        this.reduceFlag = reduceFlag;
-    }
-
-    public boolean isReduceFrontEndFlag() {
-        if(this.reduceFrontEndFee==1 ){
-            reduceFrontEndFlag =  true;
-        }else if(this.reduceFrontEndFee==0 ){
-            reduceFrontEndFlag = false;
-        }
-        return reduceFrontEndFlag;
-    }
-
-    public void setReduceFrontEndFlag(boolean reduceFrontEndFlag) {
-        this.reduceFrontEndFlag = reduceFrontEndFlag;
-    }
-
     public BaseRate getStandardBasePrice() {
         return standardBasePrice;
     }
@@ -436,8 +389,6 @@ public class NewCreditDetailView implements Serializable {
                 .append("PCEAmount", PCEAmount)
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
-                .append("reduceFlag", reduceFlag)
-                .append("reduceFrontEndFlag", reduceFrontEndFlag)
                 .append("standardBasePrice", standardBasePrice)
                 .append("standardPrice", standardPrice)
                 .append("standardInterest", standardInterest)

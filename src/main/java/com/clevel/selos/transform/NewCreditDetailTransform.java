@@ -4,6 +4,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.view.NewCreditDetailView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setProductCode(newCreditDetailView.getProductCode());
             newCreditDetail.setProjectCode(newCreditDetailView.getProjectCode());
             newCreditDetail.setPurpose(newCreditDetailView.getPurpose());
-            newCreditDetail.setReduceFrontEndFee(newCreditDetailView.getReduceFrontEndFee());
-            newCreditDetail.setReducePriceFlag(newCreditDetailView.getReducePriceFlag());
+            newCreditDetail.setReduceFrontEndFee(Util.returnNumForFlag(newCreditDetailView.isReduceFrontEndFee()));
+            newCreditDetail.setReducePriceFlag(Util.returnNumForFlag(newCreditDetailView.isReducePriceFlag()));
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setStandardInterest(newCreditDetailView.getStandardInterest());
             newCreditDetail.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
@@ -96,8 +97,8 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setProductCode(newCreditDetail.getProductCode());
             newCreditDetailView.setProjectCode(newCreditDetail.getProjectCode());
             newCreditDetailView.setPurpose(newCreditDetail.getPurpose());
-            newCreditDetailView.setReduceFrontEndFee(newCreditDetail.getReduceFrontEndFee());
-            newCreditDetailView.setReducePriceFlag(newCreditDetail.getReducePriceFlag());
+            newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
+            newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
             newCreditDetailView.setRemark(newCreditDetail.getRemark());
             newCreditDetailView.setStandardInterest(newCreditDetail.getStandardInterest());
             newCreditDetailView.setStandardBasePrice(newCreditDetail.getStandardBasePrice());

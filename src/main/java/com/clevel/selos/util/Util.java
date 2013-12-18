@@ -301,4 +301,8 @@ public class Util implements Serializable {
             return 0;
         }
     }
+
+    public static boolean isTrueForCheckBox(int value){
+       return (value == 2)?true:false;
+    }
 }

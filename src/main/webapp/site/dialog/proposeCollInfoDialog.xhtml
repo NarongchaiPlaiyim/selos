@@ -261,7 +261,7 @@
             <p:selectOneMenu id="dlgCollateralType"
                              value="#{CollateralHeaderDetailView.headCollType.id}"
                              size="1"
-                             style="min-width: 200px; width: 200px; max-width: 200px;"
+                             style="min-width: 300px; width: 300px; max-width: 300px;"
                              required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacPropose.collateralTypeList}"
@@ -354,7 +354,7 @@
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
                                var="relatedWith"  varStatus="c">
-                        <h:outputText value="#{relatedWith.titleDeed}"/><br/>
+                        <h:outputText value="#{not empty newSubCollateralDetailView.relatedWithList and fn:length(newSubCollateralDetailView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
