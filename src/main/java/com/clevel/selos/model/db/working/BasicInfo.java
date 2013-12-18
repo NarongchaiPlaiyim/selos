@@ -438,6 +438,7 @@ public class BasicInfo implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    @OrderBy("id ASC")
     public List<OpenAccount> getOpenAccountList() {
         return openAccountList;
     }
