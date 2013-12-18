@@ -182,7 +182,11 @@ public class BizInfoSummary implements Serializable {
             district.setProvince(province);
             subDistrict.setDistrict(district);
             subDistrict.setProvince(province);
+            bizInfoSummaryView.setProvince(province);
+            bizInfoSummaryView.setDistrict(district);
             bizInfoSummaryView.setSubDistrict(subDistrict);
+            bizInfoSummaryView.setDistrict(district);
+            bizInfoSummaryView.setProvince(province);
             bizInfoSummaryView.setReferredExperience(referredExperience);
             bizInfoSummaryView.setCountry(country);
 
@@ -213,7 +217,7 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
         }catch (Exception e){
-            log.info("error");
+            log.info("error onSearchBizInfoSummaryByWorkCase : ", e);
 
         }
 
@@ -223,13 +227,13 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeProvince() {
-        Province proSelect = bizInfoSummaryView.getSubDistrict().getDistrict().getProvince();
+        Province proSelect = bizInfoSummaryView.getProvince();
         districtList = districtDAO.getListByProvince(proSelect);
         log.info("onChangeProvince :::: districtList.size ::: ", districtList.size());
     }
 
     public void onChangeDistrict() {
-        District districtSelect = bizInfoSummaryView.getSubDistrict().getDistrict();
+        District districtSelect = bizInfoSummaryView.getDistrict();
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
         log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
     }
@@ -450,6 +454,12 @@ public class BizInfoSummary implements Serializable {
         log.info("onCalSummaryTable end");
     }
 
+    public void onCheckSave(){
+        if (redirect != null && !redirect.equals("")) {
+            RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
+        }
+    }
+
     public void onSaveBizInfoSummary() {
 
         try {
@@ -457,6 +467,10 @@ public class BizInfoSummary implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
             log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
+            if (redirect != null && !redirect.equals("")) {
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+
 
             log.info("Controller getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
             log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
@@ -471,37 +485,36 @@ public class BizInfoSummary implements Serializable {
                 }
 
                 String url = "bizInfoDetail.jsf";
-                FacesContext fc = FacesContext.getCurrentInstance();
+                FacesUtil.redirect("/site/bizInfoDetail.jsf");
+                /*FacesContext fc = FacesContext.getCurrentInstance();
                 ExternalContext ec = fc.getExternalContext();
 
                 log.info("redirect to new page url is " + url);
-                ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");
+                ec.redirect(ec.getRequestContextPath() + "/site/bizInfoDetail.jsf");*/
                 //ec.redirect(url);
                 log.info("redirect to new page goooo!! 1");
+                return;
             } else {
+                log.info("after redirect method");
                 log.info("not have to redirect ");
+                onCreation();
+                log.info("onCreation() after Save");
+                messageHeader = "Save BizInfoSummary Success.";
+                message = "Save BizInfoSummary data success.";
+                log.info("after set message");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-
-            log.info("after redirect method");
-            messageHeader = "Save BizInfoSummary Success.";
-            message = "Save BizInfoSummary data success.";
-            log.info("after set message");
-            onCreation();
-            log.info("onCreation() after Save");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
-            log.info("onSaveBizInfoSummary Error");
+            log.info("onSaveBizInfoSummary Error : ", ex);
             messageHeader = "Save BizInfoSummary Failed.";
             if (ex.getCause() != null) {
-                log.info("ex.getCause().toString() is " + ex.getCause().toString());
+                //log.info("ex.getCause().toString() is " + ex.getCause().toString());
                 message = "Save BizInfoSummary data failed. Cause : " + ex.getCause().toString();
             } else {
-                log.info("ex.getCause().toString() is " + ex.getMessage());
+                //log.info("ex.getCause().toString() is " + ex.getMessage());
                 message = "Save BizInfoSummary data failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } finally {
-            log.info("onSaveBizInfoSummary end");
         }
     }
 

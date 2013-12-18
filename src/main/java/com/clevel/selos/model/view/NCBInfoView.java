@@ -2,7 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,6 +10,7 @@ import java.util.Date;
 
 public class NCBInfoView implements Serializable {
     private long id;
+    private long customerId;
     private String ncbCusMarriageStatus;
     private Date checkingDate;
     private Date ncbLastInfoAsOfDate;
@@ -38,7 +38,7 @@ public class NCBInfoView implements Serializable {
     private int tdrOtherYear;
     private String remark;
     private TDRCondition tdrCondition;
-    private Customer customer;
+    //private Customer customer;
     private String ncbCusName;
     private String ncbCusAddress;
 
@@ -80,7 +80,7 @@ public class NCBInfoView implements Serializable {
         this.tdrOtherYear = 0;
         this.remark = "";
         this.tdrCondition = new TDRCondition();
-        this.customer = new Customer();
+        //this.customer = new Customer();
         this.ncbCusName = "";
         this.ncbCusAddress = "";
         this.ncbDetailView = new NCBDetailView();
@@ -92,6 +92,14 @@ public class NCBInfoView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     public Date getCheckingDate() {
@@ -263,13 +271,13 @@ public class NCBInfoView implements Serializable {
         this.tdrCondition = tdrCondition;
     }
 
-    public Customer getCustomer() {
+    /*public Customer getCustomer() {
         return customer;
     }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
+    }*/
 
     public String getNcbCusMarriageStatus() {
         return ncbCusMarriageStatus;
@@ -470,7 +478,7 @@ public class NCBInfoView implements Serializable {
                 .append("tdrOtherYear", tdrOtherYear)
                 .append("remark", remark)
                 .append("tdrCondition", tdrCondition)
-                .append("customer", customer)
+                //.append("customer", customer)
                 .append("ncbCusName", ncbCusName)
                 .append("ncbCusAddress", ncbCusAddress)
                 .append("active", active)

@@ -1,5 +1,8 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.util.Util;
@@ -14,48 +17,52 @@ public class NCBTransform extends Transform {
     LoanAccountTypeTransform loanAccountTypeTransform;
     @Inject
     CustomerTransform customerTransform;
+    @Inject
+    CustomerDAO customerDAO;
 
-    public NCB transformToModel(NCBInfoView NCBInfoView) {
+    public NCB transformToModel(NCBInfoView ncbInfoView) {
         NCB ncb = new NCB();
 
-        if (NCBInfoView.getId() != 0) {
-            ncb.setId(NCBInfoView.getId());
+        if (ncbInfoView.getId() != 0) {
+            ncb.setId(ncbInfoView.getId());
         }
 
         ncb.setActive(true);
-        ncb.setCreateBy(NCBInfoView.getCreateBy());
-        ncb.setModifyBy(NCBInfoView.getModifyBy());
-        ncb.setCreateDate(NCBInfoView.getCreateDate());
-        ncb.setModifyDate(NCBInfoView.getModifyDate());
-        ncb.setCustomer(NCBInfoView.getCustomer());
-        ncb.setCheckIn6Month(NCBInfoView.getCheckIn6Month());
-        ncb.setCheckingDate(NCBInfoView.getCheckingDate());
-        ncb.setCurrentPaymentType(NCBInfoView.getCurrentPaymentType());
-        ncb.setHistoryPaymentType(NCBInfoView.getHistoryPaymentType());
-        ncb.setNplFlag(NCBInfoView.getNplFlag());
-        ncb.setNplOtherFlag(transFormBooleanToDb(NCBInfoView.isNplOtherFlag()));
-        ncb.setNplOtherMonth(NCBInfoView.getNplOtherMonth());
-        ncb.setNplOtherYear(NCBInfoView.getNplOtherYear());
-        ncb.setNplTMBFlag(transFormBooleanToDb(NCBInfoView.isNplTMBFlag()));
-        ncb.setNplTMBMonth(NCBInfoView.getNplTMBMonth());
-        ncb.setNplTMBYear(NCBInfoView.getNplTMBYear());
-        ncb.setPaymentClass(NCBInfoView.getPaymentClass());
-        ncb.setPersonalId(NCBInfoView.getPersonalId());
-        ncb.setRemark(NCBInfoView.getRemark());
-        ncb.setTdrFlag(NCBInfoView.getTdrFlag());
-        ncb.setTdrOhterFlag(transFormBooleanToDb(NCBInfoView.isTdrOtherFlag()));
-        ncb.setTdrOtherMonth(NCBInfoView.getTdrOtherMonth());
-        ncb.setTdrOtherYear(NCBInfoView.getTdrOtherYear());
-        ncb.setTdrTMBFlag(transFormBooleanToDb(NCBInfoView.isTdrTMBFlag()));
-        ncb.setTdrTMBMonth(NCBInfoView.getTdrTMBMonth());
-        ncb.setTdrTMBYear(NCBInfoView.getTdrTMBYear());
-        ncb.setNcbCusName(NCBInfoView.getNcbCusName());
-        ncb.setEnquiry(NCBInfoView.getEnquiry());
-        ncb.setNcbCusMarriageStatus(NCBInfoView.getNcbCusMarriageStatus());
-        ncb.setNcbCusAddress(NCBInfoView.getNcbCusAddress());
+        ncb.setCreateBy(ncbInfoView.getCreateBy());
+        ncb.setModifyBy(ncbInfoView.getModifyBy());
+        ncb.setCreateDate(ncbInfoView.getCreateDate());
+        ncb.setModifyDate(ncbInfoView.getModifyDate());
+        //ncb.setCustomer(NCBInfoView.getCustomer());
+        Customer customer = customerDAO.findById(ncbInfoView.getCustomerId());
+        ncb.setCustomer(customer);
+        ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
+        ncb.setCheckingDate(ncbInfoView.getCheckingDate());
+        ncb.setCurrentPaymentType(ncbInfoView.getCurrentPaymentType());
+        ncb.setHistoryPaymentType(ncbInfoView.getHistoryPaymentType());
+        ncb.setNplFlag(ncbInfoView.getNplFlag());
+        ncb.setNplOtherFlag(transFormBooleanToDb(ncbInfoView.isNplOtherFlag()));
+        ncb.setNplOtherMonth(ncbInfoView.getNplOtherMonth());
+        ncb.setNplOtherYear(ncbInfoView.getNplOtherYear());
+        ncb.setNplTMBFlag(transFormBooleanToDb(ncbInfoView.isNplTMBFlag()));
+        ncb.setNplTMBMonth(ncbInfoView.getNplTMBMonth());
+        ncb.setNplTMBYear(ncbInfoView.getNplTMBYear());
+        ncb.setPaymentClass(ncbInfoView.getPaymentClass());
+        ncb.setPersonalId(ncbInfoView.getPersonalId());
+        ncb.setRemark(ncbInfoView.getRemark());
+        ncb.setTdrFlag(ncbInfoView.getTdrFlag());
+        ncb.setTdrOhterFlag(transFormBooleanToDb(ncbInfoView.isTdrOtherFlag()));
+        ncb.setTdrOtherMonth(ncbInfoView.getTdrOtherMonth());
+        ncb.setTdrOtherYear(ncbInfoView.getTdrOtherYear());
+        ncb.setTdrTMBFlag(transFormBooleanToDb(ncbInfoView.isTdrTMBFlag()));
+        ncb.setTdrTMBMonth(ncbInfoView.getTdrTMBMonth());
+        ncb.setTdrTMBYear(ncbInfoView.getTdrTMBYear());
+        ncb.setNcbCusName(ncbInfoView.getNcbCusName());
+        ncb.setEnquiry(ncbInfoView.getEnquiry());
+        ncb.setNcbCusMarriageStatus(ncbInfoView.getNcbCusMarriageStatus());
+        ncb.setNcbCusAddress(ncbInfoView.getNcbCusAddress());
 
-        if (NCBInfoView.getTdrCondition() != null && NCBInfoView.getTdrCondition().getId() != 0) {
-            ncb.setTdrCondition(NCBInfoView.getTdrCondition());
+        if (ncbInfoView.getTdrCondition() != null && ncbInfoView.getTdrCondition().getId() != 0) {
+            ncb.setTdrCondition(ncbInfoView.getTdrCondition());
         } else {
             ncb.setTdrCondition(null);
         }
@@ -64,41 +71,58 @@ public class NCBTransform extends Transform {
     }
 
     public NCBInfoView transformToView(NCB ncb) {
-        NCBInfoView NCBInfoView = new NCBInfoView();
-        NCBInfoView.setId(ncb.getId());
-        NCBInfoView.setActive(true);
-        NCBInfoView.setCreateBy(ncb.getCreateBy());
-        NCBInfoView.setModifyBy(ncb.getModifyBy());
-        NCBInfoView.setCreateDate(ncb.getCreateDate());
-        NCBInfoView.setModifyDate(ncb.getModifyDate());
-        NCBInfoView.setCheckIn6Month(ncb.getCheckIn6Month());
-        NCBInfoView.setCheckingDate(ncb.getCheckingDate());
-        NCBInfoView.setCurrentPaymentType(ncb.getCurrentPaymentType());
-        NCBInfoView.setHistoryPaymentType(ncb.getHistoryPaymentType());
-        NCBInfoView.setNplFlag(ncb.getNplFlag());
-        NCBInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
-        NCBInfoView.setNplOtherMonth(ncb.getNplOtherYear());
-        NCBInfoView.setNplOtherYear(ncb.getNplOtherYear());
-        NCBInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
-        NCBInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
-        NCBInfoView.setNplTMBYear(ncb.getNplTMBYear());
-        NCBInfoView.setPaymentClass(ncb.getPaymentClass());
-        NCBInfoView.setPersonalId(ncb.getPersonalId());
-        NCBInfoView.setRemark(ncb.getRemark());
-        NCBInfoView.setTdrFlag(ncb.getTdrFlag());
-        NCBInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
-        NCBInfoView.setTdrOtherMonth(ncb.getTdrOtherMonth());
-        NCBInfoView.setTdrOtherYear(ncb.getTdrOtherYear());
-        NCBInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
-        NCBInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
-        NCBInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
-        NCBInfoView.setTdrCondition(ncb.getTdrCondition());
-        NCBInfoView.setCustomer(ncb.getCustomer());
-        NCBInfoView.setNcbCusName(ncb.getNcbCusName());
-        NCBInfoView.setEnquiry(ncb.getEnquiry());
-        NCBInfoView.setNcbCusMarriageStatus(ncb.getNcbCusMarriageStatus());
-        NCBInfoView.setNcbCusAddress(ncb.getNcbCusAddress());
-        return NCBInfoView;
+        NCBInfoView ncbInfoView = new NCBInfoView();
+        ncbInfoView.setId(ncb.getId());
+        ncbInfoView.setActive(true);
+        ncbInfoView.setCreateBy(ncb.getCreateBy());
+        ncbInfoView.setModifyBy(ncb.getModifyBy());
+        ncbInfoView.setCreateDate(ncb.getCreateDate());
+        ncbInfoView.setModifyDate(ncb.getModifyDate());
+        ncbInfoView.setCheckIn6Month(ncb.getCheckIn6Month());
+        ncbInfoView.setCheckingDate(ncb.getCheckingDate());
+        ncbInfoView.setCurrentPaymentType(ncb.getCurrentPaymentType());
+        ncbInfoView.setHistoryPaymentType(ncb.getHistoryPaymentType());
+        ncbInfoView.setNplFlag(ncb.getNplFlag());
+        ncbInfoView.setNplOtherFlag(transFormBooleanToView(ncb.getNplOtherFlag()));
+        ncbInfoView.setNplOtherMonth(ncb.getNplOtherYear());
+        ncbInfoView.setNplOtherYear(ncb.getNplOtherYear());
+        ncbInfoView.setNplTMBFlag(transFormBooleanToView(ncb.getNplTMBFlag()));
+        ncbInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
+        ncbInfoView.setNplTMBYear(ncb.getNplTMBYear());
+        ncbInfoView.setPaymentClass(ncb.getPaymentClass());
+
+        ncbInfoView.setRemark(ncb.getRemark());
+        ncbInfoView.setTdrFlag(ncb.getTdrFlag());
+        ncbInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
+        ncbInfoView.setTdrOtherMonth(ncb.getTdrOtherMonth());
+        ncbInfoView.setTdrOtherYear(ncb.getTdrOtherYear());
+        ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
+        ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
+        ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
+        ncbInfoView.setTdrCondition(ncb.getTdrCondition());
+        //NCBInfoView.setCustomer(ncb.getCustomer());
+        if(ncb.getCustomer() != null){
+            ncbInfoView.setCustomerId(ncb.getCustomer().getId());
+            String customerName = ncb.getCustomer().getNameTh();
+            if(ncb.getCustomer().getLastNameTh() != null){
+                customerName = customerName.concat(" ").concat(ncb.getCustomer().getLastNameTh());
+            }
+            ncbInfoView.setNcbCusName(customerName);
+            if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(ncb.getCustomer().getIndividual() != null){
+                    ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
+                }
+            } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
+                if(ncb.getCustomer().getJuristic() != null){
+                    ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
+                }
+            }
+
+        }
+        ncbInfoView.setEnquiry(ncb.getEnquiry());
+        ncbInfoView.setNcbCusMarriageStatus(ncb.getNcbCusMarriageStatus());
+        ncbInfoView.setNcbCusAddress(ncb.getNcbCusAddress());
+        return ncbInfoView;
     }
 
     // convert value for checkbox boolean
