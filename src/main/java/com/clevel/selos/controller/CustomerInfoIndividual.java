@@ -952,12 +952,13 @@ public class CustomerInfoIndividual implements Serializable {
                         try {
                             customerInfoView.getSpouse().setDocumentType(customerInfoSearch.getDocumentType());
                             customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                            customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("onSearchCustomerInfo ( spouse ) ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     log.debug("onSearchCustomerInfo ::: customer ( spouse ) found : {}", cusSpouseResultView.getCustomerInfoView());
-                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
                                     customerInfoView.getSpouse().setSearchId(customerInfoResultView.getCustomerInfoView().getCitizenId());
                                     customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
