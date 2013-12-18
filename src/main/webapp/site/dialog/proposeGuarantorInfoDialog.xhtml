@@ -20,9 +20,9 @@
                                          required="true">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacPropose.guarantorList}"
-                                           var="guarantorList"
-                                           itemLabel="#{guarantorList.firstNameTh}"
-                                           itemValue="#{guarantorList.id}"/>
+                                           var="guarantor"
+                                           itemLabel="#{guarantor.firstNameTh} #{guarantor.lastNameTh}"
+                                           itemValue="#{guarantor.id}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

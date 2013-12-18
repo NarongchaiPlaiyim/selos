@@ -949,13 +949,15 @@ public class CustomerInfoIndividual implements Serializable {
 
                     //for spouse
                     if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
-                        customerInfoView.getSpouse().setSearchBy(1);
-                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                         try {
                             CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
                                     customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+                                    customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                                    customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+                                    customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+                                    customerInfoView.getSpouse().setSearchFromRM(1);
                                     enableSpouseDocumentType = false;
                                     enableSpouseCitizenId = false;
                                 } else {

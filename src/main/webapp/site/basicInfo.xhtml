@@ -644,13 +644,12 @@
                 <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             </div>
+
+            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
-
-        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
-
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"

@@ -27,6 +27,7 @@ public class NewCollateralInfoView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private int isApproved;
 
     private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
     private List<CreditTypeDetailView> creditTypeDetailViewList;
@@ -189,6 +190,14 @@ public class NewCollateralInfoView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public int getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(int approved) {
+        isApproved = approved;
+    }
+
     public List<NewCollateralHeadDetailView> getNewCollateralHeadDetailViewList() {
         return newCollateralHeadDetailViewList;
     }
@@ -225,6 +234,7 @@ public class NewCollateralInfoView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("isApproved", isApproved)
                 .append("newCollateralHeadDetailViewList", newCollateralHeadDetailViewList)
                 .append("creditTypeDetailViewList", creditTypeDetailViewList)
                 .toString();

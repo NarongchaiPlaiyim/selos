@@ -19,7 +19,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeRequestType()}"
                     process="@this"
-                    update=":creditInfoDlgForm"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -52,7 +52,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeProductProgram}"
                     process="@this"
-                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -64,7 +64,7 @@
         <p:selectOneMenu id="dlgSelCreditType"
                          value="#{creditFacPropose.newCreditDetailView.creditType.id}"
                          size="1"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 300px; width: 300px; max-width: 300px;"
                          required="true">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
             <f:selectItems value="#{creditFacPropose.prdProgramToCreditTypeList}"
@@ -74,7 +74,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCreditType}"
                     process=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram"
-                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
+                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -135,7 +135,8 @@
 </tr>
 <tr>
     <td>
-        <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFlag}"
+        <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reducePriceFlag}"
+                                 id="reducePriceFlagChk"
                                  disabled="#{creditFacPropose.modeEdit}}">
         </h:selectBooleanCheckbox>
         <p:spacer width="5px;"/>
@@ -143,7 +144,8 @@
     </td>
     <td></td>
     <td colspan="2">
-        <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFlag}"
+        <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFee}"
+                                 id="reduceFrontEndFeeChk"
                                  disabled="#{creditFacPropose.modeEdit}">
         </h:selectBooleanCheckbox>
         <p:spacer width="5px;"/>
@@ -333,7 +335,7 @@
                          value="#{creditFacPropose.newCreditDetailView.loanPurpose.id}"
                          size="1"
                          required="true"
-                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         style="min-width: 300px; width: 300px; max-width: 300px;"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
              <f:selectItems value="#{creditFacPropose.loanPurposeList}"

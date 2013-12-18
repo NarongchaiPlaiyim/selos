@@ -23,7 +23,9 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
@@ -399,13 +401,19 @@ public class BankStatementSummary implements Serializable {
     private void passParamsToBankStmtDetail() {
         log.debug("passParamsToBankStmtDetail() summaryView.id: {}, seasonalFlag: {}, expectedSubmitDate: {}, isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView: {}",
                 summaryView.getId(), seasonalFlag, expectedSubmitDate, isTMB, lastMonthDate, numberOfMonths, selectedBankStmtView);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("bankStmtSumView", summaryView);
-        map.put("isTmbBank", isTMB);
-        map.put("lastMonthDate", lastMonthDate);
-        map.put("numberOfMonths", numberOfMonths);
-        map.put("selectedBankStmtView", selectedBankStmtView);
-        FacesUtil.getFlash().put("bankStmtSumParams", map);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("bankStmtSumView", summaryView);
+//        map.put("isTmbBank", isTMB);
+//        map.put("lastMonthDate", lastMonthDate);
+//        map.put("numberOfMonths", numberOfMonths);
+//        map.put("selectedBankStmtView", selectedBankStmtView);
+//        FacesUtil.getFlash().put("bankStmtSumParams", map);
+
+        FacesUtil.setSessionMapValue("bankStmtSumView", summaryView);
+        FacesUtil.setSessionMapValue("isTmbBank", isTMB);
+        FacesUtil.setSessionMapValue("lastMonthDate", lastMonthDate);
+        FacesUtil.setSessionMapValue("numberOfMonths", numberOfMonths);
+        FacesUtil.setSessionMapValue("selectedBankStmtView", selectedBankStmtView);
     }
 
     public BankStmtSummaryView getSummaryView() {
