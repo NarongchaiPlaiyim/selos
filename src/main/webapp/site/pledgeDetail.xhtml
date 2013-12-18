@@ -31,9 +31,9 @@
                         <div id="content">
                             <div id="content_info">
                                 <div id="content_trackchange">[ View Track Change ]</div>
-                                <div id="content_lastupdate">Last update by <h:outputText
-                                        value=""/>,
-                                    <p:outputLabel value="">
+                                <div id="content_lastupdate">Last update by <p:outputLabel
+                                        value="#{pledgeDetail.pledgeDetailView.modifyBy}"/>,
+                                    <p:outputLabel value="#{pledgeDetail.pledgeDetailView.modifyDate}">
                                         <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
                                     </p:outputLabel></div>
                             </div>
@@ -45,9 +45,9 @@
                                             <p:outputLabel value="#{msg.get('app.pledgeDetail.content.head.approvedType')}" />
                                         </td>
                                         <td>
-                                            <p:selectOneRadio>
-                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.new')}" itemValue=""/>
-                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.newChange')}" itemValue=""/>
+                                            <p:selectOneRadio value="#{pledgeDetail.pledgeDetailView.approveType}">
+                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.new')}" itemValue="1"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.pledgeDetail.content.radio.newChange')}" itemValue="2"/>
                                             </p:selectOneRadio>
                                         </td>
                                     </tr>
@@ -67,6 +67,7 @@
                                         </td>
                                         <td>
                                             <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                            value="#{pledgeDetail.pledgeDetailView.pledgeSignDate}"
                                                             yearRange="1950:2100"
                                                             mindate="#{pledgeDetail.currentDateDDMMYY}"
                                                             defaultdate="#{pledgeDetail.currentDateDDMMYY}"
@@ -80,7 +81,7 @@
                                             <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeType')}" />
                                         </td>
                                         <td>
-                                            <p:outputLabel value="" />
+                                            <p:outputLabel value="#{pledgeDetail.pledgeDetailView.pledgeType}" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -88,7 +89,7 @@
                                             <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.pledgeAmount')}"/>
                                         </td>
                                         <td>
-                                            <p:outputLabel value="">
+                                            <p:outputLabel value="#{pledgeDetail.pledgeDetailView.pledgeAmount}">
                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                             </p:outputLabel>
                                         </td>
@@ -163,7 +164,7 @@
                                             <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.accountNumber')}"/>
                                         </td>
                                         <td >
-                                            <p:inputMask value="" mask="999-9-99999-9"/>
+                                            <p:inputMask id="accountNumber" value="#{pledgeDetail.pledgeACView.acAccountNumber}" mask="999-9-99999-9"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -171,39 +172,46 @@
                                             <p:outputLabel value="#{msg.get('app.pledgeDetail.content.label.numberOfDep')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="numberOfDep" >
+                                            <p:inputText id="numberOfDep"  value="#{pledgeDetail.pledgeACView.acNumberofDep}">
                                                 <f:convertNumber type="number" minIntegerDigits="2" maxFractionDigits="0" />
                                                 <p:ajax event="change" update=":frmMain:numberOfDep" />
                                             </p:inputText>
                                             <p:spacer width="10" />
                                             <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
-                                                             styleClass="smaller">
+                                                             styleClass="smaller"
+                                                             update=":frmMain:pledgeAcDT"
+                                                             action="#{pledgeDetail.onAddPledgeAC()}">
                                             </p:commandButton>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td/>
                                         <td colspan="2">
-                                            <p:dataTable value="" var="item"  rowIndexVar="rowindex">
+                                            <p:dataTable id="pledgeAcDT" value="#{pledgeDetail.pledgeDetailView.pledgeACViews}" var="pledgeAC"  rowIndexVar="rowIndex">
                                                 <p:column headerText="" style="min-width: 30px; max-width: 30px" styleClass="left">
-                                                    <p:outputLabel value="#{rowindex+1}"/>
+                                                    <p:outputLabel value="#{rowIndex+1}"/>
                                                 </p:column>
                                                 <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.dep')}" style="min-width: 150px; max-width: 150px">
-                                                    <p:outputLabel value="" >
-                                                        <f:convertNumber />
+                                                    <p:outputLabel value="#{pledgeAC.acNumberofDep}" >
+
                                                     </p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.holdAmount')}" style="min-width: 200px; max-width: 200px">
-                                                    <p:outputLabel value="" >
+                                                    <p:outputLabel value="#{pledgeAC.acHoldAmount}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     </p:outputLabel>
                                                 </p:column>
                                                 <p:column  styleClass="center">
                                                     <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                                     icon="ui-icon-pencil">
+                                                                     icon="ui-icon-pencil"
+                                                                     update=":frmMain:numberOfDep :frmMain:accountNumber"
+                                                                     action="#{pledgeDetail.onEditPledgeAC()}">
+                                                        <f:setPropertyActionListener value="#{rowIndex}" target="#{pledgeDetail.rowIndex}"/>
                                                     </p:commandButton>
                                                     <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                                     icon="ui-icon-trash">
+                                                                     icon="ui-icon-trash"
+                                                                     oncomplete="confirmDeletePledgeDetailDlg.show()">
+                                                        <f:setPropertyActionListener value="#{rowIndex}" target="#{pledgeDetail.rowIndex}"/>
                                                     </p:commandButton>
                                                 </p:column>
                                                 <p:columnGroup type="footer">
@@ -211,10 +219,10 @@
                                                         <p:column colspan="2" footerText="#{msg.get('app.pledgeDetail.content.table.total.holdAmount')}" style="text-align:right" styleClass="summary_column"/>
                                                         <p:column style="text-align:right" styleClass="summary_column">
                                                             <f:facet name="footer">
-                                                                <h:outputText >
+                                                                <p:outputLabel value="#{pledgeDetail.getTotalHoldAmount()}">
                                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                                      maxIntegerDigits="14"/>
-                                                                </h:outputText>
+                                                                </p:outputLabel>
                                                             </f:facet>
                                                         </p:column >
                                                         <p:column styleClass="summary_column" />
@@ -303,6 +311,14 @@
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>
             </p:confirmDialog>
         </p:panel>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeletePledgeDetailDialog"/>
+            <ui:param name="name" value="confirmDeletePledgeDetailDlg"/>
+            <ui:param name="formId" value="frmConfirmDeletePledgeDetail"/>
+            <ui:param name="controller" value="#{pledgeDetail}"/>
+            <ui:param name="action" value="onDeletePledgeAC"/>
+            <ui:param name="update" value=":frmMain:pledgeAcDT"/>
+        </ui:include>
     </h:body>
 </f:view>
 </html>
