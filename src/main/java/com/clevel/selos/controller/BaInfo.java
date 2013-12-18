@@ -171,7 +171,7 @@ public class BaInfo implements Serializable {
         CreditTypeDetailView creditTypeDetailView;
         BigDecimal limit =BigDecimal.ZERO;
         for(int i=0;i<creditTypeDetailList.size();i++){
-            if(creditTypeDetailList.get(i).getNo()==1){
+            if(creditTypeDetailList.get(i).isNoFlag()){
                 creditTypeDetailView=new CreditTypeDetailView();
                 creditTypeDetailView.setProductProgram(creditTypeDetailList.get(i).getProductProgram());
                 creditTypeDetailView.setCreditFacility(creditTypeDetailList.get(i).getCreditFacility());

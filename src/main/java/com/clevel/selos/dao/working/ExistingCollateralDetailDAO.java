@@ -22,7 +22,7 @@ public class ExistingCollateralDetailDAO extends GenericDAO<ExistingCollateralDe
     }
 
     public List<ExistingCollateralDetail> findByExistingCreditFacility(ExistingCreditFacility existingCreditFacility,int borrowerType){
-        log.info("findByExistingCreditFacility : {}", existingCreditFacility.getId());
+        //log.info("findByExistingCreditFacility : {}", existingCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("borrowerType", borrowerType));
         criteria.add(Restrictions.eq("existingCreditFacility", existingCreditFacility));
