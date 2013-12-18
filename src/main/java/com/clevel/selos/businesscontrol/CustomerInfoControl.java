@@ -447,4 +447,11 @@ public class CustomerInfoControl extends BusinessControl {
 
         return customerInfoViewList;
     }
+
+    public CustomerInfoView getCustomerById(CustomerInfoView customerInfo){
+        log.info("getCustomerById ::: customerInfo : {}", customerInfo);
+        Customer customer = customerDAO.findById(customerInfo.getId());
+        CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
+        return customerInfoView;
+    }
 }

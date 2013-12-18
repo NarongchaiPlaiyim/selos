@@ -26,7 +26,6 @@ public class CreditTypeDetailView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    private BigDecimal purpose;
     private BigDecimal PCEPercent;
     private BigDecimal PCEAmount;
     private String purpose;
@@ -51,7 +50,6 @@ public class CreditTypeDetailView implements Serializable {
         this.seq = 0;
         this.noFlag = false;
         this.purpose = "";
-        this.purpose = BigDecimal.ZERO;
         this.PCEPercent = BigDecimal.ZERO;
         this.PCEAmount = BigDecimal.ZERO;
     }
