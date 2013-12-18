@@ -265,12 +265,12 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
-        onChangeSpecialProgram();
-        onChangeRefIn();
-        onChangeRefOut();
-        onChangeExistingSME();
-        onChangeBA();
-        onChangeReqLG();
+        onChangeSpecialProgramInit();
+        onChangeRefInInit();
+        onChangeRefOutInit();
+        onChangeExistingSMEInit();
+        onChangeBAInit();
+        onChangeReqLGInit();
     }
 
     public void fieldsControl(List<FieldsControlView> fieldsControlViewList){
@@ -529,9 +529,11 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onChangeSpecialProgram(){
         if(tmpSpecialProgram == basicInfoView.getSpProgram()){
             basicInfoView.setSpProgram(0);
+            basicInfoView.setSpecialProgram(new SpecialProgram());
             tmpSpecialProgram = 0;
         } else {
             tmpSpecialProgram = basicInfoView.getSpProgram();
+            basicInfoView.setSpecialProgram(new SpecialProgram());
         }
 
         if(basicInfoView.getSpProgram() == 2){ // yes
@@ -546,9 +548,11 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onChangeRefIn(){
         if(tmpRefinanceIN == basicInfoView.getRefIn()){
             basicInfoView.setRefIn(0);
+            basicInfoView.setRefinanceIn(new Bank());
             tmpRefinanceIN = 0;
         } else {
             tmpRefinanceIN = basicInfoView.getRefIn();
+            basicInfoView.setRefinanceIn(new Bank());
         }
 
         if(basicInfoView.getRefIn() == 2){ // yes
@@ -563,9 +567,11 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onChangeRefOut(){
         if(tmpRefinanceOUT == basicInfoView.getRefOut()){
             basicInfoView.setRefOut(0);
+            basicInfoView.setRefinanceOut(new Bank());
             tmpRefinanceOUT = 0;
         } else {
             tmpRefinanceOUT = basicInfoView.getRefOut();
+            basicInfoView.setRefinanceOut(new Bank());
         }
 
         if(basicInfoView.getRefOut() == 2){ // yes
@@ -581,9 +587,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         if(basicInfoView.getExistingSME() == 2){ // yes
             reqExistingSMECustomerSince = true;
             disExistingSMECustomerSince = false;
+            basicInfoView.setExistingSME(0);
         } else {
             reqExistingSMECustomerSince = false;
             disExistingSMECustomerSince = true;
+            basicInfoView.setExistingSME(0);
         }
     }
 
@@ -627,6 +635,106 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoView.setCharFCLate(false);
             basicInfoView.setCharFCFund(false);
 
+        } else {
+            disIsAbleToGettingGuarantorJob = true;
+            disNoClaimLGHistory = true;
+            disNoRevokedLicense = true;
+            disNoLateWorkDelivery = true;
+            disIsAdequateOfCapitalResource = true;
+            basicInfoView.setCharFCIns(false);
+            basicInfoView.setCharFCCom(false);
+            basicInfoView.setCharFCAba(false);
+            basicInfoView.setCharFCLate(false);
+            basicInfoView.setCharFCFund(false);
+        }
+    }
+
+    //Init
+    public void onChangeSpecialProgramInit(){
+        if(tmpSpecialProgram == basicInfoView.getSpProgram()){
+            basicInfoView.setSpProgram(0);
+            tmpSpecialProgram = 0;
+        } else {
+            tmpSpecialProgram = basicInfoView.getSpProgram();
+        }
+
+        if(basicInfoView.getSpProgram() == 2){ // yes
+            reqSpecialProgramValue = true;
+            disSpecialProgramValue = false;
+        } else {
+            reqSpecialProgramValue = false;
+            disSpecialProgramValue = true;
+        }
+    }
+
+    public void onChangeRefInInit(){
+        if(tmpRefinanceIN == basicInfoView.getRefIn()){
+            basicInfoView.setRefIn(0);
+            tmpRefinanceIN = 0;
+        } else {
+            tmpRefinanceIN = basicInfoView.getRefIn();
+        }
+
+        if(basicInfoView.getRefIn() == 2){ // yes
+            reqRefinanceInValue = true;
+            disRefinanceInValue = false;
+        } else {
+            reqRefinanceInValue = false;
+            disRefinanceInValue = true;
+        }
+    }
+
+    public void onChangeRefOutInit(){
+        if(tmpRefinanceOUT == basicInfoView.getRefOut()){
+            basicInfoView.setRefOut(0);
+            tmpRefinanceOUT = 0;
+        } else {
+            tmpRefinanceOUT = basicInfoView.getRefOut();
+        }
+
+        if(basicInfoView.getRefOut() == 2){ // yes
+            reqRefinanceOutValue = true;
+            disRefinanceOutValue = false;
+        } else {
+            reqRefinanceOutValue = false;
+            disRefinanceOutValue = true;
+        }
+    }
+
+    public void onChangeExistingSMEInit(){
+        if(basicInfoView.getExistingSME() == 2){ // yes
+            reqExistingSMECustomerSince = true;
+            disExistingSMECustomerSince = false;
+        } else {
+            reqExistingSMECustomerSince = false;
+            disExistingSMECustomerSince = true;
+        }
+    }
+
+    public void onChangeBAInit(){
+        if(tmpApplyBA == basicInfoView.getApplyBA()){
+            basicInfoView.setApplyBA(0);
+            tmpApplyBA = 0;
+        } else {
+            tmpApplyBA = basicInfoView.getApplyBA();
+        }
+
+        if(basicInfoView.getApplyBA() == 2){ // yes
+            reqBaPaymentMethod = true;
+            disBaPaymentMethod = false;
+        } else {
+            reqBaPaymentMethod = false;
+            disBaPaymentMethod = true;
+        }
+    }
+
+    public void onChangeReqLGInit(){
+        if(basicInfoView.isCharFCLG()){
+            disIsAbleToGettingGuarantorJob = false;
+            disNoClaimLGHistory = false;
+            disNoRevokedLicense = false;
+            disNoLateWorkDelivery = false;
+            disIsAdequateOfCapitalResource = false;
         } else {
             disIsAbleToGettingGuarantorJob = true;
             disNoClaimLGHistory = true;
