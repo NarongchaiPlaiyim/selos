@@ -72,31 +72,32 @@ public class ExistingCreditTierTransform extends Transform {
     public List<ExistingCreditTierDetailView> transformsToView(List<ExistingCreditTierDetail> existingCreditTierDetailList) {
 
         List<ExistingCreditTierDetailView> existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
-        ExistingCreditTierDetailView existingFeeDetailView;
+        ExistingCreditTierDetailView existingCreditTierDetailView;
 
         for(ExistingCreditTierDetail existingCreditTierDetail : existingCreditTierDetailList)
         {
-            existingFeeDetailView = new ExistingCreditTierDetailView();
-            existingFeeDetailView.setCreateDate(existingCreditTierDetail.getCreateDate());
-            existingFeeDetailView.setCreateBy(existingCreditTierDetail.getCreateBy());
-            existingFeeDetailView.setModifyDate(existingCreditTierDetail.getModifyDate());
-            existingFeeDetailView.setModifyBy(existingCreditTierDetail.getModifyBy());
-            existingFeeDetailView.setNo(existingCreditTierDetail.getNo());
-            existingFeeDetailView.setFinalPriceRate(existingCreditTierDetail.getFinalPriceRate());
-            existingFeeDetailView.setSuggestBasePrice(existingCreditTierDetail.getSuggestBasePrice());
-//            existingFeeDetailView.setEditFlag(existingCreditTierDetail.isCanEdit());
-            existingFeeDetailView.setFinalBasePrice(existingCreditTierDetail.getFinalBasePrice());
-            existingFeeDetailView.setFinalInterest(existingCreditTierDetail.getStandardInterest());
-            existingFeeDetailView.setFinalPriceRate(existingCreditTierDetail.getFinalPriceRate());
-            existingFeeDetailView.setInstallment(existingCreditTierDetail.getInstallment());
-            existingFeeDetailView.setStandardBasePrice(existingCreditTierDetail.getStandardBasePrice());
-            existingFeeDetailView.setStandardInterest(existingCreditTierDetail.getStandardInterest());
-            existingFeeDetailView.setStandardPrice(existingCreditTierDetail.getStandardPrice());
-            existingFeeDetailView.setSuggestBasePrice(existingCreditTierDetail.getSuggestBasePrice());
-            existingFeeDetailView.setSuggestInterest(existingCreditTierDetail.getSuggestInterest());
-            existingFeeDetailView.setSuggestPrice(existingCreditTierDetail.getSuggestPrice());
-            existingFeeDetailView.setTenor(existingCreditTierDetail.getTenor());
-            existingCreditTierDetailViewList.add(existingFeeDetailView);
+            existingCreditTierDetailView = new ExistingCreditTierDetailView();
+            existingCreditTierDetailView.setNo(existingCreditTierDetail.getNo());
+            existingCreditTierDetailView.setCreateDate(existingCreditTierDetail.getCreateDate());
+            existingCreditTierDetailView.setCreateBy(existingCreditTierDetail.getCreateBy());
+            existingCreditTierDetailView.setModifyDate(existingCreditTierDetail.getModifyDate());
+            existingCreditTierDetailView.setModifyBy(existingCreditTierDetail.getModifyBy());
+            existingCreditTierDetailView.setNo(existingCreditTierDetail.getNo());
+            existingCreditTierDetailView.setFinalPriceRate(existingCreditTierDetail.getFinalPriceRate());
+            existingCreditTierDetailView.setSuggestBasePrice(existingCreditTierDetail.getSuggestBasePrice());
+//            existingCreditTierDetailView.setEditFlag(existingCreditTierDetail.isCanEdit());
+            existingCreditTierDetailView.setFinalBasePrice(existingCreditTierDetail.getFinalBasePrice());
+            existingCreditTierDetailView.setFinalInterest(existingCreditTierDetail.getStandardInterest());
+            existingCreditTierDetailView.setFinalPriceRate(existingCreditTierDetail.getFinalPriceRate());
+            existingCreditTierDetailView.setInstallment(existingCreditTierDetail.getInstallment());
+            existingCreditTierDetailView.setStandardBasePrice(existingCreditTierDetail.getStandardBasePrice());
+            existingCreditTierDetailView.setStandardInterest(existingCreditTierDetail.getStandardInterest());
+            existingCreditTierDetailView.setStandardPrice(existingCreditTierDetail.getStandardPrice());
+            existingCreditTierDetailView.setSuggestBasePrice(existingCreditTierDetail.getSuggestBasePrice());
+            existingCreditTierDetailView.setSuggestInterest(existingCreditTierDetail.getSuggestInterest());
+            existingCreditTierDetailView.setSuggestPrice(existingCreditTierDetail.getSuggestPrice());
+            existingCreditTierDetailView.setTenor(existingCreditTierDetail.getTenor());
+            existingCreditTierDetailViewList.add(existingCreditTierDetailView);
     }
 
         return existingCreditTierDetailViewList;
