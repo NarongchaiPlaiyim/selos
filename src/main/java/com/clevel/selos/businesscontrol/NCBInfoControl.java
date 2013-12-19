@@ -119,6 +119,7 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
+        if(customers == null || customers.size() == 0) return ncbDetailViews;
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         List<NCBDetail> ncbDetails = new ArrayList<NCBDetail>();
         ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
@@ -127,7 +128,6 @@ public class NCBInfoControl extends BusinessControl {
         AccountStatus accountStatus;
             for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 Customer customer = ncbDetail.getNcb().getCustomer();
-
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
                 if(accountStatus == null || accountType == null) break;
