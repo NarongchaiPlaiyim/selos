@@ -129,8 +129,6 @@ public class DBRInfo implements Serializable {
     public void initAddDBRDetail() {
         isComplete = false;
         selectedItem = new DBRDetailView();
-
-
     }
 
     public void onAddDBRDetail() {
