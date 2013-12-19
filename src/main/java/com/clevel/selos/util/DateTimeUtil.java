@@ -308,10 +308,13 @@ public class DateTimeUtil implements Serializable {
         }
         int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
         int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
-        if (today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR))
+        if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
             m--;
-        if (today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH))
-            m--;
+        }
+        if(m < 0){
+            y--;
+            m = 12+m;
+        }
         yearMonth = y+"Y "+m+"M";
         return yearMonth;
     }
@@ -326,10 +329,13 @@ public class DateTimeUtil implements Serializable {
         }
         int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
         int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
-        if (today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR))
+        if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
             m--;
-        if (today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH))
-            m--;
+        }
+        if(m < 0){
+            y--;
+            m = 12+m;
+        }
         int ym = y*12;
         int mm = ym+m;
         month = mm;
