@@ -55,10 +55,10 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td>
-                                        <p:commandButton id="btnIndividual" value="Add" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
                                                          action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
-                                        <p:commandButton id="btnJuristic" value="Add" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
                                                          action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
                                     </td>
