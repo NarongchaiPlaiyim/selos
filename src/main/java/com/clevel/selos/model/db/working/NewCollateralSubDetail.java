@@ -65,14 +65,14 @@ public class NewCollateralSubDetail implements Serializable {
     @JoinColumn(name = "new_collateral_head_detail_id")
     private NewCollateralHeadDetail newCollateralHeadDetail;
 
-    @OneToMany
-    @JoinColumn(name = "mortgage_type_id")
-    private List<MortgageType> mortgageList;
+    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubMortgage> newCollateralSubMortgageList;
 
     @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
     private List<NewCollateralSubCustomer> newCollateralSubCustomerList;
 
-
+    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralSubRelate> newCollateralSubRelateList;
 
     public long getId() {
         return id;
@@ -186,12 +186,12 @@ public class NewCollateralSubDetail implements Serializable {
         this.newCollateralHeadDetail = newCollateralHeadDetail;
     }
 
-    public List<MortgageType> getMortgageList() {
-        return mortgageList;
+    public List<NewCollateralSubMortgage> getNewCollateralSubMortgageList() {
+        return newCollateralSubMortgageList;
     }
 
-    public void setMortgageList(List<MortgageType> mortgageList) {
-        this.mortgageList = mortgageList;
+    public void setNewCollateralSubMortgageList(List<NewCollateralSubMortgage> newCollateralSubMortgageList) {
+        this.newCollateralSubMortgageList = newCollateralSubMortgageList;
     }
 
     public List<NewCollateralSubCustomer> getNewCollateralSubCustomerList() {
@@ -202,22 +202,11 @@ public class NewCollateralSubDetail implements Serializable {
         this.newCollateralSubCustomerList = newCollateralSubCustomerList;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("subCollTypeCaption", subCollTypeCaption)
-                .append("address", address)
-                .append("landOffice", landOffice)
-                .append("titleDeed", titleDeed)
-                .append("collateralOwner", collateralOwner)
-                .append("collateralOwnerAAD", collateralOwnerAAD)
-                .append("appraisalValue", appraisalValue)
-                .append("mortgageValue", mortgageValue)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+    public List<NewCollateralSubRelate> getNewCollateralSubRelateList() {
+        return newCollateralSubRelateList;
+    }
+
+    public void setNewCollateralSubRelateList(List<NewCollateralSubRelate> newCollateralSubRelateList) {
+        this.newCollateralSubRelateList = newCollateralSubRelateList;
     }
 }

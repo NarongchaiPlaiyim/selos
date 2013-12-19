@@ -70,7 +70,7 @@ public class AccountTypeDAO extends GenericDAO<AccountType, Integer> {
         criteria.add(Restrictions.eq("active", 1));
         criteria.add(Restrictions.eq("dbrFlag", 1));
         List<AccountType> accountTypes = criteria.list();
-        log.debug("getListLoanTypeByCusEntity. (AccountType:{} )", accountTypes);
+        log.debug("getListLoanTypeByCusEntity. (AccountType size:{} )", accountTypes.size());
         return accountTypes;
     }
 }

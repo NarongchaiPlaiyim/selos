@@ -1,14 +1,16 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.MortgageType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_new_collateral_customer")
-public class NewCollateralSubCustomer implements Serializable {
+@Table(name = "wrk_new_collateral_mortgage")
+public class NewCollateralSubMortgage implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_CUS_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_CUS_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COL_CUS_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_MOR_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_MOR_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COL_MOR_ID")
     private long id;
 
     @ManyToOne
@@ -16,8 +18,8 @@ public class NewCollateralSubCustomer implements Serializable {
     private NewCollateralSubDetail newCollateralSubDetail;
 
     @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "mortgage_id")
+    private MortgageType mortgageType;
 
     public long getId() {
         return id;
@@ -35,11 +37,11 @@ public class NewCollateralSubCustomer implements Serializable {
         this.newCollateralSubDetail = newCollateralSubDetail;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public MortgageType getMortgageType() {
+        return mortgageType;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setMortgageType(MortgageType mortgageType) {
+        this.mortgageType = mortgageType;
     }
 }
