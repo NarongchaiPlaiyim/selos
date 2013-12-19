@@ -315,7 +315,8 @@
                         </p:column>
 
                         <p:column styleClass="center" style="padding: 4px 10px !important;">
-                            <p:commandButton icon="ui-icon-trash"
+                            <p:commandButton title="#{msg.get('app.button.delete')}"
+                                             icon="ui-icon-trash"
                                              rendered="#{item.canEdit}"
                                              actionListener="#{decision.onDeleteTierInfo(rowIndex)}"
                                              process="@this"
@@ -411,6 +412,7 @@
 
                     <p:commandButton type="button"
                                      value="#{msg.get('app.button.cancel')}"
+                                     styleClass="small"
                                      onclick="proposeCreditDlg.hide()"/>
                 </td>
             </tr>
