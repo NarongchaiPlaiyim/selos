@@ -192,7 +192,6 @@ public class CreditFacExistingControl extends BusinessControl {
             }
         }
 
-
         List<ExistingCreditDetail> relatedComExistingCreditList = existingCreditDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedComExistingCredit(), existingCreditFacility, user);
         existingCreditDetailDAO.persist(relatedComExistingCreditList);
         log.info("persist related existingCreditDetailList...");
@@ -221,7 +220,6 @@ public class CreditFacExistingControl extends BusinessControl {
         existingCreditDetailDAO.persist(relatedAppInRLOSCredit);
         log.info("persist related RLOS existingCreditDetailList...");
 
-
         List<ExistingCollateralDetail> borrowerCollateralDetailListDel = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
         if(borrowerCollateralDetailListDel.size()>0){
             for (int i=0 ;i<borrowerCollateralDetailListDel.size();i++) {
@@ -230,6 +228,7 @@ public class CreditFacExistingControl extends BusinessControl {
                 List<ExistingCreditTypeDetail>  existingCreditTypeDetailtDel = existingCreditTypeDetailDAO.findByExistingCollateralDetail(existingCollateralDetail);
                 existingCreditTypeDetailDAO.delete(existingCreditTypeDetailtDel);
             }
+            existingCollateralDetailDAO.delete(borrowerCollateralDetailListDel);
         }
         List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerCollateralList(), existingCreditFacility, user);
         existingCollateralDetailDAO.persist(borrowerCollateralDetailList);
@@ -250,10 +249,10 @@ public class CreditFacExistingControl extends BusinessControl {
             for (int i=0 ;i<relatedCollateralDetailListDel.size();i++) {
                 log.info(" Round relatedComExistingCreditListDel  is " + i );
                 ExistingCollateralDetail existingCollateralDetail =  relatedCollateralDetailListDel.get(i);
-
                 List<ExistingCreditTypeDetail>  existingCreditTypeDetailtDel = existingCreditTypeDetailDAO.findByExistingCollateralDetail(existingCollateralDetail);
                 existingCreditTypeDetailDAO.delete(existingCreditTypeDetailtDel);
             }
+            existingCollateralDetailDAO.delete(relatedCollateralDetailListDel);
         }
 
         List<ExistingCollateralDetail> relatedCollateralDetailList = existingCollateralDetailTransform.transformsToModel(existingCreditFacilityView.getRelatedCollateralList(), existingCreditFacility, user);
@@ -269,8 +268,6 @@ public class CreditFacExistingControl extends BusinessControl {
             log.info("persist related existingCreditTypeDetailList...");
         }
 
-
-
         List<ExistingGuarantorDetail> borrowerGuarantorDetailListDel = existingGuarantorDetailDAO.findByExistingCreditFacility(existingCreditFacility);
         if(borrowerGuarantorDetailListDel.size()>0){
             for (int i=0 ;i<borrowerGuarantorDetailListDel.size();i++) {
@@ -279,6 +276,7 @@ public class CreditFacExistingControl extends BusinessControl {
                 List<ExistingCreditTypeDetail>  existingCreditTypeDetailtDel = existingCreditTypeDetailDAO.findByExistingGuarantorDetail(existingGuarantorDetail);
                 existingCreditTypeDetailDAO.delete(existingCreditTypeDetailtDel);
             }
+            existingGuarantorDetailDAO.delete(borrowerGuarantorDetailListDel);
         }
         List<ExistingGuarantorDetail> borrowerGuarantorDetailList = existingGuarantorDetailTransform.transformsToModel(existingCreditFacilityView.getBorrowerGuarantorList(), existingCreditFacility, user);
         existingGuarantorDetailDAO.persist(borrowerGuarantorDetailList);

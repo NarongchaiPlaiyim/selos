@@ -25,7 +25,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
         for (ExistingGuarantorDetailView existingGuarantorDetailView : existingGuarantorDetailViewList) {
             existingGuarantorDetail = new ExistingGuarantorDetail();
             if (existingGuarantorDetailView.getId() != 0) {
-                existingGuarantorDetail.setId(existingGuarantorDetailView.getId());
+                //existingGuarantorDetail.setId(existingGuarantorDetailView.getId());
                 existingGuarantorDetail.setCreateDate(existingGuarantorDetailView.getCreateDate());
                 existingGuarantorDetail.setCreateBy(existingGuarantorDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -33,6 +33,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
                 existingGuarantorDetail.setCreateBy(user);
             }
 
+            existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
             existingGuarantorDetail.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
             existingGuarantorDetail.setTcglgNo(existingGuarantorDetailView.getTcgLgNo());
             existingGuarantorDetail.setExistingCreditFacility(existingCreditFacility);
@@ -50,6 +51,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
         for (ExistingGuarantorDetail existingGuarantorDetail : existingGuarantorDetailList) {
             existingGuarantorDetailView = new ExistingGuarantorDetailView();
             existingGuarantorDetailView.setId(existingGuarantorDetail.getId());
+            existingGuarantorDetailView.setNo(existingGuarantorDetail.getNo());
             existingGuarantorDetailView.setCreateDate(existingGuarantorDetail.getCreateDate());
             existingGuarantorDetailView.setCreateBy(existingGuarantorDetail.getCreateBy());
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());

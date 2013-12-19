@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class ExistingCreditTypeDetailView implements Serializable {
     private long id;
+    private int no;
     private boolean noFlag;
     private String accountName;
     private String accountNumber;
@@ -33,6 +34,7 @@ public class ExistingCreditTypeDetailView implements Serializable {
 
     public void reset() {
         this.id = 0;
+        this.no = 0;
         this.accountName = "";
         this.accountNumber = "";
         this.accountSuf = "";
@@ -53,6 +55,14 @@ public class ExistingCreditTypeDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public boolean isNoFlag() {

@@ -29,7 +29,7 @@ public class ExistingCollateralDetailTransform extends Transform {
             existingCollateralDetail = new ExistingCollateralDetail();
 
             if (existingCollateralDetailView.getId() != 0) {
-                existingCollateralDetail.setId(existingCollateralDetailView.getId());
+                //existingCollateralDetail.setId(existingCollateralDetailView.getId());
                 existingCollateralDetail.setCreateDate(existingCollateralDetailView.getCreateDate());
                 existingCollateralDetail.setCreateBy(existingCollateralDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -37,6 +37,7 @@ public class ExistingCollateralDetailTransform extends Transform {
                 existingCollateralDetail.setCreateBy(user);
             }
 
+            existingCollateralDetail.setNo(existingCollateralDetailView.getNo());
             existingCollateralDetail.setBorrowerType(existingCollateralDetailView.getBorrowerType());
             existingCollateralDetail.setCollateralType(existingCollateralDetailView.getCollateralType());
             existingCollateralDetail.setPotentialCollateral(existingCollateralDetailView.getPotentialCollateral());
@@ -63,6 +64,7 @@ public class ExistingCollateralDetailTransform extends Transform {
         for (ExistingCollateralDetail existingCollateralDetail : existingCollateralDetailList) {
             existingCollateralDetailView = new ExistingCollateralDetailView();
             existingCollateralDetailView.setId(existingCollateralDetail.getId());
+            existingCollateralDetailView.setNo(existingCollateralDetail.getNo());
             existingCollateralDetailView.setBorrowerType(existingCollateralDetail.getBorrowerType());
             existingCollateralDetailView.setCollateralType(existingCollateralDetail.getCollateralType());
             existingCollateralDetailView.setPotentialCollateral(existingCollateralDetail.getPotentialCollateral());
