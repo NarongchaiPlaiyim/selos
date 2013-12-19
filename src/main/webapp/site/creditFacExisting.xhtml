@@ -105,14 +105,14 @@
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
-                                                        #{i.index + 1}
+                                                        #{i.index + 1} id = #{borrowerCredit.id}
                                                     </td>
                                                     <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) : '1'}">
                                                         #{borrowerCredit.accountName} <br/>
                                                         #{borrowerCredit.accountNumber} Suf: #{borrowerCredit.accountSuf}<br/>
-                                                        #{borrowerCredit.existAccountStatus.name}
+                                                        #{borrowerCredit.existAccountStatus.description}
                                                     </td>
                                                     <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -603,24 +603,24 @@
                                                                 <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
-                                                                    #{i.index + 1}
+                                                                    #{i.index + 1}  id = #{relatedCredit.id}
                                                                 </td>
                                                                 <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) : '1'}">
                                                                     #{relatedCredit.accountName} <br/>
                                                                     #{relatedCredit.accountNumber} Suf: #{relatedCredit.accountSuf}<br/>
-                                                                    #{relatedCredit.existAccountStatus.name}
+                                                                    #{relatedCredit.existAccountStatus.description}
                                                                 </td>
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                                    #{relatedCredit.existProductProgram.description}
+                                                                    #{relatedCredit.existProductProgram.name}
                                                                 </td>
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                                    #{relatedCredit.existCreditType.description}
+                                                                    #{relatedCredit.existCreditType.name}
                                                                 </td>
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -1503,6 +1503,11 @@
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>
             </p:confirmDialog>
         </p:panel>
+
+        <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </h:body>
 </f:view>
 </html>

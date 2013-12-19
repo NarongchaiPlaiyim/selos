@@ -34,6 +34,16 @@ public class FacesUtil implements Serializable {
         return FacesContext.getCurrentInstance().getExternalContext().getFlash();
     }
 
+    // Getters -----------------------------------------------------------------------------------
+    public static Object getSessionMapValue(String key) {
+        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(key);
+    }
+
+    // Setters -----------------------------------------------------------------------------------
+    public static void setSessionMapValue(String key, Object value) {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(key, value);
+    }
+
     public static void redirect(String uriPath) {
         String contextPath = "";
         try {

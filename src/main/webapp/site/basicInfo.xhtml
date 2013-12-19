@@ -10,7 +10,6 @@
 <h:head>
     <title>SE-LOS : Basic Info</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
@@ -644,13 +643,12 @@
                 <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             </div>
+
+            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
-
-        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
-
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"

@@ -33,6 +33,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.Flash;
 import javax.faces.event.ValueChangeListener;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
@@ -146,26 +147,40 @@ public class BankStatementDetail implements Serializable {
         }
 
         //Parameters passed from Bank statement summary page
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> map = (Map<String, Object>) flash.get("bankStmtSumParams");
-        if (map != null) {
-            summaryView = (BankStmtSummaryView) map.get("bankStmtSumView");
-            isTmbBank = (Boolean) map.get("isTmbBank");
-            lastMonthDate = (Date) map.get("lastMonthDate");
-            numberOfMonths = (Integer) map.get("numberOfMonths");
-            bankStmtView = (BankStmtView) map.get("selectedBankStmtView");
+//        Flash flash = FacesUtil.getFlash();
+//        Map<String, Object> map = (Map<String, Object>) flash.get("bankStmtSumParams");
+//        if (map != null) {
+//            summaryView = (BankStmtSummaryView) map.get("bankStmtSumView");
+//            isTmbBank = (Boolean) map.get("isTmbBank");
+//            lastMonthDate = (Date) map.get("lastMonthDate");
+//            numberOfMonths = (Integer) map.get("numberOfMonths");
+//            bankStmtView = (BankStmtView) map.get("selectedBankStmtView");
+//
+//            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
+//                    isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
+//
+//            // if(add new bank statement)
+//            // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
+//            if (summaryView == null || (lastMonthDate == null && numberOfMonths == 0)) {
+//                FacesUtil.redirect("/site/bankStatementSummary.jsf");
+//                return;
+//            }
+//        } else {
+//            //Return to Bank statement summary if parameter is null
+//            FacesUtil.redirect("/site/bankStatementSummary.jsf");
+//            return;
+//        }
 
-            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
-                    isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
+        summaryView = (BankStmtSummaryView) FacesUtil.getSessionMapValue("bankStmtSumView");
+        isTmbBank = (Boolean) FacesUtil.getSessionMapValue("isTmbBank");
+        lastMonthDate = (Date) FacesUtil.getSessionMapValue("lastMonthDate");
+        numberOfMonths = (Integer) FacesUtil.getSessionMapValue("numberOfMonths");
+        bankStmtView = (BankStmtView) FacesUtil.getSessionMapValue("selectedBankStmtView");
 
-            // if(add new bank statement)
-            // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
-            if (summaryView == null || (lastMonthDate == null && numberOfMonths == 0)) {
-                FacesUtil.redirect("/site/bankStatementSummary.jsf");
-                return;
-            }
-        } else {
-            //Return to Bank statement summary if parameter is null
+        log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
+                isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
+
+        if (summaryView == null || (lastMonthDate == null && numberOfMonths == 0)) {
             FacesUtil.redirect("/site/bankStatementSummary.jsf");
             return;
         }

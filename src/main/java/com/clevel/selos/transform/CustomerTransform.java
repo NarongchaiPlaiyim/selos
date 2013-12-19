@@ -513,7 +513,7 @@ public class CustomerTransform extends Transform {
 
 		customer.setCsiFlag(customerInfoView.getCsiFlag());
 
-        log.info("transformToModel : customer before adding address : {}", customer);
+//        log.info("transformToModel : customer before adding address : {}", customer);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -696,7 +696,7 @@ public class CustomerTransform extends Transform {
             addressList.add(address);
         }
         customer.setAddressesList(addressList);
-        log.info("transformToModel : customer after adding address : {}", customer);
+//        log.info("transformToModel : customer after adding address : {}", customer);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

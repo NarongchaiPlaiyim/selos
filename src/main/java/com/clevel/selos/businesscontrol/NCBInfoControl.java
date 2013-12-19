@@ -176,11 +176,14 @@ public class NCBInfoControl extends BusinessControl {
     }
 
     public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){
+        log.debug("getNCBInfoViewByWorkCaseId ::: workCaseId : {}", workCaseId);
         List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         if (customerList != null && customerList.size() > 0) {
+            log.debug("getNCBInfoViewByWorkCaseId ::: customerList.size : {}", customerList.size());
             for(Customer cus : customerList){
                 if(cus.getNcb() != null){
+                    log.debug("getNCBInfoViewByWorkCaseId ::: ncb : {}", cus.getNcb());
                     NCBInfoView ncbView = ncbTransform.transformToView(cus.getNcb());
                     ncbInfoViewList.add(ncbView);
                 }
