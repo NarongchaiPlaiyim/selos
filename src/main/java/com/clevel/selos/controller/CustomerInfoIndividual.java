@@ -1161,7 +1161,7 @@ public class CustomerInfoIndividual implements Serializable {
             }
             Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
             if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getId()){
+                if(customer.getId() != customerInfoView.getSpouse().getId()){
                     messageHeader = "Save Individual Failed.";
                     message = "Citizen Id is already exist";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
