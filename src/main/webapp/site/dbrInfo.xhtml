@@ -154,7 +154,7 @@
                                         <p:column headerText=" " styleClass="center" style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 300px; width:300px; max-width: 300px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{itemNCB.accountName}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
@@ -232,7 +232,7 @@
                                         <p:column headerText=" "  style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 300px; width:300px; max-width: 300px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{item.accountName}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
@@ -315,7 +315,7 @@
                                         <p:spacer  width="10"/>
                                         <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                          styleClass="medium"
-
+                                                         action="#{dbrInfo.onCreation()}"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel">
                                         </p:commandButton>
                                     </div>
