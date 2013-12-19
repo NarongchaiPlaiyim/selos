@@ -59,6 +59,7 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
+
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
         DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
