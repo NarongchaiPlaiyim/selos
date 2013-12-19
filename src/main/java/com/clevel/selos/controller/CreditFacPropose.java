@@ -25,7 +25,6 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.NewCollateralInfoTransform;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -115,7 +114,9 @@ public class CreditFacPropose implements Serializable {
     private BaseRate finalBaseRate;
     private BigDecimal finalInterest;
     private String finalPriceRate;
-
+    private boolean modeEditReducePricing;
+    private boolean modeEditReduceFront;
+    private BigDecimal reducePrice;
 
     // for control Propose Collateral
     private NewCollateralInfoView newCollateralInfoView;
@@ -210,13 +211,10 @@ public class CreditFacPropose implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-        user = (User) session.getAttribute("user");
-
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         }
-
 
         if (workCaseId != null) {
 
@@ -348,7 +346,8 @@ public class CreditFacPropose implements Serializable {
             mortgageTypeList = new ArrayList<MortgageType>();
         }
 
-
+        modeEditReducePricing = false;
+        modeEditReduceFront = false;
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         mortgageTypeList = mortgageTypeDAO.findAll();
@@ -493,12 +492,18 @@ public class CreditFacPropose implements Serializable {
                         newCreditDetailView.setProjectCode(productFormula.getProjectCode());
                         log.info("productFormula.getReduceFrontEndFee() ::: {}", productFormula.getReduceFrontEndFee());
                         log.info("productFormula.getReducePricing() ::: {}", productFormula.getReducePricing());
-                        newCreditDetailView.setReduceFrontEndFee(Util.isTrueForCheckBox(productFormula.getReduceFrontEndFee()));
-                        newCreditDetailView.setReducePriceFlag(Util.isTrueForCheckBox(productFormula.getReducePricing()));
+
+                        modeEditReducePricing = flagForModeDisable(productFormula.getReducePricing());
+                        modeEditReduceFront =  flagForModeDisable(productFormula.getReduceFrontEndFee());
                     }
                 }
             }
         }
+    }
+
+    // 2:Y(false)can to edit , 1:N(true) cannot to edit
+    public static boolean flagForModeDisable(int value){
+        return (value == 1)?true:false;
     }
 
 
@@ -516,6 +521,11 @@ public class CreditFacPropose implements Serializable {
                 newCreditDetailView.getCreditType().setId(0);
             }
         }
+    }
+
+    public void onRequestReducePrice(){
+        log.info("reducePrice ::: {}",reducePrice);
+
     }
 
     public void onAddCreditInfo() {
@@ -1306,11 +1316,11 @@ public class CreditFacPropose implements Serializable {
                 if ((newCreditFacilityView.getNewCreditDetailViewList().size() > 0) && (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0)
                         && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-                        creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId, user);
+                        creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-                        creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId, user);
+                        creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else {
@@ -1318,11 +1328,9 @@ public class CreditFacPropose implements Serializable {
                         message = msg.get("app.propose.response.desc.cannot.save");
 
                     }
+
                     onCreation();
-                    newCreditFacilityView.setTotalPropose(creditFacProposeControl.calTotalProposeAmount(workCaseId));
-                    newCreditFacilityView.setTotalCommercial(creditFacProposeControl.calTotalCommercialAmount(workCaseId));
-                    newCreditFacilityView.setTotalCommercialAndOBOD(creditFacProposeControl.calTotalCommercialAndOBODAmount(workCaseId));
-                    newCreditFacilityView.setTotalExposure(creditFacProposeControl.calTotalExposureAmount(workCaseId));
+
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
@@ -1731,6 +1739,30 @@ public class CreditFacPropose implements Serializable {
 
     public void setRelatedWithSelected(NewSubCollateralDetailView relatedWithSelected) {
         this.relatedWithSelected = relatedWithSelected;
+    }
+
+    public boolean isModeEditReduceFront() {
+        return modeEditReduceFront;
+    }
+
+    public void setModeEditReduceFront(boolean modeEditReduceFront) {
+        this.modeEditReduceFront = modeEditReduceFront;
+    }
+
+    public boolean isModeEditReducePricing() {
+        return modeEditReducePricing;
+    }
+
+    public void setModeEditReducePricing(boolean modeEditReducePricing) {
+        this.modeEditReducePricing = modeEditReducePricing;
+    }
+
+    public BigDecimal getReducePrice() {
+        return reducePrice;
+    }
+
+    public void setReducePrice(BigDecimal reducePrice) {
+        this.reducePrice = reducePrice;
     }
 }
 

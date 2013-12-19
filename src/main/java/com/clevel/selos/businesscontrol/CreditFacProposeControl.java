@@ -4,6 +4,8 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DBRMethod;
+import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductFormula;
 import com.clevel.selos.model.db.master.ProductProgram;
@@ -200,10 +202,13 @@ public class CreditFacProposeControl extends BusinessControl {
         return newCreditFacilityView;
     }
 
-    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId, User user) {
+    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
         log.info("onSaveNewCreditFacility begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
+        newCreditFacilityView = calculateTotalProposeAmount(newCreditFacilityView,workCaseId);
+
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
         newCreditFacilityDAO.persist(newCreditFacility);
         log.info("persist :: creditFacilityPropose...");
@@ -291,7 +296,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         int seq = 0;
-        seq = newCreditDetailViewList.size()>0? newCreditDetailViewList.size()+1 : seq;
+        seq = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : seq;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
@@ -317,7 +322,6 @@ public class CreditFacProposeControl extends BusinessControl {
                 creditTypeDetailView.setProductProgram(existingCreditDetailView.getProductProgram());
                 creditTypeDetailView.setCreditFacility(existingCreditDetailView.getCreditType());
                 creditTypeDetailView.setLimit(existingCreditDetailView.getLimit());
-                creditTypeDetailView.setType("BorrowerExistingCredit");
                 creditTypeDetailView.setSeq(seq);
                 creditTypeDetailList.add(creditTypeDetailView);
                 seq++;
@@ -339,11 +343,17 @@ public class CreditFacProposeControl extends BusinessControl {
         return sumTotalGuaranteeAmount;
     }
 
-    public BigDecimal calTotalProposeAmount(long workCaseId) {
-        NewCreditFacilityView newCreditFacilityView = findNewCreditFacilityByWorkCase(workCaseId);
+    public NewCreditFacilityView calculateTotalProposeAmount(NewCreditFacilityView newCreditFacilityView,long workCaseId)
+    {
         BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
         TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
+
         BigDecimal sumTotalPropose = BigDecimal.ZERO;
+        BigDecimal sumTotalCommercial = BigDecimal.ZERO;
+        BigDecimal sumTotalCommercialAndOBOD = BigDecimal.ZERO; // wait confirm
+        BigDecimal sumTotalExposure = BigDecimal.ZERO;
+        BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
+        BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
 
         if ((newCreditFacilityView != null) && (basicInfoView.getSpecialProgram() != null) && (tcgView != null)) {
             List<NewCreditDetailView> newCreditDetailViewList = newCreditFacilityView.getNewCreditDetailViewList();
@@ -351,66 +361,99 @@ public class CreditFacProposeControl extends BusinessControl {
             if (newCreditDetailViewList != null && newCreditDetailViewList.size() != 0) {
 
                 for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                    if ((newCreditDetailView.getProductProgram().getId() != 0)&&(newCreditDetailView.getCreditType().getId() != 0))
-                    {
+                    if ((newCreditDetailView.getProductProgram().getId() != 0) && (newCreditDetailView.getCreditType().getId() != 0)) {
                         ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
                         CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
 
-                        if(productProgram!=null && creditType!=null)
-                        {
-                            PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
+                        if (productProgram != null && creditType != null) {
+                            PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
                             ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType,
                                     newCreditFacilityView.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
 
-                            if (productFormula != null) {
-                                if (productFormula.getExposureMethod() == 1) {  //limit
-                                    sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
-                                } else if (productFormula.getExposureMethod() == 2) {  //limit * %PCE
-                                    sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
-                                } else if (productFormula.getExposureMethod() == 3) { //ไม่คำนวณ
+                            if (productFormula != null)
+                            {
+                                //ExposureMethod
+                                if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
                                     sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
+                                } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                    sumTotalPropose = sumTotalPropose.add(newCreditDetailView.getLimit());
+                                } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
+                                    sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetailView.getLimit(), newCreditDetailView.getPCEPercent()));
+                                }
+
+                                //For DBR
+                                if (productFormula.getDbrCalculate()==1)//N
+                                {
+                                    sumTotalNonLoanDbr = BigDecimal.ZERO;
+                                }
+                                else if (productFormula.getDbrCalculate()==2)//Y
+                                {
+                                    if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
+                                        sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
+                                    } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
+                                        sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetailView.getInstallment());
+                                    } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+                                        sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetailView , productFormula.getDbrSpread()));
+                                    }
+                                }
+
+                                //WC
+                                if(productFormula.getWcCalculate()==0){
+
+                                }else if(productFormula.getWcCalculate()==1){
+
+                                }else if(productFormula.getWcCalculate()==2){
+
                                 }
                             }
                         }
                     }
                 }
+
+                newCreditFacilityView.setTotalPropose(sumTotalPropose); //sumTotalPropose
+                newCreditFacilityView.setTotalProposeLoanDBR(sumTotalLoanDbr);//sumTotalLoanDbr
+                newCreditFacilityView.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
+
+                ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+
+                if (existingCreditFacilityView != null)
+                {
+                    sumTotalCommercial = sumTotalCommercial.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(sumTotalPropose));
+                    newCreditFacilityView.setTotalCommercial(sumTotalCommercial); //sumTotalCommercial
+
+                    sumTotalExposure = sumTotalExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(sumTotalPropose).add(existingCreditFacilityView.getTotalBorrowerRetailLimit()));
+                    newCreditFacilityView.setTotalExposure(sumTotalExposure); //sumTotalExposure
+                }
             }
         }
 
-        return sumTotalPropose;
+        return newCreditFacilityView;
     }
 
-    public BigDecimal calTotalCommercialAmount(long workCaseId) {
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        BigDecimal sumTotalCommercial = BigDecimal.ZERO;
-
-        if (existingCreditFacilityView != null) {
-            sumTotalCommercial = sumTotalCommercial.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(calTotalProposeAmount(workCaseId)));
+    public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetailView newCreditDetailView, BigDecimal dbrSpread) {
+        BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
+        BigDecimal sum;
+        log.info("limit :: {}",newCreditDetailView.getLimit());
+        log.info("newCreditTierDetailViews.size :: {}",newCreditDetailView.getNewCreditTierDetailViewList().size());
+        if(newCreditDetailView.getNewCreditTierDetailViewList()!=null){
+            for(NewCreditTierDetailView newCreditTierDetailView : newCreditDetailView.getNewCreditTierDetailViewList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
+            {
+               sum = BigDecimal.ZERO;
+               if(newCreditTierDetailView!=null){
+                   sum = Util.divide((Util.multiply(newCreditTierDetailView.getFinalBasePrice().getValue(),newCreditTierDetailView.getFinalInterest()).add(dbrSpread)),100);
+                   sum = Util.multiply(newCreditDetailView.getLimit(),sum);
+                   sum = Util.divide(sum,12);
+                   sumTotalLoanDbr = sumTotalLoanDbr.add(sum);
+               }
+            }
         }
 
-        return sumTotalCommercial;
+        return sumTotalLoanDbr;
     }
 
-    public BigDecimal calTotalCommercialAndOBODAmount(long workCaseId) { //wait Formula
-        NewCreditFacilityView newCreditFacilityView = findNewCreditFacilityByWorkCase(workCaseId);
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-        BigDecimal sumTotalCommercialAndOBOD = BigDecimal.ZERO;
-        return sumTotalCommercialAndOBOD;
-    }
 
-    public BigDecimal calTotalExposureAmount(long workCaseId) {
-        BigDecimal sumTotalExposure = BigDecimal.ZERO;
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-
-        if (existingCreditFacilityView != null) {
-            sumTotalExposure = sumTotalExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(calTotalProposeAmount(workCaseId)).add(existingCreditFacilityView.getTotalBorrowerRetailLimit()));
-        }
-
-        return sumTotalExposure;
-    }
-
-    public void wcCalculation(long workCaseId) {
+    public void wcCalculation(long workCaseId){
 
     }
 
