@@ -1,11 +1,11 @@
-package com.clevel.selos.model.view.insurance.model;
+package com.clevel.selos.model.view.insurance;
 
 import java.io.Serializable;
 
-public class InsuranceModel implements Serializable {
+public class InsuranceCompanyView implements Serializable {
     private int company;
 
-    public InsuranceModel() {
+    public InsuranceCompanyView() {
 
     }
 

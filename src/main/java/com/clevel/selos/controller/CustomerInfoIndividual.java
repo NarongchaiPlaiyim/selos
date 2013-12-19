@@ -1161,7 +1161,7 @@ public class CustomerInfoIndividual implements Serializable {
             }
             Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
             if(customer != null && customer.getId() != 0){
-                if(customer.getId() != customerInfoView.getId()){
+                if(customer.getId() != customerInfoView.getSpouse().getId()){
                     messageHeader = "Save Individual Failed.";
                     message = "Citizen Id is already exist";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -1210,7 +1210,9 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
-        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
+            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        }
 //        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
 //        Calendar today = Calendar.getInstance();
 //        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
