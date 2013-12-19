@@ -18,6 +18,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -30,10 +31,8 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumJuris")
@@ -242,6 +241,8 @@ public class CustomerInfoJuristic implements Serializable {
     private boolean isFromSummaryParam;
     private boolean isFromIndividualParam;
 
+    private String currentDateDDMMYY;
+
     public CustomerInfoJuristic(){
     }
 
@@ -320,6 +321,12 @@ public class CustomerInfoJuristic implements Serializable {
         enableCitizenId = true;
         enableSpouseDocumentType = true;
         enableSpouseCitizenId = true;
+
+        customerInfoView.setCapital(BigDecimal.ZERO);
+        customerInfoView.setPaidCapital(BigDecimal.ZERO);
+        customerInfoView.setSalesFromFinancialStmt(BigDecimal.ZERO);
+        customerInfoView.setShareHolderRatio(BigDecimal.ZERO);
+        customerInfoView.setTotalShare(BigDecimal.ZERO);
     }
 
     public void onEditJuristic(){
@@ -631,6 +638,10 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onDeleteIndividual(){
         customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     //Get Set
@@ -1592,5 +1603,14 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setReqSpoKYCLev(boolean reqSpoKYCLev) {
         this.reqSpoKYCLev = reqSpoKYCLev;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }
