@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ExSummaryTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -14,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -258,6 +260,9 @@ public class ExSummaryControl extends BusinessControl {
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
 
+        //todo: test this , pls delete after test
+        calYearInBusinessBorrowerCharacteristic(workCaseId);
+
         //Delete Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
         exSumDeviateDAO.delete(esdList);
@@ -501,6 +506,11 @@ public class ExSummaryControl extends BusinessControl {
 //    calculate months from yearInBusiness fields.
     public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        Date yearInBiz = DateTimeUtil.getMaxOfDate(bizInfoSummaryView.getRegistrationDate(), bizInfoSummaryView.getEstablishDate());
+        String year = DateTimeUtil.calYearMonth(yearInBiz);
+        //todo:yearInBizMonth for send BRMS
+        int month = DateTimeUtil.calMonth(yearInBiz);
+
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
             exSummary = new ExSummary();
@@ -508,5 +518,8 @@ public class ExSummaryControl extends BusinessControl {
             workCase.setId(workCaseId);
             exSummary.setWorkCase(workCase);
         }
+        exSummary.setYearInBusiness(year);
+
+        exSummaryDAO.persist(exSummary);
     }
 }

@@ -19,7 +19,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeRequestType()}"
                     process="@this"
-                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -52,7 +52,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeProductProgram}"
                     process="@this"
-                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePricePanel"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -74,7 +74,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCreditType}"
                     process=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram"
-                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePricePanel"/>
+                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -143,14 +143,15 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
     <td>
-        <p:panel style="border-width:0" id="reducePricePanel" rendered="#{creditFacPropose.modeEditReducePricing}">
+        <!--<p:panel style="border-width:0" id="reducePricePanel" rendered="#{creditFacPropose.reducePricePanelRendered}">-->
             <p:inputText value="#{creditFacPropose.reducePrice}"
                          id="reducePrice"
-                         style="text-align:right">
+                         style="text-align:right"
+                         disabled="#{creditFacPropose.modeEditReducePricing}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                 <p:ajax event="blur" process="@this" listener="#{creditFacPropose.onRequestReducePrice()}" update="@this"/>
             </p:inputText>
-        </p:panel>
+        <!--</p:panel>-->
     </td>
     <td colspan="2">
         <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFee}"
@@ -173,7 +174,7 @@
                                      value="#{creditFacPropose.newCreditDetailView.standardBasePrice.id}"
                                      id="standDlg"
                                      style="width: 50px;"
-                                     disabled="true">
+                                     disabled="#{creditFacPropose.cannotEditStandard}">
                         <f:selectItems value="#{creditFacPropose.baseRateList}"
                                        var="standard"
                                        itemLabel="#{standard.name}"
@@ -184,7 +185,7 @@
                     <p:inputText value="#{creditFacPropose.newCreditDetailView.standardInterest}"
                                  id="standPriceDlg"
                                  style="text-align:right;width:50px;"
-                                 disabled="true"/>
+                                 disabled="#{creditFacPropose.cannotEditStandard}"/>
                 </td>
             </tr>
         </table>
@@ -203,7 +204,7 @@
                                      value="#{creditFacPropose.newCreditDetailView.suggestBasePrice.id}"
                                      style="width: 50px;"
                                      id="suggestDlg"
-                                     disabled="#{creditFacPropose.modeEdit}">
+                                     disabled="false">
                         <f:selectItems value="#{creditFacPropose.baseRateList}"
                                        var="suggest"
                                        itemLabel="#{suggest.name}"
@@ -217,7 +218,7 @@
                     <p:inputText value="#{creditFacPropose.newCreditDetailView.suggestInterest}"
                                  style="text-align:right;width:50px;"
                                  id="suggestPriceDlg"
-                                 disabled="#{creditFacPropose.modeEdit}">
+                                 disabled="false">
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.onChangeSuggestValue}"
                                 process=":creditInfoDlgForm" />
@@ -238,7 +239,7 @@
                 process="@form"
                 update=":creditInfoDlgForm:resultFinal"
                 actionListener="#{creditFacPropose.onAddTierInfo()}"
-                readonly="#{creditFacPropose.modeEdit}">
+                disabled="#{creditFacPropose.newCreditDetailView.requestType == 2?true:false}">
         </p:commandButton>
     </td>
 </tr>
@@ -255,14 +256,14 @@
 
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:50px;"/>
-                    <p:column style="width:200px;"
+                    <p:column style="width:50px;padding: 5px 10px !important;"/>
+                    <p:column style="width:200px; padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.price')}"/>
-                    <p:column style="width:50px;"
+                    <p:column style="width:50px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.tenor')}"/>
-                    <p:column style="width:200px;"
+                    <p:column style="width:200px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
-                    <p:column style="width:50px;"/>
+                    <p:column style="width:50px;padding: 5px 10px !important;"/>
                 </p:row>
             </p:columnGroup>
 

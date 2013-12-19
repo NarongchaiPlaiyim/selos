@@ -289,4 +289,50 @@ public class DateTimeUtil implements Serializable {
     public static int getYearOfDate(Date date) {
         return dateToCalendar(date).get(Calendar.YEAR);
     }
+
+    public static Date getMaxOfDate(Date date,Date date2) {
+        if(compareDate(date,date2) < 0){
+            return date;
+        } else {
+            return date2;
+        }
+    }
+
+    public static String calYearMonth(Date date) {
+        String yearMonth = "00Y 00M";
+        Calendar year = Calendar.getInstance();
+        year.setTime(date);
+        Calendar today = Calendar.getInstance();
+        if(year.after(today)){
+            return yearMonth;
+        }
+        int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
+        int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
+        if (today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR))
+            m--;
+        if (today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH))
+            m--;
+        yearMonth = y+"Y "+m+"M";
+        return yearMonth;
+    }
+
+    public static int calMonth(Date date) {
+        int month = 0;
+        Calendar year = Calendar.getInstance();
+        year.setTime(date);
+        Calendar today = Calendar.getInstance();
+        if(year.after(today)){
+            return month;
+        }
+        int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
+        int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
+        if (today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR))
+            m--;
+        if (today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH))
+            m--;
+        int ym = y*12;
+        int mm = ym+m;
+        month = mm;
+        return month;
+    }
 }

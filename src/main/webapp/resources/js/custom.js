@@ -89,7 +89,7 @@ function removeComma(obj) {
 }
 
 function onClickReadonlyField(obj, readonly){
-    if(readonly != 1){
+    if(readonly == true){
         if(obj != undefined){
             obj.blur();
         }
