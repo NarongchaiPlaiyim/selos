@@ -15,319 +15,327 @@
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-<h:form id="frmMain">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<!-- End Header Logo -->
-<!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
-<!-- End Header Detail -->
-<!-- Start Menu -->
-<ui:include src="include/menubar.xhtml"/>
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">#{msg.get('app.dbr.header')}</div>
-<div id="content">
-<div id="content_info">
-    <div id="content_trackchange">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText
-            value="#{dbrInfo.dbr.modifyBy}"/>,
-        <p:outputLabel value="#{dbrInfo.dbr.modifyDate}">
-            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
-
-        </p:outputLabel></div>
-</div>
-<div id="content_form">
-<!-- start content -->
-<table class="content_table_form">
-<tr>
-    <td>
-        <table>
-            <tr >
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="true" readonly="true">
-
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-
-                    </p:inputText>
-                </td>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
-                        <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <p:outputLabel for="monthlyIncomeAdjust" value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
-                </td>
-                <td>
-                    <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                        <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <p:outputLabel for="monthlyIncomePerMonth" value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                        <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"   style="text-align: right" readonly="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:inputText>
-                </td>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
-                </td>
-                <td>
-                    <p:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}" style="text-align: right" readonly="true">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                        <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
-                    </p:inputText>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td><br/></td>
-</tr>
-<tr>
-    <td>
-        <div class="separate"></div>
-    </td>
-</tr>
-<tr>
-    <td class="title top">
-        <p:outputLabel value="#{msg.get('app.dbr.debtOfBorrowers')}"/>
-    </td>
-</tr>
-<tr>
-    <!--*** NCB table *** -->
-    <td>
-        <p:dataTable value="#{dbrInfo.ncbDetails}" var="itemNCB" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
-            <p:column headerText=" " styleClass="center" style="width:10%;">
-                <p:outputLabel value="#{rowIndex+1}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
-                <p:outputLabel value="#{itemNCB.accountName}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="width:70px;">
-                <h:outputText value="#{itemNCB.loanAccountTypeView.name}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;" >
-                <div class="right">
-                    <h:outputText value="#{itemNCB.limit}" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </h:outputText>
-                </div>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px; text-align: right">
-                <div class="right">
-                    <p:outputLabel value="#{itemNCB.installment}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:outputLabel>
-                </div>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" style="width:70px; text-align: right">
-                <div class="right">
-                    <p:outputLabel value="#{itemNCB.debtForCalculate}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:outputLabel>
-                </div>
-            </p:column>
-            <p:columnGroup type="footer" >
-                <p:row >
-                    <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
-                    <p:column style="text-align:right" styleClass="summary_column">
-                        <f:facet name="footer">
-                            <p:outputLabel value="#{dbrInfo.totalMonthDebtBorrower}">
-                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
+    <h:form id="frmMain">
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml"/>
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml"/>
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml"/>
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.dbr.header')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">[ View Track Change ]</div>
+                        <div id="content_lastupdate">Last update by
+                            <h:outputText value="#{dbrInfo.dbr.modifyBy}"/>,
+                            <p:outputLabel value="#{dbrInfo.dbr.modifyDate}">
+                                <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy" type="date"/>
                             </p:outputLabel>
-                        </f:facet>
-                    </p:column>
-                </p:row>
-            </p:columnGroup>
-        </p:dataTable>
-    </td>
-</tr>
-<tr>
-    <td><br/></td>
-</tr>
-<tr>
-    <td>
-        <div class="separate"></div>
-    </td>
-</tr>
-<tr>
-    <td>
-        <table>
-            <tr>
-                <td class="title top">
-                    <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
-                </td>
-                <td>
-                    <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
-                                     styleClass="smaller" action="#{dbrInfo.initAddDBRDetail()}"
-                                     update=":dbrDetailDlgForm"
-                                     oncomplete="dbrDetailDialog.show()">
-                        <f:setPropertyActionListener value="false" target="#{dbrInfo.update}"/>
-                    </p:commandButton>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td>
-        <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false">
-            <p:column headerText=" " styleClass="center" style="width:22px;">
-                <p:outputLabel value="#{rowIndex+1}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
-                <p:outputLabel value="#{item.accountName}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
-                <p:outputLabel value="#{item.loanAccountTypeView.name}"/>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;">
-                <div class="right">
-                    <p:outputLabel value="#{item.limit}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:outputLabel>
-                </div>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px;">
-                <div class="right">
-                    <p:outputLabel value="#{item.installment}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:outputLabel>
-                </div>
-            </p:column>
-            <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" >
-                <div  class="right">
-                    <p:outputLabel value="#{item.debtForCalculate}" style="text-align: right">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                    </p:outputLabel>
-                </div>
-            </p:column>
-            <p:column styleClass="center">
-                <p:commandButton title="#{msg.get('app.button.edit')}"
-                                 icon="ui-icon-pencil"
-                                 action="#{dbrInfo.initEditDBRDetail()}"
-                                 oncomplete="dbrDetailDialog.show()"
-                                 process="@form"
-                                 update=":dbrDetailDlgForm">
-                    <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
-                    <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
-                    <f:setPropertyActionListener value="true" target="#{dbrInfo.update}"/>
-                    <p:resetInput target=":dbrDetailDlgForm"/>
-                </p:commandButton>
-                <p:commandButton title="#{msg.get('app.button.delete')}"
-                                 icon="ui-icon-trash"
-                                 oncomplete="confirmDeleteDBRInfoDlg.show()">
-                    <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
-                </p:commandButton>
-            </p:column>
-            <p:columnGroup type="footer">
-                <p:row>
-                    <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
-                    <p:column style="text-align:right" styleClass="summary_column">
-                        <f:facet name="footer">
-                            <h:outputText value="#{dbrInfo.totalMonthDebtRelated}">
-                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column >
-                    <p:column styleClass="summary_column" />
-                </p:row>
-            </p:columnGroup>
-        </p:dataTable>
-    </td>
-</tr>
-<tr>
-    <td><br/></td>
-</tr>
-<tr>
-    <td>
-        <div class="separate"></div>
-    </td>
-</tr>
-<tr>
-    <td>
-        <div class="center">
-            <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                             styleClass="medium"
-                             action="#{dbrInfo.onSaveDBRInfo}"
+                        </div>
+                    </div>
+                    <div id="content_form">
+                        <!-- start content -->
+                        <table class="content_table_form">
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr >
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="true" readonly="true">
 
-                             update=":pnl_maincontainer :msgBoxSystemMessagePanel">
-            </p:commandButton>
-            <p:spacer  width="10"/>
-            <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                             styleClass="medium"
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
 
-                             update=":pnl_maincontainer :msgBoxSystemMessagePanel">
-            </p:commandButton>
+                                                </p:inputText>
+                                            </td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
+                                                    <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">
+                                                <p:outputLabel for="monthlyIncomeAdjust" value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
+                                            </td>
+                                            <td>
+                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">
+                                                <p:outputLabel for="monthlyIncomePerMonth" value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"   style="text-align: right" readonly="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="title">
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
+                                            </td>
+                                            <td>
+                                                <p:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}" style="text-align: right" readonly="true">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="separate"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title top">
+                                    <p:outputLabel value="#{msg.get('app.dbr.debtOfBorrowers')}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--*** NCB table *** -->
+                                <td>
+                                    <p:dataTable value="#{dbrInfo.ncbDetails}" var="itemNCB" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
+                                        <p:column headerText=" " styleClass="center" style="width:10%;">
+                                            <p:outputLabel value="#{rowIndex+1}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
+                                            <p:outputLabel value="#{itemNCB.accountName}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="width:70px;">
+                                            <h:outputText value="#{itemNCB.loanAccountTypeView.name}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;" >
+                                            <div class="right">
+                                                <h:outputText value="#{itemNCB.limit}" >
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </h:outputText>
+                                            </div>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px; text-align: right">
+                                            <div class="right">
+                                                <p:outputLabel value="#{itemNCB.installment}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:outputLabel>
+                                            </div>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" style="width:70px; text-align: right">
+                                            <div class="right">
+                                                <p:outputLabel value="#{itemNCB.debtForCalculate}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:outputLabel>
+                                            </div>
+                                        </p:column>
+                                        <p:columnGroup type="footer" >
+                                            <p:row >
+                                                <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
+                                                <p:column style="text-align:right" styleClass="summary_column">
+                                                    <f:facet name="footer">
+                                                        <p:outputLabel value="#{dbrInfo.totalMonthDebtBorrower}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </p:outputLabel>
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br/>
+                                </td>
+                             </tr>
+                            <tr>
+                                <td>
+                                    <div class="separate"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td class="title top">
+                                                <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
+                                            </td>
+                                            <td>
+                                                <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
+                                                                 styleClass="smaller"
+                                                                 action="#{dbrInfo.initAddDBRDetail}"
+                                                                 process="@this"
+                                                                 update=":dbrDetailDlgForm"
+                                                                 oncomplete="dbrDetailDialog.show()">
+                                                    <f:setPropertyActionListener value="false" target="#{dbrInfo.update}"/>
+                                                </p:commandButton>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false">
+                                        <p:column headerText=" " styleClass="center" style="width:22px;">
+                                            <p:outputLabel value="#{rowIndex+1}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
+                                            <p:outputLabel value="#{item.accountName}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
+                                            <p:outputLabel value="#{item.loanAccountTypeView.name}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;">
+                                            <div class="right">
+                                                <p:outputLabel value="#{item.limit}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:outputLabel>
+                                            </div>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px;">
+                                            <div class="right">
+                                                <p:outputLabel value="#{item.installment}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:outputLabel>
+                                            </div>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" >
+                                            <div  class="right">
+                                                <p:outputLabel value="#{item.debtForCalculate}" style="text-align: right">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                </p:outputLabel>
+                                            </div>
+                                        </p:column>
+                                        <p:column styleClass="center">
+                                            <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                             icon="ui-icon-pencil"
+                                                             action="#{dbrInfo.initEditDBRDetail()}"
+                                                             oncomplete="dbrDetailDialog.show()"
+                                                             process="@form"
+                                                             update=":dbrDetailDlgForm">
+                                                <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
+                                                <f:setPropertyActionListener value="true" target="#{dbrInfo.update}"/>
+                                                <p:resetInput target=":dbrDetailDlgForm"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteDBRInfoDlg.show()">
+                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
+                                                <p:column style="text-align:right" styleClass="summary_column">
+                                                    <f:facet name="footer">
+                                                        <h:outputText value="#{dbrInfo.totalMonthDebtRelated}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </f:facet>
+                                                </p:column >
+                                                <p:column styleClass="summary_column" />
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><br/></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="separate"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="center">
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                         styleClass="medium"
+                                                         action="#{dbrInfo.onSaveDBRInfo}"
+                                                         onclick="onOneClick('frmMain:btnSave', true);"
+                                                         oncomplete="onOneClick('frmMain:btnSave', false);"
+                                                         update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                        </p:commandButton>
+                                        <p:spacer  width="10"/>
+                                        <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                                                         styleClass="medium"
+
+                                                         update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+                                        </p:commandButton>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="bottom_line"/>
+
+            <div class="clear"/>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml"/>
         </div>
-    </td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div id="bottom_line"/>
-</div>
-<div class="clear"/>
-<!-- Start Footer -->
-<ui:include src="include/footer.xhtml"/>
-<h:inputHidden id="pagename" value="mnuprescreen"/>
-<h:inputHidden id="subpagename" value="submnuprescreen"/>
-</h:form>
+        <h:inputHidden id="pagename" value="mnuprescreen"/>
+        <h:inputHidden id="subpagename" value="submnuprescreen"/>
+    </h:form>
 <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>

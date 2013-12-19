@@ -228,14 +228,19 @@ public class BizInfoSummary implements Serializable {
 
     public void onChangeProvince() {
         Province proSelect = bizInfoSummaryView.getProvince();
+        log.info("onChangeProvince :::: Province  : {} ", proSelect);
         districtList = districtDAO.getListByProvince(proSelect);
-        log.info("onChangeProvince :::: districtList.size ::: ", districtList.size());
+        bizInfoSummaryView.setDistrict(new District());
+        log.info("onChangeProvince :::: districtList.size ::: {}", districtList.size());
+        subDistrictList = new ArrayList<SubDistrict>();
     }
 
     public void onChangeDistrict() {
         District districtSelect = bizInfoSummaryView.getDistrict();
+        log.debug("onChangeDistrict :::: district : {}", districtSelect);
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
-        log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
+        bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
     }
 
 
