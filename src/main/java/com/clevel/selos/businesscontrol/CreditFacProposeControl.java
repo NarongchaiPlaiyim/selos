@@ -6,11 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
-import com.clevel.selos.model.db.master.CreditType;
-import com.clevel.selos.model.db.master.ProductFormula;
-import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.master.BaseRate;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -300,18 +296,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         // find existingCreditType >>> Borrower Commercial in this workCase
         ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
-
-//        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
-//        List<ExistingCreditDetailView> borrowerComExistingCredits = new ArrayList<ExistingCreditDetailView>();
-//        ExistingCreditDetailView existingCreditDetailTest = new ExistingCreditDetailView();
-//        existingCreditDetailTest.setAccountName("test existing");
-//        existingCreditDetailTest.setAccountRef("test existing");
-//        existingCreditDetailTest.setAccountNumber("12345");
-//        existingCreditDetailTest.setCreditType("Loan");
-//        existingCreditDetailTest.setProductProgram("Existing");
-//        existingCreditDetailTest.setLimit(BigDecimal.valueOf(2000000));
-//        borrowerComExistingCredits.add(existingCreditDetailTest);
-//        existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComExistingCredits);
 
         if (existingCreditFacilityView != null) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {

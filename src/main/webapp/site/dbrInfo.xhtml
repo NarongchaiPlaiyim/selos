@@ -9,9 +9,9 @@
 
 <h:head>
     <title>#{msg.get('app.dbr.title')}</title>
-    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -44,15 +44,13 @@
                             <tr>
                                 <td>
                                     <table>
-                                        <tr >
+                                        <tr>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
                                             </td>
                                             <td>
                                                 <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="true" readonly="true">
-
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-
+                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
                                             <td class="title">
@@ -72,9 +70,9 @@
                                             <td>
                                                 <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-
                                                 </p:inputText>
                                             </td>
+                                            <td colspan="2"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -86,6 +84,7 @@
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
                                                 </p:inputText>
                                             </td>
+                                            <td colspan="2"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -97,6 +96,7 @@
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
                                             </td>
+                                            <td colspan="2"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -151,39 +151,37 @@
                                 <!--*** NCB table *** -->
                                 <td>
                                     <p:dataTable value="#{dbrInfo.ncbDetails}" var="itemNCB" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
-                                        <p:column headerText=" " styleClass="center" style="width:10%;">
+                                        <p:column headerText=" " styleClass="center" style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 300px; width:300px; max-width: 300px;">
                                             <p:outputLabel value="#{itemNCB.accountName}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="width:70px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
                                             <h:outputText value="#{itemNCB.loanAccountTypeView.name}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;" >
-                                            <div class="right">
-                                                <h:outputText value="#{itemNCB.limit}" >
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="min-width: 150px; width:150px; max-width: 1500px;" styleClass="right">
+                                            <h:outputText value="#{itemNCB.limit}" >
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </h:outputText>
-                                            </div>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px; text-align: right">
-                                            <div class="right">
-                                                <p:outputLabel value="#{itemNCB.installment}">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:outputLabel>
-                                            </div>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
+                                            <p:outputLabel value="#{itemNCB.installment}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                            </p:outputLabel>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" style="width:70px; text-align: right">
-                                            <div class="right">
-                                                <p:outputLabel value="#{itemNCB.debtForCalculate}">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:outputLabel>
-                                            </div>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
+                                            <p:outputLabel value="#{itemNCB.debtForCalculate}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                            </p:outputLabel>
                                         </p:column>
                                         <p:columnGroup type="footer" >
                                             <p:row >
-                                                <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
+                                                <p:column style="border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column  style="border-left: none !important; text-align:right" footerText="#{msg.get('app.label.total')}" styleClass="summary_column"/>
                                                 <p:column style="text-align:right" styleClass="summary_column">
                                                     <f:facet name="footer">
                                                         <p:outputLabel value="#{dbrInfo.totalMonthDebtBorrower}">
@@ -230,43 +228,37 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false">
-                                        <p:column headerText=" " styleClass="center" style="width:22px;">
+                                    <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
+                                        <p:column headerText=" "  style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="width:60px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 300px; width:300px; max-width: 300px;">
                                             <p:outputLabel value="#{item.accountName}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
                                             <p:outputLabel value="#{item.loanAccountTypeView.name}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="width:70px;">
-                                            <div class="right">
-                                                <p:outputLabel value="#{item.limit}">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:outputLabel>
-                                            </div>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
+                                            <p:outputLabel value="#{item.limit}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                            </p:outputLabel>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="width:70px;">
-                                            <div class="right">
-                                                <p:outputLabel value="#{item.installment}">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:outputLabel>
-                                            </div>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
+                                            <p:outputLabel value="#{item.installment}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                            </p:outputLabel>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" >
-                                            <div  class="right">
-                                                <p:outputLabel value="#{item.debtForCalculate}" style="text-align: right">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </p:outputLabel>
-                                            </div>
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
+                                            <p:outputLabel value="#{item.debtForCalculate}" >
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                            </p:outputLabel>
                                         </p:column>
-                                        <p:column styleClass="center">
+                                        <p:column  styleClass="center">
                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                              icon="ui-icon-pencil"
                                                              action="#{dbrInfo.initEditDBRDetail()}"
                                                              oncomplete="dbrDetailDialog.show()"
-                                                             process="@form"
+                                                             process="@this"
                                                              update=":dbrDetailDlgForm">
                                                 <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
@@ -279,18 +271,24 @@
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
                                             </p:commandButton>
                                         </p:column>
-                                        <p:columnGroup type="footer">
-                                            <p:row>
-                                                <p:column colspan="5" footerText="Totals:" style="text-align:right" styleClass="summary_column"/>
-                                                <p:column style="text-align:right" styleClass="summary_column">
+
+                                        <p:columnGroup type="footer" >
+
+                                            <p:row >
+                                                <p:column style="border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; text-align: right;"  footerText="#{msg.get('app.label.total')}" styleClass="summary_column"/>
+                                                <p:column style="text-align:right; " styleClass="summary_column">
                                                     <f:facet name="footer">
-                                                        <h:outputText value="#{dbrInfo.totalMonthDebtRelated}">
+                                                        <p:outputLabel value="#{dbrInfo.totalMonthDebtRelated}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
-                                                        </h:outputText>
+                                                        </p:outputLabel>
                                                     </f:facet>
-                                                </p:column >
-                                                <p:column styleClass="summary_column" />
+                                                </p:column>
+                                                <p:column styleClass="summary_column"></p:column>
                                             </p:row>
                                         </p:columnGroup>
                                     </p:dataTable>

@@ -117,6 +117,8 @@ public class CreditFacPropose implements Serializable {
     private boolean modeEditReducePricing;
     private boolean modeEditReduceFront;
     private BigDecimal reducePrice;
+    private boolean reducePricePanelRendered;
+    private boolean cannotEditStandard;
 
     // for control Propose Collateral
     private NewCollateralInfoView newCollateralInfoView;
@@ -274,6 +276,8 @@ public class CreditFacPropose implements Serializable {
 
         if (newCreditFacilityView == null) {
             newCreditFacilityView = new NewCreditFacilityView();
+            reducePricePanelRendered = false;
+            cannotEditStandard = true;
         }
 
         if (creditRequestTypeList == null) {
@@ -495,6 +499,9 @@ public class CreditFacPropose implements Serializable {
 
                         modeEditReducePricing = flagForModeDisable(productFormula.getReducePricing());
                         modeEditReduceFront =  flagForModeDisable(productFormula.getReduceFrontEndFee());
+
+                        reducePricePanelRendered =(modeEditReducePricing==true)?true:false;
+                        log.info("reducePricePanelRendered:: {}",reducePricePanelRendered);
                     }
                 }
             }
@@ -515,11 +522,13 @@ public class CreditFacPropose implements Serializable {
         if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {   //change
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
             newCreditDetailView.getProductProgram().setId(0);
+            cannotEditStandard =false;
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
                 newCreditDetailView.getCreditType().setId(0);
             }
+            cannotEditStandard =true;
         }
     }
 
@@ -1763,6 +1772,22 @@ public class CreditFacPropose implements Serializable {
 
     public void setReducePrice(BigDecimal reducePrice) {
         this.reducePrice = reducePrice;
+    }
+
+    public boolean getReducePricePanelRendered() {
+        return reducePricePanelRendered;
+    }
+
+    public void setReducePricePanelRendered(boolean reducePricePanelRendered) {
+        this.reducePricePanelRendered = reducePricePanelRendered;
+    }
+
+    public boolean isCannotEditStandard() {
+        return cannotEditStandard;
+    }
+
+    public void setCannotEditStandard(boolean cannotEditStandard) {
+        this.cannotEditStandard = cannotEditStandard;
     }
 }
 
