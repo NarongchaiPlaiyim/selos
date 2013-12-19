@@ -68,7 +68,7 @@
 
                                     <tr>
                                         <td colspan="2">
-                                            <table border="1">
+                                            <table border="0">
                                                 <tr>
                                                     <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
                                                         <p:outputLabel value="#{''}"/>
@@ -80,41 +80,32 @@
                                                     <td class="center title" style="width: 250px; max-width: 250px; min-width: 250px;">
                                                         <h:outputText value="#{'Submission Date'}"/>
                                                     </td>
-                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
-                                                        <h:outputText value="#{'Y'}"/>
-                                                    </td>
-                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
-                                                        <h:outputText value="#{'N'}"/>
+                                                    <td class="center title" style="width: 100px; max-width: 100px; min-width: 100px;">
+                                                        <h:outputText styleClass="center" value="#{'Y/N'}"/>
                                                     </td>
                                                 </tr>
-
-
 
                                                 <tr>
                                                     <td class="left title">
                                                         <h:outputText value="#{'1'}"/>
                                                     </td>
-                                                    <td colspan="4" class="left title">
+                                                    <td colspan="3" class="left title">
                                                         <h:outputText value="#{'Basic Condition'}"/>
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
-
                                                     </td>
-
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
                                                     </td>
-
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td colspan="2">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
-
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -127,14 +118,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -145,14 +136,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีค่าธรรมเนียมหนังสือค้ำประกัน(L/G) ค้างมากกว่า 30 วัน'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -163,14 +154,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีการค้างการทบทวน Annual Review เกินกว่า 90 วัน'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -181,14 +172,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีภาระหนี้ RPD ของสินเชื่อทุกประเภท'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -199,14 +190,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่ติด Legal Status'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -217,14 +208,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'- ไม่มีรายการค้างชำระ (DPD)ในสินเชื่อทุกประเภทมากกว่า 7 วัน'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -254,14 +245,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'a. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -272,14 +263,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'b. เอกสารประกอบการเบิกใช้ตามวัตถุประสงค์ที่ระบุใน Opt Sheet'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
@@ -299,14 +290,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'a. ผ่านประเมิณตามหลักทรัพย์ตามเกณฑ์ 30 70 100% ของความคืบหน้าโครงการ/ เบิกตามความคืบหน้าของมูลงานที่กำหนดไว้ใน Construction form'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -316,14 +307,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'b. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
+                                                    <td class="center" style="padding-left: 10px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -333,8 +324,14 @@
                                                     <td class="left">
                                                         <h:outputText value="#{'c. เอกสารประกอบการเบิกใช้'}"/>
                                                     </td>
-                                                    <td>
+                                                    <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td class="center" style="padding-left: 8px;">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 

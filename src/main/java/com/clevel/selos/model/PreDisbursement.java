@@ -23,6 +23,8 @@ public class PreDisbursement implements Serializable {
     @NormalMessage
     Message msg;
 
+    private boolean flag;
+
     private PreDisbursementView preDisbursementView;
 
     @Inject
