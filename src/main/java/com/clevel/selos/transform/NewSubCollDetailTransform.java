@@ -57,7 +57,7 @@ public class NewSubCollDetailTransform extends Transform {
 //                newCollateralSubDetails.add(newCollateralSubDetailSave);
             }
 
-            subCollateralDetail.setMortgageList(newSubCollateralDetailView.getMortgageList());
+            //subCollateralDetail.setMortgageList(newSubCollateralDetailView.getMortgageList());
             //subCollateralDetail.setCollateralOwnerUWList(collateralOwnerUWList);
             subCollateralDetail.setTitleDeed(newSubCollateralDetailView.getTitleDeed());
             subCollateralDetail.setAppraisalValue(newSubCollateralDetailView.getAppraisalValue());
@@ -88,7 +88,7 @@ public class NewSubCollDetailTransform extends Transform {
             newSubCollateralDetailView.setCreateDate(subCollateralDetail.getCreateDate());
             newSubCollateralDetailView.setModifyBy(subCollateralDetail.getModifyBy());
             newSubCollateralDetailView.setModifyDate(subCollateralDetail.getModifyDate());
-            newSubCollateralDetailView.setMortgageList(subCollateralDetail.getMortgageList());
+            //newSubCollateralDetailView.setMortgageList(subCollateralDetail.getMortgageList());
             List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
 
             /*for(Customer customer:subCollateralDetail.getCollateralOwnerUWList()){

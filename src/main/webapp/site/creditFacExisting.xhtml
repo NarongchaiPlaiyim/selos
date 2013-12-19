@@ -105,7 +105,7 @@
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
-                                                        #{i.index + 1} id = #{borrowerCredit.id}
+                                                        #{borrowerCredit.no}
                                                     </td>
                                                     <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -295,7 +295,7 @@
                                                 </p:columnGroup>
 
                                                 <p:column styleClass="center">
-                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                    <h:outputText value="#{conditionDetailItem.no}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="center">
@@ -345,7 +345,7 @@
                                                     <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.no+1}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{borrowerRetailCredit.accountName}" /><br/>
@@ -428,7 +428,7 @@
                                                     <!--Data dtCommercialCreditborrowerPerson-->
                                                 </p:columnGroup>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerRLOSCredit.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{borrowerRLOSCredit.accountName}" /><br/>
@@ -603,7 +603,7 @@
                                                                 <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
-                                                                    #{i.index + 1}  id = #{relatedCredit.id}
+                                                                    #{relatedCredit.no}
                                                                 </td>
                                                                 <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -783,7 +783,7 @@
                                                     <!--Data dtCommercialCreditrelatedPerson-->
                                                 </p:columnGroup>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedRetailCredit.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{relatedRetailCredit.accountName}" /><br/>
@@ -869,7 +869,7 @@
                                                     <!--Data dtCommercialCreditRelatedPerson-->
                                                 </p:columnGroup>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedRLOSCredit.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{relatedRLOSCredit.accountName}" /><br/>
@@ -1110,7 +1110,7 @@
                                                 </p:columnGroup>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerCollateral.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{borrowerCollateral.collateralType.description}"></p:outputLabel>
@@ -1222,7 +1222,7 @@
                                                 </p:columnGroup>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedCollateral.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{relatedCollateral.collateralType.description}"></p:outputLabel>
@@ -1342,7 +1342,7 @@
                                                     </p:row>
                                                 </p:columnGroup>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{rowIndex+1}"></p:outputLabel>
+                                                    <p:outputLabel value="#{existingGuarantor.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{existingGuarantor.guarantorName}"></p:outputLabel>

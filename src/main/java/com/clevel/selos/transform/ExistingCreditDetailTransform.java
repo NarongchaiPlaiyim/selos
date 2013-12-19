@@ -25,7 +25,7 @@ public class ExistingCreditDetailTransform extends Transform {
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             existingCreditDetail = new ExistingCreditDetail();
             if (existingCreditDetailView.getId() != 0) {
-                existingCreditDetail.setId(existingCreditDetailView.getId());
+                //existingCreditDetail.setId(existingCreditDetailView.getId());
                 existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
                 existingCreditDetail.setCreateBy(existingCreditDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -33,6 +33,7 @@ public class ExistingCreditDetailTransform extends Transform {
                 existingCreditDetail.setCreateBy(user);
             }
 
+            existingCreditDetail.setNo(existingCreditDetailView.getNo());
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
@@ -74,6 +75,7 @@ public class ExistingCreditDetailTransform extends Transform {
         for (ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
             existingCreditDetailView = new ExistingCreditDetailView();
             existingCreditDetailView.setId(existingCreditDetail.getId());
+            existingCreditDetailView.setNo(existingCreditDetail.getNo());
             existingCreditDetailView.setBorrowerType(existingCreditDetail.getBorrowerType());
             existingCreditDetailView.setExistingCreditFrom(existingCreditDetail.getExistingCreditFrom());
             existingCreditDetailView.setSeq(existingCreditDetail.getSeq());
