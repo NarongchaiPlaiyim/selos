@@ -55,12 +55,12 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td>
-                                        <p:commandButton id="btnIndividual" value="Add Individual" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnIndividual" value="Add" styleClass="larger" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
-                                                         action="#{custInfoSummary.onLinkToAddIndividual()}"/>
-                                        <p:commandButton id="btnJuristic" value="Add Juristic" styleClass="larger" process="@form"
+                                                         action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
+                                        <p:commandButton id="btnJuristic" value="Add" styleClass="larger" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
-                                                         action="#{custInfoSummary.onLinkToAddJuristic()}"/>
+                                                         action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
                                     </td>
                                 </tr>
 
@@ -201,7 +201,7 @@
                                             <p:column styleClass="center"> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}">
+                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                                 </p:commandButton>
@@ -350,7 +350,7 @@
                                             <p:column> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}">
+                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item2}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                                 </p:commandButton>
@@ -505,7 +505,7 @@
                                             <p:column> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditRelated()}">
+                                                                 action="#{custInfoSummary.onLinkToEditRelated()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item3}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                                 </p:commandButton>
@@ -533,12 +533,12 @@
                 <h:inputHidden id="pagename" value="mnuprescreen"/>
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
-        </h:form>
 
-        <!--<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>-->
+            <p:blockUI block=":frmMain" widgetVar="blockUI">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+        </h:form>
 
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteGuarantorDialog"/>

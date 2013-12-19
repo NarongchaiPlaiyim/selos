@@ -20,6 +20,9 @@ public class ExistingCreditTypeDetail implements Serializable {
     @Column(name = "no")
     private int no;
 
+    @Column(name = "no_flag")
+    private int noFlag;
+
     @Column(name = "account")
     private String account;
 
@@ -94,6 +97,14 @@ public class ExistingCreditTypeDetail implements Serializable {
 
     public void setNo(int no) {
         this.no = no;
+    }
+
+    public int getNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(int noFlag) {
+        this.noFlag = noFlag;
     }
 
     public String getAccount() {

@@ -18,6 +18,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -30,10 +31,8 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumJuris")
@@ -242,6 +241,8 @@ public class CustomerInfoJuristic implements Serializable {
     private boolean isFromSummaryParam;
     private boolean isFromIndividualParam;
 
+    private String currentDateDDMMYY;
+
     public CustomerInfoJuristic(){
     }
 
@@ -320,6 +321,12 @@ public class CustomerInfoJuristic implements Serializable {
         enableCitizenId = true;
         enableSpouseDocumentType = true;
         enableSpouseCitizenId = true;
+
+        customerInfoView.setCapital(BigDecimal.ZERO);
+        customerInfoView.setPaidCapital(BigDecimal.ZERO);
+        customerInfoView.setSalesFromFinancialStmt(BigDecimal.ZERO);
+        customerInfoView.setShareHolderRatio(BigDecimal.ZERO);
+        customerInfoView.setTotalShare(BigDecimal.ZERO);
     }
 
     public void onEditJuristic(){
@@ -483,28 +490,28 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
 
                     //for spouse
-                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
-                        customerInfoView.getSpouse().setSearchBy(1);
-                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
-                        try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
-                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                                if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
-                                    enableSpouseDocumentType = false;
-                                    enableSpouseCitizenId = false;
-                                } else {
-                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
-                                    enableSpouseDocumentType = true;
-                                    enableSpouseCitizenId = true;
-                                }
-                            }
-                        } catch (Exception ex) {
-                            enableSpouseDocumentType = true;
-                            enableSpouseCitizenId = true;
-                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
-                        }
-                    }
+//                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
+//                        customerInfoView.getSpouse().setSearchBy(1);
+//                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+//                        try {
+//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
+//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+//                                if(cusSpouseResultView.getCustomerInfoView() != null){
+//                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+//                                    enableSpouseDocumentType = false;
+//                                    enableSpouseCitizenId = false;
+//                                } else {
+//                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
+//                                    enableSpouseDocumentType = true;
+//                                    enableSpouseCitizenId = true;
+//                                }
+//                            }
+//                        } catch (Exception ex) {
+//                            enableSpouseDocumentType = true;
+//                            enableSpouseCitizenId = true;
+//                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
+//                        }
+//                    }
 
                     enableDocumentType = false;
                     enableCitizenId = false;
@@ -526,6 +533,8 @@ public class CustomerInfoJuristic implements Serializable {
                 message = customerInfoResultView.getReason();
 
             }
+            onChangeProvinceEditForm1();
+            onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -550,16 +559,16 @@ public class CustomerInfoJuristic implements Serializable {
                         log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
 
-                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
-                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
-                                if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
-                                }
-                            }
-                        }
+//                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
+//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
+//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+//                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
+//                                if(cusSpouseResultView.getCustomerInfoView() != null){
+//                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+//                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
+//                                }
+//                            }
+//                        }
 
                         messageHeader = "Refresh Interface Info complete.";
                         message = "Customer found.";
@@ -629,6 +638,10 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onDeleteIndividual(){
         customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     //Get Set
@@ -1590,5 +1603,14 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setReqSpoKYCLev(boolean reqSpoKYCLev) {
         this.reqSpoKYCLev = reqSpoKYCLev;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }

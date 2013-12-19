@@ -17,8 +17,10 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -29,10 +31,7 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumIndi")
@@ -268,6 +267,9 @@ public class CustomerInfoIndividual implements Serializable {
     //mode
     private boolean isFromJuristic;
 
+    //for date
+    private String currentDateDDMMYY;
+
     public CustomerInfoIndividual(){
     }
 
@@ -388,13 +390,13 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.setCollateralOwner(1);
         customerInfoView.getSpouse().setCollateralOwner(1);
 
-        customerInfoView.getNationality().setId(178);
+        customerInfoView.getNationality().setId(1);
         customerInfoView.getCitizenCountry().setId(211);
         customerInfoView.getCurrentAddress().getCountry().setId(211);
         customerInfoView.getRegisterAddress().getCountry().setId(211);
         customerInfoView.getWorkAddress().getCountry().setId(211);
 
-        customerInfoView.getSpouse().getNationality().setId(178);
+        customerInfoView.getSpouse().getNationality().setId(1);
         customerInfoView.getSpouse().getCitizenCountry().setId(211);
         customerInfoView.getSpouse().getCurrentAddress().getCountry().setId(211);
         customerInfoView.getSpouse().getRegisterAddress().getCountry().setId(211);
@@ -402,6 +404,7 @@ public class CustomerInfoIndividual implements Serializable {
 
         onChangeReference();
         onChangeReferenceSpouse();
+        onChangeMaritalStatus();
     }
 
     public void onEditIndividual(){
@@ -792,6 +795,10 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeMaritalStatus(){
+        if(customerInfoView != null && customerInfoView.getMaritalStatus().getId() == 0){
+            return;
+        }
+
         MaritalStatus maritalStatus = maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId());
         if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
             maritalStatusFlag = true;
@@ -942,13 +949,20 @@ public class CustomerInfoIndividual implements Serializable {
 
                     //for spouse
                     if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
-                        customerInfoView.getSpouse().setSearchBy(1);
-                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
                         try {
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
+                            customerInfoView.getSpouse().setDocumentType(customerInfoSearch.getDocumentType());
+                            customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                            customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                                log.debug("onSearchCustomerInfo ( spouse ) ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+                                    log.debug("onSearchCustomerInfo ::: customer ( spouse ) found : {}", cusSpouseResultView.getCustomerInfoView());
+                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
+                                    customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
+                                    customerInfoView.getSpouse().setSearchId(customerInfoResultView.getCustomerInfoView().getCitizenId());
+                                    customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+                                    customerInfoView.getSpouse().setSearchFromRM(1);
                                     enableSpouseDocumentType = false;
                                     enableSpouseCitizenId = false;
                                 } else {
@@ -984,6 +998,10 @@ public class CustomerInfoIndividual implements Serializable {
                 message = customerInfoResultView.getReason();
 
             }
+            onChangeDOB();
+            onChangeProvinceEditForm1();
+            onChangeDistrictEditForm1();
+            onChangeMaritalStatus();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1118,6 +1136,9 @@ public class CustomerInfoIndividual implements Serializable {
                 message = customerInfoResultView.getReason();
 
             }
+            onChangeDOBSpouse();
+            onChangeProvinceEditForm4();
+            onChangeDistrictEditForm4();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1131,6 +1152,24 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onSave(){
         //check citizen id
+        if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                messageHeader = "Save Individual Failed.";
+                message = "Citizen Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
+            Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
+            if(customer != null && customer.getId() != 0){
+                if(customer.getId() != customerInfoView.getId()){
+                    messageHeader = "Save Individual Failed.";
+                    message = "Citizen Id is already exist";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            }
+        }
+
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
@@ -1253,6 +1292,10 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void onChangeTitleEnSpouse(){
         customerInfoView.getSpouse().getTitleTh().setId(customerInfoView.getSpouse().getTitleEn().getId());
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     //Get Set
@@ -2390,5 +2433,14 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setReqSpoRelation(boolean reqSpoRelation) {
         this.reqSpoRelation = reqSpoRelation;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }

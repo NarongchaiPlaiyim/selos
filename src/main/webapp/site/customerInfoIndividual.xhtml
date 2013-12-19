@@ -4,13 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Customer Info. Detail - Individual</title>
     <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -40,11 +42,11 @@
                             <!-- start content -->
                             <table class="content_table_form" id="contentTableForm">
                             <tr>
-                                <td class="title">
+                                <td class="title" style="min-width: 200px; max-width: 200px; width: 200px;">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
                                 </td>
-                                <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                <td style="min-width: 250px; max-width: 250px; width: 250px;">
+                                    <p:selectOneMenu size="1" style="min-width: 200px; max-width: 200px; width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
                                                      disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
@@ -57,8 +59,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title" style="width: 180px;">#{msg.get('app.custInfoIndi.content.search.by')}</td>
-                                <td style="width: 250px;">
+                                <td class="title">#{msg.get('app.custInfoIndi.content.search.by')}</td>
+                                <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearch.searchBy}"
                                                       required="#{not empty param[searchButton.clientId]}"
                                                       disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
@@ -66,8 +68,9 @@
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
                                     </p:selectOneRadio>
                                 </td>
-                                <td style="width: 150px;">
+                                <td style="min-width: 200px; max-width: 200px; width: 200px;">
                                     <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
+                                                 style="width: 180px; max-width: 180px; min-width: 180px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyDownNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
@@ -102,7 +105,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.relationship')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.relation.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRelation}"
                                                      disabled="#{custInfoSumIndi.editBorrower}">
@@ -120,7 +123,7 @@
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                 </td>
-                                <td colspan="3" style="width: 300px;">
+                                <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3 || custInfoSumIndi.customerInfoView.relation.getId() == 4}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
@@ -135,7 +138,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.reference')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.reference.id}" id="reference"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndReference}"
                                                      disabled="#{custInfoSumIndi.editBorrower}">
@@ -155,7 +158,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.share')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.percentShare}"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.percentShare}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
 
@@ -170,7 +174,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.documentType.id}"
                                                      disabled="#{not custInfoSumIndi.enableDocumentType}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDocType}">
@@ -188,6 +192,7 @@
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.citizenId}" maxlength="15"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyDownNumber(event);"
                                                  disabled="#{not custInfoSumIndi.enableCitizenId}"
@@ -198,8 +203,9 @@
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutBy')}"/>
                                 </td>
-                                <td style="width: 150px;">
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.documentAuthorizeBy}"/>
+                                <td>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.documentAuthorizeBy}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -207,17 +213,23 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                    value="#{custInfoSumIndi.customerInfoView.dateOfBirth}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDOB}">
                                         <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
                                         <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOB()}" update=":frmMain:age"/>
-                                    </p:calendar>
+                                    </clv:BECalendar>
                                 </td>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.citizenCountry.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCOB}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -233,9 +245,14 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
-                                                pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"/>
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                    value="#{custInfoSumIndi.customerInfoView.documentAuthorizeDate}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDID}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -243,9 +260,13 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
                                 </td>
                                 <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
-                                                pattern="dd/MM/yyyy" showOn="button"
-                                                required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"/>
+                                    <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                    style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                    yearRange="1950:2100"
+                                                    pattern="dd/MM/yyyy"
+                                                    mindate="01/01/1950"
+                                                    value="#{custInfoSumIndi.customerInfoView.documentExpiredDate}"
+                                                    required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndDED}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -256,7 +277,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleTh"
+                                                <p:selectOneMenu size="1" id="titleTh" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleTh.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitTh}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -271,10 +292,12 @@
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.firstNameTh}"
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndStNameTh}"/>
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.lastNameTh}"
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndLastNameTh}"/>
                                             </td>
                                         </tr>
@@ -289,7 +312,7 @@
                                     <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
-                                                <p:selectOneMenu size="1" style="width: 200px;" id="titleEn"
+                                                <p:selectOneMenu size="1" id="titleEn" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumIndi.customerInfoView.titleEn.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndTitEn}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -304,10 +327,12 @@
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.firstNameEn}"
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndStNameEn}"/>
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.lastNameEn}"
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndLastNameEn}"/>
                                             </td>
                                         </tr>
@@ -320,7 +345,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender}"
-                                                     style="width: 200px;"
+                                                     style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndGender}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItem itemLabel="Male" itemValue="1"/>
@@ -331,7 +356,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
                                 </td>
                                 <td>
-                                    <h:outputText value="#{custInfoSumIndi.customerInfoView.age}" id="age"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.age}" id="age"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;" readonly="true"/>
                                 </td>
                             </tr>
                             <tr>
@@ -339,7 +365,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.origin')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.origin.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRace}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -355,7 +381,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.nation')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.nationality.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndNation}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -369,7 +395,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.sndNation')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.sndNationality.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
@@ -384,7 +410,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.edu')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.education.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndEdu}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -398,7 +424,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.occup')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.occupation.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndOcc}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -414,7 +440,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.bussType')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.businessType.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndBizType}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -429,6 +455,7 @@
                                 </td>
                                 <td>
                                     <p:inputText id="approxIncome" styleClass="right" value="#{custInfoSumIndi.customerInfoView.approxIncome}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndAppInc}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:approxIncome"/>
@@ -440,7 +467,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.income')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.sourceIncome.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -453,7 +480,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.incomeCountry')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.countryIncome.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -468,7 +495,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.maritalStatus')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.maritalStatus.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndMarriage}"
                                                      disabled="#{custInfoSumIndi.customerInfoView.relation.id == 1
@@ -487,7 +514,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.numbOfChild')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.numberOfChild}"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.numberOfChild}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
                             <!-- ############################################################################################# -->
@@ -537,7 +565,7 @@
                                                 <table style="margin-left: -3px;">
                                                     <tr>
                                                         <td>
-                                                            <p:selectOneMenu size="1" style="width: 200px;"
+                                                            <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumIndi.customerInfoView.currentAddress.province.code}"
                                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCurPro}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -550,7 +578,7 @@
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu size="1" style="width: 200px;" id="districtForm1"
+                                                            <p:selectOneMenu size="1" id="districtForm1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumIndi.customerInfoView.currentAddress.district.id}"
                                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCurDis}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -563,7 +591,7 @@
                                                             </p:selectOneMenu>
                                                         </td>
                                                         <td>
-                                                            <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm1"
+                                                            <p:selectOneMenu size="1" id="subDistrictForm1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumIndi.customerInfoView.currentAddress.subDistrict.code}"
                                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCurSub}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -592,7 +620,7 @@
                                                 <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                             </td>
                                             <td colspan="5">
-                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumIndi.customerInfoView.currentAddress.country.id}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId])
                                                                  and custInfoSumIndi.reqIndCurCou}">
@@ -690,7 +718,7 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.registerAddress.province.code}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRegPro
@@ -705,7 +733,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm2"
+                                                                <p:selectOneMenu size="1" id="districtForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.registerAddress.district.id}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRegDis
@@ -720,7 +748,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm2"
+                                                                <p:selectOneMenu size="1" id="subDistrictForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.registerAddress.subDistrict.code}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRegSub
@@ -753,7 +781,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumIndi.customerInfoView.registerAddress.country.id}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRegCou
@@ -856,7 +884,7 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.workAddress.province.code}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorPro
@@ -871,7 +899,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm3"
+                                                                <p:selectOneMenu size="1" id="districtForm3" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.workAddress.district.id}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorDis
@@ -886,7 +914,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm3"
+                                                                <p:selectOneMenu size="1" id="subDistrictForm3" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.workAddress.subDistrict.code}"
                                                                                  disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorSub
@@ -919,7 +947,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumIndi.customerInfoView.workAddress.country.id}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorCou
@@ -968,7 +996,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.mailAdd')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.mailingAddressType.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndAddMail}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -985,6 +1013,7 @@
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.mobileNumber}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndMobNo}"/>
                                 </td>
                             </tr>
@@ -993,7 +1022,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.fax')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.faxNumber}"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.faxNumber}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1001,7 +1031,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.email')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.email}"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.email}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
 
@@ -1021,13 +1052,15 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.tmbCus')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.tmbCustomerId}" disabled="true"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.tmbCustomerId}" readonly="true"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.segment')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.serviceSegment}" disabled="true"/>
+                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.serviceSegment}" readonly="true"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1035,7 +1068,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.kyc')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.kycLevel.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndKYCLev}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1053,7 +1086,7 @@
                                 <td colspan="3">
                                     <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.kycReason}"
                                                      style="width: 70%" maxlength="250" autoResize="false"
-                                                     disabled="true"/>
+                                                     readonly="true"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1061,7 +1094,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" disabled="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" readonly="true">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1070,7 +1103,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" disabled="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" readonly="true">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1162,7 +1195,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoSearchSpouse.documentType.id}"
                                                          required="#{not empty param[searchSpouseButton.clientId]}"
                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
@@ -1175,8 +1208,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="title" style="width: 180px;">#{msg.get('app.custInfoIndi.content.search.by')}</td>
-                                    <td style="width: 250px;">
+                                    <td class="title" style="width: 200px; max-width: 200px; min-width: 200px;">#{msg.get('app.custInfoIndi.content.search.by')}</td>
+                                    <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy}"
                                                           required="#{not empty param[searchSpouseButton.clientId]}"
                                                           disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
@@ -1184,8 +1217,9 @@
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
                                         </p:selectOneRadio>
                                     </td>
-                                    <td style="width: 150px;">
+                                    <td>
                                         <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
+                                                     style="width: 180px; max-width: 180px; min-width: 180px;"
                                                      onkeydown="return onKeyDownNumber(event);"
                                                      onkeypress="return onKeyDownNumber(event);"
                                                      required="#{not empty param[searchSpouseButton.clientId]}"
@@ -1230,7 +1264,7 @@
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                     </td>
-                                    <td colspan="3" style="width: 300px;">
+                                    <td colspan="3">
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
                                                           disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3 || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
@@ -1244,7 +1278,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.reference')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;" id="reference2"
+                                        <p:selectOneMenu size="1" id="reference2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.reference.id}"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoReference}"
                                                          disabled="#{custInfoSumIndi.editSpouseBorrower}">
@@ -1274,7 +1308,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.documentType.id}"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoDocType}"
                                                          disabled="#{not custInfoSumIndi.enableSpouseDocumentType}">
@@ -1292,6 +1326,7 @@
                                     </td>
                                     <td>
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.citizenId}" maxlength="15"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoCitId}"
                                                      onkeydown="return onKeyDownNumber(event);"
                                                      onkeypress="return onKeyDownNumber(event);"
@@ -1302,8 +1337,9 @@
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutBy')}"/>
                                     </td>
-                                    <td style="width: 150px;">
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeBy}"/>
+                                    <td>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeBy}"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1311,7 +1347,12 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1319,7 +1360,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1327,16 +1372,21 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                     </td>
                                     <td>
-                                        <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button">
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.dateOfBirth}">
                                             <p:ajax event="change" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
                                             <p:ajax event="dateSelect" listener="#{custInfoSumIndi.onChangeDOBSpouse()}" update=":frmMain:ageSpouse"/>
-                                        </p:calendar>
+                                        </clv:BECalendar>
                                     </td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiCountry')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.citizenCountry.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -1354,7 +1404,7 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleThSpouse"
+                                                    <p:selectOneMenu size="1" id="titleThSpouse" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleTh.id}"
                                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoTitTh}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1369,10 +1419,12 @@
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.firstNameTh}"
+                                                                 style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoStNameTh}"/>
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.lastNameTh}"
+                                                                 style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoLastNameTh}"/>
                                                 </td>
                                             </tr>
@@ -1387,7 +1439,7 @@
                                         <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
-                                                    <p:selectOneMenu size="1" style="width: 200px;" id="titleEnSpouse"
+                                                    <p:selectOneMenu size="1" id="titleEnSpouse" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.titleEn.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.titleEnList}"
@@ -1400,10 +1452,12 @@
                                                     </p:selectOneMenu>
                                                 </td>
                                                 <td>
-                                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.firstNameEn}"/>
+                                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.firstNameEn}"
+                                                                 style="width: 200px; max-width: 200px; min-width: 200px;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.lastNameEn}"/>
+                                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.lastNameEn}"
+                                                                 style="width: 200px; max-width: 200px; min-width: 200px;"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1414,8 +1468,8 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.gender')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.spouse.gender}"
-                                                         style="width: 200px;">
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                         value="#{custInfoSumIndi.customerInfoView.spouse.gender}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItem itemLabel="Male" itemValue="1"/>
                                             <f:selectItem itemLabel="Female" itemValue="2"/>
@@ -1425,7 +1479,8 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.age')}"/>
                                     </td>
                                     <td>
-                                        <h:outputText value="#{custInfoSumIndi.customerInfoView.spouse.age}" id="ageSpouse"/>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.age}" id="ageSpouse" readonly="true"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1433,7 +1488,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.origin')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.origin.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.raceList}"
@@ -1448,7 +1503,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.nation')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.nationality.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.nationalityList}"
@@ -1461,7 +1516,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.sndNation')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.sndNationality.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
@@ -1476,7 +1531,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.edu')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.education.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.educationList}"
@@ -1489,7 +1544,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.occup')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.occupation.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.occupationList}"
@@ -1504,7 +1559,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.bussType')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.businessType.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.businessTypeList}"
@@ -1517,7 +1572,8 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.appIncome')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText id="approxIncome2" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.approxIncome}">
+                                        <p:inputText id="approxIncome2" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.approxIncome}"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;">
                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                             <p:ajax event="blur" update=":frmMain:approxIncome2"/>
                                         </p:inputText>
@@ -1528,7 +1584,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.income')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.sourceIncome.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -1541,7 +1597,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.incomeCountry')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.countryIncome.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -1556,7 +1612,8 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.numbOfChild')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.numberOfChild}"/>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.numberOfChild}"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                 </tr>
                                 <!-- ############################################################################################# -->
@@ -1604,7 +1661,7 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.province.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.provinceForm4List}"
@@ -1616,7 +1673,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm4"
+                                                                <p:selectOneMenu size="1" id="districtForm4" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.district.id}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.districtForm4List}"
@@ -1628,7 +1685,7 @@
                                                                 </p:selectOneMenu>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm4"
+                                                                <p:selectOneMenu size="1" id="subDistrictForm4" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.subDistrict.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumIndi.subDistrictForm4List}"
@@ -1654,7 +1711,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.country.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -1745,7 +1802,7 @@
                                                         <table style="margin-left: -3px;">
                                                             <tr>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.province.code}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1758,7 +1815,7 @@
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;" id="districtForm5"
+                                                                    <p:selectOneMenu size="1" id="districtForm5" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.district.id}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1771,7 +1828,7 @@
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm5"
+                                                                    <p:selectOneMenu size="1" id="subDistrictForm5" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.subDistrict.code}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1799,7 +1856,7 @@
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                                     </td>
                                                     <td colspan="5">
-                                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                          value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.country.id}"
                                                                          disabled="#{custInfoSumIndi.addressFlagForm5 != 3}">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1895,7 +1952,7 @@
                                                         <table style="margin-left: -3px;">
                                                             <tr>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.province.code}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1908,7 +1965,7 @@
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;" id="districtForm6"
+                                                                    <p:selectOneMenu size="1" id="districtForm6" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.district.id}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1921,7 +1978,7 @@
                                                                     </p:selectOneMenu>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm6"
+                                                                    <p:selectOneMenu size="1" id="subDistrictForm6" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                      value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.subDistrict.code}"
                                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}">
                                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1949,7 +2006,7 @@
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.country')}"/>
                                                     </td>
                                                     <td colspan="5">
-                                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                          value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.country.id}"
                                                                          disabled="#{custInfoSumIndi.addressFlagForm6 != 3}">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1994,7 +2051,8 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.mobile')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.mobileNumber}"/>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.mobileNumber}"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2013,13 +2071,15 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.tmbCus')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.tmbCustomerId}" disabled="true"/>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.tmbCustomerId}" readonly="true"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.segment')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.serviceSegment}" disabled="true"/>
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.serviceSegment}" readonly="true"
+                                                     style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2027,7 +2087,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.kyc')}"/>
                                     </td>
                                     <td colspan="5">
-                                        <p:selectOneMenu size="1" style="width: 200px;"
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.kycLevel.id}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.kycLevelList}"
@@ -2044,7 +2104,7 @@
                                     <td colspan="3">
                                         <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.spouse.kycReason}"
                                                          style="width: 70%" maxlength="250" autoResize="false"
-                                                         disabled="true"/>
+                                                         readonly="true"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2052,7 +2112,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" disabled="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" readonly="true">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2061,7 +2121,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" disabled="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" readonly="true">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2135,7 +2195,7 @@
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                      rendered="#{custInfoSumIndi.fromJuristic}"/>
-                                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumIndi.onCreation}"/>
                                 </td>
                             </tr>
@@ -2153,7 +2213,12 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+
+            <p:blockUI block=":frmMain" widgetVar="blockUI">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

@@ -85,8 +85,7 @@ public class DBRInfo implements Serializable {
     public void preRender() {
 
         log.info("preRender ::: setSession ");
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("workCaseId", "2001");
+
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -130,8 +129,6 @@ public class DBRInfo implements Serializable {
     public void initAddDBRDetail() {
         isComplete = false;
         selectedItem = new DBRDetailView();
-
-
     }
 
     public void onAddDBRDetail() {
@@ -208,23 +205,7 @@ public class DBRInfo implements Serializable {
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
-    public void testUpdateValueDBR(){
-        try{
-            dbrControl.updateValueOfDBR(workCaseId);
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("ws.newCase.response.success");
-            //update Display
-            dbr = new DBRView();
-            dbr = dbrControl.getDBRByWorkCase(workCaseId);
-            dbrDetails = new ArrayList<DBRDetailView>();
-            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
-                dbrDetails = dbr.getDbrDetailViews();
-            }
-        }catch (Exception e){
 
-        }
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-    }
 
     public BigDecimal getTotalMonthDebtBorrower(){
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;

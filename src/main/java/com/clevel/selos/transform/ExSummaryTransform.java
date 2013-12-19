@@ -288,7 +288,7 @@ public class ExSummaryTransform extends Transform {
         return exSumDeviateList;
     }
 
-    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, String qualitativeClass, BigDecimal bizSize){
+    public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, QualitativeView qualitativeView, BigDecimal bizSize){
         ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
@@ -306,7 +306,11 @@ public class ExSummaryTransform extends Transform {
             }
         }
 
-        exSumBusinessInfoView.setQualitativeClass(qualitativeClass);
+        if(qualitativeView != null){
+            exSumBusinessInfoView.setQualitativeClass(qualitativeView.getQualityResult());
+        } else {
+            exSumBusinessInfoView.setQualitativeClass("");
+        }
 
 //        If Borrower is Juristic use Customer Info Detail else if Borrower is Individual use Bank Statement Summary
         exSumBusinessInfoView.setBizSize(bizSize);

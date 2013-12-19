@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.Customer;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -115,7 +116,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.eq("relation.id", 2));
+        criteria.add(Restrictions.eq("relation.id", RelationValue.GUARANTOR.value()));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
         log.info("criteria.list() :: {}",criteria.list());
@@ -126,7 +127,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.or(Restrictions.eq("relation.id", 1),Restrictions.eq("relation.id", 2)));
+        criteria.add(Restrictions.or(Restrictions.eq("relation.id", RelationValue.BORROWER.value()),Restrictions.eq("relation.id", RelationValue.GUARANTOR.value())));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>)criteria.list();
         log.info("criteria.list() :: {}",criteria.list());

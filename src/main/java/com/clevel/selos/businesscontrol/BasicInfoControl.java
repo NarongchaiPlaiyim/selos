@@ -108,8 +108,9 @@ public class BasicInfoControl extends BusinessControl {
         }
         openAccountDAO.delete(openAccountList);
 
-        if (basicInfoView.getBasicInfoAccountViews().size() != 0) {
+        if (basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0) {
             for (BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()) {
+                System.out.println("BasicInfoAccountView [ ID ] : "+ biav.getId() +" [ Account Name ] : " +biav.getAccountName());
                 OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav, basicInfo);
                 openAccountDAO.save(openAccount);
 

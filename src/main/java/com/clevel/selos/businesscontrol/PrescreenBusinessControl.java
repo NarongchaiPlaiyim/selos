@@ -299,7 +299,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(CustomerInfoView customerItem : customerInfoViewList){
             log.info("customerItem : {}", customerItem);
             if(customerItem.getCustomerEntity().getId() == 1
-                    && customerItem.getNcbFlag() == RadioValue.NO.value()){
+                    && customerItem.getNcbFlag() == 0){
                 log.info("customerItem ::: NcbFlag : {}", customerItem.getNcbFlag());
                 NCRSModel ncrsModel = new NCRSModel();
 
@@ -334,7 +334,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
                 ncrsModelList.add(ncrsModel);
             } else if(customerItem.getCustomerEntity().getId() == 2
-                    && customerItem.getNcbFlag() == RadioValue.NO.value()) {
+                    && customerItem.getNcbFlag() == 0) {
                 NCCRSModel nccrsModel = new NCCRSModel();
                 if(customerItem.getDocumentType() != null){
                     if(customerItem.getTitleTh() != null){

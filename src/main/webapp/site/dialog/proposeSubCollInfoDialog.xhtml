@@ -63,7 +63,6 @@
                      required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
-<!--
 
 <tr>
     <td class="title" style="width: 150px;">
@@ -91,7 +90,7 @@
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddCollateralOwnerUW()}"
                             process="@form"
-                            update=":subCollateralDlgForm">
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
             </tr>
@@ -110,10 +109,10 @@
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:20px;"/>
-                    <p:column style="width:150px;"
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
+                    <p:column style="width:150px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralName')}"/>
-                    <p:column style="width:20px;"/>
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
                 </p:row>
             </p:columnGroup>
 
@@ -122,7 +121,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{collateralOwnerUWItem.firstNameTh}"/>
+                <h:outputText value="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -137,7 +136,7 @@
         </p:dataTable>
     </td>
 </tr>
--->
+
 
 <tr>
     <td class="title" style="width: 150px;">
@@ -166,7 +165,7 @@
                             styleClass="smaller"
                             actionListener="#{creditFacPropose.onAddMortgageType()}"
                             process="@form"
-                            update=":subCollateralDlgForm">
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
             </tr>
@@ -184,10 +183,10 @@
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:20px;"/>
-                    <p:column style="width:150px;"
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
+                    <p:column style="width:150px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
-                    <p:column style="width:20px;"/>
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
                 </p:row>
             </p:columnGroup>
 
@@ -212,8 +211,6 @@
     </td>
 </tr>
 
-<!--
-
 <tr>
     <td class="title" style="width: 150px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
@@ -223,10 +220,10 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWithSelected}"
+                                     value="#{creditFacPropose.relatedWithSelected.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
-                        <f:selectItem itemLabel="- relatedWith -" itemValue=""/>
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{creditFacPropose.relatedWithAllList}"
                                        var="relatedWithItem"
                                        itemLabel="#{relatedWithItem.titleDeed}"
@@ -240,7 +237,7 @@
                             styleClass="smaller"
                             action="#{creditFacPropose.onAddRelatedWith()}"
                             process="@form"
-                            update=":subCollateralDlgForm">
+                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
                     </p:commandButton>
                 </td>
             </tr>
@@ -258,10 +255,10 @@
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:20px;"/>
-                    <p:column style="width:150px;"
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
+                    <p:column style="width:150px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
-                    <p:column style="width:20px;"/>
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
                 </p:row>
             </p:columnGroup>
 
@@ -285,7 +282,7 @@
         </p:dataTable>
     </td>
 </tr>
--->
+
 
 <tr>
     <td class="title" style="width: 150px;">

@@ -715,51 +715,51 @@ public class Customer implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("workCase", workCase).
-                append("workCasePrescreen", workCasePrescreen).
-                append("customerEntity", customerEntity).
-                append("documentType", documentType).
-                append("documentAuthorizeBy", documentAuthorizeBy).
-                append("serviceSegment", serviceSegment).
-                append("collateralOwner", collateralOwner).
-                append("percentShare", percentShare).
-                append("approxIncome", approxIncome).
-                append("tmbCustomerId", tmbCustomerId).
-                append("documentExpiredDate", documentExpiredDate).
-                append("title", title).
-                append("nameEn", nameEn).
+                append("workCase", workCase != null ? workCase.getId() : "workCase null").
+                append("workCasePrescreen", workCasePrescreen != null ? workCasePrescreen.getId() : "workCasePrescreen null").
+                append("customerEntity", customerEntity != null ? customerEntity.getId() : "customerEntity null").
+//                append("documentType", documentType).
+//                append("documentAuthorizeBy", documentAuthorizeBy).
+//                append("serviceSegment", serviceSegment).
+//                append("collateralOwner", collateralOwner).
+//                append("percentShare", percentShare).
+//                append("approxIncome", approxIncome).
+//                append("tmbCustomerId", tmbCustomerId).
+//                append("documentExpiredDate", documentExpiredDate).
+                append("title", title != null ? title.getTitleTh() : "title null").
+//                append("nameEn", nameEn).
                 append("nameTh", nameTh).
                 append("lastNameTh", lastNameTh).
-                append("lastNameEn", lastNameEn).
-                append("age", age).
-                append("ncbFlag", ncbFlag).
-                append("csiFlag", csiFlag).
+//                append("lastNameEn", lastNameEn).
+//                append("age", age).
+//                append("ncbFlag", ncbFlag).
+//                append("csiFlag", csiFlag).
                 append("individual", individual).
                 append("juristic", juristic).
-                append("addressesList", addressesList).
-                append("businessType", businessType).
-                append("relation", relation).
-                append("reference", reference).
-                append("ncb", ncb).
-                append("customerCSIList", customerCSIList).
+//                append("addressesList", addressesList).
+//                append("businessType", businessType).
+//                append("relation", relation).
+//                append("reference", reference).
+//                append("ncb", ncb).
+//                append("customerCSIList", customerCSIList).
                 append("isSpouse", isSpouse).
                 append("spouseId", spouseId).
-                append("searchFromRM", searchFromRM).
-                append("documentAuthorizeDate", documentAuthorizeDate).
-                append("kycReason", kycReason).
-                append("worthiness", worthiness).
-                append("mobileNumber", mobileNumber).
-                append("faxNumber", faxNumber).
-                append("email", email).
-                append("convenantFlag", convenantFlag).
-                append("reviewFlag", reviewFlag).
-                append("reason", reason).
-                append("kycLevel", kycLevel).
-                append("mailingAddressType", mailingAddressType).
+//                append("searchFromRM", searchFromRM).
+//                append("documentAuthorizeDate", documentAuthorizeDate).
+//                append("kycReason", kycReason).
+//                append("worthiness", worthiness).
+//                append("mobileNumber", mobileNumber).
+//                append("faxNumber", faxNumber).
+//                append("email", email).
+//                append("convenantFlag", convenantFlag).
+//                append("reviewFlag", reviewFlag).
+//                append("reason", reason).
+//                append("kycLevel", kycLevel).
+//                append("mailingAddressType", mailingAddressType).
                 append("searchBy", searchBy).
                 append("searchId", searchId).
-                append("sourceIncome", sourceIncome).
-                append("countryIncome", countryIncome).
+//                append("sourceIncome", sourceIncome).
+//                append("countryIncome", countryIncome).
                 append("isCommittee", isCommittee).
                 append("juristicId", juristicId).
                 toString();
