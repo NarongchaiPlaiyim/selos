@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ExSummaryTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -65,17 +66,14 @@ public class ExSummaryControl extends BusinessControl {
         if(basicInfo != null && basicInfo.getId() != 0){
             qualitative = basicInfo.getQualitativeType(); // A = 1 , B = 2
         }
-        QualitativeView qualitativeView = new QualitativeView();
 
+        QualitativeView qualitativeView;
         if(qualitative == 1){ //todo: enum
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
         } else if (qualitative == 2) {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
-        }
-
-        if(qualitativeView == null) { // todo:check this
-            qualitativeView = new QualitativeView();
-            qualitativeView.setQualityResult("qualitativeClass");
+        } else {
+            qualitativeView = null;
         }
 
         if (exSummary == null) {
@@ -84,6 +82,8 @@ public class ExSummaryControl extends BusinessControl {
 
         ExSummaryView exSummaryView = exSummaryTransform.transformToView(exSummary);
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         //Customer Information
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
         if(cusListView != null && cusListView.size() > 0){
@@ -91,6 +91,7 @@ public class ExSummaryControl extends BusinessControl {
         } else {
             exSummaryView.setBorrowerListView(null);
         }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Trade Finance
@@ -110,6 +111,7 @@ public class ExSummaryControl extends BusinessControl {
         } else {
             exSummaryView.setNcbInfoListView(null);
         }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
@@ -164,7 +166,7 @@ public class ExSummaryControl extends BusinessControl {
                 }
             }
 
-            ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView.getQualityResult(),bizSize);
+            ExSumBusinessInfoView exSumBusinessInfoView = exSummaryTransform.transformBizInfoSumToExSumBizView(bizInfoSummaryView,qualitativeView,bizSize);
             exSummaryView.setExSumBusinessInfoView(exSumBusinessInfoView);
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
@@ -305,6 +307,12 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
         exSummary.setIncome(income);
 
         exSummaryDAO.persist(exSummary);
@@ -325,29 +333,47 @@ public class ExSummaryControl extends BusinessControl {
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
-        BigDecimal recommendedWCNeed;
-        BigDecimal value1 = newCreditFacility.getCase1WcLimit();
-        BigDecimal value2 = newCreditFacility.getCase2WcLimit();
-        BigDecimal value3 = newCreditFacility.getCase3WcLimit();
-        BigDecimal value4 = newCreditFacility.getWcNeed();
-        BigDecimal value5 = newCreditFacility.getTotalWcTmb();
-        BigDecimal value6 = value4.subtract(value5);
-
-        if(basicInfo.getRefinanceIN() == 1){
-            if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
-                recommendedWCNeed = getMinBigDecimal(value2,value3);
-            } else {
-                recommendedWCNeed = getMinBigDecimal(value1,value3);
+        BigDecimal recommendedWCNeed = BigDecimal.ZERO;
+        BigDecimal value1 = BigDecimal.ZERO;
+        BigDecimal value2 = BigDecimal.ZERO;
+        BigDecimal value3 = BigDecimal.ZERO;
+        BigDecimal value6 = BigDecimal.ZERO;
+        if(newCreditFacility != null && newCreditFacility.getId() != 0){
+            if(newCreditFacility.getCase1WcLimit() != null){
+                value1 = newCreditFacility.getCase1WcLimit();
             }
-        } else {
-            if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
-                recommendedWCNeed = getMinBigDecimal(value2,value3,value6);
+            if(newCreditFacility.getCase2WcLimit() != null){
+                value2 = newCreditFacility.getCase2WcLimit();
+            }
+            if(newCreditFacility.getCase3WcLimit() != null){
+                value3 = newCreditFacility.getCase3WcLimit();
+            }
+            value6 = Util.subtract(newCreditFacility.getWcNeed(),newCreditFacility.getTotalWcTmb());
+        }
+
+        if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null){
+            if(basicInfo.getRefinanceIN() == 1){
+                if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                    recommendedWCNeed = getMinBigDecimal(value2,value3);
+                } else {
+                    recommendedWCNeed = getMinBigDecimal(value1,value3);
+                }
             } else {
-                recommendedWCNeed = getMinBigDecimal(value1,value3,value6);
+                if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
+                    recommendedWCNeed = getMinBigDecimal(value2,value3,value6);
+                } else {
+                    recommendedWCNeed = getMinBigDecimal(value1,value3,value6);
+                }
             }
         }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
         exSummary.setRecommendedWCNeed(recommendedWCNeed);
 
         exSummaryDAO.persist(exSummary);
@@ -359,12 +385,20 @@ public class ExSummaryControl extends BusinessControl {
     public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal actualWC = BigDecimal.ZERO;
-        for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
-            if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
-//                actualWC = actualWC.add(n.get);
+        if(newCreditFacility != null && newCreditFacility.getNewCreditDetailList() != null) {
+            for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
+                if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
+    //                actualWC = actualWC.add(n.get);
+                }
             }
         }
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
         exSummary.setActualWC(actualWC);
 
         exSummaryDAO.persist(exSummary);
@@ -378,6 +412,12 @@ public class ExSummaryControl extends BusinessControl {
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+            if(exSummary == null){
+                exSummary = new ExSummary();
+                WorkCase workCase = new WorkCase();
+                workCase.setId(workCaseId);
+                exSummary.setWorkCase(workCase);
+            }
             if(bankStatementSummary.getGrdTotalIncomeNetBDM() != null){
                 exSummary.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
             }
@@ -385,6 +425,7 @@ public class ExSummaryControl extends BusinessControl {
                 exSummary.setSalePerYearUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
             }
             exSummaryDAO.persist(exSummary);
+
         }
     }
 
@@ -399,6 +440,11 @@ public class ExSummaryControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
         User user = getCurrentUser();
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            exSummary.setWorkCase(workCase);
+        }
         if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
             if(user.getRole().getId() != RoleValue.UW.id()){//Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
@@ -437,6 +483,12 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal groupExposureUW = newCreditFacility.getTotalExposure().add(newCreditFacility.getTotalApproveCredit());
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
         exSummary.setGroupExposureBDM(groupExposureBDM);
         exSummary.setGroupExposureUW(groupExposureUW);
 
@@ -449,5 +501,12 @@ public class ExSummaryControl extends BusinessControl {
 //    calculate months from yearInBusiness fields.
     public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
     }
 }
