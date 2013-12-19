@@ -52,7 +52,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeProductProgram}"
                     process="@this"
-                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePricePanel"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -74,7 +74,7 @@
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeCreditType}"
                     process=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram"
-                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk"/>
+                    update=":creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePricePanel"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -137,16 +137,25 @@
     <td>
         <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reducePriceFlag}"
                                  id="reducePriceFlagChk"
-                                 disabled="#{creditFacPropose.modeEdit}}">
+                                 disabled="#{creditFacPropose.modeEditReducePricing}">
         </h:selectBooleanCheckbox>
         <p:spacer width="5px;"/>
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
-    <td></td>
+    <td>
+        <p:panel style="border-width:0" id="reducePricePanel" rendered="#{creditFacPropose.modeEditReducePricing}">
+            <p:inputText value="#{creditFacPropose.reducePrice}"
+                         id="reducePrice"
+                         style="text-align:right">
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                <p:ajax event="blur" process="@this" listener="#{creditFacPropose.onRequestReducePrice()}" update="@this"/>
+            </p:inputText>
+        </p:panel>
+    </td>
     <td colspan="2">
         <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFee}"
                                  id="reduceFrontEndFeeChk"
-                                 disabled="#{creditFacPropose.modeEdit}">
+                                 disabled="#{creditFacPropose.modeEditReduceFront}">
         </h:selectBooleanCheckbox>
         <p:spacer width="5px;"/>
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
