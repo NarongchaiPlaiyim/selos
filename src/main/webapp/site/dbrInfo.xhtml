@@ -79,7 +79,7 @@
                                                 <p:outputLabel for="monthlyIncomeAdjust" value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true">
+                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
                                                 </p:inputText>
@@ -91,7 +91,7 @@
                                                 <p:outputLabel for="monthlyIncomePerMonth" value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true">
+                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
@@ -177,11 +177,12 @@
                                         </p:column>
                                         <p:columnGroup type="footer" >
                                             <p:row >
-                                                <p:column style="border-right: none !important;"  styleClass="summary_column"/>
+                                                <p:column  style="border-right: none !important; text-align:right" footerText="#{msg.get('app.dbr.table.total')}" styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
-                                                <p:column  style="border-left: none !important; text-align:right" footerText="#{msg.get('app.label.total')}" styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+
                                                 <p:column style="text-align:right" styleClass="summary_column">
                                                     <f:facet name="footer">
                                                         <p:outputLabel value="#{dbrInfo.totalMonthDebtBorrower}">
@@ -274,12 +275,13 @@
 
                                         <p:columnGroup type="footer" >
 
-                                            <p:row >
-                                                <p:column style="border-right: none !important;"  styleClass="summary_column"/>
+                                            <p:row>
+                                                <p:column style="border-right: none !important; text-align: right;"  footerText="#{msg.get('app.dbr.table.total')}" styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
                                                 <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
-                                                <p:column style="border-left: none !important; text-align: right;"  footerText="#{msg.get('app.label.total')}" styleClass="summary_column"/>
+                                                <p:column style="border-left: none !important; border-right: none !important;"  styleClass="summary_column"/>
+
                                                 <p:column style="text-align:right; " styleClass="summary_column">
                                                     <f:facet name="footer">
                                                         <p:outputLabel value="#{dbrInfo.totalMonthDebtRelated}">
@@ -352,7 +354,7 @@
 
 <p:dialog id="dbrDetailDialog" widgetVar="dbrDetailDialog" header="#{msg.get('app.dbrDetail.title')}"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-          modal="true" width="600" height="300">
+          modal="true" width="500" height="200">
     <ui:include src="dialog/dbrDetailDialog.xhtml"/>
 </p:dialog>
 
