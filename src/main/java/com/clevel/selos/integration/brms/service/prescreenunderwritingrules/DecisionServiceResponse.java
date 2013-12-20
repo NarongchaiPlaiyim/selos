@@ -1,14 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.prescreenunderwritingrules;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,14 +28,16 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "ilogRulesOutputString",
-        "ilogRulesFiredRulesCount",
-        "decisionID",
-        "underwritingRequest",
-        "underwritingResult"
+    "ilogRulesOutputString",
+    "ilogRulesFiredRulesCount",
+    "decisionID",
+    "underwritingRequest",
+    "underwritingResult"
 })
 @XmlRootElement(name = "DecisionServiceResponse", namespace = "http://www.ilog.com/rules/DecisionService")
 public class DecisionServiceResponse {
@@ -49,9 +55,11 @@ public class DecisionServiceResponse {
 
     /**
      * Gets the value of the ilogRulesOutputString property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getIlogRulesOutputString() {
         return ilogRulesOutputString;
@@ -59,9 +67,11 @@ public class DecisionServiceResponse {
 
     /**
      * Sets the value of the ilogRulesOutputString property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setIlogRulesOutputString(String value) {
         this.ilogRulesOutputString = value;
@@ -69,6 +79,7 @@ public class DecisionServiceResponse {
 
     /**
      * Gets the value of the ilogRulesFiredRulesCount property.
+     * 
      */
     public int getIlogRulesFiredRulesCount() {
         return ilogRulesFiredRulesCount;
@@ -76,6 +87,7 @@ public class DecisionServiceResponse {
 
     /**
      * Sets the value of the ilogRulesFiredRulesCount property.
+     * 
      */
     public void setIlogRulesFiredRulesCount(int value) {
         this.ilogRulesFiredRulesCount = value;
@@ -83,9 +95,11 @@ public class DecisionServiceResponse {
 
     /**
      * Gets the value of the decisionID property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getDecisionID() {
         return decisionID;
@@ -93,9 +107,11 @@ public class DecisionServiceResponse {
 
     /**
      * Sets the value of the decisionID property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setDecisionID(String value) {
         this.decisionID = value;
@@ -103,9 +119,11 @@ public class DecisionServiceResponse {
 
     /**
      * Gets the value of the underwritingRequest property.
-     *
-     * @return possible object is
-     *         {@link UnderwritingRequest }
+     * 
+     * @return
+     *     possible object is
+     *     {@link UnderwritingRequest }
+     *     
      */
     public UnderwritingRequest getUnderwritingRequest() {
         return underwritingRequest;
@@ -113,9 +131,11 @@ public class DecisionServiceResponse {
 
     /**
      * Sets the value of the underwritingRequest property.
-     *
-     * @param value allowed object is
-     *              {@link UnderwritingRequest }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link UnderwritingRequest }
+     *     
      */
     public void setUnderwritingRequest(UnderwritingRequest value) {
         this.underwritingRequest = value;
@@ -123,9 +143,11 @@ public class DecisionServiceResponse {
 
     /**
      * Gets the value of the underwritingResult property.
-     *
-     * @return possible object is
-     *         {@link UnderwritingResult }
+     * 
+     * @return
+     *     possible object is
+     *     {@link UnderwritingResult }
+     *     
      */
     public UnderwritingResult getUnderwritingResult() {
         return underwritingResult;
@@ -133,9 +155,11 @@ public class DecisionServiceResponse {
 
     /**
      * Sets the value of the underwritingResult property.
-     *
-     * @param value allowed object is
-     *              {@link UnderwritingResult }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link UnderwritingResult }
+     *     
      */
     public void setUnderwritingResult(UnderwritingResult value) {
         this.underwritingResult = value;

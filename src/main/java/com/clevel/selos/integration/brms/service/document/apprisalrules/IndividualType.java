@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for IndividualType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="IndividualType">
  *   &lt;complexContent>
@@ -44,30 +48,32 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IndividualType", propOrder = {
-        "id",
-        "name",
-        "totalNumOfDependents",
-        "gender",
-        "maritalStatus",
-        "employmentStatus",
-        "conditionOfEmployment",
-        "occupation",
-        "occupationGroup",
-        "natureOfBusiness",
-        "residentialStatus",
-        "nationality",
-        "dateOfBirth",
-        "age",
-        "segment",
-        "totalMonthlyIncome",
-        "grossMonthlyIncome",
-        "highestEducationAttained",
-        "keyDirectoryFlag",
-        "attribute",
-        "citizenID"
+    "id",
+    "name",
+    "totalNumOfDependents",
+    "gender",
+    "maritalStatus",
+    "employmentStatus",
+    "conditionOfEmployment",
+    "occupation",
+    "occupationGroup",
+    "natureOfBusiness",
+    "residentialStatus",
+    "nationality",
+    "dateOfBirth",
+    "age",
+    "segment",
+    "totalMonthlyIncome",
+    "grossMonthlyIncome",
+    "highestEducationAttained",
+    "keyDirectoryFlag",
+    "attribute",
+    "citizenID"
 })
 public class IndividualType {
 
@@ -97,9 +103,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -107,9 +115,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -117,9 +127,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the name property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getName() {
         return name;
@@ -127,9 +139,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the name property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setName(String value) {
         this.name = value;
@@ -137,9 +151,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the totalNumOfDependents property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getTotalNumOfDependents() {
         return totalNumOfDependents;
@@ -147,9 +163,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the totalNumOfDependents property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setTotalNumOfDependents(Integer value) {
         this.totalNumOfDependents = value;
@@ -157,9 +175,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the gender property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getGender() {
         return gender;
@@ -167,9 +187,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the gender property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setGender(String value) {
         this.gender = value;
@@ -177,9 +199,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the maritalStatus property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getMaritalStatus() {
         return maritalStatus;
@@ -187,9 +211,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the maritalStatus property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setMaritalStatus(String value) {
         this.maritalStatus = value;
@@ -197,9 +223,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the employmentStatus property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getEmploymentStatus() {
         return employmentStatus;
@@ -207,9 +235,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the employmentStatus property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setEmploymentStatus(String value) {
         this.employmentStatus = value;
@@ -217,9 +247,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the conditionOfEmployment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getConditionOfEmployment() {
         return conditionOfEmployment;
@@ -227,9 +259,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the conditionOfEmployment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setConditionOfEmployment(String value) {
         this.conditionOfEmployment = value;
@@ -237,9 +271,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the occupation property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getOccupation() {
         return occupation;
@@ -247,9 +283,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the occupation property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setOccupation(String value) {
         this.occupation = value;
@@ -257,9 +295,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the occupationGroup property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getOccupationGroup() {
         return occupationGroup;
@@ -267,9 +307,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the occupationGroup property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setOccupationGroup(String value) {
         this.occupationGroup = value;
@@ -277,9 +319,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the natureOfBusiness property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getNatureOfBusiness() {
         return natureOfBusiness;
@@ -287,9 +331,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the natureOfBusiness property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setNatureOfBusiness(String value) {
         this.natureOfBusiness = value;
@@ -297,9 +343,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the residentialStatus property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getResidentialStatus() {
         return residentialStatus;
@@ -307,9 +355,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the residentialStatus property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setResidentialStatus(String value) {
         this.residentialStatus = value;
@@ -317,9 +367,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the nationality property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getNationality() {
         return nationality;
@@ -327,9 +379,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the nationality property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setNationality(String value) {
         this.nationality = value;
@@ -337,9 +391,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the dateOfBirth property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfBirth() {
         return dateOfBirth;
@@ -347,9 +403,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the dateOfBirth property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfBirth(XMLGregorianCalendar value) {
         this.dateOfBirth = value;
@@ -357,9 +415,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the age property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getAge() {
         return age;
@@ -367,9 +427,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the age property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setAge(Integer value) {
         this.age = value;
@@ -377,9 +439,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the segment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getSegment() {
         return segment;
@@ -387,9 +451,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the segment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setSegment(String value) {
         this.segment = value;
@@ -397,9 +463,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the totalMonthlyIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTotalMonthlyIncome() {
         return totalMonthlyIncome;
@@ -407,9 +475,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the totalMonthlyIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTotalMonthlyIncome(BigDecimal value) {
         this.totalMonthlyIncome = value;
@@ -417,9 +487,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the grossMonthlyIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getGrossMonthlyIncome() {
         return grossMonthlyIncome;
@@ -427,9 +499,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the grossMonthlyIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setGrossMonthlyIncome(BigDecimal value) {
         this.grossMonthlyIncome = value;
@@ -437,9 +511,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the highestEducationAttained property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getHighestEducationAttained() {
         return highestEducationAttained;
@@ -447,9 +523,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the highestEducationAttained property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setHighestEducationAttained(String value) {
         this.highestEducationAttained = value;
@@ -457,9 +535,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the keyDirectoryFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isKeyDirectoryFlag() {
         return keyDirectoryFlag;
@@ -467,9 +547,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the keyDirectoryFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setKeyDirectoryFlag(Boolean value) {
         this.keyDirectoryFlag = value;
@@ -477,23 +559,25 @@ public class IndividualType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -504,9 +588,11 @@ public class IndividualType {
 
     /**
      * Gets the value of the citizenID property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCitizenID() {
         return citizenID;
@@ -514,9 +600,11 @@ public class IndividualType {
 
     /**
      * Sets the value of the citizenID property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCitizenID(String value) {
         this.citizenID = value;

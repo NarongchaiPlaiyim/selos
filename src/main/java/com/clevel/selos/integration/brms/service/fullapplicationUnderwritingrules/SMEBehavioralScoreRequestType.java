@@ -1,15 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for SMEBehavioralScoreRequestType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="SMEBehavioralScoreRequestType">
  *   &lt;complexContent>
@@ -22,11 +26,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SMEBehavioralScoreRequestType", propOrder = {
-        "borrower",
-        "timeOfRequest"
+    "borrower",
+    "timeOfRequest"
 })
 public class SMEBehavioralScoreRequestType {
 
@@ -37,9 +43,11 @@ public class SMEBehavioralScoreRequestType {
 
     /**
      * Gets the value of the borrower property.
-     *
-     * @return possible object is
-     *         {@link BorrowerType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BorrowerType }
+     *     
      */
     public BorrowerType getBorrower() {
         return borrower;
@@ -47,9 +55,11 @@ public class SMEBehavioralScoreRequestType {
 
     /**
      * Sets the value of the borrower property.
-     *
-     * @param value allowed object is
-     *              {@link BorrowerType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BorrowerType }
+     *     
      */
     public void setBorrower(BorrowerType value) {
         this.borrower = value;
@@ -57,9 +67,11 @@ public class SMEBehavioralScoreRequestType {
 
     /**
      * Gets the value of the timeOfRequest property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getTimeOfRequest() {
         return timeOfRequest;
@@ -67,9 +79,11 @@ public class SMEBehavioralScoreRequestType {
 
     /**
      * Sets the value of the timeOfRequest property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setTimeOfRequest(XMLGregorianCalendar value) {
         this.timeOfRequest = value;

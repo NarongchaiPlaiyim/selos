@@ -1,17 +1,21 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for BankruptcyDetailType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="BankruptcyDetailType">
  *   &lt;complexContent>
@@ -28,15 +32,17 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BankruptcyDetailType", propOrder = {
-        "id",
-        "fromDate",
-        "toDate",
-        "fullIdentityMatchedFlag",
-        "partialIdentityMatchedFlag",
-        "attribute"
+    "id",
+    "fromDate",
+    "toDate",
+    "fullIdentityMatchedFlag",
+    "partialIdentityMatchedFlag",
+    "attribute"
 })
 public class BankruptcyDetailType {
 
@@ -52,9 +58,11 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -62,9 +70,11 @@ public class BankruptcyDetailType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -72,9 +82,11 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the fromDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getFromDate() {
         return fromDate;
@@ -82,9 +94,11 @@ public class BankruptcyDetailType {
 
     /**
      * Sets the value of the fromDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setFromDate(XMLGregorianCalendar value) {
         this.fromDate = value;
@@ -92,9 +106,11 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the toDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getToDate() {
         return toDate;
@@ -102,9 +118,11 @@ public class BankruptcyDetailType {
 
     /**
      * Sets the value of the toDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setToDate(XMLGregorianCalendar value) {
         this.toDate = value;
@@ -112,9 +130,11 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the fullIdentityMatchedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isFullIdentityMatchedFlag() {
         return fullIdentityMatchedFlag;
@@ -122,9 +142,11 @@ public class BankruptcyDetailType {
 
     /**
      * Sets the value of the fullIdentityMatchedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setFullIdentityMatchedFlag(Boolean value) {
         this.fullIdentityMatchedFlag = value;
@@ -132,9 +154,11 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the partialIdentityMatchedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isPartialIdentityMatchedFlag() {
         return partialIdentityMatchedFlag;
@@ -142,9 +166,11 @@ public class BankruptcyDetailType {
 
     /**
      * Sets the value of the partialIdentityMatchedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setPartialIdentityMatchedFlag(Boolean value) {
         this.partialIdentityMatchedFlag = value;
@@ -152,23 +178,25 @@ public class BankruptcyDetailType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

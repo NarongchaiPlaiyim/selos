@@ -1,21 +1,21 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for SMEBehavioralScoreResultType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="SMEBehavioralScoreResultType">
  *   &lt;complexContent>
@@ -36,19 +36,21 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SMEBehavioralScoreResultType", propOrder = {
-        "timeOfResult",
-        "totalScore",
-        "riskClass",
-        "probabilityOfDefault",
-        "masterScale",
-        "color",
-        "result",
-        "validFrom",
-        "validTo",
-        "message"
+    "timeOfResult",
+    "totalScore",
+    "riskClass",
+    "probabilityOfDefault",
+    "masterScale",
+    "color",
+    "result",
+    "validFrom",
+    "validTo",
+    "message"
 })
 public class SMEBehavioralScoreResultType {
 
@@ -68,9 +70,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the timeOfResult property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getTimeOfResult() {
         return timeOfResult;
@@ -78,9 +82,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the timeOfResult property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setTimeOfResult(XMLGregorianCalendar value) {
         this.timeOfResult = value;
@@ -88,9 +94,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the totalScore property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getTotalScore() {
         return totalScore;
@@ -98,9 +106,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the totalScore property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setTotalScore(Integer value) {
         this.totalScore = value;
@@ -108,9 +118,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the riskClass property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRiskClass() {
         return riskClass;
@@ -118,9 +130,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the riskClass property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRiskClass(String value) {
         this.riskClass = value;
@@ -128,9 +142,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the probabilityOfDefault property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getProbabilityOfDefault() {
         return probabilityOfDefault;
@@ -138,9 +154,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the probabilityOfDefault property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setProbabilityOfDefault(BigDecimal value) {
         this.probabilityOfDefault = value;
@@ -148,9 +166,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the masterScale property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMasterScale() {
         return masterScale;
@@ -158,9 +178,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the masterScale property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMasterScale(BigDecimal value) {
         this.masterScale = value;
@@ -168,9 +190,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the color property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getColor() {
         return color;
@@ -178,9 +202,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the color property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setColor(String value) {
         this.color = value;
@@ -188,9 +214,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the result property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getResult() {
         return result;
@@ -198,9 +226,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the result property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setResult(String value) {
         this.result = value;
@@ -208,9 +238,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the validFrom property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getValidFrom() {
         return validFrom;
@@ -218,9 +250,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the validFrom property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setValidFrom(XMLGregorianCalendar value) {
         this.validFrom = value;
@@ -228,9 +262,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the validTo property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getValidTo() {
         return validTo;
@@ -238,9 +274,11 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Sets the value of the validTo property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setValidTo(XMLGregorianCalendar value) {
         this.validTo = value;
@@ -248,23 +286,25 @@ public class SMEBehavioralScoreResultType {
 
     /**
      * Gets the value of the message property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the message property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getMessage().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ResultType }
+     * 
+     * 
      */
     public List<ResultType> getMessage() {
         if (message == null) {

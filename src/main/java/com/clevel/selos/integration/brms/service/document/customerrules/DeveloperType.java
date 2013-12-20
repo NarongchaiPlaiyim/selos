@@ -1,19 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for DeveloperType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="DeveloperType">
  *   &lt;complexContent>
@@ -30,15 +30,17 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DeveloperType", propOrder = {
-        "id",
-        "name",
-        "code",
-        "grade",
-        "pricing",
-        "attribute"
+    "id",
+    "name",
+    "code",
+    "grade",
+    "pricing",
+    "attribute"
 })
 public class DeveloperType {
 
@@ -52,9 +54,11 @@ public class DeveloperType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -62,9 +66,11 @@ public class DeveloperType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -72,9 +78,11 @@ public class DeveloperType {
 
     /**
      * Gets the value of the name property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getName() {
         return name;
@@ -82,9 +90,11 @@ public class DeveloperType {
 
     /**
      * Sets the value of the name property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setName(String value) {
         this.name = value;
@@ -92,9 +102,11 @@ public class DeveloperType {
 
     /**
      * Gets the value of the code property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCode() {
         return code;
@@ -102,9 +114,11 @@ public class DeveloperType {
 
     /**
      * Sets the value of the code property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCode(String value) {
         this.code = value;
@@ -112,9 +126,11 @@ public class DeveloperType {
 
     /**
      * Gets the value of the grade property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getGrade() {
         return grade;
@@ -122,9 +138,11 @@ public class DeveloperType {
 
     /**
      * Sets the value of the grade property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setGrade(String value) {
         this.grade = value;
@@ -132,9 +150,11 @@ public class DeveloperType {
 
     /**
      * Gets the value of the pricing property.
-     *
-     * @return possible object is
-     *         {@link PricingType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link PricingType }
+     *     
      */
     public PricingType getPricing() {
         return pricing;
@@ -142,9 +162,11 @@ public class DeveloperType {
 
     /**
      * Sets the value of the pricing property.
-     *
-     * @param value allowed object is
-     *              {@link PricingType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PricingType }
+     *     
      */
     public void setPricing(PricingType value) {
         this.pricing = value;
@@ -152,23 +174,25 @@ public class DeveloperType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
