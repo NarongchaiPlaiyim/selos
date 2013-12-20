@@ -78,7 +78,11 @@ public class NewCollateralDetail implements Serializable {
     private List<NewCollateralHeadDetail> newCollateralHeadDetailList;
 
     @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
-    private List<CreditTypeDetail> creditTypeDetailList;
+    private List<NewCollateralRelCredit> newCollateralRelCreditList;
+
+/*    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
+    private List<CreditTypeDetail> creditTypeDetailList;*/
+
 
     public long getId() {
         return id;
@@ -200,12 +204,12 @@ public class NewCollateralDetail implements Serializable {
         this.newCollateralHeadDetailList = newCollateralHeadDetailList;
     }
 
-    public List<CreditTypeDetail> getCreditTypeDetailList() {
-        return creditTypeDetailList;
+    public List<NewCollateralRelCredit> getNewCollateralRelCreditList() {
+        return newCollateralRelCreditList;
     }
 
-    public void setCreditTypeDetailList(List<CreditTypeDetail> creditTypeDetailList) {
-        this.creditTypeDetailList = creditTypeDetailList;
+    public void setNewCollateralRelCreditList(List<NewCollateralRelCredit> newCollateralRelCreditList) {
+        this.newCollateralRelCreditList = newCollateralRelCreditList;
     }
 
     public Date getCreateDate() {
