@@ -70,7 +70,7 @@ public class BizInfoSummaryTransform extends Transform {
 //        log.info("find transformToModel district" + bizInfoSummaryView.getDistrict().getId());
 
         if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
-            district = districtDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+            district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
             log.info("find transformToModel findById  is " + district.toString());
             bizInfoSummary.setDistrict(district);
         }else{
