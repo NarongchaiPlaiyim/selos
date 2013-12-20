@@ -1,17 +1,21 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for B2ModelTransactionType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="B2ModelTransactionType">
  *   &lt;complexContent>
@@ -28,15 +32,17 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "B2ModelTransactionType", propOrder = {
-        "id",
-        "asOfDate",
-        "icModelTransaction",
-        "bscfModelTransaction",
-        "ibnrModelTransaction",
-        "attribute"
+    "id",
+    "asOfDate",
+    "icModelTransaction",
+    "bscfModelTransaction",
+    "ibnrModelTransaction",
+    "attribute"
 })
 public class B2ModelTransactionType {
 
@@ -54,9 +60,11 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -64,9 +72,11 @@ public class B2ModelTransactionType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -74,9 +84,11 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the asOfDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getAsOfDate() {
         return asOfDate;
@@ -84,9 +96,11 @@ public class B2ModelTransactionType {
 
     /**
      * Sets the value of the asOfDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setAsOfDate(XMLGregorianCalendar value) {
         this.asOfDate = value;
@@ -94,9 +108,11 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the icModelTransaction property.
-     *
-     * @return possible object is
-     *         {@link ICModelTransactionType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link ICModelTransactionType }
+     *     
      */
     public ICModelTransactionType getICModelTransaction() {
         return icModelTransaction;
@@ -104,9 +120,11 @@ public class B2ModelTransactionType {
 
     /**
      * Sets the value of the icModelTransaction property.
-     *
-     * @param value allowed object is
-     *              {@link ICModelTransactionType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ICModelTransactionType }
+     *     
      */
     public void setICModelTransaction(ICModelTransactionType value) {
         this.icModelTransaction = value;
@@ -114,9 +132,11 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the bscfModelTransaction property.
-     *
-     * @return possible object is
-     *         {@link BSCFModelTransactionType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BSCFModelTransactionType }
+     *     
      */
     public BSCFModelTransactionType getBSCFModelTransaction() {
         return bscfModelTransaction;
@@ -124,9 +144,11 @@ public class B2ModelTransactionType {
 
     /**
      * Sets the value of the bscfModelTransaction property.
-     *
-     * @param value allowed object is
-     *              {@link BSCFModelTransactionType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BSCFModelTransactionType }
+     *     
      */
     public void setBSCFModelTransaction(BSCFModelTransactionType value) {
         this.bscfModelTransaction = value;
@@ -134,9 +156,11 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the ibnrModelTransaction property.
-     *
-     * @return possible object is
-     *         {@link IBNRModelTransactionType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link IBNRModelTransactionType }
+     *     
      */
     public IBNRModelTransactionType getIBNRModelTransaction() {
         return ibnrModelTransaction;
@@ -144,9 +168,11 @@ public class B2ModelTransactionType {
 
     /**
      * Sets the value of the ibnrModelTransaction property.
-     *
-     * @param value allowed object is
-     *              {@link IBNRModelTransactionType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link IBNRModelTransactionType }
+     *     
      */
     public void setIBNRModelTransaction(IBNRModelTransactionType value) {
         this.ibnrModelTransaction = value;
@@ -154,23 +180,25 @@ public class B2ModelTransactionType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

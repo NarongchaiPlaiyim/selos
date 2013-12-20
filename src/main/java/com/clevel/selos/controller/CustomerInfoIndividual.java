@@ -294,8 +294,9 @@ public class CustomerInfoIndividual implements Serializable {
 
         onAddNewIndividual();
 
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+//        Flash flash = FacesUtil.getFlash();
+//        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
@@ -1276,7 +1277,9 @@ public class CustomerInfoIndividual implements Serializable {
         map.put("isFromSummaryParam",false);
         map.put("customerId",new Long(0));
         map.put("customerInfoView", cusInfoJuristic);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("cusInfoParams", map);
+//        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
     }
 

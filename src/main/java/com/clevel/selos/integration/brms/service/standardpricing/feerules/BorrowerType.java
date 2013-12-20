@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for BorrowerType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="BorrowerType">
  *   &lt;complexContent>
@@ -90,76 +94,78 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BorrowerType", propOrder = {
-        "id",
-        "rmNumber",
-        "botID",
-        "botName",
-        "botClass",
-        "legalEntity",
-        "individual",
-        "postCode",
-        "areaOfMailPostcode",
-        "provinceAreaOfMailPostcode",
-        "type",
-        "businessType",
-        "tgBusinessType",
-        "businessSegment",
-        "tgBusinessCustomerSegment",
-        "customerSince",
-        "characterIssueFlag",
-        "sourceOfCashIdentifiedFlag",
-        "sourceOfRepaymentVerifiedFlag",
-        "coreAssetCollateralFlag",
-        "obligorCreditLimitExceededFlag",
-        "riskCustomerType",
-        "kycRiskLevel",
-        "nationality",
-        "preScoredFlag",
-        "s48FullMatchedFlag",
-        "s48PartialMatchedFlag",
-        "s49CategoryFlag",
-        "relationshipWithMainBorrower",
-        "cardHolderType",
-        "benefitPlusGroup",
-        "aggregatedCreditExposure",
-        "aggregatedCreditExposureLimit",
-        "aggregatedCreditExposureOutstanding",
-        "debtToIncomeRatio",
-        "existTMBHomeLoanOutstandAmt",
-        "existTMBHomeLoanRepayAmt",
-        "remainingDebtToIncome",
-        "maxDebtToIncome",
-        "existingDebtToIncome",
-        "debtServiceRatio",
-        "maxDebtServiceRatio",
-        "loanToValueRatio",
-        "paymentCapacity",
-        "totalCreditLimit",
-        "limitSize",
-        "tdrFlag",
-        "employment",
-        "account",
-        "income",
-        "debt",
-        "product",
-        "fraudDetail",
-        "litigationDetail",
-        "bankruptcyDetail",
-        "score",
-        "ncbReport",
-        "tmbAccountsReport",
-        "attribute",
-        "requiredDocumentSet",
-        "guarantor",
-        "dateBehaviorScore",
-        "riskModel",
-        "delinquency",
-        "otherLoanStatus",
-        "warningCodeFullMatched",
-        "warningCodePartialMatched"
+    "id",
+    "rmNumber",
+    "botID",
+    "botName",
+    "botClass",
+    "legalEntity",
+    "individual",
+    "postCode",
+    "areaOfMailPostcode",
+    "provinceAreaOfMailPostcode",
+    "type",
+    "businessType",
+    "tgBusinessType",
+    "businessSegment",
+    "tgBusinessCustomerSegment",
+    "customerSince",
+    "characterIssueFlag",
+    "sourceOfCashIdentifiedFlag",
+    "sourceOfRepaymentVerifiedFlag",
+    "coreAssetCollateralFlag",
+    "obligorCreditLimitExceededFlag",
+    "riskCustomerType",
+    "kycRiskLevel",
+    "nationality",
+    "preScoredFlag",
+    "s48FullMatchedFlag",
+    "s48PartialMatchedFlag",
+    "s49CategoryFlag",
+    "relationshipWithMainBorrower",
+    "cardHolderType",
+    "benefitPlusGroup",
+    "aggregatedCreditExposure",
+    "aggregatedCreditExposureLimit",
+    "aggregatedCreditExposureOutstanding",
+    "debtToIncomeRatio",
+    "existTMBHomeLoanOutstandAmt",
+    "existTMBHomeLoanRepayAmt",
+    "remainingDebtToIncome",
+    "maxDebtToIncome",
+    "existingDebtToIncome",
+    "debtServiceRatio",
+    "maxDebtServiceRatio",
+    "loanToValueRatio",
+    "paymentCapacity",
+    "totalCreditLimit",
+    "limitSize",
+    "tdrFlag",
+    "employment",
+    "account",
+    "income",
+    "debt",
+    "product",
+    "fraudDetail",
+    "litigationDetail",
+    "bankruptcyDetail",
+    "score",
+    "ncbReport",
+    "tmbAccountsReport",
+    "attribute",
+    "requiredDocumentSet",
+    "guarantor",
+    "dateBehaviorScore",
+    "riskModel",
+    "delinquency",
+    "otherLoanStatus",
+    "warningCodeFullMatched",
+    "warningCodePartialMatched"
 })
 public class BorrowerType {
 
@@ -237,9 +243,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -247,9 +255,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -257,9 +267,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the rmNumber property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRmNumber() {
         return rmNumber;
@@ -267,9 +279,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the rmNumber property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRmNumber(String value) {
         this.rmNumber = value;
@@ -277,9 +291,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the botID property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBotID() {
         return botID;
@@ -287,9 +303,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the botID property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBotID(String value) {
         this.botID = value;
@@ -297,9 +315,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the botName property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBotName() {
         return botName;
@@ -307,9 +327,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the botName property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBotName(String value) {
         this.botName = value;
@@ -317,9 +339,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the botClass property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBotClass() {
         return botClass;
@@ -327,9 +351,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the botClass property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBotClass(String value) {
         this.botClass = value;
@@ -337,9 +363,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the legalEntity property.
-     *
-     * @return possible object is
-     *         {@link LegalEntityType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link LegalEntityType }
+     *     
      */
     public LegalEntityType getLegalEntity() {
         return legalEntity;
@@ -347,9 +375,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the legalEntity property.
-     *
-     * @param value allowed object is
-     *              {@link LegalEntityType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link LegalEntityType }
+     *     
      */
     public void setLegalEntity(LegalEntityType value) {
         this.legalEntity = value;
@@ -357,9 +387,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the individual property.
-     *
-     * @return possible object is
-     *         {@link IndividualType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link IndividualType }
+     *     
      */
     public IndividualType getIndividual() {
         return individual;
@@ -367,9 +399,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the individual property.
-     *
-     * @param value allowed object is
-     *              {@link IndividualType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link IndividualType }
+     *     
      */
     public void setIndividual(IndividualType value) {
         this.individual = value;
@@ -377,9 +411,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the postCode property.
-     *
-     * @return possible object is
-     *         {@link Long }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
     public Long getPostCode() {
         return postCode;
@@ -387,9 +423,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the postCode property.
-     *
-     * @param value allowed object is
-     *              {@link Long }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
     public void setPostCode(Long value) {
         this.postCode = value;
@@ -397,9 +435,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the areaOfMailPostcode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getAreaOfMailPostcode() {
         return areaOfMailPostcode;
@@ -407,9 +447,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the areaOfMailPostcode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setAreaOfMailPostcode(String value) {
         this.areaOfMailPostcode = value;
@@ -417,9 +459,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the provinceAreaOfMailPostcode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProvinceAreaOfMailPostcode() {
         return provinceAreaOfMailPostcode;
@@ -427,9 +471,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the provinceAreaOfMailPostcode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProvinceAreaOfMailPostcode(String value) {
         this.provinceAreaOfMailPostcode = value;
@@ -437,9 +483,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the type property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getType() {
         return type;
@@ -447,9 +495,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the type property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setType(String value) {
         this.type = value;
@@ -457,9 +507,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the businessType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBusinessType() {
         return businessType;
@@ -467,9 +519,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the businessType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBusinessType(String value) {
         this.businessType = value;
@@ -477,9 +531,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the tgBusinessType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTgBusinessType() {
         return tgBusinessType;
@@ -487,9 +543,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the tgBusinessType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTgBusinessType(String value) {
         this.tgBusinessType = value;
@@ -497,9 +555,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the businessSegment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBusinessSegment() {
         return businessSegment;
@@ -507,9 +567,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the businessSegment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBusinessSegment(String value) {
         this.businessSegment = value;
@@ -517,9 +579,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the tgBusinessCustomerSegment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTgBusinessCustomerSegment() {
         return tgBusinessCustomerSegment;
@@ -527,9 +591,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the tgBusinessCustomerSegment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTgBusinessCustomerSegment(String value) {
         this.tgBusinessCustomerSegment = value;
@@ -537,9 +603,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the customerSince property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getCustomerSince() {
         return customerSince;
@@ -547,9 +615,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the customerSince property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setCustomerSince(XMLGregorianCalendar value) {
         this.customerSince = value;
@@ -557,9 +627,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the characterIssueFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isCharacterIssueFlag() {
         return characterIssueFlag;
@@ -567,9 +639,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the characterIssueFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setCharacterIssueFlag(Boolean value) {
         this.characterIssueFlag = value;
@@ -577,9 +651,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the sourceOfCashIdentifiedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isSourceOfCashIdentifiedFlag() {
         return sourceOfCashIdentifiedFlag;
@@ -587,9 +663,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the sourceOfCashIdentifiedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setSourceOfCashIdentifiedFlag(Boolean value) {
         this.sourceOfCashIdentifiedFlag = value;
@@ -597,9 +675,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the sourceOfRepaymentVerifiedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isSourceOfRepaymentVerifiedFlag() {
         return sourceOfRepaymentVerifiedFlag;
@@ -607,9 +687,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the sourceOfRepaymentVerifiedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setSourceOfRepaymentVerifiedFlag(Boolean value) {
         this.sourceOfRepaymentVerifiedFlag = value;
@@ -617,9 +699,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the coreAssetCollateralFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isCoreAssetCollateralFlag() {
         return coreAssetCollateralFlag;
@@ -627,9 +711,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the coreAssetCollateralFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setCoreAssetCollateralFlag(Boolean value) {
         this.coreAssetCollateralFlag = value;
@@ -637,9 +723,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the obligorCreditLimitExceededFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isObligorCreditLimitExceededFlag() {
         return obligorCreditLimitExceededFlag;
@@ -647,9 +735,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the obligorCreditLimitExceededFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setObligorCreditLimitExceededFlag(Boolean value) {
         this.obligorCreditLimitExceededFlag = value;
@@ -657,9 +747,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the riskCustomerType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRiskCustomerType() {
         return riskCustomerType;
@@ -667,9 +759,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the riskCustomerType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRiskCustomerType(String value) {
         this.riskCustomerType = value;
@@ -677,9 +771,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the kycRiskLevel property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getKycRiskLevel() {
         return kycRiskLevel;
@@ -687,9 +783,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the kycRiskLevel property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setKycRiskLevel(Integer value) {
         this.kycRiskLevel = value;
@@ -697,9 +795,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the nationality property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getNationality() {
         return nationality;
@@ -707,9 +807,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the nationality property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setNationality(String value) {
         this.nationality = value;
@@ -717,9 +819,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the preScoredFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isPreScoredFlag() {
         return preScoredFlag;
@@ -727,9 +831,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the preScoredFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setPreScoredFlag(Boolean value) {
         this.preScoredFlag = value;
@@ -737,9 +843,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the s48FullMatchedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isS48FullMatchedFlag() {
         return s48FullMatchedFlag;
@@ -747,9 +855,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the s48FullMatchedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setS48FullMatchedFlag(Boolean value) {
         this.s48FullMatchedFlag = value;
@@ -757,9 +867,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the s48PartialMatchedFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isS48PartialMatchedFlag() {
         return s48PartialMatchedFlag;
@@ -767,9 +879,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the s48PartialMatchedFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setS48PartialMatchedFlag(Boolean value) {
         this.s48PartialMatchedFlag = value;
@@ -777,9 +891,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the s49CategoryFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isS49CategoryFlag() {
         return s49CategoryFlag;
@@ -787,9 +903,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the s49CategoryFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setS49CategoryFlag(Boolean value) {
         this.s49CategoryFlag = value;
@@ -797,9 +915,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the relationshipWithMainBorrower property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRelationshipWithMainBorrower() {
         return relationshipWithMainBorrower;
@@ -807,9 +927,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the relationshipWithMainBorrower property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRelationshipWithMainBorrower(String value) {
         this.relationshipWithMainBorrower = value;
@@ -817,9 +939,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the cardHolderType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCardHolderType() {
         return cardHolderType;
@@ -827,9 +951,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the cardHolderType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCardHolderType(String value) {
         this.cardHolderType = value;
@@ -837,9 +963,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the benefitPlusGroup property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBenefitPlusGroup() {
         return benefitPlusGroup;
@@ -847,9 +975,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the benefitPlusGroup property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBenefitPlusGroup(String value) {
         this.benefitPlusGroup = value;
@@ -857,9 +987,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the aggregatedCreditExposure property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAggregatedCreditExposure() {
         return aggregatedCreditExposure;
@@ -867,9 +999,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the aggregatedCreditExposure property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAggregatedCreditExposure(BigDecimal value) {
         this.aggregatedCreditExposure = value;
@@ -877,9 +1011,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the aggregatedCreditExposureLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAggregatedCreditExposureLimit() {
         return aggregatedCreditExposureLimit;
@@ -887,9 +1023,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the aggregatedCreditExposureLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAggregatedCreditExposureLimit(BigDecimal value) {
         this.aggregatedCreditExposureLimit = value;
@@ -897,9 +1035,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the aggregatedCreditExposureOutstanding property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAggregatedCreditExposureOutstanding() {
         return aggregatedCreditExposureOutstanding;
@@ -907,9 +1047,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the aggregatedCreditExposureOutstanding property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAggregatedCreditExposureOutstanding(BigDecimal value) {
         this.aggregatedCreditExposureOutstanding = value;
@@ -917,9 +1059,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the debtToIncomeRatio property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getDebtToIncomeRatio() {
         return debtToIncomeRatio;
@@ -927,9 +1071,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the debtToIncomeRatio property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setDebtToIncomeRatio(BigDecimal value) {
         this.debtToIncomeRatio = value;
@@ -937,9 +1083,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the existTMBHomeLoanOutstandAmt property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getExistTMBHomeLoanOutstandAmt() {
         return existTMBHomeLoanOutstandAmt;
@@ -947,9 +1095,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the existTMBHomeLoanOutstandAmt property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setExistTMBHomeLoanOutstandAmt(BigDecimal value) {
         this.existTMBHomeLoanOutstandAmt = value;
@@ -957,9 +1107,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the existTMBHomeLoanRepayAmt property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getExistTMBHomeLoanRepayAmt() {
         return existTMBHomeLoanRepayAmt;
@@ -967,9 +1119,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the existTMBHomeLoanRepayAmt property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setExistTMBHomeLoanRepayAmt(BigDecimal value) {
         this.existTMBHomeLoanRepayAmt = value;
@@ -977,9 +1131,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the remainingDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getRemainingDebtToIncome() {
         return remainingDebtToIncome;
@@ -987,9 +1143,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the remainingDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setRemainingDebtToIncome(BigDecimal value) {
         this.remainingDebtToIncome = value;
@@ -997,9 +1155,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the maxDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxDebtToIncome() {
         return maxDebtToIncome;
@@ -1007,9 +1167,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the maxDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxDebtToIncome(BigDecimal value) {
         this.maxDebtToIncome = value;
@@ -1017,9 +1179,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the existingDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getExistingDebtToIncome() {
         return existingDebtToIncome;
@@ -1027,9 +1191,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the existingDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setExistingDebtToIncome(BigDecimal value) {
         this.existingDebtToIncome = value;
@@ -1037,9 +1203,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the debtServiceRatio property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getDebtServiceRatio() {
         return debtServiceRatio;
@@ -1047,9 +1215,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the debtServiceRatio property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setDebtServiceRatio(BigDecimal value) {
         this.debtServiceRatio = value;
@@ -1057,9 +1227,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the maxDebtServiceRatio property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxDebtServiceRatio() {
         return maxDebtServiceRatio;
@@ -1067,9 +1239,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the maxDebtServiceRatio property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxDebtServiceRatio(BigDecimal value) {
         this.maxDebtServiceRatio = value;
@@ -1077,9 +1251,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the loanToValueRatio property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLoanToValueRatio() {
         return loanToValueRatio;
@@ -1087,9 +1263,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the loanToValueRatio property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLoanToValueRatio(BigDecimal value) {
         this.loanToValueRatio = value;
@@ -1097,9 +1275,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the paymentCapacity property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPaymentCapacity() {
         return paymentCapacity;
@@ -1107,9 +1287,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the paymentCapacity property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPaymentCapacity(BigDecimal value) {
         this.paymentCapacity = value;
@@ -1117,9 +1299,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the totalCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTotalCreditLimit() {
         return totalCreditLimit;
@@ -1127,9 +1311,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the totalCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTotalCreditLimit(BigDecimal value) {
         this.totalCreditLimit = value;
@@ -1137,9 +1323,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the limitSize property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getLimitSize() {
         return limitSize;
@@ -1147,9 +1335,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the limitSize property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setLimitSize(String value) {
         this.limitSize = value;
@@ -1157,9 +1347,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the tdrFlag property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTdrFlag() {
         return tdrFlag;
@@ -1167,9 +1359,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the tdrFlag property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTdrFlag(String value) {
         this.tdrFlag = value;
@@ -1177,23 +1371,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the employment property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the employment property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getEmployment().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link EmploymentType }
+     * 
+     * 
      */
     public List<EmploymentType> getEmployment() {
         if (employment == null) {
@@ -1204,23 +1400,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the account property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the account property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAccount().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AccountType }
+     * 
+     * 
      */
     public List<AccountType> getAccount() {
         if (account == null) {
@@ -1231,23 +1429,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the income property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the income property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getIncome().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link IncomeType }
+     * 
+     * 
      */
     public List<IncomeType> getIncome() {
         if (income == null) {
@@ -1258,23 +1458,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the debt property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the debt property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDebt().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DebtType }
+     * 
+     * 
      */
     public List<DebtType> getDebt() {
         if (debt == null) {
@@ -1285,23 +1487,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the product property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the product property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getProduct().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ProductType }
+     * 
+     * 
      */
     public List<ProductType> getProduct() {
         if (product == null) {
@@ -1312,23 +1516,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the fraudDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the fraudDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getFraudDetail().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link FraudDetailType }
+     * 
+     * 
      */
     public List<FraudDetailType> getFraudDetail() {
         if (fraudDetail == null) {
@@ -1339,23 +1545,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the litigationDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the litigationDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getLitigationDetail().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link LitigationDetailType }
+     * 
+     * 
      */
     public List<LitigationDetailType> getLitigationDetail() {
         if (litigationDetail == null) {
@@ -1366,23 +1574,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the bankruptcyDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the bankruptcyDetail property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBankruptcyDetail().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link BankruptcyDetailType }
+     * 
+     * 
      */
     public List<BankruptcyDetailType> getBankruptcyDetail() {
         if (bankruptcyDetail == null) {
@@ -1393,23 +1603,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
+     * 
+     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -1420,23 +1632,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the ncbReport property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the ncbReport property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getNcbReport().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link NCBReportType }
+     * 
+     * 
      */
     public List<NCBReportType> getNcbReport() {
         if (ncbReport == null) {
@@ -1447,9 +1661,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the tmbAccountsReport property.
-     *
-     * @return possible object is
-     *         {@link TMBAccountsReportType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link TMBAccountsReportType }
+     *     
      */
     public TMBAccountsReportType getTmbAccountsReport() {
         return tmbAccountsReport;
@@ -1457,9 +1673,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the tmbAccountsReport property.
-     *
-     * @param value allowed object is
-     *              {@link TMBAccountsReportType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TMBAccountsReportType }
+     *     
      */
     public void setTmbAccountsReport(TMBAccountsReportType value) {
         this.tmbAccountsReport = value;
@@ -1467,23 +1685,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -1494,23 +1714,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRequiredDocumentSet().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DocumentSetType }
+     * 
+     * 
      */
     public List<DocumentSetType> getRequiredDocumentSet() {
         if (requiredDocumentSet == null) {
@@ -1521,23 +1743,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the guarantor property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the guarantor property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getGuarantor().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link GuarantorType }
+     * 
+     * 
      */
     public List<GuarantorType> getGuarantor() {
         if (guarantor == null) {
@@ -1548,9 +1772,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the dateBehaviorScore property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateBehaviorScore() {
         return dateBehaviorScore;
@@ -1558,9 +1784,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the dateBehaviorScore property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateBehaviorScore(XMLGregorianCalendar value) {
         this.dateBehaviorScore = value;
@@ -1568,23 +1796,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the riskModel property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the riskModel property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRiskModel().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link RiskModelType }
+     * 
+     * 
      */
     public List<RiskModelType> getRiskModel() {
         if (riskModel == null) {
@@ -1595,9 +1825,11 @@ public class BorrowerType {
 
     /**
      * Gets the value of the delinquency property.
-     *
-     * @return possible object is
-     *         {@link DelinquencyType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link DelinquencyType }
+     *     
      */
     public DelinquencyType getDelinquency() {
         return delinquency;
@@ -1605,9 +1837,11 @@ public class BorrowerType {
 
     /**
      * Sets the value of the delinquency property.
-     *
-     * @param value allowed object is
-     *              {@link DelinquencyType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DelinquencyType }
+     *     
      */
     public void setDelinquency(DelinquencyType value) {
         this.delinquency = value;
@@ -1615,23 +1849,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the otherLoanStatus property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the otherLoanStatus property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getOtherLoanStatus().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link OtherLoanStatusType }
+     * 
+     * 
      */
     public List<OtherLoanStatusType> getOtherLoanStatus() {
         if (otherLoanStatus == null) {
@@ -1642,23 +1878,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the warningCodeFullMatched property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the warningCodeFullMatched property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getWarningCodeFullMatched().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link WarningCodeFullMatchedType }
+     * 
+     * 
      */
     public List<WarningCodeFullMatchedType> getWarningCodeFullMatched() {
         if (warningCodeFullMatched == null) {
@@ -1669,23 +1907,25 @@ public class BorrowerType {
 
     /**
      * Gets the value of the warningCodePartialMatched property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the warningCodePartialMatched property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getWarningCodePartialMatched().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link WarningCodePartialMatchedType }
+     * 
+     * 
      */
     public List<WarningCodePartialMatchedType> getWarningCodePartialMatched() {
         if (warningCodePartialMatched == null) {
