@@ -378,7 +378,9 @@ public class CustomerTransform extends Transform {
         //for show jurLv
         if(customer.getIsCommittee() == 1){
             Customer cusCommittee = customerDAO.findById(customer.getJuristicId());
-            customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
+            if(customer.getReference() != null){
+                customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
+            }
         } else {
             customerInfoView.setJurLv("-");
         }
@@ -386,10 +388,14 @@ public class CustomerTransform extends Transform {
         //for show indLv
         if(customer.getIsSpouse() == 1){ // is spouse
             Customer mainCus = customerDAO.findMainCustomerBySpouseId(customer.getId());
-            customerInfoView.setIndLv(customer.getReference().getDescription()+" of "+mainCus.getNameTh()+" "+mainCus.getLastNameTh());
+            if(customer.getReference() != null){
+                customerInfoView.setIndLv(customer.getReference().getDescription()+" of "+mainCus.getNameTh()+" "+mainCus.getLastNameTh());
+            }
             if(mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
                 Customer mainJur = customerDAO.findById(mainCus.getJuristicId());
-                customerInfoView.setJurLv(mainCus.getReference().getDescription()+" of "+mainJur.getNameTh());
+                if(mainCus.getReference() != null){
+                    customerInfoView.setJurLv(mainCus.getReference().getDescription()+" of "+mainJur.getNameTh());
+                }
             }
         } else {
             customerInfoView.setIndLv("-");

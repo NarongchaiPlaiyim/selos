@@ -10,6 +10,7 @@
     margin-right: 3px !important;
     background-color: white !important;
     border: 1px solid #bfbfbf !important;
+    display: block!important;
 }
 
 /*-------------*/
@@ -939,11 +940,11 @@ body .ui-tooltip {
 ----------------------------------*/
 .ui-widget {
     font-family: Verdana, Arial, sans-serif;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .ui-widget .ui-widget {
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .ui-widget input,

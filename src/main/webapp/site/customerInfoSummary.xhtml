@@ -43,8 +43,8 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td class="small">
-                                        <p:selectOneMenu styleClass="largest" size="1"
+                                    <td  style="width: 250px; max-width: 250px; min-width: 250px;">
+                                        <p:selectOneMenu size="1"  style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                             <f:selectItems value="#{custInfoSummary.customerEntityList}"
@@ -55,10 +55,10 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td>
-                                        <p:commandButton id="btnIndividual" value="Add" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
                                                          action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
-                                        <p:commandButton id="btnJuristic" value="Add" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
                                                          action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
                                     </td>

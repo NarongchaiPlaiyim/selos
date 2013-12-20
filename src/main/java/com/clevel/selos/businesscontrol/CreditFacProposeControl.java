@@ -322,7 +322,8 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
-            sumTotalGuaranteeAmount = sumTotalGuaranteeAmount.add(guarantorDetailView.getTotalLimitGuaranteeAmount());
+//            sumTotalGuaranteeAmount = sumTotalGuaranteeAmount.add(guarantorDetailView.getTotalLimitGuaranteeAmount());
+            sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
         }
         return sumTotalGuaranteeAmount;
     }

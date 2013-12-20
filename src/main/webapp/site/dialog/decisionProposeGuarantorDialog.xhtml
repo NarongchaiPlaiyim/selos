@@ -42,8 +42,9 @@
                     <p:outputLabel for="dlgTcgLgNo" value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
                 <td class="left">
-                    <!--<p:inputText id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"/>-->
-                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}" mask="99-9999"/>
+                    <p:inputMask id="dlgTcgLgNo" value="#{decision.selectedAppProposeGuarantor.tcgLgNo}"
+                                 mask="99-9999"
+                                 required="true"/>
                 </td>
             </tr>
             <tr>
@@ -130,7 +131,7 @@
                             styleClass="small"
                             action="#{decision.onSaveGuarantorInfo()}"
                             process=":@form"
-                            update=":guarantorDlgForm,:frmMain"
+                            update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                             oncomplete="handleDialogRequest(xhr, status, args, 'proposeGuarantorDlg')"/>
 
                     <p:commandButton
