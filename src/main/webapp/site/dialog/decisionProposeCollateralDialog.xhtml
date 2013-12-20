@@ -147,11 +147,11 @@
                         </p:column>
 
                         <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeDetailItem.productProgram}"/>
+                            <h:outputText value="#{creditTypeDetailItem.productProgram.name}"/>
                         </p:column>
 
                         <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeDetailItem.creditFacility}"/>
+                            <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
                         </p:column>
 
                         <p:column styleClass="right">
@@ -293,6 +293,7 @@
                                 action="#{decision.onAddSubCollateral()}"
                                 update=":subCollateralDlgForm"
                                 oncomplete="subCollateralInfoDlg.show();">
+
                             <f:setPropertyActionListener value="#{i.index}"
                                                          target="#{decision.rowIndexCollHead}"/>
                         </p:commandButton>
@@ -431,7 +432,7 @@
                                      value="#{msg.get('app.button.ok')}"
                                      action="#{decision.onSaveProposeCollInfo()}"
                                      process="@form"
-                                     update=":collateralDlgForm,:frmMain"
+                                     update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
 
                     <p:commandButton value="#{msg.get('app.button.cancel')}"

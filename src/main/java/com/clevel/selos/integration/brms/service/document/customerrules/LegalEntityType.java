@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for LegalEntityType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="LegalEntityType">
  *   &lt;complexContent>
@@ -35,21 +39,23 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LegalEntityType", propOrder = {
-        "id",
-        "juristicID",
-        "businessType",
-        "dateOfIncorporation",
-        "timeInBusiness",
-        "keyPerson",
-        "salesTurnover",
-        "atLeast1YrFinStmtFlag",
-        "netWorth",
-        "business",
-        "juristicBusinessOwner",
-        "attribute"
+    "id",
+    "juristicID",
+    "businessType",
+    "dateOfIncorporation",
+    "timeInBusiness",
+    "keyPerson",
+    "salesTurnover",
+    "atLeast1YrFinStmtFlag",
+    "netWorth",
+    "business",
+    "juristicBusinessOwner",
+    "attribute"
 })
 public class LegalEntityType {
 
@@ -71,9 +77,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -81,9 +89,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -91,9 +101,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the juristicID property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getJuristicID() {
         return juristicID;
@@ -101,9 +113,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the juristicID property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setJuristicID(String value) {
         this.juristicID = value;
@@ -111,9 +125,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the businessType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBusinessType() {
         return businessType;
@@ -121,9 +137,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the businessType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBusinessType(String value) {
         this.businessType = value;
@@ -131,9 +149,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the dateOfIncorporation property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfIncorporation() {
         return dateOfIncorporation;
@@ -141,9 +161,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the dateOfIncorporation property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfIncorporation(XMLGregorianCalendar value) {
         this.dateOfIncorporation = value;
@@ -151,9 +173,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the timeInBusiness property.
-     *
-     * @return possible object is
-     *         {@link Double }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
      */
     public Double getTimeInBusiness() {
         return timeInBusiness;
@@ -161,9 +185,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the timeInBusiness property.
-     *
-     * @param value allowed object is
-     *              {@link Double }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
      */
     public void setTimeInBusiness(Double value) {
         this.timeInBusiness = value;
@@ -171,23 +197,25 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the keyPerson property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the keyPerson property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getKeyPerson().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link IndividualType }
+     * 
+     * 
      */
     public List<IndividualType> getKeyPerson() {
         if (keyPerson == null) {
@@ -198,9 +226,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the salesTurnover property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getSalesTurnover() {
         return salesTurnover;
@@ -208,9 +238,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the salesTurnover property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setSalesTurnover(BigDecimal value) {
         this.salesTurnover = value;
@@ -218,9 +250,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the atLeast1YrFinStmtFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isAtLeast1YrFinStmtFlag() {
         return atLeast1YrFinStmtFlag;
@@ -228,9 +262,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the atLeast1YrFinStmtFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setAtLeast1YrFinStmtFlag(Boolean value) {
         this.atLeast1YrFinStmtFlag = value;
@@ -238,9 +274,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the netWorth property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getNetWorth() {
         return netWorth;
@@ -248,9 +286,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the netWorth property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setNetWorth(BigDecimal value) {
         this.netWorth = value;
@@ -258,23 +298,25 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the business property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the business property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBusiness().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link BusinessType }
+     * 
+     * 
      */
     public List<BusinessType> getBusiness() {
         if (business == null) {
@@ -285,9 +327,11 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the juristicBusinessOwner property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getJuristicBusinessOwner() {
         return juristicBusinessOwner;
@@ -295,9 +339,11 @@ public class LegalEntityType {
 
     /**
      * Sets the value of the juristicBusinessOwner property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setJuristicBusinessOwner(String value) {
         this.juristicBusinessOwner = value;
@@ -305,23 +351,25 @@ public class LegalEntityType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

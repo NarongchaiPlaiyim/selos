@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for CollateralType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="CollateralType">
  *   &lt;complexContent>
@@ -54,38 +54,40 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CollateralType", propOrder = {
-        "id",
-        "name",
-        "collateralType",
-        "eligibleFlag",
-        "coreAssetFlag",
-        "propertyType",
-        "buildingType",
-        "collateralBuildingType",
-        "description",
-        "pledgedPercentage",
-        "project",
-        "spaceType",
-        "spaceValue",
-        "document",
-        "mainBorrowerOwnerFlag",
-        "coBorrowerOwnerFlag",
-        "buildingMaterialType",
-        "propertyGrade",
-        "propertyStatus",
-        "value",
-        "marketValue",
-        "haircutValue",
-        "purchasedValue",
-        "appraisedValue",
-        "province",
-        "appraisal",
-        "developer",
-        "attribute",
-        "requiredDocumentSet"
+    "id",
+    "name",
+    "collateralType",
+    "eligibleFlag",
+    "coreAssetFlag",
+    "propertyType",
+    "buildingType",
+    "collateralBuildingType",
+    "description",
+    "pledgedPercentage",
+    "project",
+    "spaceType",
+    "spaceValue",
+    "document",
+    "mainBorrowerOwnerFlag",
+    "coBorrowerOwnerFlag",
+    "buildingMaterialType",
+    "propertyGrade",
+    "propertyStatus",
+    "value",
+    "marketValue",
+    "haircutValue",
+    "purchasedValue",
+    "appraisedValue",
+    "province",
+    "appraisal",
+    "developer",
+    "attribute",
+    "requiredDocumentSet"
 })
 public class CollateralType {
 
@@ -122,9 +124,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -132,9 +136,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -142,9 +148,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the name property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getName() {
         return name;
@@ -152,9 +160,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the name property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setName(String value) {
         this.name = value;
@@ -162,9 +172,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the collateralType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCollateralType() {
         return collateralType;
@@ -172,9 +184,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the collateralType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCollateralType(String value) {
         this.collateralType = value;
@@ -182,9 +196,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the eligibleFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isEligibleFlag() {
         return eligibleFlag;
@@ -192,9 +208,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the eligibleFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setEligibleFlag(Boolean value) {
         this.eligibleFlag = value;
@@ -202,9 +220,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the coreAssetFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isCoreAssetFlag() {
         return coreAssetFlag;
@@ -212,9 +232,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the coreAssetFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setCoreAssetFlag(Boolean value) {
         this.coreAssetFlag = value;
@@ -222,9 +244,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the propertyType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPropertyType() {
         return propertyType;
@@ -232,9 +256,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the propertyType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPropertyType(String value) {
         this.propertyType = value;
@@ -242,9 +268,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the buildingType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBuildingType() {
         return buildingType;
@@ -252,9 +280,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the buildingType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBuildingType(String value) {
         this.buildingType = value;
@@ -262,9 +292,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the collateralBuildingType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCollateralBuildingType() {
         return collateralBuildingType;
@@ -272,9 +304,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the collateralBuildingType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCollateralBuildingType(String value) {
         this.collateralBuildingType = value;
@@ -282,9 +316,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the description property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getDescription() {
         return description;
@@ -292,9 +328,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the description property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setDescription(String value) {
         this.description = value;
@@ -302,9 +340,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the pledgedPercentage property.
-     *
-     * @return possible object is
-     *         {@link Double }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
      */
     public Double getPledgedPercentage() {
         return pledgedPercentage;
@@ -312,9 +352,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the pledgedPercentage property.
-     *
-     * @param value allowed object is
-     *              {@link Double }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
      */
     public void setPledgedPercentage(Double value) {
         this.pledgedPercentage = value;
@@ -322,9 +364,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the project property.
-     *
-     * @return possible object is
-     *         {@link ProjectType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link ProjectType }
+     *     
      */
     public ProjectType getProject() {
         return project;
@@ -332,9 +376,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the project property.
-     *
-     * @param value allowed object is
-     *              {@link ProjectType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ProjectType }
+     *     
      */
     public void setProject(ProjectType value) {
         this.project = value;
@@ -342,9 +388,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the spaceType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getSpaceType() {
         return spaceType;
@@ -352,9 +400,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the spaceType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setSpaceType(String value) {
         this.spaceType = value;
@@ -362,9 +412,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the spaceValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getSpaceValue() {
         return spaceValue;
@@ -372,9 +424,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the spaceValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setSpaceValue(BigDecimal value) {
         this.spaceValue = value;
@@ -382,9 +436,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the document property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getDocument() {
         return document;
@@ -392,9 +448,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the document property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setDocument(String value) {
         this.document = value;
@@ -402,9 +460,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the mainBorrowerOwnerFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isMainBorrowerOwnerFlag() {
         return mainBorrowerOwnerFlag;
@@ -412,9 +472,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the mainBorrowerOwnerFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setMainBorrowerOwnerFlag(Boolean value) {
         this.mainBorrowerOwnerFlag = value;
@@ -422,9 +484,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the coBorrowerOwnerFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isCoBorrowerOwnerFlag() {
         return coBorrowerOwnerFlag;
@@ -432,9 +496,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the coBorrowerOwnerFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setCoBorrowerOwnerFlag(Boolean value) {
         this.coBorrowerOwnerFlag = value;
@@ -442,9 +508,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the buildingMaterialType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBuildingMaterialType() {
         return buildingMaterialType;
@@ -452,9 +520,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the buildingMaterialType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBuildingMaterialType(String value) {
         this.buildingMaterialType = value;
@@ -462,9 +532,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the propertyGrade property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPropertyGrade() {
         return propertyGrade;
@@ -472,9 +544,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the propertyGrade property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPropertyGrade(String value) {
         this.propertyGrade = value;
@@ -482,9 +556,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the propertyStatus property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPropertyStatus() {
         return propertyStatus;
@@ -492,9 +568,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the propertyStatus property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPropertyStatus(String value) {
         this.propertyStatus = value;
@@ -502,9 +580,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the value property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getValue() {
         return value;
@@ -512,9 +592,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the value property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setValue(BigDecimal value) {
         this.value = value;
@@ -522,9 +604,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the marketValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMarketValue() {
         return marketValue;
@@ -532,9 +616,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the marketValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMarketValue(BigDecimal value) {
         this.marketValue = value;
@@ -542,9 +628,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the haircutValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getHaircutValue() {
         return haircutValue;
@@ -552,9 +640,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the haircutValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setHaircutValue(BigDecimal value) {
         this.haircutValue = value;
@@ -562,9 +652,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the purchasedValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPurchasedValue() {
         return purchasedValue;
@@ -572,9 +664,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the purchasedValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPurchasedValue(BigDecimal value) {
         this.purchasedValue = value;
@@ -582,9 +676,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the appraisedValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAppraisedValue() {
         return appraisedValue;
@@ -592,9 +688,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the appraisedValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAppraisedValue(BigDecimal value) {
         this.appraisedValue = value;
@@ -602,9 +700,11 @@ public class CollateralType {
 
     /**
      * Gets the value of the province property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProvince() {
         return province;
@@ -612,9 +712,11 @@ public class CollateralType {
 
     /**
      * Sets the value of the province property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProvince(String value) {
         this.province = value;
@@ -622,23 +724,25 @@ public class CollateralType {
 
     /**
      * Gets the value of the appraisal property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the appraisal property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAppraisal().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AppraisalType }
+     * 
+     * 
      */
     public List<AppraisalType> getAppraisal() {
         if (appraisal == null) {
@@ -649,23 +753,25 @@ public class CollateralType {
 
     /**
      * Gets the value of the developer property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the developer property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDeveloper().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DeveloperType }
+     * 
+     * 
      */
     public List<DeveloperType> getDeveloper() {
         if (developer == null) {
@@ -676,23 +782,25 @@ public class CollateralType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -703,23 +811,25 @@ public class CollateralType {
 
     /**
      * Gets the value of the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRequiredDocumentSet().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DocumentSetType }
+     * 
+     * 
      */
     public List<DocumentSetType> getRequiredDocumentSet() {
         if (requiredDocumentSet == null) {

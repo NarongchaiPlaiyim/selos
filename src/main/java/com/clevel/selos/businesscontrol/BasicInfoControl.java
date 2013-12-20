@@ -67,18 +67,11 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
-        CustomerEntity customerEntity;
-        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
-        if(customerList != null && customerList.size() > 0 && customerList.get(0).getId() != 0){
-            for (Customer customer : customerList) {
-                if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) { // Customer Entity ; 1 = Individual ; 2 = Juristic
-                    customerEntity = customer.getCustomerEntity();
-                    return customerEntity;
-                }
-            }
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        CustomerEntity customerEntity = new CustomerEntity();
+        if(workCase != null){
+            customerEntity = workCase.getBorrowerType();
         }
-        //if null or not have customer , return Juristic
-        customerEntity = customerEntityDAO.findById(2);
 
         log.debug("customerEntity : {}",customerEntity);
 

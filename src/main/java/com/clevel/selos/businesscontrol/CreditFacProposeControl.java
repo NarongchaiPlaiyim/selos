@@ -155,10 +155,10 @@ public class CreditFacProposeControl extends BusinessControl {
                                     newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
                                 }
 
-                                if (newCollateralDetail.getCreditTypeDetailList() != null) {
+                                /*if (newCollateralDetail.getCreditTypeDetailList() != null) {
                                     List<CreditTypeDetailView> creditTypeDetailViews = creditTypeDetailTransform.transformToView(newCollateralDetail.getCreditTypeDetailList());
                                     newCollateralInfoView.setCreditTypeDetailViewList(creditTypeDetailViews);
-                                }
+                                }*/
                             }
                         }
 
@@ -170,11 +170,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
                         for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
                             for (NewGuarantorDetail newGuarantorDetail : newCreditFacility.getNewGuarantorDetailList()) {
-                                if (newGuarantorDetail.getCreditTypeDetailList() != null) {
+                               /* if (newGuarantorDetail.getCreditTypeDetailList() != null) {
                                     List<CreditTypeDetailView> creditTypeDetailViewList = creditTypeDetailTransform.transformToView(newGuarantorDetail.getCreditTypeDetailList());
                                     newGuarantorDetailView.setCreditTypeDetailViewList(creditTypeDetailViewList);
 
-                                }
+                                }*/
                             }
 
                         }
@@ -235,9 +235,9 @@ public class CreditFacProposeControl extends BusinessControl {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             for (NewGuarantorDetailView newGuarantorDetailView : newCreditFacilityView.getNewGuarantorDetailViewList()) {
-                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForGuarantor(newGuarantorDetailView.getCreditTypeDetailViewList(), newGuarantorDetail, user);
-                creditTypeDetailDAO.persist(creditTypeDetailList);
-                log.info("persist creditTypeDetailList...");
+//                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForGuarantor(newGuarantorDetailView.getCreditTypeDetailViewList(), newGuarantorDetail, user);
+//                creditTypeDetailDAO.persist(creditTypeDetailList);
+//                log.info("persist creditTypeDetailList...");
             }
 
         }
@@ -260,8 +260,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     }
                 }
 
-                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForCollateral(newCollateralInfoView.getCreditTypeDetailViewList(), newCollateralDetail, user);
-                creditTypeDetailDAO.persist(creditTypeDetailList);
+//                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForCollateral(newCollateralInfoView.getCreditTypeDetailViewList(), newCollateralDetail, user);
+//                creditTypeDetailDAO.persist(creditTypeDetailList);
                 log.info("persist creditTypeDetailList...");
 
             }
@@ -275,7 +275,7 @@ public class CreditFacProposeControl extends BusinessControl {
         CreditTypeDetailView creditTypeDetailView;
 
         if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
-            for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
+            /*for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
                 creditTypeDetailView = new CreditTypeDetailView();
                 creditTypeDetailView.setSeq(newCreditDetailView.getSeq());
                 creditTypeDetailView.setAccountName("-");
@@ -288,10 +288,10 @@ public class CreditFacProposeControl extends BusinessControl {
                 creditTypeDetailView.setPCEPercent(newCreditDetailView.getPCEPercent());
                 creditTypeDetailView.setPCEAmount(newCreditDetailView.getPCEAmount());
                 creditTypeDetailList.add(creditTypeDetailView);
-            }
+            }*/
         }
 
-        int seq = 0;
+       /* int seq = 0;
         seq = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : seq;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
@@ -310,7 +310,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 creditTypeDetailList.add(creditTypeDetailView);
                 seq++;
             }
-        }
+        }*/
 
         return creditTypeDetailList;
     }
@@ -322,7 +322,8 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
-            sumTotalGuaranteeAmount = sumTotalGuaranteeAmount.add(guarantorDetailView.getTotalLimitGuaranteeAmount());
+//            sumTotalGuaranteeAmount = sumTotalGuaranteeAmount.add(guarantorDetailView.getTotalLimitGuaranteeAmount());
+            sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
         }
         return sumTotalGuaranteeAmount;
     }

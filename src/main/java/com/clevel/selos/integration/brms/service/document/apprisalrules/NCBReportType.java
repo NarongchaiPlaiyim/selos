@@ -1,19 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for NCBReportType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="NCBReportType">
  *   &lt;complexContent>
@@ -30,15 +30,17 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NCBReportType", propOrder = {
-        "id",
-        "maxNumHouseMortgageLoans",
-        "ncbGenericIndividualBureauScore",
-        "ncbAccount",
-        "ncbEnquiry",
-        "attribute"
+    "id",
+    "maxNumHouseMortgageLoans",
+    "ncbGenericIndividualBureauScore",
+    "ncbAccount",
+    "ncbEnquiry",
+    "attribute"
 })
 public class NCBReportType {
 
@@ -52,9 +54,11 @@ public class NCBReportType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -62,9 +66,11 @@ public class NCBReportType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -72,9 +78,11 @@ public class NCBReportType {
 
     /**
      * Gets the value of the maxNumHouseMortgageLoans property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxNumHouseMortgageLoans() {
         return maxNumHouseMortgageLoans;
@@ -82,9 +90,11 @@ public class NCBReportType {
 
     /**
      * Sets the value of the maxNumHouseMortgageLoans property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxNumHouseMortgageLoans(Integer value) {
         this.maxNumHouseMortgageLoans = value;
@@ -92,9 +102,11 @@ public class NCBReportType {
 
     /**
      * Gets the value of the ncbGenericIndividualBureauScore property.
-     *
-     * @return possible object is
-     *         {@link NCBGenericIndividualBureauScoreType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link NCBGenericIndividualBureauScoreType }
+     *     
      */
     public NCBGenericIndividualBureauScoreType getNcbGenericIndividualBureauScore() {
         return ncbGenericIndividualBureauScore;
@@ -102,9 +114,11 @@ public class NCBReportType {
 
     /**
      * Sets the value of the ncbGenericIndividualBureauScore property.
-     *
-     * @param value allowed object is
-     *              {@link NCBGenericIndividualBureauScoreType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link NCBGenericIndividualBureauScoreType }
+     *     
      */
     public void setNcbGenericIndividualBureauScore(NCBGenericIndividualBureauScoreType value) {
         this.ncbGenericIndividualBureauScore = value;
@@ -112,23 +126,25 @@ public class NCBReportType {
 
     /**
      * Gets the value of the ncbAccount property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the ncbAccount property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getNcbAccount().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link NCBAccountType }
+     * 
+     * 
      */
     public List<NCBAccountType> getNcbAccount() {
         if (ncbAccount == null) {
@@ -139,23 +155,25 @@ public class NCBReportType {
 
     /**
      * Gets the value of the ncbEnquiry property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the ncbEnquiry property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getNcbEnquiry().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link NCBEnquiryType }
+     * 
+     * 
      */
     public List<NCBEnquiryType> getNcbEnquiry() {
         if (ncbEnquiry == null) {
@@ -166,23 +184,25 @@ public class NCBReportType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
