@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -264,8 +262,9 @@ public class CustomerInfoJuristic implements Serializable {
 
         onAddNewJuristic();
 
-        Flash flash = FacesUtil.getFlash();
-        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+//        Flash flash = FacesUtil.getFlash();
+//        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
@@ -363,7 +362,9 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isEditFromJuristic", false);
         map.put("customerId", new Long(-1));
         map.put("customerInfoView", customerInfoView);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("cusInfoParams", map);
+//        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 
@@ -376,7 +377,9 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("customerInfoView", customerInfoView);
         map.put("rowIndex",rowIndex);
         map.put("individualView", selectEditIndividual);
-        FacesUtil.getFlash().put("cusInfoParams", map);
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("cusInfoParams", map);
+//        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 

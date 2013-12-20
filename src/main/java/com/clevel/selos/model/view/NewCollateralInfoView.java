@@ -30,7 +30,7 @@ public class NewCollateralInfoView implements Serializable {
     private int isApproved;
 
     private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
-    private List<CreditTypeDetailView> creditTypeDetailViewList;
+    private List<NewCreditDetailView> newCreditDetailViewList;
 
     public NewCollateralInfoView(){
         reset();
@@ -51,7 +51,7 @@ public class NewCollateralInfoView implements Serializable {
         this.bdmComments= "";
 
         this.newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
-        this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
+        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
     }
 
     public long getId() {
@@ -206,12 +206,12 @@ public class NewCollateralInfoView implements Serializable {
         this.newCollateralHeadDetailViewList = newCollateralHeadDetailViewList;
     }
 
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
+    public List<NewCreditDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
     }
 
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
+    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
     @Override
@@ -236,7 +236,7 @@ public class NewCollateralInfoView implements Serializable {
                 .append("modifyBy", modifyBy)
                 .append("isApproved", isApproved)
                 .append("newCollateralHeadDetailViewList", newCollateralHeadDetailViewList)
-                .append("creditTypeDetailViewList", creditTypeDetailViewList)
+                .append("newCreditDetailViewList", newCreditDetailViewList)
                 .toString();
     }
 }

@@ -46,9 +46,9 @@
                                 <td>
                                     <p:dataTable style="width: 90%"
                                                  id="creditTypeTable"
-                                                 value="#{creditFacPropose.newGuarantorDetailView.creditTypeDetailViewList}"
+                                                 value="#{creditFacPropose.newGuarantorDetailView.newCreditDetailViewList}"
                                                  var="creditTypeItem"
-                                                 rowKey="#{creditTypeItem.CreditTypeDetailView}"
+                                                 rowKey="#{creditTypeItem.NewCreditDetailView}"
                                                  rowIndexVar="rowIndex">
 
                                         <p:columnGroup type="header">
@@ -84,11 +84,11 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.productProgram}"/>
+                                            <h:outputText value="#{creditTypeItem.productProgram.name}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.creditFacility}"/>
+                                            <h:outputText value="#{creditTypeItem.creditType.name}"/>
                                         </p:column>
 
                                         <p:column styleClass="right">

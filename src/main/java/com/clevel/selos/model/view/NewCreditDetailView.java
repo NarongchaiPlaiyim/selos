@@ -12,6 +12,13 @@ import java.util.List;
 
 public class NewCreditDetailView implements Serializable {
     private long id;
+    private boolean noFlag;
+    private BigDecimal guaranteeAmount;
+    private String accountName;
+    private String accountNumber;
+    private String accountSuf;
+    private int useCount;
+    private int seq;
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -42,7 +49,6 @@ public class NewCreditDetailView implements Serializable {
     private Disbursement disbursement;
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
-    private int seq;
     private int isApproved;
     private BigDecimal installment;
     private BigDecimal outstanding;
@@ -53,6 +59,13 @@ public class NewCreditDetailView implements Serializable {
     }
 
     public void reset(){
+        this.noFlag=false;
+        this.guaranteeAmount = BigDecimal.ZERO;
+        this.accountName = "";
+        this.accountNumber = "";
+        this.accountSuf = "";
+        this.useCount = 0;
+        this.seq = 0;
         this.requestType=1;
         this.isRefinance=1;
         this.productProgram = new ProductProgram();
@@ -372,6 +385,54 @@ public class NewCreditDetailView implements Serializable {
 
     public void setOutstanding(BigDecimal outstanding) {
         this.outstanding = outstanding;
+    }
+
+    public boolean isNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
     }
 
     @Override

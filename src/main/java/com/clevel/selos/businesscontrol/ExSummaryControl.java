@@ -508,7 +508,7 @@ public class ExSummaryControl extends BusinessControl {
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         Date yearInBiz = DateTimeUtil.getMaxOfDate(bizInfoSummaryView.getRegistrationDate(), bizInfoSummaryView.getEstablishDate());
         String year = DateTimeUtil.calYearMonth(yearInBiz);
-        //todo:yearInBizMonth for send BRMS
+        //todo:yearInBizMonth To send to BRMS
         int month = DateTimeUtil.calMonth(yearInBiz);
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
