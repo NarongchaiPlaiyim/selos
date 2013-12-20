@@ -1978,7 +1978,7 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                         <td class="left" colspan="3">
-                                            <p:dataTable var="collCrdType" value="#{proposeColl.creditTypeDetailViewList}"
+                                            <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
                                                          paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 
@@ -2003,9 +2003,9 @@
 
                                                 <p:column styleClass="left top">#{collCrdType.type}</p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.productProgram}</p:column>
+                                                <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.creditFacility}</p:column>
+                                                <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
 
                                                 <p:column styleClass="right top">
                                                     <h:outputText value="#{collCrdType.limit}">
@@ -2253,7 +2253,7 @@
                                 <tr>
                                     <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                     <td class="left" colspan="3">
-                                        <p:dataTable var="collCrdType" value="#{proposeColl.creditTypeDetailViewList}"
+                                        <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
                                                      paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                      style="width: 100%">
 
@@ -2278,9 +2278,9 @@
 
                                             <p:column styleClass="left top">#{collCrdType.type}</p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.productProgram}</p:column>
+                                            <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.creditFacility}</p:column>
+                                            <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
 
                                             <p:column styleClass="right top">
                                                 <h:outputText value="#{collCrdType.limit}">
@@ -2479,11 +2479,11 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.creditTypeDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
                                                 <tr>
                                                     <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram},&#160;
+                                                        #{creditType.productProgram.name},&#160;
                                                         <h:outputText value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>&#160;
@@ -2585,11 +2585,11 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.creditTypeDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
                                                 <tr>
                                                     <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram},&#160;
+                                                        #{creditType.productProgram.name},&#160;
                                                         <h:outputText value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>&#160;

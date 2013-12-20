@@ -624,13 +624,15 @@ public class Decision implements Serializable {
         // Credit Type List for (Collateral, Guarantor)
         generateSeqFromCreditList(decisionView.getApproveCreditList());
 
-        NewCreditFacilityView creditFacProposeView =  creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+//        NewCreditFacilityView creditFacProposeView =  creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+//
+//        if(creditFacProposeView != null){
+//            if(creditFacProposeView.getNewCreditDetailViewList().size()>0){
+//                sharedCreditTypeList = creditFacProposeView.getNewCreditDetailViewList();
+//            }
+//        }
 
-        if(creditFacProposeView != null){
-            if(creditFacProposeView.getNewCreditDetailViewList().size()>0){
-                sharedCreditTypeList = creditFacProposeView.getNewCreditDetailViewList();
-            }
-        }
+        sharedCreditTypeList = decisionView.getApproveCreditList();
                 // Fee Information
         NewFeeDetailView proposeFeeDetailView1 = new NewFeeDetailView();
         proposeFeeDetailView1.setProductProgram("TMB SME SmartBiz");

@@ -103,7 +103,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3" style="width:600px;">
-        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralInfoView.creditTypeDetailViewList}">
+        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralInfoView.newCreditDetailViewList}">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;padding: 5px 10px !important;"/>
@@ -135,11 +135,11 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.productProgram}"/>
+                <h:outputText value="#{creditTypeDetailItem.productProgram.name}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.creditFacility}"/>
+                <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
             </p:column>
 
             <p:column styleClass="center">
