@@ -17,7 +17,7 @@ public class NewGuarantorDetailView implements Serializable {
     private BigDecimal totalLimitGuaranteeAmount;
     private int isApproved;
 
-    private List<CreditTypeDetailView> creditTypeDetailViewList;
+    private List<NewCreditDetailView> newCreditDetailViewList;
 
     private Date createDate;
     private Date modifyDate;
@@ -32,7 +32,7 @@ public class NewGuarantorDetailView implements Serializable {
         this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
-        this.creditTypeDetailViewList = new ArrayList<CreditTypeDetailView>();
+        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
     }
 
     public long getId() {
@@ -91,12 +91,12 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = tcgLgNo;
     }
 
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
+    public List<NewCreditDetailView> getNewCreditDetailViewList() {
+        return newCreditDetailViewList;
     }
 
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
+    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
+        this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
     public BigDecimal getTotalLimitGuaranteeAmount() {
@@ -121,8 +121,9 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("id", id)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
+                .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("isApproved", isApproved)
-                .append("creditTypeDetailViewList", creditTypeDetailViewList)
+                .append("newCreditDetailViewList", newCreditDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
