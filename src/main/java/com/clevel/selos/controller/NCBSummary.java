@@ -60,7 +60,7 @@ public class NCBSummary implements Serializable {
     private NCBInfoView ncbView;
     private List<Customer> customerView;
     private NCBInfoView ncbSummaryViewItem;
-    private User user;
+    //private User user;
     private Date date;
 
     public NCBSummary() {
@@ -75,7 +75,7 @@ public class NCBSummary implements Serializable {
 
         //session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
 
-        user = (User)session.getAttribute("user");
+        //user = (User)session.getAttribute("user");
         date = DateTime.now().toDate();
 
         if (session.getAttribute("workCaseId") != null) {
@@ -127,15 +127,10 @@ public class NCBSummary implements Serializable {
 
         if (ncbSummaryViewItem != null) {
             log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/NCBInfo.jsf");
-                HttpSession session = FacesUtil.getSession(true);
-                session.setAttribute("customerId", ncbSummaryViewItem.getCustomer().getId());    // set customerId to NCB information
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
+            FacesUtil.redirect("/site/NCBInfo.jsf");
+            return;
         }
     }
 
@@ -172,13 +167,13 @@ public class NCBSummary implements Serializable {
         this.ncbSummaryViewItem = ncbSummaryViewItem;
     }
 
-    public User getUser() {
+    /*public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public Date getDate() {
         return date;

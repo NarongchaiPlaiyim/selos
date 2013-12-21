@@ -1,17 +1,21 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for BSCFModelTransactionType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="BSCFModelTransactionType">
  *   &lt;complexContent>
@@ -31,18 +35,20 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BSCFModelTransactionType", propOrder = {
-        "id",
-        "asOfDate",
-        "processingDate",
-        "flagNonK",
-        "flagCalAvg",
-        "borrower",
-        "riskModel",
-        "score",
-        "attribute"
+    "id",
+    "asOfDate",
+    "processingDate",
+    "flagNonK",
+    "flagCalAvg",
+    "borrower",
+    "riskModel",
+    "score",
+    "attribute"
 })
 public class BSCFModelTransactionType {
 
@@ -61,9 +67,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -71,9 +79,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -81,9 +91,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the asOfDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getAsOfDate() {
         return asOfDate;
@@ -91,9 +103,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the asOfDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setAsOfDate(XMLGregorianCalendar value) {
         this.asOfDate = value;
@@ -101,9 +115,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the processingDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getProcessingDate() {
         return processingDate;
@@ -111,9 +127,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the processingDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setProcessingDate(XMLGregorianCalendar value) {
         this.processingDate = value;
@@ -121,9 +139,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the flagNonK property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getFlagNonK() {
         return flagNonK;
@@ -131,9 +151,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the flagNonK property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setFlagNonK(String value) {
         this.flagNonK = value;
@@ -141,9 +163,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the flagCalAvg property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getFlagCalAvg() {
         return flagCalAvg;
@@ -151,9 +175,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the flagCalAvg property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setFlagCalAvg(String value) {
         this.flagCalAvg = value;
@@ -161,9 +187,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the borrower property.
-     *
-     * @return possible object is
-     *         {@link BorrowerType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BorrowerType }
+     *     
      */
     public BorrowerType getBorrower() {
         return borrower;
@@ -171,9 +199,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the borrower property.
-     *
-     * @param value allowed object is
-     *              {@link BorrowerType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BorrowerType }
+     *     
      */
     public void setBorrower(BorrowerType value) {
         this.borrower = value;
@@ -181,9 +211,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the riskModel property.
-     *
-     * @return possible object is
-     *         {@link RiskModelType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link RiskModelType }
+     *     
      */
     public RiskModelType getRiskModel() {
         return riskModel;
@@ -191,9 +223,11 @@ public class BSCFModelTransactionType {
 
     /**
      * Sets the value of the riskModel property.
-     *
-     * @param value allowed object is
-     *              {@link RiskModelType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RiskModelType }
+     *     
      */
     public void setRiskModel(RiskModelType value) {
         this.riskModel = value;
@@ -201,23 +235,25 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
+     * 
+     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -228,23 +264,25 @@ public class BSCFModelTransactionType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

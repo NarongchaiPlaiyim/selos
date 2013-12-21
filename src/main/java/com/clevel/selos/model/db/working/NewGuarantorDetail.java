@@ -35,8 +35,8 @@ public class NewGuarantorDetail implements Serializable {
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
 
-    @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
-    private List<CreditTypeDetail> creditTypeDetailList;
+/*    @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
+    private List<CreditTypeDetail> creditTypeDetailList;*/
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -53,6 +53,9 @@ public class NewGuarantorDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+
+    @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
+    private List<NewGuarantorRelCredit> newGuarantorRelCreditList;
 
     public long getId() {
         return id;
@@ -134,12 +137,12 @@ public class NewGuarantorDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public List<CreditTypeDetail> getCreditTypeDetailList() {
-        return creditTypeDetailList;
+    public List<NewGuarantorRelCredit> getNewGuarantorRelCreditList() {
+        return newGuarantorRelCreditList;
     }
 
-    public void setCreditTypeDetailList(List<CreditTypeDetail> creditTypeDetailList) {
-        this.creditTypeDetailList = creditTypeDetailList;
+    public void setNewGuarantorRelCreditList(List<NewGuarantorRelCredit> newGuarantorRelCreditList) {
+        this.newGuarantorRelCreditList = newGuarantorRelCreditList;
     }
 
     @Override

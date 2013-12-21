@@ -1572,31 +1572,45 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="title">
+                            <td colspan="2">
                                 <!--<h:panelGroup rendered="#{not decision.roleUW}">-->
-                                    <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"/>
-                                    <p:inputText value="#{decision.decisionView.existingSMELimit}" styleClass="left">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                    </p:inputText>
-
-                                    <p:spacer width="10"/>
-
-                                    <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"/>
-                                    <p:inputText value="#{decision.decisionView.maximumSMELimit}" styleClass="left">
-                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                    </p:inputText>
+                                    <table border="0">
+                                        <tr>
+                                            <td>
+                                                <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}" styleClass="title"/>
+                                                <p:inputText value="#{decision.decisionView.existingSMELimit}" styleClass="left">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td style="padding-left: 10px">
+                                                <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}" styleClass="title"/>
+                                                <p:inputText value="#{decision.decisionView.maximumSMELimit}" styleClass="left">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </p:inputText>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 <!--</h:panelGroup>-->
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton id="btnAddApprovedCredit" value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeCredit}" process="@form"
-                                                 update=":proposeCreditDlgForm,:proposeCreditDialog" oncomplete="proposeCreditDlg.show()"
-                                                 styleClass="smaller"/>
+                                <p:commandButton id="btnAddApprovedCredit"
+                                                 value="#{msg.get('app.button.add')}"
+                                                 actionListener="#{decision.onAddAppProposeCredit()}"
+                                                 process="@form"
+                                                 update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
+                                                 oncomplete="handleDialogOpen(xhr, status, args, 'proposeCreditDlg')"
+                                                 styleClass="smaller">
+                                    <p:resetInput target=":proposeCreditDlgForm"/>
+                                </p:commandButton>
+
                                 <p:spacer width="10" height="0"/>
-                                <p:commandButton id="btnRetrievePricingFee" value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                                 actionListener="#{decision.onRetrievePricingFee()}" process="@this"
+
+                                <p:commandButton id="btnRetrievePricingFee"
+                                                 value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                                                 actionListener="#{decision.onRetrievePricingFee()}"
+                                                 process="@form"
                                                  update=":frmMain"
                                                  styleClass="largest"/>
                             </td>
@@ -1700,15 +1714,20 @@
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
 
-                                                        <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
-                                                                         action="#{decision.onEditAppProposeCredit()}" process="@this"
-                                                                         update=":proposeCreditDlgForm" oncomplete="proposeCreditDlg.show()">
+                                                        <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                         icon="ui-icon-pencil"
+                                                                         action="#{decision.onEditAppProposeCredit()}"
+                                                                         update=":proposeCreditDlgForm"
+                                                                         oncomplete="proposeCreditDlg.show()">
                                                             <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.selectedAppProposeCredit}"/>
+                                                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCredit}"/>
                                                         </p:commandButton>
 
-                                                        <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
+                                                        <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                                         icon="ui-icon-trash"
                                                                          oncomplete="confirmDeleteAppProposeCreditDlg.show()">
                                                             <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.selectedAppProposeCredit}"/>
+                                                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCredit}"/>
                                                         </p:commandButton>
                                                     </td>
                                                 </tr>
@@ -1959,7 +1978,7 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                         <td class="left" colspan="3">
-                                            <p:dataTable var="collCrdType" value="#{proposeColl.creditTypeDetailViewList}"
+                                            <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
                                                          paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 
@@ -1977,14 +1996,16 @@
                                                 <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                                 <p:column styleClass="left top">
-                                                    #{collCrdType.account}<br/>
+                                                    #{collCrdType.accountName}<br/>
+                                                    #{msg.get('app.decision.tb.td.label.accNo')} #{collCrdType.accountNumber},
+                                                    #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">#{collCrdType.type}</p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.productProgram}</p:column>
+                                                <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.creditFacility}</p:column>
+                                                <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
 
                                                 <p:column styleClass="right top">
                                                     <h:outputText value="#{collCrdType.limit}">
@@ -2151,23 +2172,30 @@
                             <td colspan="2">
                                 <!-- Approved Collateral Table -->
                                 <table border="0" style="width: 100%">
-                                <ui:repeat value="#{decision.decisionView.approveCollateralList}" var="proposeColl">
+                                <ui:repeat value="#{decision.decisionView.approveCollateralList}" var="proposeColl" varStatus="i">
                                 <tr>
                                     <td class="title left large">#{msg.get('app.decision.label.jobId')}</td>
                                     <td class="left">#{proposeColl.jobID}</td>
                                     <td class="right" colspan="2">
                                         <!-- Approved Collateral (Edit/Delete) Button -->
-                                        <p:commandButton id="btnEditApprovedCollateral" value="#{msg.get('app.button.edit')}"
-                                                         actionListener="#{decision.onEditAppProposeCollateral()}" process="@this"
-                                                         update=":collateralDlgForm" oncomplete="proposeCollateralDlg.show()"
-                                                         styleClass="smaller"/>
+                                        <p:commandButton id="btnEditApprovedCollateral"
+                                                         value="#{msg.get('app.button.edit')}"
+                                                         action="#{decision.onEditAppProposeCollateral()}"
+                                                         update=":collateralDlgForm"
+                                                         oncomplete="proposeCollateralDlg.show()"
+                                                         styleClass="smaller">
+                                            <f:setPropertyActionListener value="#{proposeColl}" target="#{decision.selectedAppProposeCollateral}"/>
+                                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCollateral}"/>
+                                        </p:commandButton>
 
                                         <p:spacer width="10" height=""/>
 
-                                        <p:commandButton id="btnDelApprovedCollateral" value="#{msg.get('app.button.delete')}"
+                                        <p:commandButton id="btnDelApprovedCollateral"
+                                                         value="#{msg.get('app.button.delete')}"
                                                          oncomplete="confirmDeleteAppProCollateralDlg.show()"
                                                          styleClass="smaller">
                                             <f:setPropertyActionListener value="#{proposeColl}" target="#{decision.selectedAppProposeCollateral}"/>
+                                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCollateral}"/>
                                         </p:commandButton>
                                     </td>
                                 </tr>
@@ -2196,6 +2224,27 @@
                                     <td class="left">#{proposeColl.typeOfUsage}</td>
                                 </tr>
                                 <tr>
+                                    <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
+                                    <td class="left" colspan="3">
+                                        <table border="0">
+                                            <tr>
+                                                <td>#{msg.get('app.decision.label.approved')}</td>
+                                                <td>
+                                                    <p:selectOneRadio value="#{proposeColl.approved}"
+                                                                      disabled="true">
+                                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title left large">#{msg.get('app.decision.label.UWRemark')}</td>
+                                    <td class="left" colspan="3">#{proposeColl.uwRemark}</td>
+                                </tr>
+                                <tr>
                                     <td class="title left large">#{msg.get('app.decision.label.mortgageCondition')}</td>
                                     <td class="left">#{proposeColl.mortgageCondition}</td>
                                     <td class="title left large">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
@@ -2204,7 +2253,7 @@
                                 <tr>
                                     <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                     <td class="left" colspan="3">
-                                        <p:dataTable var="collCrdType" value="#{proposeColl.creditTypeDetailViewList}"
+                                        <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
                                                      paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                      style="width: 100%">
 
@@ -2222,14 +2271,16 @@
                                             <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                             <p:column styleClass="left top">
-                                                #{collCrdType.account}<br/>
+                                                #{collCrdType.accountName}<br/>
+                                                #{msg.get('app.decision.tb.td.label.accNo')} #{collCrdType.accountNumber},
+                                                #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
                                             </p:column>
 
                                             <p:column styleClass="left top">#{collCrdType.type}</p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.productProgram}</p:column>
+                                            <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.creditFacility}</p:column>
+                                            <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
 
                                             <p:column styleClass="right top">
                                                 <h:outputText value="#{collCrdType.limit}">
@@ -2298,9 +2349,9 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                         <td class="left" colspan="3">
-                                            <p:selectOneRadio value="#{collHeader.insuranceCompany}">
-                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="2"/>
-                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
+                                            <p:selectOneRadio value="#{collHeader.insuranceCompany}" disabled="true">
+                                                <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
                                             </p:selectOneRadio>
                                         </td>
                                     </tr>
@@ -2428,11 +2479,11 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.creditTypeDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
                                                 <tr>
-                                                    <td class="left" style="border-style:none !important;">#{creditType.account}</td>
+                                                    <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram},&#160;
+                                                        #{creditType.productProgram.name},&#160;
                                                         <h:outputText value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>&#160;
@@ -2489,10 +2540,15 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton id="btnAddApprovedGuarantor" value="#{msg.get('app.button.add')}"
-                                                 actionListener="#{decision.onAddAppProposeGuarantor()}" process="@form"
-                                                 update=":guarantorDlgForm" oncomplete="proposeGuarantorDlg.show()"
-                                                 styleClass="smaller"/>
+                                <p:commandButton id="btnAddApprovedGuarantor"
+                                                 value="#{msg.get('app.button.add')}"
+                                                 actionListener="#{decision.onAddAppProposeGuarantor()}"
+                                                 process="@this"
+                                                 update=":guarantorDlgForm"
+                                                 oncomplete="proposeGuarantorDlg.show()"
+                                                 styleClass="smaller">
+                                    <p:resetInput target=":guarantorDlgForm"/>
+                                </p:commandButton>
                             </td>
                         </tr>
                         <tr>
@@ -2529,11 +2585,11 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.creditTypeDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
                                                 <tr>
-                                                    <td class="left" style="border-style:none !important;">#{creditType.account}</td>
+                                                    <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram},&#160;
+                                                        #{creditType.productProgram.name},&#160;
                                                         <h:outputText value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>&#160;
@@ -2560,15 +2616,21 @@
                                     </p:column>
 
                                     <p:column styleClass="center top">
-                                        <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
-                                                         action="#{decision.onEditAppProposeGuarantor()}" process="@this"
-                                                         update=":guarantorDlgForm" oncomplete="proposeGuarantorDlg.show()">
+                                        <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                         icon="ui-icon-pencil"
+                                                         action="#{decision.onEditAppProposeGuarantor()}"
+                                                         update=":guarantorDlgForm"
+                                                         oncomplete="proposeGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
+                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
+                                            <p:resetInput target=":guarantorDlgForm"/>
                                         </p:commandButton>
 
-                                        <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
+                                        <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                         icon="ui-icon-trash"
                                                          oncomplete="confirmDeleteAppGuarantorDlg.show()">
                                             <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
+                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
                                         </p:commandButton>
                                     </p:column>
 
@@ -2958,14 +3020,9 @@
 </ui:include>
 
 <!-- Propose Sub Collateral -->
-<p:dialog id="subCollateralInfoDialog"
-          header="Sub Collateral Information"
-          widgetVar="subCollateralInfoDlg"
-          height="500"
-          modal="true"
-          onShow="hideWindowsScrollBar()"
-          onHide="showWindowsScrollBar()">
-    <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
+<p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg" header="Sub Collateral Information"
+          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+    <ui:include src="dialog/decisionProposeSubCollDialog.xhtml"/>
 </p:dialog>
 
 <ui:include src="dialog/confirmDeleteDlg.xhtml">

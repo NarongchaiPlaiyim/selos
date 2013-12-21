@@ -43,8 +43,8 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td class="small">
-                                        <p:selectOneMenu styleClass="largest" size="1"
+                                    <td  style="width: 250px; max-width: 250px; min-width: 250px;">
+                                        <p:selectOneMenu size="1"  style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                             <f:selectItems value="#{custInfoSummary.customerEntityList}"
@@ -55,17 +55,17 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td>
-                                        <p:commandButton id="btnIndividual" value="Add Individual" styleClass="larger" process="@form"
+                                        <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
-                                                         action="#{custInfoSummary.onLinkToAddIndividual()}"/>
-                                        <p:commandButton id="btnJuristic" value="Add Juristic" styleClass="larger" process="@form"
+                                                         action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
+                                        <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
-                                                         action="#{custInfoSummary.onLinkToAddJuristic()}"/>
+                                                         action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;" colspan="2">
                                         #{msg.get('app.custInfoSummary.content.borrower')}
                                     </td>
                                 </tr>
@@ -201,7 +201,7 @@
                                             <p:column styleClass="center"> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}">
+                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                                 </p:commandButton>
@@ -214,7 +214,7 @@
                                 <!-- Guarantor -->
 
                                 <tr>
-                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;" colspan="2">
                                         #{msg.get('app.custInfoSummary.content.guarantor')}
                                     </td>
                                 </tr>
@@ -350,7 +350,7 @@
                                             <p:column> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}">
+                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item2}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
                                                 </p:commandButton>
@@ -369,7 +369,7 @@
                                 <!-- Related -->
 
                                 <tr>
-                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;" colspan="2">
                                         #{msg.get('app.custInfoSummary.content.related')}
                                     </td>
                                 </tr>
@@ -505,7 +505,7 @@
                                             <p:column> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
-                                                                 action="#{custInfoSummary.onLinkToEditRelated()}">
+                                                                 action="#{custInfoSummary.onLinkToEditRelated()}" onclick="blockUI.show()">
                                                     <f:setPropertyActionListener value="#{item3}"
                                                                                  target="#{custInfoSummary.selectedItemCustomerRelated}"/>
                                                 </p:commandButton>
@@ -533,12 +533,12 @@
                 <h:inputHidden id="pagename" value="mnuprescreen"/>
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
-        </h:form>
 
-        <!--<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-            LOADING<br />
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>-->
+            <p:blockUI block=":frmMain" widgetVar="blockUI">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+        </h:form>
 
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteGuarantorDialog"/>

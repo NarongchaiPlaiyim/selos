@@ -11,8 +11,16 @@ public class LoanPaymentDetailView implements Serializable {
     private Date firstPayDate;
     private int payDate;
 
-    public LoanPaymentDetailView(){}
+    public LoanPaymentDetailView(){
+        reset();
+    }
 
+
+    public void reset(){
+        this.payDate = 0;
+        this.signDate = new Date();
+        this.firstPayDate = new Date();
+    }
     public Date getSignDate() {
         return signDate;
     }

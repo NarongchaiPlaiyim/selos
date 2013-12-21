@@ -2,11 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
-import com.clevel.selos.model.view.insurance.model.SectionModel;
+import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.DateTimeUtil;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +14,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -58,19 +55,19 @@ public class InsuranceInfo implements Serializable {
 
     private void init(){
         insuranceInfoViewList = new ArrayList<InsuranceInfoView>();
-        SectionModel sectionModel = null;
-        List<SectionModel> sectionModelList = null;
+        InsuranceInfoSectionView sectionModel = null;
+        List<InsuranceInfoSectionView> sectionModelList = null;
 
         insuranceInfoView = new InsuranceInfoView();
         insuranceInfoView.setJobID("#001");
         insuranceInfoView.setPremium(new BigDecimal(9999999));
 
-        sectionModelList = new ArrayList<SectionModel>();
+        sectionModelList = new ArrayList<InsuranceInfoSectionView>();
 
-        sectionModel = new SectionModel();
+        sectionModel = new InsuranceInfoSectionView();
         sectionModel.getHeadColl().setTitleDeed("#0001");
         sectionModelList.add(sectionModel);
-        sectionModel = new SectionModel();
+        sectionModel = new InsuranceInfoSectionView();
         sectionModel.getHeadColl().setTitleDeed("#0002");
         sectionModelList.add(sectionModel);
 
@@ -83,12 +80,12 @@ public class InsuranceInfo implements Serializable {
         insuranceInfoView.setJobID("#002");
         insuranceInfoView.setPremium(new BigDecimal(6666666));
 
-        sectionModelList = new ArrayList<SectionModel>();
+        sectionModelList = new ArrayList<InsuranceInfoSectionView>();
 
-        sectionModel = new SectionModel();
+        sectionModel = new InsuranceInfoSectionView();
         sectionModel.getHeadColl().setTitleDeed("#0001");
         sectionModelList.add(sectionModel);
-        sectionModel = new SectionModel();
+        sectionModel = new InsuranceInfoSectionView();
         sectionModel.getHeadColl().setTitleDeed("#0002");
         sectionModelList.add(sectionModel);
 

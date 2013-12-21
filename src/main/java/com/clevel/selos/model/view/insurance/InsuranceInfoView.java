@@ -1,7 +1,5 @@
 package com.clevel.selos.model.view.insurance;
 
-import com.clevel.selos.model.view.insurance.model.SectionModel;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.List;
 public class InsuranceInfoView implements Serializable {
     private String jobID;
     private BigDecimal premium;
-    private List<SectionModel> sectionList;
+    private List<InsuranceInfoSectionView> sectionList;
 
     public InsuranceInfoView() {
         init();
@@ -18,7 +16,7 @@ public class InsuranceInfoView implements Serializable {
 
     private void init(){
         premium = BigDecimal.ZERO;
-        sectionList = new ArrayList<SectionModel>();
+        sectionList = new ArrayList<InsuranceInfoSectionView>();
     }
 
     public String getJobID() {
@@ -37,11 +35,11 @@ public class InsuranceInfoView implements Serializable {
         this.premium = premium;
     }
 
-    public List<SectionModel> getSectionList() {
+    public List<InsuranceInfoSectionView> getSectionList() {
         return sectionList;
     }
 
-    public void setSectionList(List<SectionModel> sectionList) {
+    public void setSectionList(List<InsuranceInfoSectionView> sectionList) {
         this.sectionList = sectionList;
     }
 }

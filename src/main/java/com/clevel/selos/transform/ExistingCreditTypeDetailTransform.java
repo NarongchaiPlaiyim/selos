@@ -34,7 +34,8 @@ public class ExistingCreditTypeDetailTransform extends Transform {
             }
 
             existingCreditTypeDetail.setSeq(existingCreditTypeDetailView.getSeq());
-            existingCreditTypeDetail.setNo(Util.returnNumForFlag(existingCreditTypeDetailView.isNoFlag()));
+            existingCreditTypeDetail.setNo(existingCreditTypeDetailView.getNo());
+            //existingCreditTypeDetail.setNo(Util.returnNumForFlag(existingCreditTypeDetailView.isNoFlag()));
             existingCreditTypeDetail.setType(existingCreditTypeDetailView.getType());
             existingCreditTypeDetail.setRequestType(existingCreditTypeDetailView.getRequestType());
             existingCreditTypeDetail.setAccountNumber(existingCreditTypeDetailView.getAccountNumber());
@@ -70,7 +71,8 @@ public class ExistingCreditTypeDetailTransform extends Transform {
             }
 
             existingCreditTypeDetail.setSeq(existingCreditTypeDetailView.getSeq());
-            existingCreditTypeDetail.setNo(Util.returnNumForFlag(existingCreditTypeDetailView.isNoFlag()));
+            existingCreditTypeDetail.setNoFlag(Util.returnNumForFlag(existingCreditTypeDetailView.isNoFlag()));
+            existingCreditTypeDetail.setNo(existingCreditTypeDetailView.getNo());
             existingCreditTypeDetail.setType(existingCreditTypeDetailView.getType());
             existingCreditTypeDetail.setRequestType(existingCreditTypeDetailView.getRequestType());
             existingCreditTypeDetail.setAccountNumber(existingCreditTypeDetailView.getAccountNumber());
@@ -100,7 +102,8 @@ public class ExistingCreditTypeDetailTransform extends Transform {
             existingCreditTypeDetailView.setModifyDate(existingCreditTypeDetail.getModifyDate());
             existingCreditTypeDetailView.setModifyBy(existingCreditTypeDetail.getModifyBy());
             existingCreditTypeDetailView.setSeq(existingCreditTypeDetail.getSeq());
-            existingCreditTypeDetailView.setNoFlag(Util.isTrue(existingCreditTypeDetail.getNo()));
+            existingCreditTypeDetailView.setNoFlag(Util.isTrue(existingCreditTypeDetail.getNoFlag()));
+            existingCreditTypeDetailView.setNo(existingCreditTypeDetail.getNo());
             existingCreditTypeDetailView.setType(existingCreditTypeDetail.getType());
             existingCreditTypeDetailView.setRequestType(existingCreditTypeDetail.getRequestType());
             existingCreditTypeDetailView.setAccountNumber(existingCreditTypeDetail.getAccountNumber());

@@ -119,6 +119,7 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.debug("BegetNCBForCalDBRBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
+        if(customers == null || customers.size() == 0) return ncbDetailViews;
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         List<NCBDetail> ncbDetails = new ArrayList<NCBDetail>();
         ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.in("ncb", ncbs)).list();
@@ -127,7 +128,6 @@ public class NCBInfoControl extends BusinessControl {
         AccountStatus accountStatus;
             for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 Customer customer = ncbDetail.getNcb().getCustomer();
-
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
                 if(accountStatus == null || accountType == null) break;
@@ -176,11 +176,14 @@ public class NCBInfoControl extends BusinessControl {
     }
 
     public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){
+        log.debug("getNCBInfoViewByWorkCaseId ::: workCaseId : {}", workCaseId);
         List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         if (customerList != null && customerList.size() > 0) {
+            log.debug("getNCBInfoViewByWorkCaseId ::: customerList.size : {}", customerList.size());
             for(Customer cus : customerList){
                 if(cus.getNcb() != null){
+                    log.debug("getNCBInfoViewByWorkCaseId ::: ncb : {}", cus.getNcb());
                     NCBInfoView ncbView = ncbTransform.transformToView(cus.getNcb());
                     ncbInfoViewList.add(ncbView);
                 }

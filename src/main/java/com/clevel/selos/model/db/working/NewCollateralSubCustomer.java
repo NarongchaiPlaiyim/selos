@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_new_collateral_sub_detail")
+@Table(name = "wrk_new_collateral_customer")
 public class NewCollateralSubCustomer implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_CUS_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_CUS_ID", allocationSize = 1)
@@ -15,7 +15,7 @@ public class NewCollateralSubCustomer implements Serializable {
     @JoinColumn(name = "new_collateral_sub_id")
     private NewCollateralSubDetail newCollateralSubDetail;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

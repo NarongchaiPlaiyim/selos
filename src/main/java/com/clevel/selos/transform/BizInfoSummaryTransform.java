@@ -30,6 +30,7 @@ public class BizInfoSummaryTransform extends Transform {
 
     public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView) {
         log.info("find transformToModel begin");
+        log.info("BizInfoSummaryView : {}", bizInfoSummaryView);
         BizInfoSummary bizInfoSummary;
 
         bizInfoSummary = new BizInfoSummary();
@@ -56,27 +57,27 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setAddressBuilding(bizInfoSummaryView.getAddressBuilding());
         bizInfoSummary.setAddressStreet(bizInfoSummaryView.getAddressStreet());
 
-        log.info("find transformToModel province" + bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
+//        log.info("find transformToModel province" + bizInfoSummaryView.getProvince().getCode());
 
-        if(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode() != 0){
-            province = provinceDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince().getCode());
+        if(bizInfoSummaryView.getProvince()!=null && bizInfoSummaryView.getProvince().getCode() != 0){
+            province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
             log.info("find transformToModel findById  is " + province.toString());
             bizInfoSummary.setProvince(province);
         }else{
             bizInfoSummary.setProvince(null);
         }
 
-        log.info("find transformToModel district" + bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+//        log.info("find transformToModel district" + bizInfoSummaryView.getDistrict().getId());
 
-        if(bizInfoSummaryView.getSubDistrict().getDistrict()!=null && bizInfoSummaryView.getSubDistrict().getDistrict().getId() != 0){
-            district = districtDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+        if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
+            district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
             log.info("find transformToModel findById  is " + district.toString());
             bizInfoSummary.setDistrict(district);
         }else{
             bizInfoSummary.setDistrict(null);
         }
 
-        log.info("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
+//        log.info("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
         if(bizInfoSummaryView.getSubDistrict()!=null && bizInfoSummaryView.getSubDistrict().getCode() != 0){
             subDistrict = subDistrictDAO.findById(bizInfoSummaryView.getSubDistrict().getCode());
             log.info("find transformToModel findById  is " + subDistrict.toString());
@@ -85,7 +86,7 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummary.setSubDistrict(null);
         }
 
-        log.info("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
+//        log.info("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
         if(bizInfoSummaryView.getCountry()!=null && bizInfoSummaryView.getCountry().getId() != 0){
             country = countryDAO.findById(bizInfoSummaryView.getCountry().getId());
             log.info("find transformToModel findById  is " + country.toString());
@@ -253,11 +254,29 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setAddressBuilding(bizInfoSummary.getAddressBuilding());
         bizInfoSummaryView.setAddressStreet(bizInfoSummary.getAddressStreet());
 
+        if(bizInfoSummary.getProvince() != null){
+            bizInfoSummaryView.setProvince(bizInfoSummary.getProvince());
+        } else {
+            bizInfoSummaryView.setProvince(new Province());
+        }
 
-        bizInfoSummaryView.setProvince(bizInfoSummary.getSubDistrict().getDistrict().getProvince());
-        bizInfoSummaryView.setDistrict(bizInfoSummary.getSubDistrict().getDistrict());
-        bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
-        bizInfoSummaryView.setCountry(bizInfoSummary.getCountry());
+        if(bizInfoSummary.getDistrict() != null){
+            bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
+        } else {
+            bizInfoSummaryView.setDistrict(new District());
+        }
+
+        if(bizInfoSummary.getSubDistrict() != null){
+            bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
+        } else {
+            bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        }
+
+        if(bizInfoSummary.getCountry() != null){
+            bizInfoSummaryView.setCountry(bizInfoSummary.getCountry());
+        } else {
+            bizInfoSummaryView.setCountry(new Country());
+        }
         bizInfoSummaryView.setAddressEng(bizInfoSummary.getAddressEng());
 
         bizInfoSummaryView.setPostCode(bizInfoSummary.getPostCode());
@@ -266,7 +285,12 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setRegistrationDate(bizInfoSummary.getRegistrationDate());
         bizInfoSummaryView.setEstablishDate(bizInfoSummary.getEstablishDate());
-        bizInfoSummaryView.setReferredExperience(bizInfoSummary.getReferredExperience());
+
+        if(bizInfoSummary.getReferredExperience() != null){
+            bizInfoSummaryView.setReferredExperience(bizInfoSummary.getReferredExperience());
+        } else {
+            bizInfoSummaryView.setReferredExperience(new ReferredExperience());
+        }
 
         bizInfoSummaryView.setCirculationAmount(bizInfoSummary.getCirculationAmount());
         bizInfoSummaryView.setCirculationPercentage(bizInfoSummary.getCirculationPercentage());

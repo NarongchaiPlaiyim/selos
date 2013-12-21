@@ -276,6 +276,15 @@ public class BankStmtControl extends BusinessControl {
                                        BankAccountType savingAccType, BankAccountType currentAccType, BankAccountType othFDType, BankAccountType othBOEType) {
         log.debug("getAvgMaxBalance() bankAccTypeFromBankStmt: {}, maxBalance1: {}, maxBalance2: {}, maxBalance3: {}, savingAccType: {}, currentAccType: {}, othFDType: {}, othBOEType: {}",
                 bankAccTypeFromBankStmt, maxBalance1, maxBalance2, maxBalance3, savingAccType, currentAccType, othFDType, othBOEType);
+        if(maxBalance1 == null){
+            maxBalance1 = BigDecimal.ZERO;
+        }
+        if(maxBalance2 == null){
+            maxBalance2 = BigDecimal.ZERO;
+        }
+        if(maxBalance3 == null){
+            maxBalance3 = BigDecimal.ZERO;
+        }
         // if(Account Type = 'Saving Account', 'Current Account', Other: 'Fixed Deposit', 'Bill of Exchange') -> [maxBalance1 + maxBalance2 + maxBalance3] / 3
         if (savingAccType != null && savingAccType.getId() == bankAccTypeFromBankStmt.getId()) {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);

@@ -59,6 +59,7 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
+
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
         DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
@@ -258,12 +259,13 @@ public class DBRControl extends BusinessControl {
         int roleId = getCurrentUser().getRole().getId();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         //todo non confirm
+        if(newCreditFacility != null){
+            totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
+            if(roleId == RoleUser.UW.getValue()){
 
-        totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
-        if(roleId == RoleUser.UW.getValue()){
+            }else if(roleId == RoleUser.BDM.getValue()){
 
-        }else if(roleId == RoleUser.BDM.getValue()){
-
+            }
         }
         BigDecimal debt = BigDecimal.ZERO;
         debt = Util.add(totalMonthDebtBorrower, totalMonthDebtRelated);

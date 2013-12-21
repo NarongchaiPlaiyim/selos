@@ -12,6 +12,13 @@ import java.util.List;
 
 public class NewCreditDetailView implements Serializable {
     private long id;
+    private boolean noFlag;
+    private BigDecimal guaranteeAmount;
+    private String accountName;
+    private String accountNumber;
+    private String accountSuf;
+    private int useCount;
+    private int seq;
     private int requestType;
     private int isRefinance;
     private ProductProgram  productProgram;
@@ -22,10 +29,8 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal limit;
     private BigDecimal PCEPercent;
     private BigDecimal PCEAmount;
-    private int reducePriceFlag;
-    private int reduceFrontEndFee;
-    private boolean reduceFlag;
-    private boolean reduceFrontEndFlag;
+    private boolean reducePriceFlag;
+    private boolean reduceFrontEndFee;
     private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
@@ -44,7 +49,6 @@ public class NewCreditDetailView implements Serializable {
     private Disbursement disbursement;
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
-    private int seq;
     private int isApproved;
     private BigDecimal installment;
     private BigDecimal outstanding;
@@ -55,6 +59,13 @@ public class NewCreditDetailView implements Serializable {
     }
 
     public void reset(){
+        this.noFlag=false;
+        this.guaranteeAmount = BigDecimal.ZERO;
+        this.accountName = "";
+        this.accountNumber = "";
+        this.accountSuf = "";
+        this.useCount = 0;
+        this.seq = 0;
         this.requestType=1;
         this.isRefinance=1;
         this.productProgram = new ProductProgram();
@@ -69,8 +80,8 @@ public class NewCreditDetailView implements Serializable {
         this.PCEAmount = BigDecimal.ZERO;
         this.installment=BigDecimal.ZERO;
         this.outstanding=BigDecimal.ZERO;
-        this.reducePriceFlag = 0;
-        this.reduceFrontEndFee = 0;
+        this.reducePriceFlag = false;
+        this.reduceFrontEndFee = false;
         this.frontEndFee = BigDecimal.ZERO;
         this.remark = "";
         this.holdLimitAmount = BigDecimal.ZERO;
@@ -85,6 +96,7 @@ public class NewCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
+
     }
 
     public long getId() {
@@ -183,40 +195,20 @@ public class NewCreditDetailView implements Serializable {
         this.PCEAmount = PCEAmount;
     }
 
-    public int getReducePriceFlag() {
-        if(reduceFlag==true){
-            this.reducePriceFlag=1;
-        }else{
-            this.reducePriceFlag=0;
-        }
+    public boolean isReducePriceFlag() {
         return reducePriceFlag;
     }
 
-    public void setReducePriceFlag(int reducePriceFlag) {
-        if(reduceFlag==true){
-            this.reducePriceFlag=1;
-        }else{
-            this.reducePriceFlag=0;
-        }
-//        this.reducePriceFlag = reducePriceFlag;
+    public void setReducePriceFlag(boolean reducePriceFlag) {
+        this.reducePriceFlag = reducePriceFlag;
     }
 
-    public int getReduceFrontEndFee() {
-        if(reduceFrontEndFlag==true){
-            this.reduceFrontEndFee=1;
-        }else{
-            this.reduceFrontEndFee=0;
-        }
+    public boolean isReduceFrontEndFee() {
         return reduceFrontEndFee;
     }
 
-    public void setReduceFrontEndFee(int reduceFrontEndFee) {
-        if(reduceFrontEndFlag==true){
-            this.reduceFrontEndFee=1;
-        }else{
-            this.reduceFrontEndFee=0;
-        }
-//        this.reduceFrontEndFee = reduceFrontEndFee;
+    public void setReduceFrontEndFee(boolean reduceFrontEndFee) {
+        this.reduceFrontEndFee = reduceFrontEndFee;
     }
 
     public String getStandardPrice() {
@@ -331,32 +323,6 @@ public class NewCreditDetailView implements Serializable {
         this.purpose = purpose;
     }
 
-    public boolean isReduceFlag() {
-        if(this.reducePriceFlag==1 ){
-            reduceFlag =  true;
-        }else if(this.reducePriceFlag==0 ){
-            reduceFlag = false;
-        }
-        return reduceFlag;
-    }
-
-    public void setReduceFlag(boolean reduceFlag) {
-        this.reduceFlag = reduceFlag;
-    }
-
-    public boolean isReduceFrontEndFlag() {
-        if(this.reduceFrontEndFee==1 ){
-            reduceFrontEndFlag =  true;
-        }else if(this.reduceFrontEndFee==0 ){
-            reduceFrontEndFlag = false;
-        }
-        return reduceFrontEndFlag;
-    }
-
-    public void setReduceFrontEndFlag(boolean reduceFrontEndFlag) {
-        this.reduceFrontEndFlag = reduceFrontEndFlag;
-    }
-
     public BaseRate getStandardBasePrice() {
         return standardBasePrice;
     }
@@ -421,6 +387,54 @@ public class NewCreditDetailView implements Serializable {
         this.outstanding = outstanding;
     }
 
+    public boolean isNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -436,8 +450,6 @@ public class NewCreditDetailView implements Serializable {
                 .append("PCEAmount", PCEAmount)
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
-                .append("reduceFlag", reduceFlag)
-                .append("reduceFrontEndFlag", reduceFrontEndFlag)
                 .append("standardBasePrice", standardBasePrice)
                 .append("standardPrice", standardPrice)
                 .append("standardInterest", standardInterest)

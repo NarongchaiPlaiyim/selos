@@ -7,7 +7,9 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>SE-LOS : Open Account</title>
+    <title>SE-LOS : Insurance Information</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    
     <h:outputStylesheet name="css/style.css" />
     <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
@@ -28,7 +30,7 @@
             <ui:include src="include/menubar.xhtml"/>
             <!-- End Menu -->
             <div id="content_container">
-                <div id="content_name">#{'Insurance Information'}</div>
+                <div id="content_name">#{msg.get('app.insurance.header')}</div>
                 <div id="content">
                     <div id="content_info">
                         <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
@@ -38,7 +40,7 @@
                     <div id="content_form">
 
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" border="0">
 
                             <tr>
                                 <td class="title" style="width: 150px;">
@@ -80,12 +82,12 @@
                                                     <table border="0" >
                                                         <ui:repeat value="#{insuranceList.sectionList}" var="sectionList" varStatus="rowSectionIndex">
                                                             <tr>
-                                                                <td class="title" style="width: 300px; max-width: 300px; min-width: 300px;">
-                                                                </td>
+                                                            <td class="title" style="width: 300px; max-width: 300px; min-width: 300px;">
+                                                            </td>
 
-                                                                <td class="left" style="width: 600px; max-width: 600px; min-width: 600px;" >
-                                                                </td>
-                                                            </tr>
+                                                            <td class="left" style="width: 600px; max-width: 600px; min-width: 600px;" >
+                                                            </td>
+                                                        </tr>
 
                                                             <tr>
                                                                 <td class="title">

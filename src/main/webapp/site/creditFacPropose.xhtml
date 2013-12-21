@@ -552,7 +552,8 @@
 
 <tr>
 <td style="background-color:#ffffff">
- <p:panel>
+
+
 <table class="table_content"  style="width:100%">
 
 <thead>
@@ -701,8 +702,8 @@
             <table class="table_noborder" >
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.requestType')}</td>
-                    <td>#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
-                            proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}</td>
+                    <td>#{proposeCredit.requestType == 1 ? msg.get('app.label.new') :
+                            proposeCredit.requestType == 2 ? msg.get('app.label.change') : ''}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.refinance')}</td>
                     <td>#{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
                             proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}</td>
@@ -740,7 +741,8 @@
 </tbody>
 
 </table>
- </p:panel>
+
+
 </td>
 </tr>
 
@@ -1210,9 +1212,9 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3">
-        <p:dataTable value="#{newCollateralInfoView.creditTypeDetailViewList}"
+        <p:dataTable value="#{newCollateralInfoView.newCreditDetailViewList}"
                      var="creditTypeDetailItem"
-                     rowKey="#{creditTypeDetailItem.CreditTypeDetailView}"
+                     rowKey="#{creditTypeDetailItem.NewCreditDetailView}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
@@ -1245,11 +1247,11 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.productProgram}"/>
+                <h:outputText value="#{creditTypeDetailItem.productProgram.name}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.creditFacility}"/>
+                <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1410,10 +1412,10 @@
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <!--<ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
+                    <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
                                var="relatedWith"  varStatus="c">
-                        <h:outputText value="#{relatedWith.}"/><br/>
-                    </ui:repeat>-->
+                        <h:outputText value="#{not empty newSubCollateralDetailView.relatedWithList and fn:length(newSubCollateralDetailView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
+                    </ui:repeat>
                 </p:column>
                 <p:column styleClass="right">
                     <h:outputText value="#{newSubCollateralDetailView.appraisalValue}">
@@ -1501,8 +1503,8 @@
                             <h:outputText value="#{g.index+1}"/>
                         </td>
 
-                        <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{newGuarantorDetailView.guarantorName.firstNameTh}  #{newGuarantorDetailView.guarantorName.lastNameTh}"/>
+                        <td class="center top" style="width: 200px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
+                            <h:outputText value="#{newGuarantorDetailView.guarantorName.firstNameTh} #{newGuarantorDetailView.guarantorName.lastNameTh}"/>
                         </td>
 
                         <td class="center top" style="width: 100px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1510,26 +1512,26 @@
                         </td>
 
                         <td class="center top" style="width: 500px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <ui:repeat value="#{newGuarantorDetailView.creditTypeDetailViewList}"
-                                       var="creditTypeDetail"  varStatus="c">
+                            <ui:repeat value="#{newGuarantorDetailView.newCreditDetailViewList}"
+                                       var="newCreditDetail"  varStatus="c">
                                 <table class="table_noborder">
                                      <tr>
                                          <td  style="width: 100px;" class="left top">
-                                             <h:outputText value="#{creditTypeDetail.accountName}"/><br/>
-                                             <h:outputText value="#{creditTypeDetail.accountNumber}  #{creditTypeDetail.accountSuf}"/>
+                                             <h:outputText value="#{newCreditDetail.accountName}"/><br/>
+                                             <h:outputText value="#{newCreditDetail.accountNumber}  #{newCreditDetail.accountSuf}"/>
                                          </td>
                                          <td  style="width: 100px;" class="center top">
-                                             <h:outputText value="#{creditTypeDetail.productProgram}"/><br/>
-                                             <h:outputText value="#{creditTypeDetail.creditFacility}"/>
+                                             <h:outputText value="#{newCreditDetail.productProgram.name}"/><br/>
+                                             <h:outputText value="#{newCreditDetail.creditType.name}"/>
                                          </td>
                                          <td  style="width: 150px;" class="center top">
-                                             <h:outputText value="#{creditTypeDetail.limit}">
+                                             <h:outputText value="#{newCreditDetail.limit}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                              </h:outputText>
                                          </td>
                                          <td  style="width: 150px;" class="center top">
                                              <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/><br/>
-                                             <h:outputText value="#{creditTypeDetail.guaranteeAmount}">
+                                             <h:outputText value="#{newCreditDetail.guaranteeAmount}">
                                                  <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                              </h:outputText>
                                          </td>

@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
@@ -24,7 +25,7 @@ public class ExistingCreditDetailTransform extends Transform {
         for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
             existingCreditDetail = new ExistingCreditDetail();
             if (existingCreditDetailView.getId() != 0) {
-                existingCreditDetail.setId(existingCreditDetailView.getId());
+                //existingCreditDetail.setId(existingCreditDetailView.getId());
                 existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
                 existingCreditDetail.setCreateBy(existingCreditDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -32,6 +33,7 @@ public class ExistingCreditDetailTransform extends Transform {
                 existingCreditDetail.setCreateBy(user);
             }
 
+            existingCreditDetail.setNo(existingCreditDetailView.getNo());
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
@@ -43,8 +45,10 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
             existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
-            existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
-            existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
+            existingCreditDetail.setExistAccountStatus(existingCreditDetailView.getExistAccountStatus());
+            existingCreditDetail.setExistProductProgram(existingCreditDetailView.getExistProductProgram());
+            existingCreditDetail.setExistCreditType(existingCreditDetailView.getExistCreditType());
+            existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
             existingCreditDetail.setCreditType(existingCreditDetailView.getCreditType());
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
             existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
@@ -54,7 +58,6 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setPcePercent(existingCreditDetailView.getPcePercent());
             existingCreditDetail.setProductCode(existingCreditDetailView.getProductCode());
             existingCreditDetail.setProjectCode(existingCreditDetailView.getProjectCode());
-            existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
             existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
             existingCreditDetail.setExistingCreditFacility(existingCreditFacility);
 
@@ -71,8 +74,8 @@ public class ExistingCreditDetailTransform extends Transform {
 
         for (ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
             existingCreditDetailView = new ExistingCreditDetailView();
-
             existingCreditDetailView.setId(existingCreditDetail.getId());
+            existingCreditDetailView.setNo(existingCreditDetail.getNo());
             existingCreditDetailView.setBorrowerType(existingCreditDetail.getBorrowerType());
             existingCreditDetailView.setExistingCreditFrom(existingCreditDetail.getExistingCreditFrom());
             existingCreditDetailView.setSeq(existingCreditDetail.getSeq());
@@ -81,21 +84,24 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setCreateBy(existingCreditDetail.getCreateBy());
             existingCreditDetailView.setModifyDate(existingCreditDetail.getModifyDate());
             existingCreditDetailView.setModifyBy(existingCreditDetail.getModifyBy());
-            existingCreditDetailView.setSeq(existingCreditDetail.getSeq());
             existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
             existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
             existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
+            existingCreditDetailView.setExistAccountStatus(existingCreditDetail.getExistAccountStatus());
+            existingCreditDetailView.setExistProductProgram(existingCreditDetail.getExistProductProgram());
+            existingCreditDetailView.setExistCreditType(existingCreditDetail.getExistCreditType());
+            existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             existingCreditDetailView.setCreditType(existingCreditDetail.getCreditType());
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             existingCreditDetailView.setInstallment(existingCreditDetail.getInstallment());
             existingCreditDetailView.setLimit(existingCreditDetail.getLimit());
-            //existingCreditDetailView.setLoanPurpose(existingCreditDetail.getLoanPurpose());
             existingCreditDetailView.setOutstanding(existingCreditDetail.getOutstanding());
-            //existingCreditDetailView.setPCEAmount(existingCreditDetail.getPceAmount());
             existingCreditDetailView.setPceLimit(existingCreditDetail.getPceLimit());
             existingCreditDetailView.setPcePercent(existingCreditDetail.getPcePercent());
             existingCreditDetailView.setProductCode(existingCreditDetail.getProductCode());
             existingCreditDetailView.setProjectCode(existingCreditDetail.getProjectCode());
+            existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
+
             /*existingCreditDetailView.setPurpose(existingCreditDetail.getPurpose());
             existingCreditDetailView.setReduceFrontEndFee(existingCreditDetail.getReduceFrontEndFee());
             existingCreditDetailView.setReducePriceFlag(existingCreditDetail.getReducePriceFlag());
@@ -106,7 +112,6 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setSuggestInterest(existingCreditDetail.getSuggestInterest());
             existingCreditDetailView.setSuggestBasePrice(existingCreditDetail.getSuggestBasePrice());
             existingCreditDetailView.setSuggestPrice(existingCreditDetail.getSuggestPrice());*/
-            existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
 
             existingCreditDetailViewList.add(existingCreditDetailView);
         }

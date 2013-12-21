@@ -130,32 +130,32 @@ public class AccountInfo implements Serializable {
         }
 
         //Account Name
-        accountNameViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList();
-        if(accountNameViewList.size() > 0){
-            stringBuilder = new StringBuilder();
-            for (AccountNameView accountNameView : accountNameViewList){
-                stringBuilder.append(", ");
-                stringBuilder.append(accountNameView.getName());
-            }
-            String show = stringBuilder.toString();
-            if(show.length() > 1){
-                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(show.substring(2, show.length()));
-            } else {
-                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
-            }
-        } else {
-            accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
-        }
-
-        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
-        if(0 != id){
-            for (BankAccountType accountType : accountTypeList){
-                if (accountType.getId() == id){
-                    accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().setName(accountType.getName());
-                    break;
-                }
-            }
-        }
+//        accountNameViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList();
+//        if(accountNameViewList.size() > 0){
+//            stringBuilder = new StringBuilder();
+//            for (AccountNameView accountNameView : accountNameViewList){
+//                stringBuilder.append(", ");
+//                stringBuilder.append(accountNameView.getName());
+//            }
+//            String show = stringBuilder.toString();
+//            if(show.length() > 1){
+//                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(show.substring(2, show.length()));
+//            } else {
+//                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
+//            }
+//        } else {
+//            accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
+//        }
+//
+//        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
+//        if(0 != id){
+//            for (BankAccountType accountType : accountTypeList){
+//                if (accountType.getId() == id){
+//                    accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().setName(accountType.getName());
+//                    break;
+//                }
+//            }
+//        }
 
         //Product Type
         id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();

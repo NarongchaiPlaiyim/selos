@@ -19,7 +19,7 @@ public class NewCollateralHeadDetailView {
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
     private CollateralType collTypePercentLTV;
-    private PotentialCollateral   potentialCollateral ;
+    private PotentialCollateral potentialCollateral ;
 
     private BigDecimal existingCredit;
     private int insuranceCompany;

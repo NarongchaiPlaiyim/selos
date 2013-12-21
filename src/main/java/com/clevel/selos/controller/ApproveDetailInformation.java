@@ -6,6 +6,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name = "updateApproveDetail")
-public class UpdateApproveDetail implements Serializable {
+@ManagedBean(name = "approveDetailInformation")
+public class ApproveDetailInformation implements Serializable {
 
     @Inject
     @SELOS
@@ -85,10 +86,10 @@ public class UpdateApproveDetail implements Serializable {
         loanPaymentDetailView = new LoanPaymentDetailView();
         try{
             loanPaymentDetailView.setPayDate(3);
-            loanPaymentDetailView.setFirstPayDate(null);
+
             loanPaymentDetailView.setSignDate(new Date());
             FollowUpConditionView followUpConditionView = new FollowUpConditionView();
-            followUpConditionView.setCondition("ให้ Operation");
+            followUpConditionView.setCondition("Operation");
             followUpConditionView.setDetailOfFollowUp("dfdfdfdfdf");
             followUpConditionView.setDateOfFollowUp(new Date());
             followUpConditionViews.add(followUpConditionView);
@@ -127,13 +128,10 @@ public class UpdateApproveDetail implements Serializable {
     return result;
     }
 
-    public List<String> getStringList(){
-        List<String> result = new ArrayList<String>();
-        for(int i = 0; i <5; i++){
-            result.add(String.valueOf(i));
-        }
-        return result;
+    public String getCurrentDateDDMMYY(){
+        return  DateTimeUtil.convertToStringDDMMYYYY(new Date());
     }
+
 
     public long getWorkCaseId() {
         return workCaseId;

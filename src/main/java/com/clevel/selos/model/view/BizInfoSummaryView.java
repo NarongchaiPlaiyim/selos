@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -479,5 +481,63 @@ public class BizInfoSummaryView implements Serializable {
 
     public void setBizInfoDetailViewList(List<BizInfoDetailView> bizInfoDetailViewList) {
         this.bizInfoDetailViewList = bizInfoDetailViewList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("bizLocationName", bizLocationName)
+                .append("isRental", isRental)
+                .append("ownerName", ownerName)
+                .append("expiryDate", expiryDate)
+                .append("addressNo", addressNo)
+                .append("addressMoo", addressMoo)
+                .append("addressBuilding", addressBuilding)
+                .append("addressStreet", addressStreet)
+                .append("province", province)
+                .append("district", district)
+                .append("subDistrict", subDistrict)
+                .append("postCode", postCode)
+                .append("country", country)
+                .append("addressEng", addressEng)
+                .append("phoneNo", phoneNo)
+                .append("extension", extension)
+                .append("registrationDate", registrationDate)
+                .append("establishDate", establishDate)
+                .append("referredExperience", referredExperience)
+                .append("bizInterviewInfo", bizInterviewInfo)
+                .append("circulationAmount", circulationAmount)
+                .append("circulationPercentage", circulationPercentage)
+                .append("productionCostsAmount", productionCostsAmount)
+                .append("productionCostsPercentage", productionCostsPercentage)
+                .append("profitMarginAmount", profitMarginAmount)
+                .append("profitMarginPercentage", profitMarginPercentage)
+                .append("operatingExpenseAmount", operatingExpenseAmount)
+                .append("operatingExpensePercentage", operatingExpensePercentage)
+                .append("earningsBeforeTaxAmount", earningsBeforeTaxAmount)
+                .append("earningsBeforeTaxPercentage", earningsBeforeTaxPercentage)
+                .append("reduceInterestAmount", reduceInterestAmount)
+                .append("reduceInterestPercentage", reduceInterestPercentage)
+                .append("reduceTaxAmount", reduceTaxAmount)
+                .append("reduceTaxPercentage", reduceTaxPercentage)
+                .append("netMarginAmount", netMarginAmount)
+                .append("netMarginPercentage", netMarginPercentage)
+                .append("netFixAsset", netFixAsset)
+                .append("noOfEmployee", noOfEmployee)
+                .append("sumIncomeAmount", sumIncomeAmount)
+                .append("sumIncomePercent", sumIncomePercent)
+                .append("weightIncomeFactor", weightIncomeFactor)
+                .append("sumWeightInterviewedIncomeFactorPercent", sumWeightInterviewedIncomeFactorPercent)
+                .append("sumWeightAR", sumWeightAR)
+                .append("sumWeightAP", sumWeightAP)
+                .append("sumWeightINV", sumWeightINV)
+                .append("workCase", workCase)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("bizInfoDetailViewList", bizInfoDetailViewList)
+                .toString();
     }
 }

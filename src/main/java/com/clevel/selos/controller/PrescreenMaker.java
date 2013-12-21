@@ -12,6 +12,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -847,51 +848,54 @@ public class PrescreenMaker implements Serializable {
         modeForButton = ModeForButton.EDIT;
 
         if(borrowerInfo.getRelation().getId() == 1){
-            relationList = prescreenBusinessControl.getRelationByStepId(1001);
+            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
         } else {
-            relationList = prescreenBusinessControl.getRelationByStepId(1003);
+            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
         }
 
         if(stepId == 1001){
-            spouseRelationList = prescreenBusinessControl.getRelationByStepId(1001);
+            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
         } else {
             if(borrowerInfo.getSpouse() != null){
                 if(borrowerInfo.getSpouse().getId() != 0){
                     if(borrowerInfo.getSpouse().getRelation() != null){
                         if(borrowerInfo.getSpouse().getRelation().getId() == 1){
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(1001);
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
                         } else {
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(1003);
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
                         }
                     }
 
                 }else{
-                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(1003);
+                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
                 }
             } else {
-                spouseRelationList = prescreenBusinessControl.getRelationByStepId(1003);
+                spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
             }
         }
-
 
         documentTypeList = documentTypeDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
         titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
         onChangeRelation();
-        if(borrowerInfo.getCustomerEntity().getId() == 1){
+
+        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
             onChangeSpouseRelation();
         }
 
-        //TODO Get district list, subDistrict
+        //-- To Get district list, subDistrict
         onChangeProvinceBorrower();
         onChangeDistrictBorrower();
 
-        //TODO Get spouse district, subDistrict List
+        //-- To Get spouse district, subDistrict List
         if(borrowerInfo.getSpouse() != null){
             if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() == 2){
-                onChangeProvinceSpouse();
-                onChangeDistrictSpouse();
+                MaritalStatus maritalStatus = maritalStatusDAO.findById(borrowerInfo.getMaritalStatus().getId());
+                if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+                    onChangeProvinceSpouse();
+                    onChangeDistrictSpouse();
+                }
             }
         }
 
@@ -901,7 +905,7 @@ public class PrescreenMaker implements Serializable {
             enableCitizenId = false;
             enableTMBCustomerId = false;
         } else {
-            if(stepId == 1003 && borrowerInfo.getRelation().getId() == 1){
+            if(stepId == StepValue.PRESCREEN_MAKER.value() && borrowerInfo.getRelation().getId() == 1){
                 enableDocumentType = false;
                 enableCitizenId = false;
                 enableTMBCustomerId = false;
@@ -1116,6 +1120,7 @@ public class PrescreenMaker implements Serializable {
                         if(borrowerInfo.getRelation().getId() == 1){
                             //Borrower
                             borrowerInfo.setListName("BORROWER");
+                            borrowerInfo.setSubIndex(borrowerInfoViewList.size());
                             borrowerInfo.setIsSpouse(0);
                             //TODO assign caseBorrowerType
                             borrowerInfoViewList.add(borrowerInfo);

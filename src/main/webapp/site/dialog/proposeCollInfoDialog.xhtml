@@ -103,19 +103,19 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3" style="width:600px;">
-        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralInfoView.creditTypeDetailViewList}">
+        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralInfoView.newCreditDetailViewList}">
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:20px;"/>
-                    <p:column style="width:100px;"
+                    <p:column style="width:20px;padding: 5px 10px !important;"/>
+                    <p:column style="width:100px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
-                    <p:column style="width:100px;"
+                    <p:column style="width:100px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
-                    <p:column style="width:100px;"
+                    <p:column style="width:100px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
-                    <p:column style="width:100px;"
+                    <p:column style="width:100px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
-                    <p:column style="width:100px;"
+                    <p:column style="width:100px;padding: 5px 10px !important;"
                               headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
                 </p:row>
 
@@ -135,11 +135,11 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.productProgram}"/>
+                <h:outputText value="#{creditTypeDetailItem.productProgram.name}"/>
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.creditFacility}"/>
+                <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -261,7 +261,7 @@
             <p:selectOneMenu id="dlgCollateralType"
                              value="#{CollateralHeaderDetailView.headCollType.id}"
                              size="1"
-                             style="min-width: 200px; width: 200px; max-width: 200px;"
+                             style="min-width: 300px; width: 300px; max-width: 300px;"
                              required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacPropose.collateralTypeList}"
@@ -312,16 +312,16 @@
                     <p:row>
                         <p:column/>
                         <p:column
-                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')}"/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}"/>
+                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')}" style="width:20px;padding: 5px 10px !important;"/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}" style="width:20px;padding: 5px 10px !important;"/>
                         <p:column
-                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}"/>
+                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}" style="width:20px;padding: 5px 10px !important;"/>
                         <p:column
-                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')} "/>
-                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')} "/>
+                                headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')}" style="width:20px;padding: 5px 10px !important;"/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}" style="width:20px;padding: 5px 10px !important;"/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}" style="width:20px;padding: 5px 10px !important;"/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')}" style="width:20px;padding: 5px 10px !important;"/>
+                        <p:column headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')}" style="width:20px;padding: 5px 10px !important;"/>
                         <p:column/>
                     </p:row>
                 </p:columnGroup>
@@ -354,7 +354,7 @@
                 <p:column styleClass="left">
                     <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
                                var="relatedWith"  varStatus="c">
-                        <h:outputText value="#{relatedWith.titleDeed}"/><br/>
+                        <h:outputText value="#{not empty newSubCollateralDetailView.relatedWithList and fn:length(newSubCollateralDetailView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
