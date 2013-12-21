@@ -45,6 +45,7 @@ public class BaInfo implements Serializable {
 
     enum ModeForButton{ ADD, EDIT }
     enum HealthCheckList {ตรวจ,ขอข้อมูลสุขภาพ}
+
     private ModeForButton modeForButton;
 
     public BaInfo(){
@@ -79,6 +80,7 @@ public class BaInfo implements Serializable {
         applyBaInfoView.setCheckDate(new Date());
         applyBaInfoList.add(applyBaInfoView);
 
+        baPaInfoView.setBa(applyBaInfoList);
 
         CreditTypeDetailView creditTypeDetailView=new CreditTypeDetailView();
         creditTypeDetailView.setProductProgram("SmartBiz");
@@ -102,6 +104,8 @@ public class BaInfo implements Serializable {
 
     public void onOpenApplyBaDialog(){
         log.debug("onOpenApplyBaDialog()");
+
+        modeForButton = ModeForButton.EDIT;
         applyBaInfoView = new ApplyBaInfoView();
         applyBaInfoView.setCusName(newApplyBaInfoView.getCusName());
         applyBaInfoView.setContactNumber(newApplyBaInfoView.getContactNumber());
@@ -150,6 +154,8 @@ public class BaInfo implements Serializable {
     public void onSubmitApplyBaDialog(){
          log.debug("onSubmitApplyBaDialog()");
 
+        boolean complete =false;
+        if(modeForButton !=null && modeForButton.equals(ModeForButton.EDIT)) {
 
         applyBaInfoList.get(selectRowNumber).setCusName(applyBaInfoView.getCusName());
         applyBaInfoList.get(selectRowNumber).setContactNumber(applyBaInfoView.getContactNumber());
@@ -157,13 +163,20 @@ public class BaInfo implements Serializable {
         applyBaInfoList.get(selectRowNumber).setResultHealtcheck(applyBaInfoView.getResultHealtcheck());
         applyBaInfoList.get(selectRowNumber).setCheckDate(applyBaInfoView.getCheckDate());
 
-        RequestContext.getCurrentInstance().execute("applyBaInfoDialog.hide()");
+
+        complete=true;
+        }
+
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete",complete);
+
     }
 
 
     public void onSubmitBaPaInfoDialog(){
         log.debug("submitBaPaInfoDialog()");
         log.info("modeForButton ::: {}", modeForButton);
+
+        boolean complete=false;
         RequestContext context=RequestContext.getCurrentInstance();
 
 
@@ -192,49 +205,46 @@ public class BaInfo implements Serializable {
         baPaInfoAddView.setCreditType(listSelect);
 
 
-        if(modeForButton.equals(ModeForButton.ADD)){
+        if(modeForButton !=null && modeForButton.equals(ModeForButton.ADD)){
             listBaPa.add(baPaInfoAddView);
+            complete=true;
+
+            baPaInfoView.setBapa(listBaPa);
         }
 
-        if(modeForButton.equals(ModeForButton.EDIT)){
+        if(modeForButton !=null && modeForButton.equals(ModeForButton.EDIT)){
             listBaPa.get(selectRowNumber).setPremium(baPaInfoAddView.getPremium());
             listBaPa.get(selectRowNumber).setMorePay(baPaInfoAddView.getMorePay());
             listBaPa.get(selectRowNumber).setType(baPaInfoAddView.getType());
             listBaPa.get(selectRowNumber).setCustomerPay(baPaInfoAddView.getCustomerPay());
             listBaPa.get(selectRowNumber).setCreditType(listSelect);
+            complete=true;
 
+            baPaInfoView.setBapa(listBaPa);
         }
-
-
-        baPaInfoView.setBapa(listBaPa);
 
         deleteButtonFlag();
         calculationSummaryBaPa();
-        context.execute("bapaInfoDialog.hide()");
+        context.addCallbackParam("functionComplete",complete);
     }
 
 
     public void save(){
         log.debug("save()");
-                                              //todo
-//        for(int i =0;i< baPaInfoView.getBa().size();i++){
-//
-//                    baPaInfoView.setBa(applyBaInfoList);
-//        }
 
-        List<ApplyBaInfoView> listSelect= new ArrayList<ApplyBaInfoView>();
-        for(int i =0;i<applyBaInfoList.size();i++){
-            if(applyBaInfoList.get(i).isChecked()==true){
-                applyBaInfoView =new ApplyBaInfoView();
-                applyBaInfoView.setCusName(applyBaInfoList.get(i).getCusName());
-                applyBaInfoView.setContactNumber(applyBaInfoList.get(i).getContactNumber());
-                applyBaInfoView.setRelationship(applyBaInfoList.get(i).getRelationship());
-                applyBaInfoView.setResultHealtcheck(applyBaInfoList.get(i).getResultHealtcheck());
-                applyBaInfoView.setCheckDate(applyBaInfoList.get(i).getCheckDate());
-                listSelect.add(applyBaInfoView);
-            }
-        }
-        baPaInfoView.setBa(listSelect   );
+//        List<ApplyBaInfoView> listSelect= new ArrayList<ApplyBaInfoView>();
+//        for(int i =0;i<applyBaInfoList.size();i++){
+//            if(applyBaInfoList.get(i).isChecked()==true){
+//                applyBaInfoView =new ApplyBaInfoView();
+//                applyBaInfoView.setCusName(applyBaInfoList.get(i).getCusName());
+//                applyBaInfoView.setContactNumber(applyBaInfoList.get(i).getContactNumber());
+//                applyBaInfoView.setRelationship(applyBaInfoList.get(i).getRelationship());
+//                applyBaInfoView.setResultHealtcheck(applyBaInfoList.get(i).getResultHealtcheck());
+//                applyBaInfoView.setCheckDate(applyBaInfoList.get(i).getCheckDate());
+//                listSelect.add(applyBaInfoView);
+//            }
+//        }
+//        baPaInfoView.setBa(listSelect   );
         System.out.println(baPaInfoView.getBa().size());
         System.out.println(baPaInfoView.toString());
     }
