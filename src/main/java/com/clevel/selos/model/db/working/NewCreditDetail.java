@@ -134,6 +134,14 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "type", nullable = false, columnDefinition = "int default 0")
     private int type;
 
+    @ManyToOne
+    @JoinColumn(name = "new_guarantor_rel_id")
+    private NewGuarantorRelCredit newGuarantorRelCredit;
+
+    @ManyToOne
+    @JoinColumn(name = "new_collateral_rel_id")
+    private NewCollateralRelCredit newCollateralRelCredit;
+
     public long getId() {
         return id;
     }

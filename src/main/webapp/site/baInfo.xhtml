@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td colspan="100%">
-                            <p:dataTable value="#{baInfo.applyBaInfoList}" var="item" rowIndexVar="rowIndex" style="width: 100%;">
+                            <p:dataTable value="#{baInfo.baPaInfoView.ba}" var="item" rowIndexVar="rowIndex" style="width: 100%;">
                                 <p:column headerText="#{msg.get('app.baInfo.tb.applyBa')}" style="width: 50px;"><p:selectBooleanCheckbox value="#{item.checked}"/></p:column>
                                 <p:column headerText="#{msg.get('app.baInfo.tb.cusName')}" style="width: 250px;"><h:outputText value="#{item.cusName}"/> </p:column>
                                 <p:column headerText="#{msg.get('app.baInfo.tb.contactNumber')}" style="width: 200px;"><h:outputText value="#{item.contactNumber}"/></p:column>
@@ -240,7 +240,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center">
-                            <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" action="#{baInfo.save}" styleClass="smaller"/>
+                            <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" action="#{baInfo.save}" styleClass="smaller" update=":baInformationForm"/>
                             <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"/>
                         </td>
                     </tr>

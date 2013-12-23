@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for AppraisalType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="AppraisalType">
  *   &lt;complexContent>
@@ -34,20 +38,22 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AppraisalType", propOrder = {
-        "id",
-        "type",
-        "company",
-        "collateralGrading",
-        "acceptableFlag",
-        "appraisalValue",
-        "buildingValue",
-        "landValue",
-        "landAndBuildingValue",
-        "dateOfAppraisal",
-        "attribute"
+    "id",
+    "type",
+    "company",
+    "collateralGrading",
+    "acceptableFlag",
+    "appraisalValue",
+    "buildingValue",
+    "landValue",
+    "landAndBuildingValue",
+    "dateOfAppraisal",
+    "attribute"
 })
 public class AppraisalType {
 
@@ -67,9 +73,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -77,9 +85,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -87,9 +97,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the type property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getType() {
         return type;
@@ -97,9 +109,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the type property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setType(String value) {
         this.type = value;
@@ -107,9 +121,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the company property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCompany() {
         return company;
@@ -117,9 +133,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the company property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCompany(String value) {
         this.company = value;
@@ -127,9 +145,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the collateralGrading property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCollateralGrading() {
         return collateralGrading;
@@ -137,9 +157,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the collateralGrading property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCollateralGrading(String value) {
         this.collateralGrading = value;
@@ -147,9 +169,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the acceptableFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isAcceptableFlag() {
         return acceptableFlag;
@@ -157,9 +181,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the acceptableFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setAcceptableFlag(Boolean value) {
         this.acceptableFlag = value;
@@ -167,9 +193,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the appraisalValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAppraisalValue() {
         return appraisalValue;
@@ -177,9 +205,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the appraisalValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAppraisalValue(BigDecimal value) {
         this.appraisalValue = value;
@@ -187,9 +217,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the buildingValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getBuildingValue() {
         return buildingValue;
@@ -197,9 +229,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the buildingValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setBuildingValue(BigDecimal value) {
         this.buildingValue = value;
@@ -207,9 +241,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the landValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLandValue() {
         return landValue;
@@ -217,9 +253,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the landValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLandValue(BigDecimal value) {
         this.landValue = value;
@@ -227,9 +265,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the landAndBuildingValue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLandAndBuildingValue() {
         return landAndBuildingValue;
@@ -237,9 +277,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the landAndBuildingValue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLandAndBuildingValue(BigDecimal value) {
         this.landAndBuildingValue = value;
@@ -247,9 +289,11 @@ public class AppraisalType {
 
     /**
      * Gets the value of the dateOfAppraisal property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfAppraisal() {
         return dateOfAppraisal;
@@ -257,9 +301,11 @@ public class AppraisalType {
 
     /**
      * Sets the value of the dateOfAppraisal property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfAppraisal(XMLGregorianCalendar value) {
         this.dateOfAppraisal = value;
@@ -267,23 +313,25 @@ public class AppraisalType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

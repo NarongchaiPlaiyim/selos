@@ -7,21 +7,21 @@
     <h:form id="dbrDetailDlgForm">
         <p:panel id="dbrDetailDlgPanel" styleClass="panel-dialog">
 
-            <table class="content_form" border="0" style="width:650px;">
+            <table class="content_form" border="0" style="width:100%">
                 <tr>
                     <td class="title">
-                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
+                        <p:outputLabel for="accountName" value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
-                        <p:inputText value="#{dbrInfo.selectedItem.accountName}" required="true"/>
+                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
+                        <p:outputLabel for="loanAccountType" value="#{msg.get('app.dbrDetail.label.loanType')}"/>
                     </td>
                     <td>
-                        <p:selectOneMenu value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true">
+                        <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{dbrInfo.loanAccountTypes}"
                                            var="loanAccountType"
@@ -36,7 +36,8 @@
                     </td>
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
-                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true">
+                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:limit"/>
@@ -48,9 +49,10 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
                     </td>
                     <td>
-                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true">
+                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                             type="number"/>
+                                             type="number" />
                             <p:ajax event="change" update=":dbrDetailDlgForm:installment"/>
                         </p:inputText>
                     </td>
@@ -61,7 +63,7 @@
                     </td>
                     <td>
                         <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"
-                                     readonly="true">
+                                     readonly="true" styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate"/>
@@ -73,7 +75,7 @@
                         <h:outputText/>
                     </td>
                     <td>
-                        <p:commandButton value="#{msg.get('app.button.save')}"
+                        <p:commandButton value="#{msg.get('app.button.ok')}"
                                          styleClass="small"
                                          process="@form"
                                          actionListener="#{dbrInfo.onAddDBRDetail()}"

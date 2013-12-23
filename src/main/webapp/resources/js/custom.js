@@ -557,6 +557,35 @@ function onCheckRightClick(event){
     }
 }*/
 
+function handleDisbursementMcDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        mcDisbursementDialog.hide();
+    }
+}
+
+function handleDisbursementDepositDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        depositDisbursementDialog.hide();
+    }
+}
+function handleDisbursementBahtnetDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        bahtnetDisbursementDialog.hide();
+    }
+}
+
+function handleBaPaAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        bapaInfoDialog.hide();
+    }
+}
+
+function handleApplyBaDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        applyBaInfoDialog.hide();
+    }
+}
+
 function handleManageUserDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         manageUserDlg.hide();
