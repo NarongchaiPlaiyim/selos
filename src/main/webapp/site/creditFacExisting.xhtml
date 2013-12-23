@@ -88,43 +88,43 @@
                                             <tr>
                                                 <th class="ui-state-default" style="width: 30px"></th>
                                                 <th class="ui-state-default" style="width: 200px" >Account</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                <th class="ui-state-default" style="width: 100px" >#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.code')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                <th class="ui-state-default" style="width: 100px">int/fee</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.code')}</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.outstanding')}</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                <th class="ui-state-default" style="width: 90px">int/fee</th>
+                                                <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
                                                 <th class="ui-state-default" style="width: 50px"></th>
                                             </tr>
                                             </thead>
                                             <tbody class="ui-datatable-data ui-widget-content">
                                             <ui:repeat var="borrowerCredit" value="#{creditFacExisting.existingCreditFacilityView.borrowerComExistingCredit}" varStatus="i">
                                                 <tr>
-                                                    <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
                                                         #{borrowerCredit.no}
                                                     </td>
-                                                    <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList) : '1'}">
                                                         #{borrowerCredit.accountName} <br/>
                                                         #{borrowerCredit.accountNumber} Suf: #{borrowerCredit.accountSuf}<br/>
                                                         #{borrowerCredit.existAccountStatus.description}
                                                     </td>
-                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
                                                         #{borrowerCredit.existProductProgram.name}
                                                     </td>
-                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
                                                         #{borrowerCredit.existCreditType.name}
                                                     </td>
-                                                    <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
                                                         #{msg.get('app.decision.tb.td.label.product')} #{borrowerCredit.productCode}<br/>
@@ -147,25 +147,25 @@
                                                         </h:outputText>
                                                     </td>
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
-                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             borrowerCredit.existingCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
-                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             borrowerCredit.existingCreditTierDetailViewList[0].finalPriceRate : ''}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
-                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             borrowerCredit.existingCreditTierDetailViewList[0].tenor : ''}">
                                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
-                                                    <td style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList)+fn:length(borrowerCredit.existingSplitLineDetailViewList)  : '1'}">
                                                         <p:commandButton icon="ui-icon-pencil"
@@ -194,17 +194,17 @@
                                                 <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
                                                 <ui:repeat value="#{borrowerCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
-                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.installment}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                             </h:outputText>
                                                         </td>
-                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.finalPriceRate}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                             </h:outputText>
                                                         </td>
-                                                        <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.tenor}">
                                                                 <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                             </h:outputText>
@@ -214,7 +214,7 @@
 
                                                 <ui:repeat value="#{borrowerCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
                                                     <tr>
-                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -223,7 +223,7 @@
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <p:spacer width="5px"/>
                                                         </td>
-                                                        <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{existingSplitLineDetailView.limit}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                             </h:outputText>
@@ -331,14 +331,14 @@
                                                     <p:row>
                                                         <p:column headerText="" styleClass="center" style="width: 30px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}" style="width: 200px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
@@ -414,14 +414,14 @@
                                                     <p:row>
                                                         <p:column headerText="" styleClass="center" style="width: 50px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}" style="width: 200px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
@@ -497,7 +497,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                             <tr>
-                                                <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                     <h:outputText
                                                             value="Total Commercail"/>
                                                 </td>
@@ -518,7 +518,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Commercail and OBOD"/>
                                                     </td>
@@ -540,7 +540,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Exposure"/>
                                                     </td>
@@ -586,26 +586,26 @@
                                                         <tr>
                                                             <th class="ui-state-default" style="width: 30px"></th>
                                                             <th class="ui-state-default" style="width: 200px" >Account</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                            <th class="ui-state-default" style="width: 100px" >#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.code')}</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.outstanding')}</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                            <th class="ui-state-default" style="width: 100px">int/fee</th>
-                                                            <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                            <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                            <th class="ui-state-default" style="width: 150px" >#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                            <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.code')}</th>
+                                                            <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                            <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.outstanding')}</th>
+                                                            <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                            <th class="ui-state-default" style="width: 90px">int/fee</th>
+                                                            <th class="ui-state-default" style="width: 90px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
                                                             <th class="ui-state-default" style="width: 50px"></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody class="ui-datatable-data ui-widget-content">
                                                         <ui:repeat var="relatedCredit" value="#{creditFacExisting.existingCreditFacilityView.relatedComExistingCredit}" varStatus="i">
                                                             <tr>
-                                                                <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
                                                                     #{relatedCredit.no}
                                                                 </td>
-                                                                <td class="center  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                <td class="left  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList) : '1'}">
                                                                     #{relatedCredit.accountName} <br/>
@@ -645,25 +645,25 @@
                                                                     </h:outputText>
                                                                 </td>
                                                                 <!-- BEGIN: Credit Tier Detail [0] -->
-                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                     <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             relatedCredit.existingCreditTierDetailViewList[0].installment : ''}">
                                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     </h:outputText>
                                                                 </td>
-                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                     <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             relatedCredit.existingCreditTierDetailViewList[0].finalPriceRate : ''}">
                                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                     </h:outputText>
                                                                 </td>
-                                                                <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                     <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             relatedCredit.existingCreditTierDetailViewList[0].tenor : ''}">
                                                                         <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                                     </h:outputText>
                                                                 </td>
-                                                                <td style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                                <td class=" top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList)+fn:length(relatedCredit.existingSplitLineDetailViewList)  : '1'}">
                                                                     <p:commandButton icon="ui-icon-pencil"
@@ -692,17 +692,17 @@
                                                             <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
                                                             <ui:repeat value="#{relatedCredit.existingCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                                 <tr>
-                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{creditTierDetail.installment}">
                                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                         </h:outputText>
                                                                     </td>
-                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{creditTierDetail.finalPriceRate}">
                                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                         </h:outputText>
                                                                     </td>
-                                                                    <td class="right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{creditTierDetail.tenor}">
                                                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                                                         </h:outputText>
@@ -712,7 +712,7 @@
 
                                                             <ui:repeat value="#{relatedCredit.existingSplitLineDetailViewList}" var="existingSplitLineDetailView" varStatus="j">
                                                                 <tr>
-                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{existingSplitLineDetailView.productProgram.name}"/>
                                                                     </td>
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -721,7 +721,7 @@
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <p:spacer width="5px"/>
                                                                     </td>
-                                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{existingSplitLineDetailView.limit}">
                                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                                         </h:outputText>
@@ -769,14 +769,14 @@
                                                     <p:row>
                                                         <p:column headerText="" styleClass="center" style="width: 30px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}" style="width: 200px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
@@ -855,14 +855,14 @@
                                                     <p:row>
                                                         <p:column headerText="" styleClass="center" style="width: 30px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.account')}" style="width: 200px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.productProgram')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 150px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.code')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.limit')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.outstanding')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.installment')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.int/fee')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tenor')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
 
@@ -939,7 +939,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Commercail"/>
                                                     </td>
@@ -960,7 +960,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Commercail and OBOD"/>
                                                     </td>
@@ -981,7 +981,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Exposure"/>
                                                     </td>
@@ -1007,7 +1007,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Commercail"/>
                                                     </td>
@@ -1028,7 +1028,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Commercail and OBOD"/>
                                                     </td>
@@ -1049,7 +1049,7 @@
                                         <td>
                                             <table class="table_content" style="width:100%">
                                                 <tr>
-                                                    <td style="text-align: left;width:350px;background-color:#f4f8b6;" class="title">
+                                                    <td style="text-align: left;width:320px;background-color:#f4f8b6;" class="title">
                                                         <h:outputText
                                                                 value="Total Exposure"/>
                                                     </td>
@@ -1102,9 +1102,9 @@
                                                         <p:column style="width:30px;"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}" style="width: 300px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 400px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
                                                 </p:columnGroup>
@@ -1214,9 +1214,9 @@
                                                         <p:column style="width:30px;"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.collateralType')}" style="width: 300px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 400px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}" style="width: 100px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgage')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.appraisalValue')}" style="width: 90px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.mortgageValue')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
                                                 </p:columnGroup>
@@ -1335,9 +1335,9 @@
                                                     <p:row>
                                                         <p:column style="width:30px;"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guarantorName')}" style="width: 200px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tcg.lg.no')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.tcg.lg.no')}" style="width: 90px"/>
                                                         <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.creditType')}" style="width: 600px"/>
-                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guaranteeAmount')}" style="width: 100px"/>
+                                                        <p:column headerText="#{msg.get('app.credit.facility.existing.tb.label.guaranteeAmount')}" style="width: 90px"/>
                                                         <p:column headerText="" style="width: 50px"/>
                                                     </p:row>
                                                 </p:columnGroup>
@@ -1345,7 +1345,7 @@
                                                     <p:outputLabel value="#{existingGuarantor.no}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{existingGuarantor.guarantorName}"></p:outputLabel>
+                                                    <p:outputLabel value="#{existingGuarantor.guarantorName.firstNameTh}"></p:outputLabel>
                                                 </p:column>
                                                 <p:column headerText="">
                                                     <p:outputLabel value="#{existingGuarantor.tcgLgNo}"></p:outputLabel>

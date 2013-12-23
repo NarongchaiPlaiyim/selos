@@ -63,6 +63,8 @@ public class ExistingCreditTierTransform extends Transform {
 
             existingCreditTierDetail.setTenor(existingCreditTierDetailView.getTenor());
             existingCreditTierDetail.setExistingCreditDetail(existingCreditDetail);
+            existingCreditTierDetail.setModifyDate(new Date());
+            existingCreditTierDetail.setModifyBy(user);
             existingCreditTierDetailList.add(existingCreditTierDetail);
         }
 

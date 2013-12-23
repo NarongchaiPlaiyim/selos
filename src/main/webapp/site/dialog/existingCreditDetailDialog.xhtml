@@ -9,7 +9,7 @@
 <h:form id="existingCreditDlgForm">
 <table class="content_form">
     <tr>
-        <td>
+        <td class="title">
             borrower name
         </td>
         <td>
@@ -17,13 +17,13 @@
         </td>
     </tr>
     <tr>
-        <td>
+        <td class="title">
             account Number
         </td>
         <td>
             <p:inputText value="#{creditFacExisting.existingCreditDetailView.accountNumber}"/>
         </td>
-        <td>
+        <td class="title">
             account suffix
         </td>
         <td>
@@ -113,24 +113,24 @@
         </td>
     </tr>
     <tr>
-        <td>
-            outstanding
-        </td>
-        <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.outstanding}"/>
-        </td>
-    </tr>
-    <tr>
         <td colspan="2">
         </td>
         <td class="title">
-            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
+            <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}" integerOnly="true" />
         </td>
         <td>
             <p:inputText value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
                          style="text-align:right">
 
             </p:inputText>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">
+            outstanding
+        </td>
+        <td>
+            <p:inputText value="#{creditFacExisting.existingCreditDetailView.outstanding}" integerOnly="true" />
         </td>
     </tr>
     <tr>
@@ -157,29 +157,53 @@
                 <p:columnGroup type="header">
                     <p:row>
                         <p:column style="width:50px;"/>
+                        <p:column style="width:200px;"
+                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
                         <p:column style="width:150px;"
                                   headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.price')}"/>
                         <p:column style="width:200px;"
                                   headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.tenor')}"/>
-                        <p:column style="width:200px;"
-                                  headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
                         <p:column style="width: 80px"/>
                     </p:row>
                 </p:columnGroup>
                 <p:column styleClass="center">
-                    <p:outputLabel value="#{rowIndex+1}"/>
+                    <p:outputLabel value="#{creditTier.no}"/>
                 </p:column>
-
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.installment}" />
+                    <p:inputText  value="#{creditTier.installment}" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="14"/>
+                    </p:inputText>
                 </p:column>
-
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.finalPriceRate}" />
+                    <table border="0" style="border: transparent">
+                        <tr>
+                            <td>
+                                <p:selectOneMenu size="1"
+                                                 value="#{creditTier.finalBasePrice.id}"
+                                                 id="standDlg"
+                                                 style="width: 50px;">
+                                    <f:selectItems value="#{creditFacExisting.baseRateList}"
+                                                   var="standard"
+                                                   itemLabel="#{standard.name}"
+                                                   itemValue="#{standard.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:inputText value="#{creditTier.finalInterest}"
+                                             id="standPriceDlg"
+                                             style="text-align:right;width:50px;">
+                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                    </table>
                 </p:column>
-
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.tenor}" />
+                    <p:inputText  value="#{creditTier.tenor}" >
+                        <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="14"/>
+                    </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
                     <p:commandButton title="Remove" process="@form"
@@ -233,7 +257,7 @@
                 </p:columnGroup>
 
                 <p:column styleClass="center">
-                    <h:outputText value="#{rowIndex+1}"/>
+                    <h:outputText value="#{existingSplitLine.no}"/>
                 </p:column>
 
                 <p:column styleClass="center">

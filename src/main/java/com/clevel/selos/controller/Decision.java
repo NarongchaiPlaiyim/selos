@@ -461,7 +461,9 @@ public class Decision implements Serializable {
 
         // Guarantor
         ExistingGuarantorDetailView existingGuarantor = new ExistingGuarantorDetailView();
-        existingGuarantor.setGuarantorName("ABC Co., Ltd.");
+        CustomerInfoView customerInfoView = new CustomerInfoView();
+        customerInfoView.setFirstNameTh("ABC Co., Ltd.");
+        existingGuarantor.setGuarantorName(customerInfoView);
         existingGuarantor.setTcgLgNo("12-34567");
 
         ExistingCreditTypeDetailView existingCreditTypeDetailView1 = new ExistingCreditTypeDetailView();

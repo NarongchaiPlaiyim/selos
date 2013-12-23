@@ -70,6 +70,8 @@ public class ExistingCreditTypeDetailTransform extends Transform {
                 existingCreditTypeDetail.setCreateBy(user);
             }
 
+            existingCreditTypeDetail.setModifyDate(new Date());
+            existingCreditTypeDetail.setModifyBy(user);
             existingCreditTypeDetail.setSeq(existingCreditTypeDetailView.getSeq());
             existingCreditTypeDetail.setNoFlag(Util.returnNumForFlag(existingCreditTypeDetailView.isNoFlag()));
             existingCreditTypeDetail.setNo(existingCreditTypeDetailView.getNo());

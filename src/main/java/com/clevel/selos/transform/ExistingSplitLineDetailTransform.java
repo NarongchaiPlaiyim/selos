@@ -37,6 +37,8 @@ public class ExistingSplitLineDetailTransform extends Transform {
             existingSplitLineDetail.setProductProgram(existingSplitLineDetailView.getProductProgram());
             existingSplitLineDetail.setLimit(existingSplitLineDetailView.getLimit());
             existingSplitLineDetail.setExistingCreditDetail(existingCreditDetail);
+            existingSplitLineDetail.setModifyDate(new Date());
+            existingSplitLineDetail.setModifyBy(user);
             existingSplitLineDetails.add(existingSplitLineDetail);
         }
 
