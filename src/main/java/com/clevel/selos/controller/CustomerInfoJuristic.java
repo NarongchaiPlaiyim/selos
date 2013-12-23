@@ -307,7 +307,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         referenceList = new ArrayList<Reference>();
 
-        addressFlagForm2 = 1;
+        addressFlagForm2 = 3;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -326,6 +326,11 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoView.setSalesFromFinancialStmt(BigDecimal.ZERO);
         customerInfoView.setShareHolderRatio(BigDecimal.ZERO);
         customerInfoView.setTotalShare(BigDecimal.ZERO);
+
+        customerInfoView.getSourceIncome().setId(211);
+        customerInfoView.getCountryIncome().setId(211);
+        customerInfoView.getRegisterAddress().getCountry().setId(211);
+        customerInfoView.getWorkAddress().getCountry().setId(211);
     }
 
     public void onEditJuristic(){
