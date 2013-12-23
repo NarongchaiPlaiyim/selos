@@ -702,8 +702,8 @@
             <table class="table_noborder" >
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.requestType')}</td>
-                    <td>#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
-                            proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}</td>
+                    <td>#{proposeCredit.requestType == 1 ? msg.get('app.label.new') :
+                            proposeCredit.requestType == 2 ? msg.get('app.label.change') : ''}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.refinance')}</td>
                     <td>#{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
                             proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}</td>

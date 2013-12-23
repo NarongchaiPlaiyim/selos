@@ -13,12 +13,13 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -203,6 +204,8 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
+        Date createDate = DateTime.now().toDate();
+        Date modifyDate = DateTime.now().toDate();
         newCreditFacilityView = calculateTotalProposeAmount(newCreditFacilityView,workCaseId);
 
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
@@ -235,9 +238,13 @@ public class CreditFacProposeControl extends BusinessControl {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             for (NewGuarantorDetailView newGuarantorDetailView : newCreditFacilityView.getNewGuarantorDetailViewList()) {
-//                List<CreditTypeDetail> creditTypeDetailList = creditTypeDetailTransform.transformToModelForGuarantor(newGuarantorDetailView.getCreditTypeDetailViewList(), newGuarantorDetail, user);
-//                creditTypeDetailDAO.persist(creditTypeDetailList);
-//                log.info("persist creditTypeDetailList...");
+                if(newGuarantorDetailView.getNewCreditDetailViewList().size()>0){
+
+                    for(NewCreditDetailView newCreditDetailView:newGuarantorDetailView.getNewCreditDetailViewList()){
+
+                    }
+                }
+                log.info("persist creditTypeDetailList...");
             }
 
         }
@@ -269,27 +276,8 @@ public class CreditFacProposeControl extends BusinessControl {
 
     }
 
-    public List<CreditTypeDetailView> findCreditFacility(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
+    public List<NewCreditDetailView> findCreditFacility(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         // todo: find credit existing and propose in this workCase
-        List<CreditTypeDetailView> creditTypeDetailList = new ArrayList<CreditTypeDetailView>();
-        CreditTypeDetailView creditTypeDetailView;
-
-        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
-            /*for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-                creditTypeDetailView = new CreditTypeDetailView();
-                creditTypeDetailView.setSeq(newCreditDetailView.getSeq());
-                creditTypeDetailView.setAccountName("-");
-                creditTypeDetailView.setAccountNumber("-");
-                creditTypeDetailView.setAccountSuf("-");
-                creditTypeDetailView.setRequestType(newCreditDetailView.getRequestType());
-                creditTypeDetailView.setProductProgram(newCreditDetailView.getProductProgram().getName());
-                creditTypeDetailView.setCreditFacility(newCreditDetailView.getCreditType().getName());
-                creditTypeDetailView.setLimit(newCreditDetailView.getLimit());
-                creditTypeDetailView.setPCEPercent(newCreditDetailView.getPCEPercent());
-                creditTypeDetailView.setPCEAmount(newCreditDetailView.getPCEAmount());
-                creditTypeDetailList.add(creditTypeDetailView);
-            }*/
-        }
 
        /* int seq = 0;
         seq = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : seq;
@@ -312,7 +300,7 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }*/
 
-        return creditTypeDetailList;
+        return newCreditDetailViewList;
     }
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {

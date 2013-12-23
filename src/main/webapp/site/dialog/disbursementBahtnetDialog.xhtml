@@ -1,0 +1,76 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+    <h:form id="disbursementBahtnetForm">
+        <table id="content_form">
+            <tr>
+                <td><p:outputLabel for="bankName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.bankName')}"/></td>
+                <td>
+                    <p:selectOneMenu id="bankName" value="#{disbursementInfo.disbursementBahtnetDetailView.bankCode}" required="true">
+                           <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                           <f:selectItems value="#{disbursementInfo.bankList}" var="bankList" itemLabel="#{bankList.name}" itemValue="#{bankList.code}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="branchName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.branchName')}"/></td>
+                <td>
+                    <p:inputText id="branchName" value="#{disbursementInfo.disbursementBahtnetDetailView.branchName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td ><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.accountNumber')}"/></td>
+                <td>
+                    <p:inputMask id="accountNumber" mask="999-9-99999-9" value="#{disbursementInfo.disbursementBahtnetDetailView.accountNumber}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="benefitName" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.benefitName')}"/></td>
+                <td>
+                    <p:inputText id="benefitName" value="#{disbursementInfo.disbursementBahtnetDetailView.benefitName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.bahtnet.dialog.creditType')}"/></td>
+                <td>
+                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementBahtnetDetailView.creditType}" rowIndexVar="rowIndex" var="item">
+                        <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.productProgram')}">
+                            <h:outputText value="#{item.productProgram}"/>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.creditFac')}">
+                            <h:outputText value="#{item.creditFacility}"/>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.limit')}">
+                            <h:outputText value="#{item.limit}">
+                                <f:convertNumber pattern="#,##0"
+                                                 minFractionDigits="2"
+                                                 maxFractionDigits="2"
+                                                 maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.dialog.tb.disburseAmount')}">
+                            <p:inputText value="#{item.disburseAmount}" style="#{item.componentFlag? 'border-color:blank;' : 'border-color:red;'}"/>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="text-align: center">
+                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                     actionListener="#{disbursementInfo.onSubmitDisbursementBahtnet()}"
+                                     styleClass="smaller"
+                                     update=":disbursementForm ,:disbursementBahtnetForm"
+                                     process="@form"
+                                     oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                                     onclick="bahtnetDisbursementDialog.hide()"
+                                     update=":disbursementForm"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

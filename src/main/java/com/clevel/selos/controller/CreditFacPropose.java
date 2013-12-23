@@ -25,6 +25,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.NewCollateralInfoTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -148,7 +149,7 @@ public class CreditFacPropose implements Serializable {
     private List<NewCreditDetailView> newCreditDetailListTemp;
     private List<NewCreditDetailView> newCollateralCreditDetailList;
     private List<NewCreditDetailView> newGuarantorCreditDetailList;
-    private NewCreditDetailView newCreditDetail;
+    private List<NewCreditDetailView> newCreditDetailList;
 
     // for  control Condition Information Dialog
     private NewConditionDetailView newConditionDetailView;
@@ -665,8 +666,7 @@ public class CreditFacPropose implements Serializable {
             seq++;
             log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
 
-            Cloner cloner = new Cloner();
-            newCreditDetailListTemp = cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList());
+            newCreditDetailList =  newCreditFacilityView.getNewCreditDetailViewList();
 
         } else {
 
@@ -781,6 +781,8 @@ public class CreditFacPropose implements Serializable {
     public void onAddProposeCollInfo() {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
         modeForButton = ModeForButton.ADD;
+        Cloner cloner = new Cloner();
+        newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
         newCollateralInfoView = new NewCollateralInfoView();
         newCollateralInfoView.setNewCreditDetailViewList(newCreditDetailListTemp);
         newCollateralInfoView.getNewCollateralHeadDetailViewList().add(new NewCollateralHeadDetailView());
@@ -806,6 +808,8 @@ public class CreditFacPropose implements Serializable {
         newCollateralInfoView.setNewCollateralHeadDetailViewList(selectCollateralDetailView.getNewCollateralHeadDetailViewList());
 
         int tempSeq = 0;
+        Cloner cloner = new Cloner();
+        newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
         newCollateralInfoView.setNewCreditDetailViewList(newCreditDetailListTemp);
 
         if (selectCollateralDetailView.getNewCreditDetailViewList().size() > 0) {
@@ -908,7 +912,8 @@ public class CreditFacPropose implements Serializable {
             newCreditFacilityView.getNewCollateralInfoViewList().get(rowIndexCollateral).setNewCollateralHeadDetailViewList(newCollateralInfoView.getNewCollateralHeadDetailViewList());
 
             boolean checkPlus;
-
+//            Cloner cloner = new Cloner();
+//            newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
             newCollateralInfoView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
 
             for (int i = 0; i < newCreditDetailListTemp.size(); i++) {
@@ -968,7 +973,12 @@ public class CreditFacPropose implements Serializable {
 //                    messageErr = true;
 //                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //                } else {
-                    log.info("onAddCollateralOwnerUW :: {} ", newSubCollateralDetailView.getCollateralOwnerUW());
+                    log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", newSubCollateralDetailView.getCollateralOwnerUW().getId());
+                    if (newSubCollateralDetailView.getCollateralOwnerUW().getId() == 0) {
+                        log.error("Can not add CollateralOwnerUw because id = 0!");
+                        return;
+                    }
+
                     CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(newSubCollateralDetailView.getCollateralOwnerUW());
                     newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
 //                }
@@ -990,6 +1000,11 @@ public class CreditFacPropose implements Serializable {
 //                messageErr = true;
 //                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //            } else {
+                log.debug("onAddMortgageType() mortgageType.id: {}", newSubCollateralDetailView.getMortgageType().getId());
+                if (newSubCollateralDetailView.getMortgageType().getId() == 0) {
+                    log.error("Can not add MortgageType because id = 0!");
+                    return;
+                }
                 MortgageType mortgageType = mortgageTypeDAO.findById(newSubCollateralDetailView.getMortgageType().getId());
                 log.info("onAddMortgageType :: {} ", newSubCollateralDetailView.getMortgageType());
                 newSubCollateralDetailView.getMortgageList().add(mortgageType);
@@ -1009,6 +1024,11 @@ public class CreditFacPropose implements Serializable {
 //                messageErr = true;
 //                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //            } else {
+                log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getId());
+                if (relatedWithSelected.getId() == 0) {
+                    log.error("Can not add RelatedWith because id = 0!");
+                    return;
+                }
                 NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
                 newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
 //            }
@@ -1023,7 +1043,8 @@ public class CreditFacPropose implements Serializable {
     public NewSubCollateralDetailView getIdNewSubCollateralDetail(long newSubCollateralId) {
         NewSubCollateralDetailView newSubCollateralReturn = new NewSubCollateralDetailView();
         if (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0) {
-            for (NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()) {
+            for (NewCollateralInfoView newCollateralInfoView : Util.safetyList(newCreditFacilityView.getNewCollateralInfoViewList()))
+            {
                 for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
                     for (NewSubCollateralDetailView newSubCollateralDetailOnAdded : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
                         log.info("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getId());
@@ -1085,7 +1106,6 @@ public class CreditFacPropose implements Serializable {
         log.info("onSaveSubCollateral ::: mode : {}", modeForSubColl);
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
-        List<NewSubCollateralDetailView> relatedWithList = new ArrayList<NewSubCollateralDetailView>();
         if (modeForSubColl != null && modeForSubColl.equals(ModeForButton.ADD)) {
             log.info("modeForSubColl ::: {}", modeForSubColl);
             log.info("newSubCollateralDetailView.getRelatedWithList() :: {}", newSubCollateralDetailView.getRelatedWithList().size());
@@ -1138,7 +1158,9 @@ public class CreditFacPropose implements Serializable {
     public void onAddGuarantorInfo() {
         newGuarantorDetailView = new NewGuarantorDetailView();
         modeForButton = ModeForButton.ADD;
-        newGuarantorDetailView.setNewCreditDetailViewList(newCreditFacilityView.getNewCreditDetailViewList());
+        Cloner cloner = new Cloner();
+        newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
+        newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
     }
 
     public void onEditGuarantorInfo() {
@@ -1150,6 +1172,8 @@ public class CreditFacPropose implements Serializable {
         if (newGuarantorDetailViewItem != null) {
             newGuarantorDetailView.setGuarantorName(newGuarantorDetailViewItem.getGuarantorName());
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetailViewItem.getTcgLgNo());
+            Cloner cloner = new Cloner();
+            newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
             newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
 
             if (newGuarantorDetailViewItem.getNewCreditDetailViewList().size() > 0) {
@@ -1214,7 +1238,8 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoEdit);
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
                 boolean checkPlus;
-
+//                Cloner cloner = new Cloner();
+//                newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
                 newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
 
                 for (int i = 0; i < newCreditDetailListTemp.size(); i++) {

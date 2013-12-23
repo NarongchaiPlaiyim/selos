@@ -62,8 +62,12 @@
             </tr>
             <tr>
                 <td colspan="100%" style="text-align: center">
-                    <p:commandButton value="#{msg.get('app.button.ok')}" action="#{baInfo.onSubmitBaPaInfoDialog()}"
-                            update=":baInformationForm,:bapaInfoDlgForm" styleClass="smaller" process="@form"/>
+                    <p:commandButton value="#{msg.get('app.button.ok')}"
+                                     action="#{baInfo.onSubmitBaPaInfoDialog()}"
+                                        update=":baInformationForm,:bapaInfoDlgForm"
+                                        styleClass="smaller"
+                                        process="@form"
+                                        oncomplete="handleBaPaAddDialogRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bapaInfoDialog.hide()" styleClass="smaller"/>
                 </td>
             </tr>
