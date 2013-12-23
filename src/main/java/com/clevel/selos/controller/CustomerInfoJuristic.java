@@ -262,9 +262,9 @@ public class CustomerInfoJuristic implements Serializable {
 
         onAddNewJuristic();
 
-//        Flash flash = FacesUtil.getFlash();
-//        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
+        Flash flash = FacesUtil.getFlash();
+        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+//        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
@@ -307,7 +307,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         referenceList = new ArrayList<Reference>();
 
-        addressFlagForm2 = 1;
+        addressFlagForm2 = 3;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -326,6 +326,11 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoView.setSalesFromFinancialStmt(BigDecimal.ZERO);
         customerInfoView.setShareHolderRatio(BigDecimal.ZERO);
         customerInfoView.setTotalShare(BigDecimal.ZERO);
+
+        customerInfoView.getSourceIncome().setId(211);
+        customerInfoView.getCountryIncome().setId(211);
+        customerInfoView.getRegisterAddress().getCountry().setId(211);
+        customerInfoView.getWorkAddress().getCountry().setId(211);
     }
 
     public void onEditJuristic(){
@@ -363,8 +368,8 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("customerId", new Long(-1));
         map.put("customerInfoView", customerInfoView);
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 
@@ -378,8 +383,8 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("rowIndex",rowIndex);
         map.put("individualView", selectEditIndividual);
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 

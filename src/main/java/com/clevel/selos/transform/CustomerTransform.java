@@ -357,6 +357,7 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setShareHolderRatio(juristic.getShareHolderRatio());
                 customerInfoView.setNumberOfAuthorizedUsers(juristic.getNumberOfAuthorizedUsers());
                 customerInfoView.setTotalShare(juristic.getTotalShare());
+                customerInfoView.setContactName(juristic.getContactName());
             }
         }
 
@@ -778,6 +779,7 @@ public class CustomerTransform extends Transform {
             juristic.setSalesFromFinancialStmt(customerInfoView.getSalesFromFinancialStmt());
             juristic.setShareHolderRatio(customerInfoView.getShareHolderRatio());
             juristic.setNumberOfAuthorizedUsers(customerInfoView.getNumberOfAuthorizedUsers());
+            juristic.setContactName(customerInfoView.getContactName());
 
             customer.setJuristic(juristic);
         }

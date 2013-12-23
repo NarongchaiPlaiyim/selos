@@ -111,7 +111,10 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <p:inputText value="#{creditTypeItem.guaranteeAmount}" style="text-align:right">
+                            <p:inputText value="#{creditTypeItem.guaranteeAmount}"
+                                         onclick="this.select()"
+                                         onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                         styleClass="right">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>

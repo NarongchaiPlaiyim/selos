@@ -786,6 +786,7 @@ public class Decision implements Serializable {
 
         selectedAppProposeCredit = new NewCreditDetailView();
         selectedAppProposeCollateral = new NewCollateralInfoView();
+        selectedAppSubCollateral = new NewSubCollateralDetailView();
         selectedAppProposeGuarantor = new NewGuarantorDetailView();
 
         hashSeqCredit = new Hashtable<String, String>();
