@@ -80,7 +80,7 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
+                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
 
@@ -94,7 +94,7 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
+                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" >
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>

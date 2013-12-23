@@ -37,7 +37,7 @@
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
                         <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:limit"/>
@@ -50,7 +50,7 @@
                     </td>
                     <td>
                         <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number" />
                             <p:ajax event="change" update=":dbrDetailDlgForm:installment"/>
