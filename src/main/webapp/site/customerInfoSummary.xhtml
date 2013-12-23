@@ -54,15 +54,13 @@
                                             <p:ajax event="change" update="frmMain"/>
                                         </p:selectOneMenu>
                                     </td>
-                                    <td style="width: 100px; max-width: 100px; min-width: 100px;">
+                                    <td class="left">
                                         <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
                                                          action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
                                         <p:commandButton id="btnJuristic" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
                                                          action="#{custInfoSummary.onLinkToAddJuristic()}" onclick="blockUI.show()"/>
-                                    </td>
-                                    <td>
                                     </td>
                                 </tr>
 
