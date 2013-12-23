@@ -294,9 +294,9 @@ public class CustomerInfoIndividual implements Serializable {
 
         onAddNewIndividual();
 
-//        Flash flash = FacesUtil.getFlash();
-//        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
+        Flash flash = FacesUtil.getFlash();
+        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+//        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
@@ -324,7 +324,8 @@ public class CustomerInfoIndividual implements Serializable {
         if(isEditFromJuristic){                          // select edit individual from juristic
             if(cusInfoParams != null){
                 CustomerInfoView cusView = (CustomerInfoView) cusInfoParams.get("individualView");
-                customerInfoView = customerInfoControl.getCustomerIndividualById(cusView.getId());
+//                customerInfoView = customerInfoControl.getCustomerIndividualById(cusView.getId());
+                customerInfoView = cusView;
                 onEditIndividual();
             }
         }
@@ -1257,15 +1258,14 @@ public class CustomerInfoIndividual implements Serializable {
                 }
             }
         }
-
-        //todo: find title , relation , reference , etc for show in list in juristic page
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationDAO.findById(customerInfoView.getRelation().getId()).getDescription());
-//        customerInfoView.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
-        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
+            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        }
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
@@ -1278,8 +1278,8 @@ public class CustomerInfoIndividual implements Serializable {
         map.put("customerId",new Long(0));
         map.put("customerInfoView", cusInfoJuristic);
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
     }
 

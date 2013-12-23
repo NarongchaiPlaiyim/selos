@@ -55,6 +55,9 @@ public class Juristic implements Serializable {
     @Column(name = "number_authorized_users")
     private String numberOfAuthorizedUsers;
 
+    @Column(name = "contact_name")
+    private String contactName;
+
     public Juristic() {
     }
 
@@ -162,6 +165,14 @@ public class Juristic implements Serializable {
         this.numberOfAuthorizedUsers = numberOfAuthorizedUsers;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -178,6 +189,7 @@ public class Juristic implements Serializable {
                 append("salesFromFinancialStmt", salesFromFinancialStmt).
                 append("shareHolderRatio", shareHolderRatio).
                 append("numberOfAuthorizedUsers", numberOfAuthorizedUsers).
+                append("contactName", contactName).
                 toString();
     }
 }

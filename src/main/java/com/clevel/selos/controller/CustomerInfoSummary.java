@@ -158,8 +158,8 @@ public class CustomerInfoSummary implements Serializable {
         cusView.reset();
         map.put("customerInfoView", cusView);
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
     private void passParamsToJuristic(long customerId) {
@@ -173,8 +173,8 @@ public class CustomerInfoSummary implements Serializable {
         cusView.reset();
         map.put("customerInfoView", cusView);
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
     public String onLinkToAddIndividual(){

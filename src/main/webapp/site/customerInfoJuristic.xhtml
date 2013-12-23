@@ -522,7 +522,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"
+                                            <h:outputText value="#{item.collateralOwner == 2 ? 'Y' : 'N'}"
                                                           style="min-width: 40px; max-width: 40px;"/>
                                         </p:column>
 
@@ -908,18 +908,11 @@
                             <!-- ############################################################################################# -->
                             <tr>
                                 <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoJuri.content.mailAdd')}"/>
+                                    <h:outputText value="#{msg.get('app.custInfoJuri.content.contactName')}"/>
                                 </td>
-                                <td colspan="5">
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.mailingAddressType.id}"
-                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqIndAddMail}">
-                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{custInfoSumJuris.addressTypeList}"
-                                                       var="addressType"
-                                                       itemLabel="#{addressType.name}"
-                                                       itemValue="#{addressType.id}"/>
-                                    </p:selectOneMenu>
+                                <td>
+                                    <p:inputText value="#{custInfoSumJuris.customerInfoView.contactName}"
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -952,6 +945,22 @@
                                 <td>
                                     <p:inputText value="#{custInfoSumJuris.customerInfoView.email}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <h:outputText value="#{msg.get('app.custInfoJuri.content.mailAdd')}"/>
+                                </td>
+                                <td colspan="5">
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                     value="#{custInfoSumJuris.customerInfoView.mailingAddressType.id}"
+                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqIndAddMail}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                        <f:selectItems value="#{custInfoSumJuris.addressTypeList}"
+                                                       var="addressType"
+                                                       itemLabel="#{addressType.name}"
+                                                       itemValue="#{addressType.id}"/>
+                                    </p:selectOneMenu>
                                 </td>
                             </tr>
 
