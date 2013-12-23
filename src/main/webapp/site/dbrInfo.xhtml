@@ -79,9 +79,11 @@
                                                 <p:outputLabel for="monthlyIncomeAdjust" value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()">
+                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()"
+                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
+
                                                 </p:inputText>
                                             </td>
                                             <td colspan="2"></td>
@@ -91,7 +93,8 @@
                                                 <p:outputLabel for="monthlyIncomePerMonth" value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()">
+                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()"
+                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
