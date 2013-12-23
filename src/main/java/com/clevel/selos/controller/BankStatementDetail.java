@@ -92,6 +92,7 @@ public class BankStatementDetail implements Serializable {
     //View form
     private BankStmtView bankStmtView;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
     enum ModeForButton { ADD, EDIT }
     private ModeForButton modeForButton;
@@ -403,6 +404,14 @@ public class BankStatementDetail implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        return currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 
     public boolean isBankAccTypeSelectRequired() {
