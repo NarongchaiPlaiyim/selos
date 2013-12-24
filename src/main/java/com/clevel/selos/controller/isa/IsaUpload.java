@@ -134,15 +134,7 @@ public class IsaUpload implements Serializable {
                 log.warn("Exception when list upload and Result Files", ex);
             }
         }
-//        model.addAttribute("userUploadViews", userUploadViews);
         System.out.println("n " + userUploadViews.size());
-//        if (isaUploadService.isFileProcessing()) {
-//        }
-////            model.addAttribute("isUploadWorking", "true");
-//        else {
-//            System.out.println();
-//        }
-////            model.addAttribute("isUploadWorking", "false");
 
         RequestContext.getCurrentInstance().update(":okl");
 
