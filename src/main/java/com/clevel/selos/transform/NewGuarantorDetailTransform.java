@@ -16,7 +16,9 @@ import java.util.List;
 public class NewGuarantorDetailTransform extends Transform {
 
     @Inject
-    public NewGuarantorDetailTransform() {}
+    public NewGuarantorDetailTransform() {
+    }
+
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -25,6 +27,27 @@ public class NewGuarantorDetailTransform extends Transform {
     NewGuarantorRelationDAO newGuarantorRelationDAO;
     @Inject
     NewCreditDetailTransform newCreditDetailTransform;
+
+    public NewGuarantorDetail transformToModelOne(NewGuarantorDetailView newGuarantorDetailView, NewCreditFacility newCreditFacility, User user) {
+
+        NewGuarantorDetail newGuarantorDetail = new NewGuarantorDetail();
+        if (newGuarantorDetailView.getId() != 0) {
+            newGuarantorDetail.setId(newGuarantorDetailView.getId());
+            newGuarantorDetail.setCreateDate(newGuarantorDetailView.getCreateDate());
+            newGuarantorDetail.setCreateBy(newGuarantorDetailView.getCreateBy());
+        } else { // id = 0 create new
+            newGuarantorDetail.setCreateDate(new Date());
+            newGuarantorDetail.setCreateBy(user);
+        }
+
+        Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
+        newGuarantorDetail.setGuarantorName(guarantor);
+        newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
+        newGuarantorDetail.setNewCreditFacility(newCreditFacility);
+        newGuarantorDetail.setTotalLimitGuaranteeAmount(newGuarantorDetailView.getTotalLimitGuaranteeAmount());
+
+        return newGuarantorDetail;
+    }
 
     public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user) {
 
@@ -70,13 +93,11 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
             List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            if (newGuarantorRelCreditList != null)
-            {
+            if (newGuarantorRelCreditList != null) {
                 List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
 
-                for(NewGuarantorRelCredit newGuarantorRelCredit:newGuarantorRelCreditList)
-                {
-                   newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
+                for (NewGuarantorRelCredit newGuarantorRelCredit : newGuarantorRelCreditList) {
+                    newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
                 }
 
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
@@ -84,7 +105,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
             }
 
-           newGuarantorDetailViews.add(newGuarantorDetailView);
+            newGuarantorDetailViews.add(newGuarantorDetailView);
         }
 
         return newGuarantorDetailViews;

@@ -33,6 +33,33 @@ public class NewCollateralInfoTransform extends Transform {
     @Inject
     CreditTypeDetailTransform creditTypeDetailTransform;
 
+    public NewCollateralDetail transformsNewCollateralInfoViewToModel(NewCollateralInfoView  newCollateralInfoView, NewCreditFacility newCreditFacility, User user) {
+            NewCollateralDetail newCollateralDetail = new NewCollateralDetail();
+
+            if (newCollateralInfoView.getId() != 0) {
+                newCollateralDetail.setId(newCollateralInfoView.getId());
+                newCollateralDetail.setCreateDate(newCollateralInfoView.getCreateDate());
+                newCollateralDetail.setCreateBy(newCollateralInfoView.getCreateBy());
+            } else { // id = 0 create new
+                newCollateralDetail.setCreateDate(new Date());
+                newCollateralDetail.setCreateBy(user);
+            }
+            newCollateralDetail.setJobID(newCollateralInfoView.getJobID());
+            newCollateralDetail.setAadDecision(newCollateralInfoView.getAadDecision());
+            newCollateralDetail.setAadDecisionReason(newCollateralInfoView.getAadDecisionReason());
+            newCollateralDetail.setAadDecisionReasonDetail(newCollateralInfoView.getAadDecisionReasonDetail());
+            newCollateralDetail.setAppraisalDate(newCollateralInfoView.getAppraisalDate());
+            newCollateralDetail.setBdmComments(newCollateralInfoView.getBdmComments());
+            newCollateralDetail.setMortgageCondition(newCollateralInfoView.getMortgageCondition());
+            newCollateralDetail.setMortgageConditionDetail(newCollateralInfoView.getMortgageConditionDetail());
+            newCollateralDetail.setTypeOfUsage(newCollateralInfoView.getTypeOfUsage());
+            newCollateralDetail.setUsage(newCollateralInfoView.getUsage());
+            newCollateralDetail.setUwDecision(newCollateralInfoView.getUwDecision());
+            newCollateralDetail.setUwRemark(newCollateralInfoView.getUwRemark());
+            newCollateralDetail.setNewCreditFacility(newCreditFacility);
+
+        return newCollateralDetail;
+    }
 
     public List<NewCollateralDetail> transformsToModel(List<NewCollateralInfoView> newCollateralInfoViewList, NewCreditFacility newCreditFacility, User user) {
         List<NewCollateralDetail> newCollateralDetailList = new ArrayList<NewCollateralDetail>();

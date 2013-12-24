@@ -15,27 +15,42 @@ import java.util.List;
 public class NewCreditDetailTransform extends Transform {
 
     @Inject
-    public NewCreditDetailTransform() {}
+    public NewCreditDetailTransform() {
+    }
 
     @Inject
     NewCreditDetailDAO newCreditDetailDAO;
 
-        public List<NewCreditDetail> getNewCreditDetailForGuarantor(List<NewCreditDetailView> newCreditGrtViews, NewCreditFacility newCreditFacility){
-            List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
-            List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
-            for (NewCreditDetailView newCreditDetailView : newCreditGrtViews)
-            {
-                for(NewCreditDetail newCreditDetail : newCreditDetailList){
-                   if(newCreditDetailView.getId()==newCreditDetail.getId()){
-                       newCreditListReturn.add(newCreditDetail);
-                   }
+    public List<NewCreditDetail> getNewCreditDetailForGuarantor(List<NewCreditDetailView> newCreditGrtViews, List<NewCreditDetail> newCreditDetailAll) {
+
+        List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
+        for (NewCreditDetailView newCreditDetailView : newCreditGrtViews) {
+            for (NewCreditDetail newCreditDetail : newCreditDetailAll) {
+                if (newCreditDetailView.getSeq() == newCreditDetail.getSeq()) {
+                    newCreditListReturn.add(newCreditDetail);
                 }
             }
-
-           return  newCreditListReturn;
         }
 
-        public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user){
+        return newCreditListReturn;
+    }
+
+    public List<NewCreditDetail> getNewCreditDetailForCollateral(List<NewCreditDetailView> newCreditCollViews, List<NewCreditDetail> newCreditDetailAll) {
+
+        List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
+        for (NewCreditDetailView newCreditDetailView : newCreditCollViews) {
+            for (NewCreditDetail newCreditDetail : newCreditDetailAll) {
+                if (newCreditDetailView.getSeq() == newCreditDetail.getSeq()) {
+                    newCreditListReturn.add(newCreditDetail);
+                }
+            }
+        }
+
+        return newCreditListReturn;
+    }
+
+
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user) {
 
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
@@ -130,5 +145,88 @@ public class NewCreditDetailTransform extends Transform {
         }
 
         return newCreditDetailViewList;
+    }
+
+    public NewCreditDetail transformToModelOne(NewCreditDetailView newCreditDetailView, NewCreditFacility newCreditFacility, User user) {
+
+        NewCreditDetail newCreditDetail = new NewCreditDetail();
+            if (newCreditDetailView.getId() != 0) {
+                newCreditDetail.setId(newCreditDetailView.getId());
+                newCreditDetail.setCreateDate(newCreditDetailView.getCreateDate());
+                newCreditDetail.setCreateBy(newCreditDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newCreditDetail.setCreateDate(new Date());
+                newCreditDetail.setCreateBy(user);
+            }
+
+            newCreditDetail.setSeq(newCreditDetailView.getSeq());
+            newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
+            newCreditDetail.setDisbursement(newCreditDetailView.getDisbursement());
+            newCreditDetail.setFinalPrice(newCreditDetailView.getFinalPrice());
+            newCreditDetail.setCreditType(newCreditDetailView.getCreditType());
+            newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
+            newCreditDetail.setFrontEndFee(newCreditDetailView.getFrontEndFee());
+            newCreditDetail.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
+            newCreditDetail.setInstallment(newCreditDetailView.getInstallment());
+            newCreditDetail.setLimit(newCreditDetailView.getLimit());
+            newCreditDetail.setLoanPurpose(newCreditDetailView.getLoanPurpose());
+            newCreditDetail.setOutstanding(newCreditDetailView.getOutstanding());
+            newCreditDetail.setPceAmount(newCreditDetailView.getPCEAmount());
+            newCreditDetail.setPcePercent(newCreditDetailView.getPCEPercent());
+            newCreditDetail.setProductCode(newCreditDetailView.getProductCode());
+            newCreditDetail.setProjectCode(newCreditDetailView.getProjectCode());
+            newCreditDetail.setPurpose(newCreditDetailView.getPurpose());
+            newCreditDetail.setReduceFrontEndFee(Util.returnNumForFlag(newCreditDetailView.isReduceFrontEndFee()));
+            newCreditDetail.setReducePriceFlag(Util.returnNumForFlag(newCreditDetailView.isReducePriceFlag()));
+            newCreditDetail.setRemark(newCreditDetailView.getRemark());
+            newCreditDetail.setStandardInterest(newCreditDetailView.getStandardInterest());
+            newCreditDetail.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
+            newCreditDetail.setStandardPrice(newCreditDetailView.getStandardPrice());
+            newCreditDetail.setSuggestInterest(newCreditDetailView.getSuggestInterest());
+            newCreditDetail.setSuggestBasePrice(newCreditDetailView.getSuggestBasePrice());
+            newCreditDetail.setSuggestPrice(newCreditDetailView.getSuggestPrice());
+            newCreditDetail.setTenor(newCreditDetailView.getTenor());
+            newCreditDetail.setNewCreditFacility(newCreditFacility);
+
+        return newCreditDetail;
+    }
+
+    public NewCreditDetailView transformToViewOne(NewCreditDetail newCreditDetail) {
+
+            NewCreditDetailView newCreditDetailView = new NewCreditDetailView();
+
+            newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
+            newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
+            newCreditDetailView.setModifyDate(newCreditDetail.getModifyDate());
+            newCreditDetailView.setModifyBy(newCreditDetail.getModifyBy());
+            newCreditDetailView.setSeq(newCreditDetail.getSeq());
+            newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
+            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursement());
+            newCreditDetailView.setFinalPrice(newCreditDetail.getFinalPrice());
+            newCreditDetailView.setCreditType(newCreditDetail.getCreditType());
+            newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());
+            newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
+            newCreditDetailView.setHoldLimitAmount(newCreditDetail.getHoldLimitAmount());
+            newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
+            newCreditDetailView.setLimit(newCreditDetail.getLimit());
+            newCreditDetailView.setLoanPurpose(newCreditDetail.getLoanPurpose());
+            newCreditDetailView.setOutstanding(newCreditDetail.getOutstanding());
+            newCreditDetailView.setPCEAmount(newCreditDetail.getPceAmount());
+            newCreditDetailView.setPCEPercent(newCreditDetail.getPcePercent());
+            newCreditDetailView.setProductCode(newCreditDetail.getProductCode());
+            newCreditDetailView.setProjectCode(newCreditDetail.getProjectCode());
+            newCreditDetailView.setPurpose(newCreditDetail.getPurpose());
+            newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
+            newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
+            newCreditDetailView.setRemark(newCreditDetail.getRemark());
+            newCreditDetailView.setStandardInterest(newCreditDetail.getStandardInterest());
+            newCreditDetailView.setStandardBasePrice(newCreditDetail.getStandardBasePrice());
+            newCreditDetailView.setStandardPrice(newCreditDetail.getStandardPrice());
+            newCreditDetailView.setSuggestInterest(newCreditDetail.getSuggestInterest());
+            newCreditDetailView.setSuggestBasePrice(newCreditDetail.getSuggestBasePrice());
+            newCreditDetailView.setSuggestPrice(newCreditDetail.getSuggestPrice());
+            newCreditDetailView.setTenor(newCreditDetail.getTenor());
+
+        return newCreditDetailView;
     }
 }
