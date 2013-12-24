@@ -1612,6 +1612,7 @@
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedCredit"
                                                  value="#{msg.get('app.button.add')}"
+                                                 disabled="#{not decision.roleUW}"
                                                  actionListener="#{decision.onAddAppProposeCredit()}"
                                                  process="@form"
                                                  update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
@@ -3062,36 +3063,53 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 400px">
-                                <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
-                                                 style="width: 100%">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                    <!-- todo: getList conditions for FollowUpCondition -->
-                                    <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
-                                </p:selectOneMenu>
-                            </td>
-                            <td style="padding-left: 10px">
-                                <p:commandButton id="btnAddFollowUpCondition" value="#{msg.get('app.button.add')}"
-                                                 action="#{decision.onAddFollowUpCondition()}" process="@form"
-                                                 update=":frmMain:dtFollowUpCondition"
-                                                 styleClass="smaller"/>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
+                                                             style="width: 100%">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                <f:selectItem itemLabel="Example Condition" itemValue="Example Condition"/>
+                                                <!-- todo: getList conditions for FollowUpCondition -->
+                                                <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
+                                            </p:selectOneMenu>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <p:commandButton id="btnAddFollowUpCondition"
+                                                             binding="#{addFollowUpCondButton}"
+                                                             disabled="#{not decision.roleUW}"
+                                                             value="#{msg.get('app.button.add')}"
+                                                             action="#{decision.onAddFollowUpCondition()}"
+                                                             process="@form"
+                                                             update=":frmMain:dtFollowUpCondition"
+                                                             styleClass="smaller"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
-                                             onclick="this.select()"
-                                             style="width: 200px"/>
-                                <p:spacer width="10" height="0"/>
-                                <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
-                                                yearRange="1950:2100"
-                                                defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
-                                                pattern="dd/MM/yyyy"
-                                                value="#{decision.followUpConditionView.dateOfFollowUp}"
-                                                locale="th_TH"
-                                                readonlyInput="true"
-                                                styleClass="calendar_right">
-                                </clv:BECalendar>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
+                                                         style="width: 400px"/>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
+                                                            yearRange="1950:2100"
+                                                            defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            pattern="dd/MM/yyyy"
+                                                            value="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            locale="th_TH"
+                                                            readonlyInput="true"
+                                                            styleClass="calendar_right">
+                                            </clv:BECalendar>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
@@ -3187,8 +3205,8 @@
                                                 <tr>
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}" rows="2"
-                                                                         onclick="this.select()"
+                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                                         rows="2"
                                                                          style="width: 100%"/>
                                                     </td>
                                                 </tr>
@@ -3290,7 +3308,6 @@
                                                                 <td class="center" style="border-style:none !important;">
                                                                     <p:inputTextarea value="#{decision.approvalHistory.comment}"
                                                                                      rows="5"
-                                                                                     onclick="this.select()"
                                                                                      style="font-size: 12px !important; width: 450px"/>
                                                                 </td>
                                                             </tr>

@@ -85,8 +85,7 @@
                 </td>
                 <td class="left">
                     <p:inputText value="#{bankStatementDetail.bankStmtView.branchName}"
-                                 onclick="this.select()"
-                                 required="true"
+                                 required="#{not empty param[saveButton.clientId]}"
                                  styleClass="large"/>
                 </td>
             </tr>
@@ -140,7 +139,6 @@
                 <td>
                     <p:inputMask value="#{bankStatementDetail.bankStmtView.accountNumber}"
                                  mask="999-9-99999-9"
-                                 required="true"
                                  styleClass="large"/>
                 </td>
             </tr>
@@ -150,8 +148,7 @@
                 </td>
                 <td>
                     <p:inputText value="#{bankStatementDetail.bankStmtView.accountName}"
-                                 onclick="this.select()"
-                                 required="true"
+                                 required="#{not empty param[saveButton.clientId]}"
                                  styleClass="large"/>
                 </td>
             </tr>
@@ -161,7 +158,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.accountStatusView.id}"
-                                     required="true">
+                                     required="#{not empty param[saveButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{bankStatementDetail.accStatusViewList}" var="accStatus"
                                        itemLabel="#{accStatus.status}" itemValue="#{accStatus.id}"/>
@@ -173,7 +170,8 @@
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountCharacteristic')}"/>
                 </td>
                 <td>
-                    <p:selectOneRadio value="#{bankStatementDetail.bankStmtView.accountCharacteristic}" required="true">
+                    <p:selectOneRadio value="#{bankStatementDetail.bankStmtView.accountCharacteristic}"
+                                      required="#{not empty param[saveButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.borrowersAccount')}" itemValue="1"/>
                         <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.mainDirectorAccount')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.confederateAccount')}" itemValue="3"/>
@@ -264,6 +262,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.excludeListBDM}"
+                                                             readonly="#{bankStatementDetail.roleUW}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -279,6 +278,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.excludeListUW}"
+                                                             readonly="#{not bankStatementDetail.roleUW}"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -294,6 +294,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.creditAmountBDM}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -309,6 +310,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.creditAmountUW}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -324,6 +326,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.timesOfAvgCreditBDM}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -339,6 +342,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.timesOfAvgCreditUW}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -534,6 +538,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.swingPercent}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -549,6 +554,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.utilizationPercent}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -567,6 +573,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.grossInflowPerLimit}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -582,6 +589,7 @@
                                             <td class="center"
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.totalTransaction}"
+                                                             readonly="true"
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                              styleClass="right">
@@ -616,6 +624,7 @@
                                 <td class="left">
                                     <p:inputText id="avgIncomeGross"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeGross}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -631,6 +640,7 @@
                                 <td class="left">
                                     <p:inputText id="avgIncomeNetBDM"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetBDM}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -646,6 +656,7 @@
                                 <td class="left">
                                     <p:inputText id="avgIncomeNetUW"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetUW}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -661,6 +672,7 @@
                                 <td class="left">
                                     <p:inputText id="avgWithDrawAmount"
                                                  value="#{bankStatementDetail.bankStmtView.avgWithDrawAmount}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -676,6 +688,7 @@
                                 <td class="left">
                                     <p:inputText id="swingPercent"
                                                  value="#{bankStatementDetail.bankStmtView.avgSwingPercent}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -691,6 +704,7 @@
                                 <td class="left">
                                     <p:inputText id="utilizationPercent"
                                                  value="#{bankStatementDetail.bankStmtView.avgUtilizationPercent}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -706,6 +720,7 @@
                                 <td class="left">
                                     <p:inputText id="avgGrossInflowPerLimit"
                                                  value="#{bankStatementDetail.bankStmtView.avgGrossInflowPerLimit}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -721,6 +736,7 @@
                                 <td class="left">
                                     <p:inputText id="chequeReturn"
                                                  value="#{bankStatementDetail.bankStmtView.chequeReturn}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -736,6 +752,7 @@
                                 <td class="left">
                                     <p:inputText id="trdChequeReturnAmount"
                                                  value="#{bankStatementDetail.bankStmtView.trdChequeReturnAmount}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -751,6 +768,7 @@
                                 <td class="left">
                                     <p:inputText id="overLimitTimes"
                                                  value="#{bankStatementDetail.bankStmtView.overLimitTimes}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -766,6 +784,7 @@
                                 <td class="left">
                                     <p:inputText id="overLimitDays"
                                                  value="#{bankStatementDetail.bankStmtView.overLimitDays}"
+                                                 readonly="true"
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                                  styleClass="right" style="width:200px;">
@@ -795,7 +814,9 @@
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                     action="#{bankStatementDetail.onSave()}" process="@form"
+                                     binding="#{saveButton}"
+                                     action="#{bankStatementDetail.onSave()}"
+                                     process="@form"
                                      update=":frmMain, :msgBoxSystemMessagePanel"
                                      styleClass="smaller"/>
                     <p:spacer width="5" height="0"/>
