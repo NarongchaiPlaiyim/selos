@@ -17,6 +17,7 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -78,7 +79,8 @@ public class BankStatementSummary implements Serializable {
     private Date lastThreeMonth1;
     private Date lastThreeMonth2;
     private Date lastThreeMonth3;
-    private Date toDay;
+    private Date currentDate;
+    private String currentDateDDMMYY;
 
     //Session
     private long workCaseId;
@@ -134,18 +136,22 @@ public class BankStatementSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         preRender();
-        toDay = Calendar.getInstance(new Locale("th","TH")).getTime();
+
         //retrieveBankStmtFromDWH();
         summaryView = bankStmtTransform.getBankStmtSummaryView(bankStmtSummaryDAO.findByWorkCaseId(workCaseId));
         if (summaryView != null && summaryView.getId() != 0) {
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
+            currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
+
             provideSOCPAndCalSummary();
         }
         else {// Create new Bank statement summary
             log.debug("Create new Bank statement summary");
             seasonalFlag = RadioValue.NOT_SELECTED.value();
-            expectedSubmitDate = toDay;
+            expectedSubmitDate = getCurrentDate();
+            currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+
             summaryView = new BankStmtSummaryView();
             summaryView.setSeasonal(seasonalFlag);
             summaryView.setExpectedSubmitDate(expectedSubmitDate);
@@ -504,14 +510,6 @@ public class BankStatementSummary implements Serializable {
         this.confirmMessage = confirmMessage;
     }
 
-    public Date getToDay() {
-        return toDay;
-    }
-
-    public void setToDay(Date toDay) {
-        this.toDay = toDay;
-    }
-
     public boolean isDwhIsDown() {
         return dwhIsDown;
     }
@@ -534,5 +532,21 @@ public class BankStatementSummary implements Serializable {
 
     public void setExpectedSubmitDate(Date expectedSubmitDate) {
         this.expectedSubmitDate = expectedSubmitDate;
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        return currentDateDDMMYY;
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }

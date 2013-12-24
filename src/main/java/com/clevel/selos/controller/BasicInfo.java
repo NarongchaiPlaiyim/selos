@@ -17,6 +17,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -28,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -187,6 +189,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     private int tmpRefinanceIN;
     private int tmpRefinanceOUT;
     private int tmpApplyBA;
+
+    private String currentDateDDMMYY;
 
     public BasicInfo(){
     }
@@ -511,7 +515,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
             messageHeader = "Save Basic Info Success.";
-            message = "Save Basic Info data success.";
+            message = "Save data in Basic Information success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
@@ -776,6 +780,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             message = ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     // Get Set
@@ -1473,5 +1481,14 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setDisBaPaymentMethod(boolean disBaPaymentMethod) {
         this.disBaPaymentMethod = disBaPaymentMethod;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }

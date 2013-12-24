@@ -397,6 +397,7 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.getCurrentAddress().getCountry().setId(211);
         customerInfoView.getRegisterAddress().getCountry().setId(211);
         customerInfoView.getWorkAddress().getCountry().setId(211);
+        customerInfoView.getSourceIncome().setId(211);
 
         customerInfoView.getSpouse().getNationality().setId(1);
         customerInfoView.getSpouse().getCitizenCountry().setId(211);
@@ -1249,15 +1250,27 @@ public class CustomerInfoIndividual implements Serializable {
 
         //for check citizen id form list
         if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
+            int indexList = 0;
             for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
-                if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
-                    messageHeader = "Save Individual Failed.";
-                    message = "Citizen Id is already exist";
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    return "";
+                if(isEditFromJuristic) {
+                    if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && rowIndex != indexList){
+                        messageHeader = "Save Individual Failed.";
+                        message = "Citizen Id is already exist";
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        return "";
+                    }
+                } else {
+                    if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                        messageHeader = "Save Individual Failed.";
+                        message = "Citizen Id is already exist";
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        return "";
+                    }
                 }
+                indexList++;
             }
         }
+        //customerInfoView = individual
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationDAO.findById(customerInfoView.getRelation().getId()).getDescription());
 

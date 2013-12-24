@@ -15,6 +15,7 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerCSI;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -457,5 +458,11 @@ public class CustomerInfoControl extends BusinessControl {
         Customer customer = customerDAO.findById(customerInfo.getId());
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
         return customerInfoView;
+    }
+
+    public int checkAddress(AddressView add1, AddressView add2){
+        int currentAddress = 0;
+
+        return currentAddress;
     }
 }

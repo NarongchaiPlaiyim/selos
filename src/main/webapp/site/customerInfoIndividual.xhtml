@@ -72,7 +72,7 @@
                                     <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
                                                  style="width: 180px; max-width: 180px; min-width: 180px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
                                                  disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
                                 </td>
@@ -161,7 +161,7 @@
                                     <p:inputText id="shareCust" styleClass="right" value="#{custInfoSumIndi.customerInfoView.percentShare}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);">
+                                                 onkeypress="return onKeyPressNumber(event);">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                         <p:ajax event="blur" update=":frmMain:shareCust"/>
                                     </p:inputText>
@@ -199,7 +199,7 @@
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.citizenId}" maxlength="15"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  disabled="#{not custInfoSumIndi.enableCitizenId}"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCitId}"/>
                                 </td>
@@ -400,7 +400,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.sndNation')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.sndNationality.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
@@ -429,7 +429,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.occup')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.occupation.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndOcc}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -462,7 +462,7 @@
                                     <p:inputText id="approxIncome" styleClass="right" value="#{custInfoSumIndi.customerInfoView.approxIncome}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndAppInc}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:approxIncome"/>
@@ -487,7 +487,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.incomeCountry')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.countryIncome.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -524,7 +524,7 @@
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.numberOfChild}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                 onkeypress="return onKeyPressNumber(event);"/>
                                 </td>
                             </tr>
                             <!-- ############################################################################################# -->
@@ -656,9 +656,14 @@
                                             <td colspan="5">
                                                 <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.currentAddress.phoneNumber}"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId])
-                                                             and custInfoSumIndi.reqIndCurPhone}"/>
+                                                             and custInfoSumIndi.reqIndCurPhone}"
+                                                             onkeydown="return onKeyDownNumber(event);"
+                                                             onkeypress="return onKeyPressNumber(event);"
+                                                             maxlength="10"/>
                                                 <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
-                                                <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.currentAddress.extension}"/>
+                                                <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.currentAddress.extension}"
+                                                             onkeydown="return onKeyDownNumber(event);"
+                                                             onkeypress="return onKeyPressNumber(event);"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -823,12 +828,13 @@
                                                                                  and custInfoSumIndi.reqIndRegPhone
                                                                                  and custInfoSumIndi.addressFlagForm2 == 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.registerAddress.extension}"
                                                                  disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -992,12 +998,13 @@
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorPhone
                                                                  and custInfoSumIndi.addressFlagForm3 == 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.workAddress.extension}"
                                                                  disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1031,8 +1038,9 @@
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.mobileNumber}"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
+                                                 maxlength="10"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndMobNo}"/>
                                 </td>
                             </tr>
@@ -1043,7 +1051,7 @@
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.faxNumber}"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
@@ -1106,8 +1114,7 @@
                                 </td>
                                 <td colspan="3">
                                     <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.kycReason}"
-                                                     style="width: 70%" maxlength="250" autoResize="false"
-                                                     readonly="true"/>
+                                                     style="width: 70%" maxlength="250" autoResize="false"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1115,7 +1122,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" readonly="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1124,7 +1131,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" readonly="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1242,7 +1249,7 @@
                                         <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
                                                      style="width: 180px; max-width: 180px; min-width: 180px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
                                                      required="#{not empty param[searchSpouseButton.clientId]}"
                                                      disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
                                     </td>
@@ -1317,7 +1324,7 @@
                                         <p:inputText id="shareSpouse" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.percentShare}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);">
+                                                     onkeypress="return onKeyPressNumber(event);">
                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                             <p:ajax event="blur" update=":frmMain:shareSpouse"/>
                                         </p:inputText>
@@ -1352,11 +1359,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiId')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.citizenId}" maxlength="15"
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.citizenId}" maxlength="13"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoCitId}"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
                                                      disabled="#{not custInfoSumIndi.enableSpouseCitizenId}"/>
                                     </td>
                                 </tr>
@@ -1642,7 +1649,7 @@
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.numberOfChild}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                     onkeypress="return onKeyPressNumber(event);"/>
                                     </td>
                                 </tr>
                                 <!-- ############################################################################################# -->
@@ -1765,11 +1772,12 @@
                                                 <td colspan="5">
                                                     <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.phoneNumber}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.extension}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1917,12 +1925,13 @@
                                                         <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.phoneNumber}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"
+                                                                     maxlength="10"/>
                                                         <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                         <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.extension}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -2071,12 +2080,13 @@
                                                         <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.phoneNumber}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"
+                                                                     maxlength="10"/>
                                                         <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                         <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.extension}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -2095,7 +2105,8 @@
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.mobileNumber}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                     onkeypress="return onKeyPressNumber(event);"
+                                                     maxlength="10"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2146,8 +2157,7 @@
                                     </td>
                                     <td colspan="3">
                                         <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.spouse.kycReason}"
-                                                         style="width: 70%" maxlength="250" autoResize="false"
-                                                         readonly="true"/>
+                                                         style="width: 70%" maxlength="250" autoResize="false"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2155,7 +2165,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" readonly="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2164,7 +2174,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" readonly="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2256,7 +2266,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSave2,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
