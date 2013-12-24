@@ -221,8 +221,11 @@ public class Util implements Serializable {
     }
 
     public static BigDecimal add(BigDecimal value, BigDecimal augend) {
-        if (value == null)
+        if (value == null && augend == null)
             return null;
+
+        if (value == null)
+            return augend;
 
         if (augend == null)
             return value;
@@ -231,8 +234,11 @@ public class Util implements Serializable {
     }
 
     public static BigDecimal subtract(BigDecimal value, BigDecimal subtrahend) {
-        if (value == null)
+        if (value == null && subtrahend == null)
             return null;
+
+        if (value == null)
+            return subtrahend;
 
         if (subtrahend == null)
             return value;
@@ -258,9 +264,8 @@ public class Util implements Serializable {
     }
 
     public static BigDecimal divide(BigDecimal value, int divisor) {
-        if (value == null) {
+        if (value == null)
             return null;
-        }
 
         if (divisor == 0) {
             log.debug("divide() divisor is zero!");
@@ -275,14 +280,14 @@ public class Util implements Serializable {
     }
 
     public static BigDecimal multiply(BigDecimal value, BigDecimal multiplier){
-        BigDecimal result = BigDecimal.ZERO;
-        if(value == null || multiplier == null) return null;
+        if(value == null || multiplier == null)
+            return null;
+
         try {
-            result = value.multiply(multiplier);
-        }catch (Exception e){
+            return value.multiply(multiplier);
+        } catch (Exception e){
             return null;
         }
-        return result;
     }
 
     public static <T> List<T> safetyList(List<T> list) {
