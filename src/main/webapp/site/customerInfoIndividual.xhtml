@@ -49,7 +49,7 @@
                                     <p:selectOneMenu size="1" style="min-width: 200px; max-width: 200px; width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
+                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1} || #{custInfoSumIndi.editBorrower}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                        var="docType"
@@ -63,7 +63,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearch.searchBy}"
                                                       required="#{not empty param[searchButton.clientId]}"
-                                                      disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
+                                                      disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1} || #{custInfoSumIndi.editBorrower}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
                                     </p:selectOneRadio>
@@ -74,7 +74,7 @@
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
-                                                 disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
+                                                 disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1} || #{custInfoSumIndi.editBorrower}"/>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
@@ -82,7 +82,7 @@
                                                      process="@form"
                                                      actionListener="#{custInfoSumIndi.onSearchCustomerInfo()}"
                                                      update=":msgBoxSystemMessagePanel :frmMain"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1} || #{custInfoSumIndi.editBorrower}"/>
                                 </td>
                             </tr>
 
@@ -145,7 +145,7 @@
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.referenceIndividualList}"
                                                        var="reference"
-                                                       itemLabel="#{reference.description} - #{reference.id}"
+                                                       itemLabel="#{reference.description}"
                                                        itemValue="#{reference.id}"/>
                                         <p:ajax event="change" process="@form" update=":frmMain" listener="#{custInfoSumIndi.onChangeReference()}"/>
                                     </p:selectOneMenu>
@@ -1226,7 +1226,7 @@
                                         <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoSearchSpouse.documentType.id}"
                                                          required="#{not empty param[searchSpouseButton.clientId]}"
-                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
+                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1} || #{custInfoSumIndi.editSpouseBorrower}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
@@ -1240,7 +1240,7 @@
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy}"
                                                           required="#{not empty param[searchSpouseButton.clientId]}"
-                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
+                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1} || #{custInfoSumIndi.editSpouseBorrower}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
                                         </p:selectOneRadio>
@@ -1251,7 +1251,7 @@
                                                      onkeydown="return onKeyDownNumber(event);"
                                                      onkeypress="return onKeyPressNumber(event);"
                                                      required="#{not empty param[searchSpouseButton.clientId]}"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1} || #{custInfoSumIndi.editSpouseBorrower}"/>
                                     </td>
                                     <td>
                                         <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch2"
@@ -1259,7 +1259,7 @@
                                                          process="@form"
                                                          actionListener="#{custInfoSumIndi.onSearchSpouseCustomerInfo()}"
                                                          update=":msgBoxSystemMessagePanel :frmMain"
-                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
+                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1} || #{custInfoSumIndi.editSpouseBorrower}"/>
                                     </td>
                                 </tr>
 

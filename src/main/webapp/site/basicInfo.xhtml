@@ -515,7 +515,7 @@
                                                     <p:commandButton value="#{msg.get('app.button.add')}"
                                                                      styleClass="smaller"
                                                                      process="@this"
-                                                                     actionListener="#{basicInfo.onAddAccount}"
+                                                                     actionListener="#{basicInfo.onInitAddAccount}"
                                                                      update=":basicInfoAccountDlgForm"
                                                                      oncomplete="basicInfoAccountDlg.show();">
                                                         <p:resetInput target=":basicInfoAccountDlgForm"/>
@@ -658,7 +658,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
-              modal="true" width="550" height="260">
+              modal="true" width="550" height="280">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
