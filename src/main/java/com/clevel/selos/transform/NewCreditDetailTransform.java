@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
@@ -14,10 +15,27 @@ import java.util.List;
 public class NewCreditDetailTransform extends Transform {
 
     @Inject
-    public NewCreditDetailTransform() {
-    }
+    public NewCreditDetailTransform() {}
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user){
+    @Inject
+    NewCreditDetailDAO newCreditDetailDAO;
+
+        public List<NewCreditDetail> getNewCreditDetailForGuarantor(List<NewCreditDetailView> newCreditGrtViews, NewCreditFacility newCreditFacility){
+            List<NewCreditDetail> newCreditDetailList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+            List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
+            for (NewCreditDetailView newCreditDetailView : newCreditGrtViews)
+            {
+                for(NewCreditDetail newCreditDetail : newCreditDetailList){
+                   if(newCreditDetailView.getId()==newCreditDetail.getId()){
+                       newCreditListReturn.add(newCreditDetail);
+                   }
+                }
+            }
+
+           return  newCreditListReturn;
+        }
+
+        public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility, User user){
 
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;

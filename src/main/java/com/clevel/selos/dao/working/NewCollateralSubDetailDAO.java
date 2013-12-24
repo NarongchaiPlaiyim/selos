@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail, Integer> {
+public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail, Long> {
     @Inject
     @SELOS
     Logger log;

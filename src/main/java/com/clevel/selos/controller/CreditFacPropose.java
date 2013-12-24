@@ -1025,10 +1025,10 @@ public class CreditFacPropose implements Serializable {
 //                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //            } else {
                 log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getId());
-                if (relatedWithSelected.getId() == 0) {
+                /*if (relatedWithSelected.getId() == 0) {
                     log.error("Can not add RelatedWith because id = 0!");
                     return;
-                }
+                }*/
                 NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
                 newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
 //            }
@@ -1361,7 +1361,7 @@ public class CreditFacPropose implements Serializable {
 
                     }
 
-                    onCreation();
+//                    onCreation();
 
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
