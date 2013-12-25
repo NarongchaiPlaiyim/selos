@@ -49,7 +49,7 @@
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
-                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}">
+                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1 || custInfoSumJuris.editBorrower}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.documentTypeList}"
                                                        var="docType"
@@ -63,7 +63,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumJuris.customerInfoSearch.searchBy}"
                                                       required="#{not empty param[searchButton.clientId]}"
-                                                      disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}">
+                                                      disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1 || custInfoSumJuris.editBorrower}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.search.citizenId')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.search.tmbCusId')}" itemValue="2"/>
                                     </p:selectOneRadio>
@@ -74,7 +74,7 @@
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
-                                                 disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
+                                                 disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1 || custInfoSumJuris.editBorrower}"/>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
@@ -82,7 +82,7 @@
                                                      process="@form"
                                                      actionListener="#{custInfoSumJuris.onSearchCustomerInfo()}"
                                                      update=":msgBoxSystemMessagePanel :frmMain"
-                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1 || custInfoSumJuris.editBorrower}"/>
                                 </td>
                             </tr>
 
