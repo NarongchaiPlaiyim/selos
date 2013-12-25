@@ -62,7 +62,7 @@ public class DBRDetailTransform extends Transform {
             }
         }
         dbrDetail.setLimit(dbrDetailView.getLimit());
-        dbrDetail.setAccountName(dbrDetailView.getAccountName());
+        dbrDetail.setAccountName(dbrDetailView.getAccountName().trim());
         dbrDetail.setDebtForCalculate(dbrDetailView.getDebtForCalculate());
         dbrDetail.setInstallment(dbrDetailView.getInstallment());
         dbrDetail.setLoanType(loanAccountTypeTransform.getLoanType(dbrDetailView.getLoanAccountTypeView()));
