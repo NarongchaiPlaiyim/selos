@@ -481,6 +481,11 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         StringBuilder stringBuilder = new StringBuilder();
 
+        List<BasicInfoAccountPurposeView> purposeViewTmp = new ArrayList<BasicInfoAccountPurposeView>();
+        for(BasicInfoAccountPurposeView ba : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            purposeViewTmp.add(ba);
+        }
+
         basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
         for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
             if(bia.isSelected()){
@@ -492,12 +497,6 @@ public class BasicInfo extends MandatoryFieldsControl {
                     stringBuilder.append(", "+bia.getPurpose().getName());
                 }
             }
-        }
-
-        if(!stringBuilder.toString().isEmpty()){
-            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
-            basicInfoAccountView.setPurposeForShow("-");
         }
 
         //check existing
@@ -514,6 +513,7 @@ public class BasicInfo extends MandatoryFieldsControl {
                                         boolean complete = false;
                                         RequestContext context = RequestContext.getCurrentInstance();
                                         context.addCallbackParam("functionComplete", complete);
+                                        basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
                                         return;
                                     } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
                                         boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
@@ -537,6 +537,7 @@ public class BasicInfo extends MandatoryFieldsControl {
                                                 boolean complete = false;
                                                 RequestContext context = RequestContext.getCurrentInstance();
                                                 context.addCallbackParam("functionComplete", complete);
+                                                basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
                                                 return;
                                             }
                                         }
@@ -554,6 +555,7 @@ public class BasicInfo extends MandatoryFieldsControl {
                                     boolean complete = false;
                                     RequestContext context = RequestContext.getCurrentInstance();
                                     context.addCallbackParam("functionComplete", complete);
+                                    basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
                                     return;
                                 } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
                                     boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
@@ -577,6 +579,7 @@ public class BasicInfo extends MandatoryFieldsControl {
                                             boolean complete = false;
                                             RequestContext context = RequestContext.getCurrentInstance();
                                             context.addCallbackParam("functionComplete", complete);
+                                            basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
                                             return;
                                         }
                                     }
@@ -587,6 +590,12 @@ public class BasicInfo extends MandatoryFieldsControl {
                 }
                 listIndex++;
             }
+        }
+
+        if(!stringBuilder.toString().isEmpty()){
+            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
+        }else{
+            basicInfoAccountView.setPurposeForShow("-");
         }
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
