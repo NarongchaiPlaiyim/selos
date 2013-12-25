@@ -16,8 +16,7 @@ import java.util.List;
 public class NewSubCollDetailTransform extends Transform {
 
     @Inject
-    public NewSubCollDetailTransform() {
-    }
+    public NewSubCollDetailTransform() {}
 
     @Inject
     CustomerDAO customerDAO;
@@ -143,12 +142,12 @@ public class NewSubCollDetailTransform extends Transform {
         return newSubCollateralDetailViewList;
     }
 
-    public List<NewCollateralSubDetail> getNewSubDetailForCollateral(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, List<NewCollateralSubDetail> newCollateralSubDetailPersist) {
+    public List<NewCollateralSubDetail> getNewSubDetailForRelated(List<NewSubCollateralDetailView> newSubCollateralDetailViewList, List<NewCollateralSubDetail> newCollateralSubDetailPersist) {
 
         List<NewCollateralSubDetail> listReturn = new ArrayList<NewCollateralSubDetail>();
         for (NewSubCollateralDetailView subView : newSubCollateralDetailViewList) {
             for (NewCollateralSubDetail newCollateralSubDetail : newCollateralSubDetailPersist) {
-                if (subView.getRelatedWithId() == newCollateralSubDetail.getId()) {
+                if (subView.getRelatedWithId() == newCollateralSubDetail.getRelatedWithId()) {
                     listReturn.add(newCollateralSubDetail);
                 }
             }
@@ -157,18 +156,6 @@ public class NewSubCollDetailTransform extends Transform {
         return listReturn;
     }
 
-    public List<NewSubCollateralDetailView> getNewSubCollateralDetailView(List<NewCollateralSubDetail> newCollateralSubDetails) {
 
-        List<NewSubCollateralDetailView> listReturn = new ArrayList<NewSubCollateralDetailView>();
-        /*for (NewSubCollateralDetailView subView : newSubCollateralDetailViewList) {
-            for (NewCollateralSubDetail newCollateralSubDetail : newCollateralSubDetails) {
-                if (subView.getId() == newCollateralSubDetail.getId()) {
-                    listReturn.add(newCollateralSubDetail);
-                }
-            }
-        }
-*/
-        return listReturn;
-    }
 
 }

@@ -4,6 +4,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.db.working.NewCollateralHeadDetail;
 import com.clevel.selos.model.view.NewCollateralHeadDetailView;
+import com.clevel.selos.model.view.NewSubCollateralDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class NewCollHeadDetailTransform extends Transform {
     @Inject
     public NewCollHeadDetailTransform() {
     }
+
+    @Inject
+    NewSubCollDetailTransform newSubCollDetailTransform;
 
     public NewCollateralHeadDetail transformNewCollateralHeadDetailViewToModel(NewCollateralHeadDetailView newCollateralHeadDetailView, NewCollateralDetail collateralDetail, User user) {
 
@@ -103,6 +107,11 @@ public class NewCollHeadDetailTransform extends Transform {
             newCollateralHeadDetailView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadDetailView.setModifyBy(collateralHeaderDetail.getModifyBy());
             newCollateralHeadDetailView.setModifyDate(collateralHeaderDetail.getModifyDate());
+
+            if (collateralHeaderDetail.getNewCollateralSubDetailList() != null) {
+                List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(collateralHeaderDetail.getNewCollateralSubDetailList());
+                newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
+            }
 
             newCollateralHeadDetailViewList.add(newCollateralHeadDetailView);
         }

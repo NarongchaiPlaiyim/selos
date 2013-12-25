@@ -93,13 +93,14 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
             List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
+            log.info("newGuarantorRelCreditList :: {}",newGuarantorRelCreditList.size());
             if (newGuarantorRelCreditList != null) {
                 List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
 
                 for (NewGuarantorRelCredit newGuarantorRelCredit : newGuarantorRelCreditList) {
                     newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
                 }
-
+                log.info("newCreditDetailList Guarantor:: {}",newCreditDetailList.size());
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
                 newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailViewList);
 

@@ -1346,6 +1346,7 @@ public class CreditFacPropose implements Serializable {
                         && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.onSaveRelationNewCreditDetail(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
@@ -1357,8 +1358,8 @@ public class CreditFacPropose implements Serializable {
                         message = msg.get("app.propose.response.desc.cannot.save");
 
                     }
-//                    newCreditFacilityView = creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-//                    onCreation();
+                    creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
+                    onCreation();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {

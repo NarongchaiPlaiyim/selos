@@ -21,7 +21,7 @@ public class NewCollateralRelationDAO extends GenericDAO<NewCollateralRelCredit,
     }
 
     @SuppressWarnings("unchecked")
-    public List<NewCollateralRelCredit> getListCollRelationByNewGuarantor(NewCollateralDetail newCollateralDetail) {
+    public List<NewCollateralRelCredit> getListCollRelationByNewCollateral(NewCollateralDetail newCollateralDetail) {
         log.info("getListCollRelationByNewGuarantor. (newCollateralDetail: {})", newCollateralDetail);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralDetail", newCollateralDetail));
