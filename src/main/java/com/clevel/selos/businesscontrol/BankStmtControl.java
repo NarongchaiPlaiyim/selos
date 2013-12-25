@@ -150,6 +150,10 @@ public class BankStmtControl extends BusinessControl {
         return customerAccountResult;
     }
 
+    public BankStmtSummaryView getBankStmtSummaryByWorkCaseId(long workCaseId) {
+        return bankStmtTransform.getBankStmtSummaryView(bankStatementSummaryDAO.findByWorkCaseId(workCaseId));
+    }
+
     /**
      * To get starting date of retrieving bank account <br/>
      * If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1) <br/>
@@ -200,7 +204,7 @@ public class BankStmtControl extends BusinessControl {
 
     /**
      * Formula: <br/>
-     * if(creditAmountUW[(Net)-UW] is blank) -> all values will be blank <br/>
+     * if(creditAmountUW[(Net)-UW] is blank) -> timesOfAvgCredit(BDM/UW) both values will be blank <br/>
      * else -> timesOfAvgCredit = [ creditAmount(BDM/UW) / avgIncomeNet(BDM/UW) ]
      * @param creditAmount(BDM/UW)
      * @param avgIncomeNet(BDM/UW)
@@ -208,7 +212,7 @@ public class BankStmtControl extends BusinessControl {
      * @return timesOfAvgCredit(BDM/UW)
      */
     public BigDecimal calTimesOfAvgCredit(BigDecimal creditAmount, BigDecimal avgIncomeNet, BigDecimal creditAmountUW) {
-        if (creditAmount == null || avgIncomeNet == null || creditAmountUW == null)
+        if (creditAmountUW == null)
             return null;
 
         return Util.divide(creditAmount, avgIncomeNet);
@@ -222,10 +226,15 @@ public class BankStmtControl extends BusinessControl {
      * @return Swing(%)
      */
     public BigDecimal calSwingPercent(BigDecimal maxBalance, BigDecimal minBalance, BigDecimal overLimitAmount) {
-        if (maxBalance == null || minBalance == null || overLimitAmount == null)
+        if (maxBalance == null && minBalance == null && overLimitAmount == null)
             return null;
 
-        return Util.divide(maxBalance.subtract(minBalance).abs(), overLimitAmount);
+        BigDecimal diffMinMaxBalance = Util.subtract(maxBalance, minBalance);
+
+        if (diffMinMaxBalance != null)
+            return Util.divide(diffMinMaxBalance.abs(), overLimitAmount);
+        else
+            return null;
     }
 
     /**
@@ -235,10 +244,10 @@ public class BankStmtControl extends BusinessControl {
      * @return Utilization(%)
      */
     public BigDecimal calUtilizationPercent(BigDecimal monthBalance, BigDecimal overLimitAmount) {
-        if (monthBalance == null || overLimitAmount == null)
+        if (monthBalance == null && overLimitAmount == null)
             return null;
 
-        return Util.divide(monthBalance.multiply(BigDecimal.ONE.negate()), overLimitAmount);
+        return Util.divide(Util.multiply(monthBalance, BigDecimal.ONE.negate()), overLimitAmount);
     }
 
     /**
@@ -285,6 +294,7 @@ public class BankStmtControl extends BusinessControl {
         if(maxBalance3 == null){
             maxBalance3 = BigDecimal.ZERO;
         }
+
         // if(Account Type = 'Saving Account', 'Current Account', Other: 'Fixed Deposit', 'Bill of Exchange') -> [maxBalance1 + maxBalance2 + maxBalance3] / 3
         if (savingAccType != null && savingAccType.getId() == bankAccTypeFromBankStmt.getId()) {
             return Util.divide(maxBalance1.add(maxBalance2).add(maxBalance3), 3);
@@ -870,9 +880,9 @@ public class BankStmtControl extends BusinessControl {
         bankStmtSummaryView.setOthTotalIncomeNetUW(othTotalIncomeNetUW);
 
         // Grand total
-        BigDecimal grdTotalIncomeGross = tmbTotalIncomeGross.add(othTotalIncomeGross);
-        BigDecimal grdTotalIncomeNetBDM = tmbTotalIncomeNetBDM.add(othTotalIncomeNetBDM);
-        BigDecimal grdTotalIncomeNetUW = tmbTotalIncomeNetUW.add(othTotalIncomeNetUW);
+        BigDecimal grdTotalIncomeGross = Util.add(tmbTotalIncomeGross, othTotalIncomeGross);
+        BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
+        BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
         BigDecimal grdTotalTrdChqRetPercent;
         if (useNetUWToCal)
@@ -967,9 +977,17 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, savingAccType, currentAccType, othFDType, othBOEType) );
     }
 
-    public boolean isBDMUser() {
+    public boolean isABDMorBDM() {
         User user = getCurrentUser();
         if (RoleUser.ABDM.getValue() == user.getRole().getId() || RoleUser.BDM.getValue() == user.getRole().getId())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isUW() {
+        User user = getCurrentUser();
+        if (RoleUser.UW.getValue() == user.getRole().getId())
             return true;
         else
             return false;
