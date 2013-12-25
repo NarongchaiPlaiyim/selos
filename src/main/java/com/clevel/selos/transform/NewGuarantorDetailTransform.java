@@ -93,14 +93,14 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
             List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            log.info("newGuarantorRelCreditList :: {}",newGuarantorRelCreditList.size());
+            log.info("newGuarantorRelCreditList :: {}", newGuarantorRelCreditList.size());
             if (newGuarantorRelCreditList != null) {
                 List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
 
                 for (NewGuarantorRelCredit newGuarantorRelCredit : newGuarantorRelCreditList) {
                     newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
                 }
-                log.info("newCreditDetailList Guarantor:: {}",newCreditDetailList.size());
+                log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
                 newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailViewList);
 
@@ -110,5 +110,35 @@ public class NewGuarantorDetailTransform extends Transform {
         }
 
         return newGuarantorDetailViews;
+    }
+
+    public NewGuarantorDetailView transformNewGuarantorDetailToView(NewGuarantorDetail newGuarantorDetail) {
+
+        NewGuarantorDetailView newGuarantorDetailView = new NewGuarantorDetailView();
+        CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
+        newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
+        newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());
+        newGuarantorDetailView.setModifyDate(newGuarantorDetail.getModifyDate());
+        newGuarantorDetailView.setModifyBy(newGuarantorDetail.getModifyBy());
+        newGuarantorDetailView.setGuarantorName(guarantorView);
+        newGuarantorDetailView.setTcgLgNo(newGuarantorDetail.getTcgLgNo());
+        newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
+
+        List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
+        log.info("newGuarantorRelCreditList :: {}", newGuarantorRelCreditList.size());
+        if (newGuarantorRelCreditList != null) {
+            List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
+
+            for (NewGuarantorRelCredit newGuarantorRelCredit : newGuarantorRelCreditList) {
+                newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
+            }
+            log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
+            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+            newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailViewList);
+
+        }
+
+
+        return newGuarantorDetailView;
     }
 }

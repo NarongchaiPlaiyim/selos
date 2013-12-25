@@ -152,4 +152,45 @@ public class NewCollateralInfoTransform extends Transform {
         return newCollateralDInfoViewList;
     }
 
+
+    public NewCollateralInfoView transformsNewCollateralDetailToView(NewCollateralDetail newCollateralInfo) {
+        NewCollateralInfoView newCollateralInfoView = new NewCollateralInfoView();
+        newCollateralInfoView.setCreateDate(newCollateralInfo.getCreateDate());
+        newCollateralInfoView.setCreateBy(newCollateralInfo.getCreateBy());
+        newCollateralInfoView.setCreateDate(newCollateralInfo.getCreateDate());
+        newCollateralInfoView.setCreateBy(newCollateralInfo.getCreateBy());
+        newCollateralInfoView.setJobID(newCollateralInfo.getJobID());
+        newCollateralInfoView.setAadDecision(newCollateralInfo.getAadDecision());
+        newCollateralInfoView.setAadDecisionReason(newCollateralInfo.getAadDecisionReason());
+        newCollateralInfoView.setAadDecisionReasonDetail(newCollateralInfo.getAadDecisionReasonDetail());
+        newCollateralInfoView.setAppraisalDate(newCollateralInfo.getAppraisalDate());
+        newCollateralInfoView.setBdmComments(newCollateralInfo.getBdmComments());
+        newCollateralInfoView.setMortgageCondition(newCollateralInfo.getMortgageCondition());
+        newCollateralInfoView.setMortgageConditionDetail(newCollateralInfo.getMortgageConditionDetail());
+        newCollateralInfoView.setTypeOfUsage(newCollateralInfo.getTypeOfUsage());
+        newCollateralInfoView.setUsage(newCollateralInfo.getUsage());
+        newCollateralInfoView.setUwDecision(newCollateralInfo.getUwDecision());
+        newCollateralInfoView.setUwRemark(newCollateralInfo.getUwRemark());
+
+        List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralInfo);
+        if (newCollateralRelCredits != null) {
+            List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
+
+            for (NewCollateralRelCredit newCollateralRelCredit : newCollateralRelCredits) {
+                newCreditDetailList.add(newCollateralRelCredit.getNewCreditDetail());
+            }
+
+            List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
+            newCollateralInfoView.setNewCreditDetailViewList(newCreditDetailViewList);
+
+        }
+
+        if (newCollateralInfo.getNewCollateralHeadDetailList() != null) {
+            List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralInfo.getNewCollateralHeadDetailList());
+            newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
+        }
+
+
+        return newCollateralInfoView;
+    }
 }

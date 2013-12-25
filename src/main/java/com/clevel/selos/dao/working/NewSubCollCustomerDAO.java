@@ -21,11 +21,11 @@ public class NewSubCollCustomerDAO extends GenericDAO<NewCollateralSubCustomer, 
     }
 
     @SuppressWarnings("unchecked")
-    public List<NewCollateralSubCustomer> getListNewCollateralSubCustomer(NewCollateralSubDetail mewCollateralSubDetail) {
-        log.info("getListNewCollateralSubCustomer. (mewCollateralSubDetail: {})", mewCollateralSubDetail);
+    public List<NewCollateralSubCustomer> getListNewCollateralSubCustomer(NewCollateralSubDetail newCollateralSubDetail) {
+        log.info("getListNewCollateralSubCustomer. (ewCollateralSubDetail: {})", newCollateralSubDetail);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("mewCollateralSubDetail", mewCollateralSubDetail));
-        criteria.addOrder(Order.asc("mewCollateralSubDetail.id"));
+        criteria.add(Restrictions.eq("newCollateralSubDetail", newCollateralSubDetail));
+        criteria.addOrder(Order.asc("newCollateralSubDetail.id"));
         List<NewCollateralSubCustomer> newCollateralSubCustomerList = (List<NewCollateralSubCustomer>)criteria.list();
         log.info("getList. (result size: {})", newCollateralSubCustomerList.size());
 
