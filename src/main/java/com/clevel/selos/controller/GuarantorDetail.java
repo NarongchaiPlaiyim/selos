@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.view.GuarantorDetailView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -42,6 +43,9 @@ public class GuarantorDetail implements Serializable {
     private String messageHeader;
     private String message;
 
+    // content //
+    private GuarantorDetailView guarantorDetailView;
+
     //session
     private long workCaseId;
 
@@ -73,7 +77,7 @@ public class GuarantorDetail implements Serializable {
 
     @PostConstruct
     public void onCreation(){
-
+        guarantorDetailView = new GuarantorDetailView();
     }
 
     public String getCurrentDateDDMMYY(){
@@ -94,5 +98,13 @@ public class GuarantorDetail implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public GuarantorDetailView getGuarantorDetailView() {
+        return guarantorDetailView;
+    }
+
+    public void setGuarantorDetailView(GuarantorDetailView guarantorDetailView) {
+        this.guarantorDetailView = guarantorDetailView;
     }
 }

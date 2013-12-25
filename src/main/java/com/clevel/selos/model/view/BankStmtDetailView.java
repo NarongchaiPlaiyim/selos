@@ -1,8 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -50,8 +50,8 @@ public class BankStmtDetailView implements Serializable {
 //        this.timesOfAvgCreditBDM = BigDecimal.ZERO;
 //        this.timesOfAvgCreditUW = BigDecimal.ZERO;
 //        this.debitAmount = BigDecimal.ZERO;
-        this.dateOfMaxBalance = DateTimeUtil.getCurrentDateTH();
-        this.dateOfMinBalance = DateTimeUtil.getCurrentDateTH();
+        this.dateOfMaxBalance = DateTime.now().toDate();
+        this.dateOfMinBalance = DateTime.now().toDate();
 //        this.maxBalance = BigDecimal.ZERO;
 //        this.minBalance = BigDecimal.ZERO;
 //        this.monthBalance = BigDecimal.ZERO;

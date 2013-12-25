@@ -1,0 +1,60 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+    <h:form id="disbursementDepositForm">
+        <table id="content_form">
+            <tr>
+                <td ><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountNumber')}"/></td>
+                <td>
+                    <p:inputMask id="accountNumber" mask="999-9-99999-9" value="#{disbursementInfo.disbursementDepositDetailView.accountNumber}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="accountName" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountName')}"/></td>
+                <td>
+                    <p:inputText id="accountName" value="#{disbursementInfo.disbursementDepositDetailView.accountName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.deposit.dialog.creditType')}"/></td>
+                <td>
+                    <p:dataTable id="creditType" value="#{disbursementInfo.disbursementDepositDetailView.creditType}" rowIndexVar="rowIndex" var="item">
+                        <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.productProgram')}">
+                            <h:outputText value="#{item.productProgram}"/>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.creditFac')}">
+                            <h:outputText value="#{item.creditFacility}"/>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.limit')}">
+                            <h:outputText value="#{item.limit}">
+                                <f:convertNumber pattern="#,##0"
+                                                 minFractionDigits="2"
+                                                 maxFractionDigits="2"
+                                                 maxIntegerDigits="14"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.disburseAmount')}">
+                            <p:inputText value="#{item.disburseAmount}" style="#{item.componentFlag? 'border-color:blank;' : 'border-color:red;'}"/>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="text-align: center">
+                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                     actionListener="#{disbursementInfo.onSubmitDisbursementDeposit()}"
+                                     styleClass="smaller"
+                                     update=":disbursementForm ,:disbursementDepositForm"
+                                     oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                                     onclick="depositDisbursementDialog.hide()"
+                                     update=":disbursementForm"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

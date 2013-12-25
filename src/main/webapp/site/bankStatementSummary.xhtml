@@ -4,13 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Bank Statement Summary</title>
     <h:outputStylesheet name="css/style.css" />
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -43,10 +45,10 @@
                     <!-- start content -->
                     <table class="content_table_form">
                     <tr>
-                        <td class="title" style="width:250px;">
+                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
                         </td>
-                        <td>
+                        <td class="left">
                             <p:selectOneRadio value="#{bankStatementSummary.seasonalFlag}">
                                 <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                 <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
@@ -54,24 +56,36 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width:250px;">
+                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
                         </td>
-                        <td>
-                            <p:calendar id="calendarId"
-                                        navigator="true" showButtonPanel="true" showOn="both"
-                                        value="#{bankStatementSummary.expectedSubmitDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000"
-                                        styleClass="calendar_right">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:calendar>
-                            <p:spacer width="10"/>
-                            <p:commandButton id="btnRefresh" value="#{msg.get('app.button.refresh')}" disabled="#{bankStatementSummary.disableRefresh}"
-                                             action="#{bankStatementSummary.onRefresh()}" process="@form" update=":frmMain"
-                                             styleClass="smaller"/>
+                        <td class="left">
+                            <table border="0">
+                                <tr>
+                                    <td style="border-style: none !important;">
+                                        <clv:BECalendar id="expectSumitDate" showOn="both" showButtonPanel="true" navigator="true"
+                                                        yearRange="1950:2100"
+                                                        defaultdate="#{bankStatementSummary.currentDateDDMMYY}"
+                                                        mindate="#{bankStatementSummary.currentDateDDMMYY}"
+                                                        pattern="dd/MM/yyyy"
+                                                        value="#{bankStatementSummary.expectedSubmitDate}"
+                                                        locale="th_TH"
+                                                        readonlyInput="true"
+                                                        required="#{not empty param[saveButton.clientId] || not empty param[refreshButton.clientId]}"
+                                                        styleClass="calendar_right">
+                                        </clv:BECalendar>
+                                    </td>
+                                    <td style="border-style: none !important; padding-left: 5px;">
+                                        <p:commandButton id="btnRefresh" value="#{msg.get('app.button.refresh')}"
+                                                         binding="#{refreshButton}"
+                                                         disabled="#{bankStatementSummary.disableRefresh}"
+                                                         action="#{bankStatementSummary.onRefresh()}"
+                                                         process="@form"
+                                                         update=":frmMain"
+                                                         styleClass="smaller"/>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
@@ -81,10 +95,10 @@
                     </tr>
                     <!-- TMB Bank Statement Summary -->
                     <tr>
-                        <td class="title" style="width:250px;">
+                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.tmbBankStmtSum')}"/>
                         </td>
-                        <td>
+                        <td class="left">
                             <p:commandButton id="btnAddTmbBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddTMBBankStmt()}" process="@form"
                                              update=":frmMain, :confirmChangeScreenBankStmtDialog"
@@ -317,10 +331,10 @@
                     </tr>
                     <!-- Other Bank -->
                     <tr>
-                        <td class="title" style="width:250px;">
+                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.otherBankStmtSum')}"/>
                         </td>
-                        <td>
+                        <td class="left">
                             <p:commandButton id="btnAddOthBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddOtherBankStmt()}" process="@form"
                                              update=":frmMain, :confirmChangeScreenBankStmtDialog"
@@ -607,7 +621,7 @@
                     </tr>
                     <!-- Source of Collateral Proof -->
                     <tr>
-                        <td class="title" style="width:250px;">
+                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.srcOfCollateralProof')}"/>
                         </td>
                         <td></td>
@@ -752,6 +766,7 @@
                     <tr>
                         <td colspan="2" class="center">
                             <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                             binding="#{saveButton}"
                                              action="#{bankStatementSummary.onSaveSummary()}" process="@form"
                                              update=":frmMain, :msgBoxSystemMessagePanel"
                                              styleClass="smaller"/>

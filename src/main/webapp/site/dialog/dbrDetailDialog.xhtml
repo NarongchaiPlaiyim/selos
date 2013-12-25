@@ -13,7 +13,8 @@
                         <p:outputLabel for="accountName" value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
-                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"/>
+                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"
+                                     onkeyup="return alphabetThaiEng($(this));"/>
                     </td>
                 </tr>
                 <tr>
@@ -36,7 +37,8 @@
                     </td>
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
-                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()">
+                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:limit"/>
@@ -48,7 +50,8 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
                     </td>
                     <td>
-                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()">
+                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number" />
                             <p:ajax event="change" update=":dbrDetailDlgForm:installment"/>

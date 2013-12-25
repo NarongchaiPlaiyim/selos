@@ -1,0 +1,82 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+    <h:form id="disbursementMcForm">
+        <table id="content_form">
+            <tr>
+               <td><p:outputLabel for="issuedBy" value="#{msg.get('app.disbursement.detail.mc.dialog.issuedBy')}"/></td>
+               <td>
+                   <p:selectOneMenu id="issuedBy" value="#{disbursementInfo.disbursementMcDetailView.issuedBy}">
+                     <f:selectItem itemLabel="- Please Select -" itemValue="Test"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+               <td><p:outputLabel for="issuedDate" value="#{msg.get('app.disbursement.detail.mc.dialog.mcIssuedDate')}"/></td>
+               <td>
+                   <clv:BECalendar  value="#{disbursementInfo.disbursementMcDetailView.issuedDate}" id="issuedDate" showOn="button" pattern="dd/MM/yyyy"
+                                     navigator="true" locale="th_TH" showButtonPanel="true" />
+               </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="payeeName" value="#{msg.get('app.disbursement.detail.mc.dialog.payeeName')}"/></td>
+                <td>
+                    <p:selectOneMenu  value="#{disbursementInfo.disbursementMcDetailView.payeeName}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="Test"/>
+                    </p:selectOneMenu>
+                </td>
+                <td>
+                    <p:inputText id="payeeName" value="#{disbursementInfo.disbursementMcDetailView.payeeSubname}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="crossType" value="#{msg.get('app.disbursement.detail.mc.dialog.crossType')}"/></td>
+                <td>
+                    <p:selectOneMenu id="crossType" value="#{disbursementInfo.disbursementMcDetailView.crossType}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="Test"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.mc.dialog.creditType')}"/></td>
+                <td>
+                   <p:dataTable id="creditType" value="#{disbursementInfo.disbursementMcDetailView.creditType}" rowIndexVar="rowIndex" var="item">
+                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.productProgram')}">
+                           <h:outputText value="#{item.productProgram}"/>
+                       </p:column>
+                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.creditFac')}">
+                           <h:outputText value="#{item.creditFacility}"/>
+                       </p:column>
+                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.limit')}">
+                           <h:outputText value="#{item.limit}">
+                               <f:convertNumber pattern="#,##0"
+                                                minFractionDigits="2"
+                                                maxFractionDigits="2"
+                                                maxIntegerDigits="14"/>
+                           </h:outputText>
+                       </p:column>
+                       <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.disburseAmount')}">
+                           <p:inputText value="#{item.disburseAmount}" style="#{item.componentFlag? 'border-color:blank;' : 'border-color:red;'}" />
+                       </p:column>
+                   </p:dataTable>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="text-align: center">
+                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                     actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
+                                     styleClass="smaller"
+                                     update=":disbursementForm ,:disbursementMcForm"
+                                     oncomplete="handleDisbursementMcDialogRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
+                                     onclick="mcDisbursementDialog.hide()"
+                                     update=":disbursementForm"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

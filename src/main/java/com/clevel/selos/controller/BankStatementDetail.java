@@ -92,6 +92,7 @@ public class BankStatementDetail implements Serializable {
     //View form
     private BankStmtView bankStmtView;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
     enum ModeForButton { ADD, EDIT }
     private ModeForButton modeForButton;
@@ -112,6 +113,7 @@ public class BankStatementDetail implements Serializable {
     //private String userId;
 
     private boolean bankAccTypeSelectRequired;
+    private boolean roleUW;
 
     public BankStatementDetail() {
     }
@@ -176,6 +178,8 @@ public class BankStatementDetail implements Serializable {
         lastMonthDate = (Date) FacesUtil.getSessionMapValue("lastMonthDate");
         numberOfMonths = (Integer) FacesUtil.getSessionMapValue("numberOfMonths");
         bankStmtView = (BankStmtView) FacesUtil.getSessionMapValue("selectedBankStmtView");
+
+        roleUW = bankStmtControl.isUW();
 
         log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
                 isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
@@ -405,11 +409,27 @@ public class BankStatementDetail implements Serializable {
         this.currentDate = currentDate;
     }
 
+    public String getCurrentDateDDMMYY() {
+        return currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
     public boolean isBankAccTypeSelectRequired() {
         return bankAccTypeSelectRequired;
     }
 
     public void setBankAccTypeSelectRequired(boolean bankAccTypeSelectRequired) {
         this.bankAccTypeSelectRequired = bankAccTypeSelectRequired;
+    }
+
+    public boolean isRoleUW() {
+        return roleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        this.roleUW = roleUW;
     }
 }

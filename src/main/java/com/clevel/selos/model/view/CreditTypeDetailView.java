@@ -11,6 +11,7 @@ import java.util.Date;
 public class CreditTypeDetailView implements Serializable {
     private long id;
     private boolean noFlag;
+    private boolean componentFlag;
     private String accountName;
     private String accountNumber;
     private String accountSuf;
@@ -20,6 +21,7 @@ public class CreditTypeDetailView implements Serializable {
     private String creditFacility;
     private BigDecimal limit;
     private BigDecimal guaranteeAmount;
+    private BigDecimal disburseAmount;
     private int useCount;
     private int seq;
     private Date createDate;
@@ -46,6 +48,7 @@ public class CreditTypeDetailView implements Serializable {
         this.creditFacility  = "";
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
+        this.disburseAmount = BigDecimal.ZERO;
         this.useCount = 0;
         this.seq = 0;
         this.noFlag = false;
@@ -143,6 +146,14 @@ public class CreditTypeDetailView implements Serializable {
         this.guaranteeAmount = guaranteeAmount;
     }
 
+    public BigDecimal getDisburseAmount() {
+        return disburseAmount;
+    }
+
+    public void setDisburseAmount(BigDecimal disburseAmount) {
+        this.disburseAmount = disburseAmount;
+    }
+
     public int getRequestType() {
         return requestType;
     }
@@ -215,6 +226,14 @@ public class CreditTypeDetailView implements Serializable {
         this.PCEAmount = PCEAmount;
     }
 
+    public boolean isComponentFlag() {
+        return componentFlag;
+    }
+
+    public void setComponentFlag(boolean componentFlag) {
+        this.componentFlag = componentFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -229,6 +248,7 @@ public class CreditTypeDetailView implements Serializable {
                 .append("creditFacility", creditFacility)
                 .append("limit", limit)
                 .append("guaranteeAmount", guaranteeAmount)
+                .append("disbursementAmount",disburseAmount)
                 .append("useCount", useCount)
                 .append("seq", seq)
                 .append("createDate", createDate)

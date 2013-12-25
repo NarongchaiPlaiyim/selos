@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.OpenAccountProduct;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,5 +72,17 @@ public class BasicInfoAccountView implements Serializable {
 
     public void setPurposeForShow(String purposeForShow) {
         this.purposeForShow = purposeForShow;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("accountName", accountName).
+                append("bankAccountTypeView", bankAccountTypeView).
+                append("product", product).
+                append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).
+                append("purposeForShow", purposeForShow).
+                toString();
     }
 }
