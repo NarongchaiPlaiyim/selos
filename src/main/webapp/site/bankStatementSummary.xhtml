@@ -45,10 +45,10 @@
                     <!-- start content -->
                     <table class="content_table_form">
                     <tr>
-                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
+                        <td class="title" style="min-width: 230px; width: 230px; max-width: 230px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
                         </td>
-                        <td class="left">
+                        <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:selectOneRadio value="#{bankStatementSummary.seasonalFlag}">
                                 <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                 <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
@@ -56,10 +56,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
+                        <td class="title" style="min-width: 230px; width: 230px; max-width: 230px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
                         </td>
-                        <td class="left">
+                        <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <table border="0">
                                 <tr>
                                     <td style="border-style: none !important;">
@@ -95,10 +95,10 @@
                     </tr>
                     <!-- TMB Bank Statement Summary -->
                     <tr>
-                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
+                        <td class="title" style="min-width: 230px; width: 230px; max-width: 230px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.tmbBankStmtSum')}"/>
                         </td>
-                        <td class="left">
+                        <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddTmbBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddTMBBankStmt()}" process="@form"
                                              update=":frmMain, :confirmChangeScreenBankStmtDialog"
@@ -331,10 +331,10 @@
                     </tr>
                     <!-- Other Bank -->
                     <tr>
-                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
+                        <td class="title" style="min-width: 230px; width: 230px; max-width: 230px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.otherBankStmtSum')}"/>
                         </td>
-                        <td class="left">
+                        <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddOthBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddOtherBankStmt()}" process="@form"
                                              update=":frmMain, :confirmChangeScreenBankStmtDialog"
@@ -621,10 +621,10 @@
                     </tr>
                     <!-- Source of Collateral Proof -->
                     <tr>
-                        <td class="title" style="min-width: 250px; width: 250px; max-width: 250px;">
+                        <td class="title" style="min-width: 230px; width: 230px; max-width: 230px;">
                             <h:outputText value="#{msg.get('app.bankStmtSum.label.srcOfCollateralProof')}"/>
                         </td>
-                        <td></td>
+                        <td style="min-width: 900px; width: 900px; max-width: 900px;"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

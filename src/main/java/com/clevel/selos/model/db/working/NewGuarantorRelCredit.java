@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_new_guarantor_relation")
+@Table(name = "wrk_new_grt_relation")
 public class NewGuarantorRelCredit implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_GUARANTOR_CREDIT_ID", sequenceName = "SEQ_WRK_NEW_GUARANTOR_CREDIT_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_GUARANTOR_CREDIT_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_GRT_CREDIT_ID", sequenceName = "SEQ_WRK_NEW_GRT_CREDIT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_GRT_CREDIT_ID")
     private long id;
 
     @ManyToOne

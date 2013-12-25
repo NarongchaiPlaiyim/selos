@@ -1024,15 +1024,14 @@ public class CreditFacPropose implements Serializable {
 //                messageErr = true;
 //                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //            } else {
-                log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getId());
-                if (relatedWithSelected.getId() == 0) {
-                    log.error("Can not add RelatedWith because id = 0!");
-                    return;
-                }
-                NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
-                newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
-//            }
-//        }
+        log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getRelatedWithId());
+
+        NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getRelatedWithId());
+        if (relatedWithSelected.getRelatedWithList() != null) {
+            newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
+        }
+        newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
+
 
     }
 
@@ -1238,8 +1237,6 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setGuarantorName(customerInfoEdit);
                 newCreditFacilityView.getNewGuarantorDetailViewList().get(rowIndexGuarantor).setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
                 boolean checkPlus;
-//                Cloner cloner = new Cloner();
-//                newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
                 newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
 
                 for (int i = 0; i < newCreditDetailListTemp.size(); i++) {
@@ -1349,6 +1346,7 @@ public class CreditFacPropose implements Serializable {
                         && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.onSaveRelationNewCreditDetail(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
@@ -1360,9 +1358,8 @@ public class CreditFacPropose implements Serializable {
                         message = msg.get("app.propose.response.desc.cannot.save");
 
                     }
-
+                    creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                     onCreation();
-
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
