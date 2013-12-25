@@ -49,7 +49,7 @@
                                     <p:selectOneMenu size="1" style="min-width: 200px; max-width: 200px; width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1} || #{custInfoSumIndi.editBorrower}">
+                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1 || custInfoSumIndi.editBorrower}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                        var="docType"
