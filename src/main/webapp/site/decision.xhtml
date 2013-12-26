@@ -3125,6 +3125,7 @@
                                             <p:column headerText="#{msg.get('app.decision.tb.th.topic')}" style="width: 600px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.detail')}" style="width: 400px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.date')}" style="width: 200px"/>
+                                            <p:column headerText="" style="width: 50px"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -3139,6 +3140,15 @@
                                             <f:convertDateTime pattern="dd/MM/yyyy" locale="en"/>
                                         </h:outputText>
                                     </p:column>
+
+                                    <p:column styleClass="center top">
+                                        <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                         icon="ui-icon-trash"
+                                                         oncomplete="confirmDeleteFollowUpCondDlg.show()">
+                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexFollowUpCondition}"/>
+                                        </p:commandButton>
+                                    </p:column>
+
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -3417,7 +3427,7 @@
 </p:panel>
 
 <!-- Propose Credit Dialog -->
-<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Propose Credit Information"
+<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Approve Credit Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" width="900">
     <ui:include src="dialog/decisionProposeCreditDialog.xhtml"/>
 </p:dialog>
@@ -3432,7 +3442,7 @@
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
-<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Propose Collateral Information"
+<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Approve Collateral Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="900" height="500">
     <ui:include src="dialog/decisionProposeCollateralDialog.xhtml"/>
 </p:dialog>
@@ -3462,7 +3472,7 @@
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->
-<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Propose Guarantor Information"
+<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Approve Guarantor Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="800" height="400">
     <ui:include src="dialog/decisionProposeGuarantorDialog.xhtml"/>
 </p:dialog>
@@ -3473,6 +3483,15 @@
     <ui:param name="formId" value="frmConfirmDeleteAppGuarantor"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteAppProposeGuarantor"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteFollowUpCondDialog"/>
+    <ui:param name="name" value="confirmDeleteFollowUpCondDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteFollowUpCond"/>
+    <ui:param name="controller" value="#{decision}"/>
+    <ui:param name="action" value="onDeleteFollowUpCondition"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
