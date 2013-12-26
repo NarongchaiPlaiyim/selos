@@ -63,10 +63,11 @@ public class Inbox implements Serializable {
         log.info("onCreation ::: userDetail : {}", userDetail);
         try {
             inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+            log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
         } catch (Exception e) {
+            log.error("Exception while getInbox : ", e);
             e.printStackTrace();
         }
-        log.info("onCreation ::: inboxViewList : {}", inboxViewList);
     }
 
     public void onSelectInbox() {
