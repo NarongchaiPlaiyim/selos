@@ -208,7 +208,8 @@ public class IsaBusinessControl extends BusinessControl {
     public List<User> searchUser(IsaSearchView isaSearchView) throws Exception {
         log.debug("searchUser()");
 
-        Criteria criteria = userDAO.createCriteria().add(Restrictions.eq("status","NORMAL"));
+        Criteria criteria = userDAO.createCriteria();
+        criteria.add(Restrictions.eq("userStatus",UserStatus.NORMAL));
 
         if (!isaSearchView.getId().equals("")) {
             criteria.add(Restrictions.like("id", "%" + isaSearchView.getId() + "%"));
@@ -237,6 +238,7 @@ public class IsaBusinessControl extends BusinessControl {
         if (isaSearchView.getZoneId().getId() != 0) {
             criteria.add(Restrictions.eq("zone", isaSearchView.getZoneId()));
         }
+
         List<User> list = criteria.list();
 
 

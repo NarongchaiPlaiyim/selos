@@ -171,12 +171,12 @@
                 </tr>
                 <tr>
                     <td colspan="4" class="center">
-                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller" />
-                                         <!--process="@form" update=""-->
-                                         <!--actionListener="#{basicInfo.onCreation}"  binding="#{saveBtn}"/>-->
-                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" />
-                                         <!--process="@form" update=""-->
-                                         <!--actionListener="#{basicInfo.onCreation}"/>-->
+                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                         process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
+                                         actionListener="#{accountInfo.onSave()}"  binding="#{saveBtn}"/>
+                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                         process="@form" update=":frmMain"
+                                         actionListener="#{accountInfo.onCreation()}"/>
                     </td>
                 </tr>
 
@@ -224,6 +224,17 @@
         <ui:param name="action" value="removeAccountDetail"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{accountInfo.messageHeader}" message="#{accountInfo.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
 </h:body>
 </f:view>
 </html>
