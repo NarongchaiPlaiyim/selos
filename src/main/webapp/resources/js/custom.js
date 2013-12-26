@@ -781,3 +781,29 @@ function handleConditionInfoRequest(xhr, status, args) {
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
 }
+
+function alphabetThaiEng(element){
+    var alphabet = element.val();
+    var alp_array = alphabet.split("");
+    var isAlphabet = false;
+    var pattern1 = /^[\u0E01-\u0E5B|A-Za-z|\s|-]+$/;
+    var pattern2 = /^[๑-๙||฿|]+$/
+    var char_at;
+    if(alp_array.length > 0){
+        for(var i=0;i<alp_array.length; i++){
+            isAlphabet = false;
+            char_at = alp_array[i];
+            if(!pattern1.test(char_at)){
+                isAlphabet = true;
+            }else{
+                if(pattern2.test(char_at)){
+                    isAlphabet = true;
+                }
+            }
+            if(isAlphabet){
+                alp_array.splice(i, 1);
+            }
+        }
+    }
+    element.val(alp_array.join(""));
+}
