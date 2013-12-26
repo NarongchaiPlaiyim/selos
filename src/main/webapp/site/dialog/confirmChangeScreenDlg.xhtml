@@ -10,7 +10,7 @@
             <div class="onRight">
                 <p:commandButton value="ตกลง" update="#{update}" oncomplete="#{name}.hide()"
                                  action="#{controller[action]}">
-                    <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
+                    <f:setPropertyActionListener value="#{redirectValue}" target="#{bizInfoSummary.redirect}"/>
                 </p:commandButton>
                 <p:commandButton value="ยกเลิก" onclick="#{name}.hide()"/>
             </div>
