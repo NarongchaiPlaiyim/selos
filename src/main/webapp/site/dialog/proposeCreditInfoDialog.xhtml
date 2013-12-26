@@ -9,17 +9,18 @@
 <h:form id="creditInfoDlgForm">
 <table class="content_form">
 <tr>
-    <td class="title" style="width:200px;">
+    <td class="title" style="width:400px;">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
     </td>
     <td colspan="3">
-        <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}">
-            <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="1"/>
-            <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="2"/>
+        <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}"
+                          required="#{not empty param[onSaveCreditInfo.clientId]}">
+            <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
+            <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
             <p:ajax event="change"
                     listener="#{creditFacPropose.onChangeRequestType()}"
                     process="@this"
-                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg"/>
+                    update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg,:creditInfoDlgForm:addTier"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -28,7 +29,8 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
     </td>
     <td colspan="3">
-        <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.refinance}">
+        <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.refinance}"
+                          required="#{not empty param[onSaveCreditInfo.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
         </p:selectOneRadio>
@@ -83,13 +85,15 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
     </td>
     <td>
-        <h:inputText id="productCode" value="#{creditFacPropose.newCreditDetailView.productCode}"/>
+        <p:inputText id="productCode" value="#{creditFacPropose.newCreditDetailView.productCode}"/>
     </td>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
     </td>
     <td>
-        <h:inputText id="projectCode" value="#{creditFacPropose.newCreditDetailView.projectCode}"/>
+        <p:inputText id="projectCode"
+                     value="#{creditFacPropose.newCreditDetailView.projectCode}"
+                     required="#{not empty param[onSaveCreditInfo.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -98,8 +102,9 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.limit}"
-                     style="text-align:right">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                     style="text-align:right"
+                     required="#{not empty param[onSaveCreditInfo.clientId]}">
+            <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -107,8 +112,12 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.newCreditDetailView.PCEPercent}"
-                     style="text-align:right"/>
+        <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEPercent}"
+                     style="text-align:right"
+                     required="#{not empty param[onSaveCreditInfo.clientId]}">
+            <f:convertNumber pattern="###.00" minFractionDigits="2" maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
         <p:spacer/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
     </td>
@@ -122,8 +131,9 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
-                     style="text-align:right">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                     style="text-align:right"
+                     required="#{not empty param[onSaveCreditInfo.clientId]}">
+            <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -235,11 +245,12 @@
     <td style="text-align: left;" colspan="3">
         <p:commandButton
                 value="#{msg.get('app.addButton')}"
+                id="addTier"
                 styleClass="smaller"
                 process="@form"
                 update=":creditInfoDlgForm:resultFinal"
                 actionListener="#{creditFacPropose.onAddTierInfo()}"
-                disabled="#{creditFacPropose.newCreditDetailView.requestType == 2?true:false}">
+                rendered="#{creditFacPropose.newCreditDetailView.requestType == 1?true:false}">
         </p:commandButton>
     </td>
 </tr>
@@ -289,7 +300,7 @@
                             <p:inputText value="#{item.finalInterest}"
                                          style="width: 100px;text-align: right"
                                          readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
                             </p:inputText>
                         </p:column>
                     </p:row>
@@ -299,14 +310,17 @@
             <p:column styleClass="right">
                 <p:inputText value="#{item.tenor}"
                              style="text-align: right"
-                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}"/>
+                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}"
+                             >
+                     <f:convertNumber pattern="##" minFractionDigits="0" maxFractionDigits="0"  type="number"/>
+                </p:inputText>
             </p:column>
 
             <p:column styleClass="right">
                 <p:inputText value="#{item.installment}"
                              style="text-align: right"
                              readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
-                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                    <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
                     <p:ajax event="blur" update="@this"/>
                 </p:inputText>
             </p:column>
@@ -384,7 +398,7 @@
 
         </p:selectOneMenu>
     </td>
-    <td class="title" style="width:100px;">
+    <td class="title" >
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}"/>
     </td>
     <td>
@@ -402,6 +416,7 @@
         <p:commandButton id="dlgSaveCreditBtn"
                          styleClass="small"
                          value="#{msg.get('app.button.ok')}"
+                         binding="#{onSaveCreditInfo}"
                          action="#{creditFacPropose.onSaveCreditInfo}"
                          process="@form"
                          update=":creditInfoDlgForm,:frmMain"

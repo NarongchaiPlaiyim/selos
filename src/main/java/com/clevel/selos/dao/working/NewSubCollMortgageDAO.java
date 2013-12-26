@@ -21,11 +21,11 @@ public class NewSubCollMortgageDAO extends GenericDAO<NewCollateralSubMortgage, 
     }
 
     @SuppressWarnings("unchecked")
-    public List<NewCollateralSubMortgage> getListNewCollateralSubMortgage(NewCollateralSubDetail mewCollateralSubDetail) {
-        log.info("getListNewCollateralSubMortgage. (mewCollateralSubDetail: {})", mewCollateralSubDetail);
+    public List<NewCollateralSubMortgage> getListNewCollateralSubMortgage(NewCollateralSubDetail newCollateralSubDetail) {
+        log.info("getListNewCollateralSubMortgage. (newCollateralSubDetail: {})", newCollateralSubDetail);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("mewCollateralSubDetail", mewCollateralSubDetail));
-        criteria.addOrder(Order.asc("mewCollateralSubDetail.id"));
+        criteria.add(Restrictions.eq("newCollateralSubDetail", newCollateralSubDetail));
+        criteria.addOrder(Order.asc("newCollateralSubDetail.id"));
         List<NewCollateralSubMortgage> newCollateralSubMortgages = (List<NewCollateralSubMortgage>)criteria.list();
         log.info("getList. (result size: {})", newCollateralSubMortgages.size());
 

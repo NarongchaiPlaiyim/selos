@@ -147,7 +147,7 @@ public class NewSubCollDetailTransform extends Transform {
         List<NewCollateralSubDetail> listReturn = new ArrayList<NewCollateralSubDetail>();
         for (NewSubCollateralDetailView subView : newSubCollateralDetailViewList) {
             for (NewCollateralSubDetail newCollateralSubDetail : newCollateralSubDetailPersist) {
-                if (subView.getRelatedWithId() == newCollateralSubDetail.getRelatedWithId()) {
+                if (subView.getId() == newCollateralSubDetail.getId()) {
                     listReturn.add(newCollateralSubDetail);
                 }
             }

@@ -18,7 +18,7 @@ public class ExistingCreditDetailTransform extends Transform {
     }
 
     public List<ExistingCreditDetail> transformsToModel(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user){
-
+        log.info(" transformsToModel ");
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         ExistingCreditDetail existingCreditDetail;
 
@@ -36,12 +36,16 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setNo(existingCreditDetailView.getNo());
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
+
+            log.info(" existingCreditDetailView seq is " + existingCreditDetailView.getSeq());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
+            log.info(" existingCreditDetail seq is " + existingCreditDetail.getSeq());
+
             existingCreditDetail.setInUsed(existingCreditDetailView.getInUsed());
             existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());
             existingCreditDetail.setCreateBy(existingCreditDetailView.getCreateBy());
-            existingCreditDetail.setModifyDate(existingCreditDetailView.getModifyDate());
-            existingCreditDetail.setModifyBy(existingCreditDetailView.getModifyBy());
+            existingCreditDetail.setModifyDate(new Date());
+            existingCreditDetail.setModifyBy(user);
             existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
             existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());

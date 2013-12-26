@@ -1,15 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CreditFacExistingControl;
+import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.ExistingCollateralDetail;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
@@ -67,14 +66,14 @@ public class CreditFacExisting implements Serializable {
     private ProductProgram existProductProgram;
     private CreditType existCreditType;
     private AccountStatus existAccountStatus ;
-
-
+    private List<BaseRate> baseRateList;
     private ExistingCreditDetailView  existingCreditDetailView;
 
     private List<ProductGroup> productGroupList;
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private ProductProgram productProgram;
+    private BaseRate baseRate;
 
     private List<ExistingCreditDetailView> existingCreditDetailViewList;
     private List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList;
@@ -87,8 +86,7 @@ public class CreditFacExisting implements Serializable {
     private List<AccountStatus> accountStatusList;
     private List<BankAccountStatus> bankAccountStatusList;
     private boolean showSplitLine;
-
-
+    private boolean cannotEditStandard = true;
 
     private ExistingCollateralDetailView existingCollateralDetailView;
     private List<Relation> relationList;
@@ -109,7 +107,7 @@ public class CreditFacExisting implements Serializable {
     private List<ExistingGuarantorDetailView> borrowerExistingGuarantorDetailViewList;
     private List<ExistingCreditTypeDetailView> borrowerGuarantorCreditTypeDetailViewList;
 
-    private List<Customer> guarantorList;
+    private List<CustomerInfoView> guarantorList;
 
     private int seqBorrower=0;
     private int seqRelated=0;
@@ -137,9 +135,11 @@ public class CreditFacExisting implements Serializable {
     @Inject
     private PrdProgramToCreditTypeDAO prdProgramToCreditTypeDAO;    // find credit type
     @Inject
+    private BaseRateDAO baseRateDAO;
+    @Inject
     private ProductFormulaDAO productFormulaDAO;
     @Inject
-    private CustomerDAO customerDAO;
+    CustomerInfoControl customerInfoControl;
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
     @Inject
@@ -170,11 +170,13 @@ public class CreditFacExisting implements Serializable {
 
         session = FacesUtil.getSession(true);
         productProgramList = productProgramDAO.findAll();
+        baseRateList = baseRateDAO.findAll();
         //*** Get Product Program List from Product Group ***//
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroupForExistCredit();
         if(prdGroupToPrdProgramList == null){
             prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         }
+
         creditTypeList = creditTypeDAO.findAll();
         accountStatusList = accountStatusDAO.findAll();
         log.info("preRender ::: 1.2 ");
@@ -191,6 +193,7 @@ public class CreditFacExisting implements Serializable {
         hashBorrower = new Hashtable<String,String>();
         hashRelated  = new Hashtable<String,String>();
 
+
         log.info("preRender ::: 2 ");
         if (session.getAttribute("workCaseId") != null) {
             log.info("session.getAttribute('workCaseId') != null");
@@ -199,6 +202,16 @@ public class CreditFacExisting implements Serializable {
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             log.info("preRender ::: 3.2 " + stepId);
 
+            guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+
+            log.info("guarantorList size :: {}", guarantorList.size());
+            if (guarantorList == null) {
+                guarantorList = new ArrayList<CustomerInfoView>();
+                CustomerInfoView customer = new CustomerInfoView();
+                customer.setId(63);
+                customer.setFirstNameTh("พี่เทพ มวลมหาประชา");
+                guarantorList.add(customer);
+            }
 
             existingCreditDetailView = new ExistingCreditDetailView();
 
@@ -223,6 +236,7 @@ public class CreditFacExisting implements Serializable {
 
             existingCreditTierDetailView = new ExistingCreditTierDetailView();
             existingGuarantorDetailView = new ExistingGuarantorDetailView();
+            existingGuarantorDetailView.setGuarantorName(new CustomerInfoView());
 
 
             existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
@@ -230,14 +244,6 @@ public class CreditFacExisting implements Serializable {
             if(existingCreditFacilityView==null){
                 existingCreditFacilityView =  new ExistingCreditFacilityView();
                 log.info("preRender ::: 3.5 ");
-                if (guarantorList == null) {
-                    guarantorList = new ArrayList<Customer>();
-                    Customer customer = new Customer();
-                    customer.setNameTh("พี่เทพ มวลมหาประชา");
-                    guarantorList.add(customer);
-
-                    //guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
-                }
 
                 log.info("preRender ::: 4 ");
                 existingConditionDetailViewList = new ArrayList<ExistingConditionDetailView>();
@@ -285,7 +291,7 @@ public class CreditFacExisting implements Serializable {
                     log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
                 }
                 for (int i = 0; i < existingCreditFacilityView.getRelatedComExistingCredit().size(); i++) {
-                    hashRelated.put(i,existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getInUsed());
+                    hashRelated.put(i,existingCreditFacilityView.getRelatedComExistingCredit().get(i).getInUsed());
                 }
 
                 for (int l=0;l<hashRelated.size();l++){
@@ -347,7 +353,7 @@ public class CreditFacExisting implements Serializable {
                 }else{
                     borrowerExistingGuarantorDetailViewList = existingCreditFacilityView.getBorrowerGuarantorList();
                 }
-
+                /*
                 log.info("preRender ::: getBorrowerComExistingCredit " + existingCreditFacilityView.getBorrowerComExistingCredit().size());
                 log.info("preRender ::: getBorrowerRetailExistingCredit " + existingCreditFacilityView.getBorrowerRetailExistingCredit().size());
                 log.info("preRender ::: getBorrowerAppInRLOSCredit "+  existingCreditFacilityView.getBorrowerAppInRLOSCredit().size()) ;
@@ -361,7 +367,7 @@ public class CreditFacExisting implements Serializable {
                 log.info("preRender ::: getBorrowerCollateralList " + existingCreditFacilityView.getBorrowerCollateralList().size());
                 log.info("preRender ::: getRelatedCollateralList " + existingCreditFacilityView.getRelatedCollateralList().size());
 
-                log.info("preRender ::: getBorrowerGuarantorList "+  existingCreditFacilityView.getBorrowerGuarantorList().size()) ;
+                log.info("preRender ::: getBorrowerGuarantorList "+  existingCreditFacilityView.getBorrowerGuarantorList().size()) ;*/
             }
 
             log.info("preRender ::: end ");
@@ -607,8 +613,6 @@ public class CreditFacExisting implements Serializable {
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
 
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-
-
             existingCreditDetailView.setExistProductProgram(productProgram);
             existingCreditDetailView.setExistCreditType(creditType);
             existingCreditDetailView.setExistAccountStatus(bankAccountStatus);
@@ -705,8 +709,9 @@ public class CreditFacExisting implements Serializable {
 
     //  Start Tier Dialog //
     public void onAddCreditTierDetailView() {
-        log.info("onAddCreditDetail ::: ");
+        log.info("onAddCreditTierDetailView ::: ");
         existingCreditTierDetailView = new ExistingCreditTierDetailView();
+        existingCreditTierDetailView.setFinalBasePrice(new BaseRate());
         existingCreditTierDetailView.setNo(existingCreditTierDetailViewList.size()+1);
         existingCreditTierDetailViewList.add(existingCreditTierDetailView);
     }
@@ -1107,7 +1112,7 @@ public class CreditFacExisting implements Serializable {
                 }
                 for (int i = 0; i < existingCreditTypeDetailViewList.size(); i++) {
                     if (existingCreditTypeDetailViewList.get(i).isNoFlag() == true) {
-                        borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
+
                         seqBorrowerTemp = existingCreditTypeDetailViewList.get(i).getSeq();
                         checkPlus = true;
 
@@ -1115,17 +1120,16 @@ public class CreditFacExisting implements Serializable {
                             if (selectCollateralDetail.getExistingCreditTypeDetailViewList().get(j).getSeq() == seqBorrowerTemp) {
                                 checkPlus = false;
                             }
+                            if (checkPlus) {
+                                hashBorrower.put(seqBorrowerTemp, Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) + 1);
+                            }
                         }
-
-                        if (checkPlus) {
-                            hashBorrower.put(seqBorrowerTemp, Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) + 1);
-                        }
-
                     } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
                         if (Integer.parseInt(hashBorrower.get(i).toString()) > 0) {
                             hashBorrower.put(i, Integer.parseInt(hashBorrower.get(i).toString()) - 1);
                         }
                     }
+                    borrowerCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                 }
                 for (int l=0;l<hashBorrower.size();l++){
                     log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
@@ -1155,7 +1159,7 @@ public class CreditFacExisting implements Serializable {
 
                 for (int i = 0; i < existingCreditTypeDetailViewList.size(); i++) {
                     if (existingCreditTypeDetailViewList.get(i).isNoFlag() == true) {
-                        relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
+
                         seqRelatedTemp = existingCreditTypeDetailViewList.get(i).getSeq();
                         checkPlus = true;
 
@@ -1163,10 +1167,9 @@ public class CreditFacExisting implements Serializable {
                             if (selectCollateralDetail.getExistingCreditTypeDetailViewList().get(j).getSeq() == seqRelatedTemp) {
                                 checkPlus = false;
                             }
-                        }
-
-                        if (checkPlus) {
-                            hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) + 1);
+                            if (checkPlus) {
+                                hashRelated.put(seqRelatedTemp, Integer.parseInt(hashRelated.get(seqRelatedTemp).toString()) + 1);
+                            }
                         }
 
                     } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
@@ -1174,6 +1177,7 @@ public class CreditFacExisting implements Serializable {
                             hashRelated.put(i, Integer.parseInt(hashRelated.get(i).toString()) - 1);
                         }
                     }
+                    relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                 }
                 for (int l=0;l<hashRelated.size();l++){
                     log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
@@ -1325,8 +1329,12 @@ public class CreditFacExisting implements Serializable {
         log.info("onSaveExistingGuarantor ::: mode : {}", modeForButton);
         log.info("onSaveExistingGuarantor rowIndex is " + rowIndex);
         log.info("onSaveExistingGuarantor selectGuarantorDetail null is " + (selectGuarantorDetail==null));
+        List<ExistingCreditTypeDetailView> typeCheckLastTime;
+        //typeCheckLastTime = selectGuarantorDetail.getExistingCreditTypeDetailViewList();
         if(selectGuarantorDetail != null){
             log.info("selectGuarantorDetail is " + selectGuarantorDetail.toString());
+           //typeCheckLastTime = selectGuarantorDetail.getExistingCreditTypeDetailViewList();
+            //log.info("onSaveExistingGuarantor typeCheckLastTime size is " + typeCheckLastTime.size());
         }
 
         boolean complete = false;
@@ -1373,25 +1381,35 @@ public class CreditFacExisting implements Serializable {
             for (int l=0;l<hashBorrower.size();l++){
                 log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
             }
+            log.info("selectGuarantorDetail begin old check last size " +selectGuarantorDetail.getExistingCreditTypeDetailViewList().size());
             for (int i = 0; i < existingCreditTypeDetailViewList.size(); i++) {
                 if (existingCreditTypeDetailViewList.get(i).isNoFlag() == true) {
-                    existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
+
                     summaryGuaranteeAmount = summaryGuaranteeAmount.add(existingCreditTypeDetailViewList.get(i).getGuaranteeAmount());
                     seqBorrowerTemp = existingCreditTypeDetailViewList.get(i).getSeq();
                     checkPlus = true;
 
-                    for (int j = 0; j < selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); j++) {
-                        log.info("seqBorrowerTemp is  " + seqBorrowerTemp);
-                        log.info("selectGuarantorDetail getSeq  " + j + "  is " + selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(j).getSeq());
+                    log.info("selectGuarantorDetail in process old check last size " +selectGuarantorDetail.getExistingCreditTypeDetailViewList().size());
+
+                    //for (int j = 0; j < selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); j++) {
+                    for (int j = 0; j <selectGuarantorDetail.getExistingCreditTypeDetailViewList().size(); j++) {
+                        log.info("selectGuarantorDetail old check last getSeq  " + j + "  is " + selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(j).getSeq());
                         if (selectGuarantorDetail.getExistingCreditTypeDetailViewList().get(j).getSeq() == seqBorrowerTemp) {
                             checkPlus = false;
                         }
-                    }
 
-                    if (checkPlus) {
-                        hashBorrower.put(seqBorrowerTemp, Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) + 1);
-                    }
+                        log.info("checkPlus is  " + checkPlus);
 
+                        if (checkPlus) {
+                            log.info("put hash ");
+                            hashBorrower.put(seqBorrowerTemp, Integer.parseInt(hashBorrower.get(seqBorrowerTemp).toString()) + 1);
+
+                            for (int l=0;l<hashBorrower.size();l++){
+                                log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
+                            }
+                        }
+                    }
+                    existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList().add(existingCreditTypeDetailViewList.get(i));
                 } else if (existingCreditTypeDetailViewList.get(i).isNoFlag() == false) {
                     if (Integer.parseInt(hashBorrower.get(i).toString()) > 0) {
                         hashBorrower.put(i, Integer.parseInt(hashBorrower.get(i).toString()) - 1);
@@ -1400,7 +1418,7 @@ public class CreditFacExisting implements Serializable {
                 existingGuarantorDetailViewOnRow.setTotalLimitGuaranteeAmount(summaryGuaranteeAmount);
             }
             for (int l=0;l<hashBorrower.size();l++){
-                log.info("hashBorrower.get(j) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
+                log.info("hashBorrower.get(l) in use   :  "+ l + " is   " +hashBorrower.get(l).toString());
             }
             //existingCreditFacilityView.getBorrowerGuarantorList().get(rowIndex).setExistingCreditTypeDetailViewList(existingCollateralDetailView.getExistingCreditTypeDetailViewList());
             onSetRowNoCreditTypeDetail(existingGuarantorDetailViewOnRow.getExistingCreditTypeDetailViewList());
@@ -1492,7 +1510,7 @@ public class CreditFacExisting implements Serializable {
             creditFacExistingControl.onSaveExistingCreditFacility(existingCreditFacilityView ,workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
-            onCreation();
+            //onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
         } catch (Exception ex) {
@@ -1760,11 +1778,11 @@ public class CreditFacExisting implements Serializable {
         this.typeOfList = typeOfList;
     }
 
-    public List<Customer> getGuarantorList() {
+    public List<CustomerInfoView> getGuarantorList() {
         return guarantorList;
     }
 
-    public void setGuarantorList(List<Customer> guarantorList) {
+    public void setGuarantorList(List<CustomerInfoView> guarantorList) {
         this.guarantorList = guarantorList;
     }
 
@@ -1879,5 +1897,21 @@ public class CreditFacExisting implements Serializable {
 
     public void setBankAccountStatusList(List<BankAccountStatus> bankAccountStatusList) {
         this.bankAccountStatusList = bankAccountStatusList;
+    }
+
+    public List<BaseRate> getBaseRateList() {
+        return baseRateList;
+    }
+
+    public void setBaseRateList(List<BaseRate> baseRateList) {
+        this.baseRateList = baseRateList;
+    }
+
+    public boolean isCannotEditStandard() {
+        return cannotEditStandard;
+    }
+
+    public void setCannotEditStandard(boolean cannotEditStandard) {
+        this.cannotEditStandard = cannotEditStandard;
     }
 }

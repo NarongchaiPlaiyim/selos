@@ -21,8 +21,9 @@ public class ExistingGuarantorDetail implements Serializable {
     @Column(name = "no")
     private int no ;
 
-    @Column(name = "gurantor_name")
-    private String guarantorName;
+    @OneToOne
+    @JoinColumn(name = "guarantor_id")
+    private Customer guarantorName;
 
     @Column(name = "tcglg_no")
     private String tcglgNo;
@@ -51,7 +52,7 @@ public class ExistingGuarantorDetail implements Serializable {
     private ExistingCreditFacility existingCreditFacility;
 
     @OneToMany(mappedBy = "existingGuarantorDetail", cascade = CascadeType.ALL)
-    private List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
+    private List<ExistingGuarantorCredit> existingGuarantorCreditList;
 
     public long getId() {
         return id;
@@ -69,11 +70,11 @@ public class ExistingGuarantorDetail implements Serializable {
         this.no = no;
     }
 
-    public String getGuarantorName() {
+    public Customer getGuarantorName() {
         return guarantorName;
     }
 
-    public void setGuarantorName(String guarantorName) {
+    public void setGuarantorName(Customer guarantorName) {
         this.guarantorName = guarantorName;
     }
 
@@ -133,12 +134,12 @@ public class ExistingGuarantorDetail implements Serializable {
         this.existingCreditFacility = existingCreditFacility;
     }
 
-    public List<ExistingCreditTypeDetail> getExistingCreditTypeDetailList() {
-        return existingCreditTypeDetailList;
+    public List<ExistingGuarantorCredit> getExistingGuarantorCreditList() {
+        return existingGuarantorCreditList;
     }
 
-    public void setExistingCreditTypeDetailList(List<ExistingCreditTypeDetail> existingCreditTypeDetailList) {
-        this.existingCreditTypeDetailList = existingCreditTypeDetailList;
+    public void setExistingGuarantorCreditList(List<ExistingGuarantorCredit> existingGuarantorCreditList) {
+        this.existingGuarantorCreditList = existingGuarantorCreditList;
     }
 
     @Override
@@ -154,7 +155,7 @@ public class ExistingGuarantorDetail implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("existingCreditFacility", existingCreditFacility)
-                .append("existingCreditTypeDetailList", existingCreditTypeDetailList)
+                .append("existingGuarantorCreditList", existingGuarantorCreditList)
                 .toString();
     }
 }
