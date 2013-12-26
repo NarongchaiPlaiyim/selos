@@ -104,6 +104,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private BigDecimal salesFromFinancialStmt;
     private BigDecimal shareHolderRatio;
     private String numberOfAuthorizedUsers;
+    private String contactName; // new 23-12-13
 
     //*** Var for Address ***//
     private AddressView currentAddress;
@@ -997,6 +998,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setIndLv(String indLv) {
         this.indLv = indLv;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
     @Override

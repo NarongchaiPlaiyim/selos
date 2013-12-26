@@ -17,17 +17,17 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -187,6 +187,10 @@ public class BasicInfo extends MandatoryFieldsControl {
     private int tmpRefinanceIN;
     private int tmpRefinanceOUT;
     private int tmpApplyBA;
+
+    private String accDlg;
+
+    private String currentDateDDMMYY;
 
     public BasicInfo(){
     }
@@ -416,7 +420,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
     }
 
-    public void onAddAccount(){
+    public void onInitAddAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
@@ -435,8 +439,10 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onEditAccount(){
+        accDlg = "";
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
+        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getByShortName(basicInfoAccountView.getBankAccountTypeView().getShortName())));
         onChangeAccountType();
 
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
@@ -458,7 +464,9 @@ public class BasicInfo extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void addAccount(){
+    public void onAddAccount(){
+        accDlg = "";
+
         if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
         }else{
@@ -492,6 +500,95 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoAccountView.setPurposeForShow("-");
         }
 
+        //check existing
+        if(basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0){
+            int listIndex = 0;
+            for(BasicInfoAccountView basicAccView : basicInfoView.getBasicInfoAccountViews()){
+                if(modeForButton.equals(ModeForButton.EDIT)){ // edit
+                    if(rowIndex != listIndex){
+                        if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
+                            if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
+                                if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
+                                    if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
+                                        accDlg = "ui-state-error";
+                                        boolean complete = false;
+                                        RequestContext context = RequestContext.getCurrentInstance();
+                                        context.addCallbackParam("functionComplete", complete);
+                                        return;
+                                    } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
+                                        boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
+                                        int arrayIndex = 0;
+                                        for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+                                            for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
+                                                if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
+                                                    arrayBoolean[arrayIndex] = true;
+                                                    break;
+                                                } else {
+                                                    arrayBoolean[arrayIndex] = false;
+                                                }
+                                            }
+                                            arrayIndex++;
+                                        }
+                                        for(boolean b : arrayBoolean){
+                                            if(!b){
+                                                break;
+                                            } else {
+                                                accDlg = "ui-state-error";
+                                                boolean complete = false;
+                                                RequestContext context = RequestContext.getCurrentInstance();
+                                                context.addCallbackParam("functionComplete", complete);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else { // add new
+                    if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
+                        if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
+                            if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
+                                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
+                                    accDlg = "ui-state-error";
+                                    boolean complete = false;
+                                    RequestContext context = RequestContext.getCurrentInstance();
+                                    context.addCallbackParam("functionComplete", complete);
+                                    return;
+                                } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
+                                    boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
+                                    int arrayIndex = 0;
+                                    for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+                                        for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
+                                            if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
+                                                arrayBoolean[arrayIndex] = true;
+                                                break;
+                                            } else {
+                                                arrayBoolean[arrayIndex] = false;
+                                            }
+                                        }
+                                        arrayIndex++;
+                                    }
+                                    for(boolean b : arrayBoolean){
+                                        if(!b){
+                                            break;
+                                        } else {
+                                            accDlg = "ui-state-error";
+                                            boolean complete = false;
+                                            RequestContext context = RequestContext.getCurrentInstance();
+                                            context.addCallbackParam("functionComplete", complete);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                listIndex++;
+            }
+        }
+
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
         }else{
@@ -511,7 +608,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
             messageHeader = "Save Basic Info Success.";
-            message = "Save Basic Info data success.";
+            message = "Save data in Basic Information success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
@@ -776,6 +873,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             message = ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     // Get Set
@@ -1473,5 +1574,22 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setDisBaPaymentMethod(boolean disBaPaymentMethod) {
         this.disBaPaymentMethod = disBaPaymentMethod;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public String getAccDlg() {
+        return accDlg;
+    }
+
+    public void setAccDlg(String accDlg) {
+        this.accDlg = accDlg;
     }
 }

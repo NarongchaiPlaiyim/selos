@@ -30,6 +30,7 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedAppSubCollateral.titleDeed}"
+                                 onclick="this.select()"
                                  required="true"/>
                 </td>
             </tr>
@@ -39,6 +40,7 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollAddress" value="#{decision.selectedAppSubCollateral.address}"
+                                 onclick="this.select()"
                                  required="true"/>
                 </td>
             </tr>
@@ -48,6 +50,7 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedAppSubCollateral.landOffice}"
+                                 onclick="this.select()"
                                  required="true"/>
                 </td>
             </tr>
@@ -57,6 +60,7 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedAppSubCollateral.collateralOwnerAAD}"
+                                 onclick="this.select()"
                                  required="true"/>
                 </td>
             </tr>
@@ -282,6 +286,8 @@
                 <td>
                     <p:inputText id="dlgSubCollAppraisalVal"
                                  value="#{decision.selectedAppSubCollateral.appraisalValue}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                  styleClass="right"
                                  required="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -296,6 +302,8 @@
                 <td>
                     <p:inputText id="dlgSubCollMortgageVal"
                                  value="#{decision.selectedAppSubCollateral.mortgageValue}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                  styleClass="right"
                                  required="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>

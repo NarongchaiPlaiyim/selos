@@ -376,6 +376,8 @@
                                                                     yearRange="1950:2100"
                                                                     pattern="dd/MM/yyyy"
                                                                     mindate="01/01/1950"
+                                                                    defaultdate="#{basicInfo.currentDateDDMMYY}"
+                                                                    maxdate="#{basicInfo.currentDateDDMMYY}"
                                                                     value="#{basicInfo.basicInfoView.lastReviewDate}"
                                                                     disabled="#{basicInfo.disLastReviewDate}"
                                                                     required="#{basicInfo.reqLastReviewDate and not empty param[saveBtn.clientId]}"/>
@@ -390,6 +392,8 @@
                                                                     yearRange="1950:2100"
                                                                     pattern="dd/MM/yyyy"
                                                                     mindate="01/01/1950"
+                                                                    defaultdate="#{basicInfo.currentDateDDMMYY}"
+                                                                    maxdate="#{basicInfo.currentDateDDMMYY}"
                                                                     value="#{basicInfo.basicInfoView.extReviewDate}"
                                                                     disabled="#{basicInfo.disExtendedReviewDate}"
                                                                     required="#{basicInfo.reqExtendedReviewDate and not empty param[saveBtn.clientId]}"/>
@@ -427,7 +431,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}"/>
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}" style="white-space: pre"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
@@ -440,7 +444,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.basicInfo.content.annual')}"/>
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.annual')}" style="white-space: pre"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <p:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
@@ -480,6 +484,8 @@
                                                 <td class="title" style="width: 200px; padding-left: 30px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.id')}" style="margin-right: 10px;"/>
                                                     <p:inputText value="#{basicInfo.basicInfoView.refId}" styleClass="larger"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"
                                                                  disabled="#{basicInfo.disReferralID}"
                                                                  required="#{basicInfo.reqReferralID and not empty param[saveBtn.clientId]}"/>
                                                 </td>
@@ -509,7 +515,7 @@
                                                     <p:commandButton value="#{msg.get('app.button.add')}"
                                                                      styleClass="smaller"
                                                                      process="@this"
-                                                                     actionListener="#{basicInfo.onAddAccount}"
+                                                                     actionListener="#{basicInfo.onInitAddAccount}"
                                                                      update=":basicInfoAccountDlgForm"
                                                                      oncomplete="basicInfoAccountDlg.show();">
                                                         <p:resetInput target=":basicInfoAccountDlgForm"/>
@@ -652,7 +658,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
-              modal="true" width="550" height="260">
+              modal="true" width="550" height="280">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
