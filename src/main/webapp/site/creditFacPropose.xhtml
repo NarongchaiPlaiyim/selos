@@ -553,7 +553,6 @@
 <tr>
 <td style="background-color:#ffffff">
 
-
 <table class="table_content"  style="width:100%">
 
 <thead>
@@ -702,8 +701,8 @@
             <table class="table_noborder" >
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.requestType')}</td>
-                    <td>#{proposeCredit.requestType == 1 ? msg.get('app.label.new') :
-                            proposeCredit.requestType == 2 ? msg.get('app.label.change') : ''}</td>
+                    <td>#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
+                            proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.refinance')}</td>
                     <td>#{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
                             proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}</td>
@@ -741,7 +740,6 @@
 </tbody>
 
 </table>
-
 
 </td>
 </tr>
@@ -1243,7 +1241,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 2 ? msg.get('app.label.change') : ''}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="center">

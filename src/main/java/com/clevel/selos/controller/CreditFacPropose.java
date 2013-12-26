@@ -33,8 +33,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -209,10 +207,9 @@ public class CreditFacPropose implements Serializable {
     @Inject
     TCGInfoControl tcgInfoControl;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose(){}
 
-    public void preRender() {
+ /*   public void preRender() {
         //test
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
@@ -232,8 +229,176 @@ public class CreditFacPropose implements Serializable {
             }
         }
     }
+*/
 
     @PostConstruct
+    public void onCreation()
+    {
+        log.info("onCreation.");
+        //test
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("workCaseId", new Long(2)); // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
+        if (session.getAttribute("workCaseId") != null) {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            log.info("workCaseId :: {} ", workCaseId);
+        }
+
+        if (workCaseId != null) {
+
+            modeForDB = ModeForDB.ADD_DB;
+
+            try {
+                newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
+                log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
+                if (newCreditFacilityView != null) {
+                    modeForDB = ModeForDB.EDIT_DB;
+                }
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
+            }
+
+            log.info("onCreation :: modeForDB :: {}", modeForDB);
+
+            basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            log.info("basicInfo:: {}", basicInfo.getId());
+            log.info("basicInfo:: {}", basicInfo.getProductGroup());
+            if (basicInfo == null) {
+                productGroup = null;
+                specialProgramBasicInfo = null;
+            } else {
+                log.info("basicInfo.id ::: {}", basicInfo.getId());
+                productGroup = basicInfo.getProductGroup();
+                specialProgramBasicInfo = basicInfo.getSpecialProgram();
+            }
+
+            tcg = tcgdao.findByWorkCaseId(workCaseId);
+
+            if (tcg == null) {
+                applyTCG = 0;
+            } else {
+                log.info("tcg.id ::: {}", tcg.getId());
+                applyTCG = tcg.getTcgFlag();
+            }
+
+
+            guarantorList = customerInfoControl.getGuarantorByWorkCase(workCaseId);
+
+            log.info("guarantorList size :: {}", guarantorList.size());
+            if (guarantorList == null) {
+                guarantorList = new ArrayList<CustomerInfoView>();
+            }
+
+            collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
+            log.info("collateralOwnerUwAllList size :: {}", collateralOwnerUwAllList.size());
+            if (collateralOwnerUwAllList == null) {
+                collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
+            }
+        }
+
+        if (collateralOwnerUW == null) {
+            collateralOwnerUW = new CustomerInfoView();
+        }
+
+        if (newCreditFacilityView == null) {
+            newCreditFacilityView = new NewCreditFacilityView();
+            reducePricePanelRendered = false;
+            cannotEditStandard = true;
+        }
+
+        if (creditRequestTypeList == null) {
+            creditRequestTypeList = new ArrayList<CreditRequestType>();
+        }
+
+        if (countryList == null) {
+            countryList = new ArrayList<Country>();
+        }
+
+        if (newCreditDetailView == null) {
+            newCreditDetailView = new NewCreditDetailView();
+            seq = 0;
+            hashSeqCredit = new Hashtable<String, String>();
+        }
+
+        if (productProgramList == null) {
+            productProgramList = new ArrayList<ProductProgram>();
+        }
+
+        if (creditTypeList == null) {
+            creditTypeList = new ArrayList<CreditType>();
+        }
+
+        if (disbursementList == null) {
+            disbursementList = new ArrayList<Disbursement>();
+        }
+
+        if (newConditionDetailView == null) {
+            newConditionDetailView = new NewConditionDetailView();
+        }
+
+        if (newGuarantorDetailView == null) {
+            newGuarantorDetailView = new NewGuarantorDetailView();
+        }
+
+        if (newCollateralInfoView == null) {
+            newCollateralInfoView = new NewCollateralInfoView();
+        }
+
+        if (newSubCollateralDetailView == null) {
+            newSubCollateralDetailView = new NewSubCollateralDetailView();
+        }
+
+        if (subCollateralTypeList == null) {
+            subCollateralTypeList = new ArrayList<SubCollateralType>();
+        }
+
+        if (collateralTypeList == null) {
+            collateralTypeList = new ArrayList<CollateralType>();
+        }
+
+        if (potentialCollateralList == null) {
+            potentialCollateralList = new ArrayList<PotentialCollateral>();
+        }
+
+        if (prdGroupToPrdProgramList == null) {
+            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        }
+
+        if (baseRateList == null) {
+            baseRateList = new ArrayList<BaseRate>();
+        }
+
+        if (loanPurposeList == null) {
+            loanPurposeList = new ArrayList<LoanPurpose>();
+        }
+
+        if (mortgageTypeList == null) {
+            mortgageTypeList = new ArrayList<MortgageType>();
+        }
+
+        modeEditReducePricing = false;
+        modeEditReduceFront = false;
+        creditRequestTypeList = creditRequestTypeDAO.findAll();
+        countryList = countryDAO.findAll();
+        mortgageTypeList = mortgageTypeDAO.findAll();
+        loanPurposeList = loanPurposeDAO.findAll();
+        disbursementList = disbursementDAO.findAll();
+        subCollateralTypeList = subCollateralTypeDAO.findAll();
+        collateralTypeList = collateralTypeDAO.findAll();
+        potentialCollateralList = potentialCollateralDAO.findAll();
+        baseRateList = baseRateDAO.findAll();
+        modeEdit = false;
+        suggestPrice = BigDecimal.ZERO;
+        standardPrice = BigDecimal.ZERO;
+        finalBaseRate = new BaseRate();
+        finalInterest = BigDecimal.ZERO;
+        suggestPriceLabel = "";
+        standardPriceLabel = "";
+        finalPriceRate = "";
+
+    }
+/*
+
     public void onCreation() {
         log.debug("onCreation :::");
         HttpSession session = FacesUtil.getSession(true);
@@ -408,6 +573,7 @@ public class CreditFacPropose implements Serializable {
 
     }
 
+*/
 
     //Call  BRMS to get data Propose Credit Info
     public void onRetrievePricingFee() {
