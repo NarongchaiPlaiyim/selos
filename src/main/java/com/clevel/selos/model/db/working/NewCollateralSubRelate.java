@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_new_collateral_relate")
+@Table(name = "wrk_new_sub_col_relate")
 public class NewCollateralSubRelate implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_REL_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_REL_ID", allocationSize = 1)

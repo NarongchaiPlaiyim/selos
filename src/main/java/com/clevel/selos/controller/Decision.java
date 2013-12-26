@@ -153,6 +153,10 @@ public class Decision implements Serializable {
     private BigDecimal finalInterest;
     private String finalPriceRate;
 
+    private boolean modeEditReducePricing;
+    private boolean modeEditReduceFrontEndFee;
+    private boolean cannotEditStandard;
+
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private List<BaseRate> baseRateList;
@@ -182,6 +186,9 @@ public class Decision implements Serializable {
     private List<NewCreditDetailView> guarantorCreditTypeList;
     private List<NewCreditDetailView> selectedGuarantorCrdTypeItems;
     private int rowIndexGuarantor;
+
+    // FollowUp Condition
+    private int rowIndexFollowUpCondition;
 
     //Message Dialog
     private String messageHeader;
@@ -988,11 +995,15 @@ public class Decision implements Serializable {
 
         if (RequestTypes.CHANGE.value() == selectedAppProposeCredit.getRequestType()) {   //change
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
+            selectedAppProposeCredit.getProductProgram().setId(0);
+            cannotEditStandard = false;
         }
         else if (RequestTypes.NEW.value() == selectedAppProposeCredit.getRequestType()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
+                selectedAppProposeCredit.getCreditType().setId(0);
             }
+            cannotEditStandard = true;
         }
     }
 
@@ -1003,6 +1014,7 @@ public class Decision implements Serializable {
 
         ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        selectedAppProposeCredit.getCreditType().setId(0);
     }
 
     public void onChangeCreditType() {
@@ -1015,9 +1027,8 @@ public class Decision implements Serializable {
             if (productProgram != null && creditType != null) {
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
 
-                if((prdProgramToCreditType.getId() != 0)
-                        && (creditCustomerType != CreditCustomerType.NOT_SELECTED.value())
-                        && (specialProgramBasicInfo != null)){
+                if((prdProgramToCreditType != null && prdProgramToCreditType.getId() != 0)
+                        && (specialProgramBasicInfo != null && specialProgramBasicInfo.getId() != 0)){
                     log.info("onChangeCreditType() :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
                     log.info("onChangeCreditType() :: creditCustomerType :: {}", creditCustomerType);
                     log.info("onChangeCreditType() :: specialProgramBasicInfo :: {}",specialProgramBasicInfo.getId());
@@ -1029,9 +1040,11 @@ public class Decision implements Serializable {
                         log.debug("onChangeCreditType() :::: productFormula : {}", productFormula.getId());
                         selectedAppProposeCredit.setProductCode(productFormula.getProductCode());
                         selectedAppProposeCredit.setProjectCode(productFormula.getProjectCode());
-                    } else {
-                        selectedAppProposeCredit.setProductCode("-");
-                        selectedAppProposeCredit.setProjectCode("-");
+
+                        log.debug("productFormula.", productFormula.getReducePricing());
+                        log.debug("productFormula.", productFormula.getReducePricing());
+                        modeEditReducePricing = productFormula.getReducePricing() == 1 ? true : false;
+                        modeEditReduceFrontEndFee = productFormula.getReduceFrontEndFee() == 1 ? true : false;
                     }
                 }
             }
@@ -1425,6 +1438,11 @@ public class Decision implements Serializable {
         followUpConditionView = new FollowUpConditionView();
     }
 
+    public void onDeleteFollowUpCondition() {
+        log.debug("onDeleteFollowUpCondition() rowIndexFollowUpCondition: {}", rowIndexFollowUpCondition);
+        decisionView.getFollowUpConditionList().remove(rowIndexFollowUpCondition);
+    }
+
     public void onSave() {
         log.debug("onSave()");
     }
@@ -1786,5 +1804,37 @@ public class Decision implements Serializable {
 
     public void setModeEditSubColl(boolean modeEditSubColl) {
         this.modeEditSubColl = modeEditSubColl;
+    }
+
+    public int getRowIndexFollowUpCondition() {
+        return rowIndexFollowUpCondition;
+    }
+
+    public void setRowIndexFollowUpCondition(int rowIndexFollowUpCondition) {
+        this.rowIndexFollowUpCondition = rowIndexFollowUpCondition;
+    }
+
+    public boolean isModeEditReducePricing() {
+        return modeEditReducePricing;
+    }
+
+    public void setModeEditReducePricing(boolean modeEditReducePricing) {
+        this.modeEditReducePricing = modeEditReducePricing;
+    }
+
+    public boolean isModeEditReduceFrontEndFee() {
+        return modeEditReduceFrontEndFee;
+    }
+
+    public void setModeEditReduceFrontEndFee(boolean modeEditReduceFrontEndFee) {
+        this.modeEditReduceFrontEndFee = modeEditReduceFrontEndFee;
+    }
+
+    public boolean isCannotEditStandard() {
+        return cannotEditStandard;
+    }
+
+    public void setCannotEditStandard(boolean cannotEditStandard) {
+        this.cannotEditStandard = cannotEditStandard;
     }
 }

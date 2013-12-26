@@ -13,7 +13,8 @@
                         <p:outputLabel for="accountName" value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
-                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"/>
+                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"
+                                     onkeyup="return alphabetThaiEng($(this));"/>
                     </td>
                 </tr>
                 <tr>

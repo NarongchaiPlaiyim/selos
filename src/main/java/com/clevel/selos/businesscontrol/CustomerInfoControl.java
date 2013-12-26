@@ -86,35 +86,6 @@ public class CustomerInfoControl extends BusinessControl {
                     cV.setPercentShareSummary(BigDecimal.ZERO);
                 }
             }
-
-//            //for show jurLv
-//            if(cV.getIsCommittee() == 1){
-//                for(CustomerInfoView cusView : customerInfoViewList){
-//                    if(cusView.getId() == cV.getCommitteeId()){
-//                        cV.setJurLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
-//                    }
-//                }
-//            } else {
-//                cV.setJurLv("-");
-//            }
-//
-//            //for show indLv
-//            if(cV.getIsSpouse() == 1){ // is spouse
-//                for(CustomerInfoView cusView : customerInfoViewList){ // is main spouse
-//                    if(cusView.getSpouseId() == cV.getId()){
-//                        cV.setIndLv(cV.getReference().getDescription()+" of "+cusView.getFirstNameTh()+" "+cusView.getLastNameTh());
-//                        if(cusView.getIsCommittee() == 1){ // is main spouse is committee
-//                            for(CustomerInfoView cusViewJur : customerInfoViewList){
-//                                if(cusViewJur.getId() == cusView.getCommitteeId()){
-//                                    cV.setJurLv(cusView.getReference().getDescription()+" of "+cusViewJur.getFirstNameTh()+" "+cusViewJur.getLastNameTh());
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            } else {
-//                cV.setIndLv("-");
-//            }
         }
 
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
@@ -130,6 +101,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public int getCaseBorrowerTypeIdByWorkCase(long workCaseId){
+        log.info("getCaseBorrowerTypeIdByWorkCase ::: workCaseId : {}", workCaseId);
         int caseBorrowerTypeId = 0;
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         if(workCase != null){
@@ -140,7 +112,8 @@ public class CustomerInfoControl extends BusinessControl {
         return caseBorrowerTypeId;
     }
 
-    public void saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
+    public long saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
+        log.info("saveCustomerInfoIndividual ::: workCaseId : {} , customerInfoView : {}", workCaseId,customerInfoView);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         customerInfoView.getCustomerEntity().setId(1);
@@ -185,9 +158,11 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
         }
+        return customer.getId();
     }
 
-    public void saveCustomerInfoJuristic(CustomerInfoView customerInfoView, long workCaseId){
+    public long saveCustomerInfoJuristic(CustomerInfoView customerInfoView, long workCaseId){
+        log.info("saveCustomerInfoJuristic ::: workCaseId : {} , customerInfoView : {}", workCaseId,customerInfoView);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         customerInfoView.getCustomerEntity().setId(2);
@@ -240,16 +215,16 @@ public class CustomerInfoControl extends BusinessControl {
                 cusIndividual.setIsCommittee(1);
                 cusIndividual.setCommitteeId(customerJuristic.getId());
                 if(cusIndividual.getSpouse() != null){
-//                    cusIndividual.getSpouse().setIsCommittee(1);
                     cusIndividual.getSpouse().setIsCommittee(0);
-//                    cusIndividual.getSpouse().setCommitteeId(customerJuristic.getId());
                 }
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
             }
         }
+        return customerJuristic.getId();
     }
 
     public CustomerInfoView getCustomerIndividualById(long id){
+        log.info("getCustomerIndividualById ::: id : {}", id);
         Customer customer = customerDAO.findById(id);
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
         if(customer.getSpouseId() != 0){
@@ -261,6 +236,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public CustomerInfoView getCustomerJuristicById(long id){
+        log.info("getCustomerJuristicById ::: id : {}", id);
         Customer customer = customerDAO.findById(id);
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
 
@@ -274,6 +250,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public void deleteCustomerIndividual(long customerId){
+        log.info("deleteCustomerIndividual ::: customerId : {}", customerId);
         Customer customer = customerDAO.findById(customerId);
 
         if(customer.getSpouseId() != 0){ // have spouse
@@ -331,6 +308,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public void deleteCustomerJuristic(long customerId){
+        log.info("deleteCustomerJuristic ::: customerId : {}", customerId);
         Customer customer = customerDAO.findById(customerId);
         List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId()); // find committee
         if(cusIndList != null && cusIndList.size() > 0){
@@ -461,8 +439,82 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public int checkAddress(AddressView add1, AddressView add2){
+        log.info("checkAddress ::: add1 : {} , add2 : {}", add1,add2);
+        //currentAddress = 1 is current address
+        //currentAddress = 0 is other address
         int currentAddress = 0;
+        if(!add1.getAddressNo().equalsIgnoreCase(add2.getAddressNo())){
+            return currentAddress;
+        }
+        if(!add1.getMoo().equalsIgnoreCase(add2.getMoo())){
+            return currentAddress;
+        }
+        if(!add1.getBuilding().equalsIgnoreCase(add2.getBuilding())){
+            return currentAddress;
+        }
+        if(!add1.getRoad().equalsIgnoreCase(add2.getRoad())){
+            return currentAddress;
+        }
+        if(!add1.getPostalCode().equalsIgnoreCase(add2.getPostalCode())){
+            return currentAddress;
+        }
+        if(!add1.getPhoneNumber().equalsIgnoreCase(add2.getPhoneNumber())){
+            return currentAddress;
+        }
+        if(!add1.getExtension().equalsIgnoreCase(add2.getExtension())){
+            return currentAddress;
+        }
+        if(!add1.getContactName().equalsIgnoreCase(add2.getContactName())){
+            return currentAddress;
+        }
+        if(!add1.getContactPhone().equalsIgnoreCase(add2.getContactPhone())){
+            return currentAddress;
+        }
+        if(!add1.getAddress().equalsIgnoreCase(add2.getAddress())){
+            return currentAddress;
+        }
 
+        if(add1.getProvince() != null && add2.getProvince() != null){
+            if(add1.getProvince().getCode() != add2.getProvince().getCode()){
+                return currentAddress;
+            }
+        } else if(add1.getProvince() != null && add2.getProvince() == null){
+            return currentAddress;
+        } else if(add2.getProvince() != null && add1.getProvince() == null){
+            return currentAddress;
+        }
+
+        if(add1.getDistrict() != null && add2.getDistrict() != null){
+            if(add1.getDistrict().getId() != add2.getDistrict().getId()){
+                return currentAddress;
+            }
+        } else if(add1.getDistrict() != null && add2.getDistrict() == null){
+            return currentAddress;
+        } else if(add2.getDistrict() != null && add1.getDistrict() == null){
+            return currentAddress;
+        }
+
+        if(add1.getSubDistrict() != null && add2.getSubDistrict() != null){
+            if(add1.getSubDistrict().getCode() != add2.getSubDistrict().getCode()){
+                return currentAddress;
+            }
+        } else if(add1.getSubDistrict() != null && add2.getSubDistrict() == null){
+            return currentAddress;
+        } else if(add2.getSubDistrict() != null && add1.getSubDistrict() == null){
+            return currentAddress;
+        }
+
+        if(add1.getCountry() != null && add2.getCountry() != null){
+            if(add1.getCountry().getCode() != add2.getCountry().getCode()){
+                return currentAddress;
+            }
+        } else if(add1.getCountry() != null && add2.getCountry() == null){
+            return currentAddress;
+        } else if(add2.getCountry() != null && add1.getCountry() == null){
+            return currentAddress;
+        }
+
+        currentAddress = 1;
         return currentAddress;
     }
 }

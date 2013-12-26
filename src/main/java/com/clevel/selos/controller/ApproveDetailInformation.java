@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -44,6 +45,9 @@ public class ApproveDetailInformation implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
+
     // message //
     private String messageHeader;
     private String message;
@@ -85,33 +89,7 @@ public class ApproveDetailInformation implements Serializable {
         accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
         loanPaymentDetailView = new LoanPaymentDetailView();
         try{
-            loanPaymentDetailView.setPayDate(3);
 
-            loanPaymentDetailView.setSignDate(new Date());
-            FollowUpConditionView followUpConditionView = new FollowUpConditionView();
-            followUpConditionView.setCondition("Operation");
-            followUpConditionView.setDetailOfFollowUp("dfdfdfdfdf");
-            followUpConditionView.setDateOfFollowUp(new Date());
-            followUpConditionViews.add(followUpConditionView);
-
-            AccountInfoDetailView accountInfoDetailView = new AccountInfoDetailView();
-            AccountInfoCreditTypeView accountInfoCreditTypeView = new AccountInfoCreditTypeView();
-            accountInfoCreditTypeView.setLimit(BigDecimal.TEN);
-
-            accountInfoCreditTypeView.setCreditFacility("Facility");
-            accountInfoCreditTypeView.setProductProgram("product");
-            List<AccountInfoCreditTypeView> accountInfoCreditTypeViews = new ArrayList<AccountInfoCreditTypeView>();
-            accountInfoCreditTypeViews.add(accountInfoCreditTypeView);
-            accountInfoDetailView.setAccountInfoCreditTypeViewList(accountInfoCreditTypeViews);
-
-            AccountNameView accountNameView = new AccountNameView();
-            accountNameView.setName("sdsd");
-            List<AccountNameView> accountNameViews = new ArrayList<AccountNameView>();
-            accountNameViews.add(accountNameView);
-            accountInfoDetailView.setAccountNameViewList(accountNameViews);
-            accountInfoDetailView.setAccountNumber("1212121212");
-
-            accountInfoDetailViews.add(accountInfoDetailView);
 
 
 

@@ -1612,6 +1612,7 @@
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedCredit"
                                                  value="#{msg.get('app.button.add')}"
+                                                 disabled="#{not decision.roleUW}"
                                                  actionListener="#{decision.onAddAppProposeCredit()}"
                                                  process="@form"
                                                  update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
@@ -3062,36 +3063,53 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 400px">
-                                <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
-                                                 style="width: 100%">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                    <!-- todo: getList conditions for FollowUpCondition -->
-                                    <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
-                                </p:selectOneMenu>
-                            </td>
-                            <td style="padding-left: 10px">
-                                <p:commandButton id="btnAddFollowUpCondition" value="#{msg.get('app.button.add')}"
-                                                 action="#{decision.onAddFollowUpCondition()}" process="@form"
-                                                 update=":frmMain:dtFollowUpCondition"
-                                                 styleClass="smaller"/>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
+                                                             style="width: 100%">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                <f:selectItem itemLabel="Example Condition" itemValue="Example Condition"/>
+                                                <!-- todo: getList conditions for FollowUpCondition -->
+                                                <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
+                                            </p:selectOneMenu>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <p:commandButton id="btnAddFollowUpCondition"
+                                                             binding="#{addFollowUpCondButton}"
+                                                             disabled="#{not decision.roleUW}"
+                                                             value="#{msg.get('app.button.add')}"
+                                                             action="#{decision.onAddFollowUpCondition()}"
+                                                             process="@form"
+                                                             update=":frmMain:dtFollowUpCondition"
+                                                             styleClass="smaller"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
-                                             onclick="this.select()"
-                                             style="width: 200px"/>
-                                <p:spacer width="10" height="0"/>
-                                <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
-                                                yearRange="1950:2100"
-                                                defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
-                                                pattern="dd/MM/yyyy"
-                                                value="#{decision.followUpConditionView.dateOfFollowUp}"
-                                                locale="th_TH"
-                                                readonlyInput="true"
-                                                styleClass="calendar_right">
-                                </clv:BECalendar>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
+                                                         style="width: 400px"/>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
+                                                            yearRange="1950:2100"
+                                                            defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            pattern="dd/MM/yyyy"
+                                                            value="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            locale="th_TH"
+                                                            readonlyInput="true"
+                                                            styleClass="calendar_right">
+                                            </clv:BECalendar>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
@@ -3107,6 +3125,7 @@
                                             <p:column headerText="#{msg.get('app.decision.tb.th.topic')}" style="width: 600px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.detail')}" style="width: 400px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.date')}" style="width: 200px"/>
+                                            <p:column headerText="" style="width: 50px"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -3121,6 +3140,15 @@
                                             <f:convertDateTime pattern="dd/MM/yyyy" locale="en"/>
                                         </h:outputText>
                                     </p:column>
+
+                                    <p:column styleClass="center top">
+                                        <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                         icon="ui-icon-trash"
+                                                         oncomplete="confirmDeleteFollowUpCondDlg.show()">
+                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexFollowUpCondition}"/>
+                                        </p:commandButton>
+                                    </p:column>
+
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -3187,8 +3215,8 @@
                                                 <tr>
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}" rows="2"
-                                                                         onclick="this.select()"
+                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                                         rows="2"
                                                                          style="width: 100%"/>
                                                     </td>
                                                 </tr>
@@ -3290,7 +3318,6 @@
                                                                 <td class="center" style="border-style:none !important;">
                                                                     <p:inputTextarea value="#{decision.approvalHistory.comment}"
                                                                                      rows="5"
-                                                                                     onclick="this.select()"
                                                                                      style="font-size: 12px !important; width: 450px"/>
                                                                 </td>
                                                             </tr>
@@ -3400,7 +3427,7 @@
 </p:panel>
 
 <!-- Propose Credit Dialog -->
-<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Propose Credit Information"
+<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Approve Credit Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" width="900">
     <ui:include src="dialog/decisionProposeCreditDialog.xhtml"/>
 </p:dialog>
@@ -3415,7 +3442,7 @@
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
-<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Propose Collateral Information"
+<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Approve Collateral Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="900" height="500">
     <ui:include src="dialog/decisionProposeCollateralDialog.xhtml"/>
 </p:dialog>
@@ -3445,7 +3472,7 @@
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->
-<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Propose Guarantor Information"
+<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Approve Guarantor Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="800" height="400">
     <ui:include src="dialog/decisionProposeGuarantorDialog.xhtml"/>
 </p:dialog>
@@ -3456,6 +3483,15 @@
     <ui:param name="formId" value="frmConfirmDeleteAppGuarantor"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteAppProposeGuarantor"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteFollowUpCondDialog"/>
+    <ui:param name="name" value="confirmDeleteFollowUpCondDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteFollowUpCond"/>
+    <ui:param name="controller" value="#{decision}"/>
+    <ui:param name="action" value="onDeleteFollowUpCondition"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 

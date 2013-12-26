@@ -113,6 +113,7 @@ public class BankStatementDetail implements Serializable {
     //private String userId;
 
     private boolean bankAccTypeSelectRequired;
+    private boolean roleUW;
 
     public BankStatementDetail() {
     }
@@ -177,6 +178,8 @@ public class BankStatementDetail implements Serializable {
         lastMonthDate = (Date) FacesUtil.getSessionMapValue("lastMonthDate");
         numberOfMonths = (Integer) FacesUtil.getSessionMapValue("numberOfMonths");
         bankStmtView = (BankStmtView) FacesUtil.getSessionMapValue("selectedBankStmtView");
+
+        roleUW = bankStmtControl.isUW();
 
         log.debug("Passed parameters from Bank statement summary ::: bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
                 isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
@@ -420,5 +423,13 @@ public class BankStatementDetail implements Serializable {
 
     public void setBankAccTypeSelectRequired(boolean bankAccTypeSelectRequired) {
         this.bankAccTypeSelectRequired = bankAccTypeSelectRequired;
+    }
+
+    public boolean isRoleUW() {
+        return roleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        this.roleUW = roleUW;
     }
 }
