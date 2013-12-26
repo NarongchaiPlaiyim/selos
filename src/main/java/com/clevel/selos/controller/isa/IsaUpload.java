@@ -129,6 +129,7 @@ public class IsaUpload implements Serializable {
                     }
                     count++;
                     index--;
+                    System.out.println(count);
                 } while (count <= 5 && index >= 0);
             } catch (Exception ex) {
                 log.warn("Exception when list upload and Result Files", ex);
@@ -187,7 +188,7 @@ public class IsaUpload implements Serializable {
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
                 isaUploadService.processingUploadFile(PATH_FILE, fileDir.listFiles()[0].getName());
-
+//                initForm();
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
