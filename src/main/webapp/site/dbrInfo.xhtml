@@ -46,13 +46,14 @@
                                     <table>
                                         <tr>
                                             <td class="title">
-                                                <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
+                                                <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
                                             </td>
                                             <td>
                                                 <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="true" readonly="true">
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
+                                            <td style="min-width: 350px; width: 350px; max-width: 350px"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                             </td>
@@ -72,7 +73,7 @@
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </p:inputText>
                                             </td>
-                                            <td colspan="2"></td>
+                                            <td colspan="3"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -80,13 +81,13 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);">
+                                                             onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
 
                                                 </p:inputText>
                                             </td>
-                                            <td colspan="2"></td>
+                                            <td colspan="3"></td>
                                         </tr>
                                         <tr>
                                             <td class="title">
@@ -94,7 +95,7 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" >
+                                                             onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);" >
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
@@ -110,6 +111,7 @@
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
+                                            <td style="min-width: 350px; width: 350px; max-width: 350px;"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
                                             </td>
@@ -120,8 +122,8 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td colspan="3" ></td>
+
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
                                             </td>
@@ -153,14 +155,14 @@
                             <tr>
                                 <!--*** NCB table *** -->
                                 <td>
-                                    <p:dataTable value="#{dbrInfo.ncbDetails}" var="itemNCB" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
-                                        <p:column headerText=" " styleClass="center" style="min-width: 30px; width:30px; max-width: 30px;">
+                                    <p:dataTable value="#{dbrInfo.ncbDetails}" var="itemNCB" rowIndexVar="rowIndex" paginator="false">
+                                        <p:column style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{itemNCB.accountName}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <h:outputText value="#{itemNCB.loanAccountTypeView.name}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="min-width: 150px; width:150px; max-width: 1500px;" styleClass="right">
@@ -232,14 +234,14 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false" style="width: 100%">
+                                    <p:dataTable id="dbrDetailDT" value="#{dbrInfo.dbrDetails}" var="item" rowIndexVar="rowIndex" paginator="false">
                                         <p:column headerText=" "  style="min-width: 30px; width:30px; max-width: 30px;">
                                             <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{item.accountName}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 300px; width:300px; max-width: 300px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{item.loanAccountTypeView.name}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
@@ -339,6 +341,7 @@
         <h:inputHidden id="pagename" value="mnuprescreen"/>
         <h:inputHidden id="subpagename" value="submnuprescreen"/>
     </h:form>
+
 <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
