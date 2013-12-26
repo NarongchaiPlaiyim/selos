@@ -2,17 +2,31 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
-public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Integer> {
+public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> {
     @Inject
     @SELOS
     Logger log;
     @Inject
     public NewGuarantorDetailDAO() {}
 
+    public List<NewGuarantorDetail> findNewGuarantorByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.addOrder(Order.asc("id"));
+        List<NewGuarantorDetail> newGuarantorDetails = (List<NewGuarantorDetail>) criteria.list();
+        log.info("newGuarantorDetails ::: size : {}", newGuarantorDetails.size());
+        return newGuarantorDetails;
+    }
 
 }

@@ -16,6 +16,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -362,14 +363,11 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setTMB(ncbDetailView.isTMB());
                 ncbAdd.setRefinance(ncbDetailView.isRefinance());
                 ncbAdd.setWc(ncbDetailView.isWc());
+                ncbAdd.setTMBAccount(Util.returnNumForFlag(ncbDetailView.isTMB()));
+                ncbAdd.setWcFlag(Util.returnNumForFlag(ncbDetailView.isWc()));
+                ncbAdd.setRefinanceFlag(Util.returnNumForFlag(ncbDetailView.isRefinance()));
 
-                if (ncbDetailView.isTMB() == true) {
-                    ncbAdd.setTMBAccount(1);
-                } else {
-                    ncbAdd.setTMBAccount(0);
-                }
-
-                if (ncbDetailView.isWc() == true) {
+               /* if (ncbDetailView.isWc() == true) {
                     ncbAdd.setWcFlag(1);
                 } else {
                     ncbAdd.setWcFlag(0);
@@ -379,7 +377,7 @@ public class NCBInfo implements Serializable {
                     ncbAdd.setRefinanceFlag(1);
                 } else {
                     ncbAdd.setRefinanceFlag(0);
-                }
+                }*/
 
 /*                moneys = new ArrayList<BigDecimal>();
                 moneys.add(ncbDetailView.getMonth1());
