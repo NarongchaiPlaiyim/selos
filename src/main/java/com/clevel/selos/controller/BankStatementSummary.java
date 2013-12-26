@@ -221,6 +221,7 @@ public class BankStatementSummary implements Serializable {
     }
 
     private void provideSrcOfCollateralProofList() {
+        log.debug("provideSrcOfCollateralProofList()");
         bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
         for (BankStmtView tmbBankStmtView : Util.safetyList(summaryView.getTmbBankStmtViewList())) {
             bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);

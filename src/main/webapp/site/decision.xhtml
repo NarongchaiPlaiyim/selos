@@ -1586,7 +1586,8 @@
                                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}" styleClass="title"/>
                                                 <p:inputText value="#{decision.decisionView.existingSMELimit}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="left">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -1596,7 +1597,8 @@
                                                 <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}" styleClass="title"/>
                                                 <p:inputText value="#{decision.decisionView.maximumSMELimit}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="left">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -1736,9 +1738,10 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{decision.onEditAppProposeCredit()}"
                                                                          update=":proposeCreditDlgForm"
-                                                                         oncomplete="proposeCreditDlg.show()">
+                                                                         oncomplete="proposeCreditDlg.show()">                                                            
                                                             <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.selectedAppProposeCredit}"/>
                                                             <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCredit}"/>
+                                                            <p:resetInput target=":proposeCreditDlgForm"/>
                                                         </p:commandButton>
 
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
@@ -2876,7 +2879,7 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : guarantor.approved eq 1 ? msg.get('app.label.notApproved') : ''}
                                         </p:column>
 
                                         <p:column styleClass="left top">
@@ -2926,7 +2929,7 @@
                                                              oncomplete="proposeGuarantorDlg.show()">
                                                 <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
-                                                <p:resetInput target=":guarantorDlgForm"/>
+                                                <!--<p:resetInput target=":guarantorDlgForm"/>-->
                                             </p:commandButton>
 
                                             <p:commandButton title="#{msg.get('app.button.delete')}"
@@ -3180,7 +3183,8 @@
                                                     <td class="left middle" style="width: 190px">
                                                         <p:inputText value="#{decision.decisionView.intFeeDOA}"
                                                                      onclick="this.select()"
-                                                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
                                                                      styleClass="right">
                                                             <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                             <p:ajax event="blur" update="@this"/>
@@ -3192,7 +3196,8 @@
                                                     <td class="left middle" style="width: 190px">
                                                         <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
                                                                      onclick="this.select()"
-                                                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
                                                                      styleClass="right">
                                                             <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                             <p:ajax event="blur" update="@this"/>
@@ -3204,7 +3209,8 @@
                                                     <td class="left middle" style="width: 190px">
                                                         <p:inputText value="#{decision.decisionView.guarantorBA}"
                                                                      onclick="this.select()"
-                                                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
                                                                      styleClass="right">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                             <p:ajax event="blur" update="@this"/>
@@ -3216,6 +3222,8 @@
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
                                                     <td class="left" colspan="5">
                                                         <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                                         onkeydown="return onKeyDownText(event);"
+                                                                         onkeypress="return onKeyPressText(event);"
                                                                          rows="2"
                                                                          style="width: 100%"/>
                                                     </td>
