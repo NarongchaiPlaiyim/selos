@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for ProductProgramType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="ProductProgramType">
  *   &lt;complexContent>
@@ -36,20 +36,22 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProductProgramType", propOrder = {
-        "id",
-        "name",
-        "businessType",
-        "maxAge",
-        "minCreditLimit",
-        "maxCreditLimit",
-        "minNumTimesOfGMI",
-        "maxNumTimesOfGMI",
-        "attribute",
-        "minTenor",
-        "maxTenor"
+    "id",
+    "name",
+    "businessType",
+    "maxAge",
+    "minCreditLimit",
+    "maxCreditLimit",
+    "minNumTimesOfGMI",
+    "maxNumTimesOfGMI",
+    "attribute",
+    "minTenor",
+    "maxTenor"
 })
 public class ProductProgramType {
 
@@ -68,9 +70,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -78,9 +82,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -88,9 +94,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the name property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getName() {
         return name;
@@ -98,9 +106,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the name property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setName(String value) {
         this.name = value;
@@ -108,9 +118,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the businessType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBusinessType() {
         return businessType;
@@ -118,9 +130,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the businessType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBusinessType(String value) {
         this.businessType = value;
@@ -128,9 +142,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the maxAge property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxAge() {
         return maxAge;
@@ -138,9 +154,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the maxAge property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxAge(Integer value) {
         this.maxAge = value;
@@ -148,9 +166,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the minCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMinCreditLimit() {
         return minCreditLimit;
@@ -158,9 +178,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the minCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMinCreditLimit(BigDecimal value) {
         this.minCreditLimit = value;
@@ -168,9 +190,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the maxCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimit() {
         return maxCreditLimit;
@@ -178,9 +202,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the maxCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimit(BigDecimal value) {
         this.maxCreditLimit = value;
@@ -188,9 +214,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the minNumTimesOfGMI property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMinNumTimesOfGMI() {
         return minNumTimesOfGMI;
@@ -198,9 +226,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the minNumTimesOfGMI property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMinNumTimesOfGMI(Integer value) {
         this.minNumTimesOfGMI = value;
@@ -208,9 +238,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the maxNumTimesOfGMI property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxNumTimesOfGMI() {
         return maxNumTimesOfGMI;
@@ -218,9 +250,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the maxNumTimesOfGMI property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxNumTimesOfGMI(Integer value) {
         this.maxNumTimesOfGMI = value;
@@ -228,23 +262,25 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -255,9 +291,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the minTenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMinTenor() {
         return minTenor;
@@ -265,9 +303,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the minTenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMinTenor(Integer value) {
         this.minTenor = value;
@@ -275,9 +315,11 @@ public class ProductProgramType {
 
     /**
      * Gets the value of the maxTenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxTenor() {
         return maxTenor;
@@ -285,9 +327,11 @@ public class ProductProgramType {
 
     /**
      * Sets the value of the maxTenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxTenor(Integer value) {
         this.maxTenor = value;

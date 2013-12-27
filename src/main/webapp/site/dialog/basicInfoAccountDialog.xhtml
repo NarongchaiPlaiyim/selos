@@ -11,8 +11,8 @@
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.accountName')}"/>
                 </td>
                 <td style="width: 200px;">
-                    <p:inputText value="#{basicInfo.basicInfoAccountView.accountName}" styleClass="larger"/>
-                                 <!--onkeypress="return onKeyPressText(event)" onkeydown="return onKeyDownText(event)"/>-->
+                    <p:inputText value="#{basicInfo.basicInfoAccountView.accountName}" styleClass="larger"
+                            required="true"/>
                 </td>
             </tr>
             <tr>
@@ -67,12 +67,12 @@
             <tr>
                 <td class="center" colspan="2" style="margin-top: 20px;">
                     <p:commandButton id="dlgSaveBasicAccBtn"
-                            value="#{msg.get('app.button.ok')}"
-                            styleClass="small"
-                            actionListener="#{basicInfo.addAccount}"
-                            process="@form"
-                            update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount"
-                            oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
+                                     value="#{msg.get('app.button.ok')}"
+                                     styleClass="small"
+                                     actionListener="#{basicInfo.onAddAccount()}"
+                                     process="@form"
+                                     update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount"
+                                     oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":basicInfoAccountDlgForm"
                                      onclick="basicInfoAccountDlg.hide()"/>

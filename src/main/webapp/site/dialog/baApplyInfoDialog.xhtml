@@ -44,7 +44,9 @@
                 <td colspan="100%" style="text-align: center"><p:commandButton value="#{msg.get('app.button.ok')}"
                                      actionListener="#{baInfo.onSubmitApplyBaDialog()}"
                                      update=":baInformationForm,:baApplyInfoDlgForm"
-                                     styleClass="smaller"/>
+                                     process="@form"
+                                     styleClass="smaller"
+                                     oncomplete="handleApplyBaDialogRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}"
                                      onclick="applyBaInfoDialog.hide()"
                                      styleClass="smaller"/>

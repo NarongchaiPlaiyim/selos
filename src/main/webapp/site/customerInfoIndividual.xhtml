@@ -49,12 +49,14 @@
                                     <p:selectOneMenu size="1" style="min-width: 200px; max-width: 200px; width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
+                                                     disabled="#{custInfoSumIndi.editForm}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                        var="docType"
                                                        itemLabel="#{docType.description}"
                                                        itemValue="#{docType.id}"/>
+                                        <p:ajax event="change" update=":frmMain:inputSearch"
+                                                process="@this" listener="#{custInfoSumIndi.onChangeSearch}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -63,18 +65,47 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearch.searchBy}"
                                                       required="#{not empty param[searchButton.clientId]}"
-                                                      disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
+                                                      disabled="#{custInfoSumIndi.editForm}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
+                                        <p:ajax event="click" update=":frmMain:inputSearch"
+                                                process="@this" listener="#{custInfoSumIndi.onChangeSearch}"/>
                                     </p:selectOneRadio>
                                 </td>
+                                <!-- for show only -->
                                 <td style="min-width: 200px; max-width: 200px; width: 200px;">
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
-                                                 style="width: 180px; max-width: 180px; min-width: 180px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
-                                                 required="#{not empty param[searchButton.clientId]}"
-                                                 disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
+                                    <p:panel id="inputSearch" styleClass="panel">
+                                        <p:inputText style="width: 180px; max-width: 180px; min-width: 180px;" disabled="true"
+                                                rendered="#{custInfoSumIndi.customerInfoSearch.searchBy == 0 || custInfoSumIndi.customerInfoSearch.documentType.id == 0}"/>
+
+                                    <!-- citizen & personal, only number & check thai -->
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="13" id="inputSearchText"
+                                                     style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                     onkeydown="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
+                                                     onblur="checkSearchThaiID(this)"
+                                                     required="#{not empty param[searchButton.clientId]}"
+                                                     disabled="#{custInfoSumIndi.editForm}"
+                                                     rendered="#{custInfoSumIndi.customerInfoSearch.searchBy == 1 and custInfoSumIndi.customerInfoSearch.documentType.id == 1}"/>
+
+                                    <!-- tmb cust & personal + passport -->
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
+                                                     style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                     onkeydown="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
+                                                     required="#{not empty param[searchButton.clientId]}"
+                                                     disabled="#{custInfoSumIndi.editForm}"
+                                                     rendered="#{custInfoSumIndi.customerInfoSearch.searchBy == 2 and (custInfoSumIndi.customerInfoSearch.documentType.id == 1 || custInfoSumIndi.customerInfoSearch.documentType.id == 2)}"/>
+
+                                    <!-- citizen & passport -->
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
+                                                     style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                     onkeydown="return onKeyText(event);"
+                                                     onkeypress="return onKeyText(event);"
+                                                     required="#{not empty param[searchButton.clientId]}"
+                                                     disabled="#{custInfoSumIndi.editForm}"
+                                                     rendered="#{custInfoSumIndi.customerInfoSearch.searchBy == 1 and custInfoSumIndi.customerInfoSearch.documentType.id == 2}"/>
+                                    </p:panel>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
@@ -82,7 +113,7 @@
                                                      process="@form"
                                                      actionListener="#{custInfoSumIndi.onSearchCustomerInfo()}"
                                                      update=":msgBoxSystemMessagePanel :frmMain"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumIndi.editForm}"/>
                                 </td>
                             </tr>
 
@@ -138,14 +169,14 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.reference')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.reference.id}" id="reference"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndReference}"
                                                      disabled="#{custInfoSumIndi.editBorrower}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.referenceIndividualList}"
                                                        var="reference"
-                                                       itemLabel="#{reference.description} - #{reference.id}"
+                                                       itemLabel="#{reference.description}"
                                                        itemValue="#{reference.id}"/>
                                         <p:ajax event="change" process="@form" update=":frmMain" listener="#{custInfoSumIndi.onChangeReference()}"/>
                                     </p:selectOneMenu>
@@ -161,7 +192,7 @@
                                     <p:inputText id="shareCust" styleClass="right" value="#{custInfoSumIndi.customerInfoView.percentShare}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);">
+                                                 onkeypress="return onKeyPressNumber(event);">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                         <p:ajax event="blur" update=":frmMain:shareCust"/>
                                     </p:inputText>
@@ -199,7 +230,7 @@
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.citizenId}" maxlength="15"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  disabled="#{not custInfoSumIndi.enableCitizenId}"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCitId}"/>
                                 </td>
@@ -400,7 +431,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.sndNation')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.sndNationality.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.sndNationalityList}"
@@ -429,7 +460,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.occup')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.occupation.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndOcc}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -462,7 +493,7 @@
                                     <p:inputText id="approxIncome" styleClass="right" value="#{custInfoSumIndi.customerInfoView.approxIncome}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndAppInc}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:approxIncome"/>
@@ -487,7 +518,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.incomeCountry')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumIndi.customerInfoView.countryIncome.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
@@ -524,7 +555,7 @@
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.numberOfChild}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                 onkeypress="return onKeyPressNumber(event);"/>
                                 </td>
                             </tr>
                             <!-- ############################################################################################# -->
@@ -656,9 +687,14 @@
                                             <td colspan="5">
                                                 <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.currentAddress.phoneNumber}"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId])
-                                                             and custInfoSumIndi.reqIndCurPhone}"/>
+                                                             and custInfoSumIndi.reqIndCurPhone}"
+                                                             onkeydown="return onKeyDownNumber(event);"
+                                                             onkeypress="return onKeyPressNumber(event);"
+                                                             maxlength="10"/>
                                                 <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
-                                                <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.currentAddress.extension}"/>
+                                                <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.currentAddress.extension}"
+                                                             onkeydown="return onKeyDownNumber(event);"
+                                                             onkeypress="return onKeyPressNumber(event);"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -823,12 +859,13 @@
                                                                                  and custInfoSumIndi.reqIndRegPhone
                                                                                  and custInfoSumIndi.addressFlagForm2 == 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.registerAddress.extension}"
                                                                  disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -992,12 +1029,13 @@
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorPhone
                                                                  and custInfoSumIndi.addressFlagForm3 == 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.workAddress.extension}"
                                                                  disabled="#{custInfoSumIndi.addressFlagForm3 != 3}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1031,8 +1069,9 @@
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.mobileNumber}"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
+                                                 maxlength="10"
                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndMobNo}"/>
                                 </td>
                             </tr>
@@ -1043,7 +1082,7 @@
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.faxNumber}"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyDownNumber(event);"
+                                                 onkeypress="return onKeyPressNumber(event);"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"/>
                                 </td>
                             </tr>
@@ -1106,8 +1145,7 @@
                                 </td>
                                 <td colspan="3">
                                     <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.kycReason}"
-                                                     style="width: 70%" maxlength="250" autoResize="false"
-                                                     readonly="true"/>
+                                                     style="width: 70%" maxlength="250" autoResize="false"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1115,7 +1153,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}" readonly="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1124,7 +1162,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}" readonly="true">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -1154,7 +1192,7 @@
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.csi')}"/>
                                 </td>
-                                <td>
+                                <td colspan="6">
                                     <p:dataTable var="item" value="#{custInfoSumIndi.customerInfoView.customerCSIList}"
                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
@@ -1219,12 +1257,14 @@
                                         <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSumIndi.customerInfoSearchSpouse.documentType.id}"
                                                          required="#{not empty param[searchSpouseButton.clientId]}"
-                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
+                                                         disabled="#{custInfoSumIndi.editFormSpouse}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
                                                            itemLabel="#{docType.description}"
                                                            itemValue="#{docType.id}"/>
+                                            <p:ajax event="change" update=":frmMain:inputSearchSpouse"
+                                                    process="@this" listener="#{custInfoSumIndi.onChangeSpouseSearch}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -1233,26 +1273,65 @@
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy}"
                                                           required="#{not empty param[searchSpouseButton.clientId]}"
-                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
+                                                          disabled="#{custInfoSumIndi.editFormSpouse}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
+                                            <p:ajax event="click" update=":frmMain:inputSearchSpouse"
+                                                    process="@this" listener="#{custInfoSumIndi.onChangeSpouseSearch}"/>
                                         </p:selectOneRadio>
                                     </td>
-                                    <td>
+                                    <!-- ############################################################################################################################# -->
+                                    <!--<td>
                                         <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
                                                      style="width: 180px; max-width: 180px; min-width: 180px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
                                                      required="#{not empty param[searchSpouseButton.clientId]}"
-                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumIndi.editFormSpouse}"/>
+                                    </td>-->
+                                    <!-- ############################################################################################################################# -->
+                                    <td style="min-width: 200px; max-width: 200px; width: 200px;">
+                                        <p:panel id="inputSearchSpouse" styleClass="panel">
+                                            <p:inputText style="width: 180px; max-width: 180px; min-width: 180px;" disabled="true"
+                                                         rendered="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy == 0 || custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 0}"/>
+
+                                            <!-- citizen & personal, only number & check thai -->
+                                            <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="13" id="inputSearchSpouseText"
+                                                         style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         onblur="checkSpouseThaiID(this)"
+                                                         required="#{not empty param[searchSpouseButton.clientId]}"
+                                                         disabled="#{custInfoSumIndi.editFormSpouse}"
+                                                         rendered="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy == 1 and custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 1}"/>
+
+                                            <!-- tmb cust & personal + passport -->
+                                            <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
+                                                         style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                         onkeydown="return onKeyDownNumber(event);"
+                                                         onkeypress="return onKeyPressNumber(event);"
+                                                         required="#{not empty param[searchSpouseButton.clientId]}"
+                                                         disabled="#{custInfoSumIndi.editFormSpouse}"
+                                                         rendered="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy == 2 and (custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 1 || custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 2)}"/>
+
+                                            <!-- citizen & passport -->
+                                            <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
+                                                         style="width: 180px; max-width: 180px; min-width: 180px;"
+                                                         onkeydown="return onKeyText(event);"
+                                                         onkeypress="return onKeyText(event);"
+                                                         required="#{not empty param[searchSpouseButton.clientId]}"
+                                                         disabled="#{custInfoSumIndi.editFormSpouse}"
+                                                         rendered="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy == 1 and custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 2}"/>
+                                        </p:panel>
                                     </td>
+                                    <!-- ############################################################################################################################# -->
                                     <td>
                                         <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch2"
                                                          binding="#{searchSpouseButton}"
                                                          process="@form"
                                                          actionListener="#{custInfoSumIndi.onSearchSpouseCustomerInfo()}"
                                                          update=":msgBoxSystemMessagePanel :frmMain"
-                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
+                                                         disabled="#{custInfoSumIndi.editFormSpouse}"/>
                                     </td>
                                 </tr>
 
@@ -1295,11 +1374,13 @@
                                 </tr>
 
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.reference')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" id="reference2" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                        <p:selectOneMenu size="1" id="reference2" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                          value="#{custInfoSumIndi.customerInfoView.spouse.reference.id}"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoReference}"
                                                          disabled="#{custInfoSumIndi.editSpouseBorrower}">
@@ -1310,6 +1391,10 @@
                                                            itemValue="#{reference.id}"/>
                                         </p:selectOneMenu>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.share')}"/>
                                     </td>
@@ -1317,7 +1402,7 @@
                                         <p:inputText id="shareSpouse" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.percentShare}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);">
+                                                     onkeypress="return onKeyPressNumber(event);">
                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                             <p:ajax event="blur" update=":frmMain:shareSpouse"/>
                                         </p:inputText>
@@ -1352,11 +1437,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.citiId')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.citizenId}" maxlength="15"
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.citizenId}" maxlength="13"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoCitId}"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"
+                                                     onkeypress="return onKeyPressNumber(event);"
                                                      disabled="#{not custInfoSumIndi.enableSpouseCitizenId}"/>
                                     </td>
                                 </tr>
@@ -1642,7 +1727,7 @@
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.numberOfChild}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                     onkeypress="return onKeyPressNumber(event);"/>
                                     </td>
                                 </tr>
                                 <!-- ############################################################################################# -->
@@ -1765,11 +1850,12 @@
                                                 <td colspan="5">
                                                     <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.phoneNumber}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"
+                                                                 maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.extension}"
                                                                  onkeydown="return onKeyDownNumber(event);"
-                                                                 onkeypress="return onKeyDownNumber(event);"/>
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1917,12 +2003,13 @@
                                                         <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.phoneNumber}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"
+                                                                     maxlength="10"/>
                                                         <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                         <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.extension}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm5 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -2071,12 +2158,13 @@
                                                         <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.phoneNumber}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"
+                                                                     maxlength="10"/>
                                                         <h:outputText value=" #{msg.get('app.custInfoIndi.content.telTo')} " styleClass="title"/>
                                                         <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.extension}"
                                                                      disabled="#{custInfoSumIndi.addressFlagForm6 != 3}"
                                                                      onkeydown="return onKeyDownNumber(event);"
-                                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -2095,7 +2183,8 @@
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.mobileNumber}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
-                                                     onkeypress="return onKeyDownNumber(event);"/>
+                                                     onkeypress="return onKeyPressNumber(event);"
+                                                     maxlength="10"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2146,8 +2235,7 @@
                                     </td>
                                     <td colspan="3">
                                         <p:inputTextarea value="#{custInfoSumIndi.customerInfoView.spouse.kycReason}"
-                                                         style="width: 70%" maxlength="250" autoResize="false"
-                                                         readonly="true"/>
+                                                         style="width: 70%" maxlength="250" autoResize="false"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2155,7 +2243,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.convenant')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}" readonly="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2164,7 +2252,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.review')}"/>
                                     </td>
                                     <td>
-                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}" readonly="true">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                         </p:selectOneRadio>
@@ -2194,7 +2282,7 @@
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.csi')}"/>
                                     </td>
-                                    <td>
+                                    <td colspan="6">
                                         <p:dataTable var="item" value="#{custInfoSumIndi.customerInfoView.spouse.customerCSIList}"
                                                      paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
@@ -2239,7 +2327,12 @@
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
                                                      rendered="#{custInfoSumIndi.fromJuristic}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
-                                                     actionListener="#{custInfoSumIndi.onCreation}"/>
+                                                     actionListener="#{custInfoSumIndi.onCreation}"
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
+                                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"
+                                                     process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
+                                                     action="#{custInfoSumIndi.onCancelFromJuristic()}"
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
                                 </td>
                             </tr>
                             </table>
@@ -2256,7 +2349,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSave2,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh,:frmMain:btnCancel,:frmMain:btnCancel2">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
@@ -2265,7 +2358,6 @@
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
-
         </h:form>
     </p:panel>
 
@@ -2277,8 +2369,25 @@
                              update="frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
-    </p:panel>
 
+        <p:confirmDialog id="msgBoxInvalidCitizenSearchDialog" widgetVar="msgBoxInvalidCitizenSearchDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSearchDlg', 'frmMain\\:inputSearchText')"/>
+        </p:confirmDialog>
+
+        <p:confirmDialog id="msgBoxInvalidCitizenSpouseSearchDialog" widgetVar="msgBoxInvalidCitizenSpDlg" styleClass="messageDialog"
+                         closable="false"
+                         header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update=":msgBoxSystemMessagePanel"
+                             oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSpDlg', 'frmMain\\:inputSearchSpouseText')"/>
+        </p:confirmDialog>
+    </p:panel>
 </h:body>
 </f:view>
 </html>

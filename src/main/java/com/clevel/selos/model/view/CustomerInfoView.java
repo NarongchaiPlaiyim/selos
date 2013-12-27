@@ -104,6 +104,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private BigDecimal salesFromFinancialStmt;
     private BigDecimal shareHolderRatio;
     private String numberOfAuthorizedUsers;
+    private String contactName; // new 23-12-13
 
     //*** Var for Address ***//
     private AddressView currentAddress;
@@ -999,6 +1000,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.indLv = indLv;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -1021,60 +1030,60 @@ public class CustomerInfoView implements Serializable, Cloneable {
                 .append("id", id)
                 .append("age", age)
                 .append("documentExpiredDate", documentExpiredDate)
-                .append("titleTh", titleTh)
-                .append("titleEn", titleEn)
+//                .append("titleTh", titleTh)
+//                .append("titleEn", titleEn)
                 .append("firstNameTh", firstNameTh)
                 .append("lastNameTh", lastNameTh)
-                .append("firstNameEn", firstNameEn)
-                .append("lastNameEn", lastNameEn)
+//                .append("firstNameEn", firstNameEn)
+//                .append("lastNameEn", lastNameEn)
                 .append("ncbFlag", ncbFlag)
-                .append("customerEntity", customerEntity)
-                .append("documentType", documentType)
-                .append("relation", relation)
-                .append("reference", reference)
-                .append("documentAuthorizeBy", documentAuthorizeBy)
-                .append("serviceSegment", serviceSegment)
+                .append("customerEntity", customerEntity != null ? customerEntity.getId() : "customerEntity null")
+                .append("documentType", documentType != null ? documentType.getId() : "documentType null")
+                .append("relation", relation != null ? relation.getId() : "relation null")
+                .append("reference", reference != null ? reference.getId() : "reference null")
+//                .append("documentAuthorizeBy", documentAuthorizeBy)
+//                .append("serviceSegment", serviceSegment)
                 .append("tmbCustomerId", tmbCustomerId)
-                .append("collateralOwner", collateralOwner)
-                .append("percentShare", percentShare)
-                .append("approxIncome", approxIncome)
+//                .append("collateralOwner", collateralOwner)
+//                .append("percentShare", percentShare)
+//                .append("approxIncome", approxIncome)
                 .append("dateOfBirth", dateOfBirth)
                 .append("citizenId", citizenId)
                 .append("passportId", passportId)
                 .append("gender", gender)
-                .append("numberOfChild", numberOfChild)
-                .append("education", education)
-                .append("maritalStatus", maritalStatus)
-                .append("nationality", nationality)
-                .append("sndNationality", sndNationality)
-                .append("origin", origin)
-                .append("occupation", occupation)
-                .append("capital", capital)
-                .append("financialYear", financialYear)
-                .append("dateOfRegister", dateOfRegister)
-                .append("paidCapital", paidCapital)
-                .append("registrationId", registrationId)
-                .append("signCondition", signCondition)
-                .append("totalShare", totalShare)
-                .append("currentAddress", currentAddress)
-                .append("workAddress", workAddress)
-                .append("registerAddress", registerAddress)
-                .append("mailingAddressType", mailingAddressType)
+//                .append("numberOfChild", numberOfChild)
+//                .append("education", education)
+                .append("maritalStatus", maritalStatus != null ? maritalStatus.getId() : "maritalStatus null")
+//                .append("nationality", nationality)
+//                .append("sndNationality", sndNationality)
+//                .append("origin", origin)
+//                .append("occupation", occupation)
+//                .append("capital", capital)
+//                .append("financialYear", financialYear)
+//                .append("dateOfRegister", dateOfRegister)
+//                .append("paidCapital", paidCapital)
+//                .append("registrationId", registrationId)
+//                .append("signCondition", signCondition)
+//                .append("totalShare", totalShare)
+//                .append("currentAddress", currentAddress)
+//                .append("workAddress", workAddress)
+//                .append("registerAddress", registerAddress)
+//                .append("mailingAddressType", mailingAddressType)
                 //.append("childrenList", childrenList)
-                .append("citizenCountry", citizenCountry)
-                .append("registrationCountry", registrationCountry)
-                .append("mobileNumber", mobileNumber)
-                .append("faxNumber", faxNumber)
-                .append("email", email)
-                .append("kycLevel", kycLevel)
-                .append("convenantFlag", convenantFlag)
-                .append("reviewFlag", reviewFlag)
-                .append("reason", reason)
-                .append("businessType", businessType)
-                .append("spouse", spouse)
-                .append("documentAuthorizeDate", documentAuthorizeDate)
-                .append("kycReason", kycReason)
-                .append("worthiness", worthiness)
+//                .append("citizenCountry", citizenCountry)
+//                .append("registrationCountry", registrationCountry)
+//                .append("mobileNumber", mobileNumber)
+//                .append("faxNumber", faxNumber)
+//                .append("email", email)
+//                .append("kycLevel", kycLevel)
+//                .append("convenantFlag", convenantFlag)
+//                .append("reviewFlag", reviewFlag)
+//                .append("reason", reason)
+//                .append("businessType", businessType)
+//                .append("spouse", spouse)
+//                .append("documentAuthorizeDate", documentAuthorizeDate)
+//                .append("kycReason", kycReason)
+//                .append("worthiness", worthiness)
                 .toString();
     }
 }

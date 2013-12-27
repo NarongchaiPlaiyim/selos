@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for SMEBehaviorModelRiskScoringType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="SMEBehaviorModelRiskScoringType">
  *   &lt;complexContent>
@@ -29,13 +29,15 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SMEBehaviorModelRiskScoringType", propOrder = {
-        "smeBehaviorScoreTransaction",
-        "start",
-        "end",
-        "message"
+    "smeBehaviorScoreTransaction",
+    "start",
+    "end",
+    "message"
 })
 public class SMEBehaviorModelRiskScoringType {
 
@@ -48,23 +50,25 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Gets the value of the smeBehaviorScoreTransaction property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the smeBehaviorScoreTransaction property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getSmeBehaviorScoreTransaction().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link SMEBehaviorScoreTransactionType }
+     * 
+     * 
      */
     public List<SMEBehaviorScoreTransactionType> getSmeBehaviorScoreTransaction() {
         if (smeBehaviorScoreTransaction == null) {
@@ -75,9 +79,11 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Gets the value of the start property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getStart() {
         return start;
@@ -85,9 +91,11 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Sets the value of the start property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setStart(XMLGregorianCalendar value) {
         this.start = value;
@@ -95,9 +103,11 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Gets the value of the end property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getEnd() {
         return end;
@@ -105,9 +115,11 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Sets the value of the end property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setEnd(XMLGregorianCalendar value) {
         this.end = value;
@@ -115,23 +127,25 @@ public class SMEBehaviorModelRiskScoringType {
 
     /**
      * Gets the value of the message property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the message property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getMessage().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link MessageType }
+     * 
+     * 
      */
     public List<MessageType> getMessage() {
         if (message == null) {

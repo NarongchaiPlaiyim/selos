@@ -144,95 +144,32 @@ public class CustomerInfoJuristic implements Serializable {
     private int rowIndex;
 
     // Mandate boolean for change Reference
-    private boolean reqIndRelation;
-    private boolean reqIndReference;
-    private boolean reqIndDocType;
-    private boolean reqIndCitId;
-    private boolean reqIndDOB;
-    private boolean reqIndCOB;
-    private boolean reqIndDID;
-    private boolean reqIndDED;
-    private boolean reqIndTitTh;
-    private boolean reqIndStNameTh;
-    private boolean reqIndLastNameTh;
-    private boolean reqIndTitEn;
-    private boolean reqIndStNameEn;
-    private boolean reqIndLastNameEn;
-    private boolean reqIndGender;
-    private boolean reqIndRace;
-    private boolean reqIndNation;
-    private boolean reqIndEdu;
-    private boolean reqIndOcc;
-    private boolean reqIndBizType;
-    private boolean reqIndAppInc;
-    private boolean reqIndSouInc;
-    private boolean reqIndCouSouInc;
-    private boolean reqIndMarriage;
-    private boolean reqIndCurNo;
-    private boolean reqIndCurPro;
-    private boolean reqIndCurDis;
-    private boolean reqIndCurSub;
-    private boolean reqIndCurPos;
-    private boolean reqIndCurCou;
-    private boolean reqIndCurPhone;
-    private boolean reqIndRegNo;
-    private boolean reqIndRegPro;
-    private boolean reqIndRegDis;
-    private boolean reqIndRegSub;
-    private boolean reqIndRegPos;
-    private boolean reqIndRegCou;
-    private boolean reqIndRegPhone;
-    private boolean reqIndWorNo;
-    private boolean reqIndWorPro;
-    private boolean reqIndWorDis;
-    private boolean reqIndWorSub;
-    private boolean reqIndWorPos;
-    private boolean reqIndWorCou;
-    private boolean reqIndWorPhone;
-    private boolean reqIndAddMail;
-    private boolean reqIndMobNo;
-    private boolean reqIndKYCLev;
-
-    private boolean reqSpoDocType;
-    private boolean reqSpoCitId;
-    private boolean reqSpoDOB;
-    private boolean reqSpoCOB;
-    private boolean reqSpoDID;
-    private boolean reqSpoTitTh;
-    private boolean reqSpoStNameTh;
-    private boolean reqSpoLastNameTh;
-    private boolean reqSpoTitEn;
-    private boolean reqSpoStNameEn;
-    private boolean reqSpoLastNameEn;
-    private boolean reqSpoNation;
-    private boolean reqSpoEdu;
-    private boolean reqSpoOcc;
-    private boolean reqSpoBizType;
-    private boolean reqSpoSouInc;
-    private boolean reqSpoCouSouInc;
-    private boolean reqSpoCurNo;
-    private boolean reqSpoCurPro;
-    private boolean reqSpoCurDis;
-    private boolean reqSpoCurSub;
-    private boolean reqSpoCurPos;
-    private boolean reqSpoCurCou;
-    private boolean reqSpoCurPhone;
-    private boolean reqSpoRegNo;
-    private boolean reqSpoRegPro;
-    private boolean reqSpoRegDis;
-    private boolean reqSpoRegSub;
-    private boolean reqSpoRegPos;
-    private boolean reqSpoRegCou;
-    private boolean reqSpoRegPhone;
-    private boolean reqSpoWorNo;
-    private boolean reqSpoWorPro;
-    private boolean reqSpoWorDis;
-    private boolean reqSpoWorSub;
-    private boolean reqSpoWorPos;
-    private boolean reqSpoWorCou;
-    private boolean reqSpoWorPhone;
-    private boolean reqSpoMobNo;
-    private boolean reqSpoKYCLev;
+    private boolean reqRelation;
+    private boolean reqReference;
+    private boolean reqDocType;
+    private boolean reqRegId;
+    private boolean reqTitTh;
+    private boolean reqStNameTh;
+    private boolean reqTitEn;
+    private boolean reqStNameEn;
+    private boolean reqBizType;
+    private boolean reqRegNo;
+    private boolean reqRegPro;
+    private boolean reqRegDis;
+    private boolean reqRegSub;
+    private boolean reqRegPos;
+    private boolean reqRegCou;
+    private boolean reqRegPhone;
+    private boolean reqWorNo;
+    private boolean reqWorPro;
+    private boolean reqWorDis;
+    private boolean reqWorSub;
+    private boolean reqWorPos;
+    private boolean reqWorCou;
+    private boolean reqWorPhone;
+    private boolean reqMobNo;
+    private boolean reqAddMail;
+    private boolean reqKYCLev;
 
     //param for map
     private long customerId;
@@ -240,6 +177,8 @@ public class CustomerInfoJuristic implements Serializable {
     private boolean isFromIndividualParam;
 
     private String currentDateDDMMYY;
+
+    private boolean isEditForm;
 
     public CustomerInfoJuristic(){
     }
@@ -262,9 +201,9 @@ public class CustomerInfoJuristic implements Serializable {
 
         onAddNewJuristic();
 
-//        Flash flash = FacesUtil.getFlash();
-//        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
+        Flash flash = FacesUtil.getFlash();
+        Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
+//        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
@@ -283,6 +222,7 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onAddNewJuristic(){
+        isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
@@ -292,8 +232,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         caseBorrowerTypeId = customerInfoControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
-        documentTypeList = documentTypeDAO.findAll();
-//        relationList = relationDAO.getOtherRelationList();
+        documentTypeList = documentTypeDAO.findByCustomerEntityId(2);
         relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
 
         titleEnList = titleDAO.getListByCustomerEntityId(BorrowerType.JURISTIC.value());
@@ -307,7 +246,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         referenceList = new ArrayList<Reference>();
 
-        addressFlagForm2 = 1;
+        addressFlagForm2 = 3;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -326,11 +265,24 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoView.setSalesFromFinancialStmt(BigDecimal.ZERO);
         customerInfoView.setShareHolderRatio(BigDecimal.ZERO);
         customerInfoView.setTotalShare(BigDecimal.ZERO);
+
+        customerInfoView.getSourceIncome().setId(211);
+        customerInfoView.getCountryIncome().setId(211);
+        customerInfoView.getRegisterAddress().getCountry().setId(211);
+        customerInfoView.getWorkAddress().getCountry().setId(211);
+
+        onChangeReference();
     }
 
     public void onEditJuristic(){
         if(customerId != 0 && customerId != -1){
             customerInfoView = customerInfoControl.getCustomerJuristicById(customerId);
+        }
+
+        if(customerInfoView.getId() != 0){
+            isEditForm = true;
+        } else {
+            isEditForm = false;
         }
 
         onChangeRelation();
@@ -347,10 +299,8 @@ public class CustomerInfoJuristic implements Serializable {
 
         if(customerInfoView.getRelation().getId() == 1){
             isEditBorrower = true;
-//            relationList = relationDAO.findAll();
             relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-//            relationList = relationDAO.getOtherRelationList();
             relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
         }
     }
@@ -362,9 +312,9 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isEditFromJuristic", false);
         map.put("customerId", new Long(-1));
         map.put("customerInfoView", customerInfoView);
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        HttpSession session = FacesUtil.getSession(false);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 
@@ -377,14 +327,13 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("customerInfoView", customerInfoView);
         map.put("rowIndex",rowIndex);
         map.put("individualView", selectEditIndividual);
-        HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("cusInfoParams", map);
-//        FacesUtil.getFlash().put("cusInfoParams", map);
+//        HttpSession session = FacesUtil.getSession(false);
+//        session.setAttribute("cusInfoParams", map);
+        FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 
     public void onChangeRelation(){
-//        referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
         referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
     }
 
@@ -491,30 +440,14 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchFromRM(1);
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
-
-                    //for spouse
-//                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
-//                        customerInfoView.getSpouse().setSearchBy(1);
-//                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
-//                        try {
-//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
-//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-//                                if(cusSpouseResultView.getCustomerInfoView() != null){
-//                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
-//                                    enableSpouseDocumentType = false;
-//                                    enableSpouseCitizenId = false;
-//                                } else {
-//                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
-//                                    enableSpouseDocumentType = true;
-//                                    enableSpouseCitizenId = true;
-//                                }
-//                            }
-//                        } catch (Exception ex) {
-//                            enableSpouseDocumentType = true;
-//                            enableSpouseCitizenId = true;
-//                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
-//                        }
-//                    }
+                    customerInfoView.setCollateralOwner(1);
+                    if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
+                            addressFlagForm2 = 1;
+                        } else {
+                            addressFlagForm2 = 3;
+                        }
+                    }
 
                     enableDocumentType = false;
                     enableCitizenId = false;
@@ -561,17 +494,13 @@ public class CustomerInfoJuristic implements Serializable {
                     if(customerInfoResultView.getCustomerInfoView() != null){
                         log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
-
-//                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-//                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
-//                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-//                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
-//                                if(cusSpouseResultView.getCustomerInfoView() != null){
-//                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-//                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
-//                                }
-//                            }
-//                        }
+                        if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
+                            if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
+                                addressFlagForm2 = 1;
+                            } else {
+                                addressFlagForm2 = 3;
+                            }
+                        }
 
                         messageHeader = "Refresh Interface Info complete.";
                         message = "Customer found.";
@@ -595,10 +524,16 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onChangeReference(){
-        //todo:mandatory field
+       reqRelation = true;
+       reqReference = true;
+       reqDocType = true;
+       reqRegId = true;
+       reqTitTh = true;
+       reqStNameTh = true;
     }
 
     public void onSave(){
+        log.debug("onSave");
         //check registration
         Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
         if(customer != null && customer.getId() != 0){
@@ -616,7 +551,10 @@ public class CustomerInfoJuristic implements Serializable {
         }
 
         try{
-            customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
+            customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
+            isFromSummaryParam = true;
+            onAddNewJuristic();
+            onEditJuristic();
             messageHeader = "Save Juristic Success.";
             message = "Save Juristic data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -647,7 +585,10 @@ public class CustomerInfoJuristic implements Serializable {
         return DateTime.now().toDate();
     }
 
-    //Get Set
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public CustomerInfoView getCustomerInfoView() {
         return customerInfoView;
     }
@@ -904,710 +845,6 @@ public class CustomerInfoJuristic implements Serializable {
         this.rowIndex = rowIndex;
     }
 
-    public boolean isReqIndRelation() {
-        return reqIndRelation;
-    }
-
-    public void setReqIndRelation(boolean reqIndRelation) {
-        this.reqIndRelation = reqIndRelation;
-    }
-
-    public boolean isReqIndReference() {
-        return reqIndReference;
-    }
-
-    public void setReqIndReference(boolean reqIndReference) {
-        this.reqIndReference = reqIndReference;
-    }
-
-    public boolean isReqIndDocType() {
-        return reqIndDocType;
-    }
-
-    public void setReqIndDocType(boolean reqIndDocType) {
-        this.reqIndDocType = reqIndDocType;
-    }
-
-    public boolean isReqIndCitId() {
-        return reqIndCitId;
-    }
-
-    public void setReqIndCitId(boolean reqIndCitId) {
-        this.reqIndCitId = reqIndCitId;
-    }
-
-    public boolean isReqIndDOB() {
-        return reqIndDOB;
-    }
-
-    public void setReqIndDOB(boolean reqIndDOB) {
-        this.reqIndDOB = reqIndDOB;
-    }
-
-    public boolean isReqIndCOB() {
-        return reqIndCOB;
-    }
-
-    public void setReqIndCOB(boolean reqIndCOB) {
-        this.reqIndCOB = reqIndCOB;
-    }
-
-    public boolean isReqIndDID() {
-        return reqIndDID;
-    }
-
-    public void setReqIndDID(boolean reqIndDID) {
-        this.reqIndDID = reqIndDID;
-    }
-
-    public boolean isReqIndDED() {
-        return reqIndDED;
-    }
-
-    public void setReqIndDED(boolean reqIndDED) {
-        this.reqIndDED = reqIndDED;
-    }
-
-    public boolean isReqIndTitTh() {
-        return reqIndTitTh;
-    }
-
-    public void setReqIndTitTh(boolean reqIndTitTh) {
-        this.reqIndTitTh = reqIndTitTh;
-    }
-
-    public boolean isReqIndStNameTh() {
-        return reqIndStNameTh;
-    }
-
-    public void setReqIndStNameTh(boolean reqIndStNameTh) {
-        this.reqIndStNameTh = reqIndStNameTh;
-    }
-
-    public boolean isReqIndLastNameTh() {
-        return reqIndLastNameTh;
-    }
-
-    public void setReqIndLastNameTh(boolean reqIndLastNameTh) {
-        this.reqIndLastNameTh = reqIndLastNameTh;
-    }
-
-    public boolean isReqIndTitEn() {
-        return reqIndTitEn;
-    }
-
-    public void setReqIndTitEn(boolean reqIndTitEn) {
-        this.reqIndTitEn = reqIndTitEn;
-    }
-
-    public boolean isReqIndStNameEn() {
-        return reqIndStNameEn;
-    }
-
-    public void setReqIndStNameEn(boolean reqIndStNameEn) {
-        this.reqIndStNameEn = reqIndStNameEn;
-    }
-
-    public boolean isReqIndLastNameEn() {
-        return reqIndLastNameEn;
-    }
-
-    public void setReqIndLastNameEn(boolean reqIndLastNameEn) {
-        this.reqIndLastNameEn = reqIndLastNameEn;
-    }
-
-    public boolean isReqIndGender() {
-        return reqIndGender;
-    }
-
-    public void setReqIndGender(boolean reqIndGender) {
-        this.reqIndGender = reqIndGender;
-    }
-
-    public boolean isReqIndRace() {
-        return reqIndRace;
-    }
-
-    public void setReqIndRace(boolean reqIndRace) {
-        this.reqIndRace = reqIndRace;
-    }
-
-    public boolean isReqIndNation() {
-        return reqIndNation;
-    }
-
-    public void setReqIndNation(boolean reqIndNation) {
-        this.reqIndNation = reqIndNation;
-    }
-
-    public boolean isReqIndEdu() {
-        return reqIndEdu;
-    }
-
-    public void setReqIndEdu(boolean reqIndEdu) {
-        this.reqIndEdu = reqIndEdu;
-    }
-
-    public boolean isReqIndOcc() {
-        return reqIndOcc;
-    }
-
-    public void setReqIndOcc(boolean reqIndOcc) {
-        this.reqIndOcc = reqIndOcc;
-    }
-
-    public boolean isReqIndBizType() {
-        return reqIndBizType;
-    }
-
-    public void setReqIndBizType(boolean reqIndBizType) {
-        this.reqIndBizType = reqIndBizType;
-    }
-
-    public boolean isReqIndAppInc() {
-        return reqIndAppInc;
-    }
-
-    public void setReqIndAppInc(boolean reqIndAppInc) {
-        this.reqIndAppInc = reqIndAppInc;
-    }
-
-    public boolean isReqIndSouInc() {
-        return reqIndSouInc;
-    }
-
-    public void setReqIndSouInc(boolean reqIndSouInc) {
-        this.reqIndSouInc = reqIndSouInc;
-    }
-
-    public boolean isReqIndCouSouInc() {
-        return reqIndCouSouInc;
-    }
-
-    public void setReqIndCouSouInc(boolean reqIndCouSouInc) {
-        this.reqIndCouSouInc = reqIndCouSouInc;
-    }
-
-    public boolean isReqIndMarriage() {
-        return reqIndMarriage;
-    }
-
-    public void setReqIndMarriage(boolean reqIndMarriage) {
-        this.reqIndMarriage = reqIndMarriage;
-    }
-
-    public boolean isReqIndCurNo() {
-        return reqIndCurNo;
-    }
-
-    public void setReqIndCurNo(boolean reqIndCurNo) {
-        this.reqIndCurNo = reqIndCurNo;
-    }
-
-    public boolean isReqIndCurPro() {
-        return reqIndCurPro;
-    }
-
-    public void setReqIndCurPro(boolean reqIndCurPro) {
-        this.reqIndCurPro = reqIndCurPro;
-    }
-
-    public boolean isReqIndCurDis() {
-        return reqIndCurDis;
-    }
-
-    public void setReqIndCurDis(boolean reqIndCurDis) {
-        this.reqIndCurDis = reqIndCurDis;
-    }
-
-    public boolean isReqIndCurSub() {
-        return reqIndCurSub;
-    }
-
-    public void setReqIndCurSub(boolean reqIndCurSub) {
-        this.reqIndCurSub = reqIndCurSub;
-    }
-
-    public boolean isReqIndCurPos() {
-        return reqIndCurPos;
-    }
-
-    public void setReqIndCurPos(boolean reqIndCurPos) {
-        this.reqIndCurPos = reqIndCurPos;
-    }
-
-    public boolean isReqIndCurCou() {
-        return reqIndCurCou;
-    }
-
-    public void setReqIndCurCou(boolean reqIndCurCou) {
-        this.reqIndCurCou = reqIndCurCou;
-    }
-
-    public boolean isReqIndCurPhone() {
-        return reqIndCurPhone;
-    }
-
-    public void setReqIndCurPhone(boolean reqIndCurPhone) {
-        this.reqIndCurPhone = reqIndCurPhone;
-    }
-
-    public boolean isReqIndRegNo() {
-        return reqIndRegNo;
-    }
-
-    public void setReqIndRegNo(boolean reqIndRegNo) {
-        this.reqIndRegNo = reqIndRegNo;
-    }
-
-    public boolean isReqIndRegPro() {
-        return reqIndRegPro;
-    }
-
-    public void setReqIndRegPro(boolean reqIndRegPro) {
-        this.reqIndRegPro = reqIndRegPro;
-    }
-
-    public boolean isReqIndRegDis() {
-        return reqIndRegDis;
-    }
-
-    public void setReqIndRegDis(boolean reqIndRegDis) {
-        this.reqIndRegDis = reqIndRegDis;
-    }
-
-    public boolean isReqIndRegSub() {
-        return reqIndRegSub;
-    }
-
-    public void setReqIndRegSub(boolean reqIndRegSub) {
-        this.reqIndRegSub = reqIndRegSub;
-    }
-
-    public boolean isReqIndRegPos() {
-        return reqIndRegPos;
-    }
-
-    public void setReqIndRegPos(boolean reqIndRegPos) {
-        this.reqIndRegPos = reqIndRegPos;
-    }
-
-    public boolean isReqIndRegCou() {
-        return reqIndRegCou;
-    }
-
-    public void setReqIndRegCou(boolean reqIndRegCou) {
-        this.reqIndRegCou = reqIndRegCou;
-    }
-
-    public boolean isReqIndRegPhone() {
-        return reqIndRegPhone;
-    }
-
-    public void setReqIndRegPhone(boolean reqIndRegPhone) {
-        this.reqIndRegPhone = reqIndRegPhone;
-    }
-
-    public boolean isReqIndWorNo() {
-        return reqIndWorNo;
-    }
-
-    public void setReqIndWorNo(boolean reqIndWorNo) {
-        this.reqIndWorNo = reqIndWorNo;
-    }
-
-    public boolean isReqIndWorPro() {
-        return reqIndWorPro;
-    }
-
-    public void setReqIndWorPro(boolean reqIndWorPro) {
-        this.reqIndWorPro = reqIndWorPro;
-    }
-
-    public boolean isReqIndWorDis() {
-        return reqIndWorDis;
-    }
-
-    public void setReqIndWorDis(boolean reqIndWorDis) {
-        this.reqIndWorDis = reqIndWorDis;
-    }
-
-    public boolean isReqIndWorSub() {
-        return reqIndWorSub;
-    }
-
-    public void setReqIndWorSub(boolean reqIndWorSub) {
-        this.reqIndWorSub = reqIndWorSub;
-    }
-
-    public boolean isReqIndWorPos() {
-        return reqIndWorPos;
-    }
-
-    public void setReqIndWorPos(boolean reqIndWorPos) {
-        this.reqIndWorPos = reqIndWorPos;
-    }
-
-    public boolean isReqIndWorCou() {
-        return reqIndWorCou;
-    }
-
-    public void setReqIndWorCou(boolean reqIndWorCou) {
-        this.reqIndWorCou = reqIndWorCou;
-    }
-
-    public boolean isReqIndWorPhone() {
-        return reqIndWorPhone;
-    }
-
-    public void setReqIndWorPhone(boolean reqIndWorPhone) {
-        this.reqIndWorPhone = reqIndWorPhone;
-    }
-
-    public boolean isReqIndAddMail() {
-        return reqIndAddMail;
-    }
-
-    public void setReqIndAddMail(boolean reqIndAddMail) {
-        this.reqIndAddMail = reqIndAddMail;
-    }
-
-    public boolean isReqIndMobNo() {
-        return reqIndMobNo;
-    }
-
-    public void setReqIndMobNo(boolean reqIndMobNo) {
-        this.reqIndMobNo = reqIndMobNo;
-    }
-
-    public boolean isReqIndKYCLev() {
-        return reqIndKYCLev;
-    }
-
-    public void setReqIndKYCLev(boolean reqIndKYCLev) {
-        this.reqIndKYCLev = reqIndKYCLev;
-    }
-
-    public boolean isReqSpoDocType() {
-        return reqSpoDocType;
-    }
-
-    public void setReqSpoDocType(boolean reqSpoDocType) {
-        this.reqSpoDocType = reqSpoDocType;
-    }
-
-    public boolean isReqSpoCitId() {
-        return reqSpoCitId;
-    }
-
-    public void setReqSpoCitId(boolean reqSpoCitId) {
-        this.reqSpoCitId = reqSpoCitId;
-    }
-
-    public boolean isReqSpoDOB() {
-        return reqSpoDOB;
-    }
-
-    public void setReqSpoDOB(boolean reqSpoDOB) {
-        this.reqSpoDOB = reqSpoDOB;
-    }
-
-    public boolean isReqSpoCOB() {
-        return reqSpoCOB;
-    }
-
-    public void setReqSpoCOB(boolean reqSpoCOB) {
-        this.reqSpoCOB = reqSpoCOB;
-    }
-
-    public boolean isReqSpoDID() {
-        return reqSpoDID;
-    }
-
-    public void setReqSpoDID(boolean reqSpoDID) {
-        this.reqSpoDID = reqSpoDID;
-    }
-
-    public boolean isReqSpoTitTh() {
-        return reqSpoTitTh;
-    }
-
-    public void setReqSpoTitTh(boolean reqSpoTitTh) {
-        this.reqSpoTitTh = reqSpoTitTh;
-    }
-
-    public boolean isReqSpoStNameTh() {
-        return reqSpoStNameTh;
-    }
-
-    public void setReqSpoStNameTh(boolean reqSpoStNameTh) {
-        this.reqSpoStNameTh = reqSpoStNameTh;
-    }
-
-    public boolean isReqSpoLastNameTh() {
-        return reqSpoLastNameTh;
-    }
-
-    public void setReqSpoLastNameTh(boolean reqSpoLastNameTh) {
-        this.reqSpoLastNameTh = reqSpoLastNameTh;
-    }
-
-    public boolean isReqSpoTitEn() {
-        return reqSpoTitEn;
-    }
-
-    public void setReqSpoTitEn(boolean reqSpoTitEn) {
-        this.reqSpoTitEn = reqSpoTitEn;
-    }
-
-    public boolean isReqSpoStNameEn() {
-        return reqSpoStNameEn;
-    }
-
-    public void setReqSpoStNameEn(boolean reqSpoStNameEn) {
-        this.reqSpoStNameEn = reqSpoStNameEn;
-    }
-
-    public boolean isReqSpoLastNameEn() {
-        return reqSpoLastNameEn;
-    }
-
-    public void setReqSpoLastNameEn(boolean reqSpoLastNameEn) {
-        this.reqSpoLastNameEn = reqSpoLastNameEn;
-    }
-
-    public boolean isReqSpoNation() {
-        return reqSpoNation;
-    }
-
-    public void setReqSpoNation(boolean reqSpoNation) {
-        this.reqSpoNation = reqSpoNation;
-    }
-
-    public boolean isReqSpoEdu() {
-        return reqSpoEdu;
-    }
-
-    public void setReqSpoEdu(boolean reqSpoEdu) {
-        this.reqSpoEdu = reqSpoEdu;
-    }
-
-    public boolean isReqSpoOcc() {
-        return reqSpoOcc;
-    }
-
-    public void setReqSpoOcc(boolean reqSpoOcc) {
-        this.reqSpoOcc = reqSpoOcc;
-    }
-
-    public boolean isReqSpoBizType() {
-        return reqSpoBizType;
-    }
-
-    public void setReqSpoBizType(boolean reqSpoBizType) {
-        this.reqSpoBizType = reqSpoBizType;
-    }
-
-    public boolean isReqSpoSouInc() {
-        return reqSpoSouInc;
-    }
-
-    public void setReqSpoSouInc(boolean reqSpoSouInc) {
-        this.reqSpoSouInc = reqSpoSouInc;
-    }
-
-    public boolean isReqSpoCouSouInc() {
-        return reqSpoCouSouInc;
-    }
-
-    public void setReqSpoCouSouInc(boolean reqSpoCouSouInc) {
-        this.reqSpoCouSouInc = reqSpoCouSouInc;
-    }
-
-    public boolean isReqSpoCurNo() {
-        return reqSpoCurNo;
-    }
-
-    public void setReqSpoCurNo(boolean reqSpoCurNo) {
-        this.reqSpoCurNo = reqSpoCurNo;
-    }
-
-    public boolean isReqSpoCurPro() {
-        return reqSpoCurPro;
-    }
-
-    public void setReqSpoCurPro(boolean reqSpoCurPro) {
-        this.reqSpoCurPro = reqSpoCurPro;
-    }
-
-    public boolean isReqSpoCurDis() {
-        return reqSpoCurDis;
-    }
-
-    public void setReqSpoCurDis(boolean reqSpoCurDis) {
-        this.reqSpoCurDis = reqSpoCurDis;
-    }
-
-    public boolean isReqSpoCurSub() {
-        return reqSpoCurSub;
-    }
-
-    public void setReqSpoCurSub(boolean reqSpoCurSub) {
-        this.reqSpoCurSub = reqSpoCurSub;
-    }
-
-    public boolean isReqSpoCurPos() {
-        return reqSpoCurPos;
-    }
-
-    public void setReqSpoCurPos(boolean reqSpoCurPos) {
-        this.reqSpoCurPos = reqSpoCurPos;
-    }
-
-    public boolean isReqSpoCurCou() {
-        return reqSpoCurCou;
-    }
-
-    public void setReqSpoCurCou(boolean reqSpoCurCou) {
-        this.reqSpoCurCou = reqSpoCurCou;
-    }
-
-    public boolean isReqSpoCurPhone() {
-        return reqSpoCurPhone;
-    }
-
-    public void setReqSpoCurPhone(boolean reqSpoCurPhone) {
-        this.reqSpoCurPhone = reqSpoCurPhone;
-    }
-
-    public boolean isReqSpoRegNo() {
-        return reqSpoRegNo;
-    }
-
-    public void setReqSpoRegNo(boolean reqSpoRegNo) {
-        this.reqSpoRegNo = reqSpoRegNo;
-    }
-
-    public boolean isReqSpoRegPro() {
-        return reqSpoRegPro;
-    }
-
-    public void setReqSpoRegPro(boolean reqSpoRegPro) {
-        this.reqSpoRegPro = reqSpoRegPro;
-    }
-
-    public boolean isReqSpoRegDis() {
-        return reqSpoRegDis;
-    }
-
-    public void setReqSpoRegDis(boolean reqSpoRegDis) {
-        this.reqSpoRegDis = reqSpoRegDis;
-    }
-
-    public boolean isReqSpoRegSub() {
-        return reqSpoRegSub;
-    }
-
-    public void setReqSpoRegSub(boolean reqSpoRegSub) {
-        this.reqSpoRegSub = reqSpoRegSub;
-    }
-
-    public boolean isReqSpoRegPos() {
-        return reqSpoRegPos;
-    }
-
-    public void setReqSpoRegPos(boolean reqSpoRegPos) {
-        this.reqSpoRegPos = reqSpoRegPos;
-    }
-
-    public boolean isReqSpoRegCou() {
-        return reqSpoRegCou;
-    }
-
-    public void setReqSpoRegCou(boolean reqSpoRegCou) {
-        this.reqSpoRegCou = reqSpoRegCou;
-    }
-
-    public boolean isReqSpoRegPhone() {
-        return reqSpoRegPhone;
-    }
-
-    public void setReqSpoRegPhone(boolean reqSpoRegPhone) {
-        this.reqSpoRegPhone = reqSpoRegPhone;
-    }
-
-    public boolean isReqSpoWorNo() {
-        return reqSpoWorNo;
-    }
-
-    public void setReqSpoWorNo(boolean reqSpoWorNo) {
-        this.reqSpoWorNo = reqSpoWorNo;
-    }
-
-    public boolean isReqSpoWorPro() {
-        return reqSpoWorPro;
-    }
-
-    public void setReqSpoWorPro(boolean reqSpoWorPro) {
-        this.reqSpoWorPro = reqSpoWorPro;
-    }
-
-    public boolean isReqSpoWorDis() {
-        return reqSpoWorDis;
-    }
-
-    public void setReqSpoWorDis(boolean reqSpoWorDis) {
-        this.reqSpoWorDis = reqSpoWorDis;
-    }
-
-    public boolean isReqSpoWorSub() {
-        return reqSpoWorSub;
-    }
-
-    public void setReqSpoWorSub(boolean reqSpoWorSub) {
-        this.reqSpoWorSub = reqSpoWorSub;
-    }
-
-    public boolean isReqSpoWorPos() {
-        return reqSpoWorPos;
-    }
-
-    public void setReqSpoWorPos(boolean reqSpoWorPos) {
-        this.reqSpoWorPos = reqSpoWorPos;
-    }
-
-    public boolean isReqSpoWorCou() {
-        return reqSpoWorCou;
-    }
-
-    public void setReqSpoWorCou(boolean reqSpoWorCou) {
-        this.reqSpoWorCou = reqSpoWorCou;
-    }
-
-    public boolean isReqSpoWorPhone() {
-        return reqSpoWorPhone;
-    }
-
-    public void setReqSpoWorPhone(boolean reqSpoWorPhone) {
-        this.reqSpoWorPhone = reqSpoWorPhone;
-    }
-
-    public boolean isReqSpoMobNo() {
-        return reqSpoMobNo;
-    }
-
-    public void setReqSpoMobNo(boolean reqSpoMobNo) {
-        this.reqSpoMobNo = reqSpoMobNo;
-    }
-
-    public boolean isReqSpoKYCLev() {
-        return reqSpoKYCLev;
-    }
-
-    public void setReqSpoKYCLev(boolean reqSpoKYCLev) {
-        this.reqSpoKYCLev = reqSpoKYCLev;
-    }
-
     public String getCurrentDateDDMMYY() {
         log.debug("current date : {}", getCurrentDate());
         return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
@@ -1615,5 +852,221 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public boolean isReqRelation() {
+        return reqRelation;
+    }
+
+    public void setReqRelation(boolean reqRelation) {
+        this.reqRelation = reqRelation;
+    }
+
+    public boolean isReqReference() {
+        return reqReference;
+    }
+
+    public void setReqReference(boolean reqReference) {
+        this.reqReference = reqReference;
+    }
+
+    public boolean isReqDocType() {
+        return reqDocType;
+    }
+
+    public void setReqDocType(boolean reqDocType) {
+        this.reqDocType = reqDocType;
+    }
+
+    public boolean isReqRegId() {
+        return reqRegId;
+    }
+
+    public void setReqRegId(boolean reqRegId) {
+        this.reqRegId = reqRegId;
+    }
+
+    public boolean isReqTitTh() {
+        return reqTitTh;
+    }
+
+    public void setReqTitTh(boolean reqTitTh) {
+        this.reqTitTh = reqTitTh;
+    }
+
+    public boolean isReqStNameTh() {
+        return reqStNameTh;
+    }
+
+    public void setReqStNameTh(boolean reqStNameTh) {
+        this.reqStNameTh = reqStNameTh;
+    }
+
+    public boolean isReqTitEn() {
+        return reqTitEn;
+    }
+
+    public void setReqTitEn(boolean reqTitEn) {
+        this.reqTitEn = reqTitEn;
+    }
+
+    public boolean isReqStNameEn() {
+        return reqStNameEn;
+    }
+
+    public void setReqStNameEn(boolean reqStNameEn) {
+        this.reqStNameEn = reqStNameEn;
+    }
+
+    public boolean isReqBizType() {
+        return reqBizType;
+    }
+
+    public void setReqBizType(boolean reqBizType) {
+        this.reqBizType = reqBizType;
+    }
+
+    public boolean isReqRegNo() {
+        return reqRegNo;
+    }
+
+    public void setReqRegNo(boolean reqRegNo) {
+        this.reqRegNo = reqRegNo;
+    }
+
+    public boolean isReqRegPro() {
+        return reqRegPro;
+    }
+
+    public void setReqRegPro(boolean reqRegPro) {
+        this.reqRegPro = reqRegPro;
+    }
+
+    public boolean isReqRegDis() {
+        return reqRegDis;
+    }
+
+    public void setReqRegDis(boolean reqRegDis) {
+        this.reqRegDis = reqRegDis;
+    }
+
+    public boolean isReqRegSub() {
+        return reqRegSub;
+    }
+
+    public void setReqRegSub(boolean reqRegSub) {
+        this.reqRegSub = reqRegSub;
+    }
+
+    public boolean isReqRegPos() {
+        return reqRegPos;
+    }
+
+    public void setReqRegPos(boolean reqRegPos) {
+        this.reqRegPos = reqRegPos;
+    }
+
+    public boolean isReqRegCou() {
+        return reqRegCou;
+    }
+
+    public void setReqRegCou(boolean reqRegCou) {
+        this.reqRegCou = reqRegCou;
+    }
+
+    public boolean isReqRegPhone() {
+        return reqRegPhone;
+    }
+
+    public void setReqRegPhone(boolean reqRegPhone) {
+        this.reqRegPhone = reqRegPhone;
+    }
+
+    public boolean isReqWorNo() {
+        return reqWorNo;
+    }
+
+    public void setReqWorNo(boolean reqWorNo) {
+        this.reqWorNo = reqWorNo;
+    }
+
+    public boolean isReqWorPro() {
+        return reqWorPro;
+    }
+
+    public void setReqWorPro(boolean reqWorPro) {
+        this.reqWorPro = reqWorPro;
+    }
+
+    public boolean isReqWorDis() {
+        return reqWorDis;
+    }
+
+    public void setReqWorDis(boolean reqWorDis) {
+        this.reqWorDis = reqWorDis;
+    }
+
+    public boolean isReqWorSub() {
+        return reqWorSub;
+    }
+
+    public void setReqWorSub(boolean reqWorSub) {
+        this.reqWorSub = reqWorSub;
+    }
+
+    public boolean isReqWorPos() {
+        return reqWorPos;
+    }
+
+    public void setReqWorPos(boolean reqWorPos) {
+        this.reqWorPos = reqWorPos;
+    }
+
+    public boolean isReqWorCou() {
+        return reqWorCou;
+    }
+
+    public void setReqWorCou(boolean reqWorCou) {
+        this.reqWorCou = reqWorCou;
+    }
+
+    public boolean isReqWorPhone() {
+        return reqWorPhone;
+    }
+
+    public void setReqWorPhone(boolean reqWorPhone) {
+        this.reqWorPhone = reqWorPhone;
+    }
+
+    public boolean isReqMobNo() {
+        return reqMobNo;
+    }
+
+    public void setReqMobNo(boolean reqMobNo) {
+        this.reqMobNo = reqMobNo;
+    }
+
+    public boolean isReqAddMail() {
+        return reqAddMail;
+    }
+
+    public void setReqAddMail(boolean reqAddMail) {
+        this.reqAddMail = reqAddMail;
+    }
+
+    public boolean isReqKYCLev() {
+        return reqKYCLev;
+    }
+
+    public void setReqKYCLev(boolean reqKYCLev) {
+        this.reqKYCLev = reqKYCLev;
+    }
+
+    public boolean isEditForm() {
+        return isEditForm;
+    }
+
+    public void setEditForm(boolean editForm) {
+        isEditForm = editForm;
     }
 }

@@ -553,7 +553,6 @@
 <tr>
 <td style="background-color:#ffffff">
 
-
 <table class="table_content"  style="width:100%">
 
 <thead>
@@ -741,7 +740,6 @@
 </tbody>
 
 </table>
-
 
 </td>
 </tr>
@@ -1243,7 +1241,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 2 ? msg.get('app.label.change') : ''}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="center">

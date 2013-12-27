@@ -5,13 +5,15 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Decision</title>
     <h:outputStylesheet name="css/style.css" />
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -32,6 +34,9 @@
         <style scoped="scoped">
             .ui-datatable thead th {
                 white-space: normal !important;
+            }
+            .ui-datatable tbody td {
+                border-color: #868686;
             }
             tfoot {
                 background: none;
@@ -1571,32 +1576,45 @@
                                 </table>
                             </td>
                         </tr>
+
+                        <h:panelGroup rendered="#{not decision.roleUW}">
                         <tr>
                             <td colspan="2">
-                                <!--<h:panelGroup rendered="#{not decision.roleUW}">-->
                                     <table border="0">
                                         <tr>
                                             <td>
                                                 <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}" styleClass="title"/>
-                                                <p:inputText value="#{decision.decisionView.existingSMELimit}" styleClass="left">
+                                                <p:inputText value="#{decision.decisionView.existingSMELimit}"
+                                                             onclick="this.select()"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
+                                                             styleClass="left">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                    <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
                                             <td style="padding-left: 10px">
                                                 <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}" styleClass="title"/>
-                                                <p:inputText value="#{decision.decisionView.maximumSMELimit}" styleClass="left">
+                                                <p:inputText value="#{decision.decisionView.maximumSMELimit}"
+                                                             onclick="this.select()"
+                                                             onkeydown="return onKeyDownMoney(event);"
+                                                             onkeypress="return onKeyPressMoney(event);"
+                                                             styleClass="left">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                    <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
                                         </tr>
                                     </table>
-                                <!--</h:panelGroup>-->
                             </td>
                         </tr>
+                        </h:panelGroup>
+
                         <tr>
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedCredit"
                                                  value="#{msg.get('app.button.add')}"
+                                                 disabled="#{not decision.roleUW}"
                                                  actionListener="#{decision.onAddAppProposeCredit()}"
                                                  process="@form"
                                                  update=":proposeCreditDlgForm,:msgBoxSystemMessagePanel"
@@ -1609,6 +1627,7 @@
 
                                 <p:commandButton id="btnRetrievePricingFee"
                                                  value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                                                 rendered="#{decision.roleUW}"
                                                  actionListener="#{decision.onRetrievePricingFee()}"
                                                  process="@form"
                                                  update=":frmMain"
@@ -1618,6 +1637,7 @@
                         <tr>
                             <td colspan="2">
                                 <!-- Approved Propose Credit Table -->
+                                <h:panelGroup rendered="#{decision.roleUW}">
                                 <div class="ui-datatable ui-widget">
                                     <div class="ui-datatable-tablewrapper">
                                         <table style="width: 100%">
@@ -1718,9 +1738,10 @@
                                                                          icon="ui-icon-pencil"
                                                                          action="#{decision.onEditAppProposeCredit()}"
                                                                          update=":proposeCreditDlgForm"
-                                                                         oncomplete="proposeCreditDlg.show()">
+                                                                         oncomplete="proposeCreditDlg.show()">                                                            
                                                             <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.selectedAppProposeCredit}"/>
                                                             <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCredit}"/>
+                                                            <p:resetInput target=":proposeCreditDlgForm"/>
                                                         </p:commandButton>
 
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
@@ -1888,6 +1909,259 @@
                                         </table>
                                     </div>
                                 </div>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{not decision.roleUW}">
+                                <div class="ui-datatable ui-widget">
+                                    <div class="ui-datatable-tablewrapper">
+                                        <table style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="ui-state-default" style="width: 30px"></th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.decision')}</th>
+                                                <th class="ui-state-default" style="width: 130px">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                <th class="ui-state-default" style="width: 130px">#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                <th class="ui-state-default" style="width: 130px">#{msg.get('app.decision.tb.th.code')}</th>
+                                                <th class="ui-state-default" style="width: 110px">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.standardPricePercent')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.suggestPricePercent')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.finalPricePercent')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.frontEndFeePercent')}</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="ui-datatable-data ui-widget-content">
+                                        <ui:repeat value="#{decision.decisionView.approveCreditList}" var="proposeCredit" varStatus="i">
+                                            <tr>
+                                                <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                    #{i.index + 1}
+                                                </td>
+                                                <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
+                                                    #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                                </td>
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                    #{proposeCredit.productProgram.description}
+                                                </td>
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                    #{proposeCredit.creditType.description}
+                                                </td>
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                    #{msg.get('app.decision.tb.td.label.product')} #{proposeCredit.productCode}<br/>
+                                                    #{msg.get('app.decision.tb.td.label.project')} #{proposeCredit.projectCode}
+                                                </td>
+                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                        fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                    <h:outputText value="#{proposeCredit.limit}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </td>
+                                                <!-- BEGIN: Credit Tier Detail [0] -->
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPrice : ''}">
+                                                    </h:outputText>
+                                                </td>
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}">
+                                                    </h:outputText>
+                                                </td>
+                                                <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceRate : ''}">
+                                                    </h:outputText>
+                                                </td>
+                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </td>
+                                                <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
+                                                    </h:outputText>
+                                                </td>
+                                                <!-- END: Credit Tier Detail [0] -->
+                                                <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                                    rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
+                                                    <h:outputText value="#{proposeCredit.frontEndFee}">
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </td>
+                                            </tr>
+
+                                            <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                            <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
+                                                <tr>
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.standardPrice}"/>
+                                                    </td>
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.suggestPrice}"/>
+                                                    </td>
+                                                    <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
+                                                    </td>
+                                                    <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.installment}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.tenor}"/>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                            <!-- END: Credit Tier Detail [1]->[N-1] -->
+
+                                            <tr>
+                                                <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                    <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                        <tr>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.requestType')}
+                                                            </td>
+                                                            <td style="border-style:none !important;">
+                                                                #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
+                                                                        proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
+                                                            </td>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.refinance')}
+                                                            </td>
+                                                            <td style="border-style:none !important;">
+                                                                #{proposeCredit.refinance == 2 ? msg.get('app.label.yes') :
+                                                                        proposeCredit.refinance == 1 ? msg.get('app.label.no') : ''}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.purpose')}
+                                                            </td>
+                                                            <td colspan="3" style="border-style:none !important;">
+                                                                #{proposeCredit.loanPurpose.description}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.purposeDetail')}
+                                                            </td>
+                                                            <td colspan="3" style="border-style:none !important;">
+                                                                #{proposeCredit.remark}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.disbursement')}
+                                                            </td>
+                                                            <td style="border-style:none !important;">
+                                                                #{proposeCredit.disbursement.disbursement}
+                                                            </td>
+                                                            <td class="title" style="border-style:none !important;">
+                                                                #{msg.get('app.decision.tb.td.label.holdAmount')}
+                                                            </td>
+                                                            <td style="border-style:none !important;">
+                                                                <h:outputText value="#{proposeCredit.holdLimitAmount}">
+                                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                </h:outputText>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </ui:repeat>
+
+                                        <h:panelGroup rendered="#{empty decision.decisionView.approveCreditList}">
+                                            <tr>
+                                                <td colspan="12">No records found.</td>
+                                            </tr>
+                                        </h:panelGroup>
+                                        </tbody>
+
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="summary_column"></td>
+                                            <td class="summary_column title" style="text-align:left;" colspan="4">#{msg.get('app.decision.totalProposedCredit')}</td>
+                                            <td class="summary_column title" style="text-align:right;">
+                                                <h:outputText value="#{decision.decisionView.approveTotalCreditLimit}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td class="summary_column" colspan="6"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"></td>
+                                        </tr>
+
+                                        <!-- Approved Propose Credit Total Summary -->
+                                        <tr>
+                                            <td class="title" colspan="12" style="line-height:30px; height:30px; text-align:left;">#{msg.get('app.decision.borrower')}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="summary_column"></td>
+                                            <td class="summary_column title" style="text-align:left;" colspan="4">#{msg.get('app.decision.totalCommercial')}</td>
+                                            <td class="summary_column title" style="text-align:right;">
+                                                <h:outputText value="#{decision.decisionView.approveBrwTotalCommercial}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td class="summary_column" colspan="6"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12" style="line-height:10px; height:10px;"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="summary_column"></td>
+                                            <td class="summary_column title" style="text-align:left;" colspan="4">#{msg.get('app.decision.totalCommAndOBOD')}</td>
+                                            <td class="summary_column title" style="text-align:right;">
+                                                <h:outputText value="#{decision.decisionView.approveBrwTotalComAndOBOD}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                            </td>
+                                            <td class="summary_column" colspan="6"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="12" style="line-height:10px; height:10px;"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="summary_column"></td>
+                                            <td class="summary_column title" style="text-align:left;" colspan="4">#{msg.get('app.decision.totalExposure')}</td>
+                                            <td class="summary_column title" style="text-align:right;">
+                                                <h:outputText value="#{decision.decisionView.approveTotalExposure}">
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                </h:outputText>
+                                                <!-- Approved Credit Hidden Field for BRMS -->
+                                                <h:inputHidden value="#{decision.decisionView.approveTotalNumOfNewOD}"/>
+                                                <h:inputHidden value="#{decision.decisionView.approveTotalNumProposeCreditFac}"/>
+                                                <h:inputHidden value="#{decision.decisionView.approveTotalNumContingentPropose}"/>
+                                            </td>
+                                            <td class="summary_column" colspan="6"></td>
+                                        </tr>
+                                        </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                </h:panelGroup>
                             </td>
                         </tr>
                         <tr>
@@ -2001,11 +2275,19 @@
                                                     #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
                                                 </p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.type}</p:column>
+                                                <p:column styleClass="left top">
+                                                    #{collCrdType.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}
+                                                </p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
+                                                <p:column styleClass="left top">
+                                                    <h:outputText value="#{collCrdType.productProgram.name}"
+                                                                  rendered="#{not empty collCrdType.productProgram}"/>
+                                                </p:column>
 
-                                                <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
+                                                <p:column styleClass="left top">
+                                                    <h:outputText value="#{collCrdType.creditType.name}"
+                                                                  rendered="#{not empty collCrdType.creditType}"/>
+                                                </p:column>
 
                                                 <p:column styleClass="right top">
                                                     <h:outputText value="#{collCrdType.limit}">
@@ -2074,10 +2356,13 @@
                                         <tr>
                                             <td class="title left large">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                             <td class="left" colspan="3">
-                                                <p:selectOneRadio value="#{collHeader.insuranceCompany}">
-                                                    <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="2"/>
-                                                    <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
-                                                </p:selectOneRadio>
+                                                <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}">-->
+                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="2"/>-->
+                                                    <!--<f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>-->
+                                                <!--</p:selectOneRadio>-->
+                                                #{collHeader.insuranceCompany eq 2 ? msg.get('app.button.partner')
+                                                : collHeader.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                                : ''}
                                             </td>
                                         </tr>
                                         <tr>
@@ -2179,6 +2464,7 @@
                                     <td class="right" colspan="2">
                                         <!-- Approved Collateral (Edit/Delete) Button -->
                                         <p:commandButton id="btnEditApprovedCollateral"
+                                                         rendered="#{decision.roleUW}"
                                                          value="#{msg.get('app.button.edit')}"
                                                          action="#{decision.onEditAppProposeCollateral()}"
                                                          update=":collateralDlgForm"
@@ -2191,6 +2477,7 @@
                                         <p:spacer width="10" height=""/>
 
                                         <p:commandButton id="btnDelApprovedCollateral"
+                                                         rendered="#{decision.roleUW}"
                                                          value="#{msg.get('app.button.delete')}"
                                                          oncomplete="confirmDeleteAppProCollateralDlg.show()"
                                                          styleClass="smaller">
@@ -2230,11 +2517,14 @@
                                             <tr>
                                                 <td>#{msg.get('app.decision.label.approved')}</td>
                                                 <td>
-                                                    <p:selectOneRadio value="#{proposeColl.approved}"
-                                                                      disabled="true">
-                                                        <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
-                                                    </p:selectOneRadio>
+                                                    <!--<p:selectOneRadio value="#{proposeColl.approved}"-->
+                                                                      <!--disabled="true">-->
+                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>-->
+                                                        <!--<f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>-->
+                                                    <!--</p:selectOneRadio>-->
+                                                    #{proposeColl.approved eq 2 ? msg.get('app.button.yes')
+                                                    : proposeColl.approved eq 1 ? msg.get('app.button.no')
+                                                    : ''}
                                                 </td>
                                             </tr>
                                         </table>
@@ -2276,11 +2566,19 @@
                                                 #{msg.get('app.decision.tb.td.label.suf')} #{collCrdType.accountSuf}
                                             </p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.type}</p:column>
+                                            <p:column styleClass="left top">
+                                                #{collCrdType.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}
+                                            </p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.productProgram.name}</p:column>
+                                            <p:column styleClass="left top">
+                                                <h:outputText value="#{collCrdType.productProgram.name}"
+                                                              rendered="#{not empty collCrdType.productProgram}"/>
+                                            </p:column>
 
-                                            <p:column styleClass="left top">#{collCrdType.creditType.name}</p:column>
+                                            <p:column styleClass="left top">
+                                                <h:outputText value="#{collCrdType.creditType.name}"
+                                                              rendered="#{not empty collCrdType.creditType}"/>
+                                            </p:column>
 
                                             <p:column styleClass="right top">
                                                 <h:outputText value="#{collCrdType.limit}">
@@ -2349,10 +2647,13 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.insuranceCompany')}</td>
                                         <td class="left" colspan="3">
-                                            <p:selectOneRadio value="#{collHeader.insuranceCompany}" disabled="true">
-                                                <f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>
-                                                <f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>
-                                            </p:selectOneRadio>
+                                            <!--<p:selectOneRadio value="#{collHeader.insuranceCompany}" disabled="true">-->
+                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.partner')}" itemValue="2"/>-->
+                                                <!--<f:selectItem itemLabel="#{msg.get('app.button.nonPartner')}" itemValue="1"/>-->
+                                            <!--</p:selectOneRadio>-->
+                                            #{collHeader.insuranceCompany eq 2 ? msg.get('app.button.partner')
+                                            : collHeader.insuranceCompany eq 1 ? msg.get('app.button.nonPartner')
+                                            : ''}
                                         </td>
                                     </tr>
                                     <tr>
@@ -2538,6 +2839,8 @@
                                 <h:outputText value="#{msg.get('app.decision.approvedGuarantor')}"/>
                             </td>
                         </tr>
+
+                        <h:panelGroup rendered="#{decision.roleUW}">
                         <tr>
                             <td colspan="2">
                                 <p:commandButton id="btnAddApprovedGuarantor"
@@ -2551,111 +2854,200 @@
                                 </p:commandButton>
                             </td>
                         </tr>
+                        </h:panelGroup>
+
                         <tr>
                             <td colspan="2">
-                                <p:dataTable id="dtAppProposedGuarantor"
+                                <h:panelGroup rendered="#{decision.roleUW}">
+                                    <p:dataTable id="dtAppProposedGuarantorUW"
                                              var="guarantor" value="#{decision.decisionView.approveGuarantorList}"
                                              paginator="false" rowKey="#{guarantor}" rowIndexVar="rowIndex"
                                              style="width: 100%">
 
-                                    <p:columnGroup type="header">
-                                        <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.decision')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}" style="width: 200px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 550px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}" style="width: 150px"/>
-                                            <p:column headerText="" style="width: 50px"/>
-                                        </p:row>
-                                    </p:columnGroup>
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column headerText="" style="width: 30px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.decision')}" style="width: 100px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}" style="width: 200px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}" style="width: 150px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 550px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}" style="width: 150px"/>
+                                                <p:column headerText="" style="width: 50px"/>
+                                            </p:row>
+                                        </p:columnGroup>
 
-                                    <p:column styleClass="center top">#{rowIndex + 1}</p:column>
+                                        <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
-                                    <p:column styleClass="center top">
-                                        #{guarantor.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
-                                    </p:column>
+                                        <p:column styleClass="center top">
+                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : guarantor.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                        </p:column>
 
-                                    <p:column styleClass="left top">
-                                        <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
-                                                      rendered="#{not empty guarantor.guarantorName}"/>
-                                    </p:column>
+                                        <p:column styleClass="left top">
+                                            <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
+                                                          rendered="#{not empty guarantor.guarantorName}"/>
+                                        </p:column>
 
-                                    <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
+                                        <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
 
-                                    <p:column styleClass="left top">
-                                        <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
-                                                <tr>
-                                                    <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
-                                                    <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram.name},&#160;
-                                                        <h:outputText value="#{creditType.limit}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                                        </h:outputText>&#160;
-                                                        #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
-                                                        <h:outputText value="#{creditType.guaranteeAmount}">
+                                        <p:column styleClass="left top">
+                                            <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
+                                                    <tr>
+                                                        <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
+                                                        <td class="left middle" rowspan="2" style="border-style:none !important;">
+                                                            #{creditType.productProgram.name},&#160;
+                                                            <h:outputText value="#{creditType.limit}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>&#160;
+                                                            #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
+                                                            <h:outputText value="#{creditType.guaranteeAmount}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="left" style="border-style:none !important;">
+                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{creditType.accountNumber},&#160;
+                                                            #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </table>
+                                        </p:column>
+
+                                        <p:column styleClass="right top">
+                                            <h:outputText value="#{guarantor.totalLimitGuaranteeAmount}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column styleClass="center top">
+                                            <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                             icon="ui-icon-pencil"
+                                                             action="#{decision.onEditAppProposeGuarantor()}"
+                                                             update=":guarantorDlgForm"
+                                                             oncomplete="proposeGuarantorDlg.show()">
+                                                <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
+                                                <!--<p:resetInput target=":guarantorDlgForm"/>-->
+                                            </p:commandButton>
+
+                                            <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteAppGuarantorDlg.show()">
+                                                <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
+                                            </p:commandButton>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="7" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column styleClass="summary_column" style="text-align:left" colspan="5" footerText="#{msg.get('app.label.total')}"/>
+                                                <p:column styleClass="summary_column" style="text-align:right">
+                                                    <f:facet name="footer">
+                                                        <h:outputText value="#{decision.decisionView.approveTotalGuaranteeAmt}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left" style="border-style:none !important;">
-                                                        #{msg.get('app.decision.tb.td.label.accNo')} #{creditType.accountNumber},&#160;
-                                                        #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
-                                                    </td>
-                                                </tr>
-                                            </ui:repeat>
-                                        </table>
-                                    </p:column>
+                                                    </f:facet>
+                                                    <!-- Approved Guarantor Hidden Field for BRMS -->
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
+                                                </p:column>
+                                                <p:column styleClass="summary_column" footerText=""/>
+                                            </p:row>
+                                        </p:columnGroup>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{guarantor.totalLimitGuaranteeAmount}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                        </h:outputText>
-                                    </p:column>
+                                    </p:dataTable>
+                                </h:panelGroup>
 
-                                    <p:column styleClass="center top">
-                                        <p:commandButton title="#{msg.get('app.button.edit')}"
-                                                         icon="ui-icon-pencil"
-                                                         action="#{decision.onEditAppProposeGuarantor()}"
-                                                         update=":guarantorDlgForm"
-                                                         oncomplete="proposeGuarantorDlg.show()">
-                                            <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
-                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
-                                            <p:resetInput target=":guarantorDlgForm"/>
-                                        </p:commandButton>
+                                <h:panelGroup rendered="#{not decision.roleUW}">
+                                    <p:dataTable id="dtAppProposedGuarantor"
+                                                 var="guarantor" value="#{decision.decisionView.approveGuarantorList}"
+                                                 paginator="false" rowKey="#{guarantor}" rowIndexVar="rowIndex"
+                                                 style="width: 100%">
 
-                                        <p:commandButton title="#{msg.get('app.button.delete')}"
-                                                         icon="ui-icon-trash"
-                                                         oncomplete="confirmDeleteAppGuarantorDlg.show()">
-                                            <f:setPropertyActionListener value="#{guarantor}" target="#{decision.selectedAppProposeGuarantor}"/>
-                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexGuarantor}"/>
-                                        </p:commandButton>
-                                    </p:column>
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column headerText="" style="width: 30px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.decision')}" style="width: 100px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}" style="width: 200px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}" style="width: 150px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 600px"/>
+                                                <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}" style="width: 150px"/>
+                                            </p:row>
+                                        </p:columnGroup>
 
-                                    <p:columnGroup type="footer">
-                                        <p:row>
-                                            <p:column colspan="7" style="background-color:#ffffff; line-height:10px; height:10px;"/>
-                                        </p:row>
-                                        <p:row>
-                                            <p:column styleClass="summary_column" style="text-align:left" colspan="5" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right">
-                                                <f:facet name="footer">
-                                                    <h:outputText value="#{decision.decisionView.approveTotalGuaranteeAmt}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                                    </h:outputText>
-                                                </f:facet>
-                                                <!-- Approved Guarantor Hidden Field for BRMS -->
-                                                <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
-                                                <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
-                                                <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
-                                            </p:column>
-                                            <p:column styleClass="summary_column" footerText=""/>
-                                        </p:row>
-                                    </p:columnGroup>
+                                        <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
-                                </p:dataTable>
+                                        <p:column styleClass="center top">
+                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                        </p:column>
+
+                                        <p:column styleClass="left top">
+                                            <h:outputText value="#{guarantor.guarantorName.titleTh.titleTh}#{guarantor.guarantorName.firstNameTh} #{guarantor.guarantorName.lastNameTh}"
+                                                          rendered="#{not empty guarantor.guarantorName}"/>
+                                        </p:column>
+
+                                        <p:column styleClass="center top">#{guarantor.tcgLgNo}</p:column>
+
+                                        <p:column styleClass="left top">
+                                            <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
+                                                    <tr>
+                                                        <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
+                                                        <td class="left middle" rowspan="2" style="border-style:none !important;">
+                                                            #{creditType.productProgram.name},&#160;
+                                                            <h:outputText value="#{creditType.limit}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>&#160;
+                                                            #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
+                                                            <h:outputText value="#{creditType.guaranteeAmount}">
+                                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="left" style="border-style:none !important;">
+                                                            #{msg.get('app.decision.tb.td.label.accNo')} #{creditType.accountNumber},&#160;
+                                                            #{msg.get('app.decision.tb.td.label.suf')} #{creditType.accountSuf}
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </table>
+                                        </p:column>
+
+                                        <p:column styleClass="right top">
+                                            <h:outputText value="#{guarantor.totalLimitGuaranteeAmount}">
+                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column styleClass="summary_column" style="text-align:left" colspan="5" footerText="#{msg.get('app.label.total')}"/>
+                                                <p:column styleClass="summary_column" style="text-align:right">
+                                                    <f:facet name="footer">
+                                                        <h:outputText value="#{decision.decisionView.approveTotalGuaranteeAmt}">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </f:facet>
+                                                    <!-- Approved Guarantor Hidden Field for BRMS -->
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalTCGGuaranteeAmt}"/>
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalIndvGuaranteeAmt}"/>
+                                                    <h:inputHidden value="#{decision.decisionView.approveTotalJurisGuaranteeAmt}"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:columnGroup>
+
+                                    </p:dataTable>
+                                </h:panelGroup>
                             </td>
                         </tr>
                         <tr>
@@ -2674,36 +3066,53 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 400px">
-                                <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
-                                                 style="width: 100%">
-                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                                    <!-- todo: getList conditions for FollowUpCondition -->
-                                    <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
-                                </p:selectOneMenu>
-                            </td>
-                            <td style="padding-left: 10px">
-                                <p:commandButton id="btnAddFollowUpCondition" value="#{msg.get('app.button.add')}"
-                                                 action="#{decision.onAddFollowUpCondition()}" process="@form"
-                                                 update=":frmMain:dtFollowUpCondition"
-                                                 styleClass="smaller"/>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
+                                                             style="width: 100%">
+                                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                                <f:selectItem itemLabel="Example Condition" itemValue="Example Condition"/>
+                                                <!-- todo: getList conditions for FollowUpCondition -->
+                                                <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
+                                            </p:selectOneMenu>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <p:commandButton id="btnAddFollowUpCondition"
+                                                             binding="#{addFollowUpCondButton}"
+                                                             disabled="#{not decision.roleUW}"
+                                                             value="#{msg.get('app.button.add')}"
+                                                             action="#{decision.onAddFollowUpCondition()}"
+                                                             process="@form"
+                                                             update=":frmMain:dtFollowUpCondition"
+                                                             styleClass="smaller"/>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
-                                             style="width: 200px"/>
-                                <p:spacer width="10" height="0"/>
-                                <p:calendar id="calendarId"
-                                            navigator="true" showButtonPanel="true" showOn="both"
-                                            value="#{decision.followUpConditionView.dateOfFollowUp}"
-                                            pattern="dd/MM/yyyy"
-                                            locale="th_TH"
-                                            timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000"
-                                            styleClass="calendar_right">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
+                            <td colspan="2" class="left">
+                                <table border="0">
+                                    <tr>
+                                        <td style="border-style: none !important;">
+                                            <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
+                                                         style="width: 400px"/>
+                                        </td>
+                                        <td style="border-style: none !important; padding-left: 5px;">
+                                            <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
+                                                            yearRange="1950:2100"
+                                                            defaultdate="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            pattern="dd/MM/yyyy"
+                                                            value="#{decision.followUpConditionView.dateOfFollowUp}"
+                                                            locale="th_TH"
+                                                            readonlyInput="true"
+                                                            styleClass="calendar_right">
+                                            </clv:BECalendar>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
@@ -2719,6 +3128,7 @@
                                             <p:column headerText="#{msg.get('app.decision.tb.th.topic')}" style="width: 600px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.detail')}" style="width: 400px"/>
                                             <p:column headerText="#{msg.get('app.decision.tb.th.date')}" style="width: 200px"/>
+                                            <p:column headerText="" style="width: 50px"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -2733,6 +3143,15 @@
                                             <f:convertDateTime pattern="dd/MM/yyyy" locale="en"/>
                                         </h:outputText>
                                     </p:column>
+
+                                    <p:column styleClass="center top">
+                                        <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                         icon="ui-icon-trash"
+                                                         oncomplete="confirmDeleteFollowUpCondDlg.show()">
+                                            <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowIndexFollowUpCondition}"/>
+                                        </p:commandButton>
+                                    </p:column>
+
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -2762,24 +3181,39 @@
                                                 <tr>
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.intFeeDOA')}</td>
                                                     <td class="left middle" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.intFeeDOA}" styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                        <p:inputText value="#{decision.decisionView.intFeeDOA}"
+                                                                     onclick="this.select()"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     styleClass="right">
+                                                            <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                            <p:ajax event="blur" update="@this"/>
                                                         </p:inputText>
-                                                        <h:outputText value="%"/>
+                                                        <h:outputText value=" %"/>
                                                     </td>
 
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}</td>
                                                     <td class="left middle" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.frontendFeeDOA}" styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                        <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
+                                                                     onclick="this.select()"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     styleClass="right">
+                                                            <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                            <p:ajax event="blur" update="@this"/>
                                                         </p:inputText>
-                                                        <h:outputText value="%"/>
+                                                        <h:outputText value=" %"/>
                                                     </td>
 
                                                     <td class="right middle title" style="width: 160px">#{msg.get('app.decision.tb.td.label.guarantorBA')}</td>
                                                     <td class="left middle" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.guarantorBA}" styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <p:inputText value="#{decision.decisionView.guarantorBA}"
+                                                                     onclick="this.select()"
+                                                                     onkeydown="return onKeyDownMoney(event);"
+                                                                     onkeypress="return onKeyPressMoney(event);"
+                                                                     styleClass="right">
+                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            <p:ajax event="blur" update="@this"/>
                                                         </p:inputText>
                                                         <h:outputText value=" %"/>
                                                     </td>
@@ -2787,7 +3221,11 @@
                                                 <tr>
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"  rows="2" style="width: 100%"/>
+                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                                         onkeydown="return onKeyDownText(event);"
+                                                                         onkeypress="return onKeyPressText(event);"
+                                                                         rows="2"
+                                                                         style="width: 100%"/>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -2859,6 +3297,8 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
+                        <h:panelGroup rendered="#{decision.roleUW}">
                         <tr>
                             <td colspan="2" class="center">
                                 <!-- UW - (Comment , Approve) -->
@@ -2945,6 +3385,8 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+                        </h:panelGroup>
+
                         <tr>
                             <td colspan="2">
                                 <div class="separate"><!-- --></div>
@@ -2955,12 +3397,14 @@
                         <tr>
                             <td colspan="2" class="center">
                                 <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
-                                                 action="#{decision.onSave()}" process="@form"
+                                                 action="#{decision.onSave()}"
+                                                 process="@form"
                                                  update=":frmMain, :msgBoxSystemMessagePanel"
                                                  styleClass="smaller"/>
                                 <p:spacer width="5" height="0"/>
                                 <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                                 action="#{decision.onCancel()}" process="@form"
+                                                 action="#{decision.onCancel()}"
+                                                 process="@form"
                                                  update=":frmMain"
                                                  styleClass="smaller"/>
                             </td>
@@ -2980,6 +3424,7 @@
 
     <p:blockUI block=":frmMain"
                trigger=":frmMain:btnAddApprovedCredit,
+               :frmMain:btnRetrievePricingFee
                :frmMain:btnAddApprovedGuarantor,
                :frmMain:btnAddFollowUpCondition,
                :frmMain:btnSave,
@@ -2990,7 +3435,7 @@
 </p:panel>
 
 <!-- Propose Credit Dialog -->
-<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Propose Credit Information"
+<p:dialog id="proposeCreditDialog" widgetVar="proposeCreditDlg" header="Approve Credit Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" width="900">
     <ui:include src="dialog/decisionProposeCreditDialog.xhtml"/>
 </p:dialog>
@@ -3005,7 +3450,7 @@
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
-<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Propose Collateral Information"
+<p:dialog id="proposeCollateralDialog" widgetVar="proposeCollateralDlg" header="Approve Collateral Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="900" height="500">
     <ui:include src="dialog/decisionProposeCollateralDialog.xhtml"/>
 </p:dialog>
@@ -3035,7 +3480,7 @@
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->
-<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Propose Guarantor Information"
+<p:dialog id="proposeGuarantorDialog" widgetVar="proposeGuarantorDlg" header="Approve Guarantor Information"
           modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" width="800" height="400">
     <ui:include src="dialog/decisionProposeGuarantorDialog.xhtml"/>
 </p:dialog>
@@ -3046,6 +3491,15 @@
     <ui:param name="formId" value="frmConfirmDeleteAppGuarantor"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteAppProposeGuarantor"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteFollowUpCondDialog"/>
+    <ui:param name="name" value="confirmDeleteFollowUpCondDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteFollowUpCond"/>
+    <ui:param name="controller" value="#{decision}"/>
+    <ui:param name="action" value="onDeleteFollowUpCondition"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 

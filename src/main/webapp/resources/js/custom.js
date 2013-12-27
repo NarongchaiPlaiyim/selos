@@ -154,6 +154,8 @@ function onKeyPressNumber(evt){
      *  94=^       95=_    123={       125=}
      */
 
+    alert("keyPress : " + keyCode);
+
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
         keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
         keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
@@ -171,6 +173,8 @@ function onKeyPressNumber(evt){
 
 function onKeyDownNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    alert("keyDown : " + keyCode);
 
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
         return true;
@@ -557,6 +561,35 @@ function onCheckRightClick(event){
     }
 }*/
 
+function handleDisbursementMcDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        mcDisbursementDialog.hide();
+    }
+}
+
+function handleDisbursementDepositDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        depositDisbursementDialog.hide();
+    }
+}
+function handleDisbursementBahtnetDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        bahtnetDisbursementDialog.hide();
+    }
+}
+
+function handleBaPaAddDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        bapaInfoDialog.hide();
+    }
+}
+
+function handleApplyBaDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        applyBaInfoDialog.hide();
+    }
+}
+
 function handleManageUserDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         manageUserDlg.hide();
@@ -747,4 +780,30 @@ function handleConditionInfoRequest(xhr, status, args) {
 // Credit Facility Propose Credit Dialog
 function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
+}
+
+function alphabetThaiEng(element){
+    var alphabet = element.val();
+    var alp_array = alphabet.split("");
+    var isAlphabet = false;
+    var pattern1 = /^[\u0E01-\u0E5B|A-Za-z|\s|-]+$/;
+    var pattern2 = /^[๑-๙||฿|]+$/
+    var char_at;
+    if(alp_array.length > 0){
+        for(var i=0;i<alp_array.length; i++){
+            isAlphabet = false;
+            char_at = alp_array[i];
+            if(!pattern1.test(char_at)){
+                isAlphabet = true;
+            }else{
+                if(pattern2.test(char_at)){
+                    isAlphabet = true;
+                }
+            }
+            if(isAlphabet){
+                alp_array.splice(i, 1);
+            }
+        }
+    }
+    element.val(alp_array.join(""));
 }

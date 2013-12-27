@@ -43,8 +43,8 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td  style="width: 250px; max-width: 250px; min-width: 250px;">
-                                        <p:selectOneMenu size="1"  style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <td>
+                                        <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                             <f:selectItems value="#{custInfoSummary.customerEntityList}"
@@ -54,7 +54,7 @@
                                             <p:ajax event="change" update="frmMain"/>
                                         </p:selectOneMenu>
                                     </td>
-                                    <td>
+                                    <td style="width: 950px; max-width: 950px; min-width: 950px;">
                                         <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
                                                          action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>
@@ -97,7 +97,7 @@
                                                     <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50">
+                                                    <p:column rowspan="2" width="80">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
                                                     <p:column rowspan="2" width="50">
@@ -155,8 +155,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <!--<h:outputText value="#{item.collateralOwner == 1 ? 'Y' : item.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                <h:outputText value="#{item.collateralOwner == 2 ? 'Y' : 'N'}"
                                                               style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
@@ -185,12 +184,10 @@
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
-                                            <p:column styleClass="center">
+                                            <p:column styleClass="center" style="min-width: 80px; max-width: 80px; width: 80px; white-space: normal!important;">
                                                 <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
-                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5" />
                                                 </ui:repeat>
-                                                <!--<h:outputText value="#{item}"
-                                                              style="min-width: 50px; max-width: 50px;"/>-->
                                             </p:column>
 
                                             <p:column styleClass="center">
@@ -246,7 +243,7 @@
                                                     <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50">
+                                                    <p:column rowspan="2" width="80">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
                                                     <p:column rowspan="2" width="50">
@@ -305,7 +302,7 @@
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : item2.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                <h:outputText value="#{item2.collateralOwner == 2 ? 'Y' : 'N'}"
                                                               style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
@@ -334,7 +331,7 @@
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
-                                            <p:column styleClass="center">
+                                            <p:column styleClass="center" style="min-width: 80px; max-width: 80px; width: 80px; white-space: normal!important;">
                                                 <ui:repeat value="#{item2.customerCSIList}" var="customerCSI">
                                                     <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
                                                 </ui:repeat>
@@ -401,7 +398,7 @@
                                                     <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50">
+                                                    <p:column rowspan="2" width="80">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
                                                     <p:column rowspan="2" width="50">
@@ -460,7 +457,7 @@
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : item3.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                <h:outputText value="#{item3.collateralOwner == 2 ? 'Y' : 'N'}"
                                                               style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
@@ -489,7 +486,7 @@
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
-                                            <p:column styleClass="center">
+                                            <p:column styleClass="center" style="min-width: 80px; max-width: 80px; width: 80px; white-space: normal!important;">
                                                 <ui:repeat value="#{item3.customerCSIList}" var="customerCSI">
                                                     <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
                                                 </ui:repeat>

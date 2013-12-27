@@ -1,8 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class FollowUpConditionView implements Serializable {
     public void reset() {
         this.condition = "";
         this.detailOfFollowUp = "";
-        this.dateOfFollowUp = DateTimeUtil.getCurrentDateTH();
+        this.dateOfFollowUp = DateTime.now().toDate();
     }
 
     public long getId() {

@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for RiskModelType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="RiskModelType">
  *   &lt;complexContent>
@@ -35,21 +39,23 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RiskModelType", propOrder = {
-        "id",
-        "modelID",
-        "name",
-        "riskClass",
-        "pd",
-        "tmbMasterScale",
-        "color",
-        "result",
-        "percentNotCured",
-        "dateOfScore",
-        "score",
-        "attribute"
+    "id",
+    "modelID",
+    "name",
+    "riskClass",
+    "pd",
+    "tmbMasterScale",
+    "color",
+    "result",
+    "percentNotCured",
+    "dateOfScore",
+    "score",
+    "attribute"
 })
 public class RiskModelType {
 
@@ -70,9 +76,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -80,9 +88,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -90,9 +100,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the modelID property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getModelID() {
         return modelID;
@@ -100,9 +112,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the modelID property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setModelID(String value) {
         this.modelID = value;
@@ -110,9 +124,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the name property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getName() {
         return name;
@@ -120,9 +136,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the name property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setName(String value) {
         this.name = value;
@@ -130,9 +148,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the riskClass property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRiskClass() {
         return riskClass;
@@ -140,9 +160,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the riskClass property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRiskClass(String value) {
         this.riskClass = value;
@@ -150,9 +172,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the pd property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPd() {
         return pd;
@@ -160,9 +184,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the pd property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPd(BigDecimal value) {
         this.pd = value;
@@ -170,9 +196,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the tmbMasterScale property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTmbMasterScale() {
         return tmbMasterScale;
@@ -180,9 +208,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the tmbMasterScale property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTmbMasterScale(String value) {
         this.tmbMasterScale = value;
@@ -190,9 +220,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the color property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getColor() {
         return color;
@@ -200,9 +232,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the color property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setColor(String value) {
         this.color = value;
@@ -210,9 +244,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the result property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getResult() {
         return result;
@@ -220,9 +256,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the result property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setResult(String value) {
         this.result = value;
@@ -230,9 +268,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the percentNotCured property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPercentNotCured() {
         return percentNotCured;
@@ -240,9 +280,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the percentNotCured property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPercentNotCured(BigDecimal value) {
         this.percentNotCured = value;
@@ -250,9 +292,11 @@ public class RiskModelType {
 
     /**
      * Gets the value of the dateOfScore property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfScore() {
         return dateOfScore;
@@ -260,9 +304,11 @@ public class RiskModelType {
 
     /**
      * Sets the value of the dateOfScore property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfScore(XMLGregorianCalendar value) {
         this.dateOfScore = value;
@@ -270,23 +316,25 @@ public class RiskModelType {
 
     /**
      * Gets the value of the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
+     * 
+     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -297,23 +345,25 @@ public class RiskModelType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

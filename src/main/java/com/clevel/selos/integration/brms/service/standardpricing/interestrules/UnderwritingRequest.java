@@ -1,14 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -20,10 +24,12 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "underwritingApprovalRequest"
+    "underwritingApprovalRequest"
 })
 @XmlRootElement(name = "underwritingRequest", namespace = "http://www.ilog.com/rules/param")
 public class UnderwritingRequest {
@@ -33,9 +39,11 @@ public class UnderwritingRequest {
 
     /**
      * Gets the value of the underwritingApprovalRequest property.
-     *
-     * @return possible object is
-     *         {@link UnderwritingApprovalRequestType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link UnderwritingApprovalRequestType }
+     *     
      */
     public UnderwritingApprovalRequestType getUnderwritingApprovalRequest() {
         return underwritingApprovalRequest;
@@ -43,9 +51,11 @@ public class UnderwritingRequest {
 
     /**
      * Sets the value of the underwritingApprovalRequest property.
-     *
-     * @param value allowed object is
-     *              {@link UnderwritingApprovalRequestType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link UnderwritingApprovalRequestType }
+     *     
      */
     public void setUnderwritingApprovalRequest(UnderwritingApprovalRequestType value) {
         this.underwritingApprovalRequest = value;

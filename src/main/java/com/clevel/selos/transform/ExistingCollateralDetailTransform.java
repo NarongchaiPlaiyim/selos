@@ -51,6 +51,8 @@ public class ExistingCollateralDetailTransform extends Transform {
             existingCollateralDetail.setAppraisalValue(existingCollateralDetailView.getAppraisalValue());
             existingCollateralDetail.setMortgageValue(existingCollateralDetailView.getMortgageValue());
             existingCollateralDetail.setExistingCreditFacility(existingCreditFacility);
+            existingCollateralDetail.setModifyDate(new Date());
+            existingCollateralDetail.setModifyBy(user);
 
             existingCollateralDetailList.add(existingCollateralDetail);
         }
@@ -77,6 +79,10 @@ public class ExistingCollateralDetailTransform extends Transform {
             existingCollateralDetailView.setAppraisalDate(existingCollateralDetail.getAppraisalDate());
             existingCollateralDetailView.setAppraisalValue(existingCollateralDetail.getAppraisalValue());
             existingCollateralDetailView.setMortgageValue(existingCollateralDetail.getMortgageValue());
+            existingCollateralDetailView.setModifyDate(existingCollateralDetail.getModifyDate());
+            existingCollateralDetail.setModifyBy(existingCollateralDetail.getModifyBy());
+            existingCollateralDetailView.setCreateDate(existingCollateralDetail.getCreateDate());
+            existingCollateralDetailView.setCreateBy(existingCollateralDetail.getCreateBy());
 
             existingCollateralDetailViewList.add(existingCollateralDetailView);
         }

@@ -47,7 +47,7 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
             creditTypeDetail.setProductProgram(creditTypeDetailView.getProductProgram());
             creditTypeDetail.setUseCount(creditTypeDetailView.getUseCount());
-            creditTypeDetail.setNewGuarantorDetail(newGuarantorDetail);
+//            creditTypeDetail.setNewGuarantorDetail(newGuarantorDetail);
             creditTypeDetailList.add(creditTypeDetail);
         }
 
@@ -82,7 +82,7 @@ public class CreditTypeDetailTransform extends Transform {
             creditTypeDetail.setLimit(creditTypeDetailView.getLimit());
             creditTypeDetail.setProductProgram(creditTypeDetailView.getProductProgram());
             creditTypeDetail.setUseCount(creditTypeDetailView.getUseCount());
-            creditTypeDetail.setNewCollateralDetail(newCollateralDetail);
+//            creditTypeDetail.setNewCollateralDetail(newCollateralDetail);
             creditTypeDetailList.add(creditTypeDetail);
         }
 

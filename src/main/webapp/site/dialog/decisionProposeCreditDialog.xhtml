@@ -15,9 +15,12 @@
                 </td>
                 <td colspan="3">
                     <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedAppProposeCredit.approved}"
-                                      required="true">
+                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
+                        <p:ajax event="change"
+                                process="@this"
+                                update=":proposeCreditDlgForm"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -27,9 +30,9 @@
                 </td>
                 <td colspan="3">
                     <p:selectOneRadio id="dlgRequestType" value="#{decision.selectedAppProposeCredit.requestType}"
-                                      required="true">
-                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="1"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="2"/>
+                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
+                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeRequestType()}"
                                 process="@this"
@@ -43,7 +46,7 @@
                 </td>
                 <td colspan="3">
                     <p:selectOneRadio id="dlgRadioRefinance" value="#{decision.selectedAppProposeCredit.refinance}"
-                                      required="true">
+                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                     </p:selectOneRadio>
@@ -57,7 +60,7 @@
                     <p:selectOneMenu id="dlgSelectProdProgram"
                                      value="#{decision.selectedAppProposeCredit.productProgram.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="true">
+                                     required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.prdGroupToPrdProgramList}"
                                        var="prdGroupToPrdProgramItem"
@@ -77,9 +80,8 @@
                 <td colspan="3">
                     <p:selectOneMenu id="dlgSelectCreditType"
                                      value="#{decision.selectedAppProposeCredit.creditType.id}"
-                                     size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="true">
+                                     required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.prdProgramToCreditTypeList}"
                                        var="creditTypeItem"
@@ -112,8 +114,11 @@
                 </td>
                 <td>
                     <p:inputText id="dlgLimitNotional" value="#{decision.selectedAppProposeCredit.limit}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right">
-                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -122,8 +127,11 @@
                 </td>
                 <td>
                     <p:inputText id="dlgPCEPercent" value="#{decision.selectedAppProposeCredit.PCEPercent}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right">
-                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5" height="0"/>#{msg.get('app.credit.facility.propose.dlg.label.percent')}
@@ -137,8 +145,11 @@
                 </td>
                 <td>
                     <p:inputText id="dlgPCEAmount" value="#{decision.selectedAppProposeCredit.PCEAmount}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right">
-                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -150,19 +161,35 @@
             </tr>
             <tr>
                 <td>
-                    <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing" value="#{decision.selectedAppProposeCredit.reducePriceFlag}"
-                                             disabled="#{decision.modeEditCredit}">
-                    </p:selectBooleanCheckbox>
-                    <p:spacer width="5" height="0"/>
-                    <p:outputLabel for="dlgCheckBoxReducePricing" value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+                    <table border="0">
+                        <tr>
+                            <td style="border-style: none !important;">
+                                <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing"
+                                                         value="#{decision.selectedAppProposeCredit.reducePriceFlag}"
+                                                         disabled="#{decision.modeEditCredit}">
+                                </p:selectBooleanCheckbox>
+                            </td>
+                            <td style="border-style: none !important; padding-left: 5px;">
+                                <p:outputLabel for="dlgCheckBoxReducePricing" value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
                 <td></td>
                 <td colspan="2">
-                    <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront" value="#{decision.selectedAppProposeCredit.reduceFrontEndFee}"
-                                             disabled="#{decision.modeEditCredit}">
-                    </p:selectBooleanCheckbox>
-                    <p:spacer width="5" height="0"/>
-                    <p:outputLabel for="dlgCheckBoxReduceFront" value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+                    <table border="0">
+                        <tr>
+                            <td style="border-style: none !important;">
+                                <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront"
+                                                         value="#{decision.selectedAppProposeCredit.reduceFrontEndFee}"
+                                                         disabled="#{decision.modeEditCredit}">
+                                </p:selectBooleanCheckbox>
+                            </td>
+                            <td style="border-style: none !important; padding-left: 5px;">
+                                <p:outputLabel for="dlgCheckBoxReduceFront" value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
@@ -176,7 +203,7 @@
                                 <p:selectOneMenu id="dlgSelectStandardPrice"
                                                  value="#{decision.selectedAppProposeCredit.standardBasePrice.id}"
                                                  style="width: 50px;"
-                                                 disabled="#{decision.modeEditCredit}">
+                                                 disabled="#{decision.cannotEditStandard}">
                                     <f:selectItems value="#{decision.baseRateList}"
                                                    var="standard"
                                                    itemLabel="#{standard.name}"
@@ -185,10 +212,13 @@
                             </td>
                             <td>
                                 <p:inputText id="dlgStandardInterest" value="#{decision.selectedAppProposeCredit.standardInterest}"
+                                             onclick="this.select()"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
                                              styleClass="right"
                                              style="width:50px;"
-                                             disabled="#{decision.modeEditCredit}">
-                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                             disabled="#{decision.cannotEditStandard}">
+                                    <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                     <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </td>
@@ -220,10 +250,13 @@
                             </td>
                             <td>
                                 <p:inputText id="dlgSuggestInterest" value="#{decision.selectedAppProposeCredit.suggestInterest}"
+                                             onclick="this.select()"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event);"
                                              styleClass="right"
                                              style="width:50px;"
                                              disabled="#{decision.modeEditCredit}">
-                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                    <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                     <p:ajax event="blur"
                                             listener="#{decision.onChangeSuggestValue()}"
                                             process=":proposeCreditDlgForm" />
@@ -287,10 +320,14 @@
                                     </td>
                                     <td style="border-style: none !important; padding-left: 2px !important;">
                                         <p:inputText value="#{item.finalInterest}"
+                                                     onclick="this.select()"
+                                                     onkeydown="return onKeyDownMoney(event);"
+                                                     onkeypress="return onKeyPressMoney(event);"
                                                      styleClass="right"
                                                      style="width:100px;"
                                                      readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">
-                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                                            <p:ajax event="blur" update="@this"/>
                                         </p:inputText>
                                     </td>
                                 </tr>
@@ -299,17 +336,24 @@
 
                         <p:column style="padding: 4px 10px !important;">
                             <p:inputText value="#{item.tenor}"
+                                         onclick="this.select()"
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right"
                                          readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">
-                                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                <f:convertNumber pattern="#0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="2"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </p:column>
 
                         <p:column style="padding: 4px 10px !important;">
                             <p:inputText value="#{item.installment}"
+                                         onclick="this.select()"
+                                         onkeydown="return onKeyDownMoney(event);"
+                                         onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right"
                                          readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">
-                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </p:column>
@@ -333,6 +377,9 @@
                 </td>
                 <td colspan="3">
                     <p:inputText id="dlgFrontEndFee" value="#{decision.selectedAppProposeCredit.frontEndFee}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
                                  disabled="#{decision.modeEditCredit}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -348,7 +395,7 @@
                     <p:selectOneMenu id="dlgSelectLoanPurpose"
                                      value="#{decision.selectedAppProposeCredit.loanPurpose.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="true"
+                                     required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{decision.loanPurposeList}"
@@ -364,7 +411,10 @@
                 </td>
                 <td colspan="3">
                     <p:inputTextarea id="dlgRemark" value="#{decision.selectedAppProposeCredit.remark}"
-                                     rows="3" cols="95" style="font-size: 12px !important;"
+                                     rows="3" cols="95"
+                                     onkeydown="return onKeyDownText(event);"
+                                     onkeypress="return onKeyPressText(event);"
+                                     style="font-size: 12px !important;"
                                      disabled="#{decision.modeEditCredit}"/>
                 </td>
             </tr>
@@ -376,9 +426,9 @@
                     <p:selectOneMenu id="dlgSelectDisbursement"
                                      value="#{decision.selectedAppProposeCredit.disbursement.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
-                                     required="true"
+                                     required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
-                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <!--<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>-->
                         <f:selectItems value="#{decision.disbursementList}"
                                        var="disbursementItem"
                                        itemLabel="#{disbursementItem.disbursement}"
@@ -390,6 +440,9 @@
                 </td>
                 <td>
                     <p:inputText id="dlgHoldLimitAmt" value="#{decision.selectedAppProposeCredit.holdLimitAmount}"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
                                  disabled="#{decision.modeEditCredit}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -404,6 +457,7 @@
                 <td colspan="4" class="center">
                     <p:commandButton id="dlgAddAppProposeCreditBtn"
                                      value="#{msg.get('app.button.ok')}"
+                                     binding="#{saveAppProposeCreditButton}"
                                      action="#{decision.onSaveAppProposeCredit()}"
                                      process="@form"
                                      update=":proposeCreditDlgForm,:frmMain"
@@ -413,7 +467,7 @@
                     <p:commandButton type="button"
                                      value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
-                                     onclick="proposeCreditDlg.hide()"/>
+                                     onclick="PF('proposeCreditDlg').hide()"/>
                 </td>
             </tr>
         </table>

@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for ApplicationType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="ApplicationType">
  *   &lt;complexContent>
@@ -47,43 +51,47 @@ import java.util.List;
  *         &lt;element name="requiredDocumentSet" type="{http://www.tmbbank.com/enterprise/model}DocumentSetType" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="fee" type="{http://www.tmbbank.com/enterprise/model}FeeType" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="business" type="{http://www.tmbbank.com/enterprise/model}BusinessType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="account" type="{http://www.tmbbank.com/enterprise/model}AccountType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ApplicationType", propOrder = {
-        "id",
-        "applicationNumber",
-        "bookingChannel",
-        "segment",
-        "projectCode",
-        "pricingMode",
-        "dateOfApplication",
-        "loanLimitAmount",
-        "loanCategory",
-        "totalMonthlyIncomeMainBorrower",
-        "totalMonthlyIncomeCoBorrowers",
-        "totalMonthlyIncome",
-        "aggregatedCreditLimit",
-        "aggregatedCreditExposureLimit",
-        "remainingDebtToIncome",
-        "maxDebtToIncome",
-        "existingDebtToIncome",
-        "underwritingAction",
-        "maxNumOfBorrowers",
-        "status",
-        "borrower",
-        "product",
-        "riskModel",
-        "thirdPartyPledgor",
-        "score",
-        "attribute",
-        "requiredDocumentSet",
-        "fee",
-        "business"
+    "id",
+    "applicationNumber",
+    "bookingChannel",
+    "segment",
+    "projectCode",
+    "pricingMode",
+    "dateOfApplication",
+    "loanLimitAmount",
+    "loanCategory",
+    "totalMonthlyIncomeMainBorrower",
+    "totalMonthlyIncomeCoBorrowers",
+    "totalMonthlyIncome",
+    "aggregatedCreditLimit",
+    "aggregatedCreditExposureLimit",
+    "remainingDebtToIncome",
+    "maxDebtToIncome",
+    "existingDebtToIncome",
+    "underwritingAction",
+    "maxNumOfBorrowers",
+    "status",
+    "borrower",
+    "product",
+    "riskModel",
+    "thirdPartyPledgor",
+    "score",
+    "attribute",
+    "requiredDocumentSet",
+    "fee",
+    "business",
+    "account"
 })
 public class ApplicationType {
 
@@ -119,12 +127,15 @@ public class ApplicationType {
     protected List<DocumentSetType> requiredDocumentSet;
     protected List<FeeType> fee;
     protected List<BusinessType> business;
+    protected List<AccountType> account;
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -132,9 +143,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -142,9 +155,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the applicationNumber property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getApplicationNumber() {
         return applicationNumber;
@@ -152,9 +167,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the applicationNumber property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setApplicationNumber(String value) {
         this.applicationNumber = value;
@@ -162,9 +179,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the bookingChannel property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBookingChannel() {
         return bookingChannel;
@@ -172,9 +191,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the bookingChannel property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBookingChannel(String value) {
         this.bookingChannel = value;
@@ -182,9 +203,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the segment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getSegment() {
         return segment;
@@ -192,9 +215,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the segment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setSegment(String value) {
         this.segment = value;
@@ -202,9 +227,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the projectCode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProjectCode() {
         return projectCode;
@@ -212,9 +239,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the projectCode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProjectCode(String value) {
         this.projectCode = value;
@@ -222,9 +251,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the pricingMode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPricingMode() {
         return pricingMode;
@@ -232,9 +263,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the pricingMode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPricingMode(String value) {
         this.pricingMode = value;
@@ -242,9 +275,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the dateOfApplication property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfApplication() {
         return dateOfApplication;
@@ -252,9 +287,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the dateOfApplication property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfApplication(XMLGregorianCalendar value) {
         this.dateOfApplication = value;
@@ -262,9 +299,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the loanLimitAmount property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLoanLimitAmount() {
         return loanLimitAmount;
@@ -272,9 +311,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the loanLimitAmount property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLoanLimitAmount(BigDecimal value) {
         this.loanLimitAmount = value;
@@ -282,9 +323,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the loanCategory property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getLoanCategory() {
         return loanCategory;
@@ -292,9 +335,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the loanCategory property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setLoanCategory(String value) {
         this.loanCategory = value;
@@ -302,9 +347,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the totalMonthlyIncomeMainBorrower property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTotalMonthlyIncomeMainBorrower() {
         return totalMonthlyIncomeMainBorrower;
@@ -312,9 +359,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the totalMonthlyIncomeMainBorrower property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTotalMonthlyIncomeMainBorrower(BigDecimal value) {
         this.totalMonthlyIncomeMainBorrower = value;
@@ -322,9 +371,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the totalMonthlyIncomeCoBorrowers property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTotalMonthlyIncomeCoBorrowers() {
         return totalMonthlyIncomeCoBorrowers;
@@ -332,9 +383,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the totalMonthlyIncomeCoBorrowers property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTotalMonthlyIncomeCoBorrowers(BigDecimal value) {
         this.totalMonthlyIncomeCoBorrowers = value;
@@ -342,9 +395,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the totalMonthlyIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTotalMonthlyIncome() {
         return totalMonthlyIncome;
@@ -352,9 +407,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the totalMonthlyIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTotalMonthlyIncome(BigDecimal value) {
         this.totalMonthlyIncome = value;
@@ -362,9 +419,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the aggregatedCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAggregatedCreditLimit() {
         return aggregatedCreditLimit;
@@ -372,9 +431,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the aggregatedCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAggregatedCreditLimit(BigDecimal value) {
         this.aggregatedCreditLimit = value;
@@ -382,9 +443,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the aggregatedCreditExposureLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAggregatedCreditExposureLimit() {
         return aggregatedCreditExposureLimit;
@@ -392,9 +455,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the aggregatedCreditExposureLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAggregatedCreditExposureLimit(BigDecimal value) {
         this.aggregatedCreditExposureLimit = value;
@@ -402,9 +467,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the remainingDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getRemainingDebtToIncome() {
         return remainingDebtToIncome;
@@ -412,9 +479,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the remainingDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setRemainingDebtToIncome(BigDecimal value) {
         this.remainingDebtToIncome = value;
@@ -422,9 +491,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the maxDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxDebtToIncome() {
         return maxDebtToIncome;
@@ -432,9 +503,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the maxDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxDebtToIncome(BigDecimal value) {
         this.maxDebtToIncome = value;
@@ -442,9 +515,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the existingDebtToIncome property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getExistingDebtToIncome() {
         return existingDebtToIncome;
@@ -452,9 +527,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the existingDebtToIncome property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setExistingDebtToIncome(BigDecimal value) {
         this.existingDebtToIncome = value;
@@ -462,9 +539,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the underwritingAction property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getUnderwritingAction() {
         return underwritingAction;
@@ -472,9 +551,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the underwritingAction property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setUnderwritingAction(String value) {
         this.underwritingAction = value;
@@ -482,9 +563,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the maxNumOfBorrowers property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxNumOfBorrowers() {
         return maxNumOfBorrowers;
@@ -492,9 +575,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the maxNumOfBorrowers property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxNumOfBorrowers(Integer value) {
         this.maxNumOfBorrowers = value;
@@ -502,9 +587,11 @@ public class ApplicationType {
 
     /**
      * Gets the value of the status property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getStatus() {
         return status;
@@ -512,9 +599,11 @@ public class ApplicationType {
 
     /**
      * Sets the value of the status property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setStatus(String value) {
         this.status = value;
@@ -522,23 +611,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the borrower property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the borrower property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBorrower().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link BorrowerType }
+     * 
+     * 
      */
     public List<BorrowerType> getBorrower() {
         if (borrower == null) {
@@ -549,23 +640,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the product property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the product property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getProduct().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ProductType }
+     * 
+     * 
      */
     public List<ProductType> getProduct() {
         if (product == null) {
@@ -576,23 +669,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the riskModel property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the riskModel property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRiskModel().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link RiskModelType }
+     * 
+     * 
      */
     public List<RiskModelType> getRiskModel() {
         if (riskModel == null) {
@@ -603,23 +698,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the thirdPartyPledgor property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the thirdPartyPledgor property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getThirdPartyPledgor().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ThirdPartyPledgorType }
+     * 
+     * 
      */
     public List<ThirdPartyPledgorType> getThirdPartyPledgor() {
         if (thirdPartyPledgor == null) {
@@ -630,23 +727,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
+     * 
+     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -657,23 +756,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -684,23 +785,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the requiredDocumentSet property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRequiredDocumentSet().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DocumentSetType }
+     * 
+     * 
      */
     public List<DocumentSetType> getRequiredDocumentSet() {
         if (requiredDocumentSet == null) {
@@ -711,23 +814,25 @@ public class ApplicationType {
 
     /**
      * Gets the value of the fee property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the fee property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getFee().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link FeeType }
+     * 
+     * 
      */
     public List<FeeType> getFee() {
         if (fee == null) {
@@ -738,29 +843,60 @@ public class ApplicationType {
 
     /**
      * Gets the value of the business property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the business property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getBusiness().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link BusinessType }
+     * 
+     * 
      */
     public List<BusinessType> getBusiness() {
         if (business == null) {
             business = new ArrayList<BusinessType>();
         }
         return this.business;
+    }
+
+    /**
+     * Gets the value of the account property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the account property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getAccount().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link AccountType }
+     * 
+     * 
+     */
+    public List<AccountType> getAccount() {
+        if (account == null) {
+            account = new ArrayList<AccountType>();
+        }
+        return this.account;
     }
 
 }

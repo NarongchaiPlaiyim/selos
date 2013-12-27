@@ -57,6 +57,7 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private Country country;
+    private boolean fromDB;
     //private User user;
     private Date currentDate;
 
@@ -168,7 +169,7 @@ public class BizInfoSummary implements Serializable {
         log.info("bankStatementAvg is " + bankStatementAvg);
 
         if (bizInfoSummaryView == null) {
-
+            fromDB = false;
             log.info("bizInfoSummaryView == null ");
 
             bizInfoSummaryView = new BizInfoSummaryView();
@@ -177,6 +178,7 @@ public class BizInfoSummary implements Serializable {
             district = new District();
             subDistrict = new SubDistrict();
             country = new Country();
+            country.setId(211);
             referredExperience = new ReferredExperience();
 
             district.setProvince(province);
@@ -198,6 +200,7 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
 
         } else {
+            fromDB = true;
             getBusinessInfoListDB();
             onChangeProvince();
             onChangeDistrict();
@@ -230,7 +233,9 @@ public class BizInfoSummary implements Serializable {
         Province proSelect = bizInfoSummaryView.getProvince();
         log.info("onChangeProvince :::: Province  : {} ", proSelect);
         districtList = districtDAO.getListByProvince(proSelect);
-        bizInfoSummaryView.setDistrict(new District());
+        if(!fromDB){
+            bizInfoSummaryView.setDistrict(new District());
+        }
         log.info("onChangeProvince :::: districtList.size ::: {}", districtList.size());
         subDistrictList = new ArrayList<SubDistrict>();
     }
@@ -239,7 +244,11 @@ public class BizInfoSummary implements Serializable {
         District districtSelect = bizInfoSummaryView.getDistrict();
         log.debug("onChangeDistrict :::: district : {}", districtSelect);
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
-        bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        if(!fromDB){
+            bizInfoSummaryView.setSubDistrict(new SubDistrict());
+        }
+        fromDB = false;
+
         log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
     }
 
@@ -460,6 +469,7 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onCheckSave(){
+        log.info("have to redirect is " + redirect );
         if (redirect != null && !redirect.equals("")) {
             RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
         }
@@ -469,6 +479,7 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
+            log.info("have to redirect is " + redirect );
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
             log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
@@ -481,13 +492,14 @@ public class BizInfoSummary implements Serializable {
             log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             log.info("bizInfoSummaryControl end");
-
+            log.info("have to redirect is " + redirect );
             if (redirect != null && !redirect.equals("")) {
-                log.info("have to redirect ");
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
                     onViewDetail();
                 }
+
+                log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
 
                 String url = "bizInfoDetail.jsf";
                 FacesUtil.redirect("/site/bizInfoDetail.jsf");

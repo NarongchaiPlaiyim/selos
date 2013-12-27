@@ -36,7 +36,6 @@ public class NewCreditTierTransform extends Transform {
             newCreditTierDetail.setNo(newCreditTierDetailView.getNo());
             newCreditTierDetail.setFinalPriceRate(newCreditTierDetailView.getFinalPriceRate());
             newCreditTierDetail.setSuggestBasePrice(newCreditTierDetailView.getSuggestBasePrice());
-//            newCreditTierDetail.setEditFlag(newCreditTierDetailView.isCanEdit());
             newCreditTierDetail.setFinalBasePrice(newCreditTierDetailView.getFinalBasePrice());
             newCreditTierDetail.setFinalInterest(newCreditTierDetailView.getStandardInterest());
             newCreditTierDetail.setFinalPriceRate(newCreditTierDetailView.getFinalPriceRate());
@@ -70,7 +69,6 @@ public class NewCreditTierTransform extends Transform {
             newFeeDetailView.setNo(newCreditTierDetail.getNo());
             newFeeDetailView.setFinalPriceRate(newCreditTierDetail.getFinalPriceRate());
             newFeeDetailView.setSuggestBasePrice(newCreditTierDetail.getSuggestBasePrice());
-//            newFeeDetailView.setEditFlag(newCreditTierDetail.isCanEdit());
             newFeeDetailView.setFinalBasePrice(newCreditTierDetail.getFinalBasePrice());
             newFeeDetailView.setFinalInterest(newCreditTierDetail.getStandardInterest());
             newFeeDetailView.setFinalPriceRate(newCreditTierDetail.getFinalPriceRate());

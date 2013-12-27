@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for PricingType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="PricingType">
  *   &lt;complexContent>
@@ -33,17 +33,19 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PricingType", propOrder = {
-        "id",
-        "productType",
-        "projectCode",
-        "baseRate",
-        "penaltyRate",
-        "pricingSegment",
-        "pricingTier",
-        "attribute"
+    "id",
+    "productType",
+    "projectCode",
+    "baseRate",
+    "penaltyRate",
+    "pricingSegment",
+    "pricingTier",
+    "attribute"
 })
 public class PricingType {
 
@@ -59,9 +61,11 @@ public class PricingType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -69,9 +73,11 @@ public class PricingType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -79,9 +85,11 @@ public class PricingType {
 
     /**
      * Gets the value of the productType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProductType() {
         return productType;
@@ -89,9 +97,11 @@ public class PricingType {
 
     /**
      * Sets the value of the productType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProductType(String value) {
         this.productType = value;
@@ -99,9 +109,11 @@ public class PricingType {
 
     /**
      * Gets the value of the projectCode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProjectCode() {
         return projectCode;
@@ -109,9 +121,11 @@ public class PricingType {
 
     /**
      * Sets the value of the projectCode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProjectCode(String value) {
         this.projectCode = value;
@@ -119,9 +133,11 @@ public class PricingType {
 
     /**
      * Gets the value of the baseRate property.
-     *
-     * @return possible object is
-     *         {@link BaseRateType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BaseRateType }
+     *     
      */
     public BaseRateType getBaseRate() {
         return baseRate;
@@ -129,9 +145,11 @@ public class PricingType {
 
     /**
      * Sets the value of the baseRate property.
-     *
-     * @param value allowed object is
-     *              {@link BaseRateType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BaseRateType }
+     *     
      */
     public void setBaseRate(BaseRateType value) {
         this.baseRate = value;
@@ -139,9 +157,11 @@ public class PricingType {
 
     /**
      * Gets the value of the penaltyRate property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPenaltyRate() {
         return penaltyRate;
@@ -149,9 +169,11 @@ public class PricingType {
 
     /**
      * Sets the value of the penaltyRate property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPenaltyRate(BigDecimal value) {
         this.penaltyRate = value;
@@ -159,9 +181,11 @@ public class PricingType {
 
     /**
      * Gets the value of the pricingSegment property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPricingSegment() {
         return pricingSegment;
@@ -169,9 +193,11 @@ public class PricingType {
 
     /**
      * Sets the value of the pricingSegment property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPricingSegment(String value) {
         this.pricingSegment = value;
@@ -179,23 +205,25 @@ public class PricingType {
 
     /**
      * Gets the value of the pricingTier property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the pricingTier property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getPricingTier().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link PricingTierType }
+     * 
+     * 
      */
     public List<PricingTierType> getPricingTier() {
         if (pricingTier == null) {
@@ -206,23 +234,25 @@ public class PricingType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

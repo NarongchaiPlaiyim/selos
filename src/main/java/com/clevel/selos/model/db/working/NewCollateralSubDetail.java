@@ -1,10 +1,7 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,6 +20,9 @@ public class NewCollateralSubDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "sub_collateral_type_id")
     private SubCollateralType  subCollTypeCaption;
+
+    @Column(name = "relatedWith_id")
+    private long relatedWithId;
 
     @Column(name = "address")
     private String address;
@@ -208,5 +208,13 @@ public class NewCollateralSubDetail implements Serializable {
 
     public void setNewCollateralSubRelateList(List<NewCollateralSubRelate> newCollateralSubRelateList) {
         this.newCollateralSubRelateList = newCollateralSubRelateList;
+    }
+
+    public long getRelatedWithId() {
+        return relatedWithId;
+    }
+
+    public void setRelatedWithId(long relatedWithId) {
+        this.relatedWithId = relatedWithId;
     }
 }
