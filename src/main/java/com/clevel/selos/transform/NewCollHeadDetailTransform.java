@@ -4,6 +4,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.db.working.NewCollateralHeadDetail;
 import com.clevel.selos.model.view.NewCollateralHeadDetailView;
+import com.clevel.selos.model.view.NewSubCollateralDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,7 +17,38 @@ public class NewCollHeadDetailTransform extends Transform {
     public NewCollHeadDetailTransform() {
     }
 
-    public List<NewCollateralHeadDetail> transformToModel(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList,NewCollateralDetail collateralDetail, User user) {
+    @Inject
+    NewSubCollDetailTransform newSubCollDetailTransform;
+
+    public NewCollateralHeadDetail transformNewCollateralHeadDetailViewToModel(NewCollateralHeadDetailView newCollateralHeadDetailView, NewCollateralDetail collateralDetail, User user) {
+
+        NewCollateralHeadDetail collateralHeaderDetail = new NewCollateralHeadDetail();
+
+        if (newCollateralHeadDetailView.getId() != 0) {
+            collateralHeaderDetail.setId(newCollateralHeadDetailView.getId());
+            collateralHeaderDetail.setCreateDate(newCollateralHeadDetailView.getCreateDate());
+            collateralHeaderDetail.setCreateBy(newCollateralHeadDetailView.getCreateBy());
+        } else { // id = 0 create new
+            collateralHeaderDetail.setCreateDate(new Date());
+            collateralHeaderDetail.setCreateBy(user);
+        }
+
+        collateralHeaderDetail.setHeadCollType(newCollateralHeadDetailView.getHeadCollType());
+        collateralHeaderDetail.setPotential(newCollateralHeadDetailView.getPotentialCollateral());
+        collateralHeaderDetail.setCollateralLocation(newCollateralHeadDetailView.getCollateralLocation());
+        collateralHeaderDetail.setTitleDeed(newCollateralHeadDetailView.getTitleDeed());
+        collateralHeaderDetail.setCollTypePercentLTV(newCollateralHeadDetailView.getCollTypePercentLTV());
+        collateralHeaderDetail.setExistingCredit(newCollateralHeadDetailView.getExistingCredit());
+        collateralHeaderDetail.setInsuranceCompany(newCollateralHeadDetailView.getInsuranceCompany());
+        collateralHeaderDetail.setAppraisalValue(newCollateralHeadDetailView.getAppraisalValue());
+        collateralHeaderDetail.setModifyBy(newCollateralHeadDetailView.getModifyBy());
+        collateralHeaderDetail.setModifyDate(newCollateralHeadDetailView.getModifyDate());
+        collateralHeaderDetail.setNewCollateralDetail(collateralDetail);
+
+        return collateralHeaderDetail;
+    }
+
+    public List<NewCollateralHeadDetail> transformToModel(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList, NewCollateralDetail collateralDetail, User user) {
 
         List<NewCollateralHeadDetail> collateralHeaderDetailList = new ArrayList<NewCollateralHeadDetail>();
         NewCollateralHeadDetail collateralHeaderDetail;
@@ -55,7 +87,7 @@ public class NewCollHeadDetailTransform extends Transform {
         List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
         NewCollateralHeadDetailView newCollateralHeadDetailView;
 
-        for (NewCollateralHeadDetail collateralHeaderDetail: collateralHeaderDetailList) {
+        for (NewCollateralHeadDetail collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadDetailView = new NewCollateralHeadDetailView();
             newCollateralHeadDetailView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadDetailView.setCreateDate(collateralHeaderDetail.getCreateDate());
@@ -75,6 +107,11 @@ public class NewCollHeadDetailTransform extends Transform {
             newCollateralHeadDetailView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadDetailView.setModifyBy(collateralHeaderDetail.getModifyBy());
             newCollateralHeadDetailView.setModifyDate(collateralHeaderDetail.getModifyDate());
+
+            if (collateralHeaderDetail.getNewCollateralSubDetailList() != null) {
+                List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(collateralHeaderDetail.getNewCollateralSubDetailList());
+                newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
+            }
 
             newCollateralHeadDetailViewList.add(newCollateralHeadDetailView);
         }

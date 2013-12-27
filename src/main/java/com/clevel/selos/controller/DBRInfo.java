@@ -185,7 +185,7 @@ public class DBRInfo implements Serializable {
             dbr.setWorkCaseId(workCaseId);
             dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = msg.get("app.header.save.success");
-            message = msg.get("ws.newCase.response.success");
+            message = msg.get("app.dbr.message.save");
 
             //update Display
             dbr = new DBRView();
