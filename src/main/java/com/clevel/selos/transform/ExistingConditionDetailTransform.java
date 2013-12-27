@@ -37,6 +37,8 @@ public class ExistingConditionDetailTransform extends Transform {
             existingConditionDetail.setConditionDesc(existingConditionDetailView.getConditionDesc());
             existingConditionDetail.setLoanType(existingConditionDetailView.getLoanType());
             existingConditionDetail.setExistingCreditFacility(existingCreditFacility);
+            existingConditionDetail.setModifyDate(new Date());
+            existingConditionDetail.setModifyBy(user);
             existingConditionDetailList.add(existingConditionDetail);
         }
         log.info("transformsToModel ExistingConditionDetail end ");

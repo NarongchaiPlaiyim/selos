@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_mortgagesummary")
+@Table(name = "wrk_mortgage_summary")
 public class MortgageSummary implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_MORTGAGE_SUMMARY_ID", sequenceName = "SEQ_WRK_MORTGAGE_SUMMARY_ID", allocationSize = 1)
