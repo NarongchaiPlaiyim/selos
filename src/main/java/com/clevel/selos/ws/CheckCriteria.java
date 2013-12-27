@@ -29,7 +29,7 @@ public class CheckCriteria {
 
         try {
 
-            criteriaResponse.setValue(WSResponse.DUPLICATE_CA, appId);
+            criteriaResponse.setValue(WSBRMSResponse.REJECT, appId);
         } catch (Exception e) {
             e.printStackTrace();
         }

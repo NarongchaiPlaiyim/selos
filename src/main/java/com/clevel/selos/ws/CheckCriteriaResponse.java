@@ -17,7 +17,7 @@ public class CheckCriteriaResponse {
         this.message = message;
     }
 
-    public void setValue(WSResponse wsResponse, String message) {
+    public void setValue(WSBRMSResponse wsResponse, String message) {
         setCode(wsResponse.code());
         setMessage(message);
     }
