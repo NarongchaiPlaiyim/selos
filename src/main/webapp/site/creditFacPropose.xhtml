@@ -504,7 +504,8 @@
                 <td style="text-align: left">
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
-                                 style="text-align: right;">
+                                 style="text-align: right;"
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -517,6 +518,7 @@
                     <p:spacer width="5px;"/>
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
+                                 required="#{not empty param[onsaveNewFacility.clientId]}"
                                  style="text-align: right;">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
@@ -856,8 +858,7 @@
                     <p:spacer width="5px;"/>
                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactPhoneNo')}"/>
                     <p:spacer width="5px;"/>
-                    <p:inputText styleClass="large"
-                                 value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}"></p:inputText>
+                    <p:inputMask value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}" mask="(999)999-9999"/>
                     <p:spacer width="5px;"/>
                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
                     <p:spacer width="5px;"/>
@@ -957,6 +958,7 @@
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
                                  style="text-align: right;">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText> %
                 </td>
@@ -969,6 +971,7 @@
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
                                  style="text-align: right;">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText> %
                 </td>

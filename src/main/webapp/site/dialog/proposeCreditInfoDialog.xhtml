@@ -104,7 +104,7 @@
         <p:inputText value="#{creditFacPropose.newCreditDetailView.limit}"
                      style="text-align:right"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
-            <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -115,7 +115,7 @@
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEPercent}"
                      style="text-align:right"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
-            <f:convertNumber pattern="###.00" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
         <p:spacer/>
@@ -133,7 +133,7 @@
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
                      style="text-align:right"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
-            <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -153,15 +153,13 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
     <td>
-        <!--<p:panel style="border-width:0" id="reducePricePanel" rendered="#{creditFacPropose.reducePricePanelRendered}">-->
-            <p:inputText value="#{creditFacPropose.reducePrice}"
-                         id="reducePrice"
-                         style="text-align:right"
-                         disabled="#{creditFacPropose.modeEditReducePricing}">
-                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                <p:ajax event="blur" process="@this" listener="#{creditFacPropose.onRequestReducePrice()}" update="@this"/>
-            </p:inputText>
-        <!--</p:panel>-->
+        <p:inputText value="#{creditFacPropose.reducePrice}"
+                     id="reducePrice"
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEditReducePricing}">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <p:ajax event="blur" process="@this" listener="#{creditFacPropose.onRequestReducePrice()}" update="@this"/>
+        </p:inputText>
     </td>
     <td colspan="2">
         <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reduceFrontEndFee}"
@@ -195,7 +193,10 @@
                     <p:inputText value="#{creditFacPropose.newCreditDetailView.standardInterest}"
                                  id="standPriceDlg"
                                  style="text-align:right;width:50px;"
-                                 disabled="#{creditFacPropose.cannotEditStandard}"/>
+                                 disabled="#{creditFacPropose.cannotEditStandard}">
+                        <f:convertNumber pattern="##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
                 </td>
             </tr>
         </table>
@@ -229,6 +230,7 @@
                                  style="text-align:right;width:50px;"
                                  id="suggestPriceDlg"
                                  disabled="false">
+                        <f:convertNumber pattern="##0" minFractionDigits="2" maxFractionDigits="2"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.onChangeSuggestValue}"
                                 process=":creditInfoDlgForm" />
@@ -250,7 +252,7 @@
                 process="@form"
                 update=":creditInfoDlgForm:resultFinal"
                 actionListener="#{creditFacPropose.onAddTierInfo()}"
-                rendered="#{creditFacPropose.newCreditDetailView.requestType == 1?true:false}">
+                rendered="#{creditFacPropose.cannotEditStandard}">
         </p:commandButton>
     </td>
 </tr>
@@ -300,7 +302,7 @@
                             <p:inputText value="#{item.finalInterest}"
                                          style="width: 100px;text-align: right"
                                          readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
-                                <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </p:inputText>
                         </p:column>
                     </p:row>
@@ -320,7 +322,7 @@
                 <p:inputText value="#{item.installment}"
                              style="text-align: right"
                              readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
-                    <f:convertNumber pattern="#,###,###.00" minFractionDigits="2" maxFractionDigits="2"/>
+                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     <p:ajax event="blur" update="@this"/>
                 </p:inputText>
             </p:column>
@@ -344,8 +346,9 @@
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.frontEndFee}"
                      style="text-align:right"
+                     required="#{not empty param[onSaveCreditInfo.clientId]}"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
                              integerOnly="true" maxIntegerDigits="14"/>
         </p:inputText>
     </td>
@@ -358,7 +361,7 @@
         <p:selectOneMenu id="dlgLoanPurpose"
                          value="#{creditFacPropose.newCreditDetailView.loanPurpose.id}"
                          size="1"
-                         required="true"
+                         required="#{not empty param[onSaveCreditInfo.clientId]}"
                          style="min-width: 300px; width: 300px; max-width: 300px;"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -389,7 +392,7 @@
                          value="#{creditFacPropose.newCreditDetailView.disbursement.id}"
                          size="1"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
-                         required="true"
+                         required="#{not empty param[onSaveCreditInfo.clientId]}"
                          disabled="#{creditFacPropose.modeEdit}">
             <f:selectItems value="#{creditFacPropose.disbursementList}"
                            var="disbursementItem"
