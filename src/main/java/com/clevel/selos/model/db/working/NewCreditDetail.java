@@ -18,6 +18,27 @@ public class NewCreditDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_CREDIT_DET_ID")
     private long id;
 
+    @Column(name = "no_flag")
+    private int noFlag;
+
+    @Column(name = "guarantee_amount")
+    private BigDecimal guaranteeAmount;
+
+    @Column(name = "account_number")
+    private String accountNumber;
+
+    @Column(name = "account_name")
+    private String accountName;
+
+    @Column(name = "account_suf")
+    private String accountSuf ;
+
+    @Column(name = "request_type")
+    private int requestType;
+
+    @Column(name = "refinance")
+    private int isRefinance;
+
     @Column(name = "project_code")
     private String projectCode;
 
@@ -115,6 +136,17 @@ public class NewCreditDetail implements Serializable {
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
 
+    @Column(name = "type", nullable = false, columnDefinition = "int default 0")
+    private int type;
+
+    @ManyToOne
+    @JoinColumn(name = "new_guarantor_rel_id")
+    private NewGuarantorRelCredit newGuarantorRelCredit;
+
+    @ManyToOne
+    @JoinColumn(name = "new_collateral_rel_id")
+    private NewCollateralRelCredit newCollateralRelCredit;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -124,15 +156,13 @@ public class NewCreditDetail implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name = "create_user_id")
+    @JoinColumn(name="create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name = "modify_user_id")
+    @JoinColumn(name="modify_user_id")
     private User modifyBy;
 
-    @Column(name = "type", nullable = false, columnDefinition = "int default 0")
-    private int type;
 
     public long getId() {
         return id;
@@ -140,6 +170,38 @@ public class NewCreditDetail implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public String getProjectCode() {
@@ -358,45 +420,76 @@ public class NewCreditDetail implements Serializable {
         this.loanPurpose = loanPurpose;
     }
 
-    public NewCreditFacility getNewCreditFacility() {
-        return newCreditFacility;
+    public int getNoFlag() {
+        return noFlag;
     }
 
-    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
-        this.newCreditFacility = newCreditFacility;
+    public void setNoFlag(int noFlag) {
+        this.noFlag = noFlag;
     }
 
-
-    public Date getCreateDate() {
-        return createDate;
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public User getCreateBy() {
-        return createBy;
+    public String getAccountSuf() {
+        return accountSuf;
     }
 
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
     }
 
-    public User getModifyBy() {
-        return modifyBy;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public int getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(int requestType) {
+        this.requestType = requestType;
+    }
+
+    public int getRefinance() {
+        return isRefinance;
+    }
+
+    public void setRefinance(int refinance) {
+        isRefinance = refinance;
+    }
+
+    public int getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(int approved) {
+        isApproved = approved;
+    }
+
+    public NewGuarantorRelCredit getNewGuarantorRelCredit() {
+        return newGuarantorRelCredit;
+    }
+
+    public void setNewGuarantorRelCredit(NewGuarantorRelCredit newGuarantorRelCredit) {
+        this.newGuarantorRelCredit = newGuarantorRelCredit;
     }
 
     public List<NewCreditTierDetail> getProposeCreditTierDetailList() {
@@ -407,6 +500,15 @@ public class NewCreditDetail implements Serializable {
         this.proposeCreditTierDetailList = proposeCreditTierDetailList;
     }
 
+
+    public NewCreditFacility getNewCreditFacility() {
+        return newCreditFacility;
+    }
+
+    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
+        this.newCreditFacility = newCreditFacility;
+    }
+
     public int getType() {
         return type;
     }
@@ -415,44 +517,59 @@ public class NewCreditDetail implements Serializable {
         this.type = type;
     }
 
+
+    public NewCollateralRelCredit getNewCollateralRelCredit() {
+        return newCollateralRelCredit;
+    }
+
+    public void setNewCollateralRelCredit(NewCollateralRelCredit newCollateralRelCredit) {
+        this.newCollateralRelCredit = newCollateralRelCredit;
+    }
+
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("projectCode", projectCode).
-                append("productCode", productCode).
-                append("borrowerName", borrowerName).
-                append("limit", limit).
-                append("pcePercent", pcePercent).
-                append("pceAmount", pceAmount).
-                append("reducePriceFlag", reducePriceFlag).
-                append("reduceFrontEndFee", reduceFrontEndFee).
-                append("outstanding", outstanding).
-                append("standardPrice", standardPrice).
-                append("standardInterest", standardInterest).
-                append("suggestPrice", suggestPrice).
-                append("suggestInterest", suggestInterest).
-                append("frontEndFee", frontEndFee).
-                append("remark", remark).
-                append("holdLimitAmount", holdLimitAmount).
-                append("installment", installment).
-                append("finalPrice", finalPrice).
-                append("tenor", tenor).
-                append("purpose", purpose).
-                append("seq", seq).
-                append("productProgram", productProgram).
-                append("creditType", creditType).
-                append("standardBasePrice", standardBasePrice).
-                append("suggestBasePrice", suggestBasePrice).
-                append("disbursement", disbursement).
-                append("loanPurpose", loanPurpose).
-                append("newCreditFacility", newCreditFacility).
-                append("proposeCreditTierDetailList", proposeCreditTierDetailList).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                append("type", type).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("noFlag", noFlag)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
+                .append("requestType", requestType)
+                .append("isRefinance", isRefinance)
+                .append("projectCode", projectCode)
+                .append("productCode", productCode)
+                .append("borrowerName", borrowerName)
+                .append("limit", limit)
+                .append("pcePercent", pcePercent)
+                .append("pceAmount", pceAmount)
+                .append("reducePriceFlag", reducePriceFlag)
+                .append("reduceFrontEndFee", reduceFrontEndFee)
+                .append("outstanding", outstanding)
+                .append("standardPrice", standardPrice)
+                .append("standardInterest", standardInterest)
+                .append("suggestPrice", suggestPrice)
+                .append("suggestInterest", suggestInterest)
+                .append("frontEndFee", frontEndFee)
+                .append("remark", remark)
+                .append("holdLimitAmount", holdLimitAmount)
+                .append("installment", installment)
+                .append("finalPrice", finalPrice)
+                .append("tenor", tenor)
+                .append("purpose", purpose)
+                .append("seq", seq)
+                .append("isApproved", isApproved)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .append("standardBasePrice", standardBasePrice)
+                .append("suggestBasePrice", suggestBasePrice)
+                .append("disbursement", disbursement)
+                .append("loanPurpose", loanPurpose)
+                .append("newCreditFacility", newCreditFacility)
+                .append("proposeCreditTierDetailList", proposeCreditTierDetailList)
+                .append("type", type)
+                .append("newGuarantorRelCredit", newGuarantorRelCredit)
+                .append("newCollateralRelCredit", newCollateralRelCredit)
+                .toString();
     }
 }

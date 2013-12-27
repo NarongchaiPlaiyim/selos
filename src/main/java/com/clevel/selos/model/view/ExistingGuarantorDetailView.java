@@ -13,7 +13,7 @@ import java.util.List;
 public class ExistingGuarantorDetailView implements Serializable {
     private long id;
     private int no;
-    private String guarantorName;
+    private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
 
@@ -29,7 +29,7 @@ public class ExistingGuarantorDetailView implements Serializable {
     }
 
     public void reset() {
-        this.guarantorName = "";
+        this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
@@ -83,11 +83,11 @@ public class ExistingGuarantorDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public String getGuarantorName() {
+    public CustomerInfoView getGuarantorName() {
         return guarantorName;
     }
 
-    public void setGuarantorName(String guarantorName) {
+    public void setGuarantorName(CustomerInfoView guarantorName) {
         this.guarantorName = guarantorName;
     }
 

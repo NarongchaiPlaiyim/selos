@@ -70,7 +70,7 @@ public class BizInfoSummaryTransform extends Transform {
 //        log.info("find transformToModel district" + bizInfoSummaryView.getDistrict().getId());
 
         if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
-            district = districtDAO.findById(bizInfoSummaryView.getSubDistrict().getDistrict().getId());
+            district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
             log.info("find transformToModel findById  is " + district.toString());
             bizInfoSummary.setDistrict(district);
         }else{
@@ -260,13 +260,18 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummaryView.setProvince(new Province());
         }
 
+        log.info("find bizInfoSummary.getDistrict");
+
         if(bizInfoSummary.getDistrict() != null){
+            log.info( "bizInfoSummary.getDistrict is " + bizInfoSummary.getDistrict().getId()) ;
             bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         } else {
             bizInfoSummaryView.setDistrict(new District());
         }
+        log.info("find bizInfoSummary.setSubDistrict");
 
         if(bizInfoSummary.getSubDistrict() != null){
+            log.info( "bizInfoSummary.setSubDistrict is " + bizInfoSummary.getSubDistrict().getCode());
             bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         } else {
             bizInfoSummaryView.setSubDistrict(new SubDistrict());

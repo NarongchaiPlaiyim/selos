@@ -8,17 +8,18 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each
- * Java content interface and Java element interface
- * generated in the six package.
- * <p>An ObjectFactory allows you to programatically
- * construct new instances of the Java representation
- * for XML content. The Java representation of XML
- * content can consist of schema derived interfaces
- * and classes representing the binding of schema
- * type definitions, element declarations and model
- * groups.  Factory methods for each of these are
+ * This object contains factory methods for each 
+ * Java content interface and Java element interface 
+ * generated in the appraisal package. 
+ * <p>An ObjectFactory allows you to programatically 
+ * construct new instances of the Java representation 
+ * for XML content. The Java representation of XML 
+ * content can consist of schema derived interfaces 
+ * and classes representing the binding of schema 
+ * type definitions, element declarations and model 
+ * groups.  Factory methods for each of these are 
  * provided in this class.
+ * 
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -32,27 +33,15 @@ public class ObjectFactory {
     private final static QName _ApplicationModelRiskScoring_QNAME = new QName("http://www.tmbbank.com/enterprise/model", "applicationModelRiskScoring");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: six
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: appraisal
+     * 
      */
     public ObjectFactory() {
     }
 
     /**
-     * Create an instance of {@link DecisionServiceException }
-     */
-    public DecisionServiceException createDecisionServiceException() {
-        return new DecisionServiceException();
-    }
-
-    /**
-     * Create an instance of {@link DecisionServiceRequest }
-     */
-    public DecisionServiceRequest createDecisionServiceRequest() {
-        return new DecisionServiceRequest();
-    }
-
-    /**
      * Create an instance of {@link UnderwritingRequest }
+     * 
      */
     public UnderwritingRequest createUnderwritingRequest() {
         return new UnderwritingRequest();
@@ -60,13 +49,31 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UnderwritingApprovalRequestType }
+     * 
      */
     public UnderwritingApprovalRequestType createUnderwritingApprovalRequestType() {
         return new UnderwritingApprovalRequestType();
     }
 
     /**
+     * Create an instance of {@link DecisionServiceException }
+     * 
+     */
+    public DecisionServiceException createDecisionServiceException() {
+        return new DecisionServiceException();
+    }
+
+    /**
+     * Create an instance of {@link DecisionServiceRequest }
+     * 
+     */
+    public DecisionServiceRequest createDecisionServiceRequest() {
+        return new DecisionServiceRequest();
+    }
+
+    /**
      * Create an instance of {@link DecisionServiceResponse }
+     * 
      */
     public DecisionServiceResponse createDecisionServiceResponse() {
         return new DecisionServiceResponse();
@@ -74,6 +81,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UnderwritingApprovalResultType }
+     * 
      */
     public UnderwritingApprovalResultType createUnderwritingApprovalResultType() {
         return new UnderwritingApprovalResultType();
@@ -81,6 +89,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link B2ModelRiskScoringType }
+     * 
      */
     public B2ModelRiskScoringType createB2ModelRiskScoringType() {
         return new B2ModelRiskScoringType();
@@ -88,6 +97,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EGTServiceType }
+     * 
      */
     public EGTServiceType createEGTServiceType() {
         return new EGTServiceType();
@@ -95,6 +105,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ApplicationModelRiskScoringType }
+     * 
      */
     public ApplicationModelRiskScoringType createApplicationModelRiskScoringType() {
         return new ApplicationModelRiskScoringType();
@@ -102,6 +113,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SMEBehaviorModelRiskScoringType }
+     * 
      */
     public SMEBehaviorModelRiskScoringType createSMEBehaviorModelRiskScoringType() {
         return new SMEBehaviorModelRiskScoringType();
@@ -109,6 +121,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CureModelRiskScoringType }
+     * 
      */
     public CureModelRiskScoringType createCureModelRiskScoringType() {
         return new CureModelRiskScoringType();
@@ -116,6 +129,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BorrowerType }
+     * 
      */
     public BorrowerType createBorrowerType() {
         return new BorrowerType();
@@ -123,6 +137,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link IncomeType }
+     * 
      */
     public IncomeType createIncomeType() {
         return new IncomeType();
@@ -130,6 +145,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ThirdPartyPledgorType }
+     * 
      */
     public ThirdPartyPledgorType createThirdPartyPledgorType() {
         return new ThirdPartyPledgorType();
@@ -137,6 +153,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProjectType }
+     * 
      */
     public ProjectType createProjectType() {
         return new ProjectType();
@@ -144,6 +161,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProductType }
+     * 
      */
     public ProductType createProductType() {
         return new ProductType();
@@ -151,6 +169,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LitigationDetailType }
+     * 
      */
     public LitigationDetailType createLitigationDetailType() {
         return new LitigationDetailType();
@@ -158,6 +177,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BaseRateType }
+     * 
      */
     public BaseRateType createBaseRateType() {
         return new BaseRateType();
@@ -165,6 +185,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DocumentSetType }
+     * 
      */
     public DocumentSetType createDocumentSetType() {
         return new DocumentSetType();
@@ -172,6 +193,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AccountType }
+     * 
      */
     public AccountType createAccountType() {
         return new AccountType();
@@ -179,6 +201,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ApplicationType }
+     * 
      */
     public ApplicationType createApplicationType() {
         return new ApplicationType();
@@ -186,6 +209,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NCBGenericIndividualBureauScoreType }
+     * 
      */
     public NCBGenericIndividualBureauScoreType createNCBGenericIndividualBureauScoreType() {
         return new NCBGenericIndividualBureauScoreType();
@@ -193,6 +217,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WarningCodeFullMatchedType }
+     * 
      */
     public WarningCodeFullMatchedType createWarningCodeFullMatchedType() {
         return new WarningCodeFullMatchedType();
@@ -200,6 +225,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link IBNRModelTransactionType }
+     * 
      */
     public IBNRModelTransactionType createIBNRModelTransactionType() {
         return new IBNRModelTransactionType();
@@ -207,6 +233,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NCBAccountType }
+     * 
      */
     public NCBAccountType createNCBAccountType() {
         return new NCBAccountType();
@@ -214,6 +241,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EmploymentType }
+     * 
      */
     public EmploymentType createEmploymentType() {
         return new EmploymentType();
@@ -221,6 +249,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GuarantorType }
+     * 
      */
     public GuarantorType createGuarantorType() {
         return new GuarantorType();
@@ -228,6 +257,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ICModelTransactionType }
+     * 
      */
     public ICModelTransactionType createICModelTransactionType() {
         return new ICModelTransactionType();
@@ -235,6 +265,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CampaignType }
+     * 
      */
     public CampaignType createCampaignType() {
         return new CampaignType();
@@ -242,6 +273,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CreditFacilityType }
+     * 
      */
     public CreditFacilityType createCreditFacilityType() {
         return new CreditFacilityType();
@@ -249,6 +281,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SMEBehavioralScoreResultType }
+     * 
      */
     public SMEBehavioralScoreResultType createSMEBehavioralScoreResultType() {
         return new SMEBehavioralScoreResultType();
@@ -256,6 +289,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DelinquencyType }
+     * 
      */
     public DelinquencyType createDelinquencyType() {
         return new DelinquencyType();
@@ -263,6 +297,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ScoreType }
+     * 
      */
     public ScoreType createScoreType() {
         return new ScoreType();
@@ -270,6 +305,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MessageType }
+     * 
      */
     public MessageType createMessageType() {
         return new MessageType();
@@ -277,6 +313,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CureTransactionType }
+     * 
      */
     public CureTransactionType createCureTransactionType() {
         return new CureTransactionType();
@@ -284,6 +321,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NCBEnquiryType }
+     * 
      */
     public NCBEnquiryType createNCBEnquiryType() {
         return new NCBEnquiryType();
@@ -291,6 +329,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PricingTierType }
+     * 
      */
     public PricingTierType createPricingTierType() {
         return new PricingTierType();
@@ -298,6 +337,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProductProgramType }
+     * 
      */
     public ProductProgramType createProductProgramType() {
         return new ProductProgramType();
@@ -305,6 +345,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AttributeType }
+     * 
      */
     public AttributeType createAttributeType() {
         return new AttributeType();
@@ -312,6 +353,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OtherLoanStatusType }
+     * 
      */
     public OtherLoanStatusType createOtherLoanStatusType() {
         return new OtherLoanStatusType();
@@ -319,6 +361,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FeeType }
+     * 
      */
     public FeeType createFeeType() {
         return new FeeType();
@@ -326,6 +369,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WarningCodePartialMatchedType }
+     * 
      */
     public WarningCodePartialMatchedType createWarningCodePartialMatchedType() {
         return new WarningCodePartialMatchedType();
@@ -333,6 +377,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AppraisalType }
+     * 
      */
     public AppraisalType createAppraisalType() {
         return new AppraisalType();
@@ -340,6 +385,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DebtType }
+     * 
      */
     public DebtType createDebtType() {
         return new DebtType();
@@ -347,6 +393,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link IndividualType }
+     * 
      */
     public IndividualType createIndividualType() {
         return new IndividualType();
@@ -354,6 +401,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BankruptcyDetailType }
+     * 
      */
     public BankruptcyDetailType createBankruptcyDetailType() {
         return new BankruptcyDetailType();
@@ -361,6 +409,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TMBAccountsReportType }
+     * 
      */
     public TMBAccountsReportType createTMBAccountsReportType() {
         return new TMBAccountsReportType();
@@ -368,6 +417,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BSCFModelTransactionType }
+     * 
      */
     public BSCFModelTransactionType createBSCFModelTransactionType() {
         return new BSCFModelTransactionType();
@@ -375,6 +425,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SMEBehavioralScoreRequestType }
+     * 
      */
     public SMEBehavioralScoreRequestType createSMEBehavioralScoreRequestType() {
         return new SMEBehavioralScoreRequestType();
@@ -382,6 +433,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DocumentType }
+     * 
      */
     public DocumentType createDocumentType() {
         return new DocumentType();
@@ -389,6 +441,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CollateralType }
+     * 
      */
     public CollateralType createCollateralType() {
         return new CollateralType();
@@ -396,6 +449,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResultType }
+     * 
      */
     public ResultType createResultType() {
         return new ResultType();
@@ -403,6 +457,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PricingType }
+     * 
      */
     public PricingType createPricingType() {
         return new PricingType();
@@ -410,6 +465,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DomainGroupType }
+     * 
      */
     public DomainGroupType createDomainGroupType() {
         return new DomainGroupType();
@@ -417,6 +473,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DeveloperType }
+     * 
      */
     public DeveloperType createDeveloperType() {
         return new DeveloperType();
@@ -424,6 +481,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SMEBehaviorScoreTransactionType }
+     * 
      */
     public SMEBehaviorScoreTransactionType createSMEBehaviorScoreTransactionType() {
         return new SMEBehaviorScoreTransactionType();
@@ -431,6 +489,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BusinessType }
+     * 
      */
     public BusinessType createBusinessType() {
         return new BusinessType();
@@ -438,6 +497,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SELOSProductProgramType }
+     * 
      */
     public SELOSProductProgramType createSELOSProductProgramType() {
         return new SELOSProductProgramType();
@@ -445,6 +505,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LegalEntityType }
+     * 
      */
     public LegalEntityType createLegalEntityType() {
         return new LegalEntityType();
@@ -452,6 +513,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link B2ModelTransactionType }
+     * 
      */
     public B2ModelTransactionType createB2ModelTransactionType() {
         return new B2ModelTransactionType();
@@ -459,6 +521,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FraudDetailType }
+     * 
      */
     public FraudDetailType createFraudDetailType() {
         return new FraudDetailType();
@@ -466,6 +529,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NCBReportType }
+     * 
      */
     public NCBReportType createNCBReportType() {
         return new NCBReportType();
@@ -473,13 +537,15 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RiskModelType }
+     * 
      */
     public RiskModelType createRiskModelType() {
         return new RiskModelType();
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link EGTServiceType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EGTServiceType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "EGTService")
     public JAXBElement<EGTServiceType> createEGTService(EGTServiceType value) {
@@ -487,7 +553,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link B2ModelRiskScoringType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link B2ModelRiskScoringType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "B2ModelRiskScoring")
     public JAXBElement<B2ModelRiskScoringType> createB2ModelRiskScoring(B2ModelRiskScoringType value) {
@@ -495,7 +562,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link UnderwritingApprovalResultType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link UnderwritingApprovalResultType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "underwritingApprovalResult")
     public JAXBElement<UnderwritingApprovalResultType> createUnderwritingApprovalResult(UnderwritingApprovalResultType value) {
@@ -503,7 +571,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link UnderwritingApprovalRequestType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link UnderwritingApprovalRequestType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "underwritingApprovalRequest")
     public JAXBElement<UnderwritingApprovalRequestType> createUnderwritingApprovalRequest(UnderwritingApprovalRequestType value) {
@@ -511,7 +580,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link CureModelRiskScoringType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link CureModelRiskScoringType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "cureModelRiskScoring")
     public JAXBElement<CureModelRiskScoringType> createCureModelRiskScoring(CureModelRiskScoringType value) {
@@ -519,7 +589,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link SMEBehaviorModelRiskScoringType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link SMEBehaviorModelRiskScoringType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "smeBehaviorModelRiskScoring")
     public JAXBElement<SMEBehaviorModelRiskScoringType> createSmeBehaviorModelRiskScoring(SMEBehaviorModelRiskScoringType value) {
@@ -527,7 +598,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link ApplicationModelRiskScoringType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link ApplicationModelRiskScoringType }{@code >}}
+     * 
      */
     @XmlElementDecl(namespace = "http://www.tmbbank.com/enterprise/model", name = "applicationModelRiskScoring")
     public JAXBElement<ApplicationModelRiskScoringType> createApplicationModelRiskScoring(ApplicationModelRiskScoringType value) {

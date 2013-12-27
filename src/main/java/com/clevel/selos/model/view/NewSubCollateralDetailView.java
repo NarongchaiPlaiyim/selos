@@ -24,6 +24,7 @@ public class NewSubCollateralDetailView {
     private List<CustomerInfoView> collateralOwnerUWList;
     private MortgageType mortgageType;
     private List<MortgageType> mortgageList;
+    private long relatedWithId;
     private List<NewSubCollateralDetailView> relatedWithList;
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
@@ -205,6 +206,14 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerUW = collateralOwnerUW;
     }
 
+    public long getRelatedWithId() {
+        return relatedWithId;
+    }
+
+    public void setRelatedWithId(long relatedWithId) {
+        this.relatedWithId = relatedWithId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -216,9 +225,11 @@ public class NewSubCollateralDetailView {
                 .append("titleDeed", titleDeed)
                 .append("collateralOwner", collateralOwner)
                 .append("collateralOwnerAAD", collateralOwnerAAD)
+                .append("collateralOwnerUW", collateralOwnerUW)
                 .append("collateralOwnerUWList", collateralOwnerUWList)
                 .append("mortgageType", mortgageType)
                 .append("mortgageList", mortgageList)
+                .append("relatedWithId", relatedWithId)
                 .append("relatedWithList", relatedWithList)
                 .append("appraisalValue", appraisalValue)
                 .append("mortgageValue", mortgageValue)

@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for ProductType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="ProductType">
  *   &lt;complexContent>
@@ -67,53 +71,55 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProductType", propOrder = {
-        "id",
-        "lendingType",
-        "productType",
-        "productCode",
-        "productProgram",
-        "productName",
-        "loanLimitAmount",
-        "pricingMode",
-        "pricing",
-        "loanToValueRatio",
-        "mrtaFlag",
-        "mrtaAmount",
-        "postponeRegistrationMode",
-        "maxCreditLimitByDSR",
-        "maxCreditLimitByDTI",
-        "maxCreditLimitByMaxLTV",
-        "maxCreditLimitByProductProgram",
-        "maxCreditLimitByBOTRegulation",
-        "requestedCreditLimit",
-        "recommendedCreditLimit",
-        "creditLimit",
-        "requestedCardType",
-        "cardType",
-        "dateOfFinishTenor",
-        "requestedTenor",
-        "tenor",
-        "minTenor",
-        "maxTenor",
-        "topUpAccountNumber",
-        "topUpAmount",
-        "loanType",
-        "outstandAmtOfRefinancedLoan",
-        "loanLimit",
-        "odLimit",
-        "comboLimit",
-        "campaign",
-        "monthlyInstallment",
-        "recommendedMonthlyInstallment",
-        "debtFactor",
-        "collateral",
-        "attribute",
-        "score",
-        "fee",
-        "selosProductProgram"
+    "id",
+    "lendingType",
+    "productType",
+    "productCode",
+    "productProgram",
+    "productName",
+    "loanLimitAmount",
+    "pricingMode",
+    "pricing",
+    "loanToValueRatio",
+    "mrtaFlag",
+    "mrtaAmount",
+    "postponeRegistrationMode",
+    "maxCreditLimitByDSR",
+    "maxCreditLimitByDTI",
+    "maxCreditLimitByMaxLTV",
+    "maxCreditLimitByProductProgram",
+    "maxCreditLimitByBOTRegulation",
+    "requestedCreditLimit",
+    "recommendedCreditLimit",
+    "creditLimit",
+    "requestedCardType",
+    "cardType",
+    "dateOfFinishTenor",
+    "requestedTenor",
+    "tenor",
+    "minTenor",
+    "maxTenor",
+    "topUpAccountNumber",
+    "topUpAmount",
+    "loanType",
+    "outstandAmtOfRefinancedLoan",
+    "loanLimit",
+    "odLimit",
+    "comboLimit",
+    "campaign",
+    "monthlyInstallment",
+    "recommendedMonthlyInstallment",
+    "debtFactor",
+    "collateral",
+    "attribute",
+    "score",
+    "fee",
+    "selosProductProgram"
 })
 public class ProductType {
 
@@ -166,9 +172,11 @@ public class ProductType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -176,9 +184,11 @@ public class ProductType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -186,9 +196,11 @@ public class ProductType {
 
     /**
      * Gets the value of the lendingType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getLendingType() {
         return lendingType;
@@ -196,9 +208,11 @@ public class ProductType {
 
     /**
      * Sets the value of the lendingType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setLendingType(String value) {
         this.lendingType = value;
@@ -206,9 +220,11 @@ public class ProductType {
 
     /**
      * Gets the value of the productType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProductType() {
         return productType;
@@ -216,9 +232,11 @@ public class ProductType {
 
     /**
      * Sets the value of the productType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProductType(String value) {
         this.productType = value;
@@ -226,9 +244,11 @@ public class ProductType {
 
     /**
      * Gets the value of the productCode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProductCode() {
         return productCode;
@@ -236,9 +256,11 @@ public class ProductType {
 
     /**
      * Sets the value of the productCode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProductCode(String value) {
         this.productCode = value;
@@ -246,9 +268,11 @@ public class ProductType {
 
     /**
      * Gets the value of the productProgram property.
-     *
-     * @return possible object is
-     *         {@link ProductProgramType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link ProductProgramType }
+     *     
      */
     public ProductProgramType getProductProgram() {
         return productProgram;
@@ -256,9 +280,11 @@ public class ProductType {
 
     /**
      * Sets the value of the productProgram property.
-     *
-     * @param value allowed object is
-     *              {@link ProductProgramType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ProductProgramType }
+     *     
      */
     public void setProductProgram(ProductProgramType value) {
         this.productProgram = value;
@@ -266,9 +292,11 @@ public class ProductType {
 
     /**
      * Gets the value of the productName property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getProductName() {
         return productName;
@@ -276,9 +304,11 @@ public class ProductType {
 
     /**
      * Sets the value of the productName property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setProductName(String value) {
         this.productName = value;
@@ -286,9 +316,11 @@ public class ProductType {
 
     /**
      * Gets the value of the loanLimitAmount property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLoanLimitAmount() {
         return loanLimitAmount;
@@ -296,9 +328,11 @@ public class ProductType {
 
     /**
      * Sets the value of the loanLimitAmount property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLoanLimitAmount(BigDecimal value) {
         this.loanLimitAmount = value;
@@ -306,9 +340,11 @@ public class ProductType {
 
     /**
      * Gets the value of the pricingMode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPricingMode() {
         return pricingMode;
@@ -316,9 +352,11 @@ public class ProductType {
 
     /**
      * Sets the value of the pricingMode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPricingMode(String value) {
         this.pricingMode = value;
@@ -326,9 +364,11 @@ public class ProductType {
 
     /**
      * Gets the value of the pricing property.
-     *
-     * @return possible object is
-     *         {@link PricingType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link PricingType }
+     *     
      */
     public PricingType getPricing() {
         return pricing;
@@ -336,9 +376,11 @@ public class ProductType {
 
     /**
      * Sets the value of the pricing property.
-     *
-     * @param value allowed object is
-     *              {@link PricingType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PricingType }
+     *     
      */
     public void setPricing(PricingType value) {
         this.pricing = value;
@@ -346,9 +388,11 @@ public class ProductType {
 
     /**
      * Gets the value of the loanToValueRatio property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLoanToValueRatio() {
         return loanToValueRatio;
@@ -356,9 +400,11 @@ public class ProductType {
 
     /**
      * Sets the value of the loanToValueRatio property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLoanToValueRatio(BigDecimal value) {
         this.loanToValueRatio = value;
@@ -366,9 +412,11 @@ public class ProductType {
 
     /**
      * Gets the value of the mrtaFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isMrtaFlag() {
         return mrtaFlag;
@@ -376,9 +424,11 @@ public class ProductType {
 
     /**
      * Sets the value of the mrtaFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setMrtaFlag(Boolean value) {
         this.mrtaFlag = value;
@@ -386,9 +436,11 @@ public class ProductType {
 
     /**
      * Gets the value of the mrtaAmount property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMrtaAmount() {
         return mrtaAmount;
@@ -396,9 +448,11 @@ public class ProductType {
 
     /**
      * Sets the value of the mrtaAmount property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMrtaAmount(BigDecimal value) {
         this.mrtaAmount = value;
@@ -406,9 +460,11 @@ public class ProductType {
 
     /**
      * Gets the value of the postponeRegistrationMode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPostponeRegistrationMode() {
         return postponeRegistrationMode;
@@ -416,9 +472,11 @@ public class ProductType {
 
     /**
      * Sets the value of the postponeRegistrationMode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPostponeRegistrationMode(String value) {
         this.postponeRegistrationMode = value;
@@ -426,9 +484,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxCreditLimitByDSR property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimitByDSR() {
         return maxCreditLimitByDSR;
@@ -436,9 +496,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxCreditLimitByDSR property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimitByDSR(BigDecimal value) {
         this.maxCreditLimitByDSR = value;
@@ -446,9 +508,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxCreditLimitByDTI property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimitByDTI() {
         return maxCreditLimitByDTI;
@@ -456,9 +520,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxCreditLimitByDTI property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimitByDTI(BigDecimal value) {
         this.maxCreditLimitByDTI = value;
@@ -466,9 +532,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxCreditLimitByMaxLTV property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimitByMaxLTV() {
         return maxCreditLimitByMaxLTV;
@@ -476,9 +544,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxCreditLimitByMaxLTV property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimitByMaxLTV(BigDecimal value) {
         this.maxCreditLimitByMaxLTV = value;
@@ -486,9 +556,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxCreditLimitByProductProgram property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimitByProductProgram() {
         return maxCreditLimitByProductProgram;
@@ -496,9 +568,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxCreditLimitByProductProgram property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimitByProductProgram(BigDecimal value) {
         this.maxCreditLimitByProductProgram = value;
@@ -506,9 +580,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxCreditLimitByBOTRegulation property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMaxCreditLimitByBOTRegulation() {
         return maxCreditLimitByBOTRegulation;
@@ -516,9 +592,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxCreditLimitByBOTRegulation property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMaxCreditLimitByBOTRegulation(BigDecimal value) {
         this.maxCreditLimitByBOTRegulation = value;
@@ -526,9 +604,11 @@ public class ProductType {
 
     /**
      * Gets the value of the requestedCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getRequestedCreditLimit() {
         return requestedCreditLimit;
@@ -536,9 +616,11 @@ public class ProductType {
 
     /**
      * Sets the value of the requestedCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setRequestedCreditLimit(BigDecimal value) {
         this.requestedCreditLimit = value;
@@ -546,9 +628,11 @@ public class ProductType {
 
     /**
      * Gets the value of the recommendedCreditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getRecommendedCreditLimit() {
         return recommendedCreditLimit;
@@ -556,9 +640,11 @@ public class ProductType {
 
     /**
      * Sets the value of the recommendedCreditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setRecommendedCreditLimit(BigDecimal value) {
         this.recommendedCreditLimit = value;
@@ -566,9 +652,11 @@ public class ProductType {
 
     /**
      * Gets the value of the creditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getCreditLimit() {
         return creditLimit;
@@ -576,9 +664,11 @@ public class ProductType {
 
     /**
      * Sets the value of the creditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setCreditLimit(BigDecimal value) {
         this.creditLimit = value;
@@ -586,9 +676,11 @@ public class ProductType {
 
     /**
      * Gets the value of the requestedCardType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getRequestedCardType() {
         return requestedCardType;
@@ -596,9 +688,11 @@ public class ProductType {
 
     /**
      * Sets the value of the requestedCardType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setRequestedCardType(String value) {
         this.requestedCardType = value;
@@ -606,9 +700,11 @@ public class ProductType {
 
     /**
      * Gets the value of the cardType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCardType() {
         return cardType;
@@ -616,9 +712,11 @@ public class ProductType {
 
     /**
      * Sets the value of the cardType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCardType(String value) {
         this.cardType = value;
@@ -626,9 +724,11 @@ public class ProductType {
 
     /**
      * Gets the value of the dateOfFinishTenor property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfFinishTenor() {
         return dateOfFinishTenor;
@@ -636,9 +736,11 @@ public class ProductType {
 
     /**
      * Sets the value of the dateOfFinishTenor property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfFinishTenor(XMLGregorianCalendar value) {
         this.dateOfFinishTenor = value;
@@ -646,9 +748,11 @@ public class ProductType {
 
     /**
      * Gets the value of the requestedTenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getRequestedTenor() {
         return requestedTenor;
@@ -656,9 +760,11 @@ public class ProductType {
 
     /**
      * Sets the value of the requestedTenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setRequestedTenor(Integer value) {
         this.requestedTenor = value;
@@ -666,9 +772,11 @@ public class ProductType {
 
     /**
      * Gets the value of the tenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getTenor() {
         return tenor;
@@ -676,9 +784,11 @@ public class ProductType {
 
     /**
      * Sets the value of the tenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setTenor(Integer value) {
         this.tenor = value;
@@ -686,9 +796,11 @@ public class ProductType {
 
     /**
      * Gets the value of the minTenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMinTenor() {
         return minTenor;
@@ -696,9 +808,11 @@ public class ProductType {
 
     /**
      * Sets the value of the minTenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMinTenor(Integer value) {
         this.minTenor = value;
@@ -706,9 +820,11 @@ public class ProductType {
 
     /**
      * Gets the value of the maxTenor property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getMaxTenor() {
         return maxTenor;
@@ -716,9 +832,11 @@ public class ProductType {
 
     /**
      * Sets the value of the maxTenor property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setMaxTenor(Integer value) {
         this.maxTenor = value;
@@ -726,9 +844,11 @@ public class ProductType {
 
     /**
      * Gets the value of the topUpAccountNumber property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getTopUpAccountNumber() {
         return topUpAccountNumber;
@@ -736,9 +856,11 @@ public class ProductType {
 
     /**
      * Sets the value of the topUpAccountNumber property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setTopUpAccountNumber(String value) {
         this.topUpAccountNumber = value;
@@ -746,9 +868,11 @@ public class ProductType {
 
     /**
      * Gets the value of the topUpAmount property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getTopUpAmount() {
         return topUpAmount;
@@ -756,9 +880,11 @@ public class ProductType {
 
     /**
      * Sets the value of the topUpAmount property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setTopUpAmount(BigDecimal value) {
         this.topUpAmount = value;
@@ -766,9 +892,11 @@ public class ProductType {
 
     /**
      * Gets the value of the loanType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getLoanType() {
         return loanType;
@@ -776,9 +904,11 @@ public class ProductType {
 
     /**
      * Sets the value of the loanType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setLoanType(String value) {
         this.loanType = value;
@@ -786,9 +916,11 @@ public class ProductType {
 
     /**
      * Gets the value of the outstandAmtOfRefinancedLoan property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getOutstandAmtOfRefinancedLoan() {
         return outstandAmtOfRefinancedLoan;
@@ -796,9 +928,11 @@ public class ProductType {
 
     /**
      * Sets the value of the outstandAmtOfRefinancedLoan property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setOutstandAmtOfRefinancedLoan(BigDecimal value) {
         this.outstandAmtOfRefinancedLoan = value;
@@ -806,9 +940,11 @@ public class ProductType {
 
     /**
      * Gets the value of the loanLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getLoanLimit() {
         return loanLimit;
@@ -816,9 +952,11 @@ public class ProductType {
 
     /**
      * Sets the value of the loanLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setLoanLimit(BigDecimal value) {
         this.loanLimit = value;
@@ -826,9 +964,11 @@ public class ProductType {
 
     /**
      * Gets the value of the odLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getOdLimit() {
         return odLimit;
@@ -836,9 +976,11 @@ public class ProductType {
 
     /**
      * Sets the value of the odLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setOdLimit(BigDecimal value) {
         this.odLimit = value;
@@ -846,9 +988,11 @@ public class ProductType {
 
     /**
      * Gets the value of the comboLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getComboLimit() {
         return comboLimit;
@@ -856,9 +1000,11 @@ public class ProductType {
 
     /**
      * Sets the value of the comboLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setComboLimit(BigDecimal value) {
         this.comboLimit = value;
@@ -866,9 +1012,11 @@ public class ProductType {
 
     /**
      * Gets the value of the campaign property.
-     *
-     * @return possible object is
-     *         {@link CampaignType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link CampaignType }
+     *     
      */
     public CampaignType getCampaign() {
         return campaign;
@@ -876,9 +1024,11 @@ public class ProductType {
 
     /**
      * Sets the value of the campaign property.
-     *
-     * @param value allowed object is
-     *              {@link CampaignType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CampaignType }
+     *     
      */
     public void setCampaign(CampaignType value) {
         this.campaign = value;
@@ -886,9 +1036,11 @@ public class ProductType {
 
     /**
      * Gets the value of the monthlyInstallment property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getMonthlyInstallment() {
         return monthlyInstallment;
@@ -896,9 +1048,11 @@ public class ProductType {
 
     /**
      * Sets the value of the monthlyInstallment property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setMonthlyInstallment(BigDecimal value) {
         this.monthlyInstallment = value;
@@ -906,9 +1060,11 @@ public class ProductType {
 
     /**
      * Gets the value of the recommendedMonthlyInstallment property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getRecommendedMonthlyInstallment() {
         return recommendedMonthlyInstallment;
@@ -916,9 +1072,11 @@ public class ProductType {
 
     /**
      * Sets the value of the recommendedMonthlyInstallment property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setRecommendedMonthlyInstallment(BigDecimal value) {
         this.recommendedMonthlyInstallment = value;
@@ -926,9 +1084,11 @@ public class ProductType {
 
     /**
      * Gets the value of the debtFactor property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getDebtFactor() {
         return debtFactor;
@@ -936,9 +1096,11 @@ public class ProductType {
 
     /**
      * Sets the value of the debtFactor property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setDebtFactor(BigDecimal value) {
         this.debtFactor = value;
@@ -946,23 +1108,25 @@ public class ProductType {
 
     /**
      * Gets the value of the collateral property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the collateral property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getCollateral().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CollateralType }
+     * 
+     * 
      */
     public List<CollateralType> getCollateral() {
         if (collateral == null) {
@@ -973,23 +1137,25 @@ public class ProductType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {
@@ -1000,23 +1166,25 @@ public class ProductType {
 
     /**
      * Gets the value of the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
+     * 
+     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -1027,23 +1195,25 @@ public class ProductType {
 
     /**
      * Gets the value of the fee property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the fee property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getFee().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link FeeType }
+     * 
+     * 
      */
     public List<FeeType> getFee() {
         if (fee == null) {
@@ -1054,23 +1224,25 @@ public class ProductType {
 
     /**
      * Gets the value of the selosProductProgram property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the selosProductProgram property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getSelosProductProgram().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link SELOSProductProgramType }
+     * 
+     * 
      */
     public List<SELOSProductProgramType> getSelosProductProgram() {
         if (selosProductProgram == null) {

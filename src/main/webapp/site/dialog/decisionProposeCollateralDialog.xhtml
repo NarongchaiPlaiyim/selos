@@ -14,6 +14,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:inputText id="jobID" value="#{decision.selectedAppProposeCollateral.jobID}"
+                                 onclick="this.select()"
                                  required="true"/>
                 </td>
             </tr>
@@ -87,7 +88,10 @@
                     <p:outputLabel value="#{msg.get('app.decision.label.UWRemark')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea rows="3" cols="100" value="#{decision.selectedAppProposeCollateral.uwRemark}"/>
+                    <p:inputTextarea value="#{decision.selectedAppProposeCollateral.uwRemark}"
+                                     rows="3" cols="100"
+                                     onkeydown="return onKeyDownText(event);"
+                                     onkeypress="return onKeyPressText(event);"/>
                 </td>
             </tr>
             <tr>
@@ -147,11 +151,11 @@
                         </p:column>
 
                         <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeDetailItem.productProgram}"/>
+                            <h:outputText value="#{creditTypeDetailItem.productProgram.name}"/>
                         </p:column>
 
                         <p:column styleClass="left">
-                            <h:outputText value="#{creditTypeDetailItem.creditFacility}"/>
+                            <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
                         </p:column>
 
                         <p:column styleClass="right">
@@ -169,7 +173,9 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:inputTextarea value="#{decision.selectedAppProposeCollateral.bdmComments}"
-                                     cols="100" rows="3"/>
+                                     cols="100" rows="3"
+                                     onkeydown="return onKeyDownText(event);"
+                                     onkeypress="return onKeyPressText(event);"/>
                 </td>
             </tr>
             <tr>
@@ -220,6 +226,9 @@
                     </td>
                     <td class="left">
                         <p:inputText id="dlgExistingCredit" value="#{collHeadDetail.existingCredit}"
+                                     onclick="this.select()"
+                                     onkeydown="return onKeyDownMoney(event);"
+                                     onkeypress="return onKeyPressMoney(event);"
                                      styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             <p:ajax event="blur" update="@this"/>
@@ -231,7 +240,8 @@
                         <p:outputLabel for="dlgTitleDeed" value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
                     </td>
                     <td class="left">
-                        <p:inputText id="dlgTitleDeed" value="#{collHeadDetail.titleDeed}"/>
+                        <p:inputText id="dlgTitleDeed" value="#{collHeadDetail.titleDeed}"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                     </td>
                 </tr>
                 <tr>
@@ -239,7 +249,9 @@
                         <p:outputLabel for="dlgCollLocation" value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
                     </td>
                     <td class="left">
-                        <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}" style="width: 250px;"/>
+                        <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}"
+                                     onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
+                                     style="width: 250px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -248,6 +260,8 @@
                     </td>
                     <td class="left">
                         <p:inputText id="dlgAppraisalValue" value="#{collHeadDetail.appraisalValue}"
+                                     onclick="this.select()"
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                      styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             <p:ajax event="blur" update="@this"/>
@@ -293,6 +307,7 @@
                                 action="#{decision.onAddSubCollateral()}"
                                 update=":subCollateralDlgForm"
                                 oncomplete="subCollateralInfoDlg.show();">
+
                             <f:setPropertyActionListener value="#{i.index}"
                                                          target="#{decision.rowIndexCollHead}"/>
                         </p:commandButton>
@@ -431,7 +446,7 @@
                                      value="#{msg.get('app.button.ok')}"
                                      action="#{decision.onSaveProposeCollInfo()}"
                                      process="@form"
-                                     update=":collateralDlgForm,:frmMain"
+                                     update=":collateralDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'proposeCollateralDlg')"/>
 
                     <p:commandButton value="#{msg.get('app.button.cancel')}"

@@ -191,12 +191,12 @@
                                                 <p:column headerText="" style="min-width: 30px; max-width: 30px" styleClass="left">
                                                     <p:outputLabel value="#{rowIndex+1}"/>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.dep')}" style="min-width: 150px; max-width: 150px">
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.dep')}" style="min-width: 150px; max-width: 150px" styleClass="right">
                                                     <p:outputLabel value="#{pledgeAC.acNumberofDep}" >
 
                                                     </p:outputLabel>
                                                 </p:column>
-                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.holdAmount')}" style="min-width: 200px; max-width: 200px">
+                                                <p:column headerText="#{msg.get('app.pledgeDetail.content.table.th.holdAmount')}" style="min-width: 200px; max-width: 200px" styleClass="right">
                                                     <p:outputLabel value="#{pledgeAC.acHoldAmount}" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     </p:outputLabel>
@@ -216,7 +216,9 @@
                                                 </p:column>
                                                 <p:columnGroup type="footer">
                                                     <p:row>
-                                                        <p:column colspan="2" footerText="#{msg.get('app.pledgeDetail.content.table.total.holdAmount')}" style="text-align:right" styleClass="summary_column"/>
+                                                        <p:column style="border-right: none !important;"  styleClass="summary_column"/>
+
+                                                        <p:column  footerText="#{msg.get('app.pledgeDetail.content.table.total.holdAmount')}" style="border-left: none !important;text-align:right" styleClass="summary_column"/>
                                                         <p:column style="text-align:right" styleClass="summary_column">
                                                             <f:facet name="footer">
                                                                 <p:outputLabel value="#{pledgeDetail.getTotalHoldAmount()}">

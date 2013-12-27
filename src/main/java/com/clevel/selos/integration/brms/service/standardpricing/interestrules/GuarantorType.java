@@ -1,19 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * <p>Java class for GuarantorType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="GuarantorType">
  *   &lt;complexContent>
@@ -30,15 +30,17 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GuarantorType", propOrder = {
-        "id",
-        "collateral",
-        "borrowerRelationship",
-        "businessOwnerFlag",
-        "familyRelativeOwnerFlag",
-        "attribute"
+    "id",
+    "collateral",
+    "borrowerRelationship",
+    "businessOwnerFlag",
+    "familyRelativeOwnerFlag",
+    "attribute"
 })
 public class GuarantorType {
 
@@ -53,9 +55,11 @@ public class GuarantorType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -63,9 +67,11 @@ public class GuarantorType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -73,9 +79,11 @@ public class GuarantorType {
 
     /**
      * Gets the value of the collateral property.
-     *
-     * @return possible object is
-     *         {@link CollateralType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link CollateralType }
+     *     
      */
     public CollateralType getCollateral() {
         return collateral;
@@ -83,9 +91,11 @@ public class GuarantorType {
 
     /**
      * Sets the value of the collateral property.
-     *
-     * @param value allowed object is
-     *              {@link CollateralType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CollateralType }
+     *     
      */
     public void setCollateral(CollateralType value) {
         this.collateral = value;
@@ -93,9 +103,11 @@ public class GuarantorType {
 
     /**
      * Gets the value of the borrowerRelationship property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBorrowerRelationship() {
         return borrowerRelationship;
@@ -103,9 +115,11 @@ public class GuarantorType {
 
     /**
      * Sets the value of the borrowerRelationship property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBorrowerRelationship(String value) {
         this.borrowerRelationship = value;
@@ -113,9 +127,11 @@ public class GuarantorType {
 
     /**
      * Gets the value of the businessOwnerFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isBusinessOwnerFlag() {
         return businessOwnerFlag;
@@ -123,9 +139,11 @@ public class GuarantorType {
 
     /**
      * Sets the value of the businessOwnerFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setBusinessOwnerFlag(Boolean value) {
         this.businessOwnerFlag = value;
@@ -133,9 +151,11 @@ public class GuarantorType {
 
     /**
      * Gets the value of the familyRelativeOwnerFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isFamilyRelativeOwnerFlag() {
         return familyRelativeOwnerFlag;
@@ -143,9 +163,11 @@ public class GuarantorType {
 
     /**
      * Sets the value of the familyRelativeOwnerFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setFamilyRelativeOwnerFlag(Boolean value) {
         this.familyRelativeOwnerFlag = value;
@@ -153,23 +175,25 @@ public class GuarantorType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

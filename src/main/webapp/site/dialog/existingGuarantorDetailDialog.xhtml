@@ -14,15 +14,15 @@
                     </td>
                     <td style="width: 200px;">
                         <p:selectOneMenu id="guarantorName"
-                                         value="#{creditFacExisting.existingGuarantorDetailView.guarantorName}"
+                                         value="#{creditFacExisting.existingGuarantorDetailView.guarantorName.id}"
                                          size="1"
                                          style="width: 200px;">
                                          <!--required="true"-->
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{creditFacExisting.guarantorList}"
                                            var="guarantorList"
-                                           itemLabel="#{guarantorList.nameTh}"
-                                           itemValue="#{guarantorList.nameTh}"/>
+                                           itemLabel="#{guarantorList.firstNameTh}"
+                                           itemValue="#{guarantorList.id}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>

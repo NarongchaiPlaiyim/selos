@@ -157,6 +157,8 @@ public class CustomerInfoSummary implements Serializable {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
+        HttpSession session = FacesUtil.getSession(false);
+//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
@@ -170,6 +172,8 @@ public class CustomerInfoSummary implements Serializable {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
+        HttpSession session = FacesUtil.getSession(false);
+//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 

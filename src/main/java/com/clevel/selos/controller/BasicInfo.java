@@ -17,17 +17,18 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.rits.cloning.Cloner;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -187,6 +188,10 @@ public class BasicInfo extends MandatoryFieldsControl {
     private int tmpRefinanceIN;
     private int tmpRefinanceOUT;
     private int tmpApplyBA;
+
+    private String accDlg;
+
+    private String currentDateDDMMYY;
 
     public BasicInfo(){
     }
@@ -416,7 +421,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
     }
 
-    public void onAddAccount(){
+    public void onInitAddAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
@@ -434,9 +439,9 @@ public class BasicInfo extends MandatoryFieldsControl {
         modeForButton = ModeForButton.ADD;
     }
 
-    public void onEditAccount(){
-        basicInfoAccountView = new BasicInfoAccountView();
-        basicInfoAccountView = selectAccount;
+    public void onSelectEditAccount(){
+        Cloner cloner = new Cloner();
+        basicInfoAccountView = cloner.deepClone(selectAccount);
         onChangeAccountType();
 
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
@@ -458,7 +463,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void addAccount(){
+    public void onAddAccount(){
         if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
         }else{
@@ -503,15 +508,191 @@ public class BasicInfo extends MandatoryFieldsControl {
         context.addCallbackParam("functionComplete", complete);
     }
 
+    /*public void onSelectEditAccount(){
+        accDlg = "";
+        basicInfoAccountView = new BasicInfoAccountView();
+        Cloner cloner = new Cloner();
+        basicInfoAccountView = cloner.deepClone(selectAccount);
+        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getByShortName(basicInfoAccountView.getBankAccountTypeView().getShortName())));
+        onChangeAccountType();
+
+        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
+        for(OpenAccountPurpose oap : openAccountPurposeList){
+            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+            purposeView.setPurpose(oap);
+            basicInfoAccountPurposeViewList.add(purposeView);
+        }
+
+        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            if(biapv.isSelected()){
+                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
+                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
+                        purposeView.setSelected(true);
+                    }
+                }
+            }
+        }
+        modeForButton = ModeForButton.EDIT;
+    }*/
+
+    /*public void onAddAccount(){
+        accDlg = "";
+
+        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
+            basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
+        }else{
+            basicInfoAccountView.getBankAccountTypeView().setName("-");
+        }
+
+        if(basicInfoAccountView.getProduct().getId() != 0){
+            basicInfoAccountView.setProduct(openAccountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
+        }else{
+            basicInfoAccountView.getProduct().setName("-");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<BasicInfoAccountPurposeView> purposeViewTmp = new ArrayList<BasicInfoAccountPurposeView>();
+        for(BasicInfoAccountPurposeView ba : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            purposeViewTmp.add(ba);
+        }
+
+        basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
+        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
+            if(bia.isSelected()){
+                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
+                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
+                    stringBuilder.append(bia.getPurpose().getName());
+                }else{
+                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
+                    stringBuilder.append(", "+bia.getPurpose().getName());
+                }
+            }
+        }
+
+        //check existing
+        if(basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0){
+            int listIndex = 0;
+            for(BasicInfoAccountView basicAccView : basicInfoView.getBasicInfoAccountViews()){
+                if(modeForButton.equals(ModeForButton.EDIT)){ // edit
+                    if(rowIndex != listIndex){
+                        if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
+                            if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
+                                if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
+                                    if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
+                                        accDlg = "ui-state-error";
+                                        boolean complete = false;
+                                        RequestContext context = RequestContext.getCurrentInstance();
+                                        context.addCallbackParam("functionComplete", complete);
+                                        basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
+                                        return;
+                                    } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
+                                        boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
+                                        int arrayIndex = 0;
+                                        for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+                                            for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
+                                                if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
+                                                    arrayBoolean[arrayIndex] = true;
+                                                    break;
+                                                } else {
+                                                    arrayBoolean[arrayIndex] = false;
+                                                }
+                                            }
+                                            arrayIndex++;
+                                        }
+                                        for(boolean b : arrayBoolean){
+                                            if(!b){
+                                                break;
+                                            } else {
+                                                accDlg = "ui-state-error";
+                                                boolean complete = false;
+                                                RequestContext context = RequestContext.getCurrentInstance();
+                                                context.addCallbackParam("functionComplete", complete);
+                                                basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else { // add new
+                    if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
+                        if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
+                            if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
+                                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
+                                    accDlg = "ui-state-error";
+                                    boolean complete = false;
+                                    RequestContext context = RequestContext.getCurrentInstance();
+                                    context.addCallbackParam("functionComplete", complete);
+                                    basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
+                                    return;
+                                } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
+                                    boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
+                                    int arrayIndex = 0;
+                                    for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+                                        for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
+                                            if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
+                                                arrayBoolean[arrayIndex] = true;
+                                                break;
+                                            } else {
+                                                arrayBoolean[arrayIndex] = false;
+                                            }
+                                        }
+                                        arrayIndex++;
+                                    }
+                                    for(boolean b : arrayBoolean){
+                                        if(!b){
+                                            break;
+                                        } else {
+                                            accDlg = "ui-state-error";
+                                            boolean complete = false;
+                                            RequestContext context = RequestContext.getCurrentInstance();
+                                            context.addCallbackParam("functionComplete", complete);
+                                            basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                listIndex++;
+            }
+        }
+
+        if(!stringBuilder.toString().isEmpty()){
+            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
+        }else{
+            basicInfoAccountView.setPurposeForShow("-");
+        }
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
+        }else{
+            basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
+        }
+
+        boolean complete = true;        //Change only failed to save
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
+    }*/
+
     public void onDeleteAccount() {
         basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
+    }
+
+    public void onChangeAccountType(){
+        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
     }
 
     public void onSave(){
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
             messageHeader = "Save Basic Info Success.";
-            message = "Save Basic Info data success.";
+            message = "Save data in Basic Information success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
@@ -744,10 +925,6 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
     }
 
-    public void onChangeAccountType(){
-        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
-    }
-
     public void onRefreshInterfaceInfo(){
         try{
 //            messageHeader = "Refresh Interface Info Complete.";
@@ -776,6 +953,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             message = ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
     // Get Set
@@ -1473,5 +1654,22 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setDisBaPaymentMethod(boolean disBaPaymentMethod) {
         this.disBaPaymentMethod = disBaPaymentMethod;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public String getAccDlg() {
+        return accDlg;
+    }
+
+    public void setAccDlg(String accDlg) {
+        this.accDlg = accDlg;
     }
 }

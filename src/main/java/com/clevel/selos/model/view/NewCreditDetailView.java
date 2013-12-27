@@ -1,5 +1,7 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,9 +14,16 @@ import java.util.List;
 
 public class NewCreditDetailView implements Serializable {
     private long id;
+    private boolean noFlag;
+    private BigDecimal guaranteeAmount;
+    private String accountName;
+    private String accountNumber;
+    private String accountSuf;
+    private int useCount;
+    private int seq;
     private int requestType;
     private int isRefinance;
-    private ProductProgram  productProgram;
+    private ProductProgram productProgram;
     private CreditType creditType;
     private String productCode;
     private String projectCode;
@@ -33,28 +42,34 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
-    private Date createDate;
-    private Date modifyDate;
-    private User createBy;
-    private User modifyBy;
     private BigDecimal finalPrice;
     private BigDecimal tenor;
     private Disbursement disbursement;
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
-    private int seq;
     private int isApproved;
     private BigDecimal installment;
     private BigDecimal outstanding;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
 
-    public NewCreditDetailView(){
+    public NewCreditDetailView() {
         reset();
     }
 
-    public void reset(){
-        this.requestType=1;
-        this.isRefinance=1;
+    public void reset() {
+        this.noFlag = false;
+        this.guaranteeAmount = BigDecimal.ZERO;
+        this.accountName = "";
+        this.accountNumber = "";
+        this.accountSuf = "";
+        this.useCount = 0;
+        this.seq = 0;
+        this.requestType = RequestTypes.NEW.value();
+        this.isRefinance = RadioValue.NO.value();
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
         this.disbursement = new Disbursement();
@@ -65,8 +80,8 @@ public class NewCreditDetailView implements Serializable {
         this.limit = BigDecimal.ZERO;
         this.PCEPercent = BigDecimal.ZERO;
         this.PCEAmount = BigDecimal.ZERO;
-        this.installment=BigDecimal.ZERO;
-        this.outstanding=BigDecimal.ZERO;
+        this.installment = BigDecimal.ZERO;
+        this.outstanding = BigDecimal.ZERO;
         this.reducePriceFlag = false;
         this.reduceFrontEndFee = false;
         this.frontEndFee = BigDecimal.ZERO;
@@ -92,6 +107,38 @@ public class NewCreditDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public int getSeq() {
@@ -262,38 +309,6 @@ public class NewCreditDetailView implements Serializable {
         this.tenor = tenor;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
-    }
-
     public Disbursement getDisbursement() {
         return disbursement;
     }
@@ -374,9 +389,65 @@ public class NewCreditDetailView implements Serializable {
         this.outstanding = outstanding;
     }
 
+    public boolean isNoFlag() {
+        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("noFlag", noFlag)
+                .append("guaranteeAmount", guaranteeAmount)
+                .append("accountName", accountName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
+                .append("useCount", useCount)
+                .append("seq", seq)
                 .append("requestType", requestType)
                 .append("isRefinance", isRefinance)
                 .append("productProgram", productProgram)
@@ -398,17 +469,14 @@ public class NewCreditDetailView implements Serializable {
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
                 .append("finalPrice", finalPrice)
                 .append("tenor", tenor)
                 .append("disbursement", disbursement)
                 .append("loanPurpose", loanPurpose)
                 .append("purpose", purpose)
-                .append("seq", seq)
                 .append("isApproved", isApproved)
+                .append("installment", installment)
+                .append("outstanding", outstanding)
                 .append("newCreditTierDetailViewList", newCreditTierDetailViewList)
                 .toString();
     }

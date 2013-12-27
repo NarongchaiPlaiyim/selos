@@ -9,17 +9,18 @@
     <h:head>
         <title>Isa Report</title>
         <h:outputStylesheet name="css/style.css" />
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <!--<script type="text/javascript" language="javascript"-->
+                <!--src="#{request.contextPath}/resources/js/jquery.numeric.js"/>-->
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.numeric.js" />
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer">
             <div id="main_container">
-                <ui:include src="site/include/header_logo.xhtml"/>
+                <!--<ui:include src="site/include/header_logo.xhtml"/>-->
                 <ui:include src="site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
-                    <h:form id="useruploadForm" enctype="multipart/form-data">
+                    <h:form id="useruploadForm" >
                         <div class="body_lpane">
                             <div><label class="subject">Manage User</label></div>
                             <a class="step_border" href="manageUser.jsf">User Profile</a>
@@ -57,7 +58,7 @@
                                        Result File:
                                 </p:column>
                                 <p:column>
-                                      <p:commandLink value="#{o.resultFile}"  ajax="false">
+                                      <p:commandLink value="#{o.resultFile}"  ajax="false" update=":useruploadForm">
                                           <f:setPropertyActionListener value="#{o.resultFile}" target="#{isaUpload.downloadFilePart}"  />
                                           <p:fileDownload value="#{isaUpload.file}"/>
                                       </p:commandLink>

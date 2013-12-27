@@ -1,18 +1,22 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for NCBAccountType complex type.
- * <p/>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p/>
+ * 
  * <pre>
  * &lt;complexType name="NCBAccountType">
  *   &lt;complexContent>
@@ -74,60 +78,62 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NCBAccountType", propOrder = {
-        "id",
-        "memberShortName",
-        "ownershipIndicator",
-        "accountNumber",
-        "dateOpened",
-        "dateClosed",
-        "lastPaymentDate",
-        "asOfDate",
-        "creditLimit",
-        "outstandingBalance",
-        "amountPastDue",
-        "defaultDate",
-        "installmentFrequency",
-        "installmentAmount",
-        "installmentNumPayments",
-        "paymentHistory1",
-        "paymentHistory2",
-        "paymentHistoryStartDate",
-        "paymentHistoryEndDate",
-        "loanObjective",
-        "percentPayment",
-        "creditCardType",
-        "numCoBorrowers",
-        "creditType",
-        "overdueMonths",
-        "tdrFlag",
-        "ncbAccountStatus",
-        "dateOfLastDebtRestructure",
-        "accountType",
-        "delinquencyCode",
-        "paymentPattern",
-        "overdueCountInLast6Months",
-        "overdue31DTo60DLast6MthsCount",
-        "overdue61DLast12MthsCount",
-        "overdueOver90DCount",
-        "overdue31DTo60DCount",
-        "overdue61DTo90DCount",
-        "overdue91DTo120DCount",
-        "overdue121DTo150DCount",
-        "overdue151DTo180DCount",
-        "overdue181DTo210DCount",
-        "overdue211DTo240DCount",
-        "overdue241DTo270DCount",
-        "overdue271DTo300DCount",
-        "overdueOver301DCount",
-        "overLimitLast6MthsCount",
-        "overLimitLast12MthsCount",
-        "undefinedDelqCodeLast6MthsCount",
-        "undefinedDelqCodeLast12MthsCount",
-        "ncbRecord",
-        "attribute"
+    "id",
+    "memberShortName",
+    "ownershipIndicator",
+    "accountNumber",
+    "dateOpened",
+    "dateClosed",
+    "lastPaymentDate",
+    "asOfDate",
+    "creditLimit",
+    "outstandingBalance",
+    "amountPastDue",
+    "defaultDate",
+    "installmentFrequency",
+    "installmentAmount",
+    "installmentNumPayments",
+    "paymentHistory1",
+    "paymentHistory2",
+    "paymentHistoryStartDate",
+    "paymentHistoryEndDate",
+    "loanObjective",
+    "percentPayment",
+    "creditCardType",
+    "numCoBorrowers",
+    "creditType",
+    "overdueMonths",
+    "tdrFlag",
+    "ncbAccountStatus",
+    "dateOfLastDebtRestructure",
+    "accountType",
+    "delinquencyCode",
+    "paymentPattern",
+    "overdueCountInLast6Months",
+    "overdue31DTo60DLast6MthsCount",
+    "overdue61DLast12MthsCount",
+    "overdueOver90DCount",
+    "overdue31DTo60DCount",
+    "overdue61DTo90DCount",
+    "overdue91DTo120DCount",
+    "overdue121DTo150DCount",
+    "overdue151DTo180DCount",
+    "overdue181DTo210DCount",
+    "overdue211DTo240DCount",
+    "overdue241DTo270DCount",
+    "overdue271DTo300DCount",
+    "overdueOver301DCount",
+    "overLimitLast6MthsCount",
+    "overLimitLast12MthsCount",
+    "undefinedDelqCodeLast6MthsCount",
+    "undefinedDelqCodeLast12MthsCount",
+    "ncbRecord",
+    "attribute"
 })
 public class NCBAccountType {
 
@@ -207,9 +213,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the id property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getID() {
         return id;
@@ -217,9 +225,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the id property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setID(String value) {
         this.id = value;
@@ -227,9 +237,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the memberShortName property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getMemberShortName() {
         return memberShortName;
@@ -237,9 +249,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the memberShortName property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setMemberShortName(String value) {
         this.memberShortName = value;
@@ -247,9 +261,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the ownershipIndicator property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getOwnershipIndicator() {
         return ownershipIndicator;
@@ -257,9 +273,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the ownershipIndicator property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setOwnershipIndicator(String value) {
         this.ownershipIndicator = value;
@@ -267,9 +285,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the accountNumber property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getAccountNumber() {
         return accountNumber;
@@ -277,9 +297,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the accountNumber property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setAccountNumber(String value) {
         this.accountNumber = value;
@@ -287,9 +309,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the dateOpened property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOpened() {
         return dateOpened;
@@ -297,9 +321,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the dateOpened property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOpened(XMLGregorianCalendar value) {
         this.dateOpened = value;
@@ -307,9 +333,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the dateClosed property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateClosed() {
         return dateClosed;
@@ -317,9 +345,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the dateClosed property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateClosed(XMLGregorianCalendar value) {
         this.dateClosed = value;
@@ -327,9 +357,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the lastPaymentDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getLastPaymentDate() {
         return lastPaymentDate;
@@ -337,9 +369,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the lastPaymentDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setLastPaymentDate(XMLGregorianCalendar value) {
         this.lastPaymentDate = value;
@@ -347,9 +381,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the asOfDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getAsOfDate() {
         return asOfDate;
@@ -357,9 +393,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the asOfDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setAsOfDate(XMLGregorianCalendar value) {
         this.asOfDate = value;
@@ -367,9 +405,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the creditLimit property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getCreditLimit() {
         return creditLimit;
@@ -377,9 +417,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the creditLimit property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setCreditLimit(BigDecimal value) {
         this.creditLimit = value;
@@ -387,9 +429,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the outstandingBalance property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getOutstandingBalance() {
         return outstandingBalance;
@@ -397,9 +441,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the outstandingBalance property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setOutstandingBalance(BigDecimal value) {
         this.outstandingBalance = value;
@@ -407,9 +453,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the amountPastDue property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getAmountPastDue() {
         return amountPastDue;
@@ -417,9 +465,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the amountPastDue property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setAmountPastDue(BigDecimal value) {
         this.amountPastDue = value;
@@ -427,9 +477,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the defaultDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDefaultDate() {
         return defaultDate;
@@ -437,9 +489,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the defaultDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDefaultDate(XMLGregorianCalendar value) {
         this.defaultDate = value;
@@ -447,9 +501,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the installmentFrequency property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getInstallmentFrequency() {
         return installmentFrequency;
@@ -457,9 +513,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the installmentFrequency property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setInstallmentFrequency(Integer value) {
         this.installmentFrequency = value;
@@ -467,9 +525,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the installmentAmount property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getInstallmentAmount() {
         return installmentAmount;
@@ -477,9 +537,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the installmentAmount property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setInstallmentAmount(BigDecimal value) {
         this.installmentAmount = value;
@@ -487,9 +549,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the installmentNumPayments property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getInstallmentNumPayments() {
         return installmentNumPayments;
@@ -497,9 +561,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the installmentNumPayments property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setInstallmentNumPayments(Integer value) {
         this.installmentNumPayments = value;
@@ -507,9 +573,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the paymentHistory1 property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPaymentHistory1() {
         return paymentHistory1;
@@ -517,9 +585,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the paymentHistory1 property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPaymentHistory1(String value) {
         this.paymentHistory1 = value;
@@ -527,9 +597,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the paymentHistory2 property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPaymentHistory2() {
         return paymentHistory2;
@@ -537,9 +609,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the paymentHistory2 property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPaymentHistory2(String value) {
         this.paymentHistory2 = value;
@@ -547,9 +621,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the paymentHistoryStartDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getPaymentHistoryStartDate() {
         return paymentHistoryStartDate;
@@ -557,9 +633,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the paymentHistoryStartDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setPaymentHistoryStartDate(XMLGregorianCalendar value) {
         this.paymentHistoryStartDate = value;
@@ -567,9 +645,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the paymentHistoryEndDate property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getPaymentHistoryEndDate() {
         return paymentHistoryEndDate;
@@ -577,9 +657,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the paymentHistoryEndDate property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setPaymentHistoryEndDate(XMLGregorianCalendar value) {
         this.paymentHistoryEndDate = value;
@@ -587,9 +669,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the loanObjective property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getLoanObjective() {
         return loanObjective;
@@ -597,9 +681,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the loanObjective property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setLoanObjective(Integer value) {
         this.loanObjective = value;
@@ -607,9 +693,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the percentPayment property.
-     *
-     * @return possible object is
-     *         {@link java.math.BigDecimal }
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigDecimal }
+     *     
      */
     public BigDecimal getPercentPayment() {
         return percentPayment;
@@ -617,9 +705,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the percentPayment property.
-     *
-     * @param value allowed object is
-     *              {@link java.math.BigDecimal }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigDecimal }
+     *     
      */
     public void setPercentPayment(BigDecimal value) {
         this.percentPayment = value;
@@ -627,9 +717,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the creditCardType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCreditCardType() {
         return creditCardType;
@@ -637,9 +729,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the creditCardType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCreditCardType(String value) {
         this.creditCardType = value;
@@ -647,9 +741,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the numCoBorrowers property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getNumCoBorrowers() {
         return numCoBorrowers;
@@ -657,9 +753,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the numCoBorrowers property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setNumCoBorrowers(Integer value) {
         this.numCoBorrowers = value;
@@ -667,9 +765,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the creditType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getCreditType() {
         return creditType;
@@ -677,9 +777,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the creditType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setCreditType(String value) {
         this.creditType = value;
@@ -687,9 +789,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdueMonths property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getOverdueMonths() {
         return overdueMonths;
@@ -697,9 +801,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdueMonths property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setOverdueMonths(String value) {
         this.overdueMonths = value;
@@ -707,9 +813,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the tdrFlag property.
-     *
-     * @return possible object is
-     *         {@link Boolean }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
     public Boolean isTdrFlag() {
         return tdrFlag;
@@ -717,9 +825,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the tdrFlag property.
-     *
-     * @param value allowed object is
-     *              {@link Boolean }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
     public void setTdrFlag(Boolean value) {
         this.tdrFlag = value;
@@ -727,9 +837,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the ncbAccountStatus property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getNcbAccountStatus() {
         return ncbAccountStatus;
@@ -737,9 +849,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the ncbAccountStatus property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setNcbAccountStatus(String value) {
         this.ncbAccountStatus = value;
@@ -747,9 +861,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the dateOfLastDebtRestructure property.
-     *
-     * @return possible object is
-     *         {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public XMLGregorianCalendar getDateOfLastDebtRestructure() {
         return dateOfLastDebtRestructure;
@@ -757,9 +873,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the dateOfLastDebtRestructure property.
-     *
-     * @param value allowed object is
-     *              {@link javax.xml.datatype.XMLGregorianCalendar }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
      */
     public void setDateOfLastDebtRestructure(XMLGregorianCalendar value) {
         this.dateOfLastDebtRestructure = value;
@@ -767,9 +885,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the accountType property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getAccountType() {
         return accountType;
@@ -777,9 +897,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the accountType property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setAccountType(String value) {
         this.accountType = value;
@@ -787,9 +909,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the delinquencyCode property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getDelinquencyCode() {
         return delinquencyCode;
@@ -797,9 +921,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the delinquencyCode property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setDelinquencyCode(String value) {
         this.delinquencyCode = value;
@@ -807,9 +933,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the paymentPattern property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPaymentPattern() {
         return paymentPattern;
@@ -817,9 +945,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the paymentPattern property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPaymentPattern(String value) {
         this.paymentPattern = value;
@@ -827,9 +957,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdueCountInLast6Months property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdueCountInLast6Months() {
         return overdueCountInLast6Months;
@@ -837,9 +969,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdueCountInLast6Months property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdueCountInLast6Months(Integer value) {
         this.overdueCountInLast6Months = value;
@@ -847,9 +981,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue31DTo60DLast6MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue31DTo60DLast6MthsCount() {
         return overdue31DTo60DLast6MthsCount;
@@ -857,9 +993,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue31DTo60DLast6MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue31DTo60DLast6MthsCount(Integer value) {
         this.overdue31DTo60DLast6MthsCount = value;
@@ -867,9 +1005,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue61DLast12MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue61DLast12MthsCount() {
         return overdue61DLast12MthsCount;
@@ -877,9 +1017,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue61DLast12MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue61DLast12MthsCount(Integer value) {
         this.overdue61DLast12MthsCount = value;
@@ -887,9 +1029,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdueOver90DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdueOver90DCount() {
         return overdueOver90DCount;
@@ -897,9 +1041,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdueOver90DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdueOver90DCount(Integer value) {
         this.overdueOver90DCount = value;
@@ -907,9 +1053,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue31DTo60DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue31DTo60DCount() {
         return overdue31DTo60DCount;
@@ -917,9 +1065,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue31DTo60DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue31DTo60DCount(Integer value) {
         this.overdue31DTo60DCount = value;
@@ -927,9 +1077,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue61DTo90DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue61DTo90DCount() {
         return overdue61DTo90DCount;
@@ -937,9 +1089,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue61DTo90DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue61DTo90DCount(Integer value) {
         this.overdue61DTo90DCount = value;
@@ -947,9 +1101,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue91DTo120DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue91DTo120DCount() {
         return overdue91DTo120DCount;
@@ -957,9 +1113,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue91DTo120DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue91DTo120DCount(Integer value) {
         this.overdue91DTo120DCount = value;
@@ -967,9 +1125,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue121DTo150DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue121DTo150DCount() {
         return overdue121DTo150DCount;
@@ -977,9 +1137,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue121DTo150DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue121DTo150DCount(Integer value) {
         this.overdue121DTo150DCount = value;
@@ -987,9 +1149,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue151DTo180DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue151DTo180DCount() {
         return overdue151DTo180DCount;
@@ -997,9 +1161,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue151DTo180DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue151DTo180DCount(Integer value) {
         this.overdue151DTo180DCount = value;
@@ -1007,9 +1173,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue181DTo210DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue181DTo210DCount() {
         return overdue181DTo210DCount;
@@ -1017,9 +1185,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue181DTo210DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue181DTo210DCount(Integer value) {
         this.overdue181DTo210DCount = value;
@@ -1027,9 +1197,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue211DTo240DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue211DTo240DCount() {
         return overdue211DTo240DCount;
@@ -1037,9 +1209,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue211DTo240DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue211DTo240DCount(Integer value) {
         this.overdue211DTo240DCount = value;
@@ -1047,9 +1221,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue241DTo270DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue241DTo270DCount() {
         return overdue241DTo270DCount;
@@ -1057,9 +1233,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue241DTo270DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue241DTo270DCount(Integer value) {
         this.overdue241DTo270DCount = value;
@@ -1067,9 +1245,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdue271DTo300DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdue271DTo300DCount() {
         return overdue271DTo300DCount;
@@ -1077,9 +1257,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdue271DTo300DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdue271DTo300DCount(Integer value) {
         this.overdue271DTo300DCount = value;
@@ -1087,9 +1269,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overdueOver301DCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverdueOver301DCount() {
         return overdueOver301DCount;
@@ -1097,9 +1281,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overdueOver301DCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverdueOver301DCount(Integer value) {
         this.overdueOver301DCount = value;
@@ -1107,9 +1293,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overLimitLast6MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverLimitLast6MthsCount() {
         return overLimitLast6MthsCount;
@@ -1117,9 +1305,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overLimitLast6MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverLimitLast6MthsCount(Integer value) {
         this.overLimitLast6MthsCount = value;
@@ -1127,9 +1317,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the overLimitLast12MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getOverLimitLast12MthsCount() {
         return overLimitLast12MthsCount;
@@ -1137,9 +1329,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the overLimitLast12MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setOverLimitLast12MthsCount(Integer value) {
         this.overLimitLast12MthsCount = value;
@@ -1147,9 +1341,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the undefinedDelqCodeLast6MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getUndefinedDelqCodeLast6MthsCount() {
         return undefinedDelqCodeLast6MthsCount;
@@ -1157,9 +1353,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the undefinedDelqCodeLast6MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setUndefinedDelqCodeLast6MthsCount(Integer value) {
         this.undefinedDelqCodeLast6MthsCount = value;
@@ -1167,9 +1365,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the undefinedDelqCodeLast12MthsCount property.
-     *
-     * @return possible object is
-     *         {@link Integer }
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
     public Integer getUndefinedDelqCodeLast12MthsCount() {
         return undefinedDelqCodeLast12MthsCount;
@@ -1177,9 +1377,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the undefinedDelqCodeLast12MthsCount property.
-     *
-     * @param value allowed object is
-     *              {@link Integer }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
     public void setUndefinedDelqCodeLast12MthsCount(Integer value) {
         this.undefinedDelqCodeLast12MthsCount = value;
@@ -1187,9 +1389,11 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the ncbRecord property.
-     *
-     * @return possible object is
-     *         {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getNcbRecord() {
         return ncbRecord;
@@ -1197,9 +1401,11 @@ public class NCBAccountType {
 
     /**
      * Sets the value of the ncbRecord property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setNcbRecord(String value) {
         this.ncbRecord = value;
@@ -1207,23 +1413,25 @@ public class NCBAccountType {
 
     /**
      * Gets the value of the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * <p/>
-     * <p/>
+     * 
+     * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * <p/>
-     * <p/>
-     * <p/>
+     * 
+     * 
+     * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
+     * 
+     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

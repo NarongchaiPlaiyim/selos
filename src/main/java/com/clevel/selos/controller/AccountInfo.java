@@ -1,15 +1,19 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.AccountInfoControl;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.OpenAccountProductDAO;
 import com.clevel.selos.dao.master.OpenAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
+import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -17,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,8 +44,18 @@ public class AccountInfo implements Serializable {
     private BankAccountTypeDAO accountTypeDAO;
     @Inject
     private OpenAccountPurposeDAO purposeDAO;
+    @Inject
+    private AccountInfoControl accountInfoControl;
+    @Inject
+    private BankBranchDAO bankBranchDAO;
 
     private List<OpenAccountPurpose> purposeList;
+
+    private String messageHeader;
+    private String message;
+
+    //session
+    private long workCaseId;
 
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
@@ -54,7 +69,7 @@ public class AccountInfo implements Serializable {
     //*** Drop down List ***//
     private List<BankAccountType> accountTypeList;
     private List<OpenAccountProduct> productTypeList;
-    private List<AccountInfoBranchView> branchList;
+    private List<BankBranch> branchList;
 
     //*** Check box ***//
     private List<AccountInfoPurposeView> purposeViewList;
@@ -76,6 +91,23 @@ public class AccountInfo implements Serializable {
 
     @PostConstruct
     public void onCreation(){
+        //todo
+//        HttpSession session = FacesUtil.getSession(true);
+//
+//        if(session.getAttribute("workCaseId") != null){
+//            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+//        }else{
+//            log.info("preRender ::: workCaseId is null.");
+//            try{
+//                FacesUtil.redirect("/site/inbox.jsf");
+//                return;
+//            }catch (Exception ex){
+//                log.info("Exception :: {}",ex);
+//            }
+//        }
+
+
+
         init();
         accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
     }
@@ -121,37 +153,9 @@ public class AccountInfo implements Serializable {
         //Branch
         idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
         if(0 != id){
-            for (AccountInfoBranchView branchView : branchList){
-                if (branchView.getId() == idLong){
-                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branchView.getName());
-                    break;
-                }
-            }
-        }
-
-        //Account Name
-        accountNameViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList();
-        if(accountNameViewList.size() > 0){
-            stringBuilder = new StringBuilder();
-            for (AccountNameView accountNameView : accountNameViewList){
-                stringBuilder.append(", ");
-                stringBuilder.append(accountNameView.getName());
-            }
-            String show = stringBuilder.toString();
-            if(show.length() > 1){
-                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(show.substring(2, show.length()));
-            } else {
-                accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
-            }
-        } else {
-            accountInfoView.getAccountInfoDetailViewSelected().setAccountNameViewListForShow(" - ");
-        }
-
-        id = (int) accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().getId();
-        if(0 != id){
-            for (BankAccountType accountType : accountTypeList){
-                if (accountType.getId() == id){
-                    accountInfoView.getAccountInfoDetailViewSelected().getAccountTypeView().setName(accountType.getName());
+            for (BankBranch branch : branchList){
+                if (branch.getId() == idLong){
+                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branch.getName());
                     break;
                 }
             }
@@ -175,26 +179,6 @@ public class AccountInfo implements Serializable {
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(value);
         }
-
-        //Purpose
-//        purposeViewList = accountInfoView.getAccountInfoDetailViewSelected().getAccountInfoPurposeViewList();
-//        if(purposeViewList.size() > 0){
-//            stringBuilder = new StringBuilder();
-//            for (AccountInfoPurposeView purposeView : purposeViewList){
-//                if(purposeView.isSelected()){
-//                    stringBuilder.append(", ");
-//                    stringBuilder.append(purposeView.getName());
-//                }
-//            }
-//            String show = stringBuilder.toString();
-//            if(show.length() > 1){
-//                accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(show.substring(2, show.length()));
-//            } else {
-//                accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(" - ");
-//            }
-//        } else {
-//            accountInfoView.getAccountInfoDetailViewSelected().setAccountInfoPurposeViewListForShow(" - ");
-//        }
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
             accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
@@ -227,23 +211,34 @@ public class AccountInfo implements Serializable {
         accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
     }
 
+    public void onSave(){
+        //todo :
+        workCaseId = 101L;
+        try{
+            accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
+            messageHeader = "Save Basic Info Success.";
+            message = "Save data in Basic Information success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Basic Info Failed.";
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
+        }
+    }
+
 
     private void init(){
         accountInfoView = new AccountInfoView();
         accountInfoDetailView = new AccountInfoDetailView();
 
         //branchModelList
-        branchList = new ArrayList<AccountInfoBranchView>();
-        AccountInfoBranchView branchView = null;
-
-        branchView = new AccountInfoBranchView();
-        branchView.setId(01);
-        branchView.setName("Branch");
-        branchList.add(branchView);
-        branchView = new AccountInfoBranchView();
-        branchView.setId(02);
-        branchView.setName("Branch 2");
-        branchList.add(branchView);
+        branchList = bankBranchDAO.findAll();
 
         //Account Type
         accountTypeList = accountTypeDAO.findOpenAccountType();
@@ -289,7 +284,13 @@ public class AccountInfo implements Serializable {
 
     }
 
+    public List<BankBranch> getBranchList() {
+        return branchList;
+    }
 
+    public void setBranchList(List<BankBranch> branchList) {
+        this.branchList = branchList;
+    }
 
     public OpenAccountProductDAO getProductTypeDAO() {
         return productTypeDAO;
@@ -379,14 +380,6 @@ public class AccountInfo implements Serializable {
         this.productTypeList = productTypeList;
     }
 
-    public List<AccountInfoBranchView> getBranchList() {
-        return branchList;
-    }
-
-    public void setBranchList(List<AccountInfoBranchView> branchList) {
-        this.branchList = branchList;
-    }
-
     public List<AccountInfoPurposeView> getPurposeViewList() {
         return purposeViewList;
     }
@@ -433,5 +426,29 @@ public class AccountInfo implements Serializable {
 
     public void setCreditTypeView(AccountInfoCreditTypeView creditTypeView) {
         this.creditTypeView = creditTypeView;
+    }
+
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

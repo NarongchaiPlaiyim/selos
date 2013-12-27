@@ -59,6 +59,7 @@ public class DBRControl extends BusinessControl {
     }
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
+
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
         DBR dbr = calculateDBR(dbrView, ncbDetailViews, workCase);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
@@ -171,7 +172,7 @@ public class DBRControl extends BusinessControl {
                     debtForCalculate = Util.multiply(dbrDetail.getLimit(), BigDecimal.valueOf(10));
                     debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
-                default:
+                default: // non calculator
                     break;
             }
             dbrDetail.setDebtForCalculate(debtForCalculate);

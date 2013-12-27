@@ -7,135 +7,204 @@
         xmlns:p="http://primefaces.org/ui"
         xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>ManageUser</title>
-    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    <h:outputStylesheet name="css/style.css" />
+    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
+    <h:outputScript library="js" name="custom.js" />
+    <!-- <script type="text/javascript" src="../resources/js/superfish.js"></script> -->
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer">
-<h:form id="baInformationForm">
+<h:form id="disbursementForm">
 <div id="main_container">
 
-<ui:include src="include/header_logo.xhtml" />
+<ui:include src="include/header_logo.xhtml"/>
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml" />
+<ui:include src="include/header_detail.xhtml"/>
 <!-- End Header Detail -->
 <!-- Start Menu -->
-<ui:include src="include/menubar.xhtml" />
+<ui:include src="include/menubar.xhtml"/>
+
 <div id="content_container">
 <div id="content_name"><h:outputText value="#{msg.get('app.disbursement.header.disbursement')}"/></div>
 <div id="content">
 <div id="content_info">
     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/> <h:outputText
             id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
 </div>
 <!-- start content -->
 
-<table class="content_table_form" >
+<table class="content_table_form">
 <tr>
     <td class="title" style="width:250px;"><h:outputText value="#{msg.get('app.disbursement.approvedType')}"/></td>
-    <td style="width: 300px;"> <p:selectOneRadio value="#{baInfo.baPaInfoView.approvedType}">
-        <f:selectItem itemLabel="#{msg.get('app.disbursement.radio.new')}" itemValue="1"/>
-        <f:selectItem itemLabel="#{msg.get('app.disbursement.radio.newChange')}" itemValue="0"/>
-    </p:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td colspan="100%"><div class="separate"/> </td>
-</tr>
-<tr>
-    <td>
-        <div class="title"><h:outputText value="#{msg.get('app.disbursement.header.disbursementSummary')}"/> </div>
+    <td style="width: 300px;">
+        <p:selectOneRadio value="#{disbursementInfo.disbursementInfoView.approvedType}">
+            <f:selectItem itemLabel="#{msg.get('app.disbursement.radio.new')}" itemValue="1"/>
+            <f:selectItem itemLabel="#{msg.get('app.disbursement.radio.newChange')}" itemValue="0"/>
+        </p:selectOneRadio>
     </td>
 </tr>
 <tr>
     <td colspan="100%">
-        <p:dataTable value="#{baInfo.applyBaInfoList}" var="item" rowIndexVar="rowIndex" style="width: 100%;">
+        <div class="separate"/>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div class="title"><h:outputText value="#{msg.get('app.disbursement.header.disbursementSummary')}"/></div>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%">
+        <p:dataTable value="#{disbursementInfo.disbursementInfoView.disburse}" var="item" rowIndexVar="rowIndex"
+                     style="width: 100%;">
             <p:column headerText="" style="width: 50px;"><h:outputText value="#{rowIndex+1}"/> </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.productProgram')}" style="width: 250px;"><h:outputText value=""/> </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.creditFac')}" style="width: 150px;"><h:outputText value=""/></p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.productProgram')}"
+                      style="width: 250px;"><h:outputText value="#{item.productProgram}"/> </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.creditFac')}"
+                      style="width: 150px;"><h:outputText value="#{item.creditFacility}"/></p:column>
             <p:column headerText="#{msg.get('app.disbursement.summary.tb.code')}" style="width: 150px;">
-                <table style="width: 100% ; border-style: none !important;" >
-                    <ui:repeat value="#{bapa.creditType}" var="creditType">
-                        <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.disbursement.summary.tb.code.product')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.productProgram}"/></td>
-                        </tr>
-                        <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.disbursement.summary.tb.code.project')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
-                        </tr>
-                    </ui:repeat>
+                <table style="width: 100% ; border-style: none !important;">
+                    <tr>
+                        <td style="border-style: none !important;"><h:outputText
+                                value="#{msg.get('app.disbursement.summary.tb.code.product')}"/></td>
+                        <td style="border-style: none !important;"><h:outputText value="#{item.productCode}"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-style: none !important;"><h:outputText
+                                value="#{msg.get('app.disbursement.summary.tb.code.project')}"/></td>
+                        <td style="border-style: none !important;"><h:outputText value="#{item.projectCode}"/></td>
+                    </tr>
                 </table>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.refinance')}" style="width: 100px;"><h:outputText value=""/></p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.approvedLimit')}" style="width: 200px;">  </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.holdAmount')}" style="width: 200px;">  </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.disburseAmount')}" style="width: 200px;">  </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.summary.tb.diffAmount')}" style="width: 200px;">  </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.refinance')}" style="width: 100px;"
+                      styleClass="center">
+                <h:outputText value="#{item.refinance}"/>
+            </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.approvedLimit')}" style="width: 200px;"
+                      styleClass="right">
+                <h:outputText value="#{item.approvedLimit}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.holdAmount')}" style="width: 200px;"
+                      styleClass="right">
+                <h:outputText value="#{item.holdAmount}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.disburseAmount')}" style="width: 200px;"
+                      styleClass="right">
+                <h:outputText value="#{item.disburseAmount}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="#{msg.get('app.disbursement.summary.tb.diffAmount')}" style="width: 200px;"
+                      styleClass="right">
+                <h:outputText value="#{item.diffAmount}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
+            </p:column>
         </p:dataTable>
     </td>
 </tr>
 <tr>
-    <td colspan="100%"><div class="separate"/> </td>
+    <td colspan="100%">
+        <div class="separate"/>
+    </td>
 </tr>
 <tr>
     <td>
-        <div class="title"><h:outputText value="#{msg.get('app.disbursement.header.disbursementDetail')}"/> </div>
+        <div class="title"><h:outputText value="#{msg.get('app.disbursement.header.disbursementDetail')}"/></div>
     </td>
 </tr>
 
-    <!--  ==============================================  MC ===================================================================-->
+<!--  ==============================================  MC ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc')}"/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc')}"/></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc.numberOfcheque')}"/> </td>
-    <td><p:inputText value=""/> </td>
-    <td style="width: 250px;"><h:outputText value="#{msg.get('app.dusbursement.detail.mc.totalMcDisbursement')}"/> </td>
-    <td><p:inputText value=""/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc.numberOfcheque')}"/></td>
+    <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfCheque}" readonly="true"/></td>
+    <td style="width: 250px;"><h:outputText value="#{msg.get('app.disbursement.detail.mc.totalMcDisbursement')}"/></td>
+    <td>
+        <p:inputText value="#{disbursementInfo.disbursementInfoView.totalMCDisburse}" readonly="true">
+            <f:convertNumber pattern="#,##0"
+                             minFractionDigits="2"
+                             maxFractionDigits="2"
+                             maxIntegerDigits="14"/>
+        </p:inputText>
+    </td>
 </tr>
 <tr>
-    <td><p:commandButton value="#{msg.get('app.button.add')}" styleClass="smaller"  /></td>
+    <td><p:commandButton value="#{msg.get('app.button.add')}" styleClass="smaller"
+                         actionListener="#{disbursementInfo.onOpenAddMcDialog()}"
+                         update=":disbursementMcForm"
+                         oncomplete="mcDisbursementDialog.show()"/></td>
 </tr>
 <tr>
     <td colspan="100%">
-        <p:dataTable value="#{baInfo.baPaInfoView.bapa}" var="bapa" rowIndexVar="rowIndex" style="width:100%">
+        <p:dataTable value="#{disbursementInfo.disbursementInfoView.disburseMcList}" var="mcItem" rowIndexVar="rowIndex" style="width:100%">
             <p:column headerText="" style="width: 50px;">
                 #{rowIndex+1}
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.issuedBy')}" style="width: 150px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.issuedBy')}" style="width: 150px;">
+                <h:outputText value="#{mcItem.issuedBy}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.mcIssuedDate')}" style="width: 350px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.mcIssuedDate')}" style="width: 150px;">
+                <h:outputText value="#{mcItem.issuedDate}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                </h:outputText>
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.payeeName')}" style="width:150px;">
-                <h:outputText value="#{bapa.customerPay}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.payeeName')}" style="width:150px;">
+                <h:outputText value="#{mcItem.payeeName}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.crossType')}" style="width:150px;" styleClass="right">
-                <h:outputText value="#{bapa.limit}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.crossType')}" style="width:150px;"
+                      styleClass="right">
+                <h:outputText value="#{mcItem.crossType}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.creditType')}" style="width: 150px;" styleClass="right">
-                <table style="width: 100% ; border-style: none !important;" >
-                    <ui:repeat value="#{bapa.creditType}" var="creditType">
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.creditType')}" style="width: 350px;"
+                      styleClass="right">
+                <table style="width: 100% ; border-style: none !important;">
+                    <ui:repeat value="#{mcItem.creditType}" var="mcCreditType">
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.productProgram')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.productProgram}"/></td>
-                        </tr>
-                        <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.creditType.creditType')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{mcCreditType.productProgram}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{mcCreditType.creditFacility}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{msg.get('app.disbursement.detail.mc.tb.creditType.disburse')}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{mcCreditType.disburseAmount}">
+                                    <f:convertNumber pattern="#,##0"
+                                                     maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </td>
                         </tr>
                     </ui:repeat>
                 </table>
             </p:column>
-            <p:column headerText="#{msg.get('app.dusbursement.detail.mc.tb.totalAmount')}" style="width: 150px;" styleClass="right">
-                <h:outputText value="#{bapa.morePay}">
+            <p:column headerText="#{msg.get('app.disbursement.detail.mc.tb.totalAmount')}" style="width: 150px;"
+                      styleClass="right">
+                <h:outputText value="#{mcItem.totalAmount}">
                     <f:convertNumber pattern="#,##0"
                                      minFractionDigits="2"
                                      maxFractionDigits="2"
@@ -143,209 +212,328 @@
                 </h:outputText>
             </p:column>
             <p:column style="width: 50px;" styleClass="center">
-                <p:commandButton icon="ui-icon-pencil" action="#{baInfo.openEditBaPaDialog}" update="" oncomplete="">
-                    <f:setPropertyActionListener value="#{bapa}" target="#{baInfo.newBaPaInfoAddViewItem}" />
-                    <f:setPropertyActionListener value="#{rowIndex}" target="#{baInfo.selectRowNumber}" />
+                <p:commandButton icon="ui-icon-pencil" action="#{disbursementInfo.onOpenEditMcDialog}" update=":disbursementMcForm" oncomplete="mcDisbursementDialog.show()">
+                    <f:setPropertyActionListener value="#{mcItem}" target="#{disbursementInfo.newDisbursementMcDetailView}"/>
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
+                </p:commandButton>
+                <p:commandButton icon="ui-icon-trash" oncomplete="confirmDeleteDisbursementMcDlg.show()">
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>
     </td>
 </tr>
 
-    <!--  ==============================================  Deposit ===================================================================-->
+<!--  ==============================================  Deposit ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit')}"/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit')}"/></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.numofDeposit')}"/> </td>
-    <td><p:inputText value=""/> </td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.totalDepositDisburse')}"/> </td>
-    <td><p:inputText value=""/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.numofDeposit')}"/></td>
+    <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfDeposit}" readonly="true"/></td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.totalDepositDisburse')}"/></td>
+    <td>
+        <p:inputText value="#{disbursementInfo.disbursementInfoView.totalDepositDisburse}" readonly="true">
+            <f:convertNumber pattern="#,##0"
+                             minFractionDigits="2"
+                             maxFractionDigits="2"
+                             maxIntegerDigits="14"/>
+        </p:inputText>
+    </td>
 </tr>
 <tr>
-    <td><p:commandButton value="#{msg.get('app.button.add')}" styleClass="smaller"  /></td>
+    <td>
+        <p:commandButton value="#{msg.get('app.button.add')}"
+                         styleClass="smaller"
+                         actionListener="#{disbursementInfo.onOpenAddDepositDialog}"
+                         update=":disbursementDepositForm"
+                         oncomplete="depositDisbursementDialog.show()"/>
+    </td>
 </tr>
 <tr>
     <td colspan="100%">
-        <p:dataTable value="#{baInfo.baPaInfoView.bapa}" var="bapa" rowIndexVar="rowIndex" style="width:100%">
+        <p:dataTable value="#{disbursementInfo.disbursementInfoView.disburseDepositList}" var="depositItem" rowIndexVar="rowIndex" style="width:100%">
             <p:column headerText="" style="width: 50px;">  #{rowIndex+1} </p:column>
             <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.accountNumber')}" style="width: 150px;">
-                <h:outputText value="#{bapa.type}"/>
+                <h:outputText value="#{depositItem.accountNumber}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.accountName')}" style="width: 350px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.accountName')}" style="width: 300px;">
+                <h:outputText value="#{depositItem.accountName}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.creditType')}" style="width:150px;">
-                <table style="width: 100% ; border-style: none !important;" >
-                    <ui:repeat value="#{bapa.creditType}" var="creditType">
+            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.creditType')}" style="width:350px;">
+                <table style="width: 100% ; border-style: none !important;">
+                    <ui:repeat value="#{depositItem.creditType}" var="depositCreditType">
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.productProgram')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.productProgram}"/></td>
-                        </tr>
-                        <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.creditType.creditType')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{depositCreditType.productProgram}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{depositCreditType.creditFacility}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{msg.get('app.disbursement.detail.deposit.tb.creditType.disburse')}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{depositCreditType.disburseAmount}">
+                                    <f:convertNumber pattern="#,##0"
+                                                     maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </td>
                         </tr>
                     </ui:repeat>
                 </table>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.totalAmount')}" style="width:150px;" styleClass="right">
-                <h:outputText value="#{bapa.limit}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.deposit.tb.totalAmount')}" style="width:300px;" styleClass="right">
+                <h:outputText value="#{depositItem.totalAmount}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
             </p:column>
             <p:column style="width: 50px;" styleClass="center">
-                <p:commandButton icon="ui-icon-pencil" action="#{baInfo.openEditBaPaDialog}" update="" oncomplete="">
-                    <f:setPropertyActionListener value="#{bapa}" target="#{baInfo.newBaPaInfoAddViewItem}" />
-                    <f:setPropertyActionListener value="#{rowIndex}" target="#{baInfo.selectRowNumber}" />
+                <p:commandButton icon="ui-icon-pencil" action="#{disbursementInfo.onOpenEditDepositDialog()}" update=":disbursementDepositForm" oncomplete="depositDisbursementDialog.show()">
+                    <f:setPropertyActionListener value="#{depositItem}" target="#{disbursementInfo.newDisbursementDepositDetailView}"/>
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
+                </p:commandButton>
+                <p:commandButton icon="ui-icon-trash" oncomplete="confirmDeleteDisbursementDepositDlg.show()">
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>
     </td>
 </tr>
-    <!--  ==============================================  Bahtnet ===================================================================-->
+<!--  ==============================================  Bahtnet ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet')}"/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet')}"/></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.numofBahtnet')}"/> </td>
-    <td><p:inputText value=""/> </td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.totalBahtnetDisburse')}"/> </td>
-    <td><p:inputText value=""/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.numofBahtnet')}"/></td>
+    <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfBahtnet}" readonly="true"/></td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.totalBahtnetDisburse')}"/></td>
+    <td>
+        <p:inputText value="#{disbursementInfo.disbursementInfoView.totalBahtnetDisburse}" readonly="true">
+            <f:convertNumber pattern="#,##0"
+                             minFractionDigits="2"
+                             maxFractionDigits="2"
+                             maxIntegerDigits="14"/>
+        </p:inputText>
+    </td>
 </tr>
 <tr>
-    <td><p:commandButton value="#{msg.get('app.button.add')}" styleClass="smaller"  /></td>
+    <td><p:commandButton value="#{msg.get('app.button.add')}"
+                         styleClass="smaller"
+                         actionListener="#{disbursementInfo.onOpenAddBahtnetDialog}"
+                         update=":disbursementBahtnetForm"
+                         oncomplete="bahtnetDisbursementDialog.show()"/>
+    </td>
 </tr>
 <tr>
     <td colspan="100%">
-        <p:dataTable value="#{baInfo.baPaInfoView.bapa}" var="bapa" rowIndexVar="rowIndex" style="width:100%">
+        <p:dataTable value="#{disbursementInfo.disbursementInfoView.disbursementBahtnetList}" var="bahtnetItem" rowIndexVar="rowIndex" style="width:100%">
             <p:column headerText="" style="width: 50px;">  #{rowIndex+1} </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.bankName')}" style="width: 150px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.bankName')}" style="width: 350px;">
+                <h:outputText value="#{bahtnetItem.bankName.name}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.accountNumber')}" style="width: 350px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.accountNumber')}" style="width: 150px;">
+                <h:outputText value="#{bahtnetItem.accountNumber}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.benefitName')}" style="width: 350px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.benefitName')}" style="width: 150px;">
+                <h:outputText value="#{bahtnetItem.benefitName}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.creditType')}" style="width:150px;">
-                <table style="width: 100% ; border-style: none !important;" >
-                    <ui:repeat value="#{bapa.creditType}" var="creditType">
+            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.creditType')}" style="width:350px;">
+                <table style="width: 100% ; border-style: none !important;">
+                    <ui:repeat value="#{bahtnetItem.creditType}" var="bahtnetCreditType">
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.productProgram')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.productProgram}"/></td>
-                        </tr>
-                        <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.baInfo.tb.creditType.creditType')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{bahtnetCreditType.productProgram}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{bahtnetCreditType.creditFacility}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{msg.get('app.disbursement.detail.deposit.tb.creditType.disburse')}"/>
+                            </td>
+                            <td style="border-style: none !important;">
+                                <h:outputText value="#{bahtnetCreditType.disburseAmount}">
+                                    <f:convertNumber pattern="#,##0"
+                                                     maxFractionDigits="2"
+                                                     minFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </td>
                         </tr>
                     </ui:repeat>
                 </table>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.totalAmount')}" style="width:150px;" styleClass="right">
-                <h:outputText value="#{bapa.limit}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.bahtnet.tb.totalAmount')}" style="width:150px;"
+                      styleClass="right">
+                        <h:outputText value="#{bahtnetItem.totalAmount}">
+                            <f:convertNumber pattern="#,##0"
+                                             maxFractionDigits="2"
+                                             minFractionDigits="2"
+                                             maxIntegerDigits="14"/>
+                        </h:outputText>
             </p:column>
             <p:column style="width: 50px;" styleClass="center">
-                <p:commandButton icon="ui-icon-pencil" action="#{baInfo.openEditBaPaDialog}" update="" oncomplete="">
-                    <f:setPropertyActionListener value="#{bapa}" target="#{baInfo.newBaPaInfoAddViewItem}" />
-                    <f:setPropertyActionListener value="#{rowIndex}" target="#{baInfo.selectRowNumber}" />
+                <p:commandButton icon="ui-icon-pencil" action="#{disbursementInfo.onOpenEditBahtnetDialog()}" update=":disbursementBahtnetForm" oncomplete="bahtnetDisbursementDialog.show()">
+                    <f:setPropertyActionListener value="#{bahtnetItem}" target="#{disbursementInfo.newDisbursementBahtnetDetailView}"/>
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
+                </p:commandButton>
+                <p:commandButton icon="ui-icon-trash" oncomplete="confirmDeleteDisbursementbahtnetDlg.show()">
+                    <f:setPropertyActionListener value="#{rowIndex}" target="#{disbursementInfo.selectRowNumber}"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>
     </td>
 </tr>
 <tr>
-    <td colspan="100%"><div class="separate"/> </td>
+    <td colspan="100%">
+        <div class="separate"/>
+    </td>
 </tr>
 <!--  ==============================================  BA Disbursement ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse')}"/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse')}"/></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.numofBA')}"/> </td>
-    <td><p:inputText value=""/> </td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.totalBADisburse')}"/> </td>
-    <td><p:inputText value=""/> </td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.numofBA')}"/></td>
+    <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfBA}" readonly="true"/></td>
+    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.totalBADisburse')}"/></td>
+    <td>
+        <p:inputText value="#{disbursementInfo.disbursementInfoView.totalBADisburse}" readonly="true">
+            <f:convertNumber pattern="#,##0"
+                             maxFractionDigits="2"
+                             minFractionDigits="2"
+                             maxIntegerDigits="14"/>
+        </p:inputText>
+    </td>
 </tr>
 <tr>
     <td colspan="100%">
-        <p:dataTable value="#{baInfo.baPaInfoView.bapa}" var="bapa" rowIndexVar="rowIndex" style="width:100%">
+        <p:dataTable value="#{disbursementInfo.disbursementInfoView.disbursementBaList}" var="baItem" rowIndexVar="rowIndex" style="width:100%">
             <p:column headerText="" style="width: 50px;">  #{rowIndex+1} </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.accountNumber')}" style="width: 150px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.accountNumber')}"
+                      style="width: 150px;">
+                <h:outputText value="#{baItem.accountNumber}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.accountName')}" style="width: 350px;">
-                <h:outputText value="#{bapa.type}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.accountName')}"
+                      style="width: 300px;">
+                <h:outputText value="#{baItem.accountName}"/>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType')}" style="width:150px;">
-                <table style="width: 100% ; border-style: none !important;" >
-                    <ui:repeat value="#{bapa.creditType}" var="creditType">
+            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType')}" style="width:350px;">
+                <table style="width: 100% ; border-style: none !important;">
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.productProgram')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.productProgram}"/></td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.productProgram')}"/>
+                            </td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="-"/></td>
                         </tr>
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.creditType')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.creditType')}"/>
+                            </td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="-"/></td>
                         </tr>
                         <tr>
-                            <td style="border-style: none !important;"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.purpose')}"/> </td>
-                            <td style="border-style: none !important;"><h:outputText value="#{creditType.creditFacility}"/></td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="#{msg.get('app.disbursement.detail.baDisburse.tb.creditType.purpose')}"/>
+                            </td>
+                            <td style="border-style: none !important;"><h:outputText
+                                    value="-"/></td>
                         </tr>
-                    </ui:repeat>
                 </table>
             </p:column>
-            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.totalAmount')}" style="width:150px;" styleClass="right">
-                <h:outputText value="#{bapa.limit}"/>
+            <p:column headerText="#{msg.get('app.disbursement.detail.baDisburse.tb.totalAmount')}" style="width:200px;"
+                      styleClass="right">
+                <h:outputText value="#{baItem.totalAmount}">
+                    <f:convertNumber pattern="#,##0"
+                                     maxFractionDigits="2"
+                                     minFractionDigits="2"
+                                     maxIntegerDigits="14"/>
+                </h:outputText>
             </p:column>
         </p:dataTable>
     </td>
 </tr>
 <tr>
-    <td colspan="100%"><div class="separate"/> </td>
-</tr>
-<tr>
-    <td><div class="left title"><h:outputText value="#{msg.get('app.baInfo.InsuranceInfo')}" /></div> </td>
+    <td colspan="100%">
+        <div class="separate"/>
+    </td>
 </tr>
 
 <tr>
     <td colspan="100%" style="text-align: center">
-        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" action="#{baInfo.save}" styleClass="smaller"/>
+        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" action="#{baInfo.save}"
+                         styleClass="smaller"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"/>
     </td>
 </tr>
 
 </table>
 
-</div>    <!-- content -->
+</div>
+<!-- content -->
 
-</div>     <!-- content contantner-->
+</div>
+<!-- content contantner-->
 <div class="clear"></div>
 <!-- Start Footer -->
-<ui:include src="include/footer.xhtml" />
+<ui:include src="include/footer.xhtml"/>
 <!-- End Footer -->
 </div>
 </h:form>
 </p:panel>
 
-<p:dialog widgetVar="bapaInfoDialog" header="#{msg.get('app.baInfo.dialog.bapa.header.bapa')}" resizable="false" modal="true"
-          width="900" height="200">
+<p:dialog widgetVar="mcDisbursementDialog" header="#{msg.get('app.disbursement.detail.mc.dialog.header')}"
+          resizable="false" modal="true"
+          width="900" height="400">
 
-    <!--<ui:include src="dialog/bapaInfoAddDialog.xhtml"/>-->
+    <ui:include src="dialog/disbursementMcDialog.xhtml"/>
 </p:dialog>
 
-<p:dialog widgetVar="applyBaInfoDialog" header="#{msg.get('app.baInfo.dialog.applyBa.header.applyBa')}" height="200" width="600"  modal="true" resizable="false" >
+<p:dialog widgetVar="depositDisbursementDialog" header="#{msg.get('app.disbursement.detail.deposit.dialog.header')}" height="200"
+          width="900" modal="true" resizable="false">
 
-    <!--<ui:include src="dialog/baApplyInfoDialog.xhtml"/>-->
+    <ui:include src="dialog/disbursementDepositDialog.xhtml"/>
 </p:dialog>
 
-<!--<ui:include src="dialog/confirmDeleteDlg.xhtml">-->
-    <!--<ui:param name="id" value="confirmDeleteBaPaInfoDialog"/>-->
-    <!--<ui:param name="name" value="confirmDeleteBaPaInfoDlg"/>-->
-    <!--<ui:param name="formId" value="frmConfirmDeleteBaPaInfo"/>-->
-    <!--<ui:param name="controller" value="#{baInfo}"/>-->
-    <!--<ui:param name="action" value="onRemoveBaPaList"/>-->
-    <!--<ui:param name="update" value=":baInformationForm"/>-->
-<!--</ui:include>-->
+<p:dialog widgetVar="bahtnetDisbursementDialog" header="#{msg.get('app.disbursement.detail.bahtnet.dialog.header')}" height="300"
+          width="900" modal="true" resizable="false">
+
+    <ui:include src="dialog/disbursementBahtnetDialog.xhtml"/>
+</p:dialog>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteDisbursementMcDialog"/>
+    <ui:param name="name" value="confirmDeleteDisbursementMcDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteDisbursementMc"/>
+    <ui:param name="controller" value="#{disbursementInfo}"/>
+    <ui:param name="action" value="onDeleteDisbursementMcList"/>
+    <ui:param name="update" value=":disbursementForm"/>
+</ui:include>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteDisbursementDepositDialog"/>
+    <ui:param name="name" value="confirmDeleteDisbursementDepositDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteDisbursementDeposit"/>
+    <ui:param name="controller" value="#{disbursementInfo}"/>
+    <ui:param name="action" value="onDeleteDisbursementDepositList"/>
+    <ui:param name="update" value=":disbursementForm"/>
+</ui:include>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteDisbursementbahtnetDialog"/>
+    <ui:param name="name" value="confirmDeleteDisbursementbahtnetDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteDisbursementbahtnet"/>
+    <ui:param name="controller" value="#{disbursementInfo}"/>
+    <ui:param name="action" value="onDeleteDisbursementBahtnetList"/>
+    <ui:param name="update" value=":disbursementForm"/>
+</ui:include>
 
 </h:body>
 

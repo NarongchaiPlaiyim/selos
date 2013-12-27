@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
@@ -95,9 +96,9 @@ public class TCGDetailView implements Serializable {
     }
 
     public String getProposeInThis() {
-        if (isProposeInThisRequest == 1) {
+        if (isProposeInThisRequest == RadioValue.YES.value()) {
             proposeInThis = "Y";
-        } else if (isProposeInThisRequest == 0) {
+        } else if (isProposeInThisRequest == RadioValue.NO.value()) {
             proposeInThis = "N";
         }
         return proposeInThis;

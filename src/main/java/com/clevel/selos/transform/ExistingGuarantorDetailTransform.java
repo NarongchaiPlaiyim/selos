@@ -1,9 +1,12 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.ExistingGuarantorDetail;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingGuarantorDetailView;
 
 import javax.inject.Inject;
@@ -12,6 +15,13 @@ import java.util.Date;
 import java.util.List;
 
 public class ExistingGuarantorDetailTransform extends Transform {
+
+    @Inject
+    CustomerDAO customerDAO;
+
+    @Inject
+    CustomerTransform customerTransform;
+
 
     @Inject
     public ExistingGuarantorDetailTransform() {
@@ -32,9 +42,12 @@ public class ExistingGuarantorDetailTransform extends Transform {
                 existingGuarantorDetail.setCreateDate(new Date());
                 existingGuarantorDetail.setCreateBy(user);
             }
-
+            existingGuarantorDetail.setModifyDate(new Date());
+            existingGuarantorDetail.setModifyBy(user);
             existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
-            existingGuarantorDetail.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
+            log.info("existingGuarantorDetailView.getGuarantorName().getId() is " + existingGuarantorDetailView.getGuarantorName().getId());
+            Customer guarantor = customerDAO.findById(existingGuarantorDetailView.getGuarantorName().getId());
+            existingGuarantorDetail.setGuarantorName(guarantor);
             existingGuarantorDetail.setTcglgNo(existingGuarantorDetailView.getTcgLgNo());
             existingGuarantorDetail.setExistingCreditFacility(existingCreditFacility);
             existingGuarantorDetail.setTotalLimitGuaranteeAmount(existingGuarantorDetailView.getTotalLimitGuaranteeAmount());
@@ -56,7 +69,8 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetailView.setCreateBy(existingGuarantorDetail.getCreateBy());
             existingGuarantorDetailView.setModifyDate(existingGuarantorDetail.getModifyDate());
             existingGuarantorDetailView.setModifyBy(existingGuarantorDetail.getModifyBy());
-            existingGuarantorDetailView.setGuarantorName(existingGuarantorDetail.getGuarantorName());
+            CustomerInfoView guarantorView = customerTransform.transformToView(existingGuarantorDetail.getGuarantorName());
+            existingGuarantorDetailView.setGuarantorName(guarantorView);
             existingGuarantorDetailView.setTcgLgNo(existingGuarantorDetail.getTcglgNo());
             existingGuarantorDetailView.setTotalLimitGuaranteeAmount(existingGuarantorDetail.getTotalLimitGuaranteeAmount());
             existingGuarantorDetailViews.add(existingGuarantorDetailView);
