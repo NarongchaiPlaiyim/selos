@@ -2,10 +2,12 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AccountInfoControl;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.master.BankBranchDAO;
 import com.clevel.selos.dao.master.OpenAccountProductDAO;
 import com.clevel.selos.dao.master.OpenAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BankAccountType;
+import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.view.*;
@@ -44,6 +46,8 @@ public class AccountInfo implements Serializable {
     private OpenAccountPurposeDAO purposeDAO;
     @Inject
     private AccountInfoControl accountInfoControl;
+    @Inject
+    private BankBranchDAO bankBranchDAO;
 
     private List<OpenAccountPurpose> purposeList;
 
@@ -65,7 +69,7 @@ public class AccountInfo implements Serializable {
     //*** Drop down List ***//
     private List<BankAccountType> accountTypeList;
     private List<OpenAccountProduct> productTypeList;
-    private List<AccountInfoBranchView> branchList;
+    private List<BankBranch> branchList;
 
     //*** Check box ***//
     private List<AccountInfoPurposeView> purposeViewList;
@@ -149,9 +153,9 @@ public class AccountInfo implements Serializable {
         //Branch
         idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
         if(0 != id){
-            for (AccountInfoBranchView branchView : branchList){
-                if (branchView.getId() == idLong){
-                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branchView.getName());
+            for (BankBranch branch : branchList){
+                if (branch.getId() == idLong){
+                    accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branch.getName());
                     break;
                 }
             }
@@ -234,17 +238,7 @@ public class AccountInfo implements Serializable {
         accountInfoDetailView = new AccountInfoDetailView();
 
         //branchModelList
-        branchList = new ArrayList<AccountInfoBranchView>();
-        AccountInfoBranchView branchView = null;
-
-        branchView = new AccountInfoBranchView();
-        branchView.setId(01);
-        branchView.setName("Branch");
-        branchList.add(branchView);
-        branchView = new AccountInfoBranchView();
-        branchView.setId(02);
-        branchView.setName("Branch 2");
-        branchList.add(branchView);
+        branchList = bankBranchDAO.findAll();
 
         //Account Type
         accountTypeList = accountTypeDAO.findOpenAccountType();
@@ -290,7 +284,13 @@ public class AccountInfo implements Serializable {
 
     }
 
+    public List<BankBranch> getBranchList() {
+        return branchList;
+    }
 
+    public void setBranchList(List<BankBranch> branchList) {
+        this.branchList = branchList;
+    }
 
     public OpenAccountProductDAO getProductTypeDAO() {
         return productTypeDAO;
@@ -378,14 +378,6 @@ public class AccountInfo implements Serializable {
 
     public void setProductTypeList(List<OpenAccountProduct> productTypeList) {
         this.productTypeList = productTypeList;
-    }
-
-    public List<AccountInfoBranchView> getBranchList() {
-        return branchList;
-    }
-
-    public void setBranchList(List<AccountInfoBranchView> branchList) {
-        this.branchList = branchList;
     }
 
     public List<AccountInfoPurposeView> getPurposeViewList() {
