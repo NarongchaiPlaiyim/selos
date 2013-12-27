@@ -24,7 +24,7 @@ public class CheckCriteria {
 
     @WebMethod
     public CheckCriteriaResponse caseCriteria(@WebParam(name = "appId") String appId) {
-
+    log.debug("caseCriteriaService()");
         CheckCriteriaResponse criteriaResponse = new CheckCriteriaResponse();
 
         try {
