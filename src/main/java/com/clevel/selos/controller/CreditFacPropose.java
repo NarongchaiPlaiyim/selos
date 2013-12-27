@@ -980,6 +980,7 @@ public class CreditFacPropose implements Serializable {
     public void onAddProposeCollInfo() {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
         modeForButton = ModeForButton.ADD;
+
         Cloner cloner = new Cloner();
         newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
         newCollateralInfoView = new NewCollateralInfoView();
@@ -1090,7 +1091,6 @@ public class CreditFacPropose implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
-
             log.info("newCreditFacilityView.getNewCollateralInfoViewList() {}", newCreditFacilityView.getNewCollateralInfoViewList().size());
 
         } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
@@ -1173,13 +1173,17 @@ public class CreditFacPropose implements Serializable {
 //                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //                } else {
         log.debug("onAddCollateralOwnerUW() collateralOwnerUW.id: {}", newSubCollateralDetailView.getCollateralOwnerUW().getId());
-        if (newSubCollateralDetailView.getCollateralOwnerUW().getId() == 0) {
-            log.error("Can not add CollateralOwnerUw because id = 0!");
-            return;
-        }
 
-        CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(newSubCollateralDetailView.getCollateralOwnerUW());
-        newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
+        if(newSubCollateralDetailView.getCollateralOwnerUW() != null)
+        {
+            if (newSubCollateralDetailView.getCollateralOwnerUW().getId() == 0) {
+                log.error("Can not add CollateralOwnerUw because id = 0!");
+                return;
+            }
+
+            CustomerInfoView collateralOwnerAdd = customerInfoControl.getCustomerById(newSubCollateralDetailView.getCollateralOwnerUW());
+            newSubCollateralDetailView.getCollateralOwnerUWList().add(collateralOwnerAdd);
+        }
 //                }
 //            }
 //        }
@@ -1200,13 +1204,16 @@ public class CreditFacPropose implements Serializable {
 //                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 //            } else {
         log.debug("onAddMortgageType() mortgageType.id: {}", newSubCollateralDetailView.getMortgageType().getId());
-        if (newSubCollateralDetailView.getMortgageType().getId() == 0) {
-            log.error("Can not add MortgageType because id = 0!");
-            return;
+        if(newSubCollateralDetailView.getMortgageType() != null)
+        {
+            if (newSubCollateralDetailView.getMortgageType().getId() == 0) {
+                log.error("Can not add MortgageType because id = 0!");
+                return;
+            }
+            MortgageType mortgageType = mortgageTypeDAO.findById(newSubCollateralDetailView.getMortgageType().getId());
+            log.info("onAddMortgageType :: {} ", newSubCollateralDetailView.getMortgageType());
+            newSubCollateralDetailView.getMortgageList().add(mortgageType);
         }
-        MortgageType mortgageType = mortgageTypeDAO.findById(newSubCollateralDetailView.getMortgageType().getId());
-        log.info("onAddMortgageType :: {} ", newSubCollateralDetailView.getMortgageType());
-        newSubCollateralDetailView.getMortgageList().add(mortgageType);
 //            }
 //        }
     }
@@ -1225,12 +1232,16 @@ public class CreditFacPropose implements Serializable {
 //            } else {
         log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getRelatedWithId());
 
+        if (newSubCollateralDetailView.getRelatedWithId() == 0) {
+            log.error("Can not add relatedWith because id = 0!");
+            return;
+        }
+
         NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getRelatedWithId());
         if (relatedWithSelected.getRelatedWithList() != null) {
             newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
         }
         newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
-
 
     }
 
