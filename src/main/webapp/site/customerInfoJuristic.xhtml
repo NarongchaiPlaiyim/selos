@@ -45,11 +45,11 @@
                                 <td class="title" style="width: 270px; max-width: 270px; min-width: 270px;">
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.docType')}"/>
                                 </td>
-                                <td style="width: 250px; max-width: 250px; min-width: 250px;">
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                <td style="width: 300px; max-width: 300px; min-width: 300px;">
+                                    <p:selectOneMenu size="1" style="width: 250px; max-width: 250px; min-width: 250px;"
                                                      value="#{custInfoSumJuris.customerInfoSearch.documentType.id}"
                                                      required="#{not empty param[searchButton.clientId]}"
-                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}">
+                                                     disabled="#{custInfoSumJuris.editForm}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.documentTypeList}"
                                                        var="docType"
@@ -63,7 +63,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumJuris.customerInfoSearch.searchBy}"
                                                       required="#{not empty param[searchButton.clientId]}"
-                                                      disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}">
+                                                      disabled="#{custInfoSumJuris.editForm}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.search.citizenId')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.search.tmbCusId')}" itemValue="2"/>
                                     </p:selectOneRadio>
@@ -74,7 +74,7 @@
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
-                                                 disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
+                                                 disabled="#{custInfoSumJuris.editForm}"/>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
@@ -82,7 +82,7 @@
                                                      process="@form"
                                                      actionListener="#{custInfoSumJuris.onSearchCustomerInfo()}"
                                                      update=":msgBoxSystemMessagePanel :frmMain"
-                                                     disabled="#{custInfoSumJuris.customerInfoView.searchFromRM == 1}"/>
+                                                     disabled="#{custInfoSumJuris.editForm}"/>
                                 </td>
                             </tr>
 
@@ -138,7 +138,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.reference')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumJuris.customerInfoView.reference.id}" id="reference"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqReference}"
                                                      disabled="#{custInfoSumJuris.editBorrower}">
@@ -330,8 +330,8 @@
                                 <td>
                                     <p:inputText id="registeredCapital" styleClass="right" value="#{custInfoSumJuris.customerInfoView.capital}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:registeredCapital"/>
                                     </p:inputText>
@@ -344,8 +344,8 @@
                                 <td>
                                     <p:inputText id="paidUpCapital" styleClass="right" value="#{custInfoSumJuris.customerInfoView.paidCapital}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:paidUpCapital"/>
                                     </p:inputText>
@@ -358,8 +358,8 @@
                                 <td>
                                     <p:inputText id="salesFormFinancialStmt" styleClass="right" value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:salesFormFinancialStmt"/>
                                     </p:inputText>
@@ -374,7 +374,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                         <p:ajax event="blur" update=":frmMain:shareHolderRatio"/>
                                     </p:inputText>
                                 </td>
@@ -388,7 +388,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                         <p:ajax event="blur" update=":frmMain:totalShares"/>
                                     </p:inputText>
                                 </td>
@@ -1065,7 +1065,7 @@
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.csi')}"/>
                                 </td>
-                                <td>
+                                <td colspan="6">
                                     <p:dataTable var="item" value="#{custInfoSumJuris.customerInfoView.customerCSIList}"
                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 

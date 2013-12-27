@@ -443,34 +443,103 @@ public class CustomerInfoControl extends BusinessControl {
         //currentAddress = 1 is current address
         //currentAddress = 0 is other address
         int currentAddress = 0;
-        if(!add1.getAddressNo().equalsIgnoreCase(add2.getAddressNo())){
+        if(add1.getAddressNo() != null && add2.getAddressNo() != null){
+            if(!add1.getAddressNo().equalsIgnoreCase(add2.getAddressNo())){
+                return currentAddress;
+            }
+        } else if(add1.getAddressNo() != null && add2.getAddressNo() == null){
+            return currentAddress;
+        } else if(add2.getAddressNo() != null && add1.getAddressNo() == null){
             return currentAddress;
         }
-        if(!add1.getMoo().equalsIgnoreCase(add2.getMoo())){
+
+        if(add1.getMoo() != null && add2.getMoo() != null){
+            if(!add1.getMoo().equalsIgnoreCase(add2.getMoo())){
+                return currentAddress;
+            }
+        } else if(add1.getMoo() != null && add2.getMoo() == null){
+            return currentAddress;
+        } else if(add2.getMoo() != null && add1.getMoo() == null){
             return currentAddress;
         }
-        if(!add1.getBuilding().equalsIgnoreCase(add2.getBuilding())){
+
+        if(add1.getBuilding() != null && add2.getBuilding() != null){
+            if(!add1.getBuilding().equalsIgnoreCase(add2.getBuilding())){
+                return currentAddress;
+            }
+        } else if(add1.getBuilding() != null && add2.getBuilding() == null){
+            return currentAddress;
+        } else if(add2.getBuilding() != null && add1.getBuilding() == null){
             return currentAddress;
         }
-        if(!add1.getRoad().equalsIgnoreCase(add2.getRoad())){
+
+        if(add1.getRoad() != null && add2.getRoad() != null){
+            if(!add1.getRoad().equalsIgnoreCase(add2.getRoad())){
+                return currentAddress;
+            }
+        } else if(add1.getRoad() != null && add2.getRoad() == null){
+            return currentAddress;
+        } else if(add2.getRoad() != null && add1.getRoad() == null){
             return currentAddress;
         }
-        if(!add1.getPostalCode().equalsIgnoreCase(add2.getPostalCode())){
+
+        if(add1.getPostalCode() != null && add2.getPostalCode() != null){
+            if(!add1.getPostalCode().equalsIgnoreCase(add2.getPostalCode())){
+                return currentAddress;
+            }
+        } else if(add1.getPostalCode() != null && add2.getPostalCode() == null){
+            return currentAddress;
+        } else if(add2.getPostalCode() != null && add1.getPostalCode() == null){
             return currentAddress;
         }
-        if(!add1.getPhoneNumber().equalsIgnoreCase(add2.getPhoneNumber())){
+
+        if(add1.getPhoneNumber() != null && add2.getPhoneNumber() != null){
+            if(!add1.getPhoneNumber().equalsIgnoreCase(add2.getPhoneNumber())){
+                return currentAddress;
+            }
+        } else if(add1.getPhoneNumber() != null && add2.getPhoneNumber() == null){
+            return currentAddress;
+        } else if(add2.getPhoneNumber() != null && add1.getPhoneNumber() == null){
             return currentAddress;
         }
-        if(!add1.getExtension().equalsIgnoreCase(add2.getExtension())){
+
+        if(add1.getExtension() != null && add2.getExtension() != null){
+            if(!add1.getExtension().equalsIgnoreCase(add2.getExtension())){
+                return currentAddress;
+            }
+        } else if(add1.getExtension() != null && add2.getExtension() == null){
+            return currentAddress;
+        } else if(add2.getExtension() != null && add1.getExtension() == null){
             return currentAddress;
         }
-        if(!add1.getContactName().equalsIgnoreCase(add2.getContactName())){
+
+        if(add1.getContactName() != null && add2.getContactName() != null){
+            if(!add1.getContactName().equalsIgnoreCase(add2.getContactName())){
+                return currentAddress;
+            }
+        } else if(add1.getContactName() != null && add2.getContactName() == null){
+            return currentAddress;
+        } else if(add2.getContactName() != null && add1.getContactName() == null){
             return currentAddress;
         }
-        if(!add1.getContactPhone().equalsIgnoreCase(add2.getContactPhone())){
+
+        if(add1.getContactPhone() != null && add2.getContactPhone() != null){
+            if(!add1.getContactPhone().equalsIgnoreCase(add2.getContactPhone())){
+                return currentAddress;
+            }
+        } else if(add1.getContactPhone() != null && add2.getContactPhone() == null){
+            return currentAddress;
+        } else if(add2.getContactPhone() != null && add1.getContactPhone() == null){
             return currentAddress;
         }
-        if(!add1.getAddress().equalsIgnoreCase(add2.getAddress())){
+
+        if(add1.getAddress() != null && add2.getAddress() != null){
+            if(!add1.getAddress().equalsIgnoreCase(add2.getAddress())){
+                return currentAddress;
+            }
+        } else if(add1.getAddress() != null && add2.getAddress() == null){
+            return currentAddress;
+        } else if(add2.getAddress() != null && add1.getAddress() == null){
             return currentAddress;
         }
 

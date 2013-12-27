@@ -89,7 +89,7 @@ public class ExistingCollateralDetail implements Serializable {
     private ExistingCreditFacility existingCreditFacility;
 
     @OneToMany(mappedBy = "existingCollateralDetail", cascade = CascadeType.ALL)
-    private List<ExistingCreditTypeDetail> existingCreditTypeDetailList;
+    private List<ExistingCollateralCredit> existingCollateralCreditList;
 
     public long getId() {
         return id;
@@ -259,12 +259,12 @@ public class ExistingCollateralDetail implements Serializable {
         this.existingCreditFacility = existingCreditFacility;
     }
 
-    public List<ExistingCreditTypeDetail> getExistingCreditTypeDetailList() {
-        return existingCreditTypeDetailList;
+    public List<ExistingCollateralCredit> getExistingCollateralCreditList() {
+        return existingCollateralCreditList;
     }
 
-    public void setExistingCreditTypeDetailList(List<ExistingCreditTypeDetail> existingCreditTypeDetailList) {
-        this.existingCreditTypeDetailList = existingCreditTypeDetailList;
+    public void setExistingCollateralCreditList(List<ExistingCollateralCredit> existingCollateralCreditList) {
+        this.existingCollateralCreditList = existingCollateralCreditList;
     }
 
     @Override
@@ -287,7 +287,7 @@ public class ExistingCollateralDetail implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("existingCreditFacility", existingCreditFacility)
-                .append("existingCreditTypeDetailList", existingCreditTypeDetailList)
+                .append("existingCollateralCreditList", existingCollateralCreditList)
                 .toString();
     }
 }

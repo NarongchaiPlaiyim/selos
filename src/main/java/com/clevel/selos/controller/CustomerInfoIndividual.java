@@ -267,6 +267,9 @@ public class CustomerInfoIndividual implements Serializable {
     //mode
     private boolean isFromJuristic;
 
+    private boolean isEditForm;
+    private boolean isEditFormSpouse;
+
     //for date
     private String currentDateDDMMYY;
 
@@ -331,6 +334,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onAddNewIndividual(){
+        isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.getSpouse().reset();
@@ -412,6 +416,12 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView = customerInfoControl.getCustomerIndividualById(customerId);
         }
 
+        if(customerInfoView.getId() != 0){
+            isEditForm = true;
+        } else {
+            isEditForm = false;
+        }
+
         onChangeMaritalStatus();
         onChangeRelation();
         onChangeReference();
@@ -431,6 +441,9 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm5();
             onChangeProvinceEditForm6();
             onChangeDistrictEditForm6();
+            isEditFormSpouse = true;
+        } else {
+            isEditFormSpouse = false;
         }
 
         if(customerInfoView.getSearchFromRM() == 1){
@@ -805,6 +818,7 @@ public class CustomerInfoIndividual implements Serializable {
                 cusView.reset();
                 customerInfoView.setSpouse(cusView);
                 onChangeRelation();
+                isEditFormSpouse = false;
             }
         }
     }
@@ -1369,6 +1383,18 @@ public class CustomerInfoIndividual implements Serializable {
         return "customerInfoJuristic?faces-redirect=true";
     }
 
+    public String onCancelFromJuristic(){
+        log.debug("onCancelFromJuristic");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isFromIndividualParam",true);
+        map.put("isFromSummaryParam",false);
+        map.put("customerId",new Long(0));
+        map.put("customerInfoView", cusInfoJuristic);
+        FacesUtil.getFlash().put("cusInfoParams", map);
+        return "customerInfoJuristic?faces-redirect=true";
+    }
+
     public void onChangeTitleTh(){
         customerInfoView.getTitleEn().setId(customerInfoView.getTitleTh().getId());
     }
@@ -1387,6 +1413,14 @@ public class CustomerInfoIndividual implements Serializable {
 
     public Date getCurrentDate() {
         return DateTime.now().toDate();
+    }
+
+    public void onChangeSearch(){
+        customerInfoView.setSearchId("");
+    }
+
+    public void onChangeSpouseSearch(){
+        customerInfoView.getSpouse().setSearchId("");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2536,5 +2570,21 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public boolean isEditForm() {
+        return isEditForm;
+    }
+
+    public void setEditForm(boolean editForm) {
+        isEditForm = editForm;
+    }
+
+    public boolean isEditFormSpouse() {
+        return isEditFormSpouse;
+    }
+
+    public void setEditFormSpouse(boolean editFormSpouse) {
+        isEditFormSpouse = editFormSpouse;
     }
 }

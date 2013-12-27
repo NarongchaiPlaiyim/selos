@@ -74,7 +74,7 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/></td>
                             <td colspan="5">
-                                <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="true"
+                                <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="#{not empty param[saveButton.clientId]}"
                                                  id="businessGroupId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessGroupList}"
@@ -213,8 +213,6 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="6">
-                                <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizProductDetail')}"/>
-                                <p:spacer width="10px"/>
                                 <p:commandButton id="btnAddBizProduct"
                                                  value="#{msg.get('app.button.add')}"
                                                  styleClass="medium"
@@ -797,12 +795,12 @@
     </p:panel>
 
     <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"  resizable="false"
-              modal="true" width="350" height="280">
+              modal="true" width="350" height="300">
         <ui:include src="dialog/bizStakeholderDialog.xhtml"/>
     </p:dialog>
 
     <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg" resizable="false"
-              modal="true" width="350" height="170">
+              modal="true" width="380" height="180">
         <ui:include src="dialog/bizProductDialog.xhtml"/>
     </p:dialog>
 

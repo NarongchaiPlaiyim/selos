@@ -51,7 +51,7 @@
                         <!-- only citizen id fix key only number -->
                         <p:inputText id="dlgInputSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="13"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)"
+                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onblur="checkSearchThaiID(this)"
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and (prescreenMaker.borrowerInfo.documentType.id == 1 || prescreenMaker.borrowerInfo.documentType.id == 3)}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <!-- only passport allow free text -->

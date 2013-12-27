@@ -938,9 +938,10 @@ public class BankStmtControl extends BusinessControl {
         List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList = bankStmtView.getSrcOfCollateralProofViewList();
 
         BankAccountType bankAccTypeFromBankStmt = null;
-        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
+        if (bankStmtView.getBankAccountTypeView() != null && bankStmtView.getBankAccountTypeView().getId() != 0) {
             bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId());
-        } else {
+        }
+        else if (bankStmtView.getOtherAccountType() != 0) {
             bankAccTypeFromBankStmt = bankAccountTypeDAO.findById(bankStmtView.getOtherAccountType());
         }
         /*  source.lastThreeMonth1 = BankStmtDetail.asOfDate( [T-x] )
