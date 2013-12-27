@@ -7,6 +7,9 @@ import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.bpm.model.BPMInbox;
+import com.clevel.selos.integration.bpm.model.FieldName;
+import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.brms.service.EndPointImp;
@@ -100,6 +103,8 @@ public class WelcomePage implements Serializable {
     DWHInterface dwh;
     @Inject
     COMSInterface coms;
+    @Inject
+    BPMInterface bpmInterface;
 
     @Inject
     EndPointImp endPointImp;
@@ -227,6 +232,36 @@ public class WelcomePage implements Serializable {
             log.debug("appraisalDataResult result : {}", appraisalDataResult);
             CollateralDetailView collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
             log.debug("collateralDetailView result : {}", collateralDetailView);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testMyBox() {
+        try {
+            List<BPMInbox> bpmInboxList = bpmInterface.getMyBoxList("BDM001", FieldName.APPNUMBER, OrderType.ASCENDING, 5, 4);
+            log.debug("bpmInboxList result : {}", bpmInboxList);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testReturnBox() {
+        try {
+            List<BPMInbox> bpmInboxList = bpmInterface.getReturnBoxList("BDM001", FieldName.APPNUMBER, OrderType.ASCENDING, 5, 1);
+            log.debug("bpmInboxList result : {}", bpmInboxList);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testBDMUWBox() {
+        try {
+            List<BPMInbox> bpmInboxList = bpmInterface.getBDMUWBoxList("BDM001", FieldName.APPNUMBER, OrderType.ASCENDING, 5, 1);
+            log.debug("bpmInboxList result : {}", bpmInboxList);
         } catch (Exception e) {
             log.error("", e);
         }
@@ -425,9 +460,6 @@ public class WelcomePage implements Serializable {
         log.debug("testStoredProcedure");
         STPExecutor.getApplicationNumber("XX");
     }
-
-    @Inject
-    BPMInterface bpmInterface;
 
     public void testBPM() {
         log.debug("testBPM");
