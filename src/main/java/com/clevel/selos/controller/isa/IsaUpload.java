@@ -104,8 +104,8 @@ public class IsaUpload implements Serializable {
                 do {
                     File subFolder = files[index];
                     System.out.println(subFolder.getPath());
-//                    File[] subFiles = subFolder.listFiles();
-                    File[] subFiles = new File(PATH_FILE).listFiles();
+                    File[] subFiles = subFolder.listFiles();
+//                    File[] subFiles = new File(PATH_FILE).listFiles();
                     System.out.println("subFiles : "+subFiles.length);
                     if (subFiles.length > 0) {
                         System.out.println("o");
@@ -187,7 +187,7 @@ public class IsaUpload implements Serializable {
 
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
-                isaUploadService.processingUploadFile(PATH_FILE, fileDir.listFiles()[0].getName());
+                isaUploadService.processingUploadFile(PATH_FILE, filePath);
 //                initForm();
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

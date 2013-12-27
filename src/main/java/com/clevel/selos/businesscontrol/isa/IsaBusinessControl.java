@@ -209,7 +209,7 @@ public class IsaBusinessControl extends BusinessControl {
         log.debug("searchUser()");
 
         Criteria criteria = userDAO.createCriteria();
-//        criteria.add(Restrictions.eq("status",UserStatus.NORMAL));
+        criteria.add(Restrictions.eq("userStatus",UserStatus.NORMAL));
 
         if (!isaSearchView.getId().equals("")) {
             criteria.add(Restrictions.like("id", "%" + isaSearchView.getId() + "%"));

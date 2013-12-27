@@ -199,6 +199,7 @@ public class IsaUploadService extends BusinessControl {
 
         public List<String> getToken(String input) {
             log.debug("===== begin getToken =====");
+
             String _tmp = input;
             List<String> tokens = new ArrayList<String>();
             while (_tmp.length() > 0) {
@@ -208,7 +209,11 @@ public class IsaUploadService extends BusinessControl {
                     int dIdx = _tmp.indexOf('\"', 1);
                     token = _tmp.substring(1, dIdx);
                     int cIdx = _tmp.indexOf(",", dIdx + 1);
-                    _tmp = _tmp.substring(cIdx + 1);
+                    if (cIdx < 0) {
+                        _tmp = "";
+                    } else {
+                        _tmp = _tmp.substring(cIdx + 1);
+                    }
 
                 } else {
                     int cIdx = _tmp.indexOf(",");
