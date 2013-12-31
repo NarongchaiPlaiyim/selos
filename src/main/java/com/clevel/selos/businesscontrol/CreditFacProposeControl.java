@@ -337,6 +337,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.info("newCreditDetail :: {}", newCreditDetail.getId());
                 newGuarantorRelCredit.setNewCreditDetail(newCreditDetail);
                 newGuarantorRelCredit.setNewGuarantorDetail(newGuarantorDetail);
+//                newGuarantorRelCredit.setGuaranteeAmount(newCreditDetail.getGuaranteeAmount());
                 newGuarantorRelationDAO.persist(newGuarantorRelCredit);
                 log.info("persist newGuarantorRelCredit.. id...{}", newGuarantorRelCredit.getId());
             }

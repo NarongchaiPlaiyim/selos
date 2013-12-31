@@ -19,6 +19,9 @@ public class NewGuarantorRelCredit implements Serializable {
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
+/*    @Column(name = "guarantee_amount")
+    private BigDecimal guaranteeAmount;*/
+
     public long getId() {
         return id;
     }

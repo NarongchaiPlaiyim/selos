@@ -13,7 +13,7 @@
     <td  class="title" style="width:250px;text-align: left">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
     </td>
-    <td style="width: 100px;" >
+    <td style="width: 100px;">
         <p:inputText id="jobID"
                      value="#{creditFacPropose.newCollateralInfoView.jobID}"
                      required="#{not empty param[retrieveButton.clientId]}" />
@@ -49,17 +49,17 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecision}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecision}" style="width: 300px;"/>
     </td>
 </tr>
 <tr>
     <td  class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
-    <td>
+    <td  class="title" style="width:100px;text-align: left">
         <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecisionReason}"/>
     </td>
-    <td  class="title">
+    <td  class="title" style="width:250px;text-align: left">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
