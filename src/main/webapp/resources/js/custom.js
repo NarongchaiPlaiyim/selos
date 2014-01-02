@@ -782,28 +782,46 @@ function onOneClick(buttonID, isDisable){
      document.getElementById(buttonID).disabled=isDisable;
 }
 
-function alphabetThaiEng(element){
-    var alphabet = element.val();
-    var alp_array = alphabet.split("");
-    var isAlphabet = false;
-    var pattern1 = /^[\u0E01-\u0E5B|A-Za-z|\s|-]+$/;
-    var pattern2 = /^[๑-๙||฿|]+$/
-    var char_at;
-    if(alp_array.length > 0){
-        for(var i=0;i<alp_array.length; i++){
-            isAlphabet = false;
-            char_at = alp_array[i];
-            if(!pattern1.test(char_at)){
-                isAlphabet = true;
-            }else{
-                if(pattern2.test(char_at)){
-                    isAlphabet = true;
-                }
-            }
-            if(isAlphabet){
-                alp_array.splice(i, 1);
-            }
-        }
+
+function onKeyPressAccountName(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
+     *  41=)       42=*    43=+
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  92=|
+     *  94=^       95=_    123={       125=}
+     *  124=|      3665-3673 = 0-๙    3647=฿
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 43 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 || keyCode == 125 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 92 || keyCode == 93 || keyCode == 94 || keyCode == 95 || keyCode == 123 || keyCode == 124 ||
+        keyCode == 3647 ||(keyCode > 3664 && keyCode < 3674) || keyCode == 48 || (keyCode > 48 && keyCode < 58) ){
+        return false;
     }
-    element.val(alp_array.join(""));
+
+    return true;
+}
+
+function onKeyDownAccountName(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     {  16=Ctrl  9=Tab  35=End 36=Home 37=Left Arrow 38=Up Arrow 39=Right Arrow 40=Down Arrow
+     *
+     */
+
+    if(keyCode == 16 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40){
+        return false;
+    }
+
+    return true;
 }

@@ -14,7 +14,7 @@
                     </td>
                     <td>
                         <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"
-                                     onkeyup="return alphabetThaiEng($(this));"/>
+                                     onkeypress="return onKeyPressAccountName(event);" onkeydown="return onKeyDownAccountName(event);" />
                     </td>
                 </tr>
                 <tr>
