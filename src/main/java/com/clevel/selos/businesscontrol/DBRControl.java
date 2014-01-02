@@ -172,7 +172,7 @@ public class DBRControl extends BusinessControl {
                     debtForCalculate = Util.multiply(dbrDetail.getLimit(), BigDecimal.valueOf(10));
                     debtForCalculate = Util.divide(debtForCalculate, 100);
                     break;
-                default:
+                default: // non calculator
                     break;
             }
             dbrDetail.setDebtForCalculate(debtForCalculate);
