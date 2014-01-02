@@ -791,16 +791,16 @@ function onKeyPressAccountName(evt){
      * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
      *  33=!       34="    35=#        36=$
      *  37=%       38=&    39='        40=(
-     *  41=)       42=*    43=+
-     *  58=:       59=;    60=<        62=<
-     *  63=?       64=@    91=[        93=]
-     *  92=|
+     *  41=)       42=*    43=+        44=,
+     *  58=:       59=;    60=<        61='='
+     *  62=<       63=?    64=@        91=[
+     *  93=]       92=|
      *  94=^       95=_    123={       125=}
      *  124=|      3665-3673 = 0-๙    3647=฿
      */
 
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
-        keyCode == 41 || keyCode == 42 || keyCode == 43 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 || keyCode == 125 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 43 || keyCode == 44 || keyCode == 58 || keyCode == 59 || keyCode == 60 ||keyCode == 61 || keyCode == 62 || keyCode == 125 ||
         keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 92 || keyCode == 93 || keyCode == 94 || keyCode == 95 || keyCode == 123 || keyCode == 124 ||
         keyCode == 3647 ||(keyCode > 3664 && keyCode < 3674) || keyCode == 48 || (keyCode > 48 && keyCode < 58) ){
         return false;
