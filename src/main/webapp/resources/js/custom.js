@@ -154,7 +154,7 @@ function onKeyPressNumber(evt){
      *  94=^       95=_    123={       125=}
      */
 
-    alert("keyPress : " + keyCode);
+//    alert("keyPress : " + keyCode);
 
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
         keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
@@ -174,7 +174,7 @@ function onKeyPressNumber(evt){
 function onKeyDownNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
-    alert("keyDown : " + keyCode);
+//    alert("keyDown : " + keyCode);
 
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
         return true;
