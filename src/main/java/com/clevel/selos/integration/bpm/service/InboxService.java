@@ -10,12 +10,13 @@ import com.clevel.selos.system.message.Message;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InboxService {
+public class InboxService implements Serializable {
     @Inject
     @BPM
     Logger log;
