@@ -10,6 +10,7 @@ import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.bpm.model.BPMInbox;
+import com.clevel.selos.integration.bpm.model.BPMInboxRecord;
 import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.bpm.service.InboxService;
@@ -283,6 +284,26 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
         log.debug("getBDMUWBoxList. (result size: {})", bpmInboxList.size());
         return bpmInboxList;
+    }
+
+    @Override
+    public BPMInboxRecord getInboxRecord(String userId) {
+        log.debug("getInboxRecord. (userId: {})",userId);
+        Date now = new Date();
+        BPMInboxRecord bpmInboxRecord = new BPMInboxRecord();
+        String linkKey = Util.getLinkKey(userId);
+        try {
+            bpmInboxRecord = inboxService.getInboxRecord(userId);
+            log.debug("[{}] getInboxRecord success.", linkKey);
+            bpmAuditor.add(userId, "getInboxRecord", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox record in BPM!", linkKey, e);
+            bpmAuditor.add(userId, "getInboxRecord", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getInboxRecord. (result : {})", bpmInboxRecord);
+        return bpmInboxRecord;
     }
 
     private UserDTO getUserDTO() {
