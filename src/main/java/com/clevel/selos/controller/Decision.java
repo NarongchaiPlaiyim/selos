@@ -1181,7 +1181,7 @@ public class Decision implements Serializable {
 
 
     public void onDeleteSubCollateral() {
-        log.debug("onDeleteSubCollateral() rowIndexCollateral, rowIndexCollHead, rowIndexSubColl: {}",
+        log.debug("onDeleteSubCollateral() rowIndexCollateral: {}, rowIndexCollHead: {}, rowIndexSubColl: {}",
                 rowIndexCollateral, rowIndexCollHead, rowIndexSubColl);
         decisionView.getApproveCollateralList().get(rowIndexCollHead)
                 .getNewCollateralHeadDetailViewList().get(rowIndexCollateral)
