@@ -9,7 +9,6 @@
 <h:head>
     <title>SE-LOS : TCG Calculation</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
 </h:head>
 
@@ -308,6 +307,10 @@
                 <h:inputHidden id="pagename" value="mnuprescreen"/>
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
     </p:panel>
 
@@ -325,10 +328,7 @@
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
 
-    <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"

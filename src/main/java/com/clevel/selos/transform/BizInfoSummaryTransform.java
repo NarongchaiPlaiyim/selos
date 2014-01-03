@@ -260,13 +260,18 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummaryView.setProvince(new Province());
         }
 
+        log.info("find bizInfoSummary.getDistrict");
+
         if(bizInfoSummary.getDistrict() != null){
+            log.info( "bizInfoSummary.getDistrict is " + bizInfoSummary.getDistrict().getId()) ;
             bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         } else {
             bizInfoSummaryView.setDistrict(new District());
         }
+        log.info("find bizInfoSummary.setSubDistrict");
 
         if(bizInfoSummary.getSubDistrict() != null){
+            log.info( "bizInfoSummary.setSubDistrict is " + bizInfoSummary.getSubDistrict().getCode());
             bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         } else {
             bizInfoSummaryView.setSubDistrict(new SubDistrict());

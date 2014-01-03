@@ -53,7 +53,7 @@
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 350px; width: 350px; max-width: 350px"></td>
+                                            <td style="min-width: 250px; width: 250px; max-width: 250px"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                             </td>
@@ -81,7 +81,7 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyPressMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
 
@@ -95,7 +95,7 @@
                                             </td>
                                             <td>
                                                 <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()"
-                                                             onkeydown="return onKeyPressMoney(event);" onkeypress="return onKeyPressMoney(event);" >
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
                                                 </p:inputText>
@@ -111,7 +111,7 @@
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
-                                            <td style="min-width: 350px; width: 350px; max-width: 350px;"></td>
+                                            <td style="min-width: 250px; width: 250px; max-width: 250px;"></td>
                                             <td class="title">
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
                                             </td>

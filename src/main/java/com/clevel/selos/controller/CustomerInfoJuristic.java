@@ -178,6 +178,8 @@ public class CustomerInfoJuristic implements Serializable {
 
     private String currentDateDDMMYY;
 
+    private boolean isEditForm;
+
     public CustomerInfoJuristic(){
     }
 
@@ -220,6 +222,7 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onAddNewJuristic(){
+        isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
@@ -274,6 +277,12 @@ public class CustomerInfoJuristic implements Serializable {
     public void onEditJuristic(){
         if(customerId != 0 && customerId != -1){
             customerInfoView = customerInfoControl.getCustomerJuristicById(customerId);
+        }
+
+        if(customerInfoView.getId() != 0){
+            isEditForm = true;
+        } else {
+            isEditForm = false;
         }
 
         onChangeRelation();
@@ -1051,5 +1060,13 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setReqKYCLev(boolean reqKYCLev) {
         this.reqKYCLev = reqKYCLev;
+    }
+
+    public boolean isEditForm() {
+        return isEditForm;
+    }
+
+    public void setEditForm(boolean editForm) {
+        isEditForm = editForm;
     }
 }

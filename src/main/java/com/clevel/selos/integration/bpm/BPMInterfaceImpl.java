@@ -9,6 +9,11 @@ import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.bpm.model.BPMInbox;
+import com.clevel.selos.integration.bpm.model.BPMInboxRecord;
+import com.clevel.selos.integration.bpm.model.FieldName;
+import com.clevel.selos.integration.bpm.model.OrderType;
+import com.clevel.selos.integration.bpm.service.InboxService;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
@@ -27,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +76,9 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Inject
     @BPM
     SystemAuditor bpmAuditor;
+
+    @Inject
+    InboxService inboxService;
 
     @Inject
     @ExceptionMessage
@@ -215,6 +224,86 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION, msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION));
         }
+    }
+
+    @Override
+    public List<BPMInbox> getMyBoxList(String userId, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo) {
+        log.debug("getMyBoxList. (userId: {}, fieldName: {}, orderType: {}, recPerPage: {}, pageNo: {})",userId,fieldName,orderType,recPerPage,pageNo);
+        Date now = new Date();
+        List<BPMInbox> bpmInboxList = new ArrayList<BPMInbox>();
+        String linkKey = Util.getLinkKey(userId);
+        try {
+            bpmInboxList = inboxService.getMyBox(userId, fieldName, orderType, recPerPage, pageNo);
+            log.debug("[{}] getMyBoxList success.", linkKey);
+            bpmAuditor.add(userId, "getMyBoxList", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox list in BPM!", linkKey, e);
+            bpmAuditor.add(userId, "getMyBoxList", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getMyBoxList. (result size: {})", bpmInboxList.size());
+        return bpmInboxList;
+    }
+
+    @Override
+    public List<BPMInbox> getReturnBoxList(String userId, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo) {
+        log.debug("getReturnBoxList. (userId: {}, fieldName: {}, orderType: {}, recPerPage: {}, pageNo: {})",userId,fieldName,orderType,recPerPage,pageNo);
+        Date now = new Date();
+        List<BPMInbox> bpmInboxList = new ArrayList<BPMInbox>();
+        String linkKey = Util.getLinkKey(userId);
+        try {
+            bpmInboxList = inboxService.getReturnBox(userId, fieldName, orderType, recPerPage, pageNo);
+            log.debug("[{}] getReturnBoxList success.", linkKey);
+            bpmAuditor.add(userId, "getMyBoxList", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox list in BPM!", linkKey, e);
+            bpmAuditor.add(userId, "getReturnBoxList", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getReturnBoxList. (result size: {})", bpmInboxList.size());
+        return bpmInboxList;
+    }
+
+    @Override
+    public List<BPMInbox> getBDMUWBoxList(String userId, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo) {
+        log.debug("getBDMUWBoxList. (userId: {}, fieldName: {}, orderType: {}, recPerPage: {}, pageNo: {})",userId,fieldName,orderType,recPerPage,pageNo);
+        Date now = new Date();
+        List<BPMInbox> bpmInboxList = new ArrayList<BPMInbox>();
+        String linkKey = Util.getLinkKey(userId);
+        try {
+            bpmInboxList = inboxService.getBDMUWBox(userId, fieldName, orderType, recPerPage, pageNo);
+            log.debug("[{}] getBDMUWBoxList success.", linkKey);
+            bpmAuditor.add(userId, "getBDMUWBoxList", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox list in BPM!", linkKey, e);
+            bpmAuditor.add(userId, "getBDMUWBoxList", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getBDMUWBoxList. (result size: {})", bpmInboxList.size());
+        return bpmInboxList;
+    }
+
+    @Override
+    public BPMInboxRecord getInboxRecord(String userId) {
+        log.debug("getInboxRecord. (userId: {})",userId);
+        Date now = new Date();
+        BPMInboxRecord bpmInboxRecord = new BPMInboxRecord();
+        String linkKey = Util.getLinkKey(userId);
+        try {
+            bpmInboxRecord = inboxService.getInboxRecord(userId);
+            log.debug("[{}] getInboxRecord success.", linkKey);
+            bpmAuditor.add(userId, "getInboxRecord", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox record in BPM!", linkKey, e);
+            bpmAuditor.add(userId, "getInboxRecord", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getInboxRecord. (result : {})", bpmInboxRecord);
+        return bpmInboxRecord;
     }
 
     private UserDTO getUserDTO() {

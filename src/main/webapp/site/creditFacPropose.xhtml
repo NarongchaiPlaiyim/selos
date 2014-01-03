@@ -36,7 +36,7 @@
     </div>
     <div id="content_lastupdate">Last update by
         <h:outputText id="lastupdateName" value="#{creditFacPropose.newCreditFacilityView.modifyBy.userName}"/>,
-        <h:outputText id="lastupdateTime" value="#{creditFacPropose.newCreditFacilityView.modifyDate}"/>
+        <h:outputText id="lastupdateTime" value="#{creditFacPropose.newCreditFacilityView.modifyDate}"><f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/></h:outputText>
     </div>
 </div>
 <div id="content_form">
@@ -504,7 +504,8 @@
                 <td style="text-align: left">
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
-                                 style="text-align: right;">
+                                 style="text-align: right;"
+                                 required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -517,6 +518,7 @@
                     <p:spacer width="5px;"/>
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
+                                 required="#{not empty param[onsaveNewFacility.clientId]}"
                                  style="text-align: right;">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
@@ -552,7 +554,6 @@
 
 <tr>
 <td style="background-color:#ffffff">
-
 
 <table class="table_content"  style="width:100%">
 
@@ -702,8 +703,8 @@
             <table class="table_noborder" >
                 <tr>
                     <td class="title">#{msg.get('app.decision.tb.td.label.requestType')}</td>
-                    <td>#{proposeCredit.requestType == 1 ? msg.get('app.label.new') :
-                            proposeCredit.requestType == 2 ? msg.get('app.label.change') : ''}</td>
+                    <td>#{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
+                            proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.refinance')}</td>
                     <td>#{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
                             proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}</td>
@@ -741,7 +742,6 @@
 </tbody>
 
 </table>
-
 
 </td>
 </tr>
@@ -858,8 +858,7 @@
                     <p:spacer width="5px;"/>
                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactPhoneNo')}"/>
                     <p:spacer width="5px;"/>
-                    <p:inputText styleClass="large"
-                                 value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}"></p:inputText>
+                    <p:inputMask value="#{creditFacPropose.newCreditFacilityView.contactPhoneNo}" mask="(999)999-9999"/>
                     <p:spacer width="5px;"/>
                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
                     <p:spacer width="5px;"/>
@@ -959,6 +958,7 @@
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
                                  style="text-align: right;">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText> %
                 </td>
@@ -971,6 +971,7 @@
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
                                  style="text-align: right;">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText> %
                 </td>
@@ -1243,7 +1244,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 2 ? msg.get('app.label.change') : ''}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') : creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1860,7 +1861,7 @@
     <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteSubCollateral"/>
-    <ui:param name="update" value=":subCollateralDlgForm"/>
+    <ui:param name="update" value=":collateralDlgForm"/>
 </ui:include>
 
 

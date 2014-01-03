@@ -130,7 +130,7 @@ public class NCBInfoControl extends BusinessControl {
                 Customer customer = ncbDetail.getNcb().getCustomer();
                 accountType = ncbDetail.getAccountType();
                 accountStatus = ncbDetail.getAccountStatus();
-                if(accountStatus == null || accountType == null) break;
+                if(accountStatus == null || accountType == null) continue;
 
                 if(accountStatus.getDbrFlag() == 1 && accountType.getDbrFlag() == 1){
                     NCBDetailView ncbDetailView = new NCBDetailView();

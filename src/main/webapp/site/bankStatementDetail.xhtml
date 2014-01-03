@@ -215,7 +215,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.overLimitAmount}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -230,7 +230,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.grossCreditBalance}"
                                                              onclick="this.select();"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -245,7 +245,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.numberOfCreditTxn}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -264,7 +264,7 @@
                                                 <p:inputText value="#{item.excludeListBDM}"
                                                              readonly="#{bankStatementDetail.roleUW}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -280,7 +280,7 @@
                                                 <p:inputText value="#{item.excludeListUW}"
                                                              readonly="#{not bankStatementDetail.roleUW}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -296,7 +296,7 @@
                                                 <p:inputText value="#{item.creditAmountBDM}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -312,7 +312,7 @@
                                                 <p:inputText value="#{item.creditAmountUW}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -328,7 +328,7 @@
                                                 <p:inputText value="#{item.timesOfAvgCreditBDM}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -344,7 +344,7 @@
                                                 <p:inputText value="#{item.timesOfAvgCreditUW}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -362,7 +362,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.debitAmount}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -377,7 +377,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.numberOfDebitTxn}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -413,7 +413,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.maxBalance}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -446,7 +446,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.minBalance}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -461,7 +461,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.monthBalance}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -479,7 +479,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.numberOfChequeReturn}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -494,7 +494,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.chequeReturnAmount}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -509,7 +509,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.overLimitTimes}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -524,7 +524,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.overLimitDays}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -540,7 +540,7 @@
                                                 <p:inputText value="#{item.swingPercent}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -556,7 +556,7 @@
                                                 <p:inputText value="#{item.utilizationPercent}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -575,7 +575,7 @@
                                                 <p:inputText value="#{item.grossInflowPerLimit}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -591,7 +591,7 @@
                                                 <p:inputText value="#{item.totalTransaction}"
                                                              readonly="true"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
@@ -626,7 +626,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeGross}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -642,7 +642,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetBDM}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -658,7 +658,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetUW}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -674,7 +674,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgWithDrawAmount}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -690,7 +690,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgSwingPercent}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -706,7 +706,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgUtilizationPercent}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -722,7 +722,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.avgGrossInflowPerLimit}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -738,7 +738,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.chequeReturn}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -754,7 +754,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.trdChequeReturnAmount}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -770,7 +770,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.overLimitTimes}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
@@ -786,7 +786,7 @@
                                                  value="#{bankStatementDetail.bankStmtView.overLimitDays}"
                                                  readonly="true"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                  styleClass="right" style="width:200px;">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                         <p:ajax event="blur" update="@this"/>
