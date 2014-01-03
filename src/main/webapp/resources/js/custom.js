@@ -233,7 +233,7 @@ function onKeyPressMoney(evt){
 function onKeyDownMoney(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
-    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
         return true;
     }
     /** ALLOW NUMBER **/
@@ -241,7 +241,7 @@ function onKeyDownMoney(evt){
      *  44=comma    188=comma
      *  46=period   190=period
      */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 46 || keyCode == 190 ) {
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 190 ) {
         return true;
     } else {
         return checkAllowKeyMoney(keyCode);
