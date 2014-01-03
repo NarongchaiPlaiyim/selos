@@ -1077,11 +1077,11 @@ public class CreditFacPropose implements Serializable {
 //            } else {
         log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getRelatedWithId());
 
-       /* if (newSubCollateralDetailView.getRelatedWithId() == 0) {
+        if (newSubCollateralDetailView.getRelatedWithId() == 0) {
             log.error("Can not add relatedWith because id = 0!");
             return;
         }
-*/
+
         NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getRelatedWithId());
         if (relatedWithSelected.getRelatedWithList() != null) {
             newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
@@ -1204,8 +1204,30 @@ public class CreditFacPropose implements Serializable {
     public void onDeleteSubCollateral() {
         log.info("onDeleteSubCollateral :: ");
         newCollateralInfoView.getNewCollateralHeadDetailViewList().get(rowCollHeadIndex).getNewSubCollateralDetailViewList().remove(subCollateralDetailItem);
+        log.info("rowCollHeadIndex :: ");
     }
 // END Add SUB Collateral
+
+   /* public List<NewCreditDetailView> findGuarantorCreditType(){
+        List<NewCreditDetailView> guarantorCreditDetailList = new ArrayList<NewCreditDetailView>();
+        NewCreditDetailView  guarantorCreditDetail;
+        if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
+            for (NewCreditDetailView newCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
+                guarantorCreditDetail = new NewCreditDetailView();
+                guarantorCreditDetail.setAccountName(newCreditDetail.getAccountName());
+                guarantorCreditDetail.setAccountNumber(newCreditDetail.getAccountNumber());
+                guarantorCreditDetail.setAccountSuf(newCreditDetail.getAccountSuf());
+                guarantorCreditDetail.setProductProgram(newCreditDetail.getProductProgram());
+                guarantorCreditDetail.setCreditType(newCreditDetail.getCreditType());
+                guarantorCreditDetail.setRequestType(newCreditDetail.getRequestType());
+                guarantorCreditDetail.setLimit(newCreditDetail.getLimit());
+                guarantorCreditDetail.setGuaranteeAmount(newCreditDetail.getGuaranteeAmount());
+                guarantorCreditDetailList.add(guarantorCreditDetail);
+            }
+        }
+
+       return guarantorCreditDetailList;
+    }*/
 
     //  Start Guarantor //
     public void onAddGuarantorInfo() {
@@ -1214,6 +1236,9 @@ public class CreditFacPropose implements Serializable {
         Cloner cloner = new Cloner();
         newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
         newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
+//        newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
+//        newGuarantorDetailView.setNewCreditDetailViewList(findGuarantorCreditType());
+
     }
 
     public void onEditGuarantorInfo() {
@@ -1228,6 +1253,8 @@ public class CreditFacPropose implements Serializable {
             Cloner cloner = new Cloner();
             newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
             newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
+//            newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
+//            newGuarantorDetailView.setNewCreditDetailViewList(findGuarantorCreditType());
 
             if (newGuarantorDetailViewItem.getNewCreditDetailViewList().size() > 0) {
                 for (int i = 0; i < newGuarantorDetailViewItem.getNewCreditDetailViewList().size(); i++) {

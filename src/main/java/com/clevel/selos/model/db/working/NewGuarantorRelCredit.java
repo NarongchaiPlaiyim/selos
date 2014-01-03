@@ -2,6 +2,7 @@ package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wrk_new_grt_relation")
@@ -19,6 +20,8 @@ public class NewGuarantorRelCredit implements Serializable {
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
+    @Column(name = "guarantee_amount")
+    private BigDecimal guaranteeAmount;
 
     public long getId() {
         return id;
@@ -42,5 +45,13 @@ public class NewGuarantorRelCredit implements Serializable {
 
     public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
         this.newCreditDetail = newCreditDetail;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
     }
 }
