@@ -376,14 +376,6 @@ public class BizInfoSummary implements Serializable {
         if(bizInfoSummaryView.getProductionCostsPercentage()!= null){
             productCostPercent = bizInfoSummaryView.getProductionCostsPercentage().doubleValue();
         }
-
-        if( productCostPercent > 100.01){
-            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error 100";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
         
         productCostAmount = (sumIncomeAmount * productCostPercent)/100;
         bizInfoSummaryView.setProductionCostsAmount(new BigDecimal(productCostAmount));

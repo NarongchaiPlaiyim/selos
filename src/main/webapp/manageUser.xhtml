@@ -9,8 +9,9 @@
     <h:head>
         <title>ManageUser</title>
         <h:outputStylesheet name="css/style.css" />
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <!--<script type="text/javascript" language="javascript"-->
+                <!--src="#{request.contextPath}/resources/js/jquery.numeric.js"/>-->
+        <h:outputScript library="js" name="jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
     </h:head>
     <h:body>
@@ -19,7 +20,7 @@
             <h:form id="userTableData">
             <div id="main_container">
 
-                <!--<ui:include src="site/include/header_logo.xhtml"/>-->
+                <ui:include src="site/include/header_logo.xhtml"/>
                 <ui:include src="site/include/menubar_isa.xhtml"/>
                 <div id="content_container">
                     <!-- L pane-->

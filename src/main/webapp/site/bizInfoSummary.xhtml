@@ -4,12 +4,14 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <h:head>
         <title>Business Information Summary</title>
         <h:outputStylesheet name="css/style.css" />
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -89,14 +91,14 @@
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
                                         <td class="title">
-                                            <p:calendar size="10" id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
+                                            
+                                            <clv:BECalendar size="10" id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
                                                         value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
                                                         pattern="dd/MM/yyyy"
-                                                        locale="th_TH"
                                                         timeZone="Asia/Bangkok"
-                                                        yearRange="2440:3000">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                            </p:calendar>
+                                                        yearRange="1950:2100"
+                                                        locale="th_TH" >
+                                            </clv:BECalendar>
                                         </td>
                                     </tr>
                                     <tr>
@@ -112,21 +114,27 @@
                                                 <tr>
                                                     <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
                                                     <td class="left title" colspan="3">
-                                                        <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[addBizInfoSummary.clientId]}"/>
+                                                        <p:inputText styleClass="smallest" id="addressNo" onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[addBizInfoSummary.clientId]}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
                                                         <p:spacer width="30px"/>
-                                                        <p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
+                                                        <p:inputText styleClass="smallest" id="addressMoo" onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')}"/> :
                                                         <p:spacer width="30px"/>
-                                                        <p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
+                                                        <p:inputText styleClass="large" id="addressBuilding" onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
                                                     </td>
 
                                                 </tr>
                                                 <tr>
                                                     <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}"/> :</td>
-                                                    <td class="left" colspan="3"><p:inputText style="width: 250px;" id="addressStreet" value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" /></td>
+                                                    <td class="left" colspan="3">
+                                                        <p:inputText style="width: 500px;" id="addressStreet" onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" />
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
@@ -183,21 +191,23 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
-                                                    <td colspan="3"><p:inputText style="width: 500px;" id="addressEng" value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
+                                                    <td colspan="3"><p:inputText style="width: 500px;" id="addressEng" onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                                                 value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
                                                 </tr>
                                             </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
-                                        <td>
-                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" required="#{not empty param[addBizInfoSummary.clientId]}" />
-                                        </td>
-                                        <td colspan="3">
-                                            <p:spacer width="10px"></p:spacer>
+                                        <td colspan="4">
+                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}"
+                                                         onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
+                                                         required="#{not empty param[addBizInfoSummary.clientId]}" />
+                                            <p:spacer width="20px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
                                             <p:spacer width="20px"></p:spacer>
-                                            <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
                                         </td>
                                     </tr>
                                 </table>
@@ -218,14 +228,13 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
                             </td>
                             <td colspan="4">
-                                <p:calendar size="10" id="registrationDate" showOn="button" navigator="true"
+                                <clv:BECalendar size="10" id="registrationDate" showOn="button" navigator="true"
                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
                                             pattern="dd/MM/yyyy"
-                                            locale="th_TH"
                                             timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
+                                            yearRange="1950:2100"
+                                            locale="th_TH">
+                                </clv:BECalendar>
                             </td>
                         </tr>
                         <tr >
@@ -233,14 +242,13 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
                             </td>
                             <td>
-                                <p:calendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
+                                <clv:BECalendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
                                             pattern="dd/MM/yyyy"
-                                            locale="th_TH"
                                             timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
+                                            yearRange="1950:2100"
+                                            locale="th_TH">
+                                </clv:BECalendar>
                             </td>
                             <td class="title">
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
@@ -309,8 +317,11 @@
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="productionCostsPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
-                                                <f:convertNumber  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="productionCostsPercentage" styleClass="right"
+                                                         onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
+                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
@@ -337,7 +348,8 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="operatingExpenseAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
+                                            <p:inputText id="operatingExpenseAmount" styleClass="right" onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
@@ -354,7 +366,8 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.earningsBeforeTax')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="earningsBeforeTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}" readonly="true">
+                                            <p:inputText id="earningsBeforeTaxAmount" styleClass="right"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}" readonly="true">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
                                             </p:inputText>
@@ -371,7 +384,8 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceInterestAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
+                                            <p:inputText id="reduceInterestAmount" styleClass="right" onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
@@ -388,7 +402,8 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
+                                            <p:inputText id="reduceTaxAmount" styleClass="right" onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
@@ -429,10 +444,14 @@
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
                             </td>
                             <td class="left">
-                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}" required="#{not empty param[addBizInfoSummary.clientId]}">
+                                <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}"
+                                             onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                             required="#{not empty param[addBizInfoSummary.clientId]}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>
                                 </p:inputText>
+                                <p:spacer width="10px"/>
+                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.money.unit')}"/>
                             </td>
                         </tr>
                         <tr>
@@ -440,10 +459,13 @@
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
                             </td>
                             <td class="left">
-                                <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
+                                <p:inputText id="noOfEmployee" styleClass="right" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                             value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
                                     <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                     <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
                                 </p:inputText>
+                                <p:spacer width="10px"/>
+                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.labor.unit')}"/>
                             </td>
                         </tr>
                         <tr>

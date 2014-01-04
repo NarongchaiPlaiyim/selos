@@ -41,12 +41,17 @@ public class AccountInfoDetail implements Serializable {
     @Column(name = "term")
     private String term;
 
-    //Account Name
+    @OneToMany(mappedBy = "accountInfoDetail")
+    private List<AccountInfoDetailAccountName> accountNameList;
 
     @OneToMany(mappedBy = "accountInfoDetail")
     private List<AccountInfoDetailPurpose> purposeList;
 
-    //Credit Type
+    @Column(name = "open_account")
+    private int openAccount;
+
+    @OneToMany(mappedBy = "accountInfoDetail")
+    private List<AccountInfoDetailCreditType> creditTypeList;
 
     public long getId() {
         return id;
@@ -112,11 +117,35 @@ public class AccountInfoDetail implements Serializable {
         this.term = term;
     }
 
+    public List<AccountInfoDetailAccountName> getAccountNameList() {
+        return accountNameList;
+    }
+
+    public void setAccountNameList(List<AccountInfoDetailAccountName> accountNameList) {
+        this.accountNameList = accountNameList;
+    }
+
     public List<AccountInfoDetailPurpose> getPurposeList() {
         return purposeList;
     }
 
     public void setPurposeList(List<AccountInfoDetailPurpose> purposeList) {
         this.purposeList = purposeList;
+    }
+
+    public List<AccountInfoDetailCreditType> getCreditTypeList() {
+        return creditTypeList;
+    }
+
+    public int getOpenAccount() {
+        return openAccount;
+    }
+
+    public void setOpenAccount(int openAccount) {
+        this.openAccount = openAccount;
+    }
+
+    public void setCreditTypeList(List<AccountInfoDetailCreditType> creditTypeList) {
+        this.creditTypeList = creditTypeList;
     }
 }
