@@ -206,7 +206,7 @@
                                             <p:spacer width="20px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
                                             <p:spacer width="20px"></p:spacer>
-                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyNumber(event);" onkeypress="return onKeyText(event);"
+                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
                                         </td>
                                     </tr>
@@ -459,7 +459,7 @@
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
                             </td>
                             <td class="left">
-                                <p:inputText id="noOfEmployee" styleClass="right" onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                <p:inputText id="noOfEmployee" styleClass="right" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                              value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
                                     <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                     <p:ajax event="blur" update=":frmMain:noOfEmployee"/>

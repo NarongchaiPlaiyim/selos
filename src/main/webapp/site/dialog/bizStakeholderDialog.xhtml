@@ -31,7 +31,7 @@
                 </td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
-                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  required="#{not empty param[SaveStakeholderView.clientId]}"/>
                 </td>
             </tr>
@@ -41,7 +41,7 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}"
-                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  required="#{not empty param[SaveStakeholderView.clientId]}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
@@ -95,7 +95,7 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="creditTerm" styleClass="right"
-                                 onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.creditTerm}"
                                  required="#{not empty param[SaveStakeholderView.clientId]}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
