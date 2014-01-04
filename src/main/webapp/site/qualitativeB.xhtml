@@ -894,7 +894,7 @@
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="true">
+                                                 required="#{not empty param[addQualitativeB.clientId]}">
                                     <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsB"
@@ -995,6 +995,7 @@
                     <p:commandButton id="btnSave"
                                      value="#{msg.get('app.qualitative.button.saveButton')}"
                                      styleClass="medium"
+                                     binding="#{addQualitativeB}"
                                      process=":frmMain"
                                      action="#{qualitative.onSaveQualitativeB()}"
                                      update=":frmMain,:msgBoxSystemMessagePanel"/>
