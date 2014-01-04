@@ -4,12 +4,10 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
-import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
@@ -88,19 +86,41 @@ public class TCGInfo implements Serializable {
     public TCGInfo() {
     }
 
+    private void preRender() {
+        log.info("preRender ::: setSession ");
+        HttpSession session = FacesUtil.getSession(true);
+        if (session.getAttribute("workCaseId") != null) {
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        } else {
+            //TODO return to inbox
+            log.info("preRender ::: workCaseId is null.");
+            try {
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            } catch (Exception e) {
+                log.info("Exception :: {}", e);
+            }
+        }
+    }
 
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-
         HttpSession session = FacesUtil.getSession(true);
-        //session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-        //user = (User) session.getAttribute("user");
+//        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-        if (session.getAttribute("workCaseId") != null) {
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ", workCaseId);
+        }else{
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
+            }
         }
+
 
         try {
             TCGView = tcgInfoControl.getTcgView(workCaseId);
@@ -239,22 +259,8 @@ public class TCGInfo implements Serializable {
             } else {
                 log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
             }
-
-            if (TCGDetailViewList.size() > 0) {
-                log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
-                TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "LTV"));
-            } else {
-                TCGView.setSumAppraisalAmount(new BigDecimal(0));
-                TCGView.setSumLtvValue(new BigDecimal(0));
-                TCGView.setSumInThisAppraisalAmount(new BigDecimal(0));
-                TCGView.setSumInThisLtvValue(new BigDecimal(0));
-            }
-
             complete = true;
-
+            calculate();
         } else {
 
             log.info("onSaveCollateralDetail ::: validation failed.");
@@ -267,10 +273,10 @@ public class TCGInfo implements Serializable {
 
     public void onDeleteTcgDetail() {
         TCGDetailViewList.remove(selectCollateralItem);
-        calculateAfterDelete();
+        calculate();
     }
 
-    public void calculateAfterDelete() {
+    public void calculate() {
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");

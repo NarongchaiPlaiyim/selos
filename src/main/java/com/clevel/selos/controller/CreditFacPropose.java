@@ -252,10 +252,16 @@ public class CreditFacPropose implements Serializable {
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
                 log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
-                if (newCreditFacilityView != null) {
+
+                if (newCreditFacilityView != null)
+                {
                     modeForDB = ModeForDB.EDIT_DB;
                     newCreditDetailList = newCreditFacilityView.getNewCreditDetailViewList();
 
+                    for(int i = 0; i < newCreditDetailList.size(); i++)
+                    {
+                        hashSeqCredit.put(i,newCreditDetailList.get(i).getUseCount());
+                    }
                 }
             } catch (Exception ex) {
                 log.info("Exception :: {}", ex);
@@ -439,6 +445,7 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetail.setSuggestBasePrice(baseRate);
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
             proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest());
+            proposeCreditDetail.setInstallment(newCreditTierDetailView.getInstallment());
         }
 
     }
@@ -1066,6 +1073,7 @@ public class CreditFacPropose implements Serializable {
     public void onDeleteMortgageType(int row) {
         newSubCollateralDetailView.getMortgageList().remove(row);
     }
+/*
 
     public void onAddRelatedWith() {
 //        for (NewSubCollateralDetailView relatedWithThis : newSubCollateralDetailView.getRelatedWithList()) {
@@ -1084,10 +1092,9 @@ public class CreditFacPropose implements Serializable {
 
         NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getRelatedWithId());
         if (relatedWithSelected.getRelatedWithList() != null) {
-            newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
+            newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
+//            newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
         }
-        newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
-
     }
 
     public void onDeleteRelatedWith(int row) {
@@ -1111,6 +1118,43 @@ public class CreditFacPropose implements Serializable {
         }
         return newSubCollateralReturn;
     }
+
+*/
+
+    public void onAddRelatedWith() {
+        log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getId());
+        if (relatedWithSelected.getId() == 0) {
+            log.error("Can not add RelatedWith because id = 0!");
+            return;
+        }
+        NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getId());
+        newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
+
+    }
+
+    public void onDeleteRelatedWith(int row) {
+        newSubCollateralDetailView.getRelatedWithList().remove(row);
+    }
+
+    public NewSubCollateralDetailView getIdNewSubCollateralDetail(long newSubCollateralId) {
+        NewSubCollateralDetailView newSubCollateralReturn = new NewSubCollateralDetailView();
+        if (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0) {
+            for (NewCollateralInfoView newCollateralInfoView : Util.safetyList(newCreditFacilityView.getNewCollateralInfoViewList()))
+            {
+                for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
+                    for (NewSubCollateralDetailView newSubCollateralDetailOnAdded : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
+                        log.info("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getId());
+                        log.info("newSubCollateralDetailView1 title deed ::: {}", newSubCollateralDetailOnAdded.getTitleDeed());
+                        if (newSubCollateralId == newSubCollateralDetailOnAdded.getId()) {
+                            newSubCollateralReturn = newSubCollateralDetailOnAdded;
+                        }
+                    }
+                }
+            }
+        }
+        return newSubCollateralReturn;
+    }
+
 // end for sub collateral dialog
 
 //  END Propose Collateral Information  //
