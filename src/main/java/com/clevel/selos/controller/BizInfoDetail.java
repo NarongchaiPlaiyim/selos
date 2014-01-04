@@ -341,6 +341,9 @@ public class BizInfoDetail implements Serializable {
         }
     }
 
+    public void onCancelBizProductDetailView(){
+        bizProductDetailView = new BizProductDetailView();
+    }
     public void onSaveBizProductDetailView(){
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
@@ -437,6 +440,10 @@ public class BizInfoDetail implements Serializable {
             calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
         }
         onSetRowNoBizStakeHolderDetail();
+    }
+
+    public void onCancelBizStakeHolderDetailView(){
+        bizStakeHolderDetailView = new BizStakeHolderDetailView();
     }
 
     public void onSaveBizStakeHolderDetailView(){
