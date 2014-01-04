@@ -31,7 +31,6 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollTitleDeed" value="#{decision.selectedAppSubCollateral.titleDeed}"
-                                 onclick="this.select()"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -41,7 +40,6 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollAddress" value="#{decision.selectedAppSubCollateral.address}"
-                                 onclick="this.select()"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -51,7 +49,6 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollLandOffice" value="#{decision.selectedAppSubCollateral.landOffice}"
-                                 onclick="this.select()"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -61,7 +58,6 @@
                 </td>
                 <td>
                     <p:inputText id="dlgSubCollOwnerAAD" value="#{decision.selectedAppSubCollateral.collateralOwnerAAD}"
-                                 onclick="this.select()"
                                  required="#{not empty param[saveSubCollButton.clientId]}"/>
                 </td>
             </tr>
@@ -161,7 +157,7 @@
                                         value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                                         styleClass="smaller"
                                         actionListener="#{decision.onAddMortgageType()}"
-                                        process="@this"
+                                        process="@form"
                                         update=":subCollateralDlgForm">
                                 </p:commandButton>
                             </td>
@@ -288,7 +284,8 @@
                     <p:inputText id="dlgSubCollAppraisalVal"
                                  value="#{decision.selectedAppSubCollateral.appraisalValue}"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[saveSubCollButton.clientId]}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
@@ -304,7 +301,8 @@
                     <p:inputText id="dlgSubCollMortgageVal"
                                  value="#{decision.selectedAppSubCollateral.mortgageValue}"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[saveSubCollButton.clientId]}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>

@@ -28,7 +28,7 @@ public class DBExecute implements Serializable {
     Logger log;
     @Inject
     @Config(name = "interface.coms.oracle.conn")
-    String connRlos;
+    String connCOMS;
     @Inject
     @Config(name = "interface.coms.oracle.username")
     String comsUser;
@@ -76,7 +76,7 @@ public class DBExecute implements Serializable {
         }
 
         try{
-            conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
             throw ex;
         }
@@ -130,7 +130,7 @@ public class DBExecute implements Serializable {
         }
 
         try{
-            conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
             throw ex;
         }
@@ -257,7 +257,7 @@ public class DBExecute implements Serializable {
         }
 
         try{
-            conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
             throw ex;
         }
@@ -353,7 +353,7 @@ public class DBExecute implements Serializable {
         }
 
         try{
-            conn = dbContext.getConnection(connRlos, comsUser, comsPassword);
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
             throw ex;
         }
@@ -394,6 +394,207 @@ public class DBExecute implements Serializable {
             closeConnection();
         }
         return subCollateralList;
+    }
+
+    private String getAddress(String colId, String headColId, String colType, String subColType, String onlType){
+        String SQL_TYPE_1 = "SELECT " +
+                                "APPR_LAND.DEED_NO, " +
+                                "APPR_LAND.COORDINATE_NO, " +
+                                "APPR_LAND.LAND_NO, " +
+                                "APPR_LAND.SURVEY_NO, " +
+                                "APPR_LAND.BOOK_NO, " +
+                                "APPR_LAND.PAGE_NO, " +
+                                "APPR_LAND.CONDO_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_LAND " +
+                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_2 = "SELECT " +
+                                "APPR_LAND.DEED_NO, " +
+                                "APPR_LAND.LAND_NO, " +
+                                "APPR_LAND.BOOK_NO, " +
+                                "APPR_LAND.PAGE_NO, " +
+                                "APPR_LAND.CONDO_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_LAND " +
+                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_3 = "SELECT " +
+                                "APPR_LAND.DEED_NO, " +
+                                "APPR_LAND.BOOK_NO, " +
+                                "APPR_LAND.PAGE_NO, " +
+                                "APPR_LAND.LAND_NO, " +
+                                "APPR_LAND.AIRIAL_PHOTO_NO, " +
+                                "APPR_LAND.COORDINATE_NO, " +
+                                "APPR_LAND.SHEET_NO, " +
+                                "APPR_LAND.CONDO_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_LAND " +
+                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_4 = "SELECT " +
+                                "APPR_LAND.DEED_NO, " +
+                                "APPR_LAND.BOOK_NO, " +
+                                "APPR_LAND.PAGE_NO, " +
+                                "APPR_LAND.LAND_NO, " +
+                                "APPR_LAND.SURVEY_NO, " +
+                                "APPR_LAND.COORDINATE_NO, " +
+                                "APPR_LAND.CONDO_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_LAND " +
+                            "LEFT JOIN CITY ON APPR_LAND.CONDO_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_5 = "SELECT " +
+                                "APPR_BUILDING.ADD_NO, " +
+                                "APPR_BUILDING.ADD_MOO, " +
+                                "APPR_BUILDING.ADD_ROAD, " +
+                                "APPR_BUILDING.ADD_BANN, " +
+                                "APPR_BUILDING.ADD_SOI, " +
+                                "APPR_BUILDING.ADD_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_BUILDING " +
+                            "LEFT JOIN CITY ON APPR_BUILDING.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_BUILDING.COL_ID = ? AND APPR_BUILDING.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_6 = "SELECT " +
+                                "APPR_LAND.ROOM_NO, " +
+                                "APPR_LAND.FLOOR_NO, " +
+                                "APPR_LAND.LAND_NO, " +
+                                "APPR_LAND.BUILDING_NAME, " +
+                                "APPR_LAND.CONDO_NO, " +
+                                "APPR_LAND.NO_OF_FLOOR, " +
+                                "APPR_LAND.DEED_NO, " +
+                                "APPR_LAND.CONDO_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME, " +
+                                "APPR_LAND.AREA_METER, " +
+                                "APPR_LAND.BALCONY_METER " +
+                            "FROM APPR_LAND " +
+                            "LEFT JOIN CITY ON APPR_LAND.CONDO_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_7 = "SELECT " +
+                                "APPR_MACHINE.ADD_NO, " +
+                                "APPR_MACHINE.ADD_MOO, " +
+                                "APPR_MACHINE.ADD_BANN, " +
+                                "APPR_MACHINE.ADD_SOI, " +
+                                "APPR_MACHINE.ADD_ROAD, " +
+                                "APPR_MACHINE.ADD_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_MACHINE " +
+                            "LEFT JOIN CITY ON APPR_MACHINE.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_MACHINE.COL_ID = ? AND APPR_MACHINE.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_8 = "SELECT " +
+                                "APPR_GOODS.ADD_NO, " +
+                                "APPR_GOODS.ADD_MOO, " +
+                                "APPR_GOODS.ADD_BANN, " +
+                                "APPR_GOODS.ADD_SOI, " +
+                                "APPR_GOODS.ADD_ROAD, " +
+                                "APPR_GOODS.ADD_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_GOODS " +
+                            "LEFT JOIN CITY ON APPR_GOODS.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_GOODS.COL_ID = ? AND APPR_GOODS.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_9 = "SELECT " +
+                                "SET_COUNTRY.NAME_THAI, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_CAR " +
+                            "LEFT JOIN SET_COUNTRY ON APPR_CAR.REGISTRATION_PLACE_COUNTRY = SET_COUNTRY.CODE " +
+                            "LEFT JOIN PROVINCE ON APPR_CAR.REGISTRATION_PROVINCE_LOCAL = PROVINCE.PROV_ID " +
+                            "WHERE APPR_CAR.COL_ID = ? AND APPR_CAR.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_10 = "SELECT " +
+                                "SET_COUNTRY.NAME_THAI " +
+                            "FROM APPR_SHIP " +
+                            "LEFT JOIN SET_COUNTRY ON APPR_SHIP.REGISTRATION_PLACE = SET_COUNTRY.CODE " +
+                            "WHERE APPR_SHIP.COL_ID = ? AND APPR_SHIP.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_11 = "SELECT " +
+                                "APPR_RENT.ADD_NO, " +
+                                "APPR_RENT.ADD_MOO, " +
+                                "APPR_RENT.ADD_BANN, " +
+                                "APPR_RENT.ADD_SOI, " +
+                                "APPR_RENT.ADD_ROAD, " +
+                                "APPR_RENT.ADD_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_RENT " +
+                            "LEFT JOIN CITY ON APPR_RENT.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_RENT.COL_ID = ? AND APPR_RENT.HEAD_COL_ID = ?";
+
+        String SQL_TYPE_12 = "SELECT " +
+                                "APPR_OTHERS.ADD_NO, " +
+                                "APPR_OTHERS.ADD_MOO, " +
+                                "APPR_OTHERS.ADD_BANN, " +
+                                "APPR_OTHERS.ADD_SOI, " +
+                                "APPR_OTHERS.ADD_ROAD, " +
+                                "APPR_OTHERS.ADD_DISTRICT, " +
+                                "CITY.CITY_ID, " +
+                                "CITY.CITY, " +
+                                "CITY.PROVINCE_ID, " +
+                                "PROVINCE.PROV_ID, " +
+                                "PROVINCE.PROV_NAME " +
+                            "FROM APPR_OTHERS " +
+                            "LEFT JOIN CITY ON APPR_OTHERS.ADD_CITY = CITY.CITY_ID " +
+                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
+                            "WHERE APPR_OTHERS.COL_ID = ? AND APPR_OTHERS.HEAD_COL_ID = ?";
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+        return null;
     }
 
     private void closeConnection() {

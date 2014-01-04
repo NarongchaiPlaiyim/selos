@@ -18,6 +18,9 @@ public interface ExceptionMapping {
     public static final String BPM_LOCK_CASE_EXCEPTION = "013";
     public static final String BPM_UNLOCK_CASE_EXCEPTION = "014";
     public static final String BPM_AUTHENTICATION_FAILED = "015";
+    public static final String BPM_GET_INBOX_CONNECT_ERROR = "016";
+    public static final String BPM_GET_INBOX_GETDATA_ERROR = "017";
+    public static final String BPM_GET_INBOX_DATA_NOT_FOUND = "018";
 
     //Email exception
     public static final String EMAIL_EMPTY_ADDRESS = "020";
