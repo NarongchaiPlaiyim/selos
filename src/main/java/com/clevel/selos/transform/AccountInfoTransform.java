@@ -23,7 +23,6 @@ public class AccountInfoTransform extends Transform {
         accountInfo.setModifyDate(new Date());
         accountInfo.setModifyBy(user);
 
-
         return accountInfo;
     }
 }

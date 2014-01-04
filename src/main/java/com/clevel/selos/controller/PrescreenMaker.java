@@ -841,7 +841,7 @@ public class PrescreenMaker implements Serializable {
             }
         }
 
-        if(stepId == 1001){
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
             spouseDocumentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
         }
 
@@ -853,7 +853,7 @@ public class PrescreenMaker implements Serializable {
             relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
         }
 
-        if(stepId == 1001){
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
             spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
         } else {
             if(borrowerInfo.getSpouse() != null){
@@ -1879,8 +1879,13 @@ public class PrescreenMaker implements Serializable {
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
+                    int searchBy = borrowerInfo.getSearchBy();
+                    String searchId = borrowerInfo.getSearchId();
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
+                    borrowerInfo.setSearchBy(searchBy);
+                    borrowerInfo.setSearchFromRM(1);
+                    borrowerInfo.setSearchId(searchId);
                     //borrowerInfo = customerInfoSummaryControl.getInfoForExistingCustomer(borrowerInfo);
 
                     enableCustomerForm = true;

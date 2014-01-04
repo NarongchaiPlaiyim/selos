@@ -47,6 +47,9 @@ public class AccountInfoDetail implements Serializable {
     @OneToMany(mappedBy = "accountInfoDetail")
     private List<AccountInfoDetailPurpose> purposeList;
 
+    @Column(name = "open_account")
+    private int openAccount;
+
     @OneToMany(mappedBy = "accountInfoDetail")
     private List<AccountInfoDetailCreditType> creditTypeList;
 
@@ -132,6 +135,14 @@ public class AccountInfoDetail implements Serializable {
 
     public List<AccountInfoDetailCreditType> getCreditTypeList() {
         return creditTypeList;
+    }
+
+    public int getOpenAccount() {
+        return openAccount;
+    }
+
+    public void setOpenAccount(int openAccount) {
+        this.openAccount = openAccount;
     }
 
     public void setCreditTypeList(List<AccountInfoDetailCreditType> creditTypeList) {
