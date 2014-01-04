@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewFeeDetail;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -22,6 +23,16 @@ public class NewFeeCreditDAO extends GenericDAO<NewFeeDetail, Integer> {
         log.info("findNewFeeDetailById ::: {}", newFeeDetailId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newFeeDetail.id", newFeeDetailId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewFeeDetail> newFeeDetailList = (List<NewFeeDetail>) criteria.list();
+        log.info("newFeeDetailList ::: size : {}", newFeeDetailList.size());
+        return newFeeDetailList;
+    }
+
+    public List<NewFeeDetail> findByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("findByNewCreditFacility ::: {}", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));
         List<NewFeeDetail> newFeeDetailList = (List<NewFeeDetail>) criteria.list();
         log.info("newFeeDetailList ::: size : {}", newFeeDetailList.size());

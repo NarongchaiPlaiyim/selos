@@ -27,6 +27,7 @@ public class NewCreditDetailTransform extends Transform {
         for (NewCreditDetailView newCreditDetailView : newCreditGrtViews) {
             for (NewCreditDetail newCreditDetail : newCreditDetailAll) {
                 if (newCreditDetailView.getSeq() == newCreditDetail.getSeq()) {
+                    newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
                     newCreditListReturn.add(newCreditDetail);
                 }
             }

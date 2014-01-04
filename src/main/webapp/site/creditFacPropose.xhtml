@@ -957,9 +957,12 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
+                                 onkeydown="return onKeyMoney(event);"
+                                 onkeypress="return onKeyMoney(event);"
                                  style="text-align: right;">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
+                        <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText> %
                 </td>
                 <td style="width: 300px;text-align: left" class="title">
@@ -970,9 +973,11 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
+                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                                  style="text-align: right;">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
+                        <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText> %
                 </td>
                 <td style="width: 130px;text-align: left" class="title">
