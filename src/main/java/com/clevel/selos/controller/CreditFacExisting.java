@@ -664,23 +664,20 @@ public class CreditFacExisting implements Serializable {
 
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
 
-            existingCreditDetailView.setAccountStatus(bankAccountStatusV);
             existingCreditDetailViewRow.setExistProductProgram(productProgram);
             existingCreditDetailViewRow.setExistCreditType(creditType);
             existingCreditDetailViewRow.setAccountStatus(bankAccountStatusV);
-            //existingCreditDetailViewRow.setExistAccountStatus(accountStatus);
             existingCreditDetailViewRow.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetailViewRow.setAccountNumber(existingCreditDetailView.getAccountNumber());
-            existingCreditDetailViewRow.setAccountSuf(selectCreditDetail.getAccountSuf());
-            existingCreditDetailViewRow.setExistAccountStatus(selectCreditDetail.getExistAccountStatus());
-            existingCreditDetailViewRow.setExistProductProgram(selectCreditDetail.getExistProductProgram());
-            existingCreditDetailViewRow.setExistCreditType(selectCreditDetail.getExistCreditType());
-            existingCreditDetailViewRow.setLimit(selectCreditDetail.getLimit());
-            existingCreditDetailViewRow.setProductCode(selectCreditDetail.getProductCode());
-            existingCreditDetailViewRow.setProjectCode(selectCreditDetail.getProjectCode());
-            existingCreditDetailViewRow.setOutstanding(selectCreditDetail.getOutstanding());
-            existingCreditDetailViewRow.setPcePercent(selectCreditDetail.getPcePercent());
-            existingCreditDetailViewRow.setPceLimit(selectCreditDetail.getPceLimit());
+            existingCreditDetailViewRow.setAccountSuf(existingCreditDetailView.getAccountSuf());
+            existingCreditDetailViewRow.setExistAccountStatus(bankAccountStatus);
+
+            existingCreditDetailViewRow.setLimit(existingCreditDetailView.getLimit());
+            existingCreditDetailViewRow.setProductCode(existingCreditDetailView.getProductCode());
+            existingCreditDetailViewRow.setProjectCode(existingCreditDetailView.getProjectCode());
+            existingCreditDetailViewRow.setOutstanding(existingCreditDetailView.getOutstanding());
+            existingCreditDetailViewRow.setPcePercent(existingCreditDetailView.getPcePercent());
+            existingCreditDetailViewRow.setPceLimit(existingCreditDetailView.getPceLimit());
 
             for(int i=0;i<existingSplitLineDetailViewList.size();i++){
                 productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());

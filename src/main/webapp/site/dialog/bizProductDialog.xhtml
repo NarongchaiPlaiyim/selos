@@ -22,23 +22,24 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentSalesVolume" styleClass="right"
+                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                                  value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="2"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
                     </p:inputText>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*"
-                                                                                                             styleClass="require-field"/>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
                     <p:inputText id="percentEBIT" styleClass="right"
+                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                                  value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="2"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
                     </p:inputText>
                 </td>
@@ -65,7 +66,7 @@
                             update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
                             oncomplete="handleFullappBizProductRequest(xhr, status, args)"
                             />
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bizProductViewDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bizProductViewDlg.hide()" action="#{bizInfoDetail.onCancelBizProductDetailView()}"/>
                 </td>
             </tr>
         </table>

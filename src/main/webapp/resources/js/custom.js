@@ -540,6 +540,59 @@ function onKeyText(evt){
     return true;
 }
 
+function onKeyPressTelNo(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    36=$
+     *  37=%       38=&    39='
+     *  40=(       41=)    42=*        47=/
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if( keyCode == 33 || keyCode == 34 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 ||
+        keyCode == 40 || keyCode == 41 || keyCode == 42 || keyCode == 47 || keyCode == 58 || keyCode == 59 ||
+        keyCode == 60 || keyCode == 62 || keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 ||
+        keyCode == 94 || keyCode == 95 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    return true;
+}
+
+function onKeyDownTelNo(evt){
+
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
+        return true;
+    }
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9)
+     *  35=# 45=-
+     *  189=- 109=-
+     */
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 45 || keyCode == 35 || keyCode == 109 || keyCode == 189 ) {
+        return true;
+    } else {
+        return checkAllowKeyTelNo(keyCode);
+    }
+
+    return false;
+}
+
+function checkAllowKeyTelNo(keyCode){
+    var validChar = '0123456789#-';
+    var keyChar = String.fromCharCode(keyCode);
+    validChar += String.fromCharCode(8);
+    if (validChar.indexOf(keyChar) < 0) {
+        return false;
+    }
+    return true;
+}
+
 function hideWindowsScrollBar() {
     $("body").attr("style", "overflow-y: hidden");
 }
