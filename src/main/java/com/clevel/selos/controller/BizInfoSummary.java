@@ -392,11 +392,10 @@ public class BizInfoSummary implements Serializable {
         }
 
         if( operatingExpenseAmount > profitMarginAmount){
-            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "error";
-            message = "operatingExpenseAmount > profitMarginPercent";
+            bizInfoSummaryView.setOperatingExpenseAmount(new BigDecimal(0));
+            messageHeader = "เกิดข้อผิดพลาด ";
+            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรเบื้องต้น";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         operatingExpensePercent = (operatingExpenseAmount/sumIncomeAmount)*100;
@@ -420,26 +419,23 @@ public class BizInfoSummary implements Serializable {
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
             messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรเบื้องต้น";
+            message = "กรุณากรอก หักดอกเบี้ย  ให้น้อยกว่า กำไรเบื้องต้น";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
+            message = "กรุณากรอก หักภาษี ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
             messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
+            message = "กรุณากรอก หักดอกเบี้ย และ หักภาษี  ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();

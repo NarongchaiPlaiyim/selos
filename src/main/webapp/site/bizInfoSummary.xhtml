@@ -321,7 +321,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="productionCostsPercentage" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                 <f:validateDoubleRange maximum="100"/>
@@ -352,7 +352,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="operatingExpenseAmount" styleClass="right"  readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -389,7 +389,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceInterestAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -408,7 +408,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceTaxAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -451,7 +451,7 @@
                             </td>
                             <td class="left">
                                 <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}"
-                                             onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                              required="#{not empty param[addBizInfoSummary.clientId]}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>

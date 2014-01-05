@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -62,7 +63,8 @@ public class BizInfoDetail implements Serializable {
     private String descType;
     private Date currentDate;
     private String currentDateDDMMYY;
-
+    private boolean readonlyIsUW;
+    private boolean readonlyIsBDM;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -227,7 +229,7 @@ public class BizInfoDetail implements Serializable {
             if(buyerDetailList.size()>0){
                 calSumBizStakeHolderDetailView(buyerDetailList,"2");
             }
-
+            onCheckRole();
 
         }catch (Exception ex){
             log.info("onCreation Exception ");
@@ -238,6 +240,18 @@ public class BizInfoDetail implements Serializable {
             }
         }finally {
             log.info("onCreation end ");
+        }
+    }
+
+    private void onCheckRole(){
+        readonlyIsUW = true;
+        if( user.getRole().getId() ==  RoleValue.UW.id()){
+            readonlyIsUW = false;
+        }
+
+        readonlyIsBDM = true;
+        if( user.getRole().getId() ==  RoleValue.BDM.id()){
+            readonlyIsBDM = false;
         }
     }
 
@@ -921,5 +935,21 @@ public class BizInfoDetail implements Serializable {
 
     public void setDisable(boolean disable) {
         isDisable = disable;
+    }
+
+    public boolean isReadonlyIsUW() {
+        return readonlyIsUW;
+    }
+
+    public void setReadonlyIsUW(boolean readonlyIsUW) {
+        this.readonlyIsUW = readonlyIsUW;
+    }
+
+    public boolean isReadonlyIsBDM() {
+        return readonlyIsBDM;
+    }
+
+    public void setReadonlyIsBDM(boolean readonlyIsBDM) {
+        this.readonlyIsBDM = readonlyIsBDM;
     }
 }

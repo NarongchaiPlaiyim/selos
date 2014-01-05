@@ -12,7 +12,7 @@
                     <h:outputText value="#{bizInfoDetail.dlgStakeName}"/><h:outputLabel value="*"  styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.name}" required="#{not empty param[SaveStakeholderView.clientId]}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.name}" required="#{not empty param[saveStakeholderBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
@@ -21,7 +21,7 @@
                     <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}" required="#{not empty param[SaveStakeholderView.clientId]}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}" required="#{not empty param[saveStakeholderBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
@@ -31,8 +31,8 @@
                 </td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
-                                 onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
-                                 required="#{not empty param[SaveStakeholderView.clientId]}"/>
+                                 onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyDownTelNo(event);"
+                                 required="#{not empty param[saveStakeholderBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
-                                 required="#{not empty param[SaveStakeholderView.clientId]}">
+                                 required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
                     </p:inputText>
@@ -54,8 +54,8 @@
                 </td>
                 <td>
                     <p:inputText id="percentSalesVolume" styleClass="right"
-                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
-                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentSalesVolume}" required="#{not empty param[SaveStakeholderView.clientId]}">
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentSalesVolume}" required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentSalesVolume"/>
@@ -68,8 +68,8 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentCash" styleClass="right"
-                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
-                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCash}" required="#{not empty param[SaveStakeholderView.clientId]}">
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCash}" required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash,:stakeholderViewDlgForm:percentCredit" listener="#{bizInfoDetail.onCalCashCredit('stakeHolderDlg')}"/>
@@ -82,7 +82,7 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentCredit" styleClass="right" readonly="true"
-                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCredit}" required="#{not empty param[SaveStakeholderView.clientId]}">
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCredit}" required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCredit"/>
@@ -97,7 +97,7 @@
                     <p:inputText id="creditTerm" styleClass="right"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  value="#{bizInfoDetail.bizStakeHolderDetailView.creditTerm}"
-                                 required="#{not empty param[SaveStakeholderView.clientId]}">
+                                 required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:creditTerm"/>
                     </p:inputText>
@@ -112,14 +112,15 @@
                 <td colspan="2" class="center">
                     <p:commandButton id="btnSaveStakeholderView"
                                      value="#{msg.get('app.button.ok')}"
-                                     binding="#{SaveStakeholderView}"
+                                     binding="#{saveStakeholderBtn}"
                                      process=":stakeholderViewDlgForm"
                                      action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
                                      update=":frmMain,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
                                      oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
 
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" action="#{bizInfoDetail.onCancelBizStakeHolderDetailView()}"
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" update=":stakeholderViewDlgForm"
                                      onclick="stakeholderViewDlg.hide()"/>
+
                 </td>
             </tr>
         </table>
