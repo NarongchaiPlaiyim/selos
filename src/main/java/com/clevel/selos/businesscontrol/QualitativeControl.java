@@ -105,11 +105,11 @@ public class QualitativeControl extends BusinessControl {
     }
 
 
-    public void save(WorkCase workCase) {
+    /*public void save(WorkCase workCase) {
         workCaseDAO.persist(workCase);
-    }
+    }*/
 
-    public void delete(WorkCase workCase) {
+    /*public void delete(WorkCase workCase) {
         workCaseDAO.delete(workCase);
-    }
+    }*/
 }
