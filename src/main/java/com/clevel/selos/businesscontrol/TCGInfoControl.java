@@ -180,6 +180,7 @@ public class TCGInfoControl extends BusinessControl {
 
     public BigDecimal toCalCollateralRuleResult(TCGView tcgView) {
         BigDecimal sumAdd = BigDecimal.ZERO;
+        BigDecimal sumAppraisalDivide = BigDecimal.ZERO;
         BigDecimal sumAppraisalAmount = BigDecimal.ZERO;
 
         if(tcgView!=null){
@@ -192,8 +193,11 @@ public class TCGInfoControl extends BusinessControl {
             log.info("tcgView.getExistingLoanRatioUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioUnderSameCollateral());
             log.info("tcgView.getExistingLoanRatioNotUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioNotUnderSameCollateral());
             sumAdd = num1.add(num2).add(num3).add(num4);
+            log.info("SUM After add :: {}",sumAdd);
             log.info("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
-            sumAppraisalAmount = Util.divide(tcgView.getSumAppraisalAmount(),sumAdd);
+            sumAppraisalDivide = Util.divide(tcgView.getSumAppraisalAmount(),sumAdd);
+            sumAppraisalAmount = Util.divide(sumAppraisalDivide,BigDecimal.valueOf(100));
+
             log.info("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
 
         }

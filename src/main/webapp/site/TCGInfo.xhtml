@@ -50,9 +50,8 @@
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
+                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="1"/>
-                                                        <p:spacer width="20px;"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
@@ -295,7 +294,6 @@
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" >
-                                                        <f:convertNumber pattern="#0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                                     </h:outputText>  %
                                                 </td>
                                             </tr>
@@ -357,7 +355,7 @@
     </p:panel>
 
     <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-              modal="true" width="550" height="200">
+              modal="true" width="530" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 
