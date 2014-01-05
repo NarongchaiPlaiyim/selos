@@ -377,9 +377,9 @@
                                 <td>
                                     <p:inputText id="shareHolderRatio" styleClass="right" value="#{custInfoSumJuris.customerInfoView.shareHolderRatio}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:shareHolderRatio"/>
                                     </p:inputText>
                                 </td>
