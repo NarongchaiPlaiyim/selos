@@ -370,6 +370,14 @@ function checkAllowKeyTelNo(keyCode){
 
 function hideWindowsScrollBar() {
     $("body").attr("style", "overflow-y: hidden");
+    $('input').each(function() {
+        var readonly = $(this).attr("readonly");
+        if(readonly && readonly.toLowerCase()!=='false') { // this is readonly
+            $(this).focus(function(){
+                $(this).blur();
+            });
+        }
+    });
 }
 function showWindowsScrollBar() {
     $("body").attr("style", "overflow-y: scroll");

@@ -65,8 +65,8 @@
                                                 <p:column headerText="Citizen ID / Registration ID" styleClass="center"
                                                           style="width: 150px;">
                                                     <h:inputText value="#{borrowerItem.inputId}"
-                                                                 onkeydown="return onKeyNumber(event);"
-                                                                 onkeypress="return onKeyNumber(event);"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"
                                                                  onclick="onCheckRightClick(event);"
                                                                  maxlength="15"/>
                                                     <h:outputText styleClass="require-field"
