@@ -385,16 +385,15 @@ public class BizInfoSummary implements Serializable {
         bizInfoSummaryView.setProfitMarginPercentage(new BigDecimal(profitMarginPercent));
         bizInfoSummaryView.setProfitMarginAmount(new BigDecimal(profitMarginAmount));
 
-        log.info("onCalSummaryTable 111");
-
         if(bizInfoSummaryView.getOperatingExpenseAmount()!= null){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount().doubleValue();
         }
 
         if( operatingExpenseAmount > profitMarginAmount){
             bizInfoSummaryView.setOperatingExpenseAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรเบื้องต้น";
+            operatingExpenseAmount =0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -407,7 +406,6 @@ public class BizInfoSummary implements Serializable {
         bizInfoSummaryView.setEarningsBeforeTaxAmount(new BigDecimal(earningsBeforeTaxAmount));
         bizInfoSummaryView.setEarningsBeforeTaxPercentage(new BigDecimal(earningsBeforeTaxPercent));
 
-        log.info("onCalSummaryTable 222");
         if(bizInfoSummaryView.getReduceInterestAmount()!= null){
             reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
         }
@@ -418,23 +416,27 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักดอกเบี้ย  ให้น้อยกว่า กำไรเบื้องต้น";
+            reduceInterestAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักภาษี ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
+            reduceTaxAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "เกิดข้อผิดพลาด ";
-            message = "กรุณากรอก หักดอกเบี้ย และ หักภาษี  ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
+            reduceInterestAmount = 0;
+            reduceTaxAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -468,20 +470,13 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            log.info("have to redirect is " + redirect );
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
-            log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
             if (redirect != null && !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
-
-            log.info("Controller getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
-            log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
-            log.info("bizInfoSummaryControl end");
-            log.info("have to redirect is " + redirect );
             if (redirect != null && !redirect.equals("")) {
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
@@ -505,20 +500,22 @@ public class BizInfoSummary implements Serializable {
                 log.info("not have to redirect ");
                 onCreation();
                 log.info("onCreation() after Save");
-                messageHeader = "Save BizInfoSummary Success.";
-                message = "Save BizInfoSummary data success.";
+                messageHeader = msg.get("app.bizInfoSummary.message.header.save.success");
+                message = msg.get("app.bizInfoSummary.message.body.save.success");
                 log.info("after set message");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } catch (Exception ex) {
             log.info("onSaveBizInfoSummary Error : ", ex);
-            messageHeader = "Save BizInfoSummary Failed.";
+
+            messageHeader = msg.get("app.bizInfoSummary.message.header.save.fail");
+
             if (ex.getCause() != null) {
                 //log.info("ex.getCause().toString() is " + ex.getCause().toString());
-                message = "Save BizInfoSummary data failed. Cause : " + ex.getCause().toString();
+                message = msg.get("app.bizInfoSummary.message.body.save.fail") + ex.getCause().toString();
             } else {
                 //log.info("ex.getCause().toString() is " + ex.getMessage());
-                message = "Save BizInfoSummary data failed. Cause : " + ex.getMessage();
+                message = msg.get("app.bizInfoSummary.message.body.save.fail")  + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
