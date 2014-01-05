@@ -216,14 +216,14 @@ public class AccountInfo implements Serializable {
         workCaseId = 101L;
         try{
             accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
-            messageHeader = "Save Basic Info Success.";
-            message = "Save data in Basic Information success.";
+            messageHeader = "Save Account Info Success.";
+            message = "Save data in Account Information success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Basic Info Failed.";
+            messageHeader = "Save Account Info Failed.";
             if(ex.getCause() != null){
-                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+                message = "Save Account Info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
             }
