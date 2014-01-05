@@ -394,15 +394,16 @@ function onKeyPressHomeNo(evt){
 function onKeyDownHomeNo(evt){
 
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
-    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
+    if(keyCode == 8 || keyCode == 9 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
         return true;
     }
     /** ALLOW NUMBER **/
     /*  96-105=number(0-9)
-     *  35=# 45=-
+     *  45=-  47=/
      *  189=- 109=-
+     *  111=/ 191=/
      */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 45 || keyCode == 35 || keyCode == 109 || keyCode == 189 ) {
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 45 || keyCode == 47 || keyCode == 109 || keyCode == 189 || keyCode == 111 || keyCode == 191 ) {
         return true;
     } else {
         return checkAllowKeyHomeNo(keyCode);

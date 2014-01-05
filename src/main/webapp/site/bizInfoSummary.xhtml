@@ -61,7 +61,8 @@
                                     </colgroup>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
-                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
+                                        <td><p:inputText id="bizLocationName" style="width: 300px"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
                                     </tr>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
@@ -116,7 +117,7 @@
                                                 <tr>
                                                     <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
                                                     <td class="left title" colspan="3">
-                                                        <p:inputText styleClass="smallest" id="addressNo" onkeydown="return onKeyDownHomeNo(event);" onkeypress="return onKeyPressHomeNo(event);"
+                                                        <p:inputText styleClass="small" id="addressNo" onkeydown="return onKeyDownHomeNo(event);" onkeypress="return onKeyPressHomeNo(event);"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[addBizInfoSummary.clientId]}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
