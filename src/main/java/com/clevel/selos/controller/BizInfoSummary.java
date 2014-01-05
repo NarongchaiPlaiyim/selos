@@ -16,6 +16,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.transform.BizInfoDetailTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -58,8 +59,10 @@ public class BizInfoSummary implements Serializable {
     private SubDistrict subDistrict;
     private Country country;
     private boolean fromDB;
+    private boolean readonlyInterview;
     //private User user;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
@@ -206,6 +209,7 @@ public class BizInfoSummary implements Serializable {
             onChangeDistrict();
             onChangeRental();
         }
+        onCheckInterview();
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
@@ -338,21 +342,18 @@ public class BizInfoSummary implements Serializable {
         }
     }
 
+    private void onCheckInterview(){
+        readonlyInterview = true;
+        if(bizInfoSummaryView.getCirculationAmount()!=null){
+             if( bizInfoSummaryView.getCirculationAmount().doubleValue() > 0){
+                 readonlyInterview = false;
+            }
+        }
+        log.info(" readonlyInterview is " + readonlyInterview);
+
+    }
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
-
-        if( bizInfoSummaryView.getCirculationAmount().doubleValue() <= 0){
-
-            bizInfoSummaryView.setProductionCostsPercentage(BigDecimal.ZERO);
-            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
-
-            messageHeader = "error";
-            message = "sumIncomeAmount is zero ";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
         double sumIncomeAmount = 0;
         double productCostAmount = 0;
         double productCostPercent = 0;
@@ -418,16 +419,16 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error Interest > earningsBeforeTaxAmount";
+            messageHeader = "เกิดข้อผิดพลาด ";
+            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรเบื้องต้น";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error tax > earningsBeforeTaxAmount";
+            messageHeader = "เกิดข้อผิดพลาด ";
+            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -435,8 +436,8 @@ public class BizInfoSummary implements Serializable {
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error  interest and tax > earningsBeforeTaxAmount";
+            messageHeader = "เกิดข้อผิดพลาด ";
+            message = "กรุณากรอก หักค่าใช้จ่ายในการดำเนินงาน ให้น้อยกว่า กำไรก่อนหักดอกเบี้ยและภาษี";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -720,6 +721,15 @@ public class BizInfoSummary implements Serializable {
         this.currentDate = currentDate;
     }
 
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
     public boolean isDisableExpiryDate() {
         return disableExpiryDate;
     }
@@ -734,5 +744,13 @@ public class BizInfoSummary implements Serializable {
 
     public void setDisableOwnerName(boolean disableOwnerName) {
         this.disableOwnerName = disableOwnerName;
+    }
+
+    public boolean isReadonlyInterview() {
+        return readonlyInterview;
+    }
+
+    public void setReadonlyInterview(boolean readonlyInterview) {
+        this.readonlyInterview = readonlyInterview;
     }
 }

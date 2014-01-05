@@ -73,7 +73,6 @@ public class CreditFacExisting implements Serializable {
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private ProductProgram productProgram;
-    private BaseRate baseRate;
 
     private List<ExistingCreditDetailView> existingCreditDetailViewList;
     private List<ExistingCreditDetailView> borrowerExistingCreditDetailViewList;
@@ -612,6 +611,8 @@ public class CreditFacExisting implements Serializable {
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
 
+
+
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
             existingCreditDetailView.setExistProductProgram(productProgram);
             existingCreditDetailView.setExistCreditType(creditType);
@@ -683,6 +684,12 @@ public class CreditFacExisting implements Serializable {
                 productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
                 existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
             }
+
+            for(int i=0;i<existingSplitLineDetailViewList.size();i++){
+                BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
+                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
+            }
+
             existingCreditDetailViewRow.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
             existingCreditDetailViewRow.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
 

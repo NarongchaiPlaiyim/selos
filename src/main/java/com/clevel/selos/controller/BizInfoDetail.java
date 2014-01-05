@@ -14,6 +14,7 @@ import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -60,6 +61,7 @@ public class BizInfoDetail implements Serializable {
     private long bizInfoDetailViewId;
     private String descType;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
@@ -902,6 +904,15 @@ public class BizInfoDetail implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 
     public boolean isDisable() {

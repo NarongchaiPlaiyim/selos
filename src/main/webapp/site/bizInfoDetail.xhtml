@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <h:head>
         <title>Business Information Detail</title>
@@ -181,14 +182,16 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocExpiryDate')}"/>
                             </td>
                             <td colspan="2" class="title">
-                                <p:calendar size="10" id="bizDocExpiryDate" showOn="button" navigator="true" disabled="#{bizInfoDetail.disable}"
+                                <clv:BECalendar size="10" id="bizDocExpiryDate" showOn="button" navigator="true" disabled="#{bizInfoDetail.disable}"
                                             value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
+                                            defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
+                                            mindate="#{bizInfoDetail.currentDateDDMMYY}"
                                             pattern="dd/MM/yyyy"
-                                            locale="th_TH"
                                             timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
+                                            yearRange="1950:2100"
+                                            locale="th_TH">
                                     <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
+                                </clv:BECalendar>
                             </td>
                         </tr>
                         <tr>
