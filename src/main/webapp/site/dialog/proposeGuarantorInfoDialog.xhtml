@@ -98,7 +98,7 @@
                                         </p:column>
 
                                         <p:column styleClass="right">
-                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}" style="text-align:right">
+                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}" maxlength="18"  style="text-align:right">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                 <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
