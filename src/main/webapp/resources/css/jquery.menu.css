@@ -1,7 +1,7 @@
 /** CSS Style for menu panel **/
 .selosmenu {
     font: bold 11px Verdana;
-    background: #016db8 url('../images/shared/navbg.gif') repeat-x;
+    background: #016db8 url("#{resource['images:shared/navbg.gif']}") repeat-x;
     width: 100%;
 }
 
@@ -22,7 +22,7 @@
 /*Top level menu link items style*/
 .selosmenu ul li a {
     display: block;
-    background: #016db8 url('../images/shared/navbg.gif') repeat-x;
+    background: #016db8 url("#{resource['images:shared/navbg.gif']}") repeat-x;
     color: white;
     padding: 8px 10px;
     border-right: 1px solid transparent;
@@ -104,7 +104,7 @@
 /* ######### CSS classes applied to down and right arrow images  ######### */
 
 .downarrowclass {
-    background: url('../images/shared/down.gif') no-repeat;
+    background: url("#{resource['images:shared/down.gif']}") no-repeat;
     width: 11px;
     height: 8px;
     position: absolute;

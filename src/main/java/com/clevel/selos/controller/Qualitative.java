@@ -134,13 +134,11 @@ public class Qualitative implements Serializable {
         }
     }
 
-    public void onClickQuality(int clickResult){
-        if(clickResult > result){
-            result = clickResult;
-        }else{
-            result = result;
+    public void onClickQuality(long clickResult){
+        int click = Integer.parseInt(Long.toString(clickResult));
+        if(click > result){
+            result = click;
         }
-
       log.info("result :: {}" , result);
     }
 
