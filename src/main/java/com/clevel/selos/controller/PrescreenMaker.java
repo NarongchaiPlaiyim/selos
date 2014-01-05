@@ -2258,15 +2258,20 @@ public class PrescreenMaker implements Serializable {
         //TODO get nextStep
         String actionCode = "1001";
         String checkerId = prescreenView.getCheckerId();
-        prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
         try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+            prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+            FacesUtil.redirect("/site/inbox.jsf");
             return;
         } catch (Exception ex) {
-            log.error("Error to redirect : {}", ex.getMessage());
+            log.error("onAssignToChecker ::: exception : {}", ex);
+            messageHeader = "Assign to checker failed.";
+            if(ex.getCause() != null){
+                message = "Assign to checker failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Assign to checker failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
     }
 
     public void onCancelCA(){
