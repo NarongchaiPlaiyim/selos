@@ -61,7 +61,8 @@
                                     </colgroup>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
-                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
+                                        <td><p:inputText id="bizLocationName" style="width: 300px"
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}" required="#{not empty param[addBizInfoSummary.clientId]}"/></td>
                                     </tr>
                                     <tr>
                                         <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
@@ -116,12 +117,12 @@
                                                 <tr>
                                                     <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
                                                     <td class="left title" colspan="3">
-                                                        <p:inputText styleClass="smallest" id="addressNo" onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                        <p:inputText styleClass="small" id="addressNo" onkeydown="return onKeyDownHomeNo(event);" onkeypress="return onKeyPressHomeNo(event);"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.addressNo}" required="#{not empty param[addBizInfoSummary.clientId]}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
                                                         <p:spacer width="30px"/>
-                                                        <p:inputText styleClass="smallest" id="addressMoo" onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                        <p:inputText styleClass="smallest" id="addressMoo" onkeydown="return onKeyDownHomeNo(event);" onkeypress="return onKeyPressHomeNo(event);"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
                                                         <p:spacer width="30px"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')}"/> :
@@ -352,7 +353,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="operatingExpenseAmount" styleClass="right"  readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -389,7 +390,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceInterestAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -408,7 +409,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceTaxAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
@@ -451,7 +452,7 @@
                             </td>
                             <td class="left">
                                 <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                              required="#{not empty param[addBizInfoSummary.clientId]}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>
