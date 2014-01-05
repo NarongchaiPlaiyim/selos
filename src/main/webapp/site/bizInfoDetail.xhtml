@@ -142,9 +142,9 @@
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/></td>
                             <td colspan="5">
                                 <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
-                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                              required="#{not empty param[saveButton.clientId]}">
-                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentBiz"/>
                                 </p:inputText>
@@ -205,7 +205,7 @@
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
                             <td colspan="5">
                                 <p:inputText styleClass="right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}">
-                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
                                 </p:inputText>
