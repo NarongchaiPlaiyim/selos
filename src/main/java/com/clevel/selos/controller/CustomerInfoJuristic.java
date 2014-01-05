@@ -7,6 +7,7 @@ import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
@@ -27,6 +28,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.management.relation.RelationType;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -297,7 +299,7 @@ public class CustomerInfoJuristic implements Serializable {
             enableCitizenId = false;
         }
 
-        if(customerInfoView.getRelation().getId() == 1){
+        if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
             isEditBorrower = true;
             relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{

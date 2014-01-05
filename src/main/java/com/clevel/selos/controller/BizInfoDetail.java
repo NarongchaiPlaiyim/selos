@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -60,7 +62,9 @@ public class BizInfoDetail implements Serializable {
     private long bizInfoDetailViewId;
     private String descType;
     private Date currentDate;
-
+    private String currentDateDDMMYY;
+    private boolean readonlyIsUW;
+    private boolean readonlyIsBDM;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -225,7 +229,7 @@ public class BizInfoDetail implements Serializable {
             if(buyerDetailList.size()>0){
                 calSumBizStakeHolderDetailView(buyerDetailList,"2");
             }
-
+            onCheckRole();
 
         }catch (Exception ex){
             log.info("onCreation Exception ");
@@ -236,6 +240,18 @@ public class BizInfoDetail implements Serializable {
             }
         }finally {
             log.info("onCreation end ");
+        }
+    }
+
+    private void onCheckRole(){
+        readonlyIsUW = true;
+        if( user.getRole().getId() ==  RoleValue.UW.id()){
+            readonlyIsUW = false;
+        }
+
+        readonlyIsBDM = true;
+        if( user.getRole().getId() ==  RoleValue.BDM.id()){
+            readonlyIsBDM = false;
         }
     }
 
@@ -904,11 +920,36 @@ public class BizInfoDetail implements Serializable {
         this.currentDate = currentDate;
     }
 
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
     public boolean isDisable() {
         return isDisable;
     }
 
     public void setDisable(boolean disable) {
         isDisable = disable;
+    }
+
+    public boolean isReadonlyIsUW() {
+        return readonlyIsUW;
+    }
+
+    public void setReadonlyIsUW(boolean readonlyIsUW) {
+        this.readonlyIsUW = readonlyIsUW;
+    }
+
+    public boolean isReadonlyIsBDM() {
+        return readonlyIsBDM;
+    }
+
+    public void setReadonlyIsBDM(boolean readonlyIsBDM) {
+        this.readonlyIsBDM = readonlyIsBDM;
     }
 }

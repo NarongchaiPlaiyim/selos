@@ -456,7 +456,7 @@ public class CustomerInfoIndividual implements Serializable {
             enableSpouseCitizenId = false;
         }
 
-        if(customerInfoView.getRelation().getId() == 1){
+        if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
             isEditBorrower = true;
             relationIndividualList = relationCustomerDAO.getListRelation(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 0);
         }else{
@@ -508,7 +508,7 @@ public class CustomerInfoIndividual implements Serializable {
         //this condition for spouse
         Reference referenceMain = referenceDAO.findById(customerInfoView.getReference().getId());
         if (caseBorrowerTypeId == 2) { // Juristic as Borrower
-            if(customerInfoView.getSpouse().getRelation().getId() == 4){ // Bypass related
+            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){ // Bypass related
                 int flagRelateType = 0;
                 if (referenceMain.getRelationType() == 1) { // Committee
                     flagRelateType = 4; // remove 4 ( relation_type in db ) ( remove shareholder )
@@ -928,11 +928,19 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDOB(){
-        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        if(customerInfoView.getDateOfBirth() != null){
+            customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        } else {
+            customerInfoView.setAge(0);
+        }
     }
 
     public void onChangeDOBSpouse(){
-        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
+            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        } else if(customerInfoView.getSpouse() != null){
+            customerInfoView.getSpouse().setAge(0);
+        }
     }
 
     public void onSearchCustomerInfo() {
