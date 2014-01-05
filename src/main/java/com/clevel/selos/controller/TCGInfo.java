@@ -107,7 +107,7 @@ public class TCGInfo implements Serializable {
     public void onCreation() {
         log.info("onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-//        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
