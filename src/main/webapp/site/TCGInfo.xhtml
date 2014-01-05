@@ -52,6 +52,7 @@
                                                 <td>
                                                     <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="1"/>
+                                                        <p:spacer width="20px;"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
@@ -71,7 +72,7 @@
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -90,7 +91,7 @@
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -109,7 +110,7 @@
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -128,7 +129,7 @@
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -147,7 +148,7 @@
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -293,7 +294,9 @@
                                                     <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}" />
                                                 </td>
                                                 <td>
-                                                    <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" /> %
+                                                    <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" >
+                                                        <f:convertNumber pattern="#0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                                                    </h:outputText>  %
                                                 </td>
                                             </tr>
                                             <tr>

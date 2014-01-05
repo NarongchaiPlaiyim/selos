@@ -76,18 +76,25 @@ public class Qualitative implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-//        validate = true;
-
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
+            }
+        }
+
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ",workCaseId);
-        }
 
         if(page.equals("qualitativeA.jsf")){
             //session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
@@ -98,7 +105,6 @@ public class Qualitative implements Serializable {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
         }
 
-//        log.info("Date :: {} ",qualitativeView.getCreateDate().toString());
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
@@ -106,7 +112,10 @@ public class Qualitative implements Serializable {
         } else{
             modeForButton = ModeForButton.EDIT;
             log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
-            onSetQualityToValue(qualitativeView.getQualityResult());
+            if(qualitativeView.getQualityResult()!=null)
+            {
+                 onSetQualityToValue(qualitativeView.getQualityResult());
+            }
         }
 
         onLoadSelectList();
