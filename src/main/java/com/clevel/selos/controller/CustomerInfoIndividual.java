@@ -928,11 +928,19 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDOB(){
-        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        if(customerInfoView.getDateOfBirth() != null){
+            customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+        } else {
+            customerInfoView.setAge(0);
+        }
     }
 
     public void onChangeDOBSpouse(){
-        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
+            customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+        } else if(customerInfoView.getSpouse() != null){
+            customerInfoView.getSpouse().setAge(0);
+        }
     }
 
     public void onSearchCustomerInfo() {

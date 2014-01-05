@@ -59,6 +59,7 @@
                                      value="#{tcgInfo.TCGDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
+                                     maxlength="18"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
@@ -79,6 +80,7 @@
                         <p:inputText styleClass="large"
                                      id="LTVvalue"
                                      value="#{tcgInfo.TCGDetailView.ltvValue}"
+                                     maxlength="18"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      readonly="true">
@@ -97,7 +99,6 @@
                         <p:selectOneRadio id="proposeInThisRequestRadio"
                                           value="#{tcgInfo.TCGDetailView.proposeInThisRequest}">
                             <f:selectItem itemLabel="No" itemValue="1"/>
-                            <p:spacer width="20px;"/>
                             <f:selectItem itemLabel="Yes" itemValue="2"/>
                         </p:selectOneRadio>
                     </td>

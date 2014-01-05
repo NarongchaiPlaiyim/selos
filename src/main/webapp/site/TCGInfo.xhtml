@@ -50,9 +50,8 @@
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
+                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="1"/>
-                                                        <p:spacer width="20px;"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                     </p:selectOneRadio>
                                                 </td>
@@ -66,6 +65,7 @@
                                                                  id="requestLimitRequiredTCG"
                                                                  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);"
                                                                  required="#{not empty param[saveTCG.clientId]}">
@@ -86,6 +86,7 @@
                                                                  id="requestLimitNotRequiredTCG"
                                                                  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
@@ -105,6 +106,7 @@
                                                                  id="existingLoanRatioUnderSameCollateral"
                                                                  value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
@@ -124,6 +126,7 @@
                                                                  id="existingLoanRatioNotUnderSameCollateral"
                                                                  value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
@@ -143,6 +146,7 @@
                                                                  id="tcbFloodAmount"
                                                                  value="#{tcgInfo.TCGView.tcbFloodAmount}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
@@ -295,7 +299,6 @@
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" >
-                                                        <f:convertNumber pattern="#0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                                                     </h:outputText>  %
                                                 </td>
                                             </tr>
@@ -357,7 +360,7 @@
     </p:panel>
 
     <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-              modal="true" width="550" height="200">
+              modal="true" width="530" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 

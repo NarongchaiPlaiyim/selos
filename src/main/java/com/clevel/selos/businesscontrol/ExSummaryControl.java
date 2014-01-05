@@ -117,6 +117,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
+        //Account Movement
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
@@ -158,7 +159,6 @@ public class ExSummaryControl extends BusinessControl {
                     bizSize = bankStatementSummary.getGrdTotalIncomeGross();
                 }
             } else { // use customer
-//                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
                 if(cusListView != null && cusListView.size() > 0){
                     for(CustomerInfoView cus : cusListView){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){

@@ -1,10 +1,11 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:h="http://java.sun.com/jsf/html">
 
-    <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
-    <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css"/>
+    <h:outputStylesheet name="css/jquery.menu.css" />
+    <h:outputScript library="js" name="jquery.menu.js" />
 
     <script type="text/javascript">
         //<![CDATA[
