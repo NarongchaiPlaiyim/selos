@@ -89,18 +89,18 @@ public class LoginBean {
     }
 
     public String login() {
-        log.debug("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
+        log.info("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
 
         loginExceptionMessage = "";
 
         // make authentication with AD first
         if (Util.isTrue(ldapEnable)) {
-            log.debug("LDAP authentication enabled.");
+            log.info("LDAP authentication enabled.");
             try {
                 ldapInterface.authenticate(userName, password);
             } catch (ApplicationRuntimeException e) {
                 try {
-                    log.debug("LDAP authentication failed! (user: {})", userName.trim());
+                    log.info("LDAP authentication failed! (user: {})", userName.trim());
                     securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
                     loginExceptionMessage = e.getMessage();
                 } catch (Exception ex) {
@@ -112,6 +112,11 @@ public class LoginBean {
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
+
+        log.info("userDAO.findById user.getUserName + " + user.getUserName());
+        log.info("userDAO.findById user.getRole().getSystemName() + " + user.getRole().getSystemName());
+        log.info("userDAO.findById user.getRole().getRoleType().getRoleTypeName().name()+ " + user.getRole().getRoleType().getRoleTypeName().name());
+
         UserDetail userDetail = null;
         if (Util.isTrue(encryptionEnable)) {
             password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
