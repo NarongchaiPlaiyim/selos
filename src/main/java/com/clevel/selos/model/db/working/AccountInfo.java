@@ -3,6 +3,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -116,5 +118,20 @@ public class AccountInfo implements Serializable {
 
     public void setAccountInfoDetailList(List<AccountInfoDetail> accountInfoDetailList) {
         this.accountInfoDetailList = accountInfoDetailList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("lastReviewDate", lastReviewDate)
+                .append("extendedReviewDate", extendedReviewDate)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("accountInfoDetailList", accountInfoDetailList)
+                .toString();
     }
 }
