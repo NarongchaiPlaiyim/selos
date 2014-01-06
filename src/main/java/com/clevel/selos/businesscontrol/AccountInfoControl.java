@@ -64,30 +64,24 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     }
 
     public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
-        log.debug("saveAccountInfo()");
+        log.debug("saveAccountInfo() is processing");
         User user = getCurrentUser();
 
         workCase = workCaseDAO.findById(workCaseId);
 
         accountInfo = accountInfoTransform.transformToModel(accountInfoView, workCase, user);
+        log.debug("AccountInfo : {}", accountInfo.toString());
+
         accountInfoDAO.persist(accountInfo);
 
-//        accountInfoDetailViewList = Util.safetyList(accountInfoView.getAccountInfoDetailViewList());
-//        for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){
-//            accountInfoDetail = accountInfoDetailTransform.transformToModel(dialogView, accountInfo);
-//            if(null != accountInfoDetail){
-//                accountInfoDetailDAO.persist(accountInfoDetail);
-//            }
-//        }
+        accountInfoDetailViewList = Util.safetyList(accountInfoView.getAccountInfoDetailViewList());
+        for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){
+            accountInfoDetail = accountInfoDetailTransform.transformToModel(dialogView, accountInfo);
+            if(null != accountInfoDetail){
+                accountInfoDetailDAO.persist(accountInfoDetail);
+            }
+        }
 
-
-    }
-
-    private void a(){
-
-    }
-
-    private void b(){
 
     }
 }

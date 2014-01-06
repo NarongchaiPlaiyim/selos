@@ -20,9 +20,17 @@ public class AccountInfoTransform extends Transform {
         accountInfo = new AccountInfo();
 
         accountInfo.setWorkCase(workCase);
+
         accountInfo.setModifyDate(new Date());
         accountInfo.setModifyBy(user);
 
+        accountInfo.setCreateDate(new Date());
+        accountInfo.setCreateBy(user);
+
+        accountInfo.setExtendedReviewDate(new Date());
+        accountInfo.setLastReviewDate(new Date());
+
+        accountInfo.setAccountInfoDetailList(null);
         return accountInfo;
     }
 }

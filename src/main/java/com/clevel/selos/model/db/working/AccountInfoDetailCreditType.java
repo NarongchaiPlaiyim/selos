@@ -13,7 +13,7 @@ public class AccountInfoDetailCreditType implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "account_info_detail_id")
-    private AccountInfoDetail accountInfoDetail;
+    private AccountInfoDetail accountInfoDetailCreditType;
 
     @Column(name = "credit_type_id")
     private String accountId;
@@ -29,12 +29,12 @@ public class AccountInfoDetailCreditType implements Serializable {
         this.id = id;
     }
 
-    public AccountInfoDetail getAccountInfoDetail() {
-        return accountInfoDetail;
+    public AccountInfoDetail getAccountInfoDetailCreditType() {
+        return accountInfoDetailCreditType;
     }
 
-    public void setAccountInfoDetail(AccountInfoDetail accountInfoDetail) {
-        this.accountInfoDetail = accountInfoDetail;
+    public void setAccountInfoDetailCreditType(AccountInfoDetail accountInfoDetailCreditType) {
+        this.accountInfoDetailCreditType = accountInfoDetailCreditType;
     }
 
     public String getAccountId() {
