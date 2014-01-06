@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.working;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,7 +19,7 @@ public class AccountInfoDetailPurpose implements Serializable {
     private AccountInfoDetail accountInfoDetailPurpose;
 
     @Column(name = "purpose_id")
-    private String purposeId;
+    private long purposeId;
 
     @Column(name = "purpose_name")
     private String purposeName;
@@ -37,11 +40,11 @@ public class AccountInfoDetailPurpose implements Serializable {
         this.accountInfoDetailPurpose = accountInfoDetailPurpose;
     }
 
-    public String getPurposeId() {
+    public long getPurposeId() {
         return purposeId;
     }
 
-    public void setPurposeId(String purposeId) {
+    public void setPurposeId(long purposeId) {
         this.purposeId = purposeId;
     }
 
@@ -51,5 +54,15 @@ public class AccountInfoDetailPurpose implements Serializable {
 
     public void setPurposeName(String purposeName) {
         this.purposeName = purposeName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountInfoDetailPurpose", accountInfoDetailPurpose)
+                .append("purposeId", purposeId)
+                .append("purposeName", purposeName)
+                .toString();
     }
 }
