@@ -10,7 +10,7 @@
             <table class="content_form" border="0" style="width:100%">
                 <tr>
                     <td class="title">
-                        <p:outputLabel for="accountName" value="#{msg.get('app.dbrDetail.label.accountName')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
                         <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"
@@ -19,7 +19,7 @@
                 </tr>
                 <tr>
                     <td class="title">
-                        <p:outputLabel for="loanAccountType" value="#{msg.get('app.dbrDetail.label.loanType')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
                     </td>
                     <td>
                         <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true">

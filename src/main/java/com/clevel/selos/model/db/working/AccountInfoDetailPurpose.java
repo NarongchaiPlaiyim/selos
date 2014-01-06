@@ -13,7 +13,7 @@ public class AccountInfoDetailPurpose implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "account_info_detail_id")
-    private AccountInfoDetail accountInfoDetail;
+    private AccountInfoDetail accountInfoDetailPurpose;
 
     @Column(name = "purpose_id")
     private String purposeId;
@@ -29,12 +29,12 @@ public class AccountInfoDetailPurpose implements Serializable {
         this.id = id;
     }
 
-    public AccountInfoDetail getAccountInfoDetail() {
-        return accountInfoDetail;
+    public AccountInfoDetail getAccountInfoDetailPurpose() {
+        return accountInfoDetailPurpose;
     }
 
-    public void setAccountInfoDetail(AccountInfoDetail accountInfoDetail) {
-        this.accountInfoDetail = accountInfoDetail;
+    public void setAccountInfoDetailPurpose(AccountInfoDetail accountInfoDetailPurpose) {
+        this.accountInfoDetailPurpose = accountInfoDetailPurpose;
     }
 
     public String getPurposeId() {

@@ -31,9 +31,9 @@ public class AccountInfoDetailTransform extends Transform {
         //Branch
         id = accountInfoDetailView.getBranchView().getId();
         if(id != 0){
-            accountInfoDetail.setBankBranch(branchTransform.transformToModel((int)id));
+            accountInfoDetail.setBranch(branchTransform.transformToModel((int) id));
         } else {
-            accountInfoDetail.setBankBranch(null);
+            accountInfoDetail.setBranch(null);
         }
 
         //Account Type

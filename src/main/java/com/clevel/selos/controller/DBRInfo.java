@@ -108,6 +108,7 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
+
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);

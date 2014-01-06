@@ -31,9 +31,11 @@ public class AccountInfo implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_review_date")
     private Date lastReviewDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "extended_review_date")
     private Date extendedReviewDate;
 
