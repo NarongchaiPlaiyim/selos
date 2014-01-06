@@ -92,7 +92,6 @@
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
                                         <td class="title">
-                                            
                                             <clv:BECalendar size="10" id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
                                                         value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
                                                         defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
@@ -231,12 +230,15 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
                             </td>
                             <td colspan="4">
+
                                 <clv:BECalendar size="10" id="registrationDate" showOn="button" navigator="true"
-                                            value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
-                                            pattern="dd/MM/yyyy"
-                                            timeZone="Asia/Bangkok"
-                                            yearRange="1950:2100"
-                                            locale="th_TH">
+                                                value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
+                                                defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                maxdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                pattern="dd/MM/yyyy"
+                                                timeZone="Asia/Bangkok"
+                                                yearRange="1950:2100"
+                                                locale="th_TH" >
                                 </clv:BECalendar>
                             </td>
                         </tr>
@@ -245,13 +247,14 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
                             </td>
                             <td>
-                                <clv:BECalendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
-                                            value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
-                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                            pattern="dd/MM/yyyy"
-                                            timeZone="Asia/Bangkok"
-                                            yearRange="1950:2100"
-                                            locale="th_TH">
+                                <clv:BECalendar size="10" id="establishDate" showOn="button" navigator="true"
+                                                value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
+                                                defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                maxdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                pattern="dd/MM/yyyy"
+                                                timeZone="Asia/Bangkok"
+                                                yearRange="1950:2100"
+                                                locale="th_TH" >
                                 </clv:BECalendar>
                             </td>
                             <td class="title">
@@ -523,9 +526,7 @@
                                         <p:outputLabel value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
-                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
-                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
-                                        </p:outputLabel>
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.incomeAmountDis}" />
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
                                         <p:outputLabel styleClass="right" value="#{bizInfoDetailx.percentBiz}">

@@ -98,8 +98,12 @@
         <h:outputText value="#{msg.get('app.dlg.limit')}"/>
     </td>
     <td>
-        <p:inputText id="limit" styleClass="large" style="text-align: right"
-                     value="#{ncbInfo.ncbDetailView.limit}" required="#{not empty param[addRowData.clientId]}">
+        <p:inputText id="limit"
+                     styleClass="large"
+                     style="text-align: right"
+                     maxlength="18"
+                     value="#{ncbInfo.ncbDetailView.limit}"
+                     required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:limit"/>
         </p:inputText>
@@ -110,8 +114,12 @@
         <h:outputText value="#{msg.get('app.dlg.outstanding')}"/>
     </td>
     <td>
-        <p:inputText id="outstanding" styleClass="large" style="text-align: right"
-                     value="#{ncbInfo.ncbDetailView.outstanding}" required="#{not empty param[addRowData.clientId]}">
+        <p:inputText id="outstanding"
+                     styleClass="large"
+                     style="text-align: right"
+                     maxlength="18"
+                     value="#{ncbInfo.ncbDetailView.outstanding}"
+                     required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
         </p:inputText>
@@ -122,8 +130,12 @@
         <h:outputText value="#{msg.get('app.dlg.installment')}"/>
     </td>
     <td>
-        <p:inputText id="installment" styleClass="large" style="text-align: right"
-                     value="#{ncbInfo.ncbDetailView.installment}" required="#{not empty param[addRowData.clientId]}">
+        <p:inputText id="installment"
+                     styleClass="large"
+                     style="text-align: right"
+                     maxlength="18"
+                     value="#{ncbInfo.ncbDetailView.installment}"
+                     required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:installment"/>
         </p:inputText>
@@ -189,7 +201,8 @@
         <h:outputText value="#{msg.get('app.dlg.noOfOutstandingPaymentIn12months')}"/>
     </td>
     <td>
-        <p:inputText name="noOfOutstandingPaymentIn12months" style="text-align: right"
+        <p:inputText name="noOfOutstandingPaymentIn12months"
+                     style="text-align: right"
                      value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
                      required="#{not empty param[addRowData.clientId]}"/>
     </td>
@@ -199,7 +212,9 @@
         <h:outputText value="#{msg.get('app.dlg.noOfOverLimit')}"/>
     </td>
     <td>
-        <p:inputText name="noOfOverLimit" value="#{ncbInfo.ncbDetailView.noOfOverLimit}" style="text-align: right"
+        <p:inputText name="noOfOverLimit"
+                     value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
+                     style="text-align: right"
                      required="#{not empty param[addRowData.clientId]}"/>
     </td>
 </tr>

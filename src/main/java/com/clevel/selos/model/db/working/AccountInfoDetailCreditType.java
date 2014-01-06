@@ -1,7 +1,11 @@
 package com.clevel.selos.model.db.working;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wrk_account_info_credit_type")
@@ -16,10 +20,16 @@ public class AccountInfoDetailCreditType implements Serializable {
     private AccountInfoDetail accountInfoDetailCreditType;
 
     @Column(name = "credit_type_id")
-    private String accountId;
+    private long creditTypeId;
 
     @Column(name = "credit_type_name")
-    private String accountName;
+    private String productProgram;
+
+    @Column(name = "limit")
+    private BigDecimal limit;
+
+    @Column(name = "credit_facility")
+    private String CreditFacility;
 
     public long getId() {
         return id;
@@ -37,19 +47,47 @@ public class AccountInfoDetailCreditType implements Serializable {
         this.accountInfoDetailCreditType = accountInfoDetailCreditType;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public long getCreditTypeId() {
+        return creditTypeId;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setCreditTypeId(long creditTypeId) {
+        this.creditTypeId = creditTypeId;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getProductProgram() {
+        return productProgram;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
+    }
+
+    public String getCreditFacility() {
+        return CreditFacility;
+    }
+
+    public void setCreditFacility(String creditFacility) {
+        CreditFacility = creditFacility;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountInfoDetailCreditType", accountInfoDetailCreditType)
+                .append("creditTypeId", creditTypeId)
+                .append("productProgram", productProgram)
+                .append("limit", limit)
+                .append("CreditFacility", CreditFacility)
+                .toString();
     }
 }

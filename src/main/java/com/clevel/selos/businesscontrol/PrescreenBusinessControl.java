@@ -24,6 +24,7 @@ import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
@@ -43,6 +44,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     @SELOS
     private Logger log;
+    @Inject
+    @SELOS
+    SystemAuditor slosAuditor;
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject

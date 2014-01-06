@@ -66,6 +66,7 @@ public class BizInfoSummary implements Serializable {
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
+    private String incomeAmountDis;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal SumWeightIntvIncomeFactor;
@@ -125,15 +126,16 @@ public class BizInfoSummary implements Serializable {
     public void onCreation() {
         log.info("onCreation bizInfoSum");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
         disableOwnerName = false;
         disableExpiryDate = true;
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }
-        log.debug("info WorkCaseId is: {}" + workCaseId);
-        onSearchBizInfoSummaryByWorkCase();
 
+        log.debug("info WorkCaseId is: {}", workCaseId);
+
+        onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
@@ -228,8 +230,8 @@ public class BizInfoSummary implements Serializable {
 
         }
 
-        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
-        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
+        /*log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
+        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());*/
 
     }
 
@@ -297,6 +299,8 @@ public class BizInfoSummary implements Serializable {
                 incomePercentD = temp.getPercentBiz().doubleValue();
                 sumIncomePercentD += incomePercentD;
                 incomeAmountCal = bankStatementAvg * 12;
+                incomeAmountDis = util.formatNumber(incomeAmountCal);
+                temp.setIncomeAmountDis(incomeAmountDis);
                 sumIncomeAmountD += incomeAmountCal;
 
 
@@ -704,6 +708,14 @@ public class BizInfoSummary implements Serializable {
 
     public void setSumIncomeAmountDis(String sumIncomeAmountDis) {
         this.sumIncomeAmountDis = sumIncomeAmountDis;
+    }
+
+    public String getIncomeAmountDis() {
+        return incomeAmountDis;
+    }
+
+    public void setIncomeAmountDis(String incomeAmountDis) {
+        this.incomeAmountDis = incomeAmountDis;
     }
 
     public Date getCurrentDate() {

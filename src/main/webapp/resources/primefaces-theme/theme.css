@@ -11,7 +11,29 @@
     background-color: white !important;
     border: 1px solid #bfbfbf !important;
     display: block!important;
+    width: 16px;
+    height: 16px;
 }
+
+.ui-chkbox-box {
+    position: relative;
+    top: -17px;
+}
+
+.ui-state-active {
+    position: relative!important;
+    top: 0;
+}
+
+/*.ui-chkbox-box .ui-widget .ui-state-active{
+    margin-right: 3px !important;
+    background-color: white !important;
+    border: 1px solid #bfbfbf !important;
+    display: block!important;
+    vertical-align: top;
+    position: relative!important;
+    top: 0!important;
+}*/
 
 /*-------------*/
 .ui-helper-hidden {
