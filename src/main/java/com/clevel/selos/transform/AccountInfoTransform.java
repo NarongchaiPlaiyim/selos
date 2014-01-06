@@ -30,7 +30,6 @@ public class AccountInfoTransform extends Transform {
         accountInfo.setExtendedReviewDate(new Date());
         accountInfo.setLastReviewDate(new Date());
 
-        accountInfo.setAccountInfoDetailList(null);
         return accountInfo;
     }
 }
