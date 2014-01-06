@@ -45,9 +45,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     @SELOS
     private Logger log;
     @Inject
-    @SELOS
-    SystemAuditor slosAuditor;
-    @Inject
     PrescreenTransform prescreenTransform;
     @Inject
     PrescreenFacilityTransform prescreenFacilityTransform;
