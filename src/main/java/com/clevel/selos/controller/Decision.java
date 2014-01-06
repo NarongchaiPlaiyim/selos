@@ -125,7 +125,6 @@ public class Decision implements Serializable {
 
     private int seq;
     private Hashtable<Integer, Integer> hashSeqCredit;
-//    private List<CreditTypeDetailView> sharedCreditTypeList;
     private List<NewCreditDetailView> sharedCreditTypeList;
 
     // View Selected for Add/Edit/Delete
@@ -650,7 +649,15 @@ public class Decision implements Serializable {
 //        }
 
         sharedCreditTypeList = decisionView.getApproveCreditList();
-                // Fee Information
+
+        log.debug("Initial Credit Sequence number >>>");
+        for (int i=0; i<sharedCreditTypeList.size(); i++) {
+            NewCreditDetailView creditDetailView = sharedCreditTypeList.get(i);
+            hashSeqCredit.put(creditDetailView.getSeq(), 0);
+            log.debug("put seq: {} = {}", creditDetailView.getSeq(), hashSeqCredit.get(creditDetailView.getSeq()));
+        }
+
+        // Fee Information
         NewFeeDetailView proposeFeeDetailView1 = new NewFeeDetailView();
         proposeFeeDetailView1.setProductProgram("TMB SME SmartBiz");
         proposeFeeDetailView1.setStandardFrontEndFee("12.34%, -");
@@ -734,6 +741,20 @@ public class Decision implements Serializable {
         // Approved Collateral
         decisionView.setApproveCollateralList(cloner.deepClone(proposeCollateralList));
 
+        // Set Collateral Sequence number usage
+        log.debug("Set Collateral Sequence number usage");
+        for (int i=0; i<decisionView.getApproveCollateralList().size(); i++) {
+            log.debug("Collateral[{}]", i);
+            NewCollateralInfoView coll = decisionView.getApproveCollateralList().get(i);
+
+            for (int j=0; j<coll.getNewCreditDetailViewList().size(); j++) {
+                NewCreditDetailView collCredit = coll.getNewCreditDetailViewList().get(j);
+                int newSeqValue = hashSeqCredit.get(collCredit.getSeq()) + 1;
+                hashSeqCredit.put(collCredit.getSeq(), newSeqValue);
+                log.debug("put seq: {} = {}", collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()));
+            }
+        }
+
         // Proposed Guarantor
         guarantorCreditTypeList = cloner.deepClone(sharedCreditTypeList);
         guaranteeAmtOfEachCreditFac = BigDecimal.ZERO;
@@ -767,6 +788,21 @@ public class Decision implements Serializable {
         // Approved Guarantor
         decisionView.setApproveGuarantorList(cloner.deepClone(proposeGuarantorList));
         decisionView.setApproveTotalGuaranteeAmt(totalGuaranteeAmount);
+
+        // Set Guarantor Sequence number usage
+        log.debug("Set Guarantor Sequence number usage");
+        for (int i=0; i<decisionView.getApproveGuarantorList().size(); i++) {
+            log.debug("Guarantor[{}]", i);
+            NewGuarantorDetailView guarantor = decisionView.getApproveGuarantorList().get(i);
+
+            for (int j=0; j<guarantor.getNewCreditDetailViewList().size(); j++) {
+                NewCreditDetailView guarantorCredit = guarantor.getNewCreditDetailViewList().get(j);
+                int newSeqValue = hashSeqCredit.get(guarantorCredit.getSeq()) + 1;
+                hashSeqCredit.put(guarantorCredit.getSeq(), newSeqValue);
+                log.debug("put seq: {} = {}", guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()));
+            }
+        }
+
     }
 
     @PostConstruct
@@ -796,7 +832,9 @@ public class Decision implements Serializable {
         selectedAppSubCollateral = new NewSubCollateralDetailView();
         selectedAppProposeGuarantor = new NewGuarantorDetailView();
 
-//        hashSeqCredit = new Hashtable<String, String>();
+        // Initial sequence number credit
+        seq = 1;
+        hashSeqCredit = new Hashtable<Integer, Integer>();
 
         // Retrieve Pricing/Fee
         creditCustomerType = RadioValue.NOT_SELECTED.value();
@@ -1141,12 +1179,13 @@ public class Decision implements Serializable {
 
     public void onDeleteAppProposeCollateral() {
         log.debug("onDeleteAppProposeCollateral() rowIndexCollateral: {}", rowIndexCollateral);
-        if (selectedAppProposeCollateral != null
-            && selectedAppProposeCollateral.getNewCreditDetailViewList() != null
-            && selectedAppProposeCollateral.getNewCreditDetailViewList().size() > 0) {
-            for (int i = 0; i < selectedAppProposeCollateral.getNewCreditDetailViewList().size(); i++) {
-                if (hashSeqCredit.get(i) > 0) {
-                    hashSeqCredit.put(i, hashSeqCredit.get(i) - 1);
+        if (selectedAppProposeCollateral.getNewCreditDetailViewList() != null && selectedAppProposeCollateral.getNewCreditDetailViewList().size() > 0) {
+            for (int i=0; i < selectedAppProposeCollateral.getNewCreditDetailViewList().size(); i++) {
+                NewCreditDetailView collCredit = selectedAppProposeCollateral.getNewCreditDetailViewList().get(i);
+                if (hashSeqCredit.get(collCredit.getSeq()) > 0) {
+                    log.debug("coll seq: {} = {} - 1", collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()));
+                    hashSeqCredit.put(collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()) - 1);
+                    log.debug("coll seq: {} = {}", collCredit.getSeq(), hashSeqCredit.get(collCredit.getSeq()));
                 }
             }
         }
@@ -1450,6 +1489,16 @@ public class Decision implements Serializable {
 
     public void onDeleteAppProposeGuarantor() {
         log.debug("onDeleteAppProposeGuarantor() rowIndexGuarantor: {}", rowIndexGuarantor);
+        if (selectedAppProposeGuarantor.getNewCreditDetailViewList() != null && selectedAppProposeGuarantor.getNewCreditDetailViewList().size() > 0) {
+            for (int i=0; i<selectedAppProposeGuarantor.getNewCreditDetailViewList().size(); i++) {
+                NewCreditDetailView guarantorCredit = selectedAppProposeGuarantor.getNewCreditDetailViewList().get(i);
+                if (hashSeqCredit.get(guarantorCredit.getSeq()) > 0) {
+                    log.debug("guarantor seq: {} = {} - 1", guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()));
+                    hashSeqCredit.put(guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()) - 1);
+                    log.debug("guarantor seq: {} = {}", guarantorCredit.getSeq(), hashSeqCredit.get(guarantorCredit.getSeq()));
+                }
+            }
+        }
         decisionView.getApproveGuarantorList().remove(rowIndexGuarantor);
         decisionView.setApproveTotalGuaranteeAmt(creditFacProposeControl.calTotalGuaranteeAmount(decisionView.getApproveGuarantorList()));
     }
@@ -1484,7 +1533,8 @@ public class Decision implements Serializable {
     private void generateSeqFromCreditList(List<NewCreditDetailView> newCreditDetailViewList) {
         int seq = 0;
         for (NewCreditDetailView newCreditDetailView : Util.safetyList(newCreditDetailViewList)) {
-            newCreditDetailView.setSeq(++seq);
+            newCreditDetailView.setSeq(seq);
+            seq++;
         }
     }
 
