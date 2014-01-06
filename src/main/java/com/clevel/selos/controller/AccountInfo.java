@@ -213,7 +213,7 @@ public class AccountInfo implements Serializable {
 
     public void onSave(){
         //todo :
-        workCaseId = 101L;
+        workCaseId = 2001L;
         try{
             accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
             messageHeader = "Save Account Info Success.";
