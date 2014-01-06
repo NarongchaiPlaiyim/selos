@@ -698,9 +698,7 @@
                                                                         </h:outputText>
                                                                     </td>
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                                        <h:outputText value="#{creditTierDetail.finalPriceRate}">
-                                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                                                        </h:outputText>
+                                                                        <h:outputText value="#{creditTierDetail.finalBasePrice.name}"/> <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
                                                                     </td>
                                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                         <h:outputText value="#{creditTierDetail.tenor}">

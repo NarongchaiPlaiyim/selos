@@ -9,17 +9,15 @@
         <h:form id="tcgDlgForm">
             <table class="content_form">
                 <tr>
-                    <td class="title" style="width: 220px;">
+                    <td class="title" style="width: 300px;">
                         <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}"/> :
                     </td>
-                    <td style="width: 450px;">
+                    <td style="width: 300px;">
                         <p:selectOneMenu id="potentialCollateralType"
                                          value="#{tcgInfo.TCGDetailView.potentialCollateral.id}"
                                          size="1"
-                                         style="width: 200px;"
-                                         required="true">
-                                         <!--required="#{not empty param[addDlgData.clientId]}"-->
-
+                                         style="min-width: 250px; width: 250px; max-width: 250px;"
+                                         required="#{not empty param[addDlgData.clientId]}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{tcgInfo.potentialCollateralList}"
                                            var="potentialCollateralList"
@@ -39,14 +37,15 @@
                                          value="#{tcgInfo.TCGDetailView.tcgCollateralType.id}"
                                          styleClass="largest"
                                          size="1"
-                                         required="true"
-                                         style="width: 400px;">
+                                         required="#{not empty param[addDlgData.clientId]}"
+                                         style="min-width: 250px; width: 250px; max-width: 250px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
                                            var="dlgPotentialColToTCGColList"
                                            itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                            itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
-
+                            <p:ajax event="change" listener="#{tcgInfo.calculateLtvValue}"
+                                    update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -55,11 +54,17 @@
                         <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :"/>
                     </td>
                     <td>
-                        <p:inputText styleClass="large" id="appraisalAmount"
+                        <p:inputText styleClass="large"
+                                     id="appraisalAmount"
                                      value="#{tcgInfo.TCGDetailView.appraisalAmount}"
-                                     required="true"
-                                     style="width:200px;">
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                     required="#{not empty param[addDlgData.clientId]}"
+                                     style="width:200px;text-align: right"
+                                     maxlength="18"
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                            <f:convertNumber pattern="#,##0"
+                                             minFractionDigits="2"
+                                             maxFractionDigits="2"
+                                             maxIntegerDigits="18"/>
                             <p:ajax event="blur"
                                     process=":tcgDlgForm"
                                     listener="#{tcgInfo.calculateLtvValue}"
@@ -75,10 +80,14 @@
                         <p:inputText styleClass="large"
                                      id="LTVvalue"
                                      value="#{tcgInfo.TCGDetailView.ltvValue}"
+                                     maxlength="18"
                                      required="#{not empty param[addDlgData.clientId]}"
-                                     style="width:200px;" >
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":tcgDlgForm:LTVvalue"/>
+                                     style="width:200px;text-align: right"
+                                     readonly="true">
+                            <f:convertNumber pattern="#,##0"
+                                             minFractionDigits="2"
+                                             maxFractionDigits="2"
+                                             maxIntegerDigits="18"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -105,7 +114,6 @@
                                 process=":tcgDlgForm"
                                 update=":tcgDlgForm,:frmMain:resultCollateralDetail"
                                 oncomplete="handletcgInfoRequest(xhr, status, args)"/>
-
                         <p:commandButton
                                 value="#{msg.get('app.tcg.dlg.button.cancel')}"
                                 styleClass="small"

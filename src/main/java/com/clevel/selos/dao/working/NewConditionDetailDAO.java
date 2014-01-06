@@ -3,6 +3,7 @@ package com.clevel.selos.dao.working;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewConditionDetail;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -22,6 +23,16 @@ public class NewConditionDetailDAO extends GenericDAO<NewConditionDetail, Intege
         log.info("findNewConditionDetailById ::: {}", newConditionDetailId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newFeeDetail.id", newConditionDetailId));
+        criteria.addOrder(Order.asc("id"));
+        List<NewConditionDetail> newConditionDetailList = (List<NewConditionDetail>) criteria.list();
+        log.info("newConditionDetailList ::: size : {}", newConditionDetailList.size());
+        return newConditionDetailList;
+    }
+
+    public List<NewConditionDetail> findByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("findByNewCreditFacility ::: {}", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));
         List<NewConditionDetail> newConditionDetailList = (List<NewConditionDetail>) criteria.list();
         log.info("newConditionDetailList ::: size : {}", newConditionDetailList.size());

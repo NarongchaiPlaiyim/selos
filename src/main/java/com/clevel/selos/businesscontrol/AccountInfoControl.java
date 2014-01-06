@@ -1,36 +1,47 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.working.AccountInfoDAO;
-import com.clevel.selos.dao.working.OpenAccPurposeDAO;
-import com.clevel.selos.dao.working.OpenAccountDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AccountInfo;
+import com.clevel.selos.model.db.working.AccountInfoDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.AccountInfoDetailView;
 import com.clevel.selos.model.view.AccountInfoView;
+import com.clevel.selos.transform.AccountInfoDetailTransform;
 import com.clevel.selos.transform.AccountInfoTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.List;
 
 @Stateless
 public class AccountInfoControl extends BusinessControl implements Serializable {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    OpenAccountDAO openAccountDAO;
+    private OpenAccountDAO openAccountDAO;
     @Inject
-    OpenAccPurposeDAO openAccPurposeDAO;
+    private OpenAccPurposeDAO openAccPurposeDAO;
     @Inject
-    AccountInfoDAO accountInfoDAO;
+    private AccountInfoDAO accountInfoDAO;
     @Inject
-    AccountInfoTransform accountInfoTransform;
+    private AccountInfoDetailDAO accountInfoDetailDAO;
+    @Inject
+    private AccountInfoTransform accountInfoTransform;
+    @Inject
+    private AccountInfoDetailTransform accountInfoDetailTransform;
+
+    private AccountInfo accountInfo;
+    private WorkCase workCase;
+    private List<AccountInfoDetailView> accountInfoDetailViewList;
+    private AccountInfoDetail accountInfoDetail;
 
     @Inject
     public AccountInfoControl() {
@@ -39,8 +50,8 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
 
     public AccountInfoView getAccountInfo(long workCaseId) {
         log.info("getAccountInfo ::: workCaseId : {}", workCaseId);
-        AccountInfo accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
+        workCase = workCaseDAO.findById(workCaseId);
 
         if (accountInfo == null) {
             accountInfo = new AccountInfo();
@@ -52,12 +63,25 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         return accountInfoView;
     }
 
-    public void saveAccountInfo(AccountInfoView accountInfoView, long workCaseId){
+    public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
+        log.debug("saveAccountInfo() is processing");
         User user = getCurrentUser();
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        workCase = workCaseDAO.findById(workCaseId);
 
-        AccountInfo accountInfo = accountInfoTransform.transformToModel(accountInfoView, workCase, user);
+        accountInfo = accountInfoTransform.transformToModel(accountInfoView, workCase, user);
+        log.debug("AccountInfo : {}", accountInfo.toString());
+
         accountInfoDAO.persist(accountInfo);
+
+        accountInfoDetailViewList = Util.safetyList(accountInfoView.getAccountInfoDetailViewList());
+        for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){
+            accountInfoDetail = accountInfoDetailTransform.transformToModel(dialogView, accountInfo);
+            if(null != accountInfoDetail){
+                accountInfoDetailDAO.persist(accountInfoDetail);
+            }
+        }
+
+
     }
 }

@@ -114,9 +114,12 @@
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEPercent}"
                      style="text-align:right"
+                     onkeydown="return onKeyMoney(event);"
+                     onkeypress="return onKeyMoney(event);"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
-            <f:convertNumber pattern="##0" minFractionDigits="2" maxFractionDigits="2"/>
-            <p:ajax event="blur" update="@this"/>
+            <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+            <f:validateDoubleRange maximum="100"/>
+            <p:ajax event="blur" update=":creditInfoDlgForm" process="@form"/>
         </p:inputText>
         <p:spacer/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
@@ -247,12 +250,11 @@
     <td style="text-align: left;" colspan="3">
         <p:commandButton
                 value="#{msg.get('app.addButton')}"
-                id="addTier"
                 styleClass="smaller"
+                id="addTier"
                 process="@form"
                 update=":creditInfoDlgForm:resultFinal"
-                actionListener="#{creditFacPropose.onAddTierInfo()}"
-                rendered="#{creditFacPropose.cannotEditStandard}">
+                actionListener="#{creditFacPropose.onAddTierInfo()}" >
         </p:commandButton>
     </td>
 </tr>
@@ -346,10 +348,13 @@
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.frontEndFee}"
                      style="text-align:right"
+                     onkeydown="return onKeyMoney(event);"
+                     onkeypress="return onKeyMoney(event);"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                             integerOnly="true" maxIntegerDigits="14"/>
+            <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+            <f:validateDoubleRange maximum="100"/>
+            <p:ajax event="blur" update=":creditInfoDlgForm" process="@form"/>
         </p:inputText>
     </td>
 </tr>

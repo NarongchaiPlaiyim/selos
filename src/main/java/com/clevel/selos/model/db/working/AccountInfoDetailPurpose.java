@@ -4,16 +4,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_account_info_detail_purpos")
+@Table(name = "wrk_account_info_purpose")
 public class AccountInfoDetailPurpose implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_ACCOUNT_INFO_DETAIL_PURPOSE_ID", sequenceName = "SEQ_WRK_ACCOUNT_INFO_DETAIL_PURPOSE_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_ACCOUNT_INFO_DETAIL_PURPOSE_ID")
+    @SequenceGenerator(name = "SEQ_WRK_ACCOUNT_INFO_PURPOSE", sequenceName = "SEQ_WRK_ACCOUNT_INFO_PURPOSE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_ACCOUNT_INFO_PURPOSE")
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "account_info_detail_id")
-    private AccountInfoDetail accountInfoDetail;
+    private AccountInfoDetail accountInfoDetailPurpose;
+
+    @Column(name = "purpose_id")
+    private String purposeId;
 
     @Column(name = "purpose_name")
     private String purposeName;
@@ -26,12 +29,20 @@ public class AccountInfoDetailPurpose implements Serializable {
         this.id = id;
     }
 
-    public AccountInfoDetail getAccountInfoDetail() {
-        return accountInfoDetail;
+    public AccountInfoDetail getAccountInfoDetailPurpose() {
+        return accountInfoDetailPurpose;
     }
 
-    public void setAccountInfoDetail(AccountInfoDetail accountInfoDetail) {
-        this.accountInfoDetail = accountInfoDetail;
+    public void setAccountInfoDetailPurpose(AccountInfoDetail accountInfoDetailPurpose) {
+        this.accountInfoDetailPurpose = accountInfoDetailPurpose;
+    }
+
+    public String getPurposeId() {
+        return purposeId;
+    }
+
+    public void setPurposeId(String purposeId) {
+        this.purposeId = purposeId;
     }
 
     public String getPurposeName() {

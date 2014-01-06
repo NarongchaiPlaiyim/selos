@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class TCGView implements Serializable {
     private long id;
-    private int isTCG;
+    private int TCG;
     private BigDecimal requestLimitRequiredTCG;
     private BigDecimal requestLimitNotRequiredTCG;
     private BigDecimal existingLoanRatioUnderSameCollateral;
@@ -31,22 +31,22 @@ public class TCGView implements Serializable {
 
 
     public TCGView() {
+        reset();
     }
 
     public void reset() {
-
-        this.isTCG = 0;
-        this.requestLimitRequiredTCG = new BigDecimal(0);
-        this.requestLimitNotRequiredTCG = new BigDecimal(0);
-        this.existingLoanRatioUnderSameCollateral = new BigDecimal(0);
-        this.existingLoanRatioNotUnderSameCollateral = new BigDecimal(0);
-        this.tcbFloodAmount = new BigDecimal(0);
-        this.collateralRuleResult = new BigDecimal(0);
-        this.requestTCGAmount = new BigDecimal(0);
-        this.sumAppraisalAmount = new BigDecimal(0);
-        this.sumLtvValue = new BigDecimal(0);
-        this.sumInThisAppraisalAmount = new BigDecimal(0);
-        this.sumInThisLtvValue = new BigDecimal(0);
+        this.TCG = 1;
+        this.requestLimitRequiredTCG = BigDecimal.ZERO;
+        this.requestLimitNotRequiredTCG = BigDecimal.ZERO;
+        this.existingLoanRatioUnderSameCollateral = BigDecimal.ZERO;
+        this.existingLoanRatioNotUnderSameCollateral = BigDecimal.ZERO;
+        this.tcbFloodAmount = BigDecimal.ZERO;
+        this.collateralRuleResult = BigDecimal.ZERO;
+        this.requestTCGAmount = BigDecimal.ZERO;
+        this.sumAppraisalAmount = BigDecimal.ZERO;
+        this.sumLtvValue = BigDecimal.ZERO;
+        this.sumInThisAppraisalAmount = BigDecimal.ZERO;
+        this.sumInThisLtvValue = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -58,11 +58,11 @@ public class TCGView implements Serializable {
     }
 
     public int getTCG() {
-        return isTCG;
+        return TCG;
     }
 
     public void setTCG(int TCG) {
-        isTCG = TCG;
+        TCG = TCG;
     }
 
     public BigDecimal getCollateralRuleResult() {
@@ -198,7 +198,7 @@ public class TCGView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("isTCG", isTCG)
+                .append("TCG", TCG)
                 .append("requestLimitRequiredTCG", requestLimitRequiredTCG)
                 .append("requestLimitNotRequiredTCG", requestLimitNotRequiredTCG)
                 .append("existingLoanRatioUnderSameCollateral", existingLoanRatioUnderSameCollateral)

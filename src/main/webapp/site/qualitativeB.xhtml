@@ -50,7 +50,7 @@
             </tr>
             <tr >
                 <td class="title" colspan="4" style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
                 </td>
             </tr>
             <tr>
@@ -67,7 +67,7 @@
             </tr>
             <tr >
                 <td class="title" colspan="4" style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
                 </td>
             </tr>
             <tr>
@@ -210,7 +210,7 @@
             </tr>
             <tr>
                 <td class="title" colspan="4"  style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
                 </td>
             </tr>
             <tr>
@@ -271,7 +271,7 @@
             </tr>
             <tr>
                 <td class="title" colspan="6"  style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}"/>
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}"/>
                 </td>
             </tr>
             <tr>
@@ -413,7 +413,7 @@
             </tr>
             <tr >
                 <td class="title" colspan="6" style="background-color: #868686">
-                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}"/>
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}"/>
                 </td>
             </tr>
             <tr>
@@ -601,7 +601,7 @@
 </tr>
 <tr>
     <td class="title" colspan="6" style="background-color: #868686">
-        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}"/>
+        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}"/>
     </td>
 </tr>
 <tr>
@@ -769,7 +769,7 @@
 </tr>
 <tr >
     <td class="title" colspan="6" style="background-color: #868686">
-        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
+        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
     </td>
 </tr>
 <tr>
@@ -880,21 +880,21 @@
         <table class="table_content">
             <tr>
                 <td style="width: 30%;text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
                     <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
                 </td>
                 <td style="width: 70%;text-align: left">
                     <table class="table_noborder">
                         <tr>
-                            <td class="title" style="width: 25%;text-align: left">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}"/>
+                            <td class="title" style="width: 30%;text-align: left">
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}" for="dlgQualityLevelA"/>
                             </td>
                             <td>
                                 <p:selectOneMenu id="dlgQualityLevelA"
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="true">
+                                                 required="#{not empty param[addQualitativeB.clientId]}">
                                     <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsB"
@@ -905,10 +905,10 @@
                         </tr>
                         <tr>
                             <td class="title">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}"/>
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}" for="remark"/>
                             </td>
                             <td>
-                                <h:inputTextarea cols="70" rows="3" name="remark"
+                                <h:inputTextarea id="remark" cols="70" rows="3" name="remark"
                                                  value="#{qualitative.qualitativeView.reason}"/>
                             </td>
                         </tr>
@@ -917,13 +917,13 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.classificationDate')}"/>
                     <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
                     </h:outputText>
                 </td>
                 <td class="title">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemarkNote')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.label.classificationRemarkNote')}"/>
                 </td>
             </tr>
         </table>
@@ -943,42 +943,42 @@
         <table class="table_content">
             <tr>
                 <td style="width: 50px;text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
                 </td>
                 <td style="text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.pass')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.description.pass')}"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
                 </td>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.sm')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
-                </td>
-                <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.ss')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.description.sm')}"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.D')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
                 </td>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.d')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.description.ss')}"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.DL')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.item.description.D')}"/>
                 </td>
                 <td>
-                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.dl')}"/>
+                    <h:outputText value="#{msg.get('app.qualitative.level.description.d')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.level.item.description.DL')}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.level.description.dl')}"/>
                 </td>
             </tr>
 
@@ -995,6 +995,7 @@
                     <p:commandButton id="btnSave"
                                      value="#{msg.get('app.qualitative.button.saveButton')}"
                                      styleClass="medium"
+                                     binding="#{addQualitativeB}"
                                      process=":frmMain"
                                      action="#{qualitative.onSaveQualitativeB()}"
                                      update=":frmMain,:msgBoxSystemMessagePanel"/>

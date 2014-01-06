@@ -16,6 +16,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.transform.BizInfoDetailTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -58,8 +59,10 @@ public class BizInfoSummary implements Serializable {
     private SubDistrict subDistrict;
     private Country country;
     private boolean fromDB;
+    private boolean readonlyInterview;
     //private User user;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
@@ -206,6 +209,7 @@ public class BizInfoSummary implements Serializable {
             onChangeDistrict();
             onChangeRental();
         }
+        onCheckInterview();
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
@@ -338,21 +342,18 @@ public class BizInfoSummary implements Serializable {
         }
     }
 
+    private void onCheckInterview(){
+        readonlyInterview = true;
+        if(bizInfoSummaryView.getCirculationAmount()!=null){
+             if( bizInfoSummaryView.getCirculationAmount().doubleValue() > 0){
+                 readonlyInterview = false;
+            }
+        }
+        log.info(" readonlyInterview is " + readonlyInterview);
+
+    }
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
-
-        if( bizInfoSummaryView.getCirculationAmount().doubleValue() <= 0){
-
-            bizInfoSummaryView.setProductionCostsPercentage(BigDecimal.ZERO);
-            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setReduceInterestAmount(BigDecimal.ZERO);
-            bizInfoSummaryView.setReduceTaxAmount(BigDecimal.ZERO);
-
-            messageHeader = "error";
-            message = "sumIncomeAmount is zero ";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
         double sumIncomeAmount = 0;
         double productCostAmount = 0;
         double productCostPercent = 0;
@@ -376,14 +377,6 @@ public class BizInfoSummary implements Serializable {
         if(bizInfoSummaryView.getProductionCostsPercentage()!= null){
             productCostPercent = bizInfoSummaryView.getProductionCostsPercentage().doubleValue();
         }
-
-        if( productCostPercent > 100.01){
-            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error 100";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
         
         productCostAmount = (sumIncomeAmount * productCostPercent)/100;
         bizInfoSummaryView.setProductionCostsAmount(new BigDecimal(productCostAmount));
@@ -392,18 +385,16 @@ public class BizInfoSummary implements Serializable {
         bizInfoSummaryView.setProfitMarginPercentage(new BigDecimal(profitMarginPercent));
         bizInfoSummaryView.setProfitMarginAmount(new BigDecimal(profitMarginAmount));
 
-        log.info("onCalSummaryTable 111");
-
         if(bizInfoSummaryView.getOperatingExpenseAmount()!= null){
             operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount().doubleValue();
         }
 
         if( operatingExpenseAmount > profitMarginAmount){
-            bizInfoSummaryView.setProductionCostsPercentage(new BigDecimal(0));
-            messageHeader = "error";
-            message = "operatingExpenseAmount > profitMarginPercent";
+            bizInfoSummaryView.setOperatingExpenseAmount(new BigDecimal(0));
+            operatingExpenseAmount =0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         operatingExpensePercent = (operatingExpenseAmount/sumIncomeAmount)*100;
@@ -415,7 +406,6 @@ public class BizInfoSummary implements Serializable {
         bizInfoSummaryView.setEarningsBeforeTaxAmount(new BigDecimal(earningsBeforeTaxAmount));
         bizInfoSummaryView.setEarningsBeforeTaxPercentage(new BigDecimal(earningsBeforeTaxPercent));
 
-        log.info("onCalSummaryTable 222");
         if(bizInfoSummaryView.getReduceInterestAmount()!= null){
             reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
         }
@@ -426,27 +416,28 @@ public class BizInfoSummary implements Serializable {
 
         if( reduceInterestAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error Interest > earningsBeforeTaxAmount";
+            reduceInterestAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         if( reduceTaxAmount > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error tax > earningsBeforeTaxAmount";
+            reduceTaxAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            messageHeader = "error";
-            message = "error  interest and tax > earningsBeforeTaxAmount";
+            reduceInterestAmount = 0;
+            reduceTaxAmount = 0;
+            messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
+            message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
         }
 
         reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
@@ -479,20 +470,13 @@ public class BizInfoSummary implements Serializable {
 
         try {
             log.info("onSaveBizInfoSummary begin");
-            log.info("have to redirect is " + redirect );
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
-            log.info("bizInfoSummaryControl workCase  1 ---- " + workCaseId);
             if (redirect != null && !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
-
-            log.info("Controller getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
-            log.info("Controller getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
-            log.info("bizInfoSummaryControl end");
-            log.info("have to redirect is " + redirect );
             if (redirect != null && !redirect.equals("")) {
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
@@ -516,20 +500,22 @@ public class BizInfoSummary implements Serializable {
                 log.info("not have to redirect ");
                 onCreation();
                 log.info("onCreation() after Save");
-                messageHeader = "Save BizInfoSummary Success.";
-                message = "Save BizInfoSummary data success.";
+                messageHeader = msg.get("app.bizInfoSummary.message.header.save.success");
+                message = msg.get("app.bizInfoSummary.message.body.save.success");
                 log.info("after set message");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } catch (Exception ex) {
             log.info("onSaveBizInfoSummary Error : ", ex);
-            messageHeader = "Save BizInfoSummary Failed.";
+
+            messageHeader = msg.get("app.bizInfoSummary.message.header.save.fail");
+
             if (ex.getCause() != null) {
                 //log.info("ex.getCause().toString() is " + ex.getCause().toString());
-                message = "Save BizInfoSummary data failed. Cause : " + ex.getCause().toString();
+                message = msg.get("app.bizInfoSummary.message.body.save.fail") + ex.getCause().toString();
             } else {
                 //log.info("ex.getCause().toString() is " + ex.getMessage());
-                message = "Save BizInfoSummary data failed. Cause : " + ex.getMessage();
+                message = msg.get("app.bizInfoSummary.message.body.save.fail")  + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -728,6 +714,15 @@ public class BizInfoSummary implements Serializable {
         this.currentDate = currentDate;
     }
 
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
     public boolean isDisableExpiryDate() {
         return disableExpiryDate;
     }
@@ -742,5 +737,13 @@ public class BizInfoSummary implements Serializable {
 
     public void setDisableOwnerName(boolean disableOwnerName) {
         this.disableOwnerName = disableOwnerName;
+    }
+
+    public boolean isReadonlyInterview() {
+        return readonlyInterview;
+    }
+
+    public void setReadonlyInterview(boolean readonlyInterview) {
+        this.readonlyInterview = readonlyInterview;
     }
 }

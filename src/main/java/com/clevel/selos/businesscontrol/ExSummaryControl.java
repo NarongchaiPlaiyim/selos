@@ -117,6 +117,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Bank Statement Summary
+        //Account Movement
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         exSummaryView.setExSumAccMovementViewList(new ArrayList<ExSumAccountMovementView>());
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
@@ -154,9 +155,10 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal bizSize = BigDecimal.ZERO;
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
             if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
-                bizSize = bankStatementSummary.getGrdTotalIncomeGross();
+                if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
+                    bizSize = bankStatementSummary.getGrdTotalIncomeGross();
+                }
             } else { // use customer
-//                List<Customer> customer = customerDAO.findByWorkCaseId(workCaseId);
                 if(cusListView != null && cusListView.size() > 0){
                     for(CustomerInfoView cus : cusListView){
                         if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
@@ -173,10 +175,14 @@ public class ExSummaryControl extends BusinessControl {
 
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
 
-            String addressTH = bizInfoSummaryView.getAddressNo()+" "+bizInfoSummaryView.getAddressMoo()+" "+
-                    bizInfoSummaryView.getAddressBuilding()+" "+bizInfoSummaryView.getAddressStreet()+" "+
-                    bizInfoSummaryView.getProvince().getName()+" "+bizInfoSummaryView.getDistrict().getName()+" "+
-                    bizInfoSummaryView.getSubDistrict().getName()+" "+bizInfoSummaryView.getCountry().getName();
+            String addressTH = bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : ""
+                    +" "+bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : ""
+                    +" "+bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : ""
+                    +" "+bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : ""
+                    +" "+bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getName() : ""
+                    +" "+bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getName() : ""
+                    +" "+bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getName() : ""
+                    +" "+bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getName() : "";
 
             exSummaryView.setBusinessLocationAddress(addressTH);
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());

@@ -336,7 +336,8 @@
                                     <p:inputText id="registeredCapital" styleClass="right" value="#{custInfoSumJuris.customerInfoView.capital}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);">
+                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 maxlength="18">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:registeredCapital"/>
                                     </p:inputText>
@@ -350,7 +351,8 @@
                                     <p:inputText id="paidUpCapital" styleClass="right" value="#{custInfoSumJuris.customerInfoView.paidCapital}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);">
+                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 maxlength="18">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:paidUpCapital"/>
                                     </p:inputText>
@@ -364,7 +366,8 @@
                                     <p:inputText id="salesFormFinancialStmt" styleClass="right" value="#{custInfoSumJuris.customerInfoView.salesFromFinancialStmt}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);">
+                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 maxlength="18">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:salesFormFinancialStmt"/>
                                     </p:inputText>
@@ -377,9 +380,10 @@
                                 <td>
                                     <p:inputText id="shareHolderRatio" styleClass="right" value="#{custInfoSumJuris.customerInfoView.shareHolderRatio}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 maxlength="18">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:shareHolderRatio"/>
                                     </p:inputText>
                                 </td>
@@ -391,9 +395,10 @@
                                 <td>
                                     <p:inputText id="totalShares" styleClass="right" value="#{custInfoSumJuris.customerInfoView.totalShare}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
-                                                 onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);"
+                                                 maxlength="18">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:totalShares"/>
                                     </p:inputText>
                                 </td>
@@ -754,7 +759,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.bussAdd')}"/>
                                 </td>
                                 <td colspan="2">
-                                    <p:selectOneRadio value="#{custInfoSumJuris.addressFlagForm2}">
+                                    <p:selectOneRadio value="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.reigs')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.other')}" itemValue="3"/>
                                         <p:ajax update=":frmMain:adForm2"/>
@@ -773,23 +778,23 @@
                                                 </td>
                                                 <td class="smallest left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.addressNo}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorNo
-                                                                 and custInfoSumJuris.addressFlagForm2 == 3}"/>
+                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"/>
                                                 </td>
                                                 <td class="title right">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.moo')}"/>
                                                 </td>
                                                 <td class="smallest left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.moo}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.building')}"/>
                                                 </td>
                                                 <td class="left">
                                                     <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.workAddress.building}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -798,7 +803,7 @@
                                                 </td>
                                                 <td class="left" colspan="5">
                                                     <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.workAddress.road}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -809,9 +814,9 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.province.code}"
-                                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPro
-                                                                                 and custInfoSumJuris.addressFlagForm2 == 3}">
+                                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumJuris.provinceForm2List}"
                                                                                    var="province"
@@ -824,9 +829,9 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" id="districtForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.district.id}"
-                                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorDis
-                                                                                 and custInfoSumJuris.addressFlagForm2 == 3}">
+                                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumJuris.districtForm2List}"
                                                                                    var="district"
@@ -839,9 +844,9 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" id="subDistrictForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.subDistrict.code}"
-                                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorSub
-                                                                                 and custInfoSumJuris.addressFlagForm2 == 3}">
+                                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{custInfoSumJuris.subDistrictForm2List}"
                                                                                    var="subDistrict"
@@ -860,9 +865,9 @@
                                                 <td colspan="5">
                                                     <p:inputMask mask="99999" styleClass="smaller" maxlength="5"
                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.postalCode}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPos
-                                                                 and custInfoSumJuris.addressFlagForm2 == 3}"/>
+                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -872,9 +877,9 @@
                                                 <td colspan="5">
                                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumJuris.customerInfoView.workAddress.country.id}"
-                                                                     disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                     disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorCou
-                                                                     and custInfoSumJuris.addressFlagForm2 == 3}">
+                                                                     and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                                        var="country"
@@ -889,7 +894,7 @@
                                                 </td>
                                                 <td colspan="5">
                                                     <p:inputText style="width: 500px;" value="#{custInfoSumJuris.customerInfoView.workAddress.address}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -898,13 +903,13 @@
                                                 </td>
                                                 <td colspan="5">
                                                     <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.workAddress.phoneNumber}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPhone
-                                                                                 and custInfoSumJuris.addressFlagForm2 == 3}"
+                                                                                 and custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"
                                                                  maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoJuri.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumJuris.customerInfoView.workAddress.extension}"
-                                                                 disabled="#{custInfoSumJuris.addressFlagForm2 != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
                                         </table>

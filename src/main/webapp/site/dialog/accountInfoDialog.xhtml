@@ -188,6 +188,19 @@
                 </td>
             </tr>
 
+            <tr >
+                <td class="title" >
+                    <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.request')}"/>
+                </td>
+
+                <td >
+                    <h:selectOneRadio value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.openAccount}">
+                        <f:selectItem itemLabel="#{'Open'}" itemValue="0"/>
+                        <f:selectItem itemLabel="#{'Not Open'}" itemValue="1"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+
             <tr>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.accountInfo.dialog.content.credit.type')}"/>

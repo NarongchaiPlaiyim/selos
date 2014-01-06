@@ -4,13 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <h:head>
         <title>Business Information Detail</title>
         <h:outputStylesheet name="css/style.css" />
         <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
         <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -41,7 +43,7 @@
                         <tr>
                             <td class="title" style="width: 25%"> <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
                             <td colspan="5">
-                                <p:inputText styleClass="width: 40%;" value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"/>
+                                <p:inputText style="width: 300px" value="#{bizInfoDetail.bizInfoDetailView.bizInfoText}"/>
                                 <h:inputHidden value="#{bizInfoDetail.bizInfoDetailView.id}"/>
                             </td>
                         </tr>
@@ -103,7 +105,7 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizCode')}"/></td>
                             <td style="width: 20%">
-                                <p:inputText styleClass="large" id="bizCode" value="#{bizInfoDetail.bizInfoDetailView.bizCode}"/>
+                                <p:inputText styleClass="large" id="bizCode" value="#{bizInfoDetail.bizInfoDetailView.bizCode}" readonly="true"/>
 
                             </td>
                         </tr>
@@ -112,7 +114,7 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.incomeFactor')}"/>
                             </td>
                             <td>
-                                <p:inputText styleClass="right" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}">
+                                <p:inputText styleClass="right" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}" readonly="true">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:incomeFactor"/>
                                 </p:inputText>
@@ -121,7 +123,8 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>
                             </td>
                             <td colspan="3">
-                                <p:inputText styleClass="right" id="adjustedIncomeFactor" value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}">
+                                <p:inputText styleClass="right" id="adjustedIncomeFactor" readonly="#{bizInfoDetail.readonlyIsBDM}"
+                                             value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:adjustedIncomeFactor"/>
                                 </p:inputText>
@@ -132,14 +135,17 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizComment')}"/>
                             </td>
                             <td colspan="5">
-                                <p:inputText styleClass="width: 40%;" value="#{bizInfoDetail.bizInfoDetailView.bizComment}"/>
+                                <p:inputText styleClass="width: 40%;" value="#{bizInfoDetail.bizInfoDetailView.bizComment}" readonly="true"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentBusiness')}"/></td>
                             <td colspan="5">
-                                <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}" required="#{not empty param[saveButton.clientId]}">
-                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
+                                <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
+                                             required="#{not empty param[saveButton.clientId]}">
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentBiz"/>
                                 </p:inputText>
 
@@ -168,7 +174,7 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
                             </td>
                             <td colspan="3" class="title">
-                                <p:inputText styleClass="largest" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}" disabled="#{bizInfoDetail.disable}" />
+                                <p:inputText style="width: 350px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}" disabled="#{bizInfoDetail.disable}" />
                             </td>
                         </tr>
                         <tr>
@@ -177,14 +183,16 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocExpiryDate')}"/>
                             </td>
                             <td colspan="2" class="title">
-                                <p:calendar size="10" id="bizDocExpiryDate" showOn="button" navigator="true" disabled="#{bizInfoDetail.disable}"
+                                <clv:BECalendar size="10" id="bizDocExpiryDate" showOn="button" navigator="true" disabled="#{bizInfoDetail.disable}"
                                             value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
+                                            defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
+                                            mindate="#{bizInfoDetail.currentDateDDMMYY}"
                                             pattern="dd/MM/yyyy"
-                                            locale="th_TH"
                                             timeZone="Asia/Bangkok"
-                                            yearRange="2440:3000">
+                                            yearRange="1950:2100"
+                                            locale="th_TH">
                                     <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                </p:calendar>
+                                </clv:BECalendar>
                             </td>
                         </tr>
                         <tr>
@@ -197,7 +205,8 @@
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
                             <td colspan="5">
                                 <p:inputText styleClass="right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}">
-                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
                                 </p:inputText>
                             </td>
@@ -219,7 +228,9 @@
                                                  process="@this"
                                                  actionListener="#{bizInfoDetail.onAddBizProductDetailView()}"
                                                  update=":bizProductViewDlgForm"
-                                                 oncomplete="bizProductViewDlg.show()"/>
+                                                 oncomplete="bizProductViewDlg.show()">
+                                    <p:resetInput target=":bizProductViewDlgForm" />
+                                </p:commandButton>
                             </td>
                         </tr>
                         <tr>
@@ -291,8 +302,10 @@
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                    <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="1"
                                                                  target="#{bizInfoDetail.stakeType}"/>
+
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -321,7 +334,7 @@
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.contactYear')}" styleClass="right" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{supplierItem.contactYear}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentBuysVolume')}" styleClass="right" style="width:11%;">
+                                    <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentSalesVolume')}" styleClass="right" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{supplierItem.percentSalesVolume}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </p:outputLabel>
@@ -409,9 +422,11 @@
 
                                         <p:column style="background-color:#f8d0b6; text-align:right;">
                                             <f:facet name="footer">
-                                                <p:inputText id="supplierUWAdjustPercentCredit" styleClass="right"
+                                                <p:inputText id="supplierUWAdjustPercentCredit" styleClass="right" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustPercentCredit}">
-                                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
+                                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                    <f:validateDoubleRange maximum="100"/>
                                                     <p:ajax event="blur" update=":frmMain:supplierTable:supplierUWAdjustPercentCredit"/>
                                                 </p:inputText>
                                             </f:facet>
@@ -419,9 +434,11 @@
 
                                         <p:column style="background-color:#f8d0b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <p:inputText id="supplierUWAdjustCreditTerm" styleClass="right"
+                                                    <p:inputText id="supplierUWAdjustCreditTerm" styleClass="right" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                  value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustCreditTerm}">
-                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
+                                                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                        <f:validateDoubleRange maximum="100"/>
                                                         <p:ajax event="blur" update=":frmMain:supplierTable:supplierUWAdjustCreditTerm"/>
                                                     </p:inputText>
                                                 </f:facet>
@@ -451,8 +468,10 @@
                                                  styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                    <p:resetInput target=":stakeholderViewDlgForm" />
                                     <f:setPropertyActionListener value="2"
                                                                  target="#{bizInfoDetail.stakeType}"/>
+
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -479,7 +498,7 @@
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.contactYear')}" styleClass="right" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{buyerItem.contactYear}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentSalesVolume')}" styleClass="right" style="width:11%;">
+                                    <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentBuysVolume')}" styleClass="right" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{buyerItem.percentSalesVolume}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </p:outputLabel>
@@ -566,9 +585,11 @@
 
                                             <p:column style="background-color:#f8d0b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <p:inputText id="buyerUWAdjustPercentCredit" styleClass="right"
+                                                    <p:inputText id="buyerUWAdjustPercentCredit" styleClass="right" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                  value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustPercentCredit}">
-                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
+                                                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                        <f:validateDoubleRange maximum="100"/>
                                                         <p:ajax event="blur" update=":frmMain:buyerTable:buyerUWAdjustPercentCredit"/>
                                                     </p:inputText>
                                                 </f:facet>
@@ -576,9 +597,11 @@
 
                                             <p:column style="background-color:#f8d0b6; text-align:right;">
                                                 <f:facet name="footer">
-                                                    <p:inputText id="buyerUWAdjustCreditTerm" styleClass="right"
+                                                    <p:inputText id="buyerUWAdjustCreditTerm" styleClass="right" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                  value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustCreditTerm}">
-                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
+                                                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                        <f:validateDoubleRange maximum="100"/>
                                                         <p:ajax event="blur" update=":frmMain:buyerTable:buyerUWAdjustCreditTerm"/>
                                                     </p:inputText>
                                                 </f:facet>
@@ -591,7 +614,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="100%"><p:spacer width="2px"/></td>
+                            <td colspan="100%"><p:spacer width="2px"/>  <p:outputLabel value="#{bizInfoDetail.readonlyIsUW}" /></td>
                         </tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
@@ -601,7 +624,15 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                <table class="table_content" style="width: 100%" >
+                                <table class="table_content" >
+                                    <colgroup>
+                                        <col style="width:300px;"/>
+                                        <col style="width:130px;"/>
+                                        <col style="width:300px;"/>
+                                        <col style="width:130px;"/>
+                                        <col style="width:300px;"/>
+                                        <col style="width:130px;"/>
+                                    </colgroup>
                                     <tr>
                                         <th colspan="2" style="width:33%;">การจัดซื้อ</th>
                                         <th colspan="2" style="width:33%;">การขาย</th>
@@ -610,23 +641,25 @@
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountReceivable')}"/>  </td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="standardAccountReceivable" value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountReceivable" readonly="true"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountReceivable}">
+                                                <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountReceivable"/>
                                             </p:inputText>
-
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardAccountPayable')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="standardAccountPayable" value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="standardAccountPayable" readonly="true"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardAccountPayable}">
+                                                <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardAccountPayable"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.standardStock')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="standardStock" value="#{bizInfoDetail.bizInfoDetailView.standardStock }">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="standardStock" readonly="true"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.standardStock }">
+                                                <f:convertNumber pattern="#,##0" />
                                                 <p:ajax event="blur" update=":frmMain:standardStock"/>
                                             </p:inputText>
                                         </td>
@@ -634,22 +667,25 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePurchaseAmount')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="averagePurchaseAmount" value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}">
+                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePurchaseAmount" readonly="true"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePurchaseAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePurchaseAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.averagePayableAmount')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="averagePayableAmount" value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}">
+                                            <p:inputText styleClass="right" style="width: 95%;" id="averagePayableAmount" readonly="true"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.averagePayableAmount}">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:averagePayableAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="stockDurationBDM" value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationBDM" readonly="#{bizInfoDetail.readonlyIsBDM}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}">
+                                                <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationBDM,:frmMain:stockValueBDM" listener="#{bizInfoDetail.onCalStockValue}"/>
                                             </p:inputText>
                                         </td>
@@ -657,22 +693,28 @@
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCash')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCash" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCash"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}">
+                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCash,:frmMain:purchasePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentCash')}"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCash" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}">
+                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCash,:frmMain:payablePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('payablePercentCash')}"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}" readonly="#{bizInfoDetail.readonlyIsUW}">
+                                                <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" listener="#{bizInfoDetail.onCalStockValue}"/>
                                             </p:inputText>
                                         </td>
@@ -680,21 +722,22 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCredit}" readonly="true">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCredit"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCredit')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2" minFractionDigits="2" maxFractionDigits="2" />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCredit" value="#{bizInfoDetail.bizInfoDetailView.payablePercentCredit}" readonly="true">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCredit"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="stockValueBDM" value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}">
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM" readonly="#{bizInfoDetail.readonlyIsBDM}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}">
                                                 <f:convertNumber pattern="#,##0" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueBDM"/>
                                             </p:inputText>
@@ -703,21 +746,28 @@
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentLocal')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}" >
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentLocal"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}" >
+                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentLocal')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentLocal" value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentLocal"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}">
+                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:payablePercentLocal,:frmMain:payablePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('payablePercentLocal')}"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="stockValueUW" value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}">
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueUW" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}">
                                                 <f:convertNumber pattern="#,##0" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueUW"/>
                                             </p:inputText>
@@ -726,33 +776,33 @@
                                     <tr style="background-color: #efefef">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchasePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.purchasePercentForeign}" readonly="true">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentForeign"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentForeign')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentForeign" value="#{bizInfoDetail.bizInfoDetailView.payablePercentForeign}" readonly="true">
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:payablePercentForeign"/>
                                             </p:inputText>
                                         </td>
                                         <td colspan="2" style="width: 25%;line-height: 15px"></td>
                                     </tr>
-
                                     <tr style="background-color: #FAFAFA">
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.purchaseTerm')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="purchaseTerm" value="#{bizInfoDetail.bizInfoDetailView.purchaseTerm}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="purchaseTerm"
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchaseTerm}">
+                                                <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:purchaseTerm"/>
                                             </p:inputText>
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payableTerm')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 80%;" id="payableTerm" value="#{bizInfoDetail.bizInfoDetailView.payableTerm}">
-                                                <f:convertNumber pattern="#,##0" maxIntegerDigits="2"  />
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payableTerm" value="#{bizInfoDetail.bizInfoDetailView.payableTerm}">
+                                                <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:payableTerm"/>
                                             </p:inputText>
                                         </td>
@@ -824,7 +874,7 @@
 
     <ui:include src="dialog/confirmChangeScreenDlg.xhtml">
         <ui:param name="headerMessage" value="คำเตือน"/>
-        <ui:param name="message" value="ย้อนกลับไปยังหน้าจอ Summary จะทำยกเลิกการกระทำหน้าปัจจุบัน"/>
+        <ui:param name="message" value="ย้อนกลับไปยังหน้าจอ Summary และยกเลิกการกระทำหน้าปัจจุบัน"/>
         <ui:param name="id" value="confirmChangeScreenSumDialog"/>
         <ui:param name="name" value="confirmChangeScreenSumDlg"/>
         <ui:param name="formId" value="frmConfirmChangeScreenSum"/>

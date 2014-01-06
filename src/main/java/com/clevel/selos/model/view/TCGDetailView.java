@@ -29,9 +29,9 @@ public class TCGDetailView implements Serializable {
     }
 
     public void reset() {
-        this.appraisalAmount = new BigDecimal(0);
-        this.ltvValue = new BigDecimal(0);
-        this.isProposeInThisRequest = 0;
+        this.appraisalAmount =  BigDecimal.ZERO;
+        this.ltvValue = BigDecimal.ZERO;
+        this.isProposeInThisRequest = 1;
         this.potentialCollateral = new PotentialCollateral();
         this.tcgCollateralType = new TCGCollateralType();
         this.potentialColToTCGCol = new PotentialColToTCGCol();
