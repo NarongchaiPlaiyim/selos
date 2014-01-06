@@ -126,15 +126,16 @@ public class BizInfoSummary implements Serializable {
     public void onCreation() {
         log.info("onCreation bizInfoSum");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
         disableOwnerName = false;
         disableExpiryDate = true;
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }
-        log.debug("info WorkCaseId is: {}" + workCaseId);
-        onSearchBizInfoSummaryByWorkCase();
 
+        log.debug("info WorkCaseId is: {}", workCaseId);
+
+        onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
@@ -229,8 +230,8 @@ public class BizInfoSummary implements Serializable {
 
         }
 
-        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
-        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
+        /*log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
+        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());*/
 
     }
 
