@@ -908,7 +908,6 @@ public class Decision implements Serializable {
             for (NewCreditDetailView newCreditDetailView : Util.safetyList(decisionView.getApproveCreditList())) {
                 sumTotalCreditLimit = Util.add(sumTotalCreditLimit, newCreditDetailView.getLimit());
             }
-
             decisionView.setApproveTotalCreditLimit(sumTotalCreditLimit);
         } else {
             messageHeader = msg.get("app.propose.exception");
@@ -1180,6 +1179,7 @@ public class Decision implements Serializable {
             collateralInfoEdit.getNewCreditDetailViewList().clear();
             for (NewCreditDetailView creditTypeItem : selectedCollateralCrdTypeItems) {
                 collateralInfoEdit.getNewCreditDetailViewList().add(creditTypeItem);
+
             }
 
             success = true;
