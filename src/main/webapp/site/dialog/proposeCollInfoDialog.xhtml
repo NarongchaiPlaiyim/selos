@@ -212,7 +212,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
         </td>
         <td>
-            <p:inputText  value="#{CollateralHeaderDetailView.existingCredit}"  style="text-align: right;">
+            <p:inputText  value="#{CollateralHeaderDetailView.existingCredit}"  style="text-align: right;" maxlength="18">
                 <f:convertNumber pattern="#,##0"
                                  minFractionDigits="2"
                                  maxFractionDigits="2"
@@ -250,6 +250,7 @@
         <td>
             <p:inputText value="#{CollateralHeaderDetailView.appraisalValue}"
                          style="text-align: right;"
+                         maxlength="18"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                 <p:ajax event="blur" update="@this"/>
@@ -363,12 +364,12 @@
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
                     <h:outputText value="#{newSubCollateralDetailView.appraisalValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
                     <h:outputText value="#{newSubCollateralDetailView.mortgageValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="center">

@@ -908,7 +908,8 @@
                                 <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}" for="remark"/>
                             </td>
                             <td>
-                                <h:inputTextarea id="remark" cols="70" rows="3" name="remark"
+                                <p:inputTextarea id="remark" cols="70" rows="3" name="remark"
+                                                 required="#{qualitative.requiredReason}"
                                                  value="#{qualitative.qualitativeView.reason}"/>
                             </td>
                         </tr>

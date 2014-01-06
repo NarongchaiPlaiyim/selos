@@ -365,8 +365,8 @@ public class BankStatementSummary implements Serializable {
     private boolean checkSelectSeasonalFlag() {
         log.debug("checkSelectSeasonalFlag()");
         if (RadioValue.NOT_SELECTED.value() == seasonalFlag) {
-            confirmMessageHeader = "Message dialog";
-            confirmMessage = "Please, select the Seasonal";
+            messageHeader = "Message dialog";
+            message = "Please, select the Seasonal";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.debug("result: false");
             return false;
