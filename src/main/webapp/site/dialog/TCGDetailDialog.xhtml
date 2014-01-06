@@ -38,13 +38,14 @@
                                          styleClass="largest"
                                          size="1"
                                          required="#{not empty param[addDlgData.clientId]}"
-                                         style="min-width: 300px; width: 300px; max-width: 300px;">
+                                         style="min-width: 250px; width: 250px; max-width: 250px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
                                            var="dlgPotentialColToTCGColList"
                                            itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                            itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
-
+                            <p:ajax event="change" listener="#{tcgInfo.calculateLtvValue}"
+                                    update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -58,11 +59,12 @@
                                      value="#{tcgInfo.TCGDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
+                                     maxlength="18"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="14"/>
+                                             maxIntegerDigits="18"/>
                             <p:ajax event="blur"
                                     process=":tcgDlgForm"
                                     listener="#{tcgInfo.calculateLtvValue}"
@@ -78,15 +80,14 @@
                         <p:inputText styleClass="large"
                                      id="LTVvalue"
                                      value="#{tcgInfo.TCGDetailView.ltvValue}"
+                                     maxlength="18"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     onkeydown="return onKeyDownMoney(event);"
-                                     onkeypress="return onKeyPressMoney(event);">
+                                     readonly="true">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="14"/>
-                            <p:ajax event="blur" update="@this"/>
+                                             maxIntegerDigits="18"/>
                         </p:inputText>
                     </td>
                 </tr>

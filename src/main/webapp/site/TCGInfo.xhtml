@@ -50,7 +50,7 @@
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
+                                                    <p:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" layout="grid" columns="2" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="1"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="2"/>
                                                     </p:selectOneRadio>
@@ -65,13 +65,14 @@
                                                                  id="requestLimitRequiredTCG"
                                                                  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);"
                                                                  required="#{not empty param[saveTCG.clientId]}">
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -85,12 +86,13 @@
                                                                  id="requestLimitNotRequiredTCG"
                                                                  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -104,12 +106,13 @@
                                                                  id="existingLoanRatioUnderSameCollateral"
                                                                  value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -123,12 +126,13 @@
                                                                  id="existingLoanRatioNotUnderSameCollateral"
                                                                  value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -142,12 +146,13 @@
                                                                  id="tcbFloodAmount"
                                                                  value="#{tcgInfo.TCGView.tcbFloodAmount}"
                                                                  style="width:200px;text-align: right"
+                                                                 maxlength="18"
                                                                  onkeydown="return onKeyDownMoney(event);"
                                                                  onkeypress="return onKeyPressMoney(event);">
                                                         <f:convertNumber pattern="#,##0"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                         maxIntegerDigits="18"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
                                                 </td>
@@ -293,7 +298,8 @@
                                                     <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}" />
                                                 </td>
                                                 <td>
-                                                    <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" /> %
+                                                    <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" >
+                                                    </h:outputText>  %
                                                 </td>
                                             </tr>
                                             <tr>
@@ -354,7 +360,7 @@
     </p:panel>
 
     <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-              modal="true" width="550" height="200">
+              modal="true" width="530" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 

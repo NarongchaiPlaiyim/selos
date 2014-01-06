@@ -24,10 +24,21 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findByWorkCasePreScreenId ::: workCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
-        criteria.add(Restrictions.eq("relation.id", 1));
+        criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
         criteria.addOrder(Order.asc("id"));
         List<Customer> customerList = (List<Customer>) criteria.list();
-        log.info("findByWorkCasePreScreenId ::: size : {}", workCasePreScreenId);
+        log.info("findByWorkCasePreScreenId ::: size : {}", customerList.size());
+        return customerList;
+    }
+
+    public List<Customer> findBorrowerByWorkCaseId(long workCaseId){
+        log.info("findBorrowerByWorkCaseId ::: workCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>) criteria.list();
+        log.info("findBorrowerByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
 

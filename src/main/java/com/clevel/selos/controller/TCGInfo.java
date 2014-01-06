@@ -121,8 +121,7 @@ public class TCGInfo implements Serializable {
             }
         }
 
-
-        try {
+        if(workCaseId != null){
             TCGView = tcgInfoControl.getTcgView(workCaseId);
 
             if (TCGView != null) {
@@ -132,8 +131,6 @@ public class TCGInfo implements Serializable {
                 TCGView = new TCGView();
                 modeForDB = ModeForDB.ADD_DB;
             }
-        } catch (Exception ex) {
-            log.info("Exception :: {}", ex);
         }
 
         if (TCGDetailView == null) {
@@ -148,13 +145,8 @@ public class TCGInfo implements Serializable {
             potentialCollateralList = new ArrayList<PotentialCollateral>();
         }
 
-        try {
-            potentialCollateralList = potentialCollateralDAO.findAll();
-        } catch (Exception e) {
-            log.error("potentialCollateralDAO findAll error ::: {}", e.getMessage());
-        }
+        potentialCollateralList = potentialCollateralDAO.findAll();
 
-        TCGDetailView.reset();
     }
 
 

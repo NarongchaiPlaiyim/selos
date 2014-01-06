@@ -140,17 +140,21 @@ public class InboxControl extends BusinessControl {
         appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
         String bdmUserId;
         String uwUserId = "";
+
+        List<Customer> customerList = new ArrayList<Customer>();
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+
         if (Long.toString(workCaseId) != null && workCaseId != 0) {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             bdmUserId = workCase.getCreateBy().getId();
 
             appHeaderView.setCaNo(workCase.getCaNumber());
             appHeaderView.setAppNo(workCase.getAppNumber());
-            //appHeaderView.setAppRefNo(workCase.getAppN);
-            //appHeaderView.setAppRefDate();
             appHeaderView.setCaseStatus(workCase.getStatus().getDescription());
 
-            //Customer customer = customerDAO.findByWorkCasePreScreenId()
+            customerList = customerDAO.findBorrowerByWorkCaseId(workCaseId);
+            customerInfoViewList = customerTransform.transformToViewList(customerList);
+            log.debug("customerInfo size : {}", customerInfoViewList.size());
         } else {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
@@ -162,45 +166,47 @@ public class InboxControl extends BusinessControl {
             //appHeaderView.setAppRefDate();
             appHeaderView.setCaseStatus(workCasePrescreen.getStatus().getDescription());
 
-            List<Customer> customerList = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePreScreenId);
-            log.info("getHeaderInformation ::: customerList : {}", customerList);
-            List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
-            log.info("getHeaderInformation ::: customerInfoViewList : {}", customerInfoViewList);
-            if (customerInfoViewList != null) {
-                List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
-                for (CustomerInfoView item : customerInfoViewList) {
-                    AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
-                    if (item.getTitleTh() != null) {
-                        appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
-                    } else {
-                        appBorrowerHeaderView.setBorrowerName(item.getFirstNameTh() + " " + item.getLastNameTh());
-                    }
-                    if (item.getCustomerEntity().getId() == 1) {
-                        appBorrowerHeaderView.setPersonalId(item.getCitizenId());
-                    } else if (item.getCustomerEntity().getId() == 2) {
-                        appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
-                    }
-                    appBorrowerHeaderViewList.add(appBorrowerHeaderView);
-                }
-                appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
-            }
-
-            //Find product program from WorkCasePreScreenId
-            Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-            if (prescreen != null) {
-                List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
-                log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
-                if (prescreenFacilityList != null) {
-                    List<String> productProgram = new ArrayList<String>();
-                    for (PrescreenFacility item : prescreenFacilityList) {
-                        String prdPrg = item.getProductProgram().getDescription();
-                        productProgram.add(prdPrg);
-                    }
-                    appHeaderView.setProductProgramList(productProgram);
-                }
-            }
-
+            customerList = customerDAO.findBorrowerByWorkCasePreScreenId(workCasePreScreenId);
+            customerInfoViewList = customerTransform.transformToViewList(customerList);
+            log.debug("customerInfo size : {}", customerInfoViewList.size());
         }
+
+        log.info("getHeaderInformation ::: customerInfoViewList : {}", customerInfoViewList);
+        if (customerInfoViewList != null) {
+            List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
+            for (CustomerInfoView item : customerInfoViewList) {
+                AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
+                if (item.getTitleTh() != null) {
+                    appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
+                } else {
+                    appBorrowerHeaderView.setBorrowerName(item.getFirstNameTh() + " " + item.getLastNameTh());
+                }
+                if (item.getCustomerEntity().getId() == 1) {
+                    appBorrowerHeaderView.setPersonalId(item.getCitizenId());
+                } else if (item.getCustomerEntity().getId() == 2) {
+                    appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
+                }
+                appBorrowerHeaderViewList.add(appBorrowerHeaderView);
+            }
+            appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
+        }
+
+        //Find product program from WorkCasePreScreenId
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        if (prescreen != null) {
+            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
+            log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
+            if (prescreenFacilityList != null) {
+                List<String> productProgram = new ArrayList<String>();
+                for (PrescreenFacility item : prescreenFacilityList) {
+                    String prdPrg = item.getProductProgram().getDescription();
+                    productProgram.add(prdPrg);
+                }
+                appHeaderView.setProductProgramList(productProgram);
+            }
+        }
+
+
 
         if (!Util.isEmpty(bdmUserId)) {
             User bdmUser = userDAO.findById(bdmUserId);
