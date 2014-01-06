@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.working;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,10 +16,10 @@ public class AccountInfoDetailAccountName implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "account_info_detail_id")
-    private AccountInfoDetail accountInfoDetail;
+    private AccountInfoDetail accountInfoDetailAccountName;
 
     @Column(name = "account_id")
-    private String accountId;
+    private long accountId;
 
     @Column(name = "account_name")
     private String accountName;
@@ -29,19 +32,19 @@ public class AccountInfoDetailAccountName implements Serializable {
         this.id = id;
     }
 
-    public AccountInfoDetail getAccountInfoDetail() {
-        return accountInfoDetail;
+    public AccountInfoDetail getAccountInfoDetailAccountName() {
+        return accountInfoDetailAccountName;
     }
 
-    public void setAccountInfoDetail(AccountInfoDetail accountInfoDetail) {
-        this.accountInfoDetail = accountInfoDetail;
+    public void setAccountInfoDetailAccountName(AccountInfoDetail accountInfoDetailAccountName) {
+        this.accountInfoDetailAccountName = accountInfoDetailAccountName;
     }
 
-    public String getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
@@ -51,5 +54,15 @@ public class AccountInfoDetailAccountName implements Serializable {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountInfoDetailAccountName", accountInfoDetailAccountName)
+                .append("accountId", accountId)
+                .append("accountName", accountName)
+                .toString();
     }
 }

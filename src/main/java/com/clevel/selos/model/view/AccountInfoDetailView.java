@@ -42,7 +42,6 @@ public class AccountInfoDetailView implements Serializable {
 
     //Credit Type
     private List<AccountInfoCreditTypeView> accountInfoCreditTypeViewList;
-
     public AccountInfoDetailView(){
         init();
     }

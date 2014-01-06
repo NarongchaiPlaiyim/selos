@@ -234,6 +234,7 @@ public class CustomerTransform extends Transform {
                 addressView.setContactName(address.getContactName());
                 addressView.setContactPhone(address.getContactPhone());
                 addressView.setAddress(address.getAddress());
+                addressView.setAddressTypeFlag(address.getAddressTypeFlag());
 
                 if(customer.getCustomerEntity().getId() == 1){
                     if(address.getAddressType().getId() == 1){
@@ -443,12 +444,6 @@ public class CustomerTransform extends Transform {
         }
         customer.setNameTh(customerInfoView.getFirstNameTh());
         customer.setLastNameTh(customerInfoView.getLastNameTh());
-
-//        if(customerInfoView.getTitleEn() != null && customerInfoView.getTitleEn().getId() != 0){
-//            customer.setTitleEn(titleDAO.findById(customerInfoView.getTitleEn().getId()));
-//        } else {
-//            customer.setTitleEn(null);
-//        }
         customer.setNameEn(customerInfoView.getFirstNameEn());
         customer.setLastNameEn(customerInfoView.getLastNameEn());
 
@@ -579,6 +574,7 @@ public class CustomerTransform extends Transform {
             address.setContactName(currentAddress.getContactName());
             address.setContactPhone(currentAddress.getContactPhone());
             address.setAddress(currentAddress.getAddress());
+            address.setAddressTypeFlag(currentAddress.getAddressTypeFlag());
 
             addressList.add(address);
         }
@@ -639,6 +635,7 @@ public class CustomerTransform extends Transform {
             address.setContactName(registerAddress.getContactName());
             address.setContactPhone(registerAddress.getContactPhone());
             address.setAddress(registerAddress.getAddress());
+            address.setAddressTypeFlag(registerAddress.getAddressTypeFlag());
 
             addressList.add(address);
         }
@@ -699,6 +696,7 @@ public class CustomerTransform extends Transform {
             address.setContactName(workAddress.getContactName());
             address.setContactPhone(workAddress.getContactPhone());
             address.setAddress(workAddress.getAddress());
+            address.setAddressTypeFlag(workAddress.getAddressTypeFlag());
 
             addressList.add(address);
         }

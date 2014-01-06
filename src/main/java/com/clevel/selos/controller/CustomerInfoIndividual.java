@@ -140,10 +140,10 @@ public class CustomerInfoIndividual implements Serializable {
     private String messageHeader;
     private String message;
 
-    private int addressFlagForm2;
-    private int addressFlagForm3;
-    private int addressFlagForm5;
-    private int addressFlagForm6;
+//    private int addressFlagForm2;
+//    private int addressFlagForm3;
+//    private int addressFlagForm5;
+//    private int addressFlagForm6;
 
     //session
     private long workCaseId;
@@ -339,6 +339,11 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoView.reset();
         customerInfoView.getSpouse().reset();
 
+        customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
+        customerInfoView.getWorkAddress().setAddressTypeFlag(1);
+        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
+        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
+
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
 
@@ -374,10 +379,10 @@ public class CustomerInfoIndividual implements Serializable {
         referenceIndividualList = new ArrayList<Reference>();
         referenceSpouseList = new ArrayList<Reference>();
 
-        addressFlagForm2 = 1;
-        addressFlagForm3 = 1;
-        addressFlagForm5 = 1;
-        addressFlagForm6 = 1;
+//        addressFlagForm2 = 1;
+//        addressFlagForm3 = 1;
+//        addressFlagForm5 = 1;
+//        addressFlagForm6 = 1;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -963,22 +968,28 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setCollateralOwner(1);
                     if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
-                            addressFlagForm2 = 1;
+//                            addressFlagForm2 = 1;
+                            customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
                         } else {
-                            addressFlagForm2 = 3;
+//                            addressFlagForm2 = 3;
+                            customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
                         }
                     }
                     if(customerInfoView.getCurrentAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress()) == 1){
-                            addressFlagForm3 = 1;
+//                            addressFlagForm3 = 1;
+                            customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                         } else if(customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-                                addressFlagForm3 = 2;
+//                                addressFlagForm3 = 2;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(2);
                             } else {
-                                addressFlagForm3 = 3;
+//                                addressFlagForm3 = 3;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                             }
                         } else {
-                            addressFlagForm3 = 3;
+//                            addressFlagForm3 = 3;
+                            customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                         }
                     }
 
@@ -1001,22 +1012,28 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().setCollateralOwner(1);
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
-                                            addressFlagForm5 = 1;
+//                                            addressFlagForm5 = 1;
+                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
                                         } else {
-                                            addressFlagForm5 = 3;
+//                                            addressFlagForm5 = 3;
+                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
                                         }
                                     }
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                            addressFlagForm6 = 1;
+//                                            addressFlagForm6 = 1;
+                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
                                         } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
                                             if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                                addressFlagForm6 = 2;
+//                                                addressFlagForm6 = 2;
+                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
                                             } else {
-                                                addressFlagForm6 = 3;
+//                                                addressFlagForm6 = 3;
+                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                                             }
                                         } else {
-                                            addressFlagForm6 = 3;
+//                                            addressFlagForm6 = 3;
+                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                                         }
                                     }
                                     enableSpouseDocumentType = false;
@@ -1083,22 +1100,28 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
-                                addressFlagForm2 = 1;
+//                                addressFlagForm2 = 1;
+                                customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
                             } else {
-                                addressFlagForm2 = 3;
+//                                addressFlagForm2 = 3;
+                                customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
                             }
                         }
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress()) == 1){
-                                addressFlagForm3 = 1;
+//                                addressFlagForm3 = 1;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                             } else if(customerInfoView.getRegisterAddress() != null){
                                 if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-                                    addressFlagForm3 = 2;
+//                                    addressFlagForm3 = 2;
+                                    customerInfoView.getWorkAddress().setAddressTypeFlag(2);
                                 } else {
-                                    addressFlagForm3 = 3;
+//                                    addressFlagForm3 = 3;
+                                    customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                                 }
                             } else {
-                                addressFlagForm3 = 3;
+//                                addressFlagForm3 = 3;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                             }
                         }
 
@@ -1111,22 +1134,28 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
-                                            addressFlagForm5 = 1;
+//                                            addressFlagForm5 = 1;
+                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
                                         } else {
-                                            addressFlagForm5 = 3;
+//                                            addressFlagForm5 = 3;
+                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
                                         }
                                     }
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                            addressFlagForm6 = 1;
+//                                            addressFlagForm6 = 1;
+                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
                                         } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
                                             if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                                addressFlagForm6 = 2;
+//                                                addressFlagForm6 = 2;
+                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
                                             } else {
-                                                addressFlagForm6 = 3;
+//                                                addressFlagForm6 = 3;
+                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                                             }
                                         } else {
-                                            addressFlagForm6 = 3;
+//                                            addressFlagForm6 = 3;
+                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                                         }
                                     }
                                 }
@@ -1277,30 +1306,42 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-        if(addressFlagForm2 == 1){ //dup address 1 to address 2
+//        if(addressFlagForm2 == 1){ //dup address 1 to address 2
+        if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
+            addressView.setAddressTypeFlag(1);
             customerInfoView.setRegisterAddress(addressView);
         }
 
-        if(addressFlagForm3 == 1){
+//        if(addressFlagForm3 == 1){
+        if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
+            addressView.setAddressTypeFlag(1);
             customerInfoView.setWorkAddress(addressView);
-        }else if(addressFlagForm3 == 2){
+//        }else if(addressFlagForm3 == 2){
+        }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
+            addressView.setAddressTypeFlag(2);
             customerInfoView.setWorkAddress(addressView);
         }
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
-            if(addressFlagForm5 == 1){ //dup address 1 to address 2
+//            if(addressFlagForm5 == 1){ //dup address 1 to address 2
+            if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
+                addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setRegisterAddress(addressView);
             }
 
-            if(addressFlagForm6 == 1){
+//            if(addressFlagForm6 == 1){
+            if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setWorkAddress(addressView);
-            }else if(addressFlagForm6 == 2){
+//            }else if(addressFlagForm6 == 2){
+            }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
+                addressView.setAddressTypeFlag(2);
                 customerInfoView.getSpouse().setWorkAddress(addressView);
             }
         }
@@ -1643,7 +1684,7 @@ public class CustomerInfoIndividual implements Serializable {
         this.countryList = countryList;
     }
 
-    public int getAddressFlagForm2() {
+    /*public int getAddressFlagForm2() {
         return addressFlagForm2;
     }
 
@@ -1673,7 +1714,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setAddressFlagForm6(int addressFlagForm6) {
         this.addressFlagForm6 = addressFlagForm6;
-    }
+    }*/
 
     public List<AddressType> getAddressTypeList() {
         return addressTypeList;

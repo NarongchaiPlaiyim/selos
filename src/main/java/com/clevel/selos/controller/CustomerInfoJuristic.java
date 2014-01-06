@@ -126,8 +126,8 @@ public class CustomerInfoJuristic implements Serializable {
     private String messageHeader;
     private String message;
 
-    private int addressFlagForm2;
-    private int addressFlagForm3;
+//    private int addressFlagForm2;
+//    private int addressFlagForm3;
 
     //session
     private long workCaseId;
@@ -228,6 +228,7 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
+        customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
 
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
@@ -248,7 +249,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         referenceList = new ArrayList<Reference>();
 
-        addressFlagForm2 = 3;
+//        addressFlagForm2 = 3;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -445,10 +446,13 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setCollateralOwner(1);
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-                            addressFlagForm2 = 1;
+//                            addressFlagForm2 = 1;
+                            customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                         } else {
-                            addressFlagForm2 = 3;
+//                            addressFlagForm2 = 3;
+                            customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                         }
+                        customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                     }
 
                     enableDocumentType = false;
@@ -498,9 +502,11 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-                                addressFlagForm2 = 1;
+//                                addressFlagForm2 = 1;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                             } else {
-                                addressFlagForm2 = 3;
+//                                addressFlagForm2 = 3;
+                                customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                             }
                         }
 
@@ -547,8 +553,9 @@ public class CustomerInfoJuristic implements Serializable {
             }
         }
 
-        if(addressFlagForm2 == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
+        if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
+            addressView.setAddressTypeFlag(1);
             customerInfoView.setWorkAddress(addressView);
         }
 
@@ -733,22 +740,6 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setCountryList(List<Country> countryList) {
         this.countryList = countryList;
-    }
-
-    public int getAddressFlagForm2() {
-        return addressFlagForm2;
-    }
-
-    public void setAddressFlagForm2(int addressFlagForm2) {
-        this.addressFlagForm2 = addressFlagForm2;
-    }
-
-    public int getAddressFlagForm3() {
-        return addressFlagForm3;
-    }
-
-    public void setAddressFlagForm3(int addressFlagForm3) {
-        this.addressFlagForm3 = addressFlagForm3;
     }
 
     public List<AddressType> getAddressTypeList() {
