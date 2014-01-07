@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BasicInfoControl;
-import com.clevel.selos.businesscontrol.CreditFacProposeControl;
-import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.TCGInfoControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -207,30 +204,10 @@ public class CreditFacPropose implements Serializable {
     CustomerInfoControl customerInfoControl;
     @Inject
     TCGInfoControl tcgInfoControl;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
     public CreditFacPropose(){}
-
- /*   public void preRender() {
-        //test
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ", workCaseId);
-        } else {
-
-            log.debug("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.debug("Exception :: {}", ex);
-            }
-        }
-    }
-*/
 
     @PostConstruct
     public void onCreation()
@@ -1474,6 +1451,7 @@ public class CreditFacPropose implements Serializable {
                         creditFacProposeControl.onSaveRelationNewCreditDetail(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
+                        exSummaryControl.calForCreditFacility(workCaseId);
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
