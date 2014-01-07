@@ -1,7 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-//import com.clevel.selos.dao.working.BizInfoSummaryDAO;
-
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
@@ -22,7 +20,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

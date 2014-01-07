@@ -126,53 +126,35 @@ public class BizInfoSummary implements Serializable {
     public void onCreation() {
         log.info("onCreation bizInfoSum");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
         disableOwnerName = false;
         disableExpiryDate = true;
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }
-        log.debug("info WorkCaseId is: {}" + workCaseId);
-        onSearchBizInfoSummaryByWorkCase();
 
+        log.debug("info WorkCaseId is: {}", workCaseId);
+
+        onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-
-        //user = (User)session.getAttribute("user");
-
-        //log.info("onCreation bizInfoSum " + user.getRole().toString());
-
-        //user.getRole().setId(102);
-
         bankStatementAvg = 0;
+
+        log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
         if(bankStmtSummaryView != null ){
-
-            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-                }
-            }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
-                if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
-                }
-            }*/
-
-            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
                 bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
             }else{
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
                     bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
                 }
             }
-        }else{
-           log.info("bankStmtSummaryView is null ");
         }
+        log.debug("bankStatementAvg is " + bankStatementAvg);
 
-        log.info("bankStatementAvg is " + bankStatementAvg);
-
-        if (bizInfoSummaryView == null) {
+        if(bizInfoSummaryView == null) {
             fromDB = false;
             log.info("bizInfoSummaryView == null ");
 
@@ -214,24 +196,13 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
-        log.info(" Initial session ");
-        HttpSession session = FacesUtil.getSession(true);
-        log.info(" Initial session is " + session);
-
-        //session.setAttribute("workCaseId", 10001);
-
         log.info(" get FROM session workCaseId is " + workCaseId);
         try{
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
         }catch (Exception e){
-            log.info("error onSearchBizInfoSummaryByWorkCase : ", e);
-
+            log.error("error onSearchBizInfoSummaryByWorkCase : ", e);
         }
-
-        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
-        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
-
     }
 
     public void onChangeProvince() {
