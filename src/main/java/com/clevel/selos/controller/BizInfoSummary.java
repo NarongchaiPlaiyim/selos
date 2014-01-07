@@ -233,87 +233,12 @@ public class BizInfoSummary implements Serializable {
 
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
-        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
 
-
-        if (bizInfoDetailViewList.size() == 0) {
-            bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        } else {
-
-            double incomeAmountCal = 0;
-            double sumIncomeAmountD = 0;
-
-            double sumIncomePercentD = 0;
-            double incomePercentD = 0;
-
-            double adjustIncome = 0;
-            double adjustIncomeCal = 0;
-            double sumAdjust = 0;
-
-            long ar = 0;
-            double arCal = 0;
-            double sumAR = 0;
-
-            long ap = 0;
-            double apCal = 0;
-            double sumAP = 0;
-
-            long inv = 0;
-            double invCal = 0;
-            double sumINV = 0;
-
-            for (int i = 0; i < bizInfoDetailViewList.size(); i++) {
-
-                BizInfoDetailView temp = bizInfoDetailViewList.get(i);
-
-                incomePercentD = temp.getPercentBiz().doubleValue();
-                sumIncomePercentD += incomePercentD;
-                incomeAmountCal = bankStatementAvg * 12;
-                incomeAmountDis = util.formatNumber(incomeAmountCal);
-                temp.setIncomeAmountDis(incomeAmountDis);
-                sumIncomeAmountD += incomeAmountCal;
-
-
-                adjustIncome = temp.getAdjustedIncomeFactor().doubleValue();
-                adjustIncomeCal = (adjustIncome * incomePercentD) / 100;
-                sumAdjust += adjustIncomeCal;
-
-                ar = temp.getBizDesc().getAr();
-                arCal = (ar * incomePercentD) / 100;
-                sumAR += arCal;
-
-                ap = temp.getBizDesc().getAp();
-                apCal = (ap * incomePercentD) / 100;
-                sumAP += apCal;
-
-                inv = temp.getBizDesc().getInv();
-
-                invCal = (inv * incomePercentD) / 100;
-                sumINV += invCal;
-
-            }
-
-            sumIncomeAmountDis = util.formatNumber(sumIncomeAmountD);
-
-            sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2, RoundingMode.HALF_UP);
-            sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2,RoundingMode.HALF_UP);
-            SumWeightAR = new BigDecimal(sumAR).setScale(2,RoundingMode.HALF_UP);
-            SumWeightAP = new BigDecimal(sumAP).setScale(2,RoundingMode.HALF_UP);
-            SumWeightINV = new BigDecimal(sumINV).setScale(2,RoundingMode.HALF_UP);
-            SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2,RoundingMode.HALF_UP);
-
-            bizInfoSummaryView.setCirculationAmount(sumIncomeAmount);
-            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
-            bizInfoSummaryView.setSumIncomeAmount(sumIncomeAmount);
-            bizInfoSummaryView.setSumIncomePercent(sumIncomePercent);
-            bizInfoSummaryView.setSumWeightAR(SumWeightAR);
-            bizInfoSummaryView.setSumWeightAP(SumWeightAP);
-            bizInfoSummaryView.setSumWeightINV(SumWeightINV);
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
-            if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
-                onCalSummaryTable();
-            }
+        if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
+            onCalSummaryTable();
         }
+
     }
 
     private void onCheckInterview(){

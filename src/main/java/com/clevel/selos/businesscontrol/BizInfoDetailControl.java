@@ -12,6 +12,7 @@ import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.db.working.BizStakeHolderDetail;
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
@@ -23,6 +24,8 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,13 +52,15 @@ public class BizInfoDetailControl extends BusinessControl {
     BizStakeHolderDetailTransform bizStakeHolderDetailTransform;
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
 
 	@Inject
     public BizInfoDetailControl(){
 
     }
 
-    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId) {
+    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView, long bizInfoSummaryId , long workCaseId) {
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -145,12 +150,111 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizInfoDetailView.setId(bizInfoDetail.getId());
 
+            onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
             return bizInfoDetailView;
         } catch (Exception e) {
             log.error("onSaveBizInfoToDB error" + e);
             return bizInfoDetailView;
         } finally {
             log.info("onSaveBizInfoToDB end");
+        }
+    }
+
+    public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
+        BankStmtSummaryView bankStmtSummaryView;
+        List<BizInfoDetail> bizInfoDetailList;
+        double bankStatementAvg = 0;
+
+        bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
+
+        if (bizInfoDetailList.size() == 0) {
+            bizInfoDetailList = new ArrayList<BizInfoDetail>();
+            return;
+        } else {
+
+            bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
+            if(bankStmtSummaryView != null ){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                }else{
+                    if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
+                        bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                    }
+                }
+            }
+
+            double incomeAmountCal = 0;
+            double sumIncomeAmountD = 0;
+
+            double sumIncomePercentD = 0;
+            double incomePercentD = 0;
+
+            double adjustIncome = 0;
+            double adjustIncomeCal = 0;
+            double sumAdjust = 0;
+
+            long ar = 0;
+            double arCal = 0;
+            double sumAR = 0;
+
+            long ap = 0;
+            double apCal = 0;
+            double sumAP = 0;
+
+            long inv = 0;
+            double invCal = 0;
+            double sumINV = 0;
+
+            for (int i = 0; i < bizInfoDetailList.size(); i++) {
+
+                BizInfoDetail bizInfoDetail = bizInfoDetailList.get(i);
+
+                incomePercentD = bizInfoDetail.getPercentBiz().doubleValue();
+                sumIncomePercentD += incomePercentD;
+                incomeAmountCal = bankStatementAvg * 12;
+                bizInfoDetail.setIncomeAmount( new BigDecimal(incomeAmountCal).setScale(2, RoundingMode.HALF_UP));
+                sumIncomeAmountD += incomeAmountCal;
+
+                adjustIncome = bizInfoDetail.getAdjustedIncomeFactor().doubleValue();
+                adjustIncomeCal = (adjustIncome * incomePercentD) / 100;
+                sumAdjust += adjustIncomeCal;
+
+                ar = bizInfoDetail.getBusinessDescription().getAr();
+                arCal = (ar * incomePercentD) / 100;
+                sumAR += arCal;
+
+                ap = bizInfoDetail.getBusinessDescription().getAp();
+                apCal = (ap * incomePercentD) / 100;
+                sumAP += apCal;
+
+                inv = bizInfoDetail.getBusinessDescription().getInv();
+
+                invCal = (inv * incomePercentD) / 100;
+                sumINV += invCal;
+
+                bizInfoDetailDAO.persist(bizInfoDetail);
+
+            }
+
+            BizInfoSummary  bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
+
+            BigDecimal sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightAR = new BigDecimal(sumAR).setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightAP = new BigDecimal(sumAP).setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightINV = new BigDecimal(sumINV).setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2,RoundingMode.HALF_UP);
+
+            bizInfoSummary.setCirculationAmount(sumIncomeAmount);
+            bizInfoSummary.setCirculationPercentage(new BigDecimal(100));
+            bizInfoSummary.setSumIncomeAmount(sumIncomeAmount);
+            bizInfoSummary.setSumIncomePercent(sumIncomePercent);
+            bizInfoSummary.setSumWeightAR(SumWeightAR);
+            bizInfoSummary.setSumWeightAP(SumWeightAP);
+            bizInfoSummary.setSumWeightINV(SumWeightINV);
+            bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
+
+            bizInfoSummaryDAO.persist(bizInfoSummary);
         }
     }
 

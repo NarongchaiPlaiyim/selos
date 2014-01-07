@@ -49,6 +49,9 @@ public class BizInfoDetail implements Serializable {
     @Column(name = "biz_comment")
     private String bizComment;
 
+    @Column(name="income_amount")
+    private BigDecimal incomeAmount;
+
     @Column(name = "percent_biz")
     private BigDecimal percentBiz;
 
@@ -275,6 +278,14 @@ public class BizInfoDetail implements Serializable {
 
     public void setBizComment(String bizComment) {
         this.bizComment = bizComment;
+    }
+
+    public BigDecimal getIncomeAmount() {
+        return incomeAmount;
+    }
+
+    public void setIncomeAmount(BigDecimal incomeAmount) {
+        this.incomeAmount = incomeAmount;
     }
 
     public BigDecimal getPercentBiz() {
