@@ -104,12 +104,4 @@ public class QualitativeControl extends BusinessControl {
         return qualitativeView;
     }
 
-
-    public void save(WorkCase workCase) {
-        workCaseDAO.persist(workCase);
-    }
-
-    public void delete(WorkCase workCase) {
-        workCaseDAO.delete(workCase);
-    }
 }

@@ -69,6 +69,9 @@ public class Address implements Serializable {
     @Column(name = "address")
     private String address;
 
+    @Column(name="address_type_flag", nullable=false, columnDefinition = "int default 0")
+    private int addressTypeFlag;
+
     public Address() {
 
     }
@@ -209,6 +212,14 @@ public class Address implements Serializable {
         this.address = address;
     }
 
+    public int getAddressTypeFlag() {
+        return addressTypeFlag;
+    }
+
+    public void setAddressTypeFlag(int addressTypeFlag) {
+        this.addressTypeFlag = addressTypeFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -229,6 +240,7 @@ public class Address implements Serializable {
                 append("contactName", contactName).
                 append("contactPhone", contactPhone).
                 append("address", address).
+                append("addressTypeFlag", addressTypeFlag).
                 toString();
     }
 }

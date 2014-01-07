@@ -23,6 +23,7 @@ public class AddressView implements Serializable {
     private String contactName;
     private String contactPhone;
     private String address;
+    private int addressTypeFlag;
 
     public AddressView() {
         reset();
@@ -53,6 +54,7 @@ public class AddressView implements Serializable {
         this.contactName = inputAddressView.getContactName();
         this.contactPhone = inputAddressView.getContactPhone();
         this.address = inputAddressView.getAddress();
+        this.addressTypeFlag = inputAddressView.getAddressTypeFlag();
     }
 
     public long getId() {
@@ -184,6 +186,14 @@ public class AddressView implements Serializable {
         this.address = address;
     }
 
+    public int getAddressTypeFlag() {
+        return addressTypeFlag;
+    }
+
+    public void setAddressTypeFlag(int addressTypeFlag) {
+        this.addressTypeFlag = addressTypeFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -203,6 +213,7 @@ public class AddressView implements Serializable {
                 append("contactName", contactName).
                 append("contactPhone", contactPhone).
                 append("address", address).
+                append("addressTypeFlag", addressTypeFlag).
                 toString();
     }
 }

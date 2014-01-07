@@ -3,6 +3,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,25 +30,30 @@ public class AccountInfoDetail implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "branch_id")
-    private BankBranch bankBranch;
+    private BankBranch branch;
 
     @OneToOne
-    @JoinColumn(name = "bank_account_type_id")
+    @JoinColumn(name = "account_type_id")
     private BankAccountType accountType;
 
     @OneToOne
-    @JoinColumn(name = "open_account_product_id")
+    @JoinColumn(name = "account_product_id")
     private OpenAccountProduct productType;
 
     @Column(name = "term")
     private String term;
 
-    //Account Name
+    @OneToMany(mappedBy = "accountInfoDetailAccountName")
+    private List<AccountInfoDetailAccountName> accountNameList;
 
-    @OneToMany(mappedBy = "accountInfoDetail")
+    @OneToMany(mappedBy = "accountInfoDetailPurpose")
     private List<AccountInfoDetailPurpose> purposeList;
 
-    //Credit Type
+    @Column(name = "open_account")
+    private int openAccount;
+
+    @OneToMany(mappedBy = "accountInfoDetailCreditType")
+    private List<AccountInfoDetailCreditType> creditTypeList;
 
     public long getId() {
         return id;
@@ -80,12 +87,12 @@ public class AccountInfoDetail implements Serializable {
         this.accountNumber = accountNumber;
     }
 
-    public BankBranch getBankBranch() {
-        return bankBranch;
+    public BankBranch getBranch() {
+        return branch;
     }
 
-    public void setBankBranch(BankBranch bankBranch) {
-        this.bankBranch = bankBranch;
+    public void setBranch(BankBranch branch) {
+        this.branch = branch;
     }
 
     public BankAccountType getAccountType() {
@@ -112,11 +119,53 @@ public class AccountInfoDetail implements Serializable {
         this.term = term;
     }
 
+    public List<AccountInfoDetailAccountName> getAccountNameList() {
+        return accountNameList;
+    }
+
+    public void setAccountNameList(List<AccountInfoDetailAccountName> accountNameList) {
+        this.accountNameList = accountNameList;
+    }
+
     public List<AccountInfoDetailPurpose> getPurposeList() {
         return purposeList;
     }
 
     public void setPurposeList(List<AccountInfoDetailPurpose> purposeList) {
         this.purposeList = purposeList;
+    }
+
+    public List<AccountInfoDetailCreditType> getCreditTypeList() {
+        return creditTypeList;
+    }
+
+    public int getOpenAccount() {
+        return openAccount;
+    }
+
+    public void setOpenAccount(int openAccount) {
+        this.openAccount = openAccount;
+    }
+
+    public void setCreditTypeList(List<AccountInfoDetailCreditType> creditTypeList) {
+        this.creditTypeList = creditTypeList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountInfo", accountInfo)
+                .append("requestAccountType", requestAccountType)
+                .append("accountNumber", accountNumber)
+                .append("branch", branch)
+                .append("accountType", accountType)
+                .append("productType", productType)
+                .append("term", term)
+                .append("accountNameList", accountNameList)
+                .append("purposeList", purposeList)
+                .append("openAccount", openAccount)
+                .append("creditTypeList", creditTypeList)
+                .toString();
     }
 }

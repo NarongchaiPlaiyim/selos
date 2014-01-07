@@ -284,7 +284,7 @@ public class DBExecute implements Serializable {
                     bpmInbox.setBorrowerName(rs.getString("BORROWERNAME"));
                     bpmInbox.setProductGroup(rs.getString("PRODUCTGROUP"));
                     bpmInbox.setRequestType(rs.getInt("REQUESTTYPE"));
-                    bpmInbox.setfStepName(rs.getString("F_STEPNAME"));
+                    //bpmInbox.setfStepName(rs.getString("F_STEPNAME"));  //TODO: Confirm with datta, field is exist?
                     bpmInbox.setStatus(rs.getString("STATUS"));
                     bpmInbox.setPreviousUser(rs.getString("PREVIOUSUSER"));
                     bpmInbox.setAppointmentDate(rs.getInt("APPOINTMENTDATE"));

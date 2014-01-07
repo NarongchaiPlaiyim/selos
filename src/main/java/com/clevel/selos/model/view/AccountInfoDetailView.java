@@ -37,9 +37,11 @@ public class AccountInfoDetailView implements Serializable {
     private List<AccountInfoPurposeView> accountInfoPurposeViewList;
     private String accountInfoPurposeViewListForShow;
 
+    //Open Account
+    private int openAccount;
+
     //Credit Type
     private List<AccountInfoCreditTypeView> accountInfoCreditTypeViewList;
-
     public AccountInfoDetailView(){
         init();
     }
@@ -175,6 +177,14 @@ public class AccountInfoDetailView implements Serializable {
 
     public void setTermForShow(String termForShow) {
         this.termForShow = termForShow;
+    }
+
+    public int getOpenAccount() {
+        return openAccount;
+    }
+
+    public void setOpenAccount(int openAccount) {
+        this.openAccount = openAccount;
     }
 
     @Override

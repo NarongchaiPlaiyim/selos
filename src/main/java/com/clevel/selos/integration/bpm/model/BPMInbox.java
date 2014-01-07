@@ -3,7 +3,9 @@ package com.clevel.selos.integration.bpm.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class BPMInbox {
+import java.io.Serializable;
+
+public class BPMInbox implements Serializable {
     private int receivedTime; //RECEIVEDTIME
     private String appNumber; //APPNUMBER
     private String borrowerName; //BORROWERNAME

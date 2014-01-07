@@ -76,7 +76,7 @@ public class IsaUpload implements Serializable {
         FilenameFilter dirFilter = new FilenameFilter() {
 
             public boolean accept(File dir, String name) {
-                if (name.endsWith(UPLOAD_FOLDER+".csv"))
+                if (name.endsWith(UPLOAD_FOLDER))
                     return true;
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
             }
@@ -102,9 +102,11 @@ public class IsaUpload implements Serializable {
                 int index = files.length - 1;
 
                 do {
+                    System.out.println("index : "+index);
                     File subFolder = files[index];
                     System.out.println(subFolder.getPath());
                     File[] subFiles = subFolder.listFiles();
+                    System.out.println(subFolder.getAbsolutePath());
 //                    File[] subFiles = new File(PATH_FILE).listFiles();
                     System.out.println("subFiles : "+subFiles.length);
                     if (subFiles.length > 0) {
@@ -113,13 +115,15 @@ public class IsaUpload implements Serializable {
 
                         userUploadView.setUploadTime(DateTimeUtil.dateToStringWT(new Date(subFolder.lastModified())));
                         for (int subidx = 0; subidx < subFiles.length; subidx++) {
-                            System.out.println("nb "+subFiles[subidx].getName());
+
+                            System.out.println("subid : "+subidx);
                             if (subFiles[subidx].getName().startsWith(IsaUpload.RESULT_FILENAME)) {
-//                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
-                                userUploadView.setResultFile(subFiles[subidx].getName());
-//                                System.out.println("1 "+userUploadView.getResultFile());
+                                userUploadView.setResultFile(subFolder.getName() + "/" + subFiles[subidx].getName());
+                                System.out.println("nb "+subFolder.getName() + "/" + subFiles[subidx].getName());
+//                                userUploadView.setResultFile(subFiles[subidx].getName());
+                                System.out.println("1 "+userUploadView.getResultFile());
                             }
-//                            System.out.println("2 " + userUploadView.getResultFile());
+                            System.out.println("2 " + userUploadView.getResultFile());
                         }
                         if (userUploadView.getResultFile() == null) {
                             userUploadView.setResultFile("");
@@ -135,7 +139,6 @@ public class IsaUpload implements Serializable {
                 log.warn("Exception when list upload and Result Files", ex);
             }
         }
-        System.out.println("n " + userUploadViews.size());
 
         RequestContext.getCurrentInstance().update(":okl");
 
@@ -145,6 +148,14 @@ public class IsaUpload implements Serializable {
     public void uploadUserFile(FileUploadEvent event) {
         log.debug("uploadUserFile()");
 
+
+        if(PATH_FILE==""||PATH_FILE.length()==0){
+            log.debug("PATH_FILE IS NULL");
+        }else{
+            if(!new File(PATH_FILE).isDirectory()){
+                new File(PATH_FILE).mkdir();
+            }
+        }
 
         if (event != null) {
             Date now = Calendar.getInstance().getTime();
@@ -176,10 +187,18 @@ public class IsaUpload implements Serializable {
                 }
 
                 String filePath = PATH_FILE +"\\"+ prefix+suffix;
+             /////////////////////////////////////////////////////////////   Upload FIlE
+                if(PATH_FILE==""||PATH_FILE.length()==0){
+                    log.debug("PATH_FILE IS NULL");
+                }else{
+                    if(!new File(PATH_FILE+"/"+userUploadId).isDirectory()){
+                        new File(PATH_FILE+"/"+userUploadId).mkdir();
+                    }
+                }
 
                 if (new File(PATH_FILE).isDirectory()) {
-                    System.out.println("filepAth : "+filePath);
-                    FileUtils.copyInputStreamToFile(file.getInputstream(), new File(filePath));
+
+                    FileUtils.copyInputStreamToFile(file.getInputstream(), new File(PATH_FILE+"/"+userUploadId +"\\"+ prefix+suffix));
                 } else {
                     System.out.println("NOT DIRECTORY");
                 }
@@ -187,7 +206,7 @@ public class IsaUpload implements Serializable {
 
 
                 //            String result = importService.uploadDocFiles(request, userUploadId);
-                isaUploadService.processingUploadFile(PATH_FILE, filePath);
+                isaUploadService.processingUploadFile(PATH_FILE+"/"+userUploadId +"\\"+ prefix+suffix, filePath);
 //                initForm();
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -202,9 +221,9 @@ public class IsaUpload implements Serializable {
     public StreamedContent getFile() {
         log.debug("downloadFile()");
 
-        String filename="C:\\Users\\sahawat\\Desktop\\FileUploadTest\\"+downloadFilePart;
+        String filename=PATH_FILE+"\\"+downloadFilePart;
         File file1 =new File(filename);
-        System.out.println(filename);
+        System.out.println(downloadFilePart);
         InputStream stream = null;
         try {
             stream = new FileInputStream(file1);

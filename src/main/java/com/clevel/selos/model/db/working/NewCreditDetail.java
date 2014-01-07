@@ -139,13 +139,13 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "type", nullable = false, columnDefinition = "int default 0")
     private int type;
 
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn(name = "new_guarantor_rel_id")
     private NewGuarantorRelCredit newGuarantorRelCredit;
 
     @ManyToOne
     @JoinColumn(name = "new_collateral_rel_id")
-    private NewCollateralRelCredit newCollateralRelCredit;
+    private NewCollateralRelCredit newCollateralRelCredit;*/
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -484,13 +484,6 @@ public class NewCreditDetail implements Serializable {
         isApproved = approved;
     }
 
-    public NewGuarantorRelCredit getNewGuarantorRelCredit() {
-        return newGuarantorRelCredit;
-    }
-
-    public void setNewGuarantorRelCredit(NewGuarantorRelCredit newGuarantorRelCredit) {
-        this.newGuarantorRelCredit = newGuarantorRelCredit;
-    }
 
     public List<NewCreditTierDetail> getProposeCreditTierDetailList() {
         return proposeCreditTierDetailList;
@@ -516,16 +509,6 @@ public class NewCreditDetail implements Serializable {
     public void setType(int type) {
         this.type = type;
     }
-
-
-    public NewCollateralRelCredit getNewCollateralRelCredit() {
-        return newCollateralRelCredit;
-    }
-
-    public void setNewCollateralRelCredit(NewCollateralRelCredit newCollateralRelCredit) {
-        this.newCollateralRelCredit = newCollateralRelCredit;
-    }
-
 
     @Override
     public String toString() {
@@ -568,8 +551,6 @@ public class NewCreditDetail implements Serializable {
                 .append("newCreditFacility", newCreditFacility)
                 .append("proposeCreditTierDetailList", proposeCreditTierDetailList)
                 .append("type", type)
-                .append("newGuarantorRelCredit", newGuarantorRelCredit)
-                .append("newCollateralRelCredit", newCollateralRelCredit)
                 .toString();
     }
 }

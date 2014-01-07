@@ -13,7 +13,7 @@
                                                                                                              styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}" required="#{not empty param[saveBizProductBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
@@ -22,23 +22,24 @@
                         value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentSalesVolume" styleClass="right"
-                                 value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="2"/>
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="#{not empty param[saveBizProductBtn.clientId]}">
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
                     </p:inputText>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*"
-                                                                                                             styleClass="require-field"/>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
                     <p:inputText id="percentEBIT" styleClass="right"
-                                 value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="2"/>
+                                 onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                 value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="#{not empty param[saveBizProductBtn.clientId]}">
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
                     </p:inputText>
                 </td>
@@ -47,7 +48,7 @@
                 <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/><h:outputLabel
                         value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="#{not empty param[saveBizProductBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
@@ -59,13 +60,16 @@
                 <td colspan="2" class="center">
                     <p:commandButton
                             id="btnSaveBizProductView"
+                            binding="#{saveBizProductBtn}"
                             value="#{msg.get('app.button.ok')}"
                             action="#{bizInfoDetail.onSaveBizProductDetailView()}"
                             process=":bizProductViewDlgForm"
                             update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
                             oncomplete="handleFullappBizProductRequest(xhr, status, args)"
                             />
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bizProductViewDlg.hide()"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}"
+                                     update=":bizProductViewDlgForm" onclick="bizProductViewDlg.hide()"
+                                     />
                 </td>
             </tr>
         </table>

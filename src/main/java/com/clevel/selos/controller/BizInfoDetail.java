@@ -7,6 +7,7 @@ import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -14,6 +15,7 @@ import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
@@ -49,6 +51,7 @@ public class BizInfoDetail implements Serializable {
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;
+    long workCaseId =0;
     private String messageHeader;
     private String message;
 
@@ -60,7 +63,9 @@ public class BizInfoDetail implements Serializable {
     private long bizInfoDetailViewId;
     private String descType;
     private Date currentDate;
-
+    private String currentDateDDMMYY;
+    private boolean readonlyIsUW;
+    private boolean readonlyIsBDM;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -117,9 +122,11 @@ public class BizInfoDetail implements Serializable {
             log.info("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
-            log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
+            if(session.getAttribute("workCaseId").toString() != null){
+                log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
+            }
 
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
             log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
 
@@ -225,7 +232,7 @@ public class BizInfoDetail implements Serializable {
             if(buyerDetailList.size()>0){
                 calSumBizStakeHolderDetailView(buyerDetailList,"2");
             }
-
+            onCheckRole();
 
         }catch (Exception ex){
             log.info("onCreation Exception ");
@@ -239,9 +246,21 @@ public class BizInfoDetail implements Serializable {
         }
     }
 
+    private void onCheckRole(){
+        readonlyIsUW = true;
+        if( user.getRole().getId() ==  RoleValue.UW.id()){
+            readonlyIsUW = false;
+        }
+
+        readonlyIsBDM = true;
+        if( user.getRole().getId() ==  RoleValue.BDM.id()){
+            readonlyIsBDM = false;
+        }
+    }
+
     public void getBusinessInfoListDB(){
         List<BizInfoDetailView> bizInfoDetailViewList;
-        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryId);
         sumBizPercent = 0;
         BizInfoDetailView bizInfoDetailViewTemp;
         if(bizInfoDetailViewList.size()!=0){
@@ -290,13 +309,13 @@ public class BizInfoDetail implements Serializable {
         if(bizInfoDetailView.getBizPermission() != null ){
             if( bizInfoDetailView.getBizPermission().equals("Y")){
                 isDisable = false;
-            }else{
+            }/*else{
                 bizInfoDetailView.setBizDocExpiryDate(null);
                 bizInfoDetailView.setBizDocPermission("");
             }
         }else{
             bizInfoDetailView.setBizDocExpiryDate(null);
-            bizInfoDetailView.setBizDocPermission("");
+            bizInfoDetailView.setBizDocPermission("");*/
         }
     }
 
@@ -341,6 +360,9 @@ public class BizInfoDetail implements Serializable {
         }
     }
 
+    public void onCancelBizProductDetailView(){
+        bizProductDetailView = new BizProductDetailView();
+    }
     public void onSaveBizProductDetailView(){
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
@@ -437,6 +459,10 @@ public class BizInfoDetail implements Serializable {
             calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
         }
         onSetRowNoBizStakeHolderDetail();
+    }
+
+    public void onCancelBizStakeHolderDetailView(){
+        bizStakeHolderDetailView = new BizStakeHolderDetailView();
     }
 
     public void onSaveBizStakeHolderDetailView(){
@@ -636,7 +662,7 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setModifyBy(user);
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
+            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");
 
@@ -897,11 +923,36 @@ public class BizInfoDetail implements Serializable {
         this.currentDate = currentDate;
     }
 
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
     public boolean isDisable() {
         return isDisable;
     }
 
     public void setDisable(boolean disable) {
         isDisable = disable;
+    }
+
+    public boolean isReadonlyIsUW() {
+        return readonlyIsUW;
+    }
+
+    public void setReadonlyIsUW(boolean readonlyIsUW) {
+        this.readonlyIsUW = readonlyIsUW;
+    }
+
+    public boolean isReadonlyIsBDM() {
+        return readonlyIsBDM;
+    }
+
+    public void setReadonlyIsBDM(boolean readonlyIsBDM) {
+        this.readonlyIsBDM = readonlyIsBDM;
     }
 }

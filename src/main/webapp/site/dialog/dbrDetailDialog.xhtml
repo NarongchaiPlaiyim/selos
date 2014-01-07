@@ -10,19 +10,19 @@
             <table class="content_form" border="0" style="width:100%">
                 <tr>
                     <td class="title">
-                        <p:outputLabel for="accountName" value="#{msg.get('app.dbrDetail.label.accountName')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
-                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"
-                                     onkeyup="return alphabetThaiEng($(this));"/>
+                        <p:inputText id="accountName" value="#{dbrInfo.selectedItem.accountName}" required="true"   style="width: 162px;"
+                                     onkeypress="return onKeyPressAccountName(event);" onkeydown="return onKeyDownAccountName(event);" />
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <p:outputLabel for="loanAccountType" value="#{msg.get('app.dbrDetail.label.loanType')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
                     </td>
                     <td>
-                        <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true">
+                        <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true" style="width: 170px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{dbrInfo.loanAccountTypes}"
                                            var="loanAccountType"
@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
-                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"
+                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true" styleClass="right"  onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
@@ -50,7 +50,7 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
                     </td>
                     <td>
-                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"
+                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true" styleClass="right" onclick="this.select()"  style="width: 162px;"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number" />
@@ -63,7 +63,7 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
                     </td>
                     <td>
-                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"
+                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"  style="width: 162px;"
                                      readonly="true" styleClass="right">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>

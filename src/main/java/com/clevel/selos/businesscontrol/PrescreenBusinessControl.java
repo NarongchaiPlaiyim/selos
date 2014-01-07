@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
@@ -23,6 +24,7 @@ import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
@@ -126,6 +128,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     @Inject
     STPExecutor stpExecutor;
+    @Inject
+    BPMExecutor bpmExecutor;
 
     /*@Inject
     NCBInterface ncbInterface;  */
@@ -1222,26 +1226,19 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void duplicateData(long workCasePreScreenId) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
-        //prescreenDAO.duplicatePreScreenData(workCasePreScreenId);
     }
 
     // *** Function for BPM *** //
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        Action action = actionDAO.findById(Long.parseLong(actionCode));
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode) throws Exception{
+        bpmExecutor.preScreenAssignToChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+    }
 
-        HashMap<String,String> fields = new HashMap<String, String>();
-        fields.put("Action_Code", Long.toString(action.getId()));
-        fields.put("Action_Name", action.getName());
-        fields.put("BDMCheckerUserName", checkerId);
+    public void cancelCase(long workCasePreScreenId, String queueName, String actionCode){
+        bpmExecutor.cancelCase();
+    }
 
-        log.info("assignChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
-        log.info("assignChecker ::: queueName : {}", queueName);
-        log.info("assignChecker ::: Action_Code : {}", action.getId());
-        log.info("assignChecker ::: Action_Name : {}", action.getName());
-        log.info("assignChecker ::: BDMCheckerUserName : {}", checkerId);
+    public void closeSale(long workCasePreScreenId, String queueName, String actionCode){
 
-        bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
     public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){

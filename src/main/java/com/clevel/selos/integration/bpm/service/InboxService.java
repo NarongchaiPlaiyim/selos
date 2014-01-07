@@ -2,10 +2,7 @@ package com.clevel.selos.integration.bpm.service;
 
 import com.clevel.selos.exception.BPMInterfaceException;
 import com.clevel.selos.integration.BPM;
-import com.clevel.selos.integration.bpm.model.BPMInbox;
-import com.clevel.selos.integration.bpm.model.FieldName;
-import com.clevel.selos.integration.bpm.model.OrderType;
-import com.clevel.selos.integration.bpm.model.RoleName;
+import com.clevel.selos.integration.bpm.model.*;
 import com.clevel.selos.integration.bpm.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -13,12 +10,13 @@ import com.clevel.selos.system.message.Message;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InboxService {
+public class InboxService implements Serializable {
     @Inject
     @BPM
     Logger log;
@@ -128,5 +126,20 @@ public class InboxService {
     public List<BPMInbox> getPoolBox(String userId, RoleName roleName, FieldName fieldName, OrderType orderType, int recPerPage, int pageNo) throws Exception {
 
         return null;
+    }
+
+    public BPMInboxRecord getInboxRecord(String userId) throws Exception {
+        BPMInboxRecord bpmInboxRecord = new BPMInboxRecord();
+        try {
+            int countMybox = dbExecute.getMyBoxCount(userId);
+            int countReturnBox = dbExecute.getReturnBoxCount(userId);
+            int countBDMUWBox = dbExecute.getBDMUWBoxCount(userId);
+            bpmInboxRecord.setMyboxRecord(countMybox);
+            bpmInboxRecord.setReturnBoxRecord(countReturnBox);
+            bpmInboxRecord.setBdmUwBoxRecord(countBDMUWBox);
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return bpmInboxRecord;
     }
 }

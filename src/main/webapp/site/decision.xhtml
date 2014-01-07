@@ -54,8 +54,14 @@
             <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                    <div id="content_lastupdate">Last update by
+                        <h:outputText value="#{decision.decisionView.modifyBy.userName}"
+                                      rendered="#{not empty decision.decisionView.modifyBy}"/>,
+                        <h:outputText value="#{decision.decisionView.modifyDate}"
+                                      rendered="#{not empty decision.decisionView.modifyDate}">
+                            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                    </div>
                 </div>
                 <!-- start content -->
                 <div id="content_form">
@@ -1262,7 +1268,10 @@
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
-                                    <p:column styleClass="left top">#{extGuarantor.guarantorName}</p:column>
+                                    <p:column styleClass="left top">
+                                        <h:outputText value="#{extGuarantor.guarantorName.titleTh}#{extGuarantor.guarantorName.firstNameTh} #{extGuarantor.guarantorName.lastNameTh}"
+                                                      rendered="#{not empty extGuarantor.guarantorName}"/>
+                                    </p:column>
 
                                     <p:column styleClass="center top">#{extGuarantor.tcgLgNo}</p:column>
 
@@ -1741,7 +1750,7 @@
                                                                          oncomplete="proposeCreditDlg.show()">                                                            
                                                             <f:setPropertyActionListener value="#{proposeCredit}" target="#{decision.selectedAppProposeCredit}"/>
                                                             <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowIndexCredit}"/>
-                                                            <p:resetInput target=":proposeCreditDlgForm"/>
+                                                            <!--<p:resetInput target=":proposeCreditDlgForm"/>-->
                                                         </p:commandButton>
 
                                                         <p:commandButton title="#{msg.get('app.button.delete')}"
@@ -2276,7 +2285,9 @@
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    #{collCrdType.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}
+                                                    #{collCrdType.requestType == 2 ? msg.get('app.label.new')
+                                                    : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                    : ''}
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
@@ -2405,7 +2416,7 @@
 
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.collateralOwnerUWList}" var="collOwnerUW" varStatus="i">
-                                                            #{collOwnerUW}#{!i.last ? ', ' : ''}
+                                                            #{collOwnerUW.titleTh}#{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
 
@@ -2417,7 +2428,7 @@
 
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.relatedWithList}" var="relatedWith" varStatus="k">
-                                                            #{relatedWith}#{!k.last ? ', ' : ''}
+                                                            #{relatedWith.titleDeed}#{!k.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
 
@@ -2567,7 +2578,9 @@
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                #{collCrdType.requestType == 1 ? msg.get('app.label.new') : msg.get('app.label.change')}
+                                                #{collCrdType.requestType == 2 ? msg.get('app.label.new')
+                                                : collCrdType.requestType == 1 ? msg.get('app.label.change')
+                                                : ''}
                                             </p:column>
 
                                             <p:column styleClass="left top">
@@ -2696,7 +2709,7 @@
 
                                                 <p:column styleClass="left top">
                                                     <ui:repeat value="#{subColl.collateralOwnerUWList}" var="collOwnerUW" varStatus="i">
-                                                        #{collOwnerUW}#{!i.last ? ', ' : ''}
+                                                        #{collOwnerUW.titleTh}#{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                     </ui:repeat>
                                                 </p:column>
 
@@ -2708,7 +2721,7 @@
 
                                                 <p:column styleClass="left top">
                                                     <ui:repeat value="#{subColl.relatedWithList}" var="relatedWith" varStatus="k">
-                                                        #{relatedWith}#{!k.last ? ', ' : ''}
+                                                        #{relatedWith.titleDeed}#{!k.last ? ', ' : ''}
                                                     </ui:repeat>
                                                 </p:column>
 
@@ -2784,7 +2797,8 @@
                                                 <tr>
                                                     <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{creditType.productProgram.name},&#160;
+                                                        <h:outputText value="#{creditType.productProgram.name}"
+                                                                      rendered="#{not empty creditType.productProgram}"/>,&#160;
                                                         <h:outputText value="#{creditType.limit}">
                                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                         </h:outputText>&#160;
@@ -2879,7 +2893,9 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : guarantor.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved')
+                                            : guarantor.approved eq 1 ? msg.get('app.label.notApproved')
+                                            : ''}
                                         </p:column>
 
                                         <p:column styleClass="left top">
@@ -2895,7 +2911,8 @@
                                                     <tr>
                                                         <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                         <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                            #{creditType.productProgram.name},&#160;
+                                                            <h:outputText value="#{creditType.productProgram.name}"
+                                                                          rendered="#{not empty creditType.productProgram}"/>,&#160;
                                                             <h:outputText value="#{creditType.limit}">
                                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                             </h:outputText>&#160;
@@ -2984,7 +3001,9 @@
                                         <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                         <p:column styleClass="center top">
-                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                            #{guarantor.approved eq 2 ? msg.get('app.label.approved')
+                                            : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved')
+                                            : ''}
                                         </p:column>
 
                                         <p:column styleClass="left top">
@@ -3222,8 +3241,6 @@
                                                     <td class="right middle title" style="width: 250px">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
                                                     <td class="left" colspan="5">
                                                         <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
-                                                                         onkeydown="return onKeyDownText(event);"
-                                                                         onkeypress="return onKeyPressText(event);"
                                                                          rows="2"
                                                                          style="width: 100%"/>
                                                     </td>
@@ -3446,7 +3463,7 @@
     <ui:param name="formId" value="frmConfirmDeleteAppProposeCredit"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteAppProposeCredit"/>
-    <ui:param name="update" value=":frmMain"/>
+    <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
@@ -3476,7 +3493,7 @@
     <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteSubCollateral"/>
-    <ui:param name="update" value=":subCollateralDlgForm"/>
+    <ui:param name="update" value=":collateralDlgForm"/>
 </ui:include>
 
 <!-- Propose Guarantor Dialog -->

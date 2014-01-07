@@ -13,7 +13,7 @@
     <td  class="title" style="width:250px;text-align: left">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
     </td>
-    <td style="width: 100px;" >
+    <td style="width: 100px;">
         <p:inputText id="jobID"
                      value="#{creditFacPropose.newCollateralInfoView.jobID}"
                      required="#{not empty param[retrieveButton.clientId]}" />
@@ -49,17 +49,17 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecision}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecision}" style="width: 300px;"/>
     </td>
 </tr>
 <tr>
     <td  class="title">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
-    <td>
+    <td  class="title" style="width:100px;text-align: left">
         <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecisionReason}"/>
     </td>
-    <td  class="title">
+    <td  class="title" style="width:250px;text-align: left">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
@@ -131,7 +131,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 1 ? 'New' : 'Change'}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? 'New' : 'Change'}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -196,7 +196,7 @@
             <p:selectOneMenu id="dlgCollTypePercentLTV"
                              value="#{CollateralHeaderDetailView.collTypePercentLTV.id}"
                              size="1"
-                             style="min-width: 200px; width: 200px; max-width: 200px;"
+                             style="min-width: 250px; width: 650px; max-width: 650px;"
                              required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacPropose.collateralTypeList}"
@@ -212,7 +212,7 @@
                     value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
         </td>
         <td>
-            <p:inputText  value="#{CollateralHeaderDetailView.existingCredit}"  style="text-align: right;">
+            <p:inputText  value="#{CollateralHeaderDetailView.existingCredit}"  style="text-align: right;" maxlength="18">
                 <f:convertNumber pattern="#,##0"
                                  minFractionDigits="2"
                                  maxFractionDigits="2"
@@ -250,6 +250,7 @@
         <td>
             <p:inputText value="#{CollateralHeaderDetailView.appraisalValue}"
                          style="text-align: right;"
+                         maxlength="18"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                 <p:ajax event="blur" update="@this"/>
@@ -265,7 +266,8 @@
             <p:selectOneMenu id="dlgCollateralType"
                              value="#{CollateralHeaderDetailView.headCollType.id}"
                              size="1"
-                             style="min-width: 300px; width: 300px; max-width: 300px;">
+                             style="min-width: 250px; width: 650px; max-width: 650px;"
+                             required="#{not empty param[btnSaveCollateral.clientId]}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{creditFacPropose.collateralTypeList}"
                                var="collateralTypeItem"
@@ -281,8 +283,8 @@
         </td>
         <td>
             <p:selectOneRadio value="#{CollateralHeaderDetailView.insuranceCompany}">
-                <f:selectItem itemLabel="Partner" itemValue="1"/>
-                <f:selectItem itemLabel="Non Partner" itemValue="0"/>
+                <f:selectItem itemLabel="Partner" itemValue="2"/>
+                <f:selectItem itemLabel="Non Partner" itemValue="1"/>
             </p:selectOneRadio>
         </td>
     </tr>
@@ -362,12 +364,12 @@
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
                     <h:outputText value="#{newSubCollateralDetailView.appraisalValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
                     <h:outputText value="#{newSubCollateralDetailView.mortgageValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="center">

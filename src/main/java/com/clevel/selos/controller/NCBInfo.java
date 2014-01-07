@@ -108,9 +108,7 @@ public class NCBInfo implements Serializable {
     private NCBDAO ncbDAO;
 
 
-    public NCBInfo() {
-
-    }
+    public NCBInfo() {}
 
     public Month[] getStatMonths(){
         return Month.values();

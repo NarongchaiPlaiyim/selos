@@ -68,6 +68,7 @@ public class Qualitative implements Serializable {
     private boolean messageErr;
     private  int result;
     private boolean validate;
+    private boolean requiredReason;
 
     public Qualitative(){}
 
@@ -76,29 +77,46 @@ public class Qualitative implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-//        validate = true;
-
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
 
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ",workCaseId);
-        }
-
         if(page.equals("qualitativeA.jsf")){
-            //session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }else{
+                log.info("preRender ::: workCaseId is null.");
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }catch (Exception ex){
+                    log.info("Exception :: {}",ex);
+                }
+            }
+
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
 
         } else if(page.equals("qualitativeB.jsf")){
-            //session.setAttribute("workCaseId", new Long(4)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }else{
+                log.info("preRender ::: workCaseId is null.");
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }catch (Exception ex){
+                    log.info("Exception :: {}",ex);
+                }
+            }
+
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+
         }
 
-//        log.info("Date :: {} ",qualitativeView.getCreateDate().toString());
+        requiredReason = false;
+
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
@@ -106,7 +124,10 @@ public class Qualitative implements Serializable {
         } else{
             modeForButton = ModeForButton.EDIT;
             log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
-            onSetQualityToValue(qualitativeView.getQualityResult());
+            if(qualitativeView.getQualityResult()!=null)
+            {
+                 onSetQualityToValue(qualitativeView.getQualityResult());
+            }
         }
 
         onLoadSelectList();
@@ -125,19 +146,34 @@ public class Qualitative implements Serializable {
         }
     }
 
-    public void onClickQuality(int clickResult){
-        if(clickResult > result){
-            result = clickResult;
+    public void onClickQuality(long clickResult){
+        int click = Integer.parseInt(Long.toString(clickResult));
+        if(click > result){
+            result = click;
+        }
+         // required for case result is P
+        if(result==1){
+           requiredReason=true;
         }else{
-            result = result;
+           requiredReason=false;
         }
 
       log.info("result :: {}" , result);
     }
 
    public void onSetQualityToSave(){
+       QualitativeClass[] qualitativeClasses = QualitativeClass.values();
+       for(QualitativeClass qualitativeValue : qualitativeClasses)
+       {
+          if(result==qualitativeValue.value())
+          {
+              qualitativeView.setQualityResult(qualitativeValue.toString());
+              break;
+          }
+       }
 
-        if(result == QualitativeClass.P.getValue()){
+       log.info("qualitativeView.getQualityResult :: {}" , qualitativeView.getQualityResult());
+/*        if(result == QualitativeClass.P.getValue()){
             qualitativeView.setQualityResult(QualitativeClass.P.toString());
         }else if(result == QualitativeClass.SM.getValue()){
             qualitativeView.setQualityResult(QualitativeClass.SM.toString());
@@ -147,31 +183,35 @@ public class Qualitative implements Serializable {
             qualitativeView.setQualityResult(QualitativeClass.D.toString());
         }else if(result == QualitativeClass.DL.getValue()){
             qualitativeView.setQualityResult(QualitativeClass.DL.toString());
-        }
-        /*else{
-            validate = false;
         }*/
-
-        log.info("qualitativeView.getQualityResult :: {}" , qualitativeView.getQualityResult());
     }
 
     public void onSetQualityToValue(String quality){
         log.info("onSetQualityToValue ::: quality  {}",quality);
-        if(quality.equals("P")){
-            result = 1;
-        }else  if(quality.equals("SM")){
-            result = 2;
-        }else  if(quality.equals("SS")){
-            result = 3;
-        }else  if(quality.equals("D")){
-            result = 4;
-        }else  if(quality.equals("DL")){
-            result = 5;
-        }else{
+
+        try{
+            result = QualitativeClass.valueOf(quality).value();
+        }
+        catch (IllegalArgumentException iaEx)
+        {
+            log.info("Qualitative class not true :: IllegalArgumentException :: ");
             result = 0;
         }
 
         log.info("result in mode edit :: {}" , result);
+//        if(quality.equals("P")){
+//            result = 1;
+//        }else  if(quality.equals("SM")){
+//            result = 2;
+//        }else  if(quality.equals("SS")){
+//            result = 3;
+//        }else  if(quality.equals("D")){
+//            result = 4;
+//        }else  if(quality.equals("DL")){
+//            result = 5;
+//        }else{
+//            result = 0;
+//        }
     }
 
     public void onSaveQualitativeA(){
@@ -180,27 +220,21 @@ public class Qualitative implements Serializable {
 
         try{
             onSetQualityToSave();
-
-//            if(validate == false){
-//               return ;
-//            }else  if(validate == true){
-                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
-                modeForButton = ModeForButton.EDIT;
-                messageHeader = msg.get("app.header.save.success");
-                message =  msg.get("app.qualitativeA.response.save.success");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                onCreation();
-//            }
+            qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
+            modeForButton = ModeForButton.EDIT;
+            messageHeader = msg.get("app.header.save.success");
+            message =  msg.get("app.qualitativeA.response.save.success");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader =  msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message =  msg.get("app.qualitativeA.response.save.failed")+ " cause : " + ex.getCause().toString();
+                message =  msg.get("app.qualitativeA.response.save.failed ")+ " cause : " + ex.getCause().toString();
             } else {
-                message =  msg.get("app.qualitativeA.response.save.failed") + ex.getMessage();
+                message =  msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
             }
-
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
@@ -212,8 +246,6 @@ public class Qualitative implements Serializable {
         log.info("modeForButton :: {} ",modeForButton);
         onCreation();
     }
-
-
 
     public void onSaveQualitativeB(){
         log.info(" onSaveQualitativeB :::");
@@ -231,9 +263,9 @@ public class Qualitative implements Serializable {
             messageHeader =  msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message =  msg.get("app.qualitativeB.response.save.failed")+ " cause : " + ex.getCause().toString();
+                message =  msg.get("app.qualitativeB.response.save.failed ")+ " cause : " + ex.getCause().toString();
             } else {
-                message =  msg.get("app.qualitativeB.response.save.failed") + ex.getMessage();
+                message =  msg.get("app.qualitativeB.response.save.failed ") + ex.getMessage();
             }
 
             messageErr = true;
@@ -242,7 +274,6 @@ public class Qualitative implements Serializable {
         }
 
     }
-
 
     public void onCancelQualitativeB(){
         modeForButton = ModeForButton.CANCEL;
@@ -290,4 +321,11 @@ public class Qualitative implements Serializable {
         this.messageHeader = messageHeader;
     }
 
+    public boolean isRequiredReason() {
+        return requiredReason;
+    }
+
+    public void setRequiredReason(boolean requiredReason) {
+        this.requiredReason = requiredReason;
+    }
 }

@@ -36,7 +36,7 @@
     </div>
     <div id="content_lastupdate">Last update by
         <h:outputText id="lastupdateName" value="#{creditFacPropose.newCreditFacilityView.modifyBy.userName}"/>,
-        <h:outputText id="lastupdateTime" value="#{creditFacPropose.newCreditFacilityView.modifyDate}"/>
+        <h:outputText id="lastupdateTime" value="#{creditFacPropose.newCreditFacilityView.modifyDate}"><f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/></h:outputText>
     </div>
 </div>
 <div id="content_form">
@@ -66,11 +66,12 @@
         <p:inputText styleClass="large"
                      value="#{creditFacPropose.newCreditFacilityView.WCNeed}"
                      style="text-align: right;"
+                     maxlength="18"
                      readonly="true">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
         <p:spacer width="5px;"/>
@@ -84,11 +85,12 @@
     <td style="background-color:#ffffff">
         <p:inputText styleClass="large"
                      value="#{creditFacPropose.newCreditFacilityView.totalWcDebit}"
+                     maxlength="18"
                      style="text-align: right;">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
         <p:spacer width="5px;"/>
@@ -102,11 +104,12 @@
     <td style="background-color:#ffffff">
         <p:inputText styleClass="large"
                      value="#{creditFacPropose.newCreditFacilityView.WCNeedDiffer}"
+                     maxlength="18"
                      style="text-align: right;">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
         <p:spacer width="5px;"/>
@@ -126,11 +129,12 @@
         <p:inputText styleClass="large"
                      value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
                      style="text-align: right;"
+                     maxlength="18"
                      readonly="true">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
         <p:spacer width="5px;"/>
@@ -164,11 +168,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case1WcLimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -183,11 +188,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case1WcMinLimit}"
                                  style="text-align:right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -202,11 +208,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case1Wc50CoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -221,11 +228,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case1WcDebitCoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -255,11 +263,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case2WcLimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -274,11 +283,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case2WcMinLimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -293,11 +303,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case2Wc50CoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -312,11 +323,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case2WcDebitCoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -346,11 +358,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case3WcLimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -365,11 +378,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case3WcMinLimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -384,11 +398,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case3Wc50CoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -403,11 +418,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.case3WcDebitCoreWc}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  readonly="true">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -505,11 +521,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
                                  style="text-align: right;"
+                                 maxlength="18"
                                  required="#{not empty param[onsaveNewFacility.clientId]}">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                     <p:spacer width="5px;"/>
@@ -519,11 +536,12 @@
                     <p:inputText styleClass="medium"
                                  value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                  required="#{not empty param[onsaveNewFacility.clientId]}"
+                                 maxlength="18"
                                  style="text-align: right;">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -604,7 +622,7 @@
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
             <h:outputText value="#{proposeCredit.limit}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                 maxIntegerDigits="14"/>
+                                 maxIntegerDigits="18"/>
             </h:outputText>
         </td>
         <!-- BEGIN: Credit Tier Detail [0] -->
@@ -624,13 +642,13 @@
         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
-                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
             </h:outputText>
         </td>
         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
-                <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                <f:convertNumber pattern="#,##0" maxIntegerDigits="18"/>
             </h:outputText>
         </td>
         <!-- END: Credit Tier Detail [0] -->
@@ -640,7 +658,7 @@
                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
             <h:outputText value="#{proposeCredit.frontEndFee}">
                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                 maxIntegerDigits="14"/>
+                                 maxIntegerDigits="18"/>
             </h:outputText>
         </td>
 
@@ -671,27 +689,27 @@
         <tr>
             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.standardPrice}">
-                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
                 </h:outputText>
             </td>
             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.suggestPrice}">
-                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
                 </h:outputText>
             </td>
             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.finalPriceRate}">
-                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
                 </h:outputText>
             </td>
             <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.installment}">
-                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
                 </h:outputText>
             </td>
             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                 <h:outputText value="#{creditTierDetail.tenor}">
-                    <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                    <f:convertNumber pattern="#,##0.##" maxIntegerDigits="18"/>
                 </h:outputText>
             </td>
         </tr>
@@ -722,8 +740,10 @@
                     <td>#{proposeCredit.disbursement.disbursement}</td>
                     <td class="title">#{msg.get('app.decision.tb.td.label.holdAmount')}</td>
                     <td><h:outputText value="#{proposeCredit.holdLimitAmount}">
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                        <f:convertNumber pattern="#,##0.##"
+                                         minFractionDigits="2"
+                                         maxFractionDigits="2"
+                                         maxIntegerDigits="18"/>
                     </h:outputText>
                     </td>
                 </tr>
@@ -757,10 +777,10 @@
                 <td style="text-align: left;width:300px;background-color:#f4f8b6;">
                     <h:outputText value="#{creditFacPropose.newCreditFacilityView.totalPropose}"
                                   style="text-align: right;">
-                        <f:convertNumber pattern="#,##0"
+                        <f:convertNumber pattern="#,##0.##"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                     </h:outputText>
                 </td>
             </tr>
@@ -788,7 +808,7 @@
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                     </h:outputText>
                 </td>
             </tr>
@@ -804,7 +824,7 @@
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                     </h:outputText>
                 </td>
             </tr>
@@ -820,7 +840,7 @@
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                     </h:outputText>
                 </td>
             </tr>
@@ -957,9 +977,12 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
+                                 onkeydown="return onKeyMoney(event);"
+                                 onkeypress="return onKeyMoney(event);"
                                  style="text-align: right;">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
+                        <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText> %
                 </td>
                 <td style="width: 300px;text-align: left" class="title">
@@ -970,9 +993,11 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
+                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                                  style="text-align: right;">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                        <f:validateDoubleRange maximum="100"/>
+                        <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText> %
                 </td>
                 <td style="width: 130px;text-align: left" class="title">
@@ -987,7 +1012,7 @@
                          <f:convertNumber pattern="#,##0"
                                           minFractionDigits="2"
                                           maxFractionDigits="2"
-                                          maxIntegerDigits="14"/>
+                                          maxIntegerDigits="18"/>
                         <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
@@ -1861,7 +1886,7 @@
     <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteSubCollateral"/>
-    <ui:param name="update" value=":subCollateralDlgForm"/>
+    <ui:param name="update" value=":collateralDlgForm"/>
 </ui:include>
 
 
