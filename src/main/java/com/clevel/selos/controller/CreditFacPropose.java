@@ -209,28 +209,6 @@ public class CreditFacPropose implements Serializable {
 
     public CreditFacPropose(){}
 
- /*   public void preRender() {
-        //test
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ", workCaseId);
-        } else {
-
-            log.debug("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.debug("Exception :: {}", ex);
-            }
-        }
-    }
-*/
-
     @PostConstruct
     public void onCreation()
     {
