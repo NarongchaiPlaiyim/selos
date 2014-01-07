@@ -126,7 +126,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charUnPaid}"
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoUnPaid}"
                                                                                                      disabled="#{basicInfo.disUnpaidFeeInsurance}"
                                                                                                      required="#{basicInfo.reqUnpaidFeeInsurance and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.unpaid')}"/>
@@ -405,14 +405,14 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.sbfScore.id}"
+                                                                     value="#{basicInfo.basicInfoView.sbfScoreView.id}"
                                                                      disabled="#{basicInfo.disSCFScore}"
                                                                      required="#{basicInfo.reqSCFScore and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                                        <f:selectItems value="#{basicInfo.sbfScoreList}"
-                                                                       var="sbfScore"
-                                                                       itemLabel="#{sbfScore.score}"
-                                                                       itemValue="#{sbfScore.id}"/>
+                                                        <f:selectItems value="#{basicInfo.sbfScoreViewList}"
+                                                                       var="sbfScoreView"
+                                                                       itemLabel="#{sbfScoreView.score}"
+                                                                       itemValue="#{sbfScoreView.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>

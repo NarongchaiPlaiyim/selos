@@ -51,6 +51,7 @@ public class BizInfoDetail implements Serializable {
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;
+    long workCaseId =0;
     private String messageHeader;
     private String message;
 
@@ -121,9 +122,11 @@ public class BizInfoDetail implements Serializable {
             log.info("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
-            log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
+            if(session.getAttribute("workCaseId").toString() != null){
+                log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
+            }
 
-            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
             log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
 
@@ -257,7 +260,7 @@ public class BizInfoDetail implements Serializable {
 
     public void getBusinessInfoListDB(){
         List<BizInfoDetailView> bizInfoDetailViewList;
-        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryId);
         sumBizPercent = 0;
         BizInfoDetailView bizInfoDetailViewTemp;
         if(bizInfoDetailViewList.size()!=0){
@@ -659,7 +662,7 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setModifyBy(user);
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
+            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");
 

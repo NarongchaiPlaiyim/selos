@@ -47,6 +47,10 @@ public class Reference implements Serializable {
     private int spouse;
     @Column(name = "relation_type", nullable = false, columnDefinition = "int default -1")
     private int relationType;
+    @Column(name = "unpaid_insurance", nullable = false, columnDefinition = "int default 0")
+    private int unpaidInsurance;
+    @Column(name = "pending_claim_lg", nullable = false, columnDefinition = "int default 0")
+    private int pendingClaimLG;
 
     public Reference() {
     }
@@ -187,26 +191,44 @@ public class Reference implements Serializable {
         this.relationType = relationType;
     }
 
+    public int getUnpaidInsurance() {
+        return unpaidInsurance;
+    }
+
+    public void setUnpaidInsurance(int unpaidInsurance) {
+        this.unpaidInsurance = unpaidInsurance;
+    }
+
+    public int getPendingClaimLG() {
+        return pendingClaimLG;
+    }
+
+    public void setPendingClaimLG(int pendingClaimLG) {
+        this.pendingClaimLG = pendingClaimLG;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("relation", relation).
-                append("customerEntity", customerEntity).
-                append("description", description).
-                append("borrowerType", borrowerType).
-                append("percentShare", percentShare).
-                append("collateralOwner", collateralOwner).
-                append("csi", csi).
-                append("sll", sll).
-                append("groupIncome", groupIncome).
-                append("kycFullScreening", kycFullScreening).
-                append("kycNameScreening", kycNameScreening).
-                append("linkRm", linkRm).
-                append("active", active).
-                append("mainCustomer", mainCustomer).
-                append("spouse", spouse).
-                append("relationType", relationType).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("relation", relation)
+                .append("customerEntity", customerEntity)
+                .append("description", description)
+                .append("borrowerType", borrowerType)
+                .append("percentShare", percentShare)
+                .append("collateralOwner", collateralOwner)
+                .append("csi", csi)
+                .append("sll", sll)
+                .append("groupIncome", groupIncome)
+                .append("kycFullScreening", kycFullScreening)
+                .append("kycNameScreening", kycNameScreening)
+                .append("linkRm", linkRm)
+                .append("active", active)
+                .append("mainCustomer", mainCustomer)
+                .append("spouse", spouse)
+                .append("relationType", relationType)
+                .append("unpaidInsurance", unpaidInsurance)
+                .append("pendingClaimLG", pendingClaimLG)
+                .toString();
     }
 }
