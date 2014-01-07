@@ -13,6 +13,8 @@ import java.util.List;
 public class BasicInfoTransform extends Transform {
     @Inject
     BasicInfoAccountTransform basicInfoAccountTransform;
+    @Inject
+    SBFScoreTransform sbfScoreTransform;
 
     @Inject
     public BasicInfoTransform() {
@@ -34,17 +36,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setModifyDate(new Date());
         basicInfo.setModifyBy(user);
 
-        basicInfo.setRequestType(basicInfoView.getRequestType());
-        if(basicInfo.getRequestType().getId() == 0){
-            basicInfo.setRequestType(null);
-        }
-
-        basicInfo.setProductGroup(basicInfoView.getProductGroup());
-        if(basicInfo.getProductGroup().getId() == 0){
-            basicInfo.setProductGroup(null);
-        }
-
-        basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid() ? 1 : 0);
+        basicInfo.setNoUnpaidFeeInsurance(basicInfoView.isCharNoUnPaid() ? 1 : 0);
         basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending() ? 1 : 0);
 
         basicInfo.setConstructionRequestLG(basicInfoView.isCharFCLG() ? 1 : 0);
@@ -83,7 +75,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setLastReviewDate(basicInfoView.getLastReviewDate());
         basicInfo.setExtendedReviewDate(basicInfoView.getExtReviewDate());
 
-        basicInfo.setSbfScore(basicInfoView.getSbfScore());
+        basicInfo.setSbfScore(sbfScoreTransform.transformToModel(basicInfoView.getSbfScoreView()));
         if(basicInfo.getSbfScore().getId() == 0){
             basicInfo.setSbfScore(null);
         }
@@ -120,17 +112,17 @@ public class BasicInfoTransform extends Transform {
 
         basicInfoView.setId(basicInfo.getId());
 
-        basicInfoView.setRequestType(basicInfo.getRequestType());
+        basicInfoView.setRequestType(workCase.getRequestType());
         if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
         }
 
-        basicInfoView.setProductGroup(basicInfo.getProductGroup());
+        basicInfoView.setProductGroup(workCase.getProductGroup());
         if(basicInfoView.getProductGroup() == null){
             basicInfoView.setProductGroup(new ProductGroup());
         }
 
-        basicInfoView.setCharUnPaid(basicInfo.getUnpaidFeeInsurance() != 0);
+        basicInfoView.setCharNoUnPaid(basicInfo.getNoUnpaidFeeInsurance() != 0);
         basicInfoView.setCharNoPending(basicInfo.getNoPendingClaimLG() != 0);
 
         basicInfoView.setCharFCLG(basicInfo.getConstructionRequestLG() != 0);
@@ -170,10 +162,7 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setLastReviewDate(basicInfo.getLastReviewDate());
         basicInfoView.setExtReviewDate(basicInfo.getExtendedReviewDate());
 
-        basicInfoView.setSbfScore(basicInfo.getSbfScore());
-        if(basicInfoView.getSbfScore() == null){
-            basicInfoView.setSbfScore(new SBFScore());
-        }
+        basicInfoView.setSbfScoreView(sbfScoreTransform.transformToView(basicInfo.getSbfScore()));
 
         basicInfoView.setLoan(basicInfo.getRequestLoanWithSameName());
         basicInfoView.setMoreOneYear(basicInfo.getHaveLoanInOneYear());

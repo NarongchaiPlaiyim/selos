@@ -6,15 +6,13 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
-import com.clevel.selos.model.view.BasicInfoAccountView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.rits.cloning.Cloner;
@@ -75,13 +73,15 @@ public class BasicInfo extends MandatoryFieldsControl {
     private BAPaymentMethodDAO baPaymentMethodDAO;
     @Inject
     private BankAccountTypeTransform bankAccountTypeTransform;
+    @Inject
+    private SBFScoreTransform sbfScoreTransform;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
     private List<SpecialProgram> specialProgramList;
     private List<RequestType> requestTypeList;
     private List<RiskType> riskTypeList;
-    private List<SBFScore> sbfScoreList;
+    private List<SBFScoreView> sbfScoreViewList;
     private List<Bank> bankList;
 
     private List<BankAccountType> bankAccountTypeList;
@@ -221,7 +221,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         specialProgramList = specialProgramDAO.findAll();
         requestTypeList = requestTypeDAO.findAll();
         riskTypeList = riskTypeDAO.findAll();
-        sbfScoreList = sbfScoreDAO.findAll();
+        sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
@@ -1032,12 +1032,12 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.basicInfoAccountPurposeViewList = basicInfoAccountPurposeViewList;
     }
 
-    public List<SBFScore> getSbfScoreList() {
-        return sbfScoreList;
+    public List<SBFScoreView> getSbfScoreViewList() {
+        return sbfScoreViewList;
     }
 
-    public void setSbfScoreList(List<SBFScore> sbfScoreList) {
-        this.sbfScoreList = sbfScoreList;
+    public void setSbfScoreViewList(List<SBFScoreView> sbfScoreViewList) {
+        this.sbfScoreViewList = sbfScoreViewList;
     }
 
     public List<Bank> getBankList() {

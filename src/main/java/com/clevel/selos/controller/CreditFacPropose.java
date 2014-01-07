@@ -248,13 +248,11 @@ public class CreditFacPropose implements Serializable {
 
             basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             log.info("basicInfo:: {}", basicInfo.getId());
-            log.info("basicInfo:: {}", basicInfo.getProductGroup());
             if (basicInfo == null) {
                 productGroup = null;
                 specialProgramBasicInfo = null;
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
-                productGroup = basicInfo.getProductGroup();
                 specialProgramBasicInfo = basicInfo.getSpecialProgram();
             }
 
