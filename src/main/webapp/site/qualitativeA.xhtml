@@ -868,7 +868,7 @@
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="#{not empty param[addQualitativeButton.clientId]}">
+                                                 required="#{(not empty param[addQualitativeButton.clientId]) and (qualitative.qualitativeView.qualityResult != '')}">
                                     <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsA"
@@ -883,7 +883,7 @@
                             </td>
                             <td>
                                 <p:inputTextarea cols="70" rows="3" name="remark"
-                                                 required="#{qualitative.requiredReason}"
+                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}"
                                                  value="#{qualitative.qualitativeView.reason}"/>
                             </td>
                         </tr>
@@ -975,6 +975,7 @@
                                      update=":frmMain,:msgBoxSystemMessagePanel"/>
                     <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
                                      id="btnCancel"
+                                     binding="#{cancelButton}"
                                      styleClass="medium"
                                      process=":frmMain"
                                      action="#{qualitative.onCancelQualitativeA}"

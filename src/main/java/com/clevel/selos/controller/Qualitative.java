@@ -84,8 +84,6 @@ public class Qualitative implements Serializable {
         log.info("this page :: {} ",page);
 
         if(page.equals("qualitativeA.jsf")){
-//            session.setAttribute("workCaseId", new Long(3)) ;  // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             }else{
@@ -101,8 +99,6 @@ public class Qualitative implements Serializable {
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
 
         } else if(page.equals("qualitativeB.jsf")){
-//            session.setAttribute("workCaseId", new Long(3)) ;  // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             }else{
@@ -124,7 +120,7 @@ public class Qualitative implements Serializable {
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
-//            result = 0;
+            result = 0;
         } else{
             modeForButton = ModeForButton.EDIT;
             log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
