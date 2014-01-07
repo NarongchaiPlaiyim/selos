@@ -1,5 +1,7 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.QualitativeADAO;
+import com.clevel.selos.dao.working.QualitativeBDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
@@ -8,10 +10,16 @@ import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
+import javax.inject.Inject;
 import java.util.Date;
 
 
 public class QualitativeTransform extends Transform {
+
+    @Inject
+    QualitativeBDAO qualitativeBDAO;
+    @Inject
+    QualitativeADAO qualitativeADAO;
 
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");
@@ -22,7 +30,7 @@ public class QualitativeTransform extends Transform {
         log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeAView.getId() != 0) {
-            qualitativeA.setId(qualitativeAView.getId());
+            qualitativeA = qualitativeADAO.findById(qualitativeAView.getId());
         }
 
         qualitativeA.setActive(true);
@@ -197,7 +205,7 @@ public class QualitativeTransform extends Transform {
         log.info("transformQualitativeBToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeBView.getId() != 0) {
-            qualitativeB.setId(qualitativeBView.getId());
+            qualitativeB = qualitativeBDAO.findById(qualitativeBView.getId());
         }
 
         qualitativeB.setActive(true);
