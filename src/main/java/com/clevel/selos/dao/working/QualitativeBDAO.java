@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class QualitativeBDAO extends GenericDAO<QualitativeB, Integer> {
+public class QualitativeBDAO extends GenericDAO<QualitativeB, Long> {
     @Inject
     @SELOS
     Logger log;
