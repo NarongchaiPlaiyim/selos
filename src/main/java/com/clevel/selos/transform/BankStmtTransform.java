@@ -319,7 +319,9 @@ public class BankStmtTransform extends Transform {
             bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
                     bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
             bankStatement.setBranch(bankStmtView.getBranchName());
-            if(!Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId())) && bankStmtView.getBankAccountTypeView().getId() != 0){
+            if(bankStmtView.getBankAccountTypeView() != null
+                    && !Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId()))
+                    && bankStmtView.getBankAccountTypeView().getId() != 0){
                 bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
             } else {
                 bankStatement.setBankAccountType(null);
@@ -327,7 +329,8 @@ public class BankStmtTransform extends Transform {
             bankStatement.setAccountNo(Util.removeNonDigit(bankStmtView.getAccountNumber()));
             bankStatement.setAccountName(bankStmtView.getAccountName());
             bankStatement.setOtherAccountType(bankStmtView.getOtherAccountType());
-            if(!Util.isEmpty(bankStmtView.getAccountStatusView().getId())){
+            if(bankStmtView.getAccountStatusView() != null
+                    && !Util.isEmpty(bankStmtView.getAccountStatusView().getId())){
                 bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
             } else {
                 bankStatement.setAccountStatus(null);
