@@ -138,7 +138,7 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal netFixAsset;
 
     @Column(name = "no_of_employee")
-    private int noOfEmployee;
+    private BigDecimal noOfEmployee;
 
     @Column(name = "sum_income_amount")
     private BigDecimal sumIncomeAmount;
@@ -492,11 +492,11 @@ public class BizInfoSummary implements Serializable {
         this.netFixAsset = netFixAsset;
     }
 
-    public int getNoOfEmployee() {
+    public BigDecimal getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(int noOfEmployee) {
+    public void setNoOfEmployee(BigDecimal noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 

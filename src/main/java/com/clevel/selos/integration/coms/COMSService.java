@@ -6,9 +6,11 @@ import com.clevel.selos.integration.coms.db.CollateralDecisionDetail;
 import com.clevel.selos.integration.coms.db.CollateralJobLevel;
 import com.clevel.selos.integration.coms.db.HeadCollateral;
 import com.clevel.selos.integration.coms.db.SubCollateral;
+import com.clevel.selos.integration.coms.model.AddressType;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
+import com.clevel.selos.integration.coms.module.AddressTypeMapping;
 import com.clevel.selos.integration.coms.module.DBExecute;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -29,6 +31,9 @@ public class COMSService implements Serializable {
 
     @Inject
     DBExecute dbExecute;
+
+    @Inject
+    AddressTypeMapping addressTypeMapping;
 
     @Inject
     @ExceptionMessage
@@ -139,8 +144,54 @@ public class COMSService implements Serializable {
                                         subAppraisalValue = subCollateral.getcPrice();
                                     }
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
-                                    //TODO: usage, typeOfUsage, address
+                                    //TODO: usage, typeOfUsage
 
+                                    //Get Address
+                                    String address = "";
+                                    AddressType addressType = addressTypeMapping.getAddressType(subCollateralData.getHeadCollType(), subCollateralData.getSubCollType(), subCollateral.getOnlType());
+                                    if(addressType!=null){
+                                        switch (addressType){
+                                            case TYPE1:
+                                                address = dbExecute.getAddressType1(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE2:
+                                                address = dbExecute.getAddressType2(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE3:
+                                                address = dbExecute.getAddressType3(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE4:
+                                                address = dbExecute.getAddressType4(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE5:
+                                                address = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE6:
+                                                address = dbExecute.getAddressType6(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE7:
+                                                address = dbExecute.getAddressType7(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE8:
+                                                address = dbExecute.getAddressType8(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE9:
+                                                address = dbExecute.getAddressType9(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE10:
+                                                address = dbExecute.getAddressType10(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE11:
+                                                address = dbExecute.getAddressType11(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            case TYPE12:
+                                                address = dbExecute.getAddressType12(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                    subCollateralData.setAddress(address);
                                     subCollateralDataList.add(subCollateralData);
                                 }
                             }

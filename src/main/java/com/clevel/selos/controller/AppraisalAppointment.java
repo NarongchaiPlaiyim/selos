@@ -113,7 +113,7 @@ public class AppraisalAppointment implements Serializable {
         modeForButton = "add";
 
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 10001);
+        //session.setAttribute("workCaseId", 10001);
         user = (User)session.getAttribute("user");
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
@@ -141,6 +141,8 @@ public class AppraisalAppointment implements Serializable {
                     appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
                 }
 
+
+
                 appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
                 log.info("appraisalDetailViewList  :::::::::::: {} ", appraisalContactDetailViewList);
                 if(appraisalContactDetailViewList == null){
@@ -160,6 +162,11 @@ public class AppraisalAppointment implements Serializable {
                 try {
                     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                     ec.redirect(ec.getRequestContextPath() + "/site/appraisalRequest.jsf");
+                    log.info("go 1{}");
+                    /*String url = "appraisalRequest.jsf";
+                    FacesUtil.redirect("/site/appraisalRequest.jsf");*/
+                    log.info("go 2");
+
                     return;
                 } catch (Exception ex) {
                     log.info("Exception :: {}", ex);
@@ -167,7 +174,8 @@ public class AppraisalAppointment implements Serializable {
 
                 appraisalCompany = new AppraisalCompany();
                 appraisalDivision = new AppraisalDivision();
-                locationProperty = new LocationProperty();
+
+                      locationProperty = new LocationProperty();
                 province = new Province();
 
                 appraisalView = new AppraisalView();
@@ -177,11 +185,11 @@ public class AppraisalAppointment implements Serializable {
                 appraisalView.setProvinceOfProperty(province);
                 showNoRequest = true;
 
-                log.info("appraisalView after search :: {} is null "  + (appraisalView == null));
+                /*log.info("appraisalView after search :: {} is null "  + (appraisalView == null));
 
                 log.info("Click Button .show");
                 RequestContext.getCurrentInstance().execute("btnShowNoRequest.click()");
-                log.info("msgBoxNoRequestMessageDlg.show");
+                log.info("msgBoxNoRequestMessageDlg.show");*/
             }
 
         }
