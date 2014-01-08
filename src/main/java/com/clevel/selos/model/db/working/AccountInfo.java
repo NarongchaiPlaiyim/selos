@@ -47,6 +47,9 @@ public class AccountInfo implements Serializable {
     @Column(name = "modify_date")
     private Date modifyDate;
 
+    @Column(name = "approved_type")
+    private int approvedType;
+
     @OneToMany(mappedBy = "accountInfo")
     private List<AccountInfoDetail> accountInfoDetailList;
 
@@ -122,6 +125,14 @@ public class AccountInfo implements Serializable {
         this.accountInfoDetailList = accountInfoDetailList;
     }
 
+    public int getApprovedType() {
+        return approvedType;
+    }
+
+    public void setApprovedType(int approvedType) {
+        this.approvedType = approvedType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -133,6 +144,7 @@ public class AccountInfo implements Serializable {
                 .append("extendedReviewDate", extendedReviewDate)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
+                .append("approvedType", approvedType)
                 .append("accountInfoDetailList", accountInfoDetailList)
                 .toString();
     }

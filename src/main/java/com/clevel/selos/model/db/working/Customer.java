@@ -37,8 +37,9 @@ public class Customer implements Serializable {
     @Column(name="document_authorize_by")
     private String documentAuthorizeBy;
 
-    @Column(name="service_segment")
-    private String serviceSegment;
+    @OneToOne
+    @JoinColumn(name="service_segment_id")
+    private ServiceSegment serviceSegment;
 
     @Column(name="collateral_owner")
     private int collateralOwner;
@@ -136,8 +137,8 @@ public class Customer implements Serializable {
     @Column(name="email")
     private String email;
 
-    @Column(name="convenant_flag", nullable = false, columnDefinition = "int default -1")
-    private int convenantFlag;
+    @Column(name="covenant_flag", nullable = false, columnDefinition = "int default -1")
+    private int covenantFlag;
 
     @Column(name="review_flag", nullable = false, columnDefinition = "int default -1")
     private int reviewFlag;
@@ -176,8 +177,8 @@ public class Customer implements Serializable {
     @Column(name="age_months", nullable=false, columnDefinition="int default 0")
     private int ageMonths;
 
-    @Column(name="is_existing_customer", nullable=false, columnDefinition="int default 0")
-    private int isExistingSMECustomer;
+    @Column(name="existing_sme_customer", nullable=false, columnDefinition="int default 0")
+    private int existingSMECustomer;
 
     @Column(name="last_review_date")
     private Date lastReviewDate;
@@ -203,14 +204,15 @@ public class Customer implements Serializable {
     @Column(name="adjust_class")
     private String adjustClass;
 
-    @Column(name="rating_final")
-    private String ratingFinal;
+    @ManyToOne
+    @JoinColumn(name="rating_final")
+    private SBFScore ratingFinal;
 
     @Column(name="unpaid_fee_insurance", nullable=false, columnDefinition="int default 0")
-    private int unpaidFeeInsurance;
+    private BigDecimal unpaidFeeInsurance;
 
-    @Column(name="no_pending_claim_LG", nullable=false, columnDefinition="int default 0")
-    private int noPendingClaimLG;
+    @Column(name="pending_claim_LG", nullable=false, columnDefinition="int default 0")
+    private BigDecimal pendingClaimLG;
 
     public Customer() {
     }
@@ -263,12 +265,20 @@ public class Customer implements Serializable {
         this.documentAuthorizeBy = documentAuthorizeBy;
     }
 
-    public String getServiceSegment() {
+    public ServiceSegment getServiceSegment() {
         return serviceSegment;
     }
 
-    public void setServiceSegment(String serviceSegment) {
+    public void setServiceSegment(ServiceSegment serviceSegment) {
         this.serviceSegment = serviceSegment;
+    }
+
+    public int getExistingSMECustomer() {
+        return existingSMECustomer;
+    }
+
+    public void setExistingSMECustomer(int existingSMECustomer) {
+        this.existingSMECustomer = existingSMECustomer;
     }
 
     public int getCollateralOwner() {
@@ -511,12 +521,12 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
-    public int getConvenantFlag() {
-        return convenantFlag;
+    public int getCovenantFlag() {
+        return covenantFlag;
     }
 
-    public void setConvenantFlag(int convenantFlag) {
-        this.convenantFlag = convenantFlag;
+    public void setCovenantFlag(int covenantFlag) {
+        this.covenantFlag = covenantFlag;
     }
 
     public int getReviewFlag() {
@@ -615,13 +625,7 @@ public class Customer implements Serializable {
         this.ageMonths = ageMonths;
     }
 
-    public int getIsExistingSMECustomer() {
-        return isExistingSMECustomer;
-    }
 
-    public void setIsExistingSMECustomer(int existingSMECustomer) {
-        isExistingSMECustomer = existingSMECustomer;
-    }
 
     public Date getLastReviewDate() {
         return lastReviewDate;
@@ -687,28 +691,28 @@ public class Customer implements Serializable {
         this.adjustClass = adjustClass;
     }
 
-    public String getRatingFinal() {
+    public SBFScore getRatingFinal() {
         return ratingFinal;
     }
 
-    public void setRatingFinal(String ratingFinal) {
+    public void setRatingFinal(SBFScore ratingFinal) {
         this.ratingFinal = ratingFinal;
     }
 
-    public int getUnpaidFeeInsurance() {
+    public BigDecimal getUnpaidFeeInsurance() {
         return unpaidFeeInsurance;
     }
 
-    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
+    public void setUnpaidFeeInsurance(BigDecimal unpaidFeeInsurance) {
         this.unpaidFeeInsurance = unpaidFeeInsurance;
     }
 
-    public int getNoPendingClaimLG() {
-        return noPendingClaimLG;
+    public BigDecimal getPendingClaimLG() {
+        return pendingClaimLG;
     }
 
-    public void setNoPendingClaimLG(int noPendingClaimLG) {
-        this.noPendingClaimLG = noPendingClaimLG;
+    public void setPendingClaimLG(BigDecimal pendingClaimLG) {
+        this.pendingClaimLG = pendingClaimLG;
     }
 
     @Override

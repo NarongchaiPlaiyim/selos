@@ -105,14 +105,13 @@
                                                         <p:spacer width="22" height="5"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')} :" styleClass="title" for="addressBuilding"/>
                                                         <p:spacer width="5" height="5"/>
-                                                        <p:inputText styleClass="larger" id="addressBuilding" onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
-                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
+                                                        <p:inputText styleClass="larger" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}" for="addressStreet"/> :</td>
                                                     <td class="left" colspan="3">
-                                                        <p:inputText style="width: 608px;" id="addressStreet" onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
+                                                        <p:inputText style="width: 608px;" id="addressStreet"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" />
                                                     </td>
                                                 </tr>
@@ -190,7 +189,7 @@
                                             <p:spacer width="20" height="5" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}" styleClass="title" for="extension"/>
                                             <p:spacer width="20" height="5"></p:spacer>
-                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyNumber(event);" onkeypress="return onKeyText(event);"
+                                            <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
                                         </td>
                                     </tr>
@@ -207,13 +206,13 @@
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/> :
                                         </td>
                                         <td colspan="3">
-                                            <clv:BECalendar id="registrationDate" showOn="button" navigator="true"
+                                            <clv:BECalendar id="registrationDate" showOn="button" navigator="true" locale="th_TH"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
-                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            pattern="dd/MM/yyyy"
                                                             yearRange="1950:2100"
-                                                            locale="th_TH" >
+                                                            pattern="dd/MM/yyyy"
+                                                            showButtonPanel="true"
+                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}">
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -224,6 +223,7 @@
                                         <td>
                                             <clv:BECalendar id="establishDate" showOn="button" navigator="true"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
+                                                            mindate="01/01/1950"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             pattern="dd/MM/yyyy"
@@ -448,7 +448,8 @@
                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}" for="noOfEmployee"/> :
                                     </td>
                                     <td class="left">
-                                        <p:inputText id="noOfEmployee" styleClass="right" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                        <p:inputText id="noOfEmployee" styleClass="right"
+                                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                      value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
                                             <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                             <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
@@ -505,7 +506,9 @@
                                         <p:outputLabel value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
-                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.incomeAmountDis}" />
+                                        <p:outputLabel styleClass="right" value="#{bizInfoDetailx.incomeAmount}" >
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
                                         <p:outputLabel styleClass="right" value="#{bizInfoDetailx.percentBiz}">
@@ -559,13 +562,23 @@
                                     <p:columnGroup type="footer">
                                         <p:row>
                                             <p:column colspan="5" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumIncomeAmount')}"
-                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                                      style="background-color:#f4f8b6; text-align:left;">
+                                            </p:column>
 
-                                            <p:column footerText="#{bizInfoSummary.sumIncomeAmountDis}"
-                                                      style="background-color:#f4f8b6; text-align:right;"/>
-
-                                            <p:column footerText="#{bizInfoSummary.sumIncomePercent}"
-                                                      style="background-color:#f4f8b6; text-align:right;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumIncomeAmount}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                     </p:outputLabel>
+                                                </f:facet>
+                                             </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumIncomePercent}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
 
                                             <p:column style="background-color:#f4f8b6;" colspan="7" />
                                         </p:row>
@@ -574,20 +587,42 @@
                                                       style="background-color:#f8d0b6;; text-align:left;"/>
 
                                             <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
-
-                                            <p:column footerText="#{bizInfoSummary.sumWeightIntvIncomeFactor}"
                                                       style="background-color:#f8d0b6; text-align:right;">
+
                                             </p:column>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightAR}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                            <p:column
+                                                      style="background-color:#f8d0b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumWeightInterviewedIncomeFactorPercent}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightAP}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                            <p:column style="background-color:#f8d0b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumWeightAR}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
 
-                                            <p:column footerText="#{bizInfoSummary.sumWeightINV}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                            <p:column style="background-color:#f8d0b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumWeightAP}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
+
+                                            <p:column style="background-color:#f8d0b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.sumWeightINV}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
+                                            </p:column>
 
                                             <p:column footerText="-"
                                                       style="background-color:#f8d0b6; text-align:center;"/>

@@ -95,8 +95,8 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bizInfoSummaryView;
     }
 
-    public List<BizInfoDetailView> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
-        log.info("onGetBizInfoSummaryByWorkCase ");
+    public List<BizInfoDetailView> onGetBizInfoDetailViewByBizInfoSummary(long bizInfoSummaryID) {
+        log.info("onGetBizInfoDetailViewByBizInfoSummary ");
 
         List<BizInfoDetail> bizInfoDetailList;
         List<BizInfoDetailView> bizInfoDetailViewList;
@@ -120,6 +120,20 @@ public class BizInfoSummaryControl extends BusinessControl {
             //bizInfoSummaryView = null;
         }
         return bizInfoDetailViewList;
+    }
+
+    public List<BizInfoDetail> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
+        log.info("onGetBizInfoDetailByBizInfoSummary ");
+
+        List<BizInfoDetail> bizInfoDetailList;
+
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryID);
+
+        log.info("bizInfoSummaryID after findById " + bizInfoSummary);
+
+        bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
+
+        return bizInfoDetailList;
     }
 
     public BankStmtSummaryView getBankStmtSummary(long workCaseId){

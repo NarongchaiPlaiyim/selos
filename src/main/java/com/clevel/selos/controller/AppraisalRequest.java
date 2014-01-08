@@ -83,7 +83,7 @@ public class AppraisalRequest implements Serializable {
         modeForButton = "add";
 
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 10001);
+        //session.setAttribute("workCaseId", 10001);
         user = (User)session.getAttribute("user");
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();

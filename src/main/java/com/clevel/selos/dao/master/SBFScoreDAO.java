@@ -25,4 +25,10 @@ public class SBFScoreDAO extends GenericDAO<SBFScore, Integer> {
         List<SBFScore> list = criteria.list();
         return list;
     }
+
+    public SBFScore findByScore(int score){
+        Criteria criteria = getSession().createCriteria(getEntityClass())
+                .add(Restrictions.eq("score", score));
+        return (SBFScore)criteria.uniqueResult();
+    }
 }
