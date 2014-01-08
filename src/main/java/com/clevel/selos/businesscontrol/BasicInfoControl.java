@@ -1,17 +1,12 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.CustomerEntityDAO;
-import com.clevel.selos.dao.master.ReferenceDAO;
-import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.service.document.apprisalrules.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.db.master.BAPaymentMethod;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.SBFScore;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BasicInfoAccPurposeTransform;
@@ -46,6 +41,10 @@ public class BasicInfoControl extends BusinessControl {
     OpenAccPurposeDAO openAccPurposeDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
+    @Inject
+    ProductGroupDAO productGroupDAO;
+    @Inject
+    RequestTypeDAO requestTypeDAO;
 
     @Inject
     BasicInfoTransform basicInfoTransform;
@@ -222,6 +221,10 @@ public class BasicInfoControl extends BusinessControl {
 
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
+
+        workCase.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
+        workCase.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
+        workCaseDAO.persist(workCase);
 
         List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
         for (OpenAccount oa : openAccountList) {
