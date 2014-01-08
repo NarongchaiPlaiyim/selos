@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class ExSumBusinessInfoView {
 
     private BigDecimal netFixAsset;
-    private int noOfEmployee;
+    private BigDecimal noOfEmployee;
     private String bizProvince;
     private String bizType;
     private String bizGroup;
@@ -25,7 +25,7 @@ public class ExSumBusinessInfoView {
 
     public void reset() {
         this.netFixAsset = BigDecimal.ZERO;
-        this.noOfEmployee = 0;
+        this.noOfEmployee = BigDecimal.ZERO;
         this.bizProvince = "";
         this.bizType = "";
         this.bizGroup = "";
@@ -48,11 +48,11 @@ public class ExSumBusinessInfoView {
         this.netFixAsset = netFixAsset;
     }
 
-    public int getNoOfEmployee() {
+    public BigDecimal getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(int noOfEmployee) {
+    public void setNoOfEmployee(BigDecimal noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 
