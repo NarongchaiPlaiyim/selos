@@ -3,7 +3,9 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ServiceSegmentView {
+import java.io.Serializable;
+
+public class ServiceSegmentView implements Serializable {
 
     private int id;
     private int code;

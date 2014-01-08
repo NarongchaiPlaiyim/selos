@@ -3,7 +3,9 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class SBFScoreView {
+import java.io.Serializable;
+
+public class SBFScoreView implements Serializable {
 
     private int id;
     private int score;

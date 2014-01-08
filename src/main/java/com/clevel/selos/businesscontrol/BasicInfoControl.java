@@ -92,7 +92,11 @@ public class BasicInfoControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         CustomerEntity customerEntity = new CustomerEntity();
         if(workCase != null){
-            customerEntity = workCase.getBorrowerType();
+            if(workCase.getBorrowerType() != null){
+                customerEntity = workCase.getBorrowerType();
+            } else {
+                log.error("[WorkCase] - Borrower Type is Null !!");
+            }
         }
 
         log.debug("customerEntity : {}",customerEntity);
@@ -174,6 +178,9 @@ public class BasicInfoControl extends BusinessControl {
         else
             basicInfo.setPassAnnualReview(RadioValue.YES.value());
 
+        if(sbfScore != null && sbfScore.getId() == 0){
+            sbfScore = null;
+        }
         basicInfo.setSbfScore(sbfScore);
 
         log.info("countExistingSME {}", countExistingSME);
