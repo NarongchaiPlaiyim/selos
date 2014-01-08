@@ -1,7 +1,5 @@
 package com.clevel.selos.businesscontrol;
 
-//import com.clevel.selos.dao.working.BizInfoSummaryDAO;
-
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
@@ -22,7 +20,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,8 +95,8 @@ public class BizInfoSummaryControl extends BusinessControl {
         return bizInfoSummaryView;
     }
 
-    public List<BizInfoDetailView> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
-        log.info("onGetBizInfoSummaryByWorkCase ");
+    public List<BizInfoDetailView> onGetBizInfoDetailViewByBizInfoSummary(long bizInfoSummaryID) {
+        log.info("onGetBizInfoDetailViewByBizInfoSummary ");
 
         List<BizInfoDetail> bizInfoDetailList;
         List<BizInfoDetailView> bizInfoDetailViewList;
@@ -123,6 +120,20 @@ public class BizInfoSummaryControl extends BusinessControl {
             //bizInfoSummaryView = null;
         }
         return bizInfoDetailViewList;
+    }
+
+    public List<BizInfoDetail> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
+        log.info("onGetBizInfoDetailByBizInfoSummary ");
+
+        List<BizInfoDetail> bizInfoDetailList;
+
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryID);
+
+        log.info("bizInfoSummaryID after findById " + bizInfoSummary);
+
+        bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
+
+        return bizInfoDetailList;
     }
 
     public BankStmtSummaryView getBankStmtSummary(long workCaseId){

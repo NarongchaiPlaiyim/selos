@@ -1,9 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -30,6 +27,14 @@ public class WorkCase implements Serializable {
     @Column(name = "ref_app_number")
     private String refAppNumber;
 
+    @OneToOne
+    @JoinColumn(name = "requesttype_id")
+    private RequestType requestType;
+
+    @OneToOne
+    @JoinColumn(name = "productgroup_id")
+    private ProductGroup productGroup;
+
     @Column(name = "wob_number")
     private String wobNumber;
 
@@ -47,15 +52,9 @@ public class WorkCase implements Serializable {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
-
-    @OneToMany(mappedBy = "workCase", fetch = FetchType.LAZY)
-    private List<Customer> customerList;
-
-    @OneToMany(mappedBy = "workCase")
-    private List<DBR> dbrList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -117,6 +116,22 @@ public class WorkCase implements Serializable {
         this.refAppNumber = refAppNumber;
     }
 
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
     public String getWobNumber() {
         return wobNumber;
     }
@@ -163,14 +178,6 @@ public class WorkCase implements Serializable {
 
     public void setBorrowerType(CustomerEntity borrowerType) {
         this.borrowerType = borrowerType;
-    }
-
-    public List<Customer> getCustomerList() {
-        return customerList;
-    }
-
-    public void setCustomerList(List<Customer> customerList) {
-        this.customerList = customerList;
     }
 
     public Date getCreateDate() {
@@ -228,13 +235,14 @@ public class WorkCase implements Serializable {
                 .append("caNumber", caNumber)
                 .append("appNumber", appNumber)
                 .append("refAppNumber", refAppNumber)
+                .append("requestType", requestType)
+                .append("productGroup", productGroup)
                 .append("wobNumber", wobNumber)
                 .append("lock", lock)
                 .append("lockUser", lockUser)
                 .append("step", step)
                 .append("status", status)
                 .append("borrowerType", borrowerType)
-                .append("customerList", customerList)
                 .append("createDate", createDate)
                 .append("createBy", createBy)
                 .append("modifyDate", modifyDate)

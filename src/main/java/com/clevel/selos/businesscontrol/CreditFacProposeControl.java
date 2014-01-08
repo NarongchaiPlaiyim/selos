@@ -112,6 +112,7 @@ public class CreditFacProposeControl extends BusinessControl {
     MortgageTypeDAO mortgageTypeDAO;
 
 
+
     public CreditFacProposeControl() {
     }
 
@@ -334,6 +335,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 }
             }
         }
+
         log.info("onSaveNewCreditFacility  end :: {}", workCaseId);
     }
 

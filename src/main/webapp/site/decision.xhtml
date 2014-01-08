@@ -54,8 +54,14 @@
             <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                    <div id="content_lastupdate">Last update by
+                        <h:outputText value="#{decision.decisionView.modifyBy.userName}"
+                                      rendered="#{not empty decision.decisionView.modifyBy}"/>,
+                        <h:outputText value="#{decision.decisionView.modifyDate}"
+                                      rendered="#{not empty decision.decisionView.modifyDate}">
+                            <f:convertDateTime locale="th_TH" pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                    </div>
                 </div>
                 <!-- start content -->
                 <div id="content_form">
@@ -3457,7 +3463,7 @@
     <ui:param name="formId" value="frmConfirmDeleteAppProposeCredit"/>
     <ui:param name="controller" value="#{decision}"/>
     <ui:param name="action" value="onDeleteAppProposeCredit"/>
-    <ui:param name="update" value=":frmMain"/>
+    <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
 </ui:include>
 
 <!-- Propose Collateral Dialog -->

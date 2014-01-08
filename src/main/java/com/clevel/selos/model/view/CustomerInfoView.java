@@ -53,7 +53,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Relation relation;
     private Reference reference;
     private String documentAuthorizeBy;
-    private String serviceSegment;
+    private ServiceSegmentView serviceSegmentView;
     private String tmbCustomerId;
     private int collateralOwner;
     private BigDecimal percentShare;
@@ -62,7 +62,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String faxNumber;
     private String email;
     private KYCLevel kycLevel;
-    private int convenantFlag;
+    private int covenantFlag;
     private int reviewFlag;
     private String reason;
     private BusinessType businessType;
@@ -124,18 +124,19 @@ public class CustomerInfoView implements Serializable, Cloneable {
     //for new field
     //age , customer entity
     private int ageMonths;
-    private int isExistingSMECustomer;
+    private int existingSMECustomer;
     private Date lastReviewDate;
     private Date extendedReviewDate;
     private int extendedReviewDateFlag;
     private Date nextReviewDate;
     private int nextReviewDateFlag;
+
     private Date lastContractDate;
     private Date numberOfMonthsLastContractDate;
     private String adjustClass;
-    private String ratingFinal;
-    private int unpaidFeeInsurance;
-    private int noPendingClaimLG;
+    private SBFScoreView ratingFinal;
+    private BigDecimal unpaidFeeInsurance;
+    private BigDecimal pendingClaimLG;
 
     public CustomerInfoView(){
         //reset();
@@ -156,7 +157,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.documentAuthorizeBy = "";
         this.documentExpiredDate = new Date();
         this.tmbCustomerId = "";
-        this.serviceSegment = "";
+        this.serviceSegmentView = new ServiceSegmentView();
         this.collateralOwner = -1;
         this.percentShare = BigDecimal.ZERO;
         this.titleTh = new Title();
@@ -188,7 +189,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.faxNumber = "";
         this.email = "";
         this.kycLevel = new KYCLevel();
-        this.convenantFlag = -1;
+        this.covenantFlag = -1;
         this.reviewFlag = -1;
         this.reason = "";
         this.spouse = new CustomerInfoView();
@@ -199,6 +200,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
         this.percentShareSummary = BigDecimal.ZERO;
+
+        this.unpaidFeeInsurance = BigDecimal.ZERO;
+        this.pendingClaimLG = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
@@ -377,12 +381,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.collateralOwner = collateralOwner;
     }
 
-    public int getConvenantFlag() {
-        return convenantFlag;
+    public int getCovenantFlag() {
+        return covenantFlag;
     }
 
-    public void setConvenantFlag(int convenantFlag) {
-        this.convenantFlag = convenantFlag;
+    public void setCovenantFlag(int covenantFlag) {
+        this.covenantFlag = covenantFlag;
     }
 
     public int getReviewFlag() {
@@ -433,12 +437,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.documentAuthorizeBy = documentAuthorizeBy;
     }
 
-    public String getServiceSegment() {
-        return serviceSegment;
+    public ServiceSegmentView getServiceSegmentView() {
+        return serviceSegmentView;
     }
 
-    public void setServiceSegment(String serviceSegment) {
-        this.serviceSegment = serviceSegment;
+    public void setServiceSegmentView(ServiceSegmentView serviceSegmentView) {
+        this.serviceSegmentView = serviceSegmentView;
     }
 
     public String getTmbCustomerId() {
@@ -888,12 +892,28 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.ageMonths = ageMonths;
     }
 
-    public int getIsExistingSMECustomer() {
-        return isExistingSMECustomer;
+    public int getExistingSMECustomer() {
+        return existingSMECustomer;
     }
 
-    public void setIsExistingSMECustomer(int existingSMECustomer) {
-        isExistingSMECustomer = existingSMECustomer;
+    public void setExistingSMECustomer(int existingSMECustomer) {
+        this.existingSMECustomer = existingSMECustomer;
+    }
+
+    public BigDecimal getUnpaidFeeInsurance() {
+        return unpaidFeeInsurance;
+    }
+
+    public void setUnpaidFeeInsurance(BigDecimal unpaidFeeInsurance) {
+        this.unpaidFeeInsurance = unpaidFeeInsurance;
+    }
+
+    public BigDecimal getPendingClaimLG() {
+        return pendingClaimLG;
+    }
+
+    public void setPendingClaimLG(BigDecimal pendingClaimLG) {
+        this.pendingClaimLG = pendingClaimLG;
     }
 
     public Date getLastReviewDate() {
@@ -960,28 +980,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.adjustClass = adjustClass;
     }
 
-    public String getRatingFinal() {
+    public SBFScoreView getRatingFinal() {
         return ratingFinal;
     }
 
-    public void setRatingFinal(String ratingFinal) {
+    public void setRatingFinal(SBFScoreView ratingFinal) {
         this.ratingFinal = ratingFinal;
-    }
-
-    public int getUnpaidFeeInsurance() {
-        return unpaidFeeInsurance;
-    }
-
-    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
-        this.unpaidFeeInsurance = unpaidFeeInsurance;
-    }
-
-    public int getNoPendingClaimLG() {
-        return noPendingClaimLG;
-    }
-
-    public void setNoPendingClaimLG(int noPendingClaimLG) {
-        this.noPendingClaimLG = noPendingClaimLG;
     }
 
     public String getJurLv() {

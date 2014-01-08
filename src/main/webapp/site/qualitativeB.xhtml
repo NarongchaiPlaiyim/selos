@@ -894,7 +894,7 @@
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="#{not empty param[addQualitativeB.clientId]}">
+                                                 required="#{(not empty param[addQualitativeButton.clientId]) and (qualitative.qualitativeView.qualityResult != '')}">
                                     <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsB"
@@ -908,7 +908,8 @@
                                 <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}" for="remark"/>
                             </td>
                             <td>
-                                <h:inputTextarea id="remark" cols="70" rows="3" name="remark"
+                                <p:inputTextarea id="remark" cols="70" rows="3" name="remark"
+                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}"
                                                  value="#{qualitative.qualitativeView.reason}"/>
                             </td>
                         </tr>

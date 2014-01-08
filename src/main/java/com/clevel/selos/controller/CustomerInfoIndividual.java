@@ -966,6 +966,10 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+                    if(customerInfoView.getDateOfBirth() != null){
+                        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+                    }
+                    isEditForm = true;
                     if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
 //                            addressFlagForm2 = 1;
@@ -1010,6 +1014,10 @@ public class CustomerInfoIndividual implements Serializable {
                                     customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
                                     customerInfoView.getSpouse().setSearchFromRM(1);
                                     customerInfoView.getSpouse().setCollateralOwner(1);
+                                    if(customerInfoView.getSpouse().getDateOfBirth() != null){
+                                        customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
+                                    }
+                                    isEditFormSpouse = true;
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
                                         if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
 //                                            addressFlagForm5 = 1;
@@ -1087,11 +1095,11 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onRefreshInterfaceInfo(){
-        if(customerInfoView.getSearchFromRM() == 1){ // for individual && check spouse
-            log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
+        log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
+        if(customerInfoView.getSearchFromRM() == 1) { // for individual && check spouse
             CustomerInfoResultView customerInfoResultView;
             try{
-                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView);
+                customerInfoResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView);
                 log.debug("refreshInterfaceInfo ::: customerInfoResultView : {}", customerInfoResultView);
                 if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                     log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
@@ -1126,7 +1134,7 @@ public class CustomerInfoIndividual implements Serializable {
                         }
 
                         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView.getSpouse());
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){

@@ -333,6 +333,14 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
 
+        bizInfoSummaryView.setSumIncomeAmount(bizInfoSummary.getSumIncomeAmount());
+        bizInfoSummaryView.setSumIncomePercent(bizInfoSummary.getSumIncomePercent());
+        bizInfoSummaryView.setSumWeightAR(bizInfoSummary.getSumWeightAR());
+        bizInfoSummaryView.setSumWeightAP(bizInfoSummary.getSumWeightAP());
+        bizInfoSummaryView.setSumWeightINV(bizInfoSummary.getSumWeightINV());
+        bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+
+
         return bizInfoSummaryView;
     }
 

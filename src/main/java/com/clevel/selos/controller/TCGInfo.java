@@ -86,23 +86,6 @@ public class TCGInfo implements Serializable {
     public TCGInfo() {
     }
 
-    private void preRender() {
-        log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            } catch (Exception e) {
-                log.info("Exception :: {}", e);
-            }
-        }
-    }
-
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");

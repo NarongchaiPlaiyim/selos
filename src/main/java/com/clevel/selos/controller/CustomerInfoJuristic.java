@@ -444,6 +444,7 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
+                    isEditForm = true;
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
 //                            addressFlagForm2 = 1;

@@ -65,6 +65,7 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setStockDurationUW(bizInfoDetailView.getStockDurationUW());
         bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
         bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
+        bizInfoDetail.setIncomeAmount(bizInfoDetailView.getIncomeAmount());
 
         bizInfoDetail.setModifyBy(bizInfoDetailView.getModifyBy());
         bizInfoDetail.setModifyDate(DateTime.now().toDate());
@@ -130,6 +131,7 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setCreateDate(bizInfoDetail.getCreateDate());
 
         bizInfoDetailView.setIsMainDetail(bizInfoDetail.getIsMainDetail());
+        bizInfoDetailView.setIncomeAmount(bizInfoDetail.getIncomeAmount());
 
         return bizInfoDetailView;
     }

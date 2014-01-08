@@ -3,10 +3,14 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
@@ -21,6 +25,7 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.transform.business.ObligationBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -29,6 +34,8 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -58,11 +65,15 @@ public class CustomerInfoControl extends BusinessControl {
     RMInterface rmInterface;
     @Inject
     BRMSInterface brmsInterface;
+    @Inject
+    DWHInterface dwhInterface;
 
     @Inject
     CustomerTransform customerTransform;
     @Inject
     CustomerBizTransform customerBizTransform;
+    @Inject
+    ObligationBizTransform obligationBizTransform;
 
     public CustomerInfoSummaryView getCustomerInfoSummary(long workCaseId){
         log.info("getCustomerInfoSummary ::: workCaseId : {}", workCaseId);
@@ -350,6 +361,26 @@ public class CustomerInfoControl extends BusinessControl {
 
     //** function for integration **//
 
+    public CustomerInfoResultView retrieveInterfaceInfo(CustomerInfoView customerInfoView){
+        log.info("retrieveInterfaceInfo with {}", customerInfoView != null? customerInfoView.getId(): "");
+        CustomerInfoResultView customerInfoResult = getCustomerInfoFromRM(customerInfoView);
+
+        /*
+        //This is for setting the CustomerInfoResult to test the obligation without RM Call.
+        CustomerInfoResultView customerInfoResult = new CustomerInfoResultView();
+        customerInfoResult.setActionResult(ActionResult.SUCCESS);
+        customerInfoResult.setReason("Customer Found.");
+        customerInfoResult.setCustomerInfoView(customerInfoView);
+        */
+
+        if(customerInfoResult.getActionResult() == ActionResult.SUCCESS){
+            customerInfoResult.setCustomerInfoView(getCustomerCreditInfo(customerInfoResult.getCustomerInfoView()));
+        }
+
+        log.info("return {}", customerInfoResult.getActionResult());
+        return customerInfoResult;
+    }
+
     // *** Function for RM *** //
     public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
@@ -412,6 +443,21 @@ public class CustomerInfoControl extends BusinessControl {
         return customerInfoResultSearch;
     }
 
+    /**
+     * To get the Customer Credit Information from Obligation and update into the same customerInfoView
+     * @param customerInfoView
+     * @return customerInfoView
+     */
+    public CustomerInfoView getCustomerCreditInfo(CustomerInfoView customerInfoView){
+        if(customerInfoView != null && customerInfoView.getTmbCustomerId() != null){
+            log.info("retrieveCustomerCreditInfo, with TMB Customer ID {}", customerInfoView.getTmbCustomerId());
+            ObligationResult obligationResult = dwhInterface.getObligationData(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+            if(obligationResult.getActionResult().equals(ActionResult.SUCCESS)){
+                customerInfoView = obligationBizTransform.getCustomerInfoView(obligationResult.getObligationList(), customerInfoView);
+            }
+        }
+        return customerInfoView;
+    }
 
     public List<CustomerInfoView> getGuarantorByWorkCase(long workCaseId){
         log.info("getGuarantorByWorkCase ::: workCaseId : {}", workCaseId);
