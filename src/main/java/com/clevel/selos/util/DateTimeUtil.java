@@ -58,6 +58,13 @@ public class DateTimeUtil implements Serializable {
         return dateString;
     }
 
+    public static String convertToStringDDMMYYYY(Date date,Locale locale){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy",locale);
+        String dateString = simpleDateFormat.format(date);
+
+        return dateString;
+    }
+
     public static Date convertToDateTH(Date date){
         DateTime dateConvert = new DateTime(date, BuddhistChronology.getInstance());
         log.debug("dateConvert : {}", dateConvert);
