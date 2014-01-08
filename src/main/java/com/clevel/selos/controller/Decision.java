@@ -170,20 +170,18 @@ public class Decision implements Serializable {
     private List<CustomerInfoView> collateralOwnerUwAllList;
     private List<MortgageType> mortgageTypeList;
     private List<NewSubCollateralDetailView> relatedWithAllList;
-//    private List<CreditTypeDetailView> collateralCreditTypeList;
-//    private List<CreditTypeDetailView> selectedCollateralCrdTypeItems;
     private List<NewCreditDetailView> collateralCreditTypeList;
     private List<NewCreditDetailView> selectedCollateralCrdTypeItems;
+    private List<NewCreditDetailView> collCrdTypePrev;
     private int rowIndexCollateral;
     private int rowIndexCollHead;
     private int rowIndexSubColl;
 
     // Propose/Approve - Guarantor
     private List<CustomerInfoView> guarantorList;
-//    private List<CreditTypeDetailView> guarantorCreditTypeList;
-//    private List<CreditTypeDetailView> selectedGuarantorCrdTypeItems;
     private List<NewCreditDetailView> guarantorCreditTypeList;
     private List<NewCreditDetailView> selectedGuarantorCrdTypeItems;
+    private List<NewCreditDetailView> guarantorCrdTypeItemsTmp;
     private int rowIndexGuarantor;
 
     // FollowUp Condition
@@ -1431,11 +1429,27 @@ public class Decision implements Serializable {
             // needed to select credit type items
             if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
                 guarantorDetailEdit.getNewCreditDetailViewList().clear();
+                // seq usage
                 for (NewCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
+                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
                     guarantorDetailEdit.getNewCreditDetailViewList().add(creditTypeItem);
+                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
                 }
                 guarantorDetailEdit.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
+
+                for (NewCreditDetailView creditOfList : guarantorCreditTypeList) {
+                    boolean isSelect = false;
+                    for (NewCreditDetailView creditSelected : selectedGuarantorCrdTypeItems) {
+                        if (creditOfList.getSeq() == creditSelected.getSeq()) {
+                            isSelect = true;
+                            break;
+                        }
+                    }
+
+                }
+
                 success = true;
                 log.debug("Success: Edit Guarantor from ApproveGuarantorList");
             }
@@ -1459,6 +1473,11 @@ public class Decision implements Serializable {
             if (selectedGuarantorCrdTypeItems != null && selectedGuarantorCrdTypeItems.size() > 0) {
                 for (NewCreditDetailView creditTypeItem : selectedGuarantorCrdTypeItems) {
                     guarantorDetailAdd.getNewCreditDetailViewList().add(creditTypeItem);
+
+                    log.debug("guarantor seq: {} = {} + 1", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+                    hashSeqCredit.put(creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()) + 1);
+                    log.debug("guarantor seq: {} = {}", creditTypeItem.getSeq(), hashSeqCredit.get(creditTypeItem.getSeq()));
+
                     sumGuaranteeAmtPerCrdType = sumGuaranteeAmtPerCrdType.add(creditTypeItem.getGuaranteeAmount());
                 }
                 guarantorDetailAdd.setTotalLimitGuaranteeAmount(sumGuaranteeAmtPerCrdType);
