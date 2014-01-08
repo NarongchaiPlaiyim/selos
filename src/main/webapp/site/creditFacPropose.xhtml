@@ -63,9 +63,8 @@
                 value="#{msg.get('app.credit.facility.propose.label.WCNeed')}"/>
     </td>
     <td style="background-color:#ffffff">
-        <p:inputText styleClass="large"
-                     value="#{creditFacPropose.newCreditFacilityView.WCNeed}"
-                     style="text-align: right;"
+        <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeed}"
+                     style="text-align:right;"
                      maxlength="18"
                      readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -83,10 +82,9 @@
                 value="#{msg.get('app.credit.facility.propose.label.totalWCdebit')}"/>
     </td>
     <td style="background-color:#ffffff">
-        <p:inputText styleClass="large"
-                     value="#{creditFacPropose.newCreditFacilityView.totalWcDebit}"
+        <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcDebit}"
                      maxlength="18"
-                     style="text-align: right;">
+                     style="text-align:right;">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
@@ -102,10 +100,9 @@
                 value="#{msg.get('app.credit.facility.propose.label.WCNeedDiffer')}"/>
     </td>
     <td style="background-color:#ffffff">
-        <p:inputText styleClass="large"
-                     value="#{creditFacPropose.newCreditFacilityView.WCNeedDiffer}"
+        <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeedDiffer}"
                      maxlength="18"
-                     style="text-align: right;">
+                     style="text-align:right;">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
@@ -126,8 +123,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.totalWCTMB')}"/>
     </td>
     <td>
-        <p:inputText styleClass="large"
-                     value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
+        <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
                      style="text-align: right;"
                      maxlength="18"
                      readonly="true">
@@ -977,8 +973,7 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.intFeeDOA}"
-                                 onkeydown="return onKeyMoney(event);"
-                                 onkeypress="return onKeyMoney(event);"
+                                 maxlength="3"
                                  style="text-align: right;">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>
@@ -993,7 +988,7 @@
 
                     <p:inputText styleClass="small"
                                  value="#{creditFacPropose.newCreditFacilityView.frontendFeeDOA}"
-                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                  maxlength="3"
                                  style="text-align: right;">
                         <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                         <f:validateDoubleRange maximum="100"/>

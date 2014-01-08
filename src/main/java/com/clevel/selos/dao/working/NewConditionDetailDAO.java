@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class NewConditionDetailDAO extends GenericDAO<NewConditionDetail, Integer> {
+public class NewConditionDetailDAO extends GenericDAO<NewConditionDetail, Long> {
     @Inject
     @SELOS
     Logger log;

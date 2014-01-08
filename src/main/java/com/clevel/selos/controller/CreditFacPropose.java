@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -209,18 +211,32 @@ public class CreditFacPropose implements Serializable {
 
     public CreditFacPropose(){}
 
-    @PostConstruct
-    public void onCreation()
-    {
-        log.info("onCreation.");
-        //test
+    public void preRender() {
+
+        log.info("preRender ::: setSession ");
+
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2)); // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
+        } else {
+            //TODO return to inbox
+            log.info("preRender ::: workCaseId is null.");
+            try {
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                return;
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
+            }
         }
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        preRender();
+        log.info("onCreation.");
 
         if (workCaseId != null) {
 
@@ -1145,8 +1161,10 @@ public class CreditFacPropose implements Serializable {
         log.info(" newCreditFacilityView.getNewCollateralInfoViewList().size ::{}", newCreditFacilityView.getNewCollateralInfoViewList().size());
 
         if (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0) {
+
+            relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();  // find list of Title Deed other Collateral but not include this Collateral
+
             for (NewCollateralInfoView newCollateralInfoView : newCreditFacilityView.getNewCollateralInfoViewList()) {
-                relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();  // find list of Title Deed other Collateral but not include this Collateral
                 for (NewCollateralHeadDetailView newCollateralHeadDetail : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
                     if (newCollateralHeadDetail.getNewSubCollateralDetailViewList().size() > 0) {
                         log.info("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
@@ -1448,12 +1466,14 @@ public class CreditFacPropose implements Serializable {
                         && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        log.info("Bean :: onSaveNewCreditFacility ::");
                         creditFacProposeControl.onSaveRelationNewCreditDetail(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
-                        exSummaryControl.calForCreditFacility(workCaseId);
+//                        exSummaryControl.calForCreditFacility(workCaseId);
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.onSaveRelationNewCreditDetail(newCreditFacilityView, workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else {
