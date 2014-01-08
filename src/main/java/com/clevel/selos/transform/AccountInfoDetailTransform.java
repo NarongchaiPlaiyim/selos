@@ -1,10 +1,11 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.master.OpenAccountProductDAO;
+import com.clevel.selos.dao.master.OpenAccountPurposeDAO;
+import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AccountInfoCreditTypeView;
-import com.clevel.selos.model.view.AccountInfoDetailView;
-import com.clevel.selos.model.view.AccountInfoPurposeView;
-import com.clevel.selos.model.view.AccountNameView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
@@ -12,14 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountInfoDetailTransform extends Transform {
+
     @Inject
-    AccountInfoBranchTransform branchTransform;
+    private AccountInfoBranchTransform branchTransform;
     @Inject
-    AccountInfoAccountTypeTransform accountTypeTransform;
+    private AccountInfoAccountTypeTransform accountTypeTransform;
     @Inject
-    AccountInfoProductTypeTransform productTypeTransform;
+    private AccountInfoProductTypeTransform productTypeTransform;
+
+    @Inject
+    private OpenAccountPurposeDAO purposeDAO;
+    private List<OpenAccountPurpose> openAccountPurposeList;
 
     private AccountInfoDetail accountInfoDetail;
+    private List<AccountInfoDetailView> accountInfoDetailViewList;
+    private AccountInfoDetailView accountInfoDetailView;
 
     //Account Name
     private List<AccountInfoDetailAccountName> accountNameList;
@@ -31,11 +39,15 @@ public class AccountInfoDetailTransform extends Transform {
 
     //Credit Type
     private List<AccountInfoDetailCreditType> creditTypeList;
-    AccountInfoDetailCreditType accountInfoDetailCreditType;
+    private AccountInfoDetailCreditType accountInfoDetailCreditType;
 
     private List<AccountNameView> accountNameViewList;
     private List<AccountInfoPurposeView> accountInfoPurposeViewList;
     private List<AccountInfoCreditTypeView> accountInfoCreditTypeViewList;
+
+    private AccountInfoBranchView branchView;
+    private AccountInfoAccountTypeView accountTypeView;
+    private AccountInfoProductTypeView productTypeView;
 
     private long id;
     @Inject
@@ -110,7 +122,6 @@ public class AccountInfoDetailTransform extends Transform {
             accountInfoDetail.setPurposeList(null);
         }
 
-
         //Credit Type
         accountInfoCreditTypeViewList = Util.safetyList(accountInfoDetailView.getAccountInfoCreditTypeViewList());
         if(accountInfoCreditTypeViewList.size() > 0){
@@ -138,4 +149,92 @@ public class AccountInfoDetailTransform extends Transform {
         return accountInfoDetail;
     }
 
+    public List<AccountInfoDetailView> transformToView(final List<AccountInfoDetail> accountInfoDetailList){
+        accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
+        String value;
+        for(AccountInfoDetail infoDetail : accountInfoDetailList){
+            accountInfoDetailView = new AccountInfoDetailView();
+            accountInfoDetailView.setReqAccountType(infoDetail.getRequestAccountType());
+
+            id = accountInfoDetailView.getReqAccountType();
+            if(1 == id){
+                accountInfoDetailView.setReqAccountTypeForShow("Existing");
+            } else {
+                accountInfoDetailView.setReqAccountTypeForShow("New");
+            }
+
+            value = accountInfoDetailView.getAccountNumber();
+            if(value == null || "".equals(value)){
+                accountInfoDetailView.setAccountNumberForShow(" - ");
+            } else {
+                accountInfoDetailView.setAccountNumberForShow(value);
+            }
+
+            //branch
+            branchView = new AccountInfoBranchView();
+            branchView.setId(infoDetail.getBranch().getId());
+            branchView.setName(infoDetail.getBranch().getName());
+            accountInfoDetailView.setBranchView(branchView);
+
+            //account type
+            accountTypeView = new AccountInfoAccountTypeView();
+            accountTypeView.setId(infoDetail.getAccountType().getId());
+            accountTypeView.setName(infoDetail.getAccountType().getName());
+            accountInfoDetailView.setAccountTypeView(accountTypeView);
+
+            //product type
+            productTypeView = new AccountInfoProductTypeView();
+            productTypeView.setId(infoDetail.getProductType().getId());
+            productTypeView.setName(infoDetail.getProductType().getName());
+            accountInfoDetailView.setProductTypeView(productTypeView);
+
+            //account name
+            accountInfoDetailView.setAccountNameViewList(null);
+            accountInfoDetailView.setAccountNameViewListForShow("-");//for show
+
+            //purpose
+            purposeList = safetyList(infoDetail.getPurposeList());
+            accountInfoDetailView.setAccountInfoPurposeViewList(loadPurpose(purposeList));
+
+//            accountInfoDetailView.setAccountInfoPurposeViewListForShow("-");
+
+            //open account
+            accountInfoDetailView.setOpenAccount(infoDetail.getOpenAccount());
+
+            //Credit Type
+            accountInfoDetailView.setAccountInfoCreditTypeViewList(null);
+
+            accountInfoDetailViewList.add(accountInfoDetailView);
+        }
+        return accountInfoDetailViewList;
+    }
+
+    private List<AccountInfoPurposeView> loadPurpose(List<AccountInfoDetailPurpose> purposeList){
+        openAccountPurposeList = safetyList(purposeDAO.findAll());
+        accountInfoPurposeViewList = new ArrayList<AccountInfoPurposeView>();
+        long id;
+        AccountInfoPurposeView purposeView;
+        pointer :
+        for(OpenAccountPurpose purposeMST : openAccountPurposeList){
+            purposeView = new AccountInfoPurposeView();
+            id = purposeMST.getId();
+            purposeView.setId(id);
+            purposeView.setName(purposeMST.getName());
+            purposeView.setSelected(false);
+            for (AccountInfoDetailPurpose purposeDB : purposeList){
+                if(id == purposeDB.getPurposeId() ){
+                    purposeView.setSelected(true);
+                    purposeList.remove(purposeDB);
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            accountInfoPurposeViewList.add(purposeView);
+        }
+        return accountInfoPurposeViewList;
+    }
+    private <T> List<T> safetyList(List<T> list) {
+        return Util.safetyList(list);
+    }
 }

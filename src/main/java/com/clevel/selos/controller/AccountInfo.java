@@ -55,7 +55,7 @@ public class AccountInfo implements Serializable {
     private String message;
 
     //session
-    private long workCaseId;
+    private long workCaseId = 2001L;
 
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
@@ -106,10 +106,15 @@ public class AccountInfo implements Serializable {
 //            }
 //        }
 
-
-
         init();
-        accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
+        accountInfoView = accountInfoControl.getAccountInfo(workCaseId);
+        if(accountInfoView!=null){
+            log.debug("Account info view is not null");
+            accountInfoDetailViewList = accountInfoView.getAccountInfoDetailViewList();
+        } else {
+            log.debug("Account info view is null");
+            accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
+        }
     }
 
     public void onAddAccountDetail(){
@@ -132,7 +137,6 @@ public class AccountInfo implements Serializable {
         int id = 0;
         long idLong = 0L;
         String value = null;
-        StringBuilder stringBuilder = null;
 
         //Request Account Type
         id = accountInfoView.getAccountInfoDetailViewSelected().getReqAccountType();
@@ -213,12 +217,11 @@ public class AccountInfo implements Serializable {
 
     public void onSave(){
         //todo :
-        workCaseId = 2001L;
         try{
             accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
             messageHeader = "Save Account Info Success.";
             message = "Save data in Account Information success.";
-            onCreation();
+//            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             messageHeader = "Save Account Info Failed.";
@@ -231,7 +234,6 @@ public class AccountInfo implements Serializable {
             onCreation();
         }
     }
-
 
     private void init(){
         accountInfoView = new AccountInfoView();

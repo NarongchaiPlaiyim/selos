@@ -53,25 +53,23 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     private List<AccountInfoDetailPurpose> accountInfoDetailPurposeList;
     private List<AccountInfoDetailCreditType> accountInfoDetailCreditTypeList;
 
-
     @Inject
     public AccountInfoControl() {
 
     }
 
     public AccountInfoView getAccountInfo(long workCaseId) {
-        log.info("getAccountInfo ::: workCaseId : {}", workCaseId);
+        log.info("-- getAccountInfo ::: workCaseId : {}", workCaseId);
         accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
-        workCase = workCaseDAO.findById(workCaseId);
-
-        if (accountInfo == null) {
-            accountInfo = new AccountInfo();
+        AccountInfoView accountInfoView = null;
+        if (accountInfo != null) {
+//            accountInfo = new AccountInfo();
+            accountInfoView = accountInfoTransform.transformToView(accountInfo);
+            log.info("-- getAccountInfo ::: AccountInfoView : {}", accountInfoView);
+            return accountInfoView;
+        } else {
+            return accountInfoView;
         }
-
-        AccountInfoView accountInfoView = null;// basicInfoTransform.transformToView(basicInfo, workCase);
-
-        log.info("getAccountInfo ::: AccountInfoView : {}", accountInfoView);
-        return accountInfoView;
     }
 
     public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
@@ -87,10 +85,12 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         if(accountInfoDetailList.size() > 0){
             clearDB(accountInfoDetailList);
             accountInfoDetailDAO.delete(accountInfoDetailList);
-            insertToDB(accountInfoView.getAccountInfoDetailViewList());
+            accountInfoDetailViewList = accountInfoView.getAccountInfoDetailViewList();
+            insertToDB(accountInfoDetailViewList);
         } else {
             accountInfoDetailDAO.delete(accountInfoDetailList);
-            insertToDB(accountInfoView.getAccountInfoDetailViewList());
+            accountInfoDetailViewList = accountInfoView.getAccountInfoDetailViewList();
+            insertToDB(accountInfoDetailViewList);
         }
     }
 
