@@ -266,9 +266,6 @@ public class ExSummaryControl extends BusinessControl {
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
 
-        //todo: test this , pls delete after test
-        calYearInBusinessBorrowerCharacteristic(workCaseId);
-
         //Delete Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
         exSumDeviateDAO.delete(esdList);
@@ -301,6 +298,12 @@ public class ExSummaryControl extends BusinessControl {
     public void calForBizInfoSummary(long workCaseId){
         calYearInBusinessBorrowerCharacteristic(workCaseId);
     }
+
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
 
     //TODO : Business login here
     //Borrower Characteristic - income ( Line 45 )

@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class NewFeeCreditDAO extends GenericDAO<NewFeeDetail, Integer> {
+public class NewFeeCreditDAO extends GenericDAO<NewFeeDetail, Long> {
     @Inject
     @SELOS
     Logger log;

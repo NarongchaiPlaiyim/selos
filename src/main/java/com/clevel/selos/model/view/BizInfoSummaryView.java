@@ -49,7 +49,7 @@ public class BizInfoSummaryView implements Serializable {
     private BigDecimal netMarginAmount;
     private BigDecimal netMarginPercentage;
     private BigDecimal netFixAsset;
-    private int noOfEmployee;
+    private BigDecimal noOfEmployee;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal weightIncomeFactor;
@@ -371,11 +371,11 @@ public class BizInfoSummaryView implements Serializable {
         this.netFixAsset = netFixAsset;
     }
 
-    public int getNoOfEmployee() {
+    public BigDecimal getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(int noOfEmployee) {
+    public void setNoOfEmployee(BigDecimal noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 

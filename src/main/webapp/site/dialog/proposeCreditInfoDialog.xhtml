@@ -85,7 +85,9 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
     </td>
     <td>
-        <p:inputText id="productCode" value="#{creditFacPropose.newCreditDetailView.productCode}"/>
+        <p:inputText id="productCode"
+                     value="#{creditFacPropose.newCreditDetailView.productCode}"
+                     style="min-width: 180px; width: 180px; max-width: 180px;"/>
     </td>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
@@ -93,6 +95,7 @@
     <td>
         <p:inputText id="projectCode"
                      value="#{creditFacPropose.newCreditDetailView.projectCode}"
+                     style="min-width: 180px; width: 180px; max-width: 180px;"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"/>
     </td>
 </tr>
@@ -102,7 +105,7 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.limit}"
-                     style="text-align:right"
+                     style="text-align:right;width: 180px;"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                      maxlength="18">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
@@ -114,15 +117,14 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEPercent}"
-                     style="text-align:right"
-                     onkeydown="return onKeyMoney(event);"
-                     onkeypress="return onKeyMoney(event);"
+                     style="text-align:right;width: 180px;"
+                     maxlength="3"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
             <f:validateDoubleRange maximum="100"/>
             <p:ajax event="blur" update=":creditInfoDlgForm" process="@form"/>
         </p:inputText>
-        <p:spacer/>
+        <p:spacer width="10" height="20"/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
     </td>
 
@@ -135,7 +137,7 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.PCEAmount}"
-                     style="text-align:right"
+                     style="text-align:right;width: 180px;"
                      maxlength="18"
                      required="#{not empty param[onSaveCreditInfo.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
@@ -160,7 +162,7 @@
     <td>
         <p:inputText value="#{creditFacPropose.reducePrice}"
                      id="reducePrice"
-                     style="text-align:right"
+                     style="text-align:right;width: 180px;"
                      maxlength="18"
                      disabled="#{creditFacPropose.modeEditReducePricing}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
@@ -352,8 +354,7 @@
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.newCreditDetailView.frontEndFee}"
                      style="text-align:right"
-                     onkeydown="return onKeyMoney(event);"
-                     onkeypress="return onKeyMoney(event);"
+                     maxlength="3"
                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                      disabled="#{creditFacPropose.modeEdit}">
             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -410,12 +411,12 @@
 
         </p:selectOneMenu>
     </td>
-    <td class="title" >
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}"/>
+    <td class="title" style="min-width: 120px; width: 120px; max-width: 120px;">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}" />
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newCreditDetailView.holdLimitAmount}"
-                     style="text-align:right"
+                     style="text-align:right;width: 180px;"
                      maxlength="18"
                      disabled="#{creditFacPropose.modeEdit}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"

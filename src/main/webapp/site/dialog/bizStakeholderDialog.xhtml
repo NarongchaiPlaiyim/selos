@@ -31,7 +31,7 @@
                 </td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
-                                 onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyDownTelNo(event);"
+                                 onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}"/>
                 </td>
             </tr>
@@ -40,11 +40,11 @@
                         value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactYear')}"/><h:outputLabel
                         value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}"
+                    <p:inputText id="contactYear" value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}" styleClass="right"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}">
                         <f:convertNumber pattern="#,##0" integerOnly="true"/>
-                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:contactYear"/>
                     </p:inputText>
                 </td>
             </tr>

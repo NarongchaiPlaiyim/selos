@@ -111,7 +111,7 @@
                                                 <tr>
                                                     <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}" for="addressStreet"/> :</td>
                                                     <td class="left" colspan="3">
-                                                        <p:inputText style="width: 608px;" id="addressStreet" onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
+                                                        <p:inputText style="width: 608px;" id="addressStreet"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" />
                                                     </td>
                                                 </tr>
@@ -210,7 +210,7 @@
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
                                                             yearRange="1950:2100"
                                                             pattern="dd/MM/yyyy"
-                                                            mindate="01/01/1950"
+                                                            showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
                                             </clv:BECalendar>
@@ -448,7 +448,8 @@
                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}" for="noOfEmployee"/> :
                                     </td>
                                     <td class="left">
-                                        <p:inputText id="noOfEmployee" styleClass="right" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
+                                        <p:inputText id="noOfEmployee" styleClass="right"
+                                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                      value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
                                             <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                             <p:ajax event="blur" update=":frmMain:noOfEmployee"/>

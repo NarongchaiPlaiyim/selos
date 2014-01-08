@@ -212,8 +212,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             }
         }
 
-        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
-        fieldsControl(fieldsControlViewList);
+//        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
+//        fieldsControl(fieldsControlViewList);
+        //todo: hardcode on this
+        fieldsControlHardCode();
 
         basicInfoView = new BasicInfoView();
 
@@ -957,6 +959,78 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public Date getCurrentDate() {
         return DateTime.now().toDate();
+    }
+
+    //todo: hardcode on this
+    public void fieldsControlHardCode(){
+        reqApplicationNo = true;
+        disApplicationNo = true;
+        reqRefApplicationNo = false;
+        disRefApplicationNo = true;
+        reqCaNo = true;
+        disCaNo = true;
+        reqRequestType = true;
+        disRequestType = false;
+        reqProductGroup = true;
+        disProductGroup = false;
+        reqUnpaidFeeInsurance = false;
+        disUnpaidFeeInsurance = true;
+        reqNoPendingClaimLG = false;
+        disNoPendingClaimLG = true;
+        reqIsConstructionRequestLG = false;
+        disIsConstructionRequestLG = false;
+        reqIsAbleToGettingGuarantorJob = false;
+        disIsAbleToGettingGuarantorJob = false;
+        reqNoClaimLGHistory = false;
+        disNoClaimLGHistory = false;
+        reqNoRevokedLicense = false;
+        disNoRevokedLicense = false;
+        reqNoLateWorkDelivery = false;
+        disNoLateWorkDelivery = false;
+        reqIsAdequateOfCapitalResource = false;
+        disIsAdequateOfCapitalResource = false;
+        reqIsApplySpecialProgram = true;
+        disIsApplySpecialProgram = false;
+        reqSpecialProgramValue = false;
+        disSpecialProgramValue = false;
+        reqIsRefinanceIN = true;
+        disIsRefinanceIN = false;
+        reqRefinanceInValue = false;
+        disRefinanceInValue = false;
+        reqIsRefinanceOUT = true;
+        disIsRefinanceOUT = false;
+        reqRefinanceOutValue = false;
+        disRefinanceOutValue = false;
+        reqRiskCustomerType = true;
+        disRiskCustomerType = false;
+        reqQualitativeType = true;
+        disQualitativeType = false;
+        reqIsExistingSMECustomer = false;
+        disIsExistingSMECustomer = true;
+        reqExistingSMECustomerSince = false;
+        disExistingSMECustomerSince = false;
+        reqLastReviewDate = false;
+        disLastReviewDate = true;
+        reqExtendedReviewDate = false;
+        disExtendedReviewDate = true;
+        reqSCFScore = false;
+        disSCFScore = true;
+        reqRequestLoanWithSameName = false;
+        disRequestLoanWithSameName = true;
+        reqHaveLoanInOneYear = false;
+        disHaveLoanInOneYear = true;
+        reqPassAnnualReview = false;
+        disPassAnnualReview = true;
+        reqLoanRequestPattern = true;
+        disLoanRequestPattern = false;
+        reqReferralName = false;
+        disReferralName = false;
+        reqReferralID = false;
+        disReferralID = false;
+        reqIsApplyBA = false;
+        disIsApplyBA = false;
+        reqBaPaymentMethod = false;
+        disBaPaymentMethod = false;
     }
 
     // Get Set
