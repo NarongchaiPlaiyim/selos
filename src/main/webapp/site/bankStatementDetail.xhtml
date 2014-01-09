@@ -57,7 +57,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.countIncome')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <table border="0">
                         <tr>
                             <td style="border-style: none !important;">
@@ -76,7 +76,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.bankName')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.bankView.code}">
                         <f:selectItems value="#{bankStatementDetail.bankViewList}" var="bank"
                                        itemLabel="#{bank.bankName}" itemValue="#{bank.code}"/>
@@ -87,7 +87,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.branchName')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:inputText value="#{bankStatementDetail.bankStmtView.branchName}"
                                  required="#{not empty param[saveButton.clientId]}"
                                  styleClass="large"/>
@@ -97,7 +97,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountType')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <table border="0" style="float:left; border-collapse:separate; border-spacing:0;">
                         <tr>
                             <td>
@@ -140,7 +140,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountNumber')}"/>
                 </td>
-                <td>
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:inputMask value="#{bankStatementDetail.bankStmtView.accountNumber}"
                                  mask="999-9-99999-9"
                                  styleClass="large"/>
@@ -150,7 +150,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountName')}"/>
                 </td>
-                <td>
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:inputText value="#{bankStatementDetail.bankStmtView.accountName}"
                                  required="#{not empty param[saveButton.clientId]}"
                                  styleClass="large"/>
@@ -160,7 +160,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountStatus')}"/>
                 </td>
-                <td>
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.accountStatusView.id}"
                                      required="#{not empty param[saveButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -173,7 +173,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountCharacteristic')}"/>
                 </td>
-                <td>
+                <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:selectOneRadio value="#{bankStatementDetail.bankStmtView.accountCharacteristic}"
                                       required="#{not empty param[saveButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.borrowersAccount')}" itemValue="1"/>
@@ -806,7 +806,7 @@
                 <td class="title" style="width:250px;">
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.remark')}"/>
                 </td>
-                <td>
+                <td class="left" style="min-width: 80%; width: 900px; max-width: 900px;">
                     <p:inputTextarea value="#{bankStatementDetail.bankStmtView.remark}" rows="5" cols="100"/>
                 </td>
             </tr>
@@ -819,13 +819,14 @@
                 <td colspan="2" class="center">
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                      binding="#{saveButton}"
-                                     action="#{bankStatementDetail.onSave()}"
+                                     actionListener="#{bankStatementDetail.onSave()}"
                                      process="@form"
-                                     update=":frmMain, :msgBoxSystemMessagePanel"
+                                     update=":frmMain,:msgBoxSystemMessagePanel"
                                      styleClass="smaller"/>
                     <p:spacer width="5" height="0"/>
                     <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
-                                     actionListener="#{bankStatementDetail.onCreation()}" process="@form"
+                                     actionListener="#{bankStatementDetail.onCreation()}"
+                                     process="@form"
                                      update=":frmMain"
                                      styleClass="smaller"/>
                 </td>

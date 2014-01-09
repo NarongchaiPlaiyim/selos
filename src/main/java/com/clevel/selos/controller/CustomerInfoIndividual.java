@@ -273,6 +273,9 @@ public class CustomerInfoIndividual implements Serializable {
     //for date
     private String currentDateDDMMYY;
 
+    private boolean enableAllFieldCus;
+    private boolean enableAllFieldCusSpouse;
+
     public CustomerInfoIndividual(){
     }
 
@@ -294,6 +297,9 @@ public class CustomerInfoIndividual implements Serializable {
 
         //default value
         isFromJuristic = false;
+
+        enableAllFieldCus = false;
+        enableAllFieldCusSpouse = false;
 
         onAddNewIndividual();
 
@@ -427,6 +433,8 @@ public class CustomerInfoIndividual implements Serializable {
             isEditForm = false;
         }
 
+        enableAllFieldCus = true;
+
         onChangeMaritalStatus();
         onChangeRelation();
         onChangeReference();
@@ -447,6 +455,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeProvinceEditForm6();
             onChangeDistrictEditForm6();
             isEditFormSpouse = true;
+            enableAllFieldCusSpouse = true;
         } else {
             isEditFormSpouse = false;
         }
@@ -824,6 +833,7 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSpouse(cusView);
                 onChangeRelation();
                 isEditFormSpouse = false;
+                enableAllFieldCusSpouse = false;
             }
         }
     }
@@ -955,6 +965,8 @@ public class CustomerInfoIndividual implements Serializable {
         try{
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            enableAllFieldCus = true;
+            isEditForm = true;
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
@@ -969,7 +981,6 @@ public class CustomerInfoIndividual implements Serializable {
                     if(customerInfoView.getDateOfBirth() != null){
                         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
                     }
-                    isEditForm = true;
                     if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress()) == 1){
 //                            addressFlagForm2 = 1;
@@ -999,6 +1010,7 @@ public class CustomerInfoIndividual implements Serializable {
 
                     //for spouse
                     if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
+                        enableAllFieldCusSpouse = true;
                         try {
                             customerInfoView.getSpouse().setDocumentType(customerInfoSearch.getDocumentType());
                             customerInfoView.getSpouse().setSearchBy(customerInfoSearch.getSearchBy());
@@ -1077,9 +1089,10 @@ public class CustomerInfoIndividual implements Serializable {
                 enableCitizenId = true;
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
-
+                customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+                customerInfoView.setCitizenId(customerInfoSearch.getCitizenId());
             }
-            onChangeDOB();
+//            onChangeDOB();
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             onChangeMaritalStatus();
@@ -1227,6 +1240,8 @@ public class CustomerInfoIndividual implements Serializable {
         CustomerInfoResultView customerInfoResultView;
         try{
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearchSpouse);
+            enableAllFieldCusSpouse = true;
+            isEditFormSpouse = true;
             log.debug("onSearchSpouseCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchSpouseCustomerInfo ActionResult.SUCCESS");
@@ -1267,7 +1282,9 @@ public class CustomerInfoIndividual implements Serializable {
                 enableCitizenId = true;
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
-
+                customerInfoView.setSpouse(new CustomerInfoView());
+                customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+                customerInfoView.getSpouse().setCitizenId(customerInfoSearch.getCitizenId());
             }
             onChangeDOBSpouse();
             onChangeProvinceEditForm4();
@@ -2643,5 +2660,21 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setEditFormSpouse(boolean editFormSpouse) {
         isEditFormSpouse = editFormSpouse;
+    }
+
+    public boolean isEnableAllFieldCusSpouse() {
+        return enableAllFieldCusSpouse;
+    }
+
+    public void setEnableAllFieldCusSpouse(boolean enableAllFieldCusSpouse) {
+        this.enableAllFieldCusSpouse = enableAllFieldCusSpouse;
+    }
+
+    public boolean isEnableAllFieldCus() {
+        return enableAllFieldCus;
+    }
+
+    public void setEnableAllFieldCus(boolean enableAllFieldCus) {
+        this.enableAllFieldCus = enableAllFieldCus;
     }
 }

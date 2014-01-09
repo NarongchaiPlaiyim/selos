@@ -774,7 +774,8 @@
                         <td colspan="2" class="center">
                             <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                              binding="#{saveButton}"
-                                             action="#{bankStatementSummary.onSaveSummary()}" process="@form"
+                                             actionListener="#{bankStatementSummary.onSaveSummary()}"
+                                             process="@form"
                                              update=":frmMain,:msgBoxSystemMessagePanel"
                                              styleClass="smaller"/>
                         </td>
