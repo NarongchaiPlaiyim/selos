@@ -219,7 +219,7 @@ public class CustomerInfoControl extends BusinessControl {
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
         if(customerJuristic.getReference() != null){
             Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());
-            if(!reference.getPercentShare().equalsIgnoreCase("-")){
+            if(reference != null && reference.getId() != 0 && !reference.getPercentShare().equalsIgnoreCase("-")){
                 if(customerJuristic.getShares() != null && customerJuristic.getJuristic().getTotalShare() != null){
                     customerJuristic.setPercentShare(Util.divide(customerJuristic.getShares(),customerJuristic.getJuristic().getTotalShare()));
                 }
@@ -233,7 +233,7 @@ public class CustomerInfoControl extends BusinessControl {
             for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
                 if(cusIndividual.getReference() != null){
                     Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
-                    if(!reference.getPercentShare().equalsIgnoreCase("-")){
+                    if(reference != null && reference.getId() != 0 && !reference.getPercentShare().equalsIgnoreCase("-")){
                         if(customerJuristic.getShares() != null && cusIndividual.getShares() != null){
                             cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
                         }
@@ -244,7 +244,7 @@ public class CustomerInfoControl extends BusinessControl {
                 if(cusIndividual.getSpouse() != null){
                     if(cusIndividual.getSpouse().getReference() != null){
                         Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
-                        if(!reference.getPercentShare().equalsIgnoreCase("-")){
+                        if(reference != null && reference.getId() != 0 && !reference.getPercentShare().equalsIgnoreCase("-")){
                             if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
                                 cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
                             }
