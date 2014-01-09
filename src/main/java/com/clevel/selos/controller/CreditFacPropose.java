@@ -4,10 +4,7 @@ import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
-import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
-import com.clevel.selos.dao.working.TCGDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
@@ -15,6 +12,7 @@ import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.TCG;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -208,6 +206,8 @@ public class CreditFacPropose implements Serializable {
     TCGInfoControl tcgInfoControl;
     @Inject
     ExSummaryControl exSummaryControl;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
     public CreditFacPropose(){}
 
@@ -241,13 +241,15 @@ public class CreditFacPropose implements Serializable {
         if (workCaseId != null) {
 
             modeForDB = ModeForDB.ADD_DB;
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
 
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-                log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
                 if (newCreditFacilityView != null)
                 {
+                    log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
+
                     modeForDB = ModeForDB.EDIT_DB;
                     newCreditDetailList = newCreditFacilityView.getNewCreditDetailViewList();
 
@@ -263,13 +265,18 @@ public class CreditFacPropose implements Serializable {
             log.info("onCreation :: modeForDB :: {}", modeForDB);
 
             basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-            log.info("basicInfo:: {}", basicInfo.getId());
             if (basicInfo == null) {
-                productGroup = null;
                 specialProgramBasicInfo = null;
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
                 specialProgramBasicInfo = basicInfo.getSpecialProgram();
+            }
+
+            if(workCase == null){
+                productGroup = null;
+            } else{
+                log.info("workCase.id ::: {}", workCase.getId());
+                productGroup =  workCase.getProductGroup();
             }
 
             tcg = tcgdao.findByWorkCaseId(workCaseId);
