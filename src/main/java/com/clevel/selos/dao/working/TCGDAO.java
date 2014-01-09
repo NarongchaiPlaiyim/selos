@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class TcgDAO extends GenericDAO<TCG, Integer> {
+public class TCGDAO extends GenericDAO<TCG, Integer> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public TcgDAO() {
+    public TCGDAO() {
     }
 
     public TCG findTcgById(long id) {

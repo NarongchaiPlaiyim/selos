@@ -4,8 +4,8 @@ import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.dao.working.TcgDAO;
-import com.clevel.selos.dao.working.TcgDetailDAO;
+import com.clevel.selos.dao.working.TCGDAO;
+import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PotentialCollateral;
@@ -41,9 +41,9 @@ public class TCGInfoControl extends BusinessControl {
     TCGTransform tcgTransform;
 
     @Inject
-    TcgDAO tcgDAO;
+    TCGDAO TCGDAO;
     @Inject
-    TcgDetailDAO tcgDetailDAO;
+    TCGDetailDAO TCGDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
@@ -69,10 +69,10 @@ public class TCGInfoControl extends BusinessControl {
         User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
         log.info("transform comeback {} ", tcg.toString());
-        tcgDAO.persist(tcg);
+        TCGDAO.persist(tcg);
         log.info("persist tcg");
         List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
-        tcgDetailDAO.persist(tcgDetailList);
+        TCGDetailDAO.persist(tcgDetailList);
     }
 
     public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
@@ -82,16 +82,16 @@ public class TCGInfoControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
-        tcgDAO.persist(tcg);
+        TCGDAO.persist(tcg);
         log.info("persist tcg");
 
-        List<TCGDetail> tcgDetailListToDelete = tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
+        List<TCGDetail> tcgDetailListToDelete = TCGDetailDAO.findTCGDetailByTcgId(tcg.getId());
         log.info("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
-        tcgDetailDAO.delete(tcgDetailListToDelete);
+        TCGDetailDAO.delete(tcgDetailListToDelete);
         log.info("delete tcgDetailListToDelete");
 
         List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
-        tcgDetailDAO.persist(tcgDetailList);
+        TCGDetailDAO.persist(tcgDetailList);
         log.info("persist tcgDetailList");
 
     }
@@ -103,7 +103,7 @@ public class TCGInfoControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
         if (workCase != null) {
-            TCG tcg = tcgDAO.findByWorkCase(workCase);
+            TCG tcg = TCGDAO.findByWorkCase(workCase);
 
             if (tcg != null) {
                 log.info("tcg :: {} ", tcg.getId());
@@ -118,7 +118,7 @@ public class TCGInfoControl extends BusinessControl {
         log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
         List<TCGDetailView> tcgDetailViewList = null;
 
-        List<TCGDetail> TCGDetailList = tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
+        List<TCGDetail> TCGDetailList = TCGDetailDAO.findTCGDetailByTcgId(tcgView.getId());
 
         if (TCGDetailList.size() > 0) {
             tcgDetailViewList = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);

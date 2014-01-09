@@ -198,7 +198,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     SpecialProgramDAO specialProgramDAO;
     @Inject
-    TcgDAO tcgDAO;
+    TCGDAO TCGDAO;
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
@@ -288,7 +288,7 @@ public class CreditFacPropose implements Serializable {
                 productGroup =  workCase.getProductGroup();
             }
 
-            tcg = tcgDAO.findByWorkCaseId(workCaseId);
+            tcg = TCGDAO.findByWorkCaseId(workCaseId);
 
             if (tcg == null) {
                 applyTCG = 0;
