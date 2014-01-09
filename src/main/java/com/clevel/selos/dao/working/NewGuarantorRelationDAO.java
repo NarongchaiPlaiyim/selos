@@ -17,8 +17,7 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorRelCredit, L
     @SELOS
     Logger log;
     @Inject
-    public NewGuarantorRelationDAO() {
-    }
+    public NewGuarantorRelationDAO() {}
 
     @SuppressWarnings("unchecked")
     public List<NewGuarantorRelCredit> getListGuarantorRelationByNewGuarantor(NewGuarantorDetail newGuarantorDetail) {

@@ -2,9 +2,12 @@ package com.clevel.selos.model.db.relation;
 
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "rel_potential_tcgcollateral")
@@ -20,6 +23,15 @@ public class PotentialColToTCGCol implements Serializable {
     @OneToOne
     @JoinColumn(name = "tcgcollateral_id")
     private TCGCollateralType tcgCollateralType;
+
+    @Column(name = "percent_ltv")
+    private BigDecimal percentLTV;
+
+    @Column(name = "ten_percent_ltv")
+    private BigDecimal tenPercentLTV;
+
+    @Column(name = "retention_ltv")
+    private BigDecimal retentionLTV;
 
     @Column(name = "active")
     private int active;
@@ -54,5 +66,42 @@ public class PotentialColToTCGCol implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public BigDecimal getPercentLTV() {
+        return percentLTV;
+    }
+
+    public void setPercentLTV(BigDecimal percentLTV) {
+        this.percentLTV = percentLTV;
+    }
+
+    public BigDecimal getTenPercentLTV() {
+        return tenPercentLTV;
+    }
+
+    public void setTenPercentLTV(BigDecimal tenPercentLTV) {
+        this.tenPercentLTV = tenPercentLTV;
+    }
+
+    public BigDecimal getRetentionLTV() {
+        return retentionLTV;
+    }
+
+    public void setRetentionLTV(BigDecimal retentionLTV) {
+        this.retentionLTV = retentionLTV;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("potentialCollateral", potentialCollateral)
+                .append("tcgCollateralType", tcgCollateralType)
+                .append("percentLTV", percentLTV)
+                .append("tenPercentLTV", tenPercentLTV)
+                .append("retentionLTV", retentionLTV)
+                .append("active", active)
+                .toString();
     }
 }

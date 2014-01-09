@@ -13,7 +13,6 @@ import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -25,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ViewScoped
@@ -70,11 +70,10 @@ public class AccountInfo implements Serializable {
     private List<BankAccountType> accountTypeList;
     private List<OpenAccountProduct> productTypeList;
     private List<BankBranch> branchList;
+    private List<AccountNameView> accountNameList;
 
     //*** Check box ***//
     private List<AccountInfoPurposeView> purposeViewList;
-
-    private List<String> accountName;
 
     //*** Account Name (Table) ***//
     private List<AccountNameView> accountNameViewList;
@@ -109,10 +108,17 @@ public class AccountInfo implements Serializable {
         init();
         accountInfoView = accountInfoControl.getAccountInfo(workCaseId);
         if(accountInfoView!=null){
-            log.debug("Account info view is not null");
             accountInfoDetailViewList = accountInfoView.getAccountInfoDetailViewList();
+            log.debug("-- accountInfoDetailViewList.size() : {}", accountInfoDetailViewList.size());
+            for(AccountInfoDetailView view : accountInfoDetailViewList){
+                accountNameViewList = view.getAccountNameViewList();
+                log.debug("-- accountNameViewList.size() : {}", accountNameViewList.size());
+                for(AccountNameView nameView : accountNameViewList){
+                    log.debug("-- Account Name View : {}", nameView.getName());
+                }
+            }
         } else {
-            log.debug("Account info view is null");
+            accountInfoView = new AccountInfoView();
             accountInfoDetailViewList = new ArrayList<AccountInfoDetailView>();
         }
     }
@@ -128,9 +134,17 @@ public class AccountInfo implements Serializable {
     }
 
     public void addAccountName(){
-        accountNameView = new AccountNameView();
-        accountNameView.setName(accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected().getName());
-        accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().add(accountNameView);
+        long id = 0;
+        id = accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewSelected().getId();
+        for(AccountNameView nameView : accountNameList){
+            if(nameView.getId() == id){
+                accountNameView = new AccountNameView();
+                accountNameView.setId(id);
+                accountNameView.setName(nameView.getName());
+                accountInfoView.getAccountInfoDetailViewSelected().getAccountNameViewList().add(accountNameView);
+                break;
+            }
+        }
     }
 
     public void addAccountDetail(){
@@ -140,26 +154,33 @@ public class AccountInfo implements Serializable {
 
         //Request Account Type
         id = accountInfoView.getAccountInfoDetailViewSelected().getReqAccountType();
+        log.debug("-- Request Account Type id : {}", id);
         if(1 == id){
             accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("Existing");
+            log.debug("-- Request Account Type : {}", "Existing");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("New");
+            log.debug("-- Request Account Type : {}", "New");
         }
 
         //Account Number
         value = accountInfoView.getAccountInfoDetailViewSelected().getAccountNumber();
         if(value == null || "".equals(value)){
             accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(" - ");
+            log.debug("-- Account Number : {}", "Null or Empty");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(value);
+            log.debug("-- Account Number : {}", value);
         }
 
         //Branch
         idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
-        if(0 != id){
+        log.debug("-- Branch id : {}", idLong);
+        if(0 != idLong){
             for (BankBranch branch : branchList){
                 if (branch.getId() == idLong){
                     accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branch.getName());
+                    log.debug("-- Branch : {}", branch.getName());
                     break;
                 }
             }
@@ -167,10 +188,12 @@ public class AccountInfo implements Serializable {
 
         //Product Type
         id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();
+        log.debug("-- Product Type id : {}", id);
         if(0 != id){
             for (OpenAccountProduct productType : productTypeList){
                 if (productType.getId() == id){
                     accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().setName(productType.getName());
+                    log.debug("-- Product Type : {}", productType.getName());
                     break;
                 }
             }
@@ -180,8 +203,10 @@ public class AccountInfo implements Serializable {
         value = accountInfoView.getAccountInfoDetailViewSelected().getTerm();
         if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
             accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(" - ");
+            log.debug("-- Term : {}", "Null or Empty");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(value);
+            log.debug("-- Term : {}", value);
         }
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
@@ -210,8 +235,13 @@ public class AccountInfo implements Serializable {
     }
 
     public void editAccountDetail(){
+        long id = 0;
         modeForButton = ModeForButton.EDIT;
         accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
+        id = accountInfoDetailView.getAccountTypeView().getId();
+        if(id != 0){
+            productTypeList = productTypeDAO.findByBankAccountTypeId((int)id);
+        }
         accountInfoView.setAccountInfoDetailViewSelected(accountInfoDetailView);
     }
 
@@ -245,6 +275,9 @@ public class AccountInfo implements Serializable {
         //Account Type
         accountTypeList = accountTypeDAO.findOpenAccountType();
 
+        //product Type
+        productTypeList = Collections.EMPTY_LIST;
+
         //Purpose
         purposeList = purposeDAO.findAll();
 
@@ -259,10 +292,22 @@ public class AccountInfo implements Serializable {
         accountInfoDetailView.setAccountInfoPurposeViewList(purposeViewList);
 
         //Account Name for test
-        accountName = new ArrayList<String>();
-        accountName.add("Mr. Ki mu ji");
-        accountName.add("Mr. Sbay D");
-        accountName.add("Mr. Kim ji");
+        accountNameList = new ArrayList<AccountNameView>();
+
+        accountNameView = new AccountNameView();
+        accountNameView.setId(01);
+        accountNameView.setName("Mr. Ki mu ji");
+        accountNameList.add(accountNameView);
+
+        accountNameView = new AccountNameView();
+        accountNameView.setId(02);
+        accountNameView.setName("Mr. Sbay D");
+        accountNameList.add(accountNameView);
+
+        accountNameView = new AccountNameView();
+        accountNameView.setId(03);
+        accountNameView.setName("Mr. Kim ji");
+        accountNameList.add(accountNameView);
 
         //Account Name (Table) for test
         accountNameViewList = new ArrayList<AccountNameView>();
@@ -270,11 +315,15 @@ public class AccountInfo implements Serializable {
         //Credit Type (Table) for test
         creditTypeViewList = new ArrayList<AccountInfoCreditTypeView>();
         creditTypeView = new AccountInfoCreditTypeView();
+        creditTypeView.setId(1);
+        creditTypeView.setSelected(false);
         creditTypeView.setProductProgram("ProductProgram");
         creditTypeView.setCreditFacility("Loan");
         creditTypeView.setLimit(new BigDecimal("99999"));
         creditTypeViewList.add(creditTypeView);
         creditTypeView = new AccountInfoCreditTypeView();
+        creditTypeView.setId(2);
+        creditTypeView.setSelected(false);
         creditTypeView.setProductProgram("ProductProgram2");
         creditTypeView.setCreditFacility("OD");
         creditTypeView.setLimit(new BigDecimal("99999999999999"));
@@ -390,12 +439,12 @@ public class AccountInfo implements Serializable {
         this.purposeViewList = purposeViewList;
     }
 
-    public List<String> getAccountName() {
-        return accountName;
+    public List<AccountNameView> getAccountNameList() {
+        return accountNameList;
     }
 
-    public void setAccountName(List<String> accountName) {
-        this.accountName = accountName;
+    public void setAccountNameList(List<AccountNameView> accountNameList) {
+        this.accountNameList = accountNameList;
     }
 
     public List<AccountNameView> getAccountNameViewList() {
