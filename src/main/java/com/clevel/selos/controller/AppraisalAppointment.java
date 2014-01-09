@@ -14,6 +14,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -74,6 +75,7 @@ public class AppraisalAppointment implements Serializable {
     private String message;
     private boolean showNoRequest;
     private Date currentDate;
+    private String currentDateDDMMYY;
 
     private User user;
     private Long workCaseId;
@@ -214,12 +216,12 @@ public class AppraisalAppointment implements Serializable {
 
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.appraisal.appointment.message.header.save.fail");
 
             if(ex.getCause() != null){
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                message = msg.get("app.appraisal.appointment.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.appraisal.appointment.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -532,18 +534,18 @@ public class AppraisalAppointment implements Serializable {
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
 
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.success");
-            message = msg.get("app.customerAcceptance.message.body.save.success");
+            messageHeader = msg.get("app.appraisal.appointment.message.header.save.success");
+            message = msg.get("app.appraisal.appointment.message.body.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.appraisal.appointment.message.header.save.fail");
 
             if(ex.getCause() != null){
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                message = msg.get("app.appraisal.appointment.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.appraisal.appointment.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -759,6 +761,15 @@ public class AppraisalAppointment implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 
     public int isCheck(boolean value){

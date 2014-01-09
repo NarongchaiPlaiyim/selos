@@ -47,7 +47,10 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.appraisalDate}"/>
+                    <p:outputLabel value="#{appraisalResult.collateralDetailView.appraisalDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                    </p:outputLabel>
+
                 </td>
             </tr>
             <tr>
@@ -120,7 +123,7 @@
                 </td>
                 <td>
                     <p:outputLabel value="#{collateralHeadDetailView.appraisalValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                     </p:outputLabel>
                 </td>
             </tr>

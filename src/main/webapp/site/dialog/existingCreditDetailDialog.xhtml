@@ -170,15 +170,15 @@
                     <p:outputLabel value="#{creditTier.no}"/>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.installment}" >
+                    <p:inputText  value="#{creditTier.installment}" style="text-align:right;">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                                         maxIntegerDigits="18"/>
                     </p:inputText>
                 </p:column>
-                <p:column styleClass="center">
-                    <table border="0" style="border: transparent">
-                        <tr>
-                            <td>
+                <p:column>
+                    <p:panelGrid  styleClass="panelGridPadding0" style="width:200px;">
+                        <p:row>
+                            <p:column>
                                 <p:selectOneMenu size="1"
                                                  value="#{creditTier.finalBasePrice.id}"
                                                  id="standDlg"
@@ -188,20 +188,20 @@
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
                                 </p:selectOneMenu>
-                            </td>
-                            <td>
+                            </p:column>
+                            <p:column>
                                 <p:inputText value="#{creditTier.finalInterest}"
                                              id="standPriceDlg"
                                              style="text-align:right;width:50px;">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </p:inputText>
-                            </td>
-                        </tr>
-                    </table>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.tenor}" >
+                    <p:inputText  value="#{creditTier.tenor}" style="text-align:right;">
                         <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="14"/>
                     </p:inputText>
                 </p:column>
@@ -271,7 +271,10 @@
                     </p:selectOneMenu>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText value="#{existingSplitLine.limit}"/>
+                    <p:inputText value="#{existingSplitLine.limit}" style="text-align:right;" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="18"/>
+                    </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
                     <p:column styleClass="center">

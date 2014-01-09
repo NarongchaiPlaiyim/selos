@@ -4,12 +4,14 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalResultControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -294,12 +296,12 @@ public class AppraisalResult implements Serializable {
 
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
 
             if(ex.getCause() != null){
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.appraisal.result.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -418,18 +420,18 @@ public class AppraisalResult implements Serializable {
             appraisalView.setCollateralDetailViewList(collateralDetailViewList);
 
             appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.success");
-            message = msg.get("app.customerAcceptance.message.body.save.success");
+            messageHeader = msg.get("app.appraisal.result.message.header.save.success");
+            message = msg.get("app.appraisal.result.message.body.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
 
             if(ex.getCause() != null){
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.appraisal.result.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -615,10 +617,18 @@ public class AppraisalResult implements Serializable {
         jobId = collateralDetailView.getJobID();
         AppraisalDataResult appraisalDataResult;
         log.info("userId is   " + user.getId() + "      jobId is  " + jobId);
+        try{
+            log.info("begin coms ");
+            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
+            log.info("end coms ");
+            collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
 
-        appraisalDataResult =comsInterface.getAppraisalData(user.getId(),jobId);
-        collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
-
+        }catch (COMSInterfaceException comsEx){
+            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
+            message = comsEx.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
         /*log.info("getData From COMS begin");
         appraisalData = new AppraisalData();
         appraisalData.setJobId(collateralDetailView.getJobID());
