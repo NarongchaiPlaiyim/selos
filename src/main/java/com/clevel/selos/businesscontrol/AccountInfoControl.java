@@ -94,6 +94,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         }
     }
 
+
     private void insertToDB(List<AccountInfoDetailView> accountInfoDetailViewList){
         accountInfoDetailViewList = safetyList(accountInfoDetailViewList);
         for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){
@@ -114,7 +115,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             }
         }
     }
-
     private void clearDB(List<AccountInfoDetail> accountInfoDetailList){
         long id;
         for(AccountInfoDetail infoDetail : accountInfoDetailList ){
@@ -130,7 +130,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             accountInfoDetailCreditTypeDAO.delete(accountInfoDetailCreditTypeList);
         }
     }
-
     private <T> List<T> safetyList(List<T> list) {
         return Util.safetyList(list);
     }

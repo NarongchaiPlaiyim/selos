@@ -31,11 +31,9 @@ public class AccountInfoDetailView implements Serializable {
     //Account Name
     private List<AccountNameView> accountNameViewList;
     private AccountNameView accountNameViewSelected;
-    private String accountNameViewListForShow;
 
     //Purpose
     private List<AccountInfoPurposeView> accountInfoPurposeViewList;
-    private String accountInfoPurposeViewListForShow;
 
     //Open Account
     private int openAccount;
@@ -123,28 +121,12 @@ public class AccountInfoDetailView implements Serializable {
         this.accountNameViewList = accountNameViewList;
     }
 
-    public String getAccountNameViewListForShow() {
-        return accountNameViewListForShow;
-    }
-
-    public void setAccountNameViewListForShow(String accountNameViewListForShow) {
-        this.accountNameViewListForShow = accountNameViewListForShow;
-    }
-
     public List<AccountInfoPurposeView> getAccountInfoPurposeViewList() {
         return accountInfoPurposeViewList;
     }
 
     public void setAccountInfoPurposeViewList(List<AccountInfoPurposeView> accountInfoPurposeViewList) {
         this.accountInfoPurposeViewList = accountInfoPurposeViewList;
-    }
-
-    public String getAccountInfoPurposeViewListForShow() {
-        return accountInfoPurposeViewListForShow;
-    }
-
-    public void setAccountInfoPurposeViewListForShow(String accountInfoPurposeViewListForShow) {
-        this.accountInfoPurposeViewListForShow = accountInfoPurposeViewListForShow;
     }
 
     public List<AccountInfoCreditTypeView> getAccountInfoCreditTypeViewList() {
@@ -199,9 +181,7 @@ public class AccountInfoDetailView implements Serializable {
                 .append("productTypeView", productTypeView)
                 .append("term", term)
                 .append("accountNameViewList", accountNameViewList)
-                .append("accountNameViewListForShow", accountNameViewListForShow)
                 .append("accountInfoPurposeViewList", accountInfoPurposeViewList)
-                .append("accountInfoPurposeViewListForShow", accountInfoPurposeViewListForShow)
                 .toString();
     }
 }
