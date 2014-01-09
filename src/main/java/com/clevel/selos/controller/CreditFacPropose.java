@@ -5,7 +5,9 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
@@ -19,6 +21,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.NewCollateralInfoTransform;
+import com.clevel.selos.transform.business.CollateralBizProposeTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
@@ -195,7 +198,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     SpecialProgramDAO specialProgramDAO;
     @Inject
-    TCGDAO tcgdao;
+    TcgDAO tcgDAO;
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
@@ -208,6 +211,10 @@ public class CreditFacPropose implements Serializable {
     ExSummaryControl exSummaryControl;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    private COMSInterface comsInterface;
+    @Inject
+    private CollateralBizProposeTransform collateralBizProposeTransform;
 
     public CreditFacPropose(){}
 
@@ -216,10 +223,12 @@ public class CreditFacPropose implements Serializable {
         log.info("preRender ::: setSession ");
 
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", new Long(2)); // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
+            user = (User)session.getAttribute("user");
+
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -279,7 +288,7 @@ public class CreditFacPropose implements Serializable {
                 productGroup =  workCase.getProductGroup();
             }
 
-            tcg = tcgdao.findByWorkCaseId(workCaseId);
+            tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
             if (tcg == null) {
                 applyTCG = 0;
@@ -411,6 +420,7 @@ public class CreditFacPropose implements Serializable {
         // test create data from retrieving
         NewCreditDetailView creditDetailRetrieve = new NewCreditDetailView();
         BaseRate baseRate = baseRateDAO.findById(1);
+        BigDecimal installment = BigDecimal.ZERO;
         creditDetailRetrieve.setStandardBasePrice(baseRate);
         creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
 
@@ -444,50 +454,30 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
             proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest());
             proposeCreditDetail.setInstallment(newCreditTierDetailView.getInstallment());
+            log.info("proposeCreditDetail.getInstallment ::  {}",proposeCreditDetail.getInstallment());
         }
-
     }
 
     // Call  COMs to get Data Propose Collateral
     public void onCallRetrieveAppraisalReportInfo() {
         log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", newCollateralInfoView.getJobID());
-
-//COMSInterface
+        //COMSInterface
         log.info("getData From COMS begin");
+        String jobId;
+        jobId = newCollateralInfoView.getJobID();
+        AppraisalDataResult appraisalDataResult;
+        log.info(" jobId is  " + jobId);
+        try{
+            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
 
-        /*newCollateralInfoView.setAppraisalDate(DateTime.now().toDate());
-        newCollateralInfoView.setAadDecision("ผ่าน");
-        newCollateralInfoView.setAadDecisionReason("กู้");
-        newCollateralInfoView.setAadDecisionReasonDetail("ok");
+            if(appraisalDataResult != null){
+                newCollateralInfoView = collateralBizProposeTransform.transformCollateral(appraisalDataResult);
+            }
 
-        newCollateralHeadDetailView = new NewCollateralHeadDetailView();
-        newCollateralHeadDetailView.setCollateralLocation("ประเทศไทย แลน ออฟ สไมล์");
-        newCollateralHeadDetailView.setTitleDeed("กค 126,ญก 156");
-        newCollateralHeadDetailView.setAppraisalValue(BigDecimal.valueOf(4810000));
+        } catch (Exception ex) {
+            log.error("Exception : {}", ex);
+        }
 
-        CollateralType collateralType = collateralTypeDAO.findById(1);
-        PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(2);
-        newCollateralHeadDetailView.setHeadCollType(collateralType);
-        newCollateralHeadDetailView.setPotentialCollateral(potentialCollateral);
-
-        newSubCollateralDetailView = new NewSubCollateralDetailView();
-        newSubCollateralDetailView.setLandOffice("ขอนแก่น");
-        newSubCollateralDetailView.setAddress("ถนน ข้าวเหนียว จ ขอนแก่น");
-        newSubCollateralDetailView.setTitleDeed("กค 126");
-        newSubCollateralDetailView.setCollateralOwner("AAA");
-        newSubCollateralDetailView.setAppraisalValue(new BigDecimal(3810000));
-        newSubCollateralDetailViewList.add(newSubCollateralDetailView);
-
-        newSubCollateralDetailView = new NewSubCollateralDetailView();
-        newSubCollateralDetailView.setLandOffice("กทม");
-        newSubCollateralDetailView.setAddress("ถนน วิภาวดีรังสิต");
-        newSubCollateralDetailView.setTitleDeed("กค 126");
-        newSubCollateralDetailView.setCollateralOwner("BBB");
-        newSubCollateralDetailView.setAppraisalValue(new BigDecimal(9000000));
-        newSubCollateralDetailViewList.add(newSubCollateralDetailView);
-
-        newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViewList);
-        newCollateralInfoView.getNewCollateralHeadDetailViewList().add(newCollateralHeadDetailView);*/
 
         log.info("onCallRetrieveAppraisalReportInfo End");
 
@@ -1736,14 +1726,6 @@ public class CreditFacPropose implements Serializable {
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
     }
-
-/*    public List<CreditTypeDetailView> getCreditTypeDetailList() {
-        return creditTypeDetailList;
-    }
-
-    public void setCreditTypeDetailList(List<CreditTypeDetailView> creditTypeDetailList) {
-        this.creditTypeDetailList = creditTypeDetailList;
-    }*/
 
     public List<PrdProgramToCreditType> getPrdProgramToCreditTypeList() {
         return prdProgramToCreditTypeList;
