@@ -29,15 +29,16 @@ public class AccountInfoTransform extends Transform {
     }
 
     public AccountInfo transformToModel(final AccountInfoView accountInfoView,final WorkCase workCase,final User user){
-        accountInfo = accountInfoDAO.findByWorkCaseId(workCase.getId());
-        if(accountInfo != null){
+        accountInfo = new AccountInfo();
+
+        if(accountInfoView.getId() != 0){
+            accountInfo = accountInfoDAO.findById(accountInfoView.getId());
             accountInfo.setModifyDate(new Date());
             accountInfo.setModifyBy(user);
             accountInfo.setLastReviewDate(new Date());
             accountInfo.setApprovedType(accountInfoView.getApprovedType());
             return accountInfo;
         } else {
-            accountInfo = new AccountInfo();
             accountInfo.setWorkCase(workCase);
             accountInfo.setModifyDate(new Date());
             accountInfo.setModifyBy(user);
@@ -52,7 +53,7 @@ public class AccountInfoTransform extends Transform {
 
     public AccountInfoView transformToView(final AccountInfo accountInfo){
         accountInfoView = new AccountInfoView();
-
+        accountInfoView.setId(accountInfo.getId());
         accountInfoView.setModifyDate(accountInfo.getModifyDate());
         accountInfoView.setModifyBy(accountInfo.getModifyBy());
 

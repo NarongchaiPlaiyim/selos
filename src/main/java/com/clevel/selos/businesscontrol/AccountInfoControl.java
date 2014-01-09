@@ -63,7 +63,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
         AccountInfoView accountInfoView = null;
         if (accountInfo != null) {
-//            accountInfo = new AccountInfo();
             accountInfoView = accountInfoTransform.transformToView(accountInfo);
             log.info("-- getAccountInfo ::: AccountInfoView : {}", accountInfoView);
             return accountInfoView;
