@@ -75,10 +75,11 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
         log.debug("-- saveAccountInfo({}, {})", accountInfoView.toString(), workCaseId);
         User user = getCurrentUser();
-
         workCase = workCaseDAO.findById(workCaseId);
+        accountInfoView.getId();
 
         accountInfo = accountInfoTransform.transformToModel(accountInfoView, workCase, user);
+
         accountInfoDAO.persist(accountInfo);
 
         accountInfoDetailList = safetyList(accountInfoDetailDAO.findByAccountInfoDetailId(accountInfo.getId()));
@@ -93,6 +94,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             insertToDB(accountInfoDetailViewList);
         }
     }
+
 
     private void insertToDB(List<AccountInfoDetailView> accountInfoDetailViewList){
         accountInfoDetailViewList = safetyList(accountInfoDetailViewList);
@@ -114,7 +116,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             }
         }
     }
-
     private void clearDB(List<AccountInfoDetail> accountInfoDetailList){
         long id;
         for(AccountInfoDetail infoDetail : accountInfoDetailList ){
@@ -130,7 +131,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             accountInfoDetailCreditTypeDAO.delete(accountInfoDetailCreditTypeList);
         }
     }
-
     private <T> List<T> safetyList(List<T> list) {
         return Util.safetyList(list);
     }

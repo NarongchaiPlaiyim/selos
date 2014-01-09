@@ -18,8 +18,8 @@ public class AccountInfoDetailAccountName implements Serializable {
     @JoinColumn(name = "account_info_detail_id")
     private AccountInfoDetail accountInfoDetailAccountName;
 
-    @Column(name = "account_id")
-    private long accountId;
+    @Column(name = "account_name_id")
+    private long accountNameId;
 
     @Column(name = "account_name")
     private String accountName;
@@ -40,12 +40,12 @@ public class AccountInfoDetailAccountName implements Serializable {
         this.accountInfoDetailAccountName = accountInfoDetailAccountName;
     }
 
-    public long getAccountId() {
-        return accountId;
+    public long getAccountNameId() {
+        return accountNameId;
     }
 
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
+    public void setAccountNameId(long accountNameId) {
+        this.accountNameId = accountNameId;
     }
 
     public String getAccountName() {
@@ -61,7 +61,7 @@ public class AccountInfoDetailAccountName implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("accountInfoDetailAccountName", accountInfoDetailAccountName)
-                .append("accountId", accountId)
+                .append("accountNameId", accountNameId)
                 .append("accountName", accountName)
                 .toString();
     }
