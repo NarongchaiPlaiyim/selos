@@ -113,7 +113,7 @@
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoView.relation.id}"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRelation}"
-                                                     disabled="#{custInfoSumJuris.editBorrower}">
+                                                     disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.relationList}"
                                                        var="relation"
@@ -130,7 +130,9 @@
                                 </td>
                                 <td colspan="3">
                                     <p:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
-                                                      disabled="#{custInfoSumJuris.customerInfoView.relation.getId() == 3 || custInfoSumJuris.customerInfoView.relation.getId() == 4}">
+                                                      disabled="#{custInfoSumJuris.customerInfoView.relation.getId() == 3
+                                                      || custInfoSumJuris.customerInfoView.relation.getId() == 4
+                                                      || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
                                     </p:selectOneRadio>
@@ -146,7 +148,7 @@
                                     <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
                                                      value="#{custInfoSumJuris.customerInfoView.reference.id}" id="reference"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqReference}"
-                                                     disabled="#{custInfoSumJuris.editBorrower}">
+                                                     disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.referenceList}"
                                                        var="reference"
@@ -166,7 +168,8 @@
                                     <p:inputText id="share" styleClass="right" value="#{custInfoSumJuris.customerInfoView.shares}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);">
+                                                 onkeypress="return onKeyPressNumber(event);"
+                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"/>
                                         <p:ajax event="blur" update=":frmMain:share"/>
                                     </p:inputText>
@@ -186,7 +189,7 @@
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoView.documentType.id}"
-                                                     disabled="#{not custInfoSumJuris.enableDocumentType}"
+                                                     disabled="#{not custInfoSumJuris.enableDocumentType || not custInfoSumJuris.enableAllFieldCus}"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqDocType}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.documentTypeList}"
@@ -205,7 +208,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
-                                                 disabled="#{not custInfoSumJuris.enableCitizenId}"
+                                                 disabled="#{not custInfoSumJuris.enableCitizenId || not custInfoSumJuris.enableAllFieldCus}"
                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegId}"/>
                                 </td>
                             </tr>
@@ -220,7 +223,8 @@
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
                                                     maxdate="#{custInfoSumJuris.currentDateDDMMYY}"
-                                                    value="#{custInfoSumJuris.customerInfoView.dateOfRegister}">
+                                                    value="#{custInfoSumJuris.customerInfoView.dateOfRegister}"
+                                                    disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                     </clv:BECalendar>
                                 </td>
                             </tr>
@@ -234,7 +238,8 @@
                                                     yearRange="1950:2100"
                                                     pattern="dd/MM/yyyy"
                                                     mindate="01/01/1950"
-                                                    value="#{custInfoSumJuris.customerInfoView.documentIssueDate}">
+                                                    value="#{custInfoSumJuris.customerInfoView.documentIssueDate}"
+                                                    disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                     </clv:BECalendar>
                                 </td>
                             </tr>
@@ -248,7 +253,8 @@
                                             <td>
                                                 <p:selectOneMenu size="1" id="titleTh" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumJuris.customerInfoView.titleTh.id}"
-                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqTitTh}">
+                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqTitTh}"
+                                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.titleThList}"
                                                                    var="titleTh"
@@ -262,7 +268,8 @@
                                             <td>
                                                 <p:inputText value="#{custInfoSumJuris.customerInfoView.firstNameTh}"
                                                              required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqStNameTh}"
-                                                             style="width: 200px; max-width: 200px; min-width: 200px;"/>
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -278,7 +285,8 @@
                                             <td>
                                                 <p:selectOneMenu size="1" id="titleEn" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumJuris.customerInfoView.titleEn.id}"
-                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqTitEn}">
+                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqTitEn}"
+                                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.titleEnList}"
                                                                    var="titleEn"
@@ -292,7 +300,8 @@
                                             <td>
                                                 <p:inputText value="#{custInfoSumJuris.customerInfoView.firstNameEn}"
                                                              required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqStNameEn}"
-                                                             style="width: 200px; max-width: 200px; min-width: 200px;"/>
+                                                             style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -305,7 +314,8 @@
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoView.businessType.id}"
-                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqBizType}">
+                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqBizType}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.businessTypeList}"
                                                        var="busType"
@@ -320,7 +330,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu styleClass="largest" size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.financialYear}">
+                                                     value="#{custInfoSumJuris.customerInfoView.financialYear}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.yearList}"
                                                        var="yearList"
@@ -338,7 +349,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 maxlength="18">
+                                                 maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:registeredCapital"/>
                                     </p:inputText>
@@ -353,7 +364,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 maxlength="18">
+                                                 maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:paidUpCapital"/>
                                     </p:inputText>
@@ -368,7 +379,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 maxlength="18">
+                                                 maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:salesFormFinancialStmt"/>
                                     </p:inputText>
@@ -383,7 +394,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 maxlength="18">
+                                                 maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:shareHolderRatio"/>
                                     </p:inputText>
@@ -398,7 +409,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 maxlength="18">
+                                                 maxlength="17" disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         <p:ajax event="blur" update=":frmMain:totalShares"/>
                                     </p:inputText>
@@ -410,7 +421,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.sourceIncome.id}">
+                                                     value="#{custInfoSumJuris.customerInfoView.sourceIncome.id}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                        var="country"
@@ -423,7 +435,8 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.countryIncome.id}">
+                                                     value="#{custInfoSumJuris.customerInfoView.countryIncome.id}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                        var="country"
@@ -448,7 +461,8 @@
                                 <td colspan="5">
                                     <p:commandButton styleClass="small" process="@form"
                                                      value="#{msg.get('app.button.add')}"
-                                                     action="#{custInfoSumJuris.onAddIndividual()}"/>
+                                                     action="#{custInfoSumJuris.onAddIndividual()}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -571,7 +585,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.worthiness}"
+                                            <h:outputText value="#{item.worthiness == 3 ? 'Pass' : item.worthiness == 4 ? 'Fail' : item.worthiness == 5 ? 'N/A' : '-'}"
                                                           style="min-width: 50px; max-width: 50px;"/>
                                         </p:column>
 
@@ -608,7 +622,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:inputText value="#{custInfoSumJuris.customerInfoView.numberOfAuthorizedUsers}"
-                                                 style="width: 300px; max-width: 300px; min-width: 300px;"/>
+                                                 style="width: 300px; max-width: 300px; min-width: 300px;"
+                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
 
@@ -629,19 +644,22 @@
                                             <td class="smallest left">
                                                 <p:inputText styleClass="smallest"
                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.addressNo}"
-                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegNo}"/>
+                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegNo}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                             <td class="title right">
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.moo')}"/>
                                             </td>
                                             <td class="smallest left">
-                                                <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.registerAddress.moo}"/>
+                                                <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.registerAddress.moo}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                             <td class="small title right">
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.building')}"/>
                                             </td>
                                             <td class="left">
-                                                <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.registerAddress.building}"/>
+                                                <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.registerAddress.building}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -649,7 +667,8 @@
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.road')}"/>
                                             </td>
                                             <td class="left" colspan="5">
-                                                <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.road}"/>
+                                                <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.road}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -660,7 +679,8 @@
                                                         <td>
                                                             <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.province.code}"
-                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegPro}">
+                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegPro}"
+                                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumJuris.provinceForm1List}"
                                                                                var="province"
@@ -673,7 +693,8 @@
                                                         <td>
                                                             <p:selectOneMenu size="1" id="districtForm1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.district.id}"
-                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegDis}">
+                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegDis}"
+                                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumJuris.districtForm1List}"
                                                                                var="district"
@@ -686,7 +707,8 @@
                                                         <td>
                                                             <p:selectOneMenu size="1" id="subDistrictForm1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.subDistrict.code}"
-                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegSub}">
+                                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegSub}"
+                                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                 <f:selectItems value="#{custInfoSumJuris.subDistrictForm1List}"
                                                                                var="subDistrict"
@@ -705,7 +727,8 @@
                                             <td colspan="5">
                                                 <p:inputMask mask="99999" styleClass="smaller" maxlength="5"
                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.postalCode}"
-                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegPos}"/>
+                                                             required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegPos}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -715,7 +738,8 @@
                                             <td colspan="5">
                                                 <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  value="#{custInfoSumJuris.customerInfoView.registerAddress.country.id}"
-                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegCou}">
+                                                                 required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegCou}"
+                                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                                    var="country"
@@ -729,7 +753,8 @@
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.address')}"/>
                                             </td>
                                             <td colspan="5">
-                                                <p:inputText style="width: 500px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.address}"/>
+                                                <p:inputText style="width: 500px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.address}"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -741,11 +766,12 @@
                                                              required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegPhone}"
                                                              onkeydown="return onKeyDownNumber(event);"
                                                              onkeypress="return onKeyPressNumber(event);"
-                                                             maxlength="10"/>
+                                                             maxlength="10" disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                                 <h:outputText value=" #{msg.get('app.custInfoJuri.content.telTo')} " styleClass="title"/>
                                                 <p:inputText styleClass="smaller" value="#{custInfoSumJuris.customerInfoView.registerAddress.extension}"
                                                              onkeydown="return onKeyDownNumber(event);"
-                                                             onkeypress="return onKeyPressNumber(event);"/>
+                                                             onkeypress="return onKeyPressNumber(event);"
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -760,7 +786,8 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.bussAdd')}"/>
                                 </td>
                                 <td colspan="2">
-                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag}">
+                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag}"
+                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.reigs')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.other')}" itemValue="3"/>
                                         <p:ajax update=":frmMain:adForm2"/>
@@ -779,7 +806,8 @@
                                                 </td>
                                                 <td class="smallest left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.addressNo}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorNo
                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"/>
                                                 </td>
@@ -788,14 +816,16 @@
                                                 </td>
                                                 <td class="smallest left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.moo}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.building')}"/>
                                                 </td>
                                                 <td class="left">
                                                     <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.workAddress.building}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -804,7 +834,8 @@
                                                 </td>
                                                 <td class="left" colspan="5">
                                                     <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.workAddress.road}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -815,7 +846,8 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.province.code}"
-                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPro
                                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -830,7 +862,8 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" id="districtForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.district.id}"
-                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorDis
                                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -845,7 +878,8 @@
                                                             <td>
                                                                 <p:selectOneMenu size="1" id="subDistrictForm2" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.subDistrict.code}"
-                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorSub
                                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -866,7 +900,8 @@
                                                 <td colspan="5">
                                                     <p:inputMask mask="99999" styleClass="smaller" maxlength="5"
                                                                  value="#{custInfoSumJuris.customerInfoView.workAddress.postalCode}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPos
                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"/>
                                                 </td>
@@ -878,7 +913,8 @@
                                                 <td colspan="5">
                                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                      value="#{custInfoSumJuris.customerInfoView.workAddress.country.id}"
-                                                                     disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                     disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                                || not custInfoSumJuris.enableAllFieldCus}"
                                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorCou
                                                                      and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -895,7 +931,8 @@
                                                 </td>
                                                 <td colspan="5">
                                                     <p:inputText style="width: 500px;" value="#{custInfoSumJuris.customerInfoView.workAddress.address}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -904,13 +941,15 @@
                                                 </td>
                                                 <td colspan="5">
                                                     <p:inputText styleClass="large" value="#{custInfoSumJuris.customerInfoView.workAddress.phoneNumber}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqWorPhone
                                                                                  and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}"
                                                                  maxlength="10"/>
                                                     <h:outputText value=" #{msg.get('app.custInfoJuri.content.telTo')} " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumJuris.customerInfoView.workAddress.extension}"
-                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -927,7 +966,8 @@
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumJuris.customerInfoView.contactName}"
-                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"
+                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -940,7 +980,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
-                                                 maxlength="10"/>
+                                                 maxlength="10" disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -951,7 +991,8 @@
                                     <p:inputText value="#{custInfoSumJuris.customerInfoView.faxNumber}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
-                                                 onkeypress="return onKeyPressNumber(event);"/>
+                                                 onkeypress="return onKeyPressNumber(event);"
+                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -960,7 +1001,8 @@
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumJuris.customerInfoView.email}"
-                                                 style="width: 192px; max-width: 192px; min-width: 192px;"/>
+                                                 style="width: 192px; max-width: 192px; min-width: 192px;"
+                                                 disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -970,7 +1012,8 @@
                                 <td colspan="5">
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoView.mailingAddressType.id}"
-                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqAddMail}">
+                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqAddMail}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.addressTypeList}"
                                                        var="addressType"
@@ -1014,7 +1057,8 @@
                                 <td colspan="5">
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumJuris.customerInfoView.kycLevel.id}"
-                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqKYCLev}">
+                                                     required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqKYCLev}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.kycLevelList}"
                                                        var="kyc"
@@ -1029,7 +1073,8 @@
                                 </td>
                                 <td colspan="3">
                                     <p:inputTextarea value="#{custInfoSumJuris.customerInfoView.kycReason}"
-                                                     style="width: 70%" maxlength="250" autoResize="false"/>
+                                                     style="width: 70%" maxlength="250" autoResize="false"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1065,10 +1110,10 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.worthiness')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.worthiness}" disabled="#{custInfoSumJuris.editBorrower}">
+                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoView.worthiness}" disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.pass')}" itemValue="3"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.fail')}" itemValue="4"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.na')}" itemValue="4"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.na')}" itemValue="5"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1109,9 +1154,11 @@
                                 <td colspan="6" class="center">
                                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="small"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
-                                                     actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"/>
+                                                     actionListener="#{custInfoSumJuris.onSave}" binding="#{saveCustomer}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
-                                                     actionListener="#{custInfoSumJuris.onCreation}"/>
+                                                     actionListener="#{custInfoSumJuris.onCreation}"
+                                                     disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             </table>

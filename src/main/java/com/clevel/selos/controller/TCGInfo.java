@@ -190,7 +190,6 @@ public class TCGInfo implements Serializable {
             BigDecimal ltvValueBig ;
             log.info("TCGDetailView AppraisalAmount :: {}" , tcgDetailView.getAppraisalAmount());
 
-
             ltvValueBig = tcgInfoControl.toCalculateLtvValue(tcgDetailView, this.workCaseId);
             tcgDetailView.setLtvValue(ltvValueBig);
         }
@@ -211,7 +210,6 @@ public class TCGInfo implements Serializable {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
-
                 TCGDetailView tcgDetailViewSave = new TCGDetailView();
                 tcgDetailViewSave.setPotentialCollateral(potentialCollateralSave);
                 tcgDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
@@ -224,7 +222,6 @@ public class TCGInfo implements Serializable {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
-
                 TCGDetailViewList.get(rowIndex).setPotentialCollateral(potentialCollateralSave);
                 TCGDetailViewList.get(rowIndex).setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewList.get(rowIndex).setAppraisalAmount(tcgDetailView.getAppraisalAmount());
@@ -255,11 +252,10 @@ public class TCGInfo implements Serializable {
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
-            TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
-            TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
-            TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
-            TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "LTV"));
-
+            TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumAppraisalValue(TCGDetailViewList));
+            TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumLtvValue(TCGDetailViewList));
+            TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumAppraisalInThis(TCGDetailViewList));
+            TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumLtvInThis(TCGDetailViewList));
         } else {
             TCGView.setSumAppraisalAmount(new BigDecimal(0));
             TCGView.setSumLtvValue(new BigDecimal(0));

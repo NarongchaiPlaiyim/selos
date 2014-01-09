@@ -36,4 +36,14 @@ public class PotentialColToTCGColDAO extends GenericDAO<PotentialColToTCGCol, In
         return list;
 
     }
+
+    public PotentialColToTCGCol getPotentialColToTCGCol(PotentialCollateral potentialCollateral ,TCGCollateralType tcgCollateralType) {
+        log.info("getListPotentialColToTCGCol. (PotentialCollateral: {})", potentialCollateral);
+        log.info("getPotentialColToTCGCol. (TCGCollateralType: {})", tcgCollateralType);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("potentialCollateral", potentialCollateral));
+        criteria.add(Restrictions.eq("tcgCollateralType", tcgCollateralType));
+        PotentialColToTCGCol potentialColToTCGCol = (PotentialColToTCGCol) criteria.uniqueResult();
+        return potentialColToTCGCol;
+    }
 }

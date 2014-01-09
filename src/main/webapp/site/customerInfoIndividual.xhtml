@@ -2419,18 +2419,22 @@
                                     <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumIndi.onSave}" binding="#{saveCustomer}"
-                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
-                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumIndi.onCreation}"
-                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onCancelFromJuristic()}"
-                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             </table>
