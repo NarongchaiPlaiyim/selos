@@ -202,6 +202,8 @@ public class BankStatementDetail implements Serializable {
             modeForButton = ModeForButton.EDIT;
         }
 
+        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
+
         // select items
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank) {
@@ -215,7 +217,6 @@ public class BankStatementDetail implements Serializable {
         accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
     }
 
-
     private List<BankStmtDetailView> generateBankStmtDetail() {
         List<BankStmtDetailView> bankStmtDetailViewList;
         bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
@@ -226,7 +227,6 @@ public class BankStatementDetail implements Serializable {
             bankStmtDetailView.setAsOfDate(date);
             bankStmtDetailViewList.add(bankStmtDetailView);
         }
-        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtDetailViewList, SortOrder.ASCENDING);
         return bankStmtDetailViewList;
     }
 
@@ -316,6 +316,8 @@ public class BankStatementDetail implements Serializable {
     }
 
     private void checkRequiredBankAccTypeSelected() {
+        if (bankStmtView.getBankAccountTypeView() == null) bankStmtView.setBankAccountTypeView(new BankAccountTypeView());
+
         int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
