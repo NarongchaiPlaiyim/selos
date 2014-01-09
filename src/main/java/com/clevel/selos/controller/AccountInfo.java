@@ -209,8 +209,6 @@ public class AccountInfo implements Serializable {
             log.debug("-- Term : {}", value);
         }
 
-
-
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
             accountInfoDetailView = accountInfoView.getAccountInfoDetailViewSelected();
             accountInfoDetailViewList.add(accountInfoDetailView);

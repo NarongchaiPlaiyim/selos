@@ -117,7 +117,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private CustomerInfoView spouse;
 
     // for show in Summary
-    private BigDecimal percentShareSummary;
+//    private BigDecimal percentShareSummary;
     private String indLv; // new 11-12-13
     private String jurLv; // new 11-12-13
 
@@ -137,6 +137,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private SBFScoreView ratingFinal;
     private BigDecimal unpaidFeeInsurance;
     private BigDecimal pendingClaimLG;
+
+    private BigDecimal shares;
 
     public CustomerInfoView(){
         //reset();
@@ -160,6 +162,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.serviceSegmentView = new ServiceSegmentView();
         this.collateralOwner = -1;
         this.percentShare = BigDecimal.ZERO;
+        this.shares = BigDecimal.ZERO;
         this.titleTh = new Title();
         this.titleEn = new Title();
         this.firstNameTh = "";
@@ -199,7 +202,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.sourceIncome = new Country();
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
-        this.percentShareSummary = BigDecimal.ZERO;
+//        this.percentShareSummary = BigDecimal.ZERO;
 
         this.unpaidFeeInsurance = BigDecimal.ZERO;
         this.pendingClaimLG = BigDecimal.ZERO;
@@ -876,13 +879,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
         return isCommittee;
     }
 
-    public BigDecimal getPercentShareSummary() {
-        return percentShareSummary;
-    }
-
-    public void setPercentShareSummary(BigDecimal percentShareSummary) {
-        this.percentShareSummary = percentShareSummary;
-    }
+//    public BigDecimal getPercentShareSummary() {
+//        return percentShareSummary;
+//    }
+//
+//    public void setPercentShareSummary(BigDecimal percentShareSummary) {
+//        this.percentShareSummary = percentShareSummary;
+//    }
 
     public int getAgeMonths() {
         return ageMonths;
@@ -1010,6 +1013,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setContactName(String contactName) {
         this.contactName = contactName;
+    }
+
+    public BigDecimal getShares() {
+        return shares;
+    }
+
+    public void setShares(BigDecimal shares) {
+        this.shares = shares;
     }
 
     @Override
