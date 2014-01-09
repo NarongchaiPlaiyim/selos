@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.AccountInfoDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.AccountInfo;
 import com.clevel.selos.model.db.working.AccountInfoDetail;
@@ -21,27 +22,32 @@ public class AccountInfoTransform extends Transform {
     @Inject
     AccountInfoDetailTransform accountInfoDetailTransform;
     @Inject
+    private AccountInfoDAO accountInfoDAO;
+    @Inject
     public AccountInfoTransform() {
 
     }
 
     public AccountInfo transformToModel(final AccountInfoView accountInfoView,final WorkCase workCase,final User user){
-        accountInfo = new AccountInfo();
-
-        accountInfo.setWorkCase(workCase);
-
-        accountInfo.setModifyDate(new Date());
-        accountInfo.setModifyBy(user);
-
-        accountInfo.setCreateDate(new Date());
-        accountInfo.setCreateBy(user);
-
-        accountInfo.setExtendedReviewDate(new Date());
-        accountInfo.setLastReviewDate(new Date());
-
-        accountInfo.setApprovedType(accountInfoView.getApprovedType());
-
-        return accountInfo;
+        accountInfo = accountInfoDAO.findByWorkCaseId(workCase.getId());
+        if(accountInfo != null){
+            accountInfo.setModifyDate(new Date());
+            accountInfo.setModifyBy(user);
+            accountInfo.setLastReviewDate(new Date());
+            accountInfo.setApprovedType(accountInfoView.getApprovedType());
+            return accountInfo;
+        } else {
+            accountInfo = new AccountInfo();
+            accountInfo.setWorkCase(workCase);
+            accountInfo.setModifyDate(new Date());
+            accountInfo.setModifyBy(user);
+            accountInfo.setCreateDate(new Date());
+            accountInfo.setCreateBy(user);
+            accountInfo.setExtendedReviewDate(new Date());
+            accountInfo.setLastReviewDate(new Date());
+            accountInfo.setApprovedType(accountInfoView.getApprovedType());
+            return accountInfo;
+        }
     }
 
     public AccountInfoView transformToView(final AccountInfo accountInfo){

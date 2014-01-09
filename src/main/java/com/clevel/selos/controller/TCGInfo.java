@@ -51,7 +51,7 @@ public class TCGInfo implements Serializable {
 
 
     private List<TCGDetailView> TCGDetailViewList;
-    private TCGDetailView TCGDetailView;
+    private TCGDetailView tcgDetailView;
     private TCGDetailView selectCollateralItem;
     private TCGView TCGView;
     private int rowIndex;
@@ -116,8 +116,8 @@ public class TCGInfo implements Serializable {
             }
         }
 
-        if (TCGDetailView == null) {
-            TCGDetailView = new TCGDetailView();
+        if (tcgDetailView == null) {
+            tcgDetailView = new TCGDetailView();
         }
 
         if (TCGDetailViewList == null) {
@@ -134,10 +134,10 @@ public class TCGInfo implements Serializable {
 
 
     public void onChangePotentialCollateralType() {
-        log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", TCGDetailView.getPotentialCollateral().getId());
+        log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", tcgDetailView.getPotentialCollateral().getId());
 
         try {
-            PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(TCGDetailView.getPotentialCollateral().getId());
+            PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
 
             log.info("potentialCollateralDAO.findById ::::: {}", potentialCollateral);
 
@@ -160,8 +160,8 @@ public class TCGInfo implements Serializable {
     public void onAddCollateralDetail() {
         log.info("onAddCollateralDetail :: reset form");
         modeForButton = ModeForButton.ADD;
-        TCGDetailView = new TCGDetailView();
-        TCGDetailView.reset();
+        tcgDetailView = new TCGDetailView();
+        tcgDetailView.reset();
     }
 
     // onclick edit button
@@ -176,23 +176,23 @@ public class TCGInfo implements Serializable {
             potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateralEdit);
             TCGCollateralType tcgCollateralTypeEdit = selectCollateralItem.getTcgCollateralType();
 
-            TCGDetailView.setPotentialCollateral(potentialCollateralEdit);
-            TCGDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-            TCGDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
-            TCGDetailView.setLtvValue(selectCollateralItem.getLtvValue());
-            TCGDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
+            tcgDetailView.setPotentialCollateral(potentialCollateralEdit);
+            tcgDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
+            tcgDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
+            tcgDetailView.setLtvValue(selectCollateralItem.getLtvValue());
+            tcgDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
 
         }
     }
 
     public void calculateLtvValue(){
-        if (TCGDetailView.getPotentialCollateral().getId() != 0 && TCGDetailView.getTcgCollateralType().getId() != 0) {
+        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
             BigDecimal ltvValueBig ;
-            log.info("TCGDetailView AppraisalAmount :: {}" , TCGDetailView.getAppraisalAmount());
+            log.info("TCGDetailView AppraisalAmount :: {}" , tcgDetailView.getAppraisalAmount());
 
 
-            ltvValueBig = tcgInfoControl.toCalculateLtvValue(TCGDetailView);
-            TCGDetailView.setLtvValue(ltvValueBig);
+            ltvValueBig = tcgInfoControl.toCalculateLtvValue(tcgDetailView, this.workCaseId);
+            tcgDetailView.setLtvValue(ltvValueBig);
         }
     }
 
@@ -202,34 +202,34 @@ public class TCGInfo implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
 
-        log.info("TCGDetailView.getPotentialCollateral().getId() :: {}", TCGDetailView.getPotentialCollateral().getId());
-        log.info("TCGDetailView.getTcgCollateralType().getId() :: {}", TCGDetailView.getTcgCollateralType().getId());
+        log.info("TCGDetailView.getPotentialCollateral().getId() :: {}", tcgDetailView.getPotentialCollateral().getId());
+        log.info("TCGDetailView.getTcgCollateralType().getId() :: {}", tcgDetailView.getTcgCollateralType().getId());
 
-        if (TCGDetailView.getPotentialCollateral().getId() != 0 && TCGDetailView.getTcgCollateralType().getId() != 0) {
+        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
 
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
-                PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(TCGDetailView.getPotentialCollateral().getId());
-                TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(TCGDetailView.getTcgCollateralType().getId());
+                PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
+                TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
 
-                TCGDetailView TCGDetailViewSave = new TCGDetailView();
-                TCGDetailViewSave.setPotentialCollateral(potentialCollateralSave);
-                TCGDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
-                TCGDetailViewSave.setAppraisalAmount(TCGDetailView.getAppraisalAmount());
-                TCGDetailViewSave.setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
-                TCGDetailViewList.add(TCGDetailViewSave);
+                TCGDetailView tcgDetailViewSave = new TCGDetailView();
+                tcgDetailViewSave.setPotentialCollateral(potentialCollateralSave);
+                tcgDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
+                tcgDetailViewSave.setAppraisalAmount(tcgDetailView.getAppraisalAmount());
+                tcgDetailViewSave.setLtvValue(tcgDetailView.getLtvValue());
+                tcgDetailViewSave.setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
+                TCGDetailViewList.add(tcgDetailViewSave);
 
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
-                PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(TCGDetailView.getPotentialCollateral().getId());
-                TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(TCGDetailView.getTcgCollateralType().getId());
+                PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
+                TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
 
                 TCGDetailViewList.get(rowIndex).setPotentialCollateral(potentialCollateralSave);
                 TCGDetailViewList.get(rowIndex).setTcgCollateralType(tcgCollateralTypeSave);
-                TCGDetailViewList.get(rowIndex).setAppraisalAmount(TCGDetailView.getAppraisalAmount());
-                TCGDetailViewList.get(rowIndex).setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
+                TCGDetailViewList.get(rowIndex).setAppraisalAmount(tcgDetailView.getAppraisalAmount());
+                TCGDetailViewList.get(rowIndex).setLtvValue(tcgDetailView.getLtvValue());
+                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
 
             } else {
                 log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
@@ -348,12 +348,12 @@ public class TCGInfo implements Serializable {
         this.TCGDetailViewList = TCGDetailViewList;
     }
 
-    public TCGDetailView getTCGDetailView() {
-        return TCGDetailView;
+    public TCGDetailView getTcgDetailView() {
+        return tcgDetailView;
     }
 
-    public void setTCGDetailView(TCGDetailView TCGDetailView) {
-        this.TCGDetailView = TCGDetailView;
+    public void setTcgDetailView(TCGDetailView tcgDetailView) {
+        this.tcgDetailView = tcgDetailView;
     }
 
     public TCGDetailView getSelectCollateralItem() {

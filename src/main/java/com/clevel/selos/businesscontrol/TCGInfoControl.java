@@ -5,8 +5,11 @@ import com.clevel.selos.dao.working.TcgDAO;
 import com.clevel.selos.dao.working.TcgDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.TCGDetail;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -42,6 +45,11 @@ public class TCGInfoControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     TCGCollateralTypeDAO tcgCollateralTypeDAO;
+    @Inject
+    PotentialColToTCGColDAO potentialColToTCGColDAO;
+
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     @Inject
     public void TCGInfoControl() {
@@ -116,18 +124,35 @@ public class TCGInfoControl extends BusinessControl {
     }
 
 
-    public BigDecimal toCalculateLtvValue(TCGDetailView tcgDetailView) {
-        double ltvValue = 0;
-        double ltvPercent = 0;
+    public BigDecimal toCalculateLtvValue(TCGDetailView tcgDetailView, Long workCaseId) {
+
+        log.info("Calculate LTV Value tcgDetailView{}, workCaseId{}", tcgDetailView, workCaseId);
+        BigDecimal ltvPercentBig = null;
         BigDecimal ltvValueBig = BigDecimal.ZERO;
 
-        TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
+        PotentialColToTCGCol potentialColToTCGCol = tcgDetailView.getPotentialColToTCGCol();
 
-        if (tcgCollateralType != null && tcgDetailView != null) {
-            ltvPercent = tcgCollateralType.getPercentLTV();
-            log.info("ltvPercent :: {} ", ltvPercent);
-            ltvValue = tcgDetailView.getAppraisalAmount().doubleValue() * ltvPercent;
-            ltvValueBig = new BigDecimal(ltvValue);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(Util.isTrue(workCase.getProductGroup().getSpecialLTV())){
+            ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+        }
+
+        if(ltvPercentBig == null){
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            if( Util.isTrue(basicInfo.getExistingSMECustomer()) &&
+                    Util.isTrue(basicInfo.getPassAnnualReview()) &&
+                    Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
+                    Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
+                    (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)){
+                ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+            } else {
+                ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+            }
+        }
+
+        if (ltvPercentBig != null && tcgDetailView != null) {
+            log.info("ltvPercent :: {} ", ltvPercentBig);
+            ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
         }
 
         return ltvValueBig;
