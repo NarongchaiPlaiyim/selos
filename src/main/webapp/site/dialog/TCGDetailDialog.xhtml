@@ -59,7 +59,7 @@
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     maxlength="18"
+                                     maxlength="17"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
@@ -80,7 +80,7 @@
                         <p:inputText styleClass="large"
                                      id="LTVvalue"
                                      value="#{tcgInfo.tcgDetailView.ltvValue}"
-                                     maxlength="18"
+                                     maxlength="17"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      readonly="true">
