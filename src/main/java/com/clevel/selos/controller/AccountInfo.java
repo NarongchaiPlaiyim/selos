@@ -154,26 +154,33 @@ public class AccountInfo implements Serializable {
 
         //Request Account Type
         id = accountInfoView.getAccountInfoDetailViewSelected().getReqAccountType();
+        log.debug("-- Request Account Type id : {}", id);
         if(1 == id){
             accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("Existing");
+            log.debug("-- Request Account Type : {}", "Existing");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setReqAccountTypeForShow("New");
+            log.debug("-- Request Account Type : {}", "New");
         }
 
         //Account Number
         value = accountInfoView.getAccountInfoDetailViewSelected().getAccountNumber();
         if(value == null || "".equals(value)){
             accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(" - ");
+            log.debug("-- Account Number : {}", "Null or Empty");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setAccountNumberForShow(value);
+            log.debug("-- Account Number : {}", value);
         }
 
         //Branch
         idLong = accountInfoView.getAccountInfoDetailViewSelected().getBranchView().getId();
-        if(0 != id){
+        log.debug("-- Branch id : {}", idLong);
+        if(0 != idLong){
             for (BankBranch branch : branchList){
                 if (branch.getId() == idLong){
                     accountInfoView.getAccountInfoDetailViewSelected().getBranchView().setName(branch.getName());
+                    log.debug("-- Branch : {}", branch.getName());
                     break;
                 }
             }
@@ -181,10 +188,12 @@ public class AccountInfo implements Serializable {
 
         //Product Type
         id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();
+        log.debug("-- Product Type id : {}", id);
         if(0 != id){
             for (OpenAccountProduct productType : productTypeList){
                 if (productType.getId() == id){
                     accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().setName(productType.getName());
+                    log.debug("-- Product Type : {}", productType.getName());
                     break;
                 }
             }
@@ -194,8 +203,10 @@ public class AccountInfo implements Serializable {
         value = accountInfoView.getAccountInfoDetailViewSelected().getTerm();
         if(value == null || "null".equalsIgnoreCase(value) || "".equals(value)){
             accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(" - ");
+            log.debug("-- Term : {}", "Null or Empty");
         } else {
             accountInfoView.getAccountInfoDetailViewSelected().setTermForShow(value);
+            log.debug("-- Term : {}", value);
         }
 
 
@@ -239,7 +250,6 @@ public class AccountInfo implements Serializable {
     public void onSave(){
         //todo :
         try{
-
             accountInfoControl.saveAccountInfo(accountInfoView, workCaseId);
             messageHeader = "Save Account Info Success.";
             message = "Save data in Account Information success.";
