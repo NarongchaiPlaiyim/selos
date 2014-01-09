@@ -3437,18 +3437,18 @@
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         </div>
-    </h:form>
 
-    <p:blockUI block=":frmMain"
-               trigger=":frmMain:btnAddApprovedCredit,
+        <p:blockUI block=":frmMain"
+                   trigger=":frmMain:btnAddApprovedCredit,
                :frmMain:btnRetrievePricingFee
                :frmMain:btnAddApprovedGuarantor,
                :frmMain:btnAddFollowUpCondition,
                :frmMain:btnSave,
                :frmMain:btnCancel">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
 </p:panel>
 
 <!-- Propose Credit Dialog -->

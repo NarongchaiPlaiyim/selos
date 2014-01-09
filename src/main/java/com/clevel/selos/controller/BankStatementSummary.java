@@ -332,7 +332,8 @@ public class BankStatementSummary implements Serializable {
 
     public void onClickAddTMBBankStmt() {
         log.debug("onClickAddTMBBankStmt()");
-//        if (!checkSelectSeasonalFlag()) return;
+        if (!checkSelectSeasonalFlag()) return;
+
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
@@ -345,7 +346,8 @@ public class BankStatementSummary implements Serializable {
 
     public void onClickAddOtherBankStmt() {
         log.debug("onClickAddOtherBankStmt()");
-//        if (!checkSelectSeasonalFlag()) return;
+        if (!checkSelectSeasonalFlag()) return;
+
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
