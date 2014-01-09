@@ -22,16 +22,6 @@ public class TCGCollateralType implements Serializable {
     @Column(name = "active")
     private int active;
 
-    @Column(name = "percentLTV")
-    private double percentLTV;
-
-    @Column(name = "tenPercentLTV")
-    private double tenPercentLTV;
-
-    @Column(name = "retentionLTV")
-    private double retentionLTV;
-
-
     public int getId() {
         return id;
     }
@@ -62,29 +52,5 @@ public class TCGCollateralType implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
-    }
-
-    public double getPercentLTV() {
-        return percentLTV;
-    }
-
-    public void setPercentLTV(double percentLTV) {
-        this.percentLTV = percentLTV;
-    }
-
-    public double getTenPercentLTV() {
-        return tenPercentLTV;
-    }
-
-    public void setTenPercentLTV(double tenPercentLTV) {
-        this.tenPercentLTV = tenPercentLTV;
-    }
-
-    public double getRetentionLTV() {
-        return retentionLTV;
-    }
-
-    public void setRetentionLTV(double retentionLTV) {
-        this.retentionLTV = retentionLTV;
     }
 }

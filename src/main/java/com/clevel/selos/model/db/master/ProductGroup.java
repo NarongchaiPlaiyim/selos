@@ -25,6 +25,8 @@ public class ProductGroup implements Serializable {
     private int addExistingCredit;
     @Column(name = "add_propose_credit")
     private int addProposeCredit;
+    @Column(name = "special_ltv")
+    private int specialLTV;
     @Column(name = "active")
     private int active;
 
@@ -61,6 +63,14 @@ public class ProductGroup implements Serializable {
 
     public void setBrmsCode(String brmsCode) {
         this.brmsCode = brmsCode;
+    }
+
+    public int getSpecialLTV() {
+        return specialLTV;
+    }
+
+    public void setSpecialLTV(int specialLTV) {
+        this.specialLTV = specialLTV;
     }
 
     public int getActive() {
