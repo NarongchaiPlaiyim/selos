@@ -11,12 +11,12 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class TCGDetailDAO extends GenericDAO<TCGDetail, Integer> {
+public class TcgDetailDAO extends GenericDAO<TCGDetail, Integer> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public TCGDetailDAO() {
+    public TcgDetailDAO() {
 
     }
 

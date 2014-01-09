@@ -1,8 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
-import com.clevel.selos.dao.working.TCGDAO;
-import com.clevel.selos.dao.working.TCGDetailDAO;
+import com.clevel.selos.dao.working.TcgDAO;
+import com.clevel.selos.dao.working.TcgDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.TCGCollateralType;
@@ -35,9 +35,9 @@ public class TCGInfoControl extends BusinessControl {
     TCGTransform tcgTransform;
 
     @Inject
-    TCGDAO tcgDAO;
+    TcgDAO tcgDAO;
     @Inject
-    TCGDetailDAO tcgDetailDAO;
+    TcgDetailDAO tcgDetailDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
