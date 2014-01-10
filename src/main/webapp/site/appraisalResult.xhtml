@@ -359,7 +359,7 @@
                                                      </p:column>
                                                      <p:column styleClass="right" style="width: 150px">
                                                          <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
-                                                            <f:convertNumber pattern="#,##0" />
+                                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                          </p:outputLabel>
                                                      </p:column>
                                                  </p:dataTable>
@@ -421,7 +421,7 @@
 </p:panel>
 
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-          modal="true" width="650" height="500" >
+          modal="true" width="700" height="500" >
     <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
 </p:dialog>
 

@@ -59,8 +59,6 @@ public class ExistingCollateralDetailView implements Serializable {
         this.creditFacility = "";
         this.limit = BigDecimal.ZERO;
         this.mortgageType = new MortgageType();
-        this.appraisalValue = BigDecimal.ZERO;
-        this.mortgageValue = BigDecimal.ZERO;
         this.existingCreditTypeDetailViewList = new ArrayList<ExistingCreditTypeDetailView>();
     }
 

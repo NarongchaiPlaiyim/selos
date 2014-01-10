@@ -87,6 +87,7 @@ public class AppraisalResult implements Serializable {
     private String message;
     private boolean showNoRequest;
     private Date currentDate;
+    private boolean searchCOMS;
     int rowCollateral;
 
     private User user;
@@ -312,6 +313,7 @@ public class AppraisalResult implements Serializable {
     public void onAddCollateralDetailView(){
         log.info("onAddCollateralDetailView >>> begin ");
         collateralDetailView = new CollateralDetailView();
+        searchCOMS = false;
         modeForButton = "add";
     }
 
@@ -319,6 +321,18 @@ public class AppraisalResult implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
         Cloner cloner = new Cloner();
+
+
+        if(!searchCOMS){
+            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
+            collateralDetailView = new CollateralDetailView();
+            collateralDetailView.setCollateralHeaderDetailViewList(new ArrayList<CollateralHeaderDetailView>());
+            message = "ไม่สามารถบันทึกได้ เนื่องจากไม่พบข้อมูล AAD ";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
+
 
 
         log.info( "onSaveCollateralDetailView rowCollateral " + rowCollateral);
@@ -335,11 +349,11 @@ public class AppraisalResult implements Serializable {
             log.info("onSaveCollateralDetailView edit >>> begin ");
             //collateralDetailView.setAADDecision("set decision at EDIT Dialog");
             //collateralDetailViewOnRow  = cloner.deepClone(collateralDetailView);
-            collateralDetailView.setAADDecision("decision");
-            collateralDetailView.setAADDecisionReason("reason 1");
-            collateralDetailView.setAADDecisionReasonDetail("reason 2");
-            collateralDetailView.setMortgageCondition("mortgage 1 ");
-            collateralDetailView.setMortgageConditionDetail("mortgage 2");
+            collateralDetailView.setAADDecision(collateralDetailView.getAADDecision());
+            collateralDetailView.setAADDecisionReason(collateralDetailView.getAADDecisionReason());
+            collateralDetailView.setAADDecisionReasonDetail(collateralDetailView.getAADDecisionReasonDetail());
+            collateralDetailView.setMortgageCondition(collateralDetailView.getMortgageCondition());
+            collateralDetailView.setMortgageConditionDetail(collateralDetailView.getMortgageConditionDetail());
 
             collateralDetailViewOnRow.setJobID(collateralDetailView.getJobID());
             collateralDetailViewOnRow.setAppraisalDate(collateralDetailView.getAppraisalDate());
@@ -368,16 +382,6 @@ public class AppraisalResult implements Serializable {
         rowCollateral =  selectCollateralDetailView.getNo();
         log.info( "onEditCollateralDetailView rowCollateral " + rowCollateral);
         if( rowIndex < collateralDetailViewList.size() ) {
-
-            selectCollateralDetailView.setAADDecision("set decision at Edit on Row ");
-            selectCollateralDetailView.setAADDecisionReason("set decision Reason at Edit on Row ");
-
-            /*collateralDetailView.setAADDecision(selectCollateralDetailView.getAADDecision());
-            collateralDetailView.setAADDecisionReason(selectCollateralDetailView.getAADDecisionReason());
-            collateralDetailView.setAADDecisionReasonDetail(selectCollateralDetailView.getAADDecisionReasonDetail());*/
-
-            collateralDetailView.setMortgageCondition("Mort 1");
-            collateralDetailView.setMortgageConditionDetail("Mort Detail");
 
             collateralDetailView.setJobID(selectCollateralDetailView.getJobID());
             collateralDetailView.setAppraisalDate(selectCollateralDetailView.getAppraisalDate());
@@ -606,26 +610,60 @@ public class AppraisalResult implements Serializable {
         }
     }
 
+
+    public void onSetRowNoHeaderCollaral(List<CollateralHeaderDetailView> collateralHeaderDetailViewList){
+        CollateralHeaderDetailView collateralHeaderDetailView;
+        for(int h=0;h<collateralHeaderDetailViewList.size();h++){
+            collateralHeaderDetailView = collateralHeaderDetailViewList.get(h);
+            collateralHeaderDetailView.setNo(h+1);
+        }
+    }
+
+    public void onSetRowNoSubCollaral(List<SubCollateralDetailView> subCollateralDetailViewList){
+        SubCollateralDetailView subCollateralDetailView;
+        for(int s=0;s<subCollateralDetailViewList.size();s++){
+            subCollateralDetailView = subCollateralDetailViewList.get(s);
+            subCollateralDetailView.setNo(s+1);
+        }
+    }
+
     public void onSearchCollateral() {
-        log.info("onSearchCollateral begin key is " +collateralDetailView.getJobID() );
+        log.info("onSearchCollateral begin key is " +collateralDetailView.getJobIDSearch() );
 
         ///Call ComS
         //DataComes
         //COMSInterface
         //
         String jobId;
-        jobId = collateralDetailView.getJobID();
+        jobId = collateralDetailView.getJobIDSearch();
         AppraisalDataResult appraisalDataResult;
         log.info("userId is   " + user.getId() + "      jobId is  " + jobId);
         try{
             log.info("begin coms ");
             appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
             log.info("end coms ");
+            searchCOMS = true;
             collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
 
+            for(int i=0;i<collateralDetailView.getCollateralHeaderDetailViewList().size();i++){
+                onSetRowNoHeaderCollaral(collateralDetailView.getCollateralHeaderDetailViewList());
+
+                for(int j=0;j<collateralDetailView.getCollateralHeaderDetailViewList().get(i).getSubCollateralDetailViewList().size();j++){
+                    onSetRowNoSubCollaral(collateralDetailView.getCollateralHeaderDetailViewList().get(i).getSubCollateralDetailViewList());
+                }
+
+            }
+
+
+
+
         }catch (COMSInterfaceException comsEx){
+            log.info("error comsEx ");
+            searchCOMS = false;
             messageHeader = msg.get("app.appraisal.message.validate.header.fail");
-            message = comsEx.getMessage();
+            message = comsEx.getMessage() + " JOB ID " + jobId ;
+            collateralDetailView = new CollateralDetailView();
+            collateralDetailView.setCollateralHeaderDetailViewList(new ArrayList<CollateralHeaderDetailView>());
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }

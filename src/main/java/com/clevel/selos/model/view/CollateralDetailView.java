@@ -7,6 +7,7 @@ import java.util.List;
 
 public class CollateralDetailView {
     private long id;
+    private String jobIDSearch;
     private String jobID;
     private int no;
     private Date appraisalDate;
@@ -30,6 +31,14 @@ public class CollateralDetailView {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getJobIDSearch() {
+        return jobIDSearch;
+    }
+
+    public void setJobIDSearch(String jobIDSearch) {
+        this.jobIDSearch = jobIDSearch;
     }
 
     public String getJobID() {
