@@ -100,8 +100,8 @@
                                     <!-- citizen & passport -->
                                         <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
                                                      style="width: 180px; max-width: 180px; min-width: 180px;"
-                                                     onkeydown="return onKeyText(event);"
-                                                     onkeypress="return onKeyText(event);"
+                                                     onkeydown="return onKeyDownText(event);"
+                                                     onkeypress="return onKeyPressText(event);"
                                                      required="#{not empty param[searchButton.clientId]}"
                                                      disabled="#{custInfoSumIndi.editForm}"
                                                      rendered="#{custInfoSumIndi.customerInfoSearch.searchBy == 1 and custInfoSumIndi.customerInfoSearch.documentType.id == 2}"/>
@@ -191,7 +191,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.share')}"/>
                                 </td>
                                 <td>
-                                    <p:inputText id="shareCust" styleClass="right" value="#{custInfoSumIndi.customerInfoView.percentShare}"
+                                    <p:inputText id="shareCust" styleClass="right" value="#{custInfoSumIndi.customerInfoView.shares}"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  disabled="#{not custInfoSumIndi.enableAllFieldCus}"
                                                  onkeydown="return onKeyDownNumber(event);"
@@ -1452,7 +1452,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.share')}"/>
                                     </td>
                                     <td>
-                                        <p:inputText id="shareSpouse" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.percentShare}"
+                                        <p:inputText id="shareSpouse" styleClass="right" value="#{custInfoSumIndi.customerInfoView.spouse.shares}"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      onkeydown="return onKeyDownNumber(event);"
                                                      onkeypress="return onKeyPressNumber(event);"
@@ -2419,18 +2419,22 @@
                                     <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      actionListener="#{custInfoSumIndi.onSave}" binding="#{saveCustomer}"
-                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.save')}" styleClass="small" id="btnSave2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onSaveFromJuristic()}" binding="#{saveCustomer2}"
-                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumIndi.onCreation}"
-                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onCancelFromJuristic()}"
-                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"
+                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                 </td>
                             </tr>
                             </table>

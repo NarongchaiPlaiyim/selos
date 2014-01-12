@@ -1089,10 +1089,10 @@ public class CustomerInfoIndividual implements Serializable {
                 enableCitizenId = true;
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
-                customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-                customerInfoView.setCitizenId(customerInfoSearch.getCitizenId());
             }
-//            onChangeDOB();
+            customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             onChangeMaritalStatus();
@@ -1100,6 +1100,8 @@ public class CustomerInfoIndividual implements Serializable {
         }catch (Exception ex){
             enableDocumentType = true;
             enableCitizenId = true;
+            customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
             log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
@@ -1282,10 +1284,13 @@ public class CustomerInfoIndividual implements Serializable {
                 enableCitizenId = true;
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
-                customerInfoView.setSpouse(new CustomerInfoView());
-                customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-                customerInfoView.getSpouse().setCitizenId(customerInfoSearch.getCitizenId());
+                CustomerInfoView cus = new CustomerInfoView();
+                cus.reset();
+                customerInfoView.setSpouse(cus);
             }
+            customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
+            customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
+
             onChangeDOBSpouse();
             onChangeProvinceEditForm4();
             onChangeDistrictEditForm4();
@@ -1293,6 +1298,11 @@ public class CustomerInfoIndividual implements Serializable {
         }catch (Exception ex){
             enableDocumentType = true;
             enableCitizenId = true;
+            CustomerInfoView cus = new CustomerInfoView();
+            cus.reset();
+            customerInfoView.setSpouse(cus);
+            customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
+            customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
             log.debug("onSearchSpouseCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();

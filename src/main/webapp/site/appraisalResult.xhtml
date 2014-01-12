@@ -224,7 +224,9 @@
                                              <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                                          </td>
                                          <td>
-                                             <p:outputLabel value="#{collateralDetailView.appraisalDate}"/>
+                                             <p:outputLabel value="#{collateralDetailView.appraisalDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                             </p:outputLabel>
                                          </td>
                                      </tr>
                                      <tr>
@@ -311,7 +313,7 @@
                                              </td>
                                              <td>
                                                  <p:outputLabel value="#{collateralHeadDetailView.appraisalValue}">
-                                                     <f:convertNumber pattern="#,##0" />
+                                                     <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                                  </p:outputLabel>
                                              </td>
                                          </tr>
@@ -357,7 +359,7 @@
                                                      </p:column>
                                                      <p:column styleClass="right" style="width: 150px">
                                                          <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
-                                                            <f:convertNumber pattern="#,##0" />
+                                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                          </p:outputLabel>
                                                      </p:column>
                                                  </p:dataTable>
@@ -419,7 +421,7 @@
 </p:panel>
 
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-          modal="true" width="650" height="500" >
+          modal="true" width="700" height="500" >
     <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
 </p:dialog>
 

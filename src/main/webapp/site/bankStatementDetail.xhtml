@@ -5,6 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
@@ -65,8 +66,7 @@
                                                          value="#{bankStatementDetail.bankStmtView.notCountIncome}"/>
                             </td>
                             <td style="border-style: none !important; padding-left: 5px;">
-                                <h:outputLabel for="countIncome"
-                                               value="#{msg.get('app.bankStmtDetail.checkbox.isNotCountIncome')}"/>
+                                <h:outputText value="#{msg.get('app.bankStmtDetail.checkbox.isNotCountIncome')}"/>
                             </td>
                         </tr>
                     </table>
@@ -189,8 +189,10 @@
                     <td class="right" style="font-weight:bold;">
                         <h:outputText value="#{msg.get('app.bankStmtDetail.bahtUnit')}"/>
                         <!-- Hidden -->
-                        <h:inputHidden value="#{bankStatementDetail.bankStmtView.TMB}"/>
-                        <h:inputHidden value="#{bankStatementDetail.bankStmtView.highestInflow}"/>
+                        <h:inputHidden value="#{bankStatementDetail.bankStmtView.TMB}"
+                                       rendered="#{not empty bankStatementDetail.bankStmtView}"/>
+                        <h:inputHidden value="#{bankStatementDetail.bankStmtView.highestInflow}"
+                                       rendered="#{not empty bankStatementDetail.bankStmtView}"/>
                     </td>
                 </tr>
                 <tr>
@@ -842,13 +844,13 @@
         <ui:include src="include/footer.xhtml"/>
         <!-- End Footer -->
         </div>
-    </h:form>
 
-<p:blockUI widgetVar="blockUI" block=":frmMain"
-           trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
+        <p:blockUI widgetVar="blockUI" block=":frmMain"
+                   trigger=":frmMain:btnSave,:frmMain:btnCancel">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
 </p:panel>
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

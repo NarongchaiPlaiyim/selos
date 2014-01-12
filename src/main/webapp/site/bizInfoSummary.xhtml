@@ -79,13 +79,14 @@
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
                                         <td class="title">
-                                            <clv:BECalendar id="expiryDate" showOn="button" navigator="true" disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
+                                            <clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"
+                                                            value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
+                                                            disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
                                                             yearRange="1950:2100"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            pattern="dd/MM/yyyy"
-                                                            value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
-                                                            locale="th_TH" >
+                                                            showButtonPanel="true"
+                                                            pattern="dd/MM/yyyy">
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -174,7 +175,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
-                                                    <td colspan="3"><p:inputText style="width: 608px;" id="addressEng" onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                    <td colspan="3"><p:inputText style="width: 608px;" id="addressEng"
                                                                                  value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
                                                 </tr>
                                             </table>
@@ -221,14 +222,13 @@
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/> :
                                         </td>
                                         <td>
-                                            <clv:BECalendar id="establishDate" showOn="button" navigator="true"
+                                            <clv:BECalendar id="establishDate" showOn="button" navigator="true" locale="th_TH"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
-                                                            mindate="01/01/1950"
-                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            pattern="dd/MM/yyyy"
                                                             yearRange="1950:2100"
-                                                            locale="th_TH" >
+                                                            pattern="dd/MM/yyyy"
+                                                            showButtonPanel="true"
+                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}">
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title right">
@@ -684,7 +684,7 @@
         </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" width="350px"
                          header="#{bizInfoSummary.messageHeader}" message="#{bizInfoSummary.message}" >
             <p:commandButton value="OK"
                              process="@this"

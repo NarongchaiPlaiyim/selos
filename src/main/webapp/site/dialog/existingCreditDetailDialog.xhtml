@@ -99,15 +99,23 @@
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
         </td>
         <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.limit}"
-                         style="text-align:right"/>
+            <p:inputText id="limit" value="#{creditFacExisting.existingCreditDetailView.limit}"
+                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                         style="text-align:right">
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                <p:ajax event="blur" update=":existingCreditDlgForm:limit"/>
+            </p:inputText>
         </td>
         <td class="title">
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
         </td>
         <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.pcePercent}"
-                         style="text-align:right"/>
+            <p:inputText id="pcePercent" value="#{creditFacExisting.existingCreditDetailView.pcePercent}" style="text-align:right">
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                <f:validateDoubleRange maximum="100"/>
+                <p:ajax event="blur" update=":existingCreditDlgForm:pcePercent"/>
+            </p:inputText>
+
             <p:spacer/>
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
         </td>
@@ -119,9 +127,11 @@
             <p:outputLabel value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}" integerOnly="true" />
         </td>
         <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
+            <p:inputText id="pceLimit" value="#{creditFacExisting.existingCreditDetailView.pceLimit}"
+                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
                          style="text-align:right">
-
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                <p:ajax event="blur" update=":existingCreditDlgForm:pceLimit"/>
             </p:inputText>
         </td>
     </tr>
@@ -130,7 +140,11 @@
             outstanding
         </td>
         <td>
-            <p:inputText value="#{creditFacExisting.existingCreditDetailView.outstanding}" integerOnly="true" />
+            <p:inputText id="outstanding" value="#{creditFacExisting.existingCreditDetailView.outstanding}" style="text-align:right;"
+                         onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()">
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                <p:ajax event="blur" update=":existingCreditDlgForm:outstanding"/>
+            </p:inputText>
         </td>
     </tr>
     <tr>
@@ -170,15 +184,17 @@
                     <p:outputLabel value="#{creditTier.no}"/>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.installment}" >
-                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="14"/>
+                    <p:inputText  id="tierInstallment" style="text-align:right;"
+                                  value="#{creditTier.installment}"
+                                  onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="18"/>
+                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierInstallment"/>
                     </p:inputText>
                 </p:column>
-                <p:column styleClass="center">
-                    <table border="0" style="border: transparent">
-                        <tr>
-                            <td>
+                <p:column>
+                    <p:panelGrid  styleClass="panelGridPadding0" style="width:200px;">
+                        <p:row>
+                            <p:column>
                                 <p:selectOneMenu size="1"
                                                  value="#{creditTier.finalBasePrice.id}"
                                                  id="standDlg"
@@ -188,21 +204,26 @@
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
                                 </p:selectOneMenu>
-                            </td>
-                            <td>
+                            </p:column>
+                            <p:column>
                                 <p:inputText value="#{creditTier.finalInterest}"
-                                             id="standPriceDlg"
+                                             id="tierFinalInterest"
+                                             onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
                                              style="text-align:right;width:50px;">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="14"/>
+                                                     maxIntegerDigits="18"/>
+                                    <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierFinalInterest"/>
                                 </p:inputText>
-                            </td>
-                        </tr>
-                    </table>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText  value="#{creditTier.tenor}" >
+                    <p:inputText id="tierTenor"
+                                 onkeydown="return onKeyDownNumber()" onkeypress="return onKeyPressNumber()"
+                                 value="#{creditTier.tenor}" style="text-align:right;" >
                         <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="14"/>
+                        <p:ajax event="blur" update=":existingCreditDlgForm:resultTier:tierTenor"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
@@ -271,7 +292,12 @@
                     </p:selectOneMenu>
                 </p:column>
                 <p:column styleClass="center">
-                    <p:inputText value="#{existingSplitLine.limit}"/>
+                    <p:inputText id="splitLimit"
+                                 onkeydown="return onKeyDownMoney()" onkeypress="return onKeyPressMoney()"
+                                 value="#{existingSplitLine.limit}" style="text-align:right;" >
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update=":existingCreditDlgForm:spiltResult:splitLimit"/>
+                    </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
                     <p:column styleClass="center">

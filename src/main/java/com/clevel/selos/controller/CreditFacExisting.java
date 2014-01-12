@@ -622,7 +622,10 @@ public class CreditFacExisting implements Serializable {
                 productProgram = productProgramDAO.findById(existingSplitLineDetailViewList.get(i).getProductProgram().getId());
                 existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
             }
-
+            for(int i=0;i<existingCreditTierDetailViewList.size();i++){
+                BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
+                existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
+            }
             existingCreditDetailView.setExistingSplitLineDetailViewList(existingSplitLineDetailViewList);
             existingCreditDetailView.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
 
@@ -685,7 +688,7 @@ public class CreditFacExisting implements Serializable {
                 existingSplitLineDetailViewList.get(i).setProductProgram(productProgram);
             }
 
-            for(int i=0;i<existingSplitLineDetailViewList.size();i++){
+            for(int i=0;i<existingCreditTierDetailViewList.size();i++){
                 BaseRate baseRate = baseRateDAO.findById(existingCreditTierDetailViewList.get(i).getFinalBasePrice().getId());
                 existingCreditTierDetailViewList.get(i).setFinalBasePrice(baseRate);
             }

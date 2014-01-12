@@ -205,6 +205,8 @@ public class CustomerTransform extends Transform {
 
 		customerInfoView.setCsiFlag(customer.getCsiFlag());
 
+		customerInfoView.setShares(customer.getShares());
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
@@ -515,6 +517,8 @@ public class CustomerTransform extends Transform {
         customer.setJuristicId(customerInfoView.getCommitteeId());
 
 		customer.setCsiFlag(customerInfoView.getCsiFlag());
+
+		customer.setShares(customerInfoView.getShares());
 
 //        log.info("transformToModel : customer before adding address : {}", customer);
 

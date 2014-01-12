@@ -3,21 +3,21 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
     <p:panel id="contactRecordDlgPanel" styleClass="panel-dialog">
     <h:form id="contactRecordViewDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/>
+                    <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar id="callingDate" showOn="button" navigator="true"
+                    <clv:BECalendar id="callingDate" showOn="button" navigator="true"
                                 value="#{appraisalAppointment.contactRecordDetailView.callingDate}"
-                                pattern="dd/MM/yyyy HH:mm"
                                 locale="th_TH"
-                                timeZone="Asia/Bangkok"
-                                yearRange="2440:3000">
-                        <f:convertDateTime pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
-                    </p:calendar>
+                                yearRange="1950:2100">
+                    </clv:BECalendar>
                 </td>
             </tr>
             <tr>
@@ -31,40 +31,25 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.acceptResult')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
-                <td>
-
-                    <p:selectOneRadio id="acceptResultRadio" value="#{appraisalAppointment.contactRecordDetailView.acceptResult}">
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.accept')}"  itemValue="1" />
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.notAccept')}" itemValue="0" />
-                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.etc')}" itemValue="2" />
-                    </p:selectOneRadio>
-                </td>
-            </tr>
-            <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.nextCallingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar id="nextCallingDate" showOn="button" navigator="true"
+                    <clv:BECalendar id="nextCallingDate" showOn="button" navigator="true"
                                 value="#{appraisalAppointment.contactRecordDetailView.nextCallingDate}"
-                                pattern="dd/MM/yyyy HH:mm"
                                 locale="th_TH"
-                                timeZone="Asia/Bangkok"
-                                yearRange="2440:3000">
-                        <f:convertDateTime pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
-                    </p:calendar>
+                                yearRange="1950:2100">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </clv:BECalendar>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.reason')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:selectOneMenu style="width: 100px" value="#{appraisalAppointment.contactRecordDetailView.reason}" id="reason">
+                    <p:selectOneMenu style="width: 180px" value="#{appraisalAppointment.contactRecordDetailView.reason}" id="reason">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItem itemLabel="1" itemValue="1"/>
-                        <f:selectItem itemLabel="2" itemValue="2"/>
-                        <f:selectItem itemLabel="3" itemValue="3"/>
-                        <f:selectItem itemLabel="4" itemValue="4"/>
-                        <f:selectItem itemLabel="5" itemValue="5"/>
-                        <f:selectItem itemLabel="6" itemValue="6"/>
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.accept')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.notAccept')}" itemValue="2"/>
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.reason.needToConsider')}" itemValue="3"/>
+
                     </p:selectOneMenu>
                 </td>
             </tr>
