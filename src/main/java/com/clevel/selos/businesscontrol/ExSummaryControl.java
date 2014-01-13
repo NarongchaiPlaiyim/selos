@@ -266,9 +266,6 @@ public class ExSummaryControl extends BusinessControl {
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
 
-        //todo: test this , pls delete after test
-        calYearInBusinessBorrowerCharacteristic(workCaseId);
-
         //Delete Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
         exSumDeviateDAO.delete(esdList);
@@ -302,6 +299,12 @@ public class ExSummaryControl extends BusinessControl {
         calYearInBusinessBorrowerCharacteristic(workCaseId);
     }
 
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+            // ----------------------------------------------------------------------------------------------------------------------------------------------- //
+
     //TODO : Business login here
     //Borrower Characteristic - income ( Line 45 )
     //Credit Facility-Propose + DBR + Decision
@@ -310,12 +313,22 @@ public class ExSummaryControl extends BusinessControl {
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
-        BigDecimal totalWCTMB = newCreditFacility.getTotalWcTmb();
-        BigDecimal odLimit = newCreditFacility.getTotalCommercialAndOBOD();
-        BigDecimal loanCoreWC = newCreditFacility.getTotalCommercial();
-        BigDecimal adjusted = dbr.getMonthlyIncomeAdjust();
+        BigDecimal totalWCTMB = BigDecimal.ZERO;
+        BigDecimal odLimit = BigDecimal.ZERO;
+        BigDecimal loanCoreWC = BigDecimal.ZERO;
+        BigDecimal adjusted = BigDecimal.ZERO;
 
-        BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
+        if(newCreditFacility != null && newCreditFacility.getId() != 0){
+            totalWCTMB = newCreditFacility.getTotalWcTmb();
+            odLimit = newCreditFacility.getTotalCommercialAndOBOD();
+            loanCoreWC = newCreditFacility.getTotalCommercial();
+        }
+        if(dbr != null && dbr.getId() != 0){
+            adjusted = dbr.getMonthlyIncomeAdjust();
+        }
+
+        BigDecimal income = Util.divide((totalWCTMB.add(odLimit).add(loanCoreWC)),(adjusted.multiply(new BigDecimal(12))));
+//        BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -362,7 +375,7 @@ public class ExSummaryControl extends BusinessControl {
             value6 = Util.subtract(newCreditFacility.getWcNeed(),newCreditFacility.getTotalWcTmb());
         }
 
-        if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null){
+        if(basicInfo != null && basicInfo.getId() != 0 && newCreditFacility != null && newCreditFacility.getId() != 0){
             if(basicInfo.getRefinanceIN() == 1){
                 if(newCreditFacility.getCreditCustomerType() == CreditCustomerType.PRIME.value()){
                     recommendedWCNeed = getMinBigDecimal(value2,value3);
@@ -396,7 +409,7 @@ public class ExSummaryControl extends BusinessControl {
     public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         BigDecimal actualWC = BigDecimal.ZERO;
-        if(newCreditFacility != null && newCreditFacility.getNewCreditDetailList() != null) {
+        if(newCreditFacility != null && newCreditFacility.getId() != 0 && newCreditFacility.getNewCreditDetailList() != null) {
             for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
                 if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
     //                actualWC = actualWC.add(n.get);
@@ -490,8 +503,12 @@ public class ExSummaryControl extends BusinessControl {
 //    groupExposureUW - Group Total Exposure + Total Approved Credit
     public void calGroupExposureBorrowerCharacteristic(long workCaseId){ //TODO: Decision , Credit Facility-Propose , Pls Call me !!
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        BigDecimal groupExposureBDM = newCreditFacility.getTotalExposure().add(newCreditFacility.getTotalPropose());
-        BigDecimal groupExposureUW = newCreditFacility.getTotalExposure().add(newCreditFacility.getTotalApproveCredit());
+        BigDecimal groupExposureBDM = BigDecimal.ZERO;
+        BigDecimal groupExposureUW = BigDecimal.ZERO;
+        if(newCreditFacility != null && newCreditFacility.getId() != 0){
+            groupExposureBDM = Util.add(newCreditFacility.getTotalExposure(),newCreditFacility.getTotalPropose());
+            groupExposureUW = Util.add(newCreditFacility.getTotalExposure(),newCreditFacility.getTotalApproveCredit());
+        }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){

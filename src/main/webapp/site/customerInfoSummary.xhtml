@@ -189,7 +189,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.percentShareSummary}"
+                                                <h:outputText value="#{item.percentShare}"
                                                               style="min-width: 70px; max-width: 70px; width: 70px;"/>
                                             </p:column>
 
@@ -210,7 +210,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.worthiness}"
+                                                <h:outputText value="#{item.worthiness == 3 ? 'Pass' : item.worthiness == 4 ? 'Fail' : item.worthiness == 5 ? 'N/A' : '-'}"
                                                               style="min-width: 50px; max-width: 50px; width: 50px;"/>
                                             </p:column>
 
@@ -354,7 +354,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.percentShareSummary}"
+                                                <h:outputText value="#{item2.percentShare}"
                                                               style="min-width: 70px; max-width: 70px; width: 70px;"/>
                                             </p:column>
 
@@ -375,7 +375,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.worthiness}"
+                                                <h:outputText value="#{item2.worthiness == 3 ? 'Pass' : item2.worthiness == 4 ? 'Fail' : item2.worthiness == 5 ? 'N/A' : '-'}"
                                                               style="min-width: 50px; max-width: 50px; width: 50px;"/>
                                             </p:column>
 
@@ -525,7 +525,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.percentShareSummary}"
+                                                <h:outputText value="#{item3.percentShare}"
                                                               style="min-width: 70px; max-width: 70px; width: 70px;"/>
                                             </p:column>
 
@@ -546,7 +546,7 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.worthiness}"
+                                                <h:outputText value="#{item3.worthiness == 3 ? 'Pass' : item3.worthiness == 4 ? 'Fail' : item3.worthiness == 5 ? 'N/A' : '-'}"
                                                               style="min-width: 50px; max-width: 50px; width: 50px;"/>
                                             </p:column>
 

@@ -14,7 +14,7 @@
                     </td>
                     <td style="width: 300px;">
                         <p:selectOneMenu id="potentialCollateralType"
-                                         value="#{tcgInfo.TCGDetailView.potentialCollateral.id}"
+                                         value="#{tcgInfo.tcgDetailView.potentialCollateral.id}"
                                          size="1"
                                          style="min-width: 250px; width: 250px; max-width: 250px;"
                                          required="#{not empty param[addDlgData.clientId]}">
@@ -34,7 +34,7 @@
                     </td>
                     <td>
                         <p:selectOneMenu id="potentialColToTCG"
-                                         value="#{tcgInfo.TCGDetailView.tcgCollateralType.id}"
+                                         value="#{tcgInfo.tcgDetailView.tcgCollateralType.id}"
                                          styleClass="largest"
                                          size="1"
                                          required="#{not empty param[addDlgData.clientId]}"
@@ -56,10 +56,10 @@
                     <td>
                         <p:inputText styleClass="large"
                                      id="appraisalAmount"
-                                     value="#{tcgInfo.TCGDetailView.appraisalAmount}"
+                                     value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     maxlength="18"
+                                     maxlength="17"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
@@ -79,8 +79,8 @@
                     <td>
                         <p:inputText styleClass="large"
                                      id="LTVvalue"
-                                     value="#{tcgInfo.TCGDetailView.ltvValue}"
-                                     maxlength="18"
+                                     value="#{tcgInfo.tcgDetailView.ltvValue}"
+                                     maxlength="17"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      readonly="true">
@@ -97,7 +97,7 @@
                     </td>
                     <td>
                         <p:selectOneRadio id="proposeInThisRequestRadio"
-                                          value="#{tcgInfo.TCGDetailView.proposeInThisRequest}">
+                                          value="#{tcgInfo.tcgDetailView.proposeInThisRequest}">
                             <f:selectItem itemLabel="No" itemValue="1"/>
                             <f:selectItem itemLabel="Yes" itemValue="2"/>
                         </p:selectOneRadio>

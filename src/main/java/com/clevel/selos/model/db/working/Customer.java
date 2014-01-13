@@ -214,6 +214,9 @@ public class Customer implements Serializable {
     @Column(name="pending_claim_LG", nullable=false, columnDefinition="int default 0")
     private BigDecimal pendingClaimLG;
 
+    @Column(name="shares", nullable=false, columnDefinition="int default 0")
+    private BigDecimal shares;
+
     public Customer() {
     }
 
@@ -713,6 +716,14 @@ public class Customer implements Serializable {
 
     public void setPendingClaimLG(BigDecimal pendingClaimLG) {
         this.pendingClaimLG = pendingClaimLG;
+    }
+
+    public BigDecimal getShares() {
+        return shares;
+    }
+
+    public void setShares(BigDecimal shares) {
+        this.shares = shares;
     }
 
     @Override

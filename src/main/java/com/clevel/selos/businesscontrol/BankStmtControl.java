@@ -386,9 +386,9 @@ public class BankStmtControl extends BusinessControl {
         if (bankStmtViewList == null || bankStmtViewList.size() == 0) return;
         for (BankStmtView bankStmtView : bankStmtViewList) {
             if (atId == bankStmtView.getId()) {
-                bankStmtView.setMainAccount(1);
+                bankStmtView.setMainAccount(RadioValue.YES.value());
             } else {
-                bankStmtView.setMainAccount(0);
+                bankStmtView.setMainAccount(RadioValue.NO.value());
             }
         }
     }

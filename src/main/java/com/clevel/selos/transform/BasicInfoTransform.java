@@ -76,7 +76,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setExtendedReviewDate(basicInfoView.getExtReviewDate());
 
         basicInfo.setSbfScore(sbfScoreTransform.transformToModel(basicInfoView.getSbfScoreView()));
-        if(basicInfo.getSbfScore().getId() == 0){
+        if(basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getId() == 0){
             basicInfo.setSbfScore(null);
         }
 

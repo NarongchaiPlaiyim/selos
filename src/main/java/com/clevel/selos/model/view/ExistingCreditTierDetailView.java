@@ -34,15 +34,8 @@ public class ExistingCreditTierDetailView implements Serializable {
     }
 
     public void reset() {
-        this.finalPriceRate = "";
-        this.tenor = 0;
-        this.installment = BigDecimal.ZERO;
         this.standardBasePrice =  new BaseRate();
-        this.standardPrice = "";
         this.suggestBasePrice = new BaseRate();
-        this.suggestPrice = "";
-        this.standardInterest = BigDecimal.ZERO;
-        this.suggestInterest = BigDecimal.ZERO;
         this.finalBasePrice = new BaseRate();
     }
 

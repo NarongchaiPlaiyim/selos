@@ -6,6 +6,7 @@ import com.clevel.selos.integration.coms.db.CollateralDecisionDetail;
 import com.clevel.selos.integration.coms.db.CollateralJobLevel;
 import com.clevel.selos.integration.coms.db.HeadCollateral;
 import com.clevel.selos.integration.coms.db.SubCollateral;
+import com.clevel.selos.integration.coms.model.AddressType;
 import com.clevel.selos.integration.coms.tool.DBContext;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,6 +50,9 @@ public class DBExecute implements Serializable {
 
     Connection conn = null;
     transient ResultSet rs = null;
+    private final String SPACE = " ";
+    private final String COMMA = ", ";
+    private final String COLON = ": ";
 
     @Inject
     public DBExecute() {
@@ -396,206 +401,1023 @@ public class DBExecute implements Serializable {
         return subCollateralList;
     }
 
-    private String getAddress(String colId, String headColId, String colType, String subColType, String onlType){
+    public String getAddressType1(String colId, String headColId){
+        log.debug("getAddressType1 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
         String SQL_TYPE_1 = "SELECT " +
-                                "APPR_LAND.DEED_NO, " +
-                                "APPR_LAND.COORDINATE_NO, " +
-                                "APPR_LAND.LAND_NO, " +
-                                "APPR_LAND.SURVEY_NO, " +
-                                "APPR_LAND.BOOK_NO, " +
-                                "APPR_LAND.PAGE_NO, " +
-                                "APPR_LAND.CONDO_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_LAND " +
-                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
+                                "A.DEED_NO as deedNo, " +
+                                "A.COORDINATE_NO as coordinateNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.SURVEY_NO as surveyNo, " +
+                                "A.BOOK_NO as bookNo, " +
+                                "A.PAGE_NO as pageNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_LAND A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
 
-        String SQL_TYPE_2 = "SELECT " +
-                                "APPR_LAND.DEED_NO, " +
-                                "APPR_LAND.LAND_NO, " +
-                                "APPR_LAND.BOOK_NO, " +
-                                "APPR_LAND.PAGE_NO, " +
-                                "APPR_LAND.CONDO_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_LAND " +
-                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_3 = "SELECT " +
-                                "APPR_LAND.DEED_NO, " +
-                                "APPR_LAND.BOOK_NO, " +
-                                "APPR_LAND.PAGE_NO, " +
-                                "APPR_LAND.LAND_NO, " +
-                                "APPR_LAND.AIRIAL_PHOTO_NO, " +
-                                "APPR_LAND.COORDINATE_NO, " +
-                                "APPR_LAND.SHEET_NO, " +
-                                "APPR_LAND.CONDO_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_LAND " +
-                            "LEFT JOIN CITY ON APPR_LAND.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_4 = "SELECT " +
-                                "APPR_LAND.DEED_NO, " +
-                                "APPR_LAND.BOOK_NO, " +
-                                "APPR_LAND.PAGE_NO, " +
-                                "APPR_LAND.LAND_NO, " +
-                                "APPR_LAND.SURVEY_NO, " +
-                                "APPR_LAND.COORDINATE_NO, " +
-                                "APPR_LAND.CONDO_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_LAND " +
-                            "LEFT JOIN CITY ON APPR_LAND.CONDO_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_5 = "SELECT " +
-                                "APPR_BUILDING.ADD_NO, " +
-                                "APPR_BUILDING.ADD_MOO, " +
-                                "APPR_BUILDING.ADD_ROAD, " +
-                                "APPR_BUILDING.ADD_BANN, " +
-                                "APPR_BUILDING.ADD_SOI, " +
-                                "APPR_BUILDING.ADD_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_BUILDING " +
-                            "LEFT JOIN CITY ON APPR_BUILDING.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_BUILDING.COL_ID = ? AND APPR_BUILDING.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_6 = "SELECT " +
-                                "APPR_LAND.ROOM_NO, " +
-                                "APPR_LAND.FLOOR_NO, " +
-                                "APPR_LAND.LAND_NO, " +
-                                "APPR_LAND.BUILDING_NAME, " +
-                                "APPR_LAND.CONDO_NO, " +
-                                "APPR_LAND.NO_OF_FLOOR, " +
-                                "APPR_LAND.DEED_NO, " +
-                                "APPR_LAND.CONDO_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME, " +
-                                "APPR_LAND.AREA_METER, " +
-                                "APPR_LAND.BALCONY_METER " +
-                            "FROM APPR_LAND " +
-                            "LEFT JOIN CITY ON APPR_LAND.CONDO_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_LAND.COL_ID = ? AND APPR_LAND.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_7 = "SELECT " +
-                                "APPR_MACHINE.ADD_NO, " +
-                                "APPR_MACHINE.ADD_MOO, " +
-                                "APPR_MACHINE.ADD_BANN, " +
-                                "APPR_MACHINE.ADD_SOI, " +
-                                "APPR_MACHINE.ADD_ROAD, " +
-                                "APPR_MACHINE.ADD_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_MACHINE " +
-                            "LEFT JOIN CITY ON APPR_MACHINE.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_MACHINE.COL_ID = ? AND APPR_MACHINE.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_8 = "SELECT " +
-                                "APPR_GOODS.ADD_NO, " +
-                                "APPR_GOODS.ADD_MOO, " +
-                                "APPR_GOODS.ADD_BANN, " +
-                                "APPR_GOODS.ADD_SOI, " +
-                                "APPR_GOODS.ADD_ROAD, " +
-                                "APPR_GOODS.ADD_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_GOODS " +
-                            "LEFT JOIN CITY ON APPR_GOODS.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_GOODS.COL_ID = ? AND APPR_GOODS.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_9 = "SELECT " +
-                                "SET_COUNTRY.NAME_THAI, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_CAR " +
-                            "LEFT JOIN SET_COUNTRY ON APPR_CAR.REGISTRATION_PLACE_COUNTRY = SET_COUNTRY.CODE " +
-                            "LEFT JOIN PROVINCE ON APPR_CAR.REGISTRATION_PROVINCE_LOCAL = PROVINCE.PROV_ID " +
-                            "WHERE APPR_CAR.COL_ID = ? AND APPR_CAR.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_10 = "SELECT " +
-                                "SET_COUNTRY.NAME_THAI " +
-                            "FROM APPR_SHIP " +
-                            "LEFT JOIN SET_COUNTRY ON APPR_SHIP.REGISTRATION_PLACE = SET_COUNTRY.CODE " +
-                            "WHERE APPR_SHIP.COL_ID = ? AND APPR_SHIP.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_11 = "SELECT " +
-                                "APPR_RENT.ADD_NO, " +
-                                "APPR_RENT.ADD_MOO, " +
-                                "APPR_RENT.ADD_BANN, " +
-                                "APPR_RENT.ADD_SOI, " +
-                                "APPR_RENT.ADD_ROAD, " +
-                                "APPR_RENT.ADD_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_RENT " +
-                            "LEFT JOIN CITY ON APPR_RENT.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_RENT.COL_ID = ? AND APPR_RENT.HEAD_COL_ID = ?";
-
-        String SQL_TYPE_12 = "SELECT " +
-                                "APPR_OTHERS.ADD_NO, " +
-                                "APPR_OTHERS.ADD_MOO, " +
-                                "APPR_OTHERS.ADD_BANN, " +
-                                "APPR_OTHERS.ADD_SOI, " +
-                                "APPR_OTHERS.ADD_ROAD, " +
-                                "APPR_OTHERS.ADD_DISTRICT, " +
-                                "CITY.CITY_ID, " +
-                                "CITY.CITY, " +
-                                "CITY.PROVINCE_ID, " +
-                                "PROVINCE.PROV_ID, " +
-                                "PROVINCE.PROV_NAME " +
-                            "FROM APPR_OTHERS " +
-                            "LEFT JOIN CITY ON APPR_OTHERS.ADD_CITY = CITY.CITY_ID " +
-                            "LEFT JOIN PROVINCE ON CITY.PROVINCE_ID = PROVINCE.PROV_ID " +
-                            "WHERE APPR_OTHERS.COL_ID = ? AND APPR_OTHERS.HEAD_COL_ID = ?";
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_1 = "SELECT " +
+                            "A.DEED_NO as deedNo, " +
+                            "A.COORDINATE_NO as coordinateNo, " +
+                            "A.LAND_NO as landNo, " +
+                            "A.SURVEY_NO as surveyNo, " +
+                            "A.BOOK_NO as bookNo, " +
+                            "A.PAGE_NO as pageNo, " +
+                            "A.CONDO_DISTRICT as condoDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+".APPR_LAND A " +
+                        "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
 
         try{
             conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
         } catch (COMSInterfaceException ex){
             throw ex;
         }
-        return null;
+
+        try {
+            log.debug("SQL_TYPE_1 : {}",SQL_TYPE_1);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_1);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String deedNo = rs.getString("deedNo");
+                String coordinateNo = rs.getString("coordinateNo");
+                String landNo = rs.getString("landNo");
+                String surveyNo = rs.getString("surveyNo");
+                String bookNo = rs.getString("bookNo");
+                String pageNo = rs.getString("pageNo");
+                String condoDistrict = rs.getString("condoDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = deedNo.concat(COMMA)
+                            .concat(coordinateNo).concat(COMMA)
+                            .concat(landNo).concat(COMMA)
+                            .concat(surveyNo).concat(COMMA)
+                            .concat(bookNo).concat(COMMA)
+                            .concat(pageNo).concat(COMMA)
+                            .concat(condoDistrict).concat(SPACE)
+                            .concat(city).concat(SPACE)
+                            .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
     }
+
+    public String getAddressType2(String colId, String headColId){
+        log.debug("getAddressType2 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_2 = "SELECT " +
+                                "A.DEED_NO as deedNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.BOOK_NO as bookNo, " +
+                                "A.PAGE_NO as pageNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_LAND A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_2 = "SELECT " +
+                                "A.DEED_NO as deedNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.BOOK_NO as bookNo, " +
+                                "A.PAGE_NO as pageNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM "+schema+".APPR_LAND A " +
+                            "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_2 : {}",SQL_TYPE_2);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_2);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String deedNo = rs.getString("deedNo");
+                String landNo = rs.getString("landNo");
+                String bookNo = rs.getString("bookNo");
+                String pageNo = rs.getString("pageNo");
+                String condoDistrict = rs.getString("condoDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = deedNo.concat(COMMA)
+                        .concat(landNo).concat(COMMA)
+                        .concat(bookNo).concat(COMMA)
+                        .concat(pageNo).concat(COMMA)
+                        .concat(condoDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType3(String colId, String headColId){
+        log.debug("getAddressType3 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_3 = "SELECT " +
+                                "A.DEED_NO as deedNo, " +
+                                "A.BOOK_NO as bookNo, " +
+                                "A.PAGE_NO as pageNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.AIRIAL_PHOTO_NO as airialPhotoNo, " +
+                                "A.COORDINATE_NO as coordinateNo, " +
+                                "A.SHEET_NO as sheetNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_LAND A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_3 = "SELECT " +
+                            "A.DEED_NO as deedNo, " +
+                            "A.BOOK_NO as bookNo, " +
+                            "A.PAGE_NO as pageNo, " +
+                            "A.LAND_NO as landNo, " +
+                            "A.AIRIAL_PHOTO_NO as airialPhotoNo, " +
+                            "A.COORDINATE_NO as coordinateNo, " +
+                            "A.SHEET_NO as sheetNo, " +
+                            "A.CONDO_DISTRICT as condoDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+".APPR_LAND A " +
+                        "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_3 : {}",SQL_TYPE_3);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_3);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String deedNo = rs.getString("deedNo");
+                String bookNo = rs.getString("bookNo");
+                String pageNo = rs.getString("pageNo");
+                String landNo = rs.getString("landNo");
+                String airialPhotoNo = rs.getString("airialPhotoNo");
+                String coordinateNo = rs.getString("coordinateNo");
+                String sheetNo = rs.getString("sheetNo");
+                String condoDistrict = rs.getString("condoDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = deedNo.concat(COMMA)
+                        .concat(bookNo).concat(COMMA)
+                        .concat(pageNo).concat(COMMA)
+                        .concat(landNo).concat(COMMA)
+                        .concat(airialPhotoNo).concat(COMMA)
+                        .concat(coordinateNo).concat(COMMA)
+                        .concat(sheetNo).concat(COMMA)
+                        .concat(condoDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType4(String colId, String headColId){
+        log.debug("getAddressType4 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_4 = "SELECT " +
+                                "A.DEED_NO as deedNo, " +
+                                "A.BOOK_NO as bookNo, " +
+                                "A.PAGE_NO as pageNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.SURVEY_NO as surveyNo, " +
+                                "A.COORDINATE_NO as coordinateNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_LAND A " +
+                            "LEFT JOIN CITY B ON A.CONDO_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_4 = "SELECT " +
+                            "A.DEED_NO as deedNo, " +
+                            "A.BOOK_NO as bookNo, " +
+                            "A.PAGE_NO as pageNo, " +
+                            "A.LAND_NO as landNo, " +
+                            "A.SURVEY_NO as surveyNo, " +
+                            "A.COORDINATE_NO as coordinateNo, " +
+                            "A.CONDO_DISTRICT as condoDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+".APPR_LAND A " +
+                        "LEFT JOIN "+schema+".CITY B ON A.CONDO_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_4 : {}",SQL_TYPE_4);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_4);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String deedNo = rs.getString("deedNo");
+                String bookNo = rs.getString("bookNo");
+                String pageNo = rs.getString("pageNo");
+                String landNo = rs.getString("landNo");
+                String surveyNo = rs.getString("surveyNo");
+                String coordinateNo = rs.getString("coordinateNo");
+                String condoDistrict = rs.getString("condoDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = deedNo.concat(COMMA)
+                        .concat(bookNo).concat(COMMA)
+                        .concat(pageNo).concat(COMMA)
+                        .concat(landNo).concat(COMMA)
+                        .concat(surveyNo).concat(COMMA)
+                        .concat(coordinateNo).concat(COMMA)
+                        .concat(condoDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType5(String colId, String headColId){
+        log.debug("getAddressType5 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_5 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_BUILDING A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_5 = "SELECT " +
+                            "A.ADD_NO as addNo, " +
+                            "A.ADD_MOO as addMoo, " +
+                            "A.ADD_ROAD as addRoad, " +
+                            "A.ADD_BANN as addBann, " +
+                            "A.ADD_SOI as addSoi, " +
+                            "A.ADD_DISTRICT as addDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+".APPR_BUILDING A " +
+                        "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_5 : {}",SQL_TYPE_5);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_5);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String addNo = rs.getString("addNo");
+                String addMoo = rs.getString("addMoo");
+                String addRoad = rs.getString("addRoad");
+                String addBann = rs.getString("addBann");
+                String addSoi = rs.getString("addSoi");
+                String addDistrict = rs.getString("addDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = addNo.concat(SPACE)
+                        .concat(addMoo).concat(SPACE)
+                        .concat(addRoad).concat(SPACE)
+                        .concat(addBann).concat(SPACE)
+                        .concat(addSoi).concat(SPACE)
+                        .concat(addDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType6(String colId, String headColId){
+        log.debug("getAddressType6 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_6 = "SELECT " +
+                                "A.ROOM_NO as roomNo, " +
+                                "A.FLOOR_NO as floorNo, " +
+                                "A.LAND_NO as landNo, " +
+                                "A.BUILDING_NAME as buildingName, " +
+                                "A.CONDO_NO as condoNo, " +
+                                "A.NO_OF_FLOOR as noOfFloor, " +
+                                "A.DEED_NO as deedNo, " +
+                                "A.CONDO_DISTRICT as condoDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName, " +
+                                "A.AREA_METER as areaMeter, " +
+                                "A.BALCONY_METER as balconyMeter " +
+                            "FROM APPR_LAND A " +
+                            "LEFT JOIN CITY B ON A.CONDO_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_6 = "SELECT " +
+                            "A.ROOM_NO as roomNo, " +
+                            "A.FLOOR_NO as floorNo, " +
+                            "A.LAND_NO as landNo, " +
+                            "A.BUILDING_NAME as buildingName, " +
+                            "A.CONDO_NO as condoNo, " +
+                            "A.NO_OF_FLOOR as noOfFloor, " +
+                            "A.DEED_NO as deedNo, " +
+                            "A.CONDO_DISTRICT as condoDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName, " +
+                            "A.AREA_METER as areaMeter, " +
+                            "A.BALCONY_METER as balconyMeter " +
+                        "FROM "+schema+"APPR_LAND A " +
+                        "LEFT JOIN "+schema+"CITY B ON A.CONDO_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_6 : {}",SQL_TYPE_6);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_6);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String roomNo = rs.getString("roomNo");
+                String floorNo = rs.getString("floorNo");
+                String landNo = rs.getString("landNo");
+                String buildingName = rs.getString("buildingName");
+                String condoNo = rs.getString("condoNo");
+                String noOfFloor = rs.getString("noOfFloor");
+                String deedNo = rs.getString("deedNo");
+                String condoDistrict = rs.getString("condoDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+                BigDecimal areaMeter = rs.getBigDecimal("areaMeter");
+                BigDecimal balconyMeter = rs.getBigDecimal("balconyMeter");
+
+                address = roomNo.concat(COMMA)
+                        .concat(floorNo).concat(COMMA)
+                        .concat(landNo).concat(COMMA)
+                        .concat(buildingName).concat(COMMA)
+                        .concat(condoNo).concat(COMMA)
+                        .concat(noOfFloor).concat(COMMA)
+                        .concat(deedNo).concat(COMMA)
+                        .concat(condoDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+                if(areaMeter!=null){
+                    address = address.concat(COMMA).concat(areaMeter.toString());
+                }
+                if(balconyMeter!=null){
+                    address = address.concat(COMMA).concat(balconyMeter.toString());
+                }
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType7(String colId, String headColId){
+        log.debug("getAddressType7 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_7 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_MACHINE A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_7 = "SELECT " +
+                            "A.ADD_NO as addNo, " +
+                            "A.ADD_MOO as addMoo, " +
+                            "A.ADD_BANN as addBann, " +
+                            "A.ADD_SOI as addSoi, " +
+                            "A.ADD_ROAD as addRoad, " +
+                            "A.ADD_DISTRICT as addDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+"APPR_MACHINE A " +
+                        "LEFT JOIN "+schema+"CITY B ON A.ADD_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_7 : {}",SQL_TYPE_7);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_7);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String addNo = rs.getString("addNo");
+                String addMoo = rs.getString("addMoo");
+                String addBann = rs.getString("addBann");
+                String addSoi = rs.getString("addSoi");
+                String addRoad = rs.getString("addRoad");
+                String addDistrict = rs.getString("addDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = addNo.concat(SPACE)
+                        .concat(addMoo).concat(SPACE)
+                        .concat(addBann).concat(SPACE)
+                        .concat(addSoi).concat(SPACE)
+                        .concat(addRoad).concat(SPACE)
+                        .concat(addDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType8(String colId, String headColId){
+        log.debug("getAddressType8 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_8 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_GOODS A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_8 = "SELECT " +
+                            "A.ADD_NO as addNo, " +
+                            "A.ADD_MOO as addMoo, " +
+                            "A.ADD_BANN as addBann, " +
+                            "A.ADD_SOI as addSoi, " +
+                            "A.ADD_ROAD as addRoad, " +
+                            "A.ADD_DISTRICT as addDistrict, " +
+                            "B.CITY_ID as cityId, " +
+                            "B.CITY as city, " +
+                            "B.PROVINCE_ID as provinceId, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+"APPR_GOODS A " +
+                        "LEFT JOIN "+schema+"CITY B ON A.ADD_CITY = B.CITY_ID " +
+                        "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_8 : {}",SQL_TYPE_8);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_8);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String addNo = rs.getString("addNo");
+                String addMoo = rs.getString("addMoo");
+                String addBann = rs.getString("addBann");
+                String addSoi = rs.getString("addSoi");
+                String addRoad = rs.getString("addRoad");
+                String addDistrict = rs.getString("addDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = addNo.concat(SPACE)
+                        .concat(addMoo).concat(SPACE)
+                        .concat(addBann).concat(SPACE)
+                        .concat(addSoi).concat(SPACE)
+                        .concat(addRoad).concat(SPACE)
+                        .concat(addDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType9(String colId, String headColId){
+        log.debug("getAddressType9 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_9 = "SELECT " +
+                                "B.NAME_THAI as nameThai, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_CAR A " +
+                            "LEFT JOIN SET_COUNTRY B ON A.REGISTRATION_PLACE_COUNTRY = B.CODE " +
+                            "LEFT JOIN PROVINCE C ON A.REGISTRATION_PROVINCE_LOCAL = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_9 = "SELECT " +
+                            "B.NAME_THAI as nameThai, " +
+                            "C.PROV_ID as provId, " +
+                            "C.PROV_NAME as provName " +
+                        "FROM "+schema+"APPR_CAR A " +
+                        "LEFT JOIN "+schema+"SET_COUNTRY B ON A.REGISTRATION_PLACE_COUNTRY = B.CODE " +
+                        "LEFT JOIN "+schema+"PROVINCE C ON A.REGISTRATION_PROVINCE_LOCAL = C.PROV_ID " +
+                        "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_9 : {}",SQL_TYPE_9);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_9);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String nameThai = rs.getString("nameThai");
+                String provName = rs.getString("provName");
+
+                address = nameThai.concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType10(String colId, String headColId){
+        log.debug("getAddressType10 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_10 = "SELECT " +
+                                "B.NAME_THAI as nameThai " +
+                            "FROM APPR_SHIP A " +
+                            "LEFT JOIN SET_COUNTRY B ON A.REGISTRATION_PLACE = B.CODE " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_10 = "SELECT " +
+                                "B.NAME_THAI as nameThai " +
+                            "FROM "+schema+"APPR_SHIP A " +
+                            "LEFT JOIN "+schema+"SET_COUNTRY B ON A.REGISTRATION_PLACE = B.CODE " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_10 : {}",SQL_TYPE_10);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_10);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String nameThai = rs.getString("nameThai");
+                address = nameThai;
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType11(String colId, String headColId){
+        log.debug("getAddressType11 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_11 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_RENT A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_11 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM "+schema+"APPR_RENT A " +
+                            "LEFT JOIN "+schema+"CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_11 : {}",SQL_TYPE_11);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_11);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String addNo = rs.getString("addNo");
+                String addMoo = rs.getString("addMoo");
+                String addBann = rs.getString("addBann");
+                String addSoi = rs.getString("addSoi");
+                String addRoad = rs.getString("addRoad");
+                String addDistrict = rs.getString("addDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = addNo.concat(SPACE)
+                        .concat(addMoo).concat(SPACE)
+                        .concat(addBann).concat(SPACE)
+                        .concat(addSoi).concat(SPACE)
+                        .concat(addRoad).concat(SPACE)
+                        .concat(addDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
+    public String getAddressType12(String colId, String headColId){
+        log.debug("getAddressType12 colId: {}, headColId: {}",colId, headColId);
+        String address = "";
+        String SQL_TYPE_12 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM APPR_OTHERS A " +
+                            "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+
+        if(schema!=null && !schema.trim().equalsIgnoreCase("")){
+            SQL_TYPE_12 = "SELECT " +
+                                "A.ADD_NO as addNo, " +
+                                "A.ADD_MOO as addMoo, " +
+                                "A.ADD_BANN as addBann, " +
+                                "A.ADD_SOI as addSoi, " +
+                                "A.ADD_ROAD as addRoad, " +
+                                "A.ADD_DISTRICT as addDistrict, " +
+                                "B.CITY_ID as cityId, " +
+                                "B.CITY as city, " +
+                                "B.PROVINCE_ID as provinceId, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
+                            "FROM "+schema+"APPR_OTHERS A " +
+                            "LEFT JOIN "+schema+"CITY B ON A.ADD_CITY = B.CITY_ID " +
+                            "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
+        }
+
+        try{
+            conn = dbContext.getConnection(connCOMS, comsUser, comsPassword);
+        } catch (COMSInterfaceException ex){
+            throw ex;
+        }
+
+        try {
+            log.debug("SQL_TYPE_12 : {}",SQL_TYPE_12);
+            PreparedStatement statement = conn.prepareStatement(SQL_TYPE_12);
+            statement.setString(1, colId);
+            statement.setString(2, headColId);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String addNo = rs.getString("addNo");
+                String addMoo = rs.getString("addMoo");
+                String addBann = rs.getString("addBann");
+                String addSoi = rs.getString("addSoi");
+                String addRoad = rs.getString("addRoad");
+                String addDistrict = rs.getString("addDistrict");
+                String cityId = rs.getString("cityId");
+                String city = rs.getString("city");
+                String provinceId = rs.getString("provinceId");
+                String provId = rs.getString("provId");
+                String provName = rs.getString("provName");
+
+                address = addNo.concat(SPACE)
+                        .concat(addMoo).concat(SPACE)
+                        .concat(addBann).concat(SPACE)
+                        .concat(addSoi).concat(SPACE)
+                        .concat(addRoad).concat(SPACE)
+                        .concat(addDistrict).concat(SPACE)
+                        .concat(city).concat(SPACE)
+                        .concat(provName);
+            }
+            log.debug("address result : {}", address);
+            rs.close();
+            conn.close();
+            conn = null;
+            log.debug("connection closed.");
+        } catch (SQLException e) {
+            log.error("execute query exception!",e);
+            throw new COMSInterfaceException(e, ExceptionMapping.COMS_GETDATA_ERROR, msg.get(ExceptionMapping.COMS_GETDATA_ERROR));
+        } finally {
+            closeConnection();
+        }
+
+        return address;
+    }
+
 
     private void closeConnection() {
         if(rs != null){

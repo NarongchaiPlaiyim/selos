@@ -28,7 +28,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
-import javax.management.relation.RelationType;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -182,6 +181,8 @@ public class CustomerInfoJuristic implements Serializable {
 
     private boolean isEditForm;
 
+    private boolean enableAllFieldCus;
+
     public CustomerInfoJuristic(){
     }
 
@@ -200,6 +201,8 @@ public class CustomerInfoJuristic implements Serializable {
                 log.info("Exception :: {}",ex);
             }
         }
+
+        enableAllFieldCus = false;
 
         onAddNewJuristic();
 
@@ -287,6 +290,8 @@ public class CustomerInfoJuristic implements Serializable {
         } else {
             isEditForm = false;
         }
+
+        enableAllFieldCus = true;
 
         onChangeRelation();
         onChangeReference();
@@ -433,6 +438,7 @@ public class CustomerInfoJuristic implements Serializable {
         try{
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            enableAllFieldCus = true;
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
@@ -476,12 +482,16 @@ public class CustomerInfoJuristic implements Serializable {
                 message = customerInfoResultView.getReason();
 
             }
+            customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+            customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
             enableCitizenId = true;
+            customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+            customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
             log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
@@ -1062,5 +1072,13 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setEditForm(boolean editForm) {
         isEditForm = editForm;
+    }
+
+    public boolean isEnableAllFieldCus() {
+        return enableAllFieldCus;
+    }
+
+    public void setEnableAllFieldCus(boolean enableAllFieldCus) {
+        this.enableAllFieldCus = enableAllFieldCus;
     }
 }
