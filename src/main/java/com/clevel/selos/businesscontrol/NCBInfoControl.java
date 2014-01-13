@@ -168,6 +168,7 @@ public class NCBInfoControl extends BusinessControl {
                         .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
                 ncbDetailView.setAccountName(accountName.toString());
                 ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
                 ncbDetailViews.add(ncbDetailView);
             }
 

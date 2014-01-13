@@ -20,11 +20,12 @@ public class DBRView implements Serializable {
     private BigDecimal currentDBR;
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
+    private BigDecimal totalMonthDebtBorrowerStart;
+    private BigDecimal totalMonthDebtBorrowerFinal;
+    private boolean isUpdateTotalDebtBorrower;
     private long workCaseId;
     private String userId;
-    private BigDecimal totalMonthDebtBorrower;
-    private BigDecimal totalMonthDebtRelated;
-	private String modifyBy;
+    private String modifyBy;
     private Date modifyDate;
 
 
@@ -44,8 +45,8 @@ public class DBRView implements Serializable {
         this.dbrBeforeRequest = BigDecimal.ZERO;
         this.dbrInterest = BigDecimal.ZERO;
         this.workCaseId = 0;
-        this.totalMonthDebtBorrower = BigDecimal.ZERO;
-        this.totalMonthDebtRelated = BigDecimal.ZERO;
+        this.isUpdateTotalDebtBorrower = false;
+
     }
 
     public long getId() {
@@ -144,22 +145,6 @@ public class DBRView implements Serializable {
         this.userId = userId;
     }
 
-    public BigDecimal getTotalMonthDebtBorrower() {
-        return totalMonthDebtBorrower;
-    }
-
-    public void setTotalMonthDebtBorrower(BigDecimal totalMonthDebtBorrower) {
-        this.totalMonthDebtBorrower = totalMonthDebtBorrower;
-    }
-
-    public BigDecimal getTotalMonthDebtRelated() {
-        return totalMonthDebtRelated;
-    }
-
-    public void setTotalMonthDebtRelated(BigDecimal totalMonthDebtRelated) {
-        this.totalMonthDebtRelated = totalMonthDebtRelated;
-    }
-
 	public String getModifyBy() {
         return modifyBy;
     }
@@ -176,6 +161,30 @@ public class DBRView implements Serializable {
         this.modifyDate = modifyDate;
     }
 
+    public BigDecimal getTotalMonthDebtBorrowerStart() {
+        return totalMonthDebtBorrowerStart;
+    }
+
+    public void setTotalMonthDebtBorrowerStart(BigDecimal totalMonthDebtBorrowerStart) {
+        this.totalMonthDebtBorrowerStart = totalMonthDebtBorrowerStart;
+    }
+
+    public BigDecimal getTotalMonthDebtBorrowerFinal() {
+        return totalMonthDebtBorrowerFinal;
+    }
+
+    public void setTotalMonthDebtBorrowerFinal(BigDecimal totalMonthDebtBorrowerFinal) {
+        this.totalMonthDebtBorrowerFinal = totalMonthDebtBorrowerFinal;
+    }
+
+    public boolean isUpdateTotalDebtBorrower() {
+        return isUpdateTotalDebtBorrower;
+    }
+
+    public void setUpdateTotalDebtBorrower(boolean updateTotalDebtBorrower) {
+        isUpdateTotalDebtBorrower = updateTotalDebtBorrower;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -189,8 +198,12 @@ public class DBRView implements Serializable {
                 .append("currentDBR", currentDBR)
                 .append("dbrBeforeRequest", dbrBeforeRequest)
                 .append("dbrInterest", dbrInterest)
+                .append("totalMonthDebtBorrowerStart", totalMonthDebtBorrowerStart)
+                .append("totalMonthDebtBorrowerFinal", totalMonthDebtBorrowerFinal)
                 .append("workCaseId", workCaseId)
                 .append("userId", userId)
+                .append("modifyBy", modifyBy)
+                .append("modifyDate", modifyDate)
                 .toString();
     }
 }
