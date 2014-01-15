@@ -503,6 +503,10 @@ public class CreditFacPropose implements Serializable {
         if ((newCreditDetailView.getProductProgram().getId() != 0) && (newCreditDetailView.getCreditType().getId() != 0)) {
             ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
             CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
+
+            log.info("productProgram :: {}",productProgram.getId());
+            log.info("creditType :: {}",creditType.getId());
+            log.info("specialProgramBasicInfo.getId() :: {}",specialProgramBasicInfo.getId());
 //productFormulaDAO
 //where 4 ตัว ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
             if (productProgram != null && creditType != null) {
