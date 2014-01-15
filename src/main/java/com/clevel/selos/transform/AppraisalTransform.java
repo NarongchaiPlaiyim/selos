@@ -1,5 +1,9 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.db.master.AppraisalCompany;
+import com.clevel.selos.model.db.master.AppraisalDivision;
+import com.clevel.selos.model.db.master.LocationProperty;
+import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.view.AppraisalView;
 import org.joda.time.DateTime;
@@ -47,18 +51,42 @@ public class AppraisalTransform extends Transform {
         appraisalView.setAADAdminRemark(appraisal.getAADAdminRemark());
         appraisalView.setAppointmentDate(appraisal.getAppointmentDate());
         appraisalView.setAppointmentTime(appraisal.getAppointmentTime());
-        appraisalView.setAppraisalCompany(appraisal.getAppraisalCompany());
+
+        if(appraisal.getAppraisalCompany()!=null && appraisal.getAppraisalCompany().getId()!=0){
+            appraisalView.setAppraisalCompany(appraisal.getAppraisalCompany());
+        }else{
+            appraisalView.setAppraisalCompany(new AppraisalCompany());
+        }
         appraisalView.setAppraisalDate(appraisal.getAppraisalDate());
-        appraisalView.setAppraisalDivision(appraisal.getAppraisalDivision());
+
+
+        if(appraisal.getAppraisalCompany()!=null && appraisal.getAppraisalDivision().getId()!=0){
+            appraisalView.setAppraisalDivision(appraisal.getAppraisalDivision());
+        }else{
+            appraisalView.setAppraisalDivision(new AppraisalDivision());
+        }
+
+        if(appraisal.getLocationOfProperty()!=null && appraisal.getLocationOfProperty().getId()!=0){
+            appraisalView.setLocationOfProperty(appraisal.getLocationOfProperty());
+        }else{
+            appraisalView.setLocationOfProperty(new LocationProperty());
+        }
+
+        if(appraisal.getProvinceOfProperty()!=null && appraisal.getProvinceOfProperty().getCode()!=0){
+            appraisalView.setProvinceOfProperty(appraisal.getProvinceOfProperty());
+        }else{
+            appraisalView.setProvinceOfProperty(new Province());
+        }
+
         appraisalView.setAppraisalName(appraisal.getAppraisalName());
         appraisalView.setAppraisalType(appraisal.getAppraisalType());
         appraisalView.setBdmRemark(appraisal.getBdmRemark());
         appraisalView.setCancelAppointment(appraisal.getCancelAppointment());
         appraisalView.setAppointmentRemark(appraisal.getAppointmentRemark());
         appraisalView.setDueDate(appraisal.getDueDate());
-        appraisalView.setLocationOfProperty(appraisal.getLocationOfProperty());
+
         appraisalView.setZoneLocation(appraisal.getZoneLocation());
-        appraisalView.setProvinceOfProperty(appraisal.getProvinceOfProperty());
+
         appraisalView.setReceivedTaskDate(appraisal.getReceivedTaskDate());
 
         appraisalView.setId(appraisal.getId());

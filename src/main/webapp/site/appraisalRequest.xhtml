@@ -40,7 +40,7 @@
                             </tr>
                             <tr>
                                 <td class="left" colspan="6">
-                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/>
+                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" styleClass="title" style="font-size: 15px"/>
                                     <p:spacer width="50" height="20"></p:spacer>
                                     <p:commandButton id="btnAddAppraisalDetail"
                                                      value="#{msg.get('app.button.add')}"
@@ -54,7 +54,7 @@
                             </tr>
                             <tr>
                                 <td colspan="6">
-                                    <p:dataTable tableStyleClass="center" style="width: 100%"
+                                    <p:dataTable tableStyleClass="center"
                                                  id="appraisalDetailViewTable"
                                                  var="appraisalDetailView"
                                                  value="#{appraisalRequest.appraisalDetailViewList}"
@@ -63,20 +63,20 @@
                                                  rowIndexVar="rowIndex" >
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
-                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
-                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
-                                                <p:column colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
-                                                <p:column rowspan="2" headerText=""/>
+                                                <p:column style="min-width: 50px;width: 50px;max-width: 50px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
+                                                <p:column style="min-width: 150px;width: 150px;max-width: 150px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
+                                                <p:column style="min-width: 450px;width: 450px;max-width: 450px" rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
+                                                <p:column style="min-width: 400px;width: 400px;max-width: 400px" colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
+                                                <p:column style="min-width: 80px;width: 80px;max-width: 80px" rowspan="2" headerText=""/>
                                             </p:row>
                                             <p:row>
-                                                <p:column
+                                                <p:column style="min-width: 200px;width: 200px;max-width: 200px"
                                                         headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
-                                                <p:column
+                                                <p:column style="min-width: 200px;width: 200px;max-width: 200px"
                                                         headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
                                             </p:row>
                                         </p:columnGroup>
-                                        <p:column  styleClass="center" style="width:4%;">
+                                        <p:column  styleClass="center" >
                                             <p:outputLabel value="#{appraisalDetailView.no}"/>
                                         </p:column>
                                         <p:column styleClass="left" >
@@ -124,8 +124,8 @@
                             </tr>
                             <tr>
                                 <td class="left" colspan="6">
-                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" style="font-size: 15px" />
-                                    <p:spacer width="50" height="20"></p:spacer>
+                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" styleClass="title" style="font-size: 15px" />
+                                    <p:spacer width="30px" height="20px"></p:spacer>
                                     <p:commandButton id="btnAddAppraisalContactDetail"
                                                      value="#{msg.get('app.button.add')}"
                                                      styleClass="smaller"
@@ -145,16 +145,16 @@
                                                  paginator="false"
                                                  rowKey="#{appraisalContactDetailView.id}"
                                                  rowIndexVar="rowIndex" >
-                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.no')}" styleClass="center" style="width:30px;" >
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.no')}" styleClass="center" style="min-width: 30px;width:30px;max-width: 30px" >
                                             <p:outputLabel value="#{appraisalContactDetailView.no}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}" styleClass="left"  style="width:200px;">
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}" styleClass="left"  style="min-width: 350px;width:350px;max-width: 350px">
                                             <p:outputLabel value="#{appraisalContactDetailView.customerName}" />
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}" styleClass="left" style="width:150px;">
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}" styleClass="left" style="min-width: 150px;width:150px;max-width: 150px">
                                             <p:outputLabel value="#{appraisalContactDetailView.contactNo}" />
                                         </p:column>
-                                        <p:column headerText="" styleClass="center" style="width:8%;">
+                                        <p:column headerText="" styleClass="center" style="min-width:80px;width:80px;max-width:80px">
                                             <p:commandButton icon="ui-icon-pencil"
                                                              action="#{appraisalRequest.onEditAppraisalContactDetailView()}"
                                                              update=":appraisalContactDetailDlgForm"
@@ -189,7 +189,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 150px;">
+                                <td style="min-width:180px;width:180px;max-width:180px">
                                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
                                 </td>
                                 <td>
@@ -197,7 +197,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width: 150px;">
+                                <td style="min-width:180px;width:180px;max-width:180px">
                                     <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
                                 </td>
                                 <td>
@@ -228,7 +228,7 @@
                 </div>
                 <div class="clear"></div>
                 <!-- Start Footer -->
-                <ui:include src="../resources/footer.xhtml" />
+                <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             </div>
             </h:form>

@@ -22,7 +22,7 @@ import com.clevel.selos.model.view.ActionStatusView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditFacilityView;
-import com.clevel.selos.transform.business.ExistingCreditTransform;
+import com.clevel.selos.transform.business.ObligationBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -52,7 +52,7 @@ public class ExistingCreditControl extends BusinessControl {
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
-    ExistingCreditTransform existingCreditTransform;
+    ObligationBizTransform existingCreditTransform;
 
     @Inject
     public ExistingCreditControl(){

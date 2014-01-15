@@ -290,12 +290,13 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.appraisalValue}"
-                     style="text-align: right;"
+                     style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
+                     maxlength="18"
                      required="#{not empty param[addSubCollDlg.clientId]}">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -306,12 +307,13 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.mortgageValue}"
-                     style="text-align: right;"
+                     style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
+                     maxlength="18"
                      required="#{not empty param[addSubCollDlg.clientId]}">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                             maxIntegerDigits="18"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>

@@ -1,15 +1,20 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.DocumentTypeDAO;
+import com.clevel.selos.dao.master.ReferenceDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
+import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerCSI;
@@ -21,13 +26,12 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.transform.business.ObligationBizTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,14 +59,21 @@ public class CustomerInfoControl extends BusinessControl {
     NCBDAO ncbDAO;
 
     @Inject
+    ReferenceDAO referenceDAO;
+
+    @Inject
     RMInterface rmInterface;
     @Inject
     BRMSInterface brmsInterface;
+    @Inject
+    DWHInterface dwhInterface;
 
     @Inject
     CustomerTransform customerTransform;
     @Inject
     CustomerBizTransform customerBizTransform;
+    @Inject
+    ObligationBizTransform obligationBizTransform;
 
     public CustomerInfoSummaryView getCustomerInfoSummary(long workCaseId){
         log.info("getCustomerInfoSummary ::: workCaseId : {}", workCaseId);
@@ -72,7 +83,7 @@ public class CustomerInfoControl extends BusinessControl {
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
 
         //update percent share for juristic
-        for(CustomerInfoView cV : customerInfoViewList){
+        /*for(CustomerInfoView cV : customerInfoViewList){
             if(cV.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
                 if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
                     if(cV.getTotalShare() != null && cV.getTotalShare().compareTo(BigDecimal.ZERO) > 0){
@@ -86,7 +97,7 @@ public class CustomerInfoControl extends BusinessControl {
                     cV.setPercentShareSummary(BigDecimal.ZERO);
                 }
             }
-        }
+        }*/
 
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
         customerInfoSummaryView.setBorrowerCustomerViewList(borrowerCustomerList);
@@ -206,15 +217,45 @@ public class CustomerInfoControl extends BusinessControl {
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
+        if(customerJuristic.getReference() != null){
+            if(customerJuristic.getReference().getId() != 0){
+                Reference reference = referenceDAO.findById(customerJuristic.getReference().getId());
+                if(!reference.getPercentShare().equalsIgnoreCase("-")){
+                    if(customerJuristic.getShares() != null && customerJuristic.getJuristic().getTotalShare() != null){
+                        customerJuristic.setPercentShare(Util.divide(customerJuristic.getShares(),customerJuristic.getJuristic().getTotalShare()));
+                    }
+                }
+            }
+        }
         customerDAO.persist(customerJuristic);
         juristicDAO.persist(customerJuristic.getJuristic());
         addressDAO.persist(customerJuristic.getAddressesList());
 
         if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
             for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
+                if(cusIndividual.getReference() != null){
+                    if(cusIndividual.getReference().getId() != 0){
+                        Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
+                        if(!reference.getPercentShare().equalsIgnoreCase("-")){
+                            if(customerJuristic.getShares() != null && cusIndividual.getShares() != null){
+                                cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
+                            }
+                        }
+                    }
+                }
                 cusIndividual.setIsCommittee(1);
                 cusIndividual.setCommitteeId(customerJuristic.getId());
                 if(cusIndividual.getSpouse() != null){
+                    if(cusIndividual.getSpouse().getReference() != null){
+                        if(cusIndividual.getSpouse().getReference().getId() != 0){
+                            Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
+                            if(reference != null && reference.getId() != 0 && !reference.getPercentShare().equalsIgnoreCase("-")){
+                                if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
+                                    cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
+                                }
+                            }
+                        }
+                    }
                     cusIndividual.getSpouse().setIsCommittee(0);
                 }
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
@@ -350,6 +391,26 @@ public class CustomerInfoControl extends BusinessControl {
 
     //** function for integration **//
 
+    public CustomerInfoResultView retrieveInterfaceInfo(CustomerInfoView customerInfoView){
+        log.info("retrieveInterfaceInfo with {}", customerInfoView != null? customerInfoView.getId(): "");
+        CustomerInfoResultView customerInfoResult = getCustomerInfoFromRM(customerInfoView);
+
+        /*
+        //This is for setting the CustomerInfoResult to test the obligation without RM Call.
+        CustomerInfoResultView customerInfoResult = new CustomerInfoResultView();
+        customerInfoResult.setActionResult(ActionResult.SUCCESS);
+        customerInfoResult.setReason("Customer Found.");
+        customerInfoResult.setCustomerInfoView(customerInfoView);
+        */
+
+        if(customerInfoResult.getActionResult() == ActionResult.SUCCESS){
+            customerInfoResult.setCustomerInfoView(getCustomerCreditInfo(customerInfoResult.getCustomerInfoView()));
+        }
+
+        log.info("return {}", customerInfoResult.getActionResult());
+        return customerInfoResult;
+    }
+
     // *** Function for RM *** //
     public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
@@ -412,6 +473,21 @@ public class CustomerInfoControl extends BusinessControl {
         return customerInfoResultSearch;
     }
 
+    /**
+     * To get the Customer Credit Information from Obligation and update into the same customerInfoView
+     * @param customerInfoView
+     * @return customerInfoView
+     */
+    public CustomerInfoView getCustomerCreditInfo(CustomerInfoView customerInfoView){
+        if(customerInfoView != null && customerInfoView.getTmbCustomerId() != null){
+            log.info("retrieveCustomerCreditInfo, with TMB Customer ID {}", customerInfoView.getTmbCustomerId());
+            ObligationResult obligationResult = dwhInterface.getObligationData(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+            if(obligationResult.getActionResult().equals(ActionResult.SUCCESS)){
+                customerInfoView = obligationBizTransform.getCustomerInfoView(obligationResult.getObligationList(), customerInfoView);
+            }
+        }
+        return customerInfoView;
+    }
 
     public List<CustomerInfoView> getGuarantorByWorkCase(long workCaseId){
         log.info("getGuarantorByWorkCase ::: workCaseId : {}", workCaseId);

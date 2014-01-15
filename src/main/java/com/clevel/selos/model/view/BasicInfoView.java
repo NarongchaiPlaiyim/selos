@@ -16,7 +16,7 @@ public class BasicInfoView implements Serializable {
     private String caNo;
     private RequestType requestType;
     private ProductGroup productGroup;
-    private boolean charUnPaid;
+    private boolean charNoUnPaid;
     private boolean charNoPending;
     private boolean charFCLG;
     private boolean charFCIns;
@@ -36,7 +36,7 @@ public class BasicInfoView implements Serializable {
     private String since;
     private Date lastReviewDate;
     private Date extReviewDate;
-    private SBFScore sbfScore;
+    private SBFScoreView sbfScoreView;
     private int loan;
     private int moreOneYear;
     private int annual;
@@ -62,7 +62,7 @@ public class BasicInfoView implements Serializable {
         this.refinanceIn = new Bank();
         this.refinanceOut = new Bank();
         this.riskType = new RiskType();
-        this.sbfScore = new SBFScore();
+        this.sbfScoreView = new SBFScoreView();
         this.loanRequestPattern = new BorrowingType();
         this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
         this.baPaymentMethod = new BAPaymentMethod();
@@ -116,12 +116,12 @@ public class BasicInfoView implements Serializable {
         this.productGroup = productGroup;
     }
 
-    public boolean isCharUnPaid() {
-        return charUnPaid;
+    public boolean isCharNoUnPaid() {
+        return charNoUnPaid;
     }
 
-    public void setCharUnPaid(boolean charUnPaid) {
-        this.charUnPaid = charUnPaid;
+    public void setCharNoUnPaid(boolean charNoUnPaid) {
+        this.charNoUnPaid = charNoUnPaid;
     }
 
     public boolean isCharNoPending() {
@@ -276,12 +276,12 @@ public class BasicInfoView implements Serializable {
         this.extReviewDate = extReviewDate;
     }
 
-    public SBFScore getSbfScore() {
-        return sbfScore;
+    public SBFScoreView getSbfScoreView() {
+        return sbfScoreView;
     }
 
-    public void setSbfScore(SBFScore sbfScore) {
-        this.sbfScore = sbfScore;
+    public void setSbfScoreView(SBFScoreView sbfScoreView) {
+        this.sbfScoreView = sbfScoreView;
     }
 
     public int getLoan() {
@@ -390,47 +390,47 @@ public class BasicInfoView implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("appNo", appNo).
-                append("refAppNo", refAppNo).
-                append("caNo", caNo).
-                append("requestType", requestType).
-                append("productGroup", productGroup).
-                append("charUnPaid", charUnPaid).
-                append("charNoPending", charNoPending).
-                append("charFCLG", charFCLG).
-                append("charFCIns", charFCIns).
-                append("charFCCom", charFCCom).
-                append("charFCAba", charFCAba).
-                append("charFCLate", charFCLate).
-                append("charFCFund", charFCFund).
-                append("spProgram", spProgram).
-                append("specialProgram", specialProgram).
-                append("refIn", refIn).
-                append("refinanceIn", refinanceIn).
-                append("refOut", refOut).
-                append("refinanceOut", refinanceOut).
-                append("riskType", riskType).
-                append("qualitative", qualitative).
-                append("existingSME", existingSME).
-                append("since", since).
-                append("lastReviewDate", lastReviewDate).
-                append("extReviewDate", extReviewDate).
-                append("sbfScore", sbfScore).
-                append("loan", loan).
-                append("moreOneYear", moreOneYear).
-                append("annual", annual).
-                append("loanRequestPattern", loanRequestPattern).
-                append("refName", refName).
-                append("refId", refId).
-                append("basicInfoAccountViews", basicInfoAccountViews).
-                append("applyBA", applyBA).
-                append("baPaymentMethod", baPaymentMethod).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("createBy", createBy).
-                append("modifyBy", modifyBy).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("appNo", appNo)
+                .append("refAppNo", refAppNo)
+                .append("caNo", caNo)
+                .append("requestType", requestType)
+                .append("productGroup", productGroup)
+                .append("charNoUnPaid", charNoUnPaid)
+                .append("charNoPending", charNoPending)
+                .append("charFCLG", charFCLG)
+                .append("charFCIns", charFCIns)
+                .append("charFCCom", charFCCom)
+                .append("charFCAba", charFCAba)
+                .append("charFCLate", charFCLate)
+                .append("charFCFund", charFCFund)
+                .append("spProgram", spProgram)
+                .append("specialProgram", specialProgram)
+                .append("refIn", refIn)
+                .append("refinanceIn", refinanceIn)
+                .append("refOut", refOut)
+                .append("refinanceOut", refinanceOut)
+                .append("riskType", riskType)
+                .append("qualitative", qualitative)
+                .append("existingSME", existingSME)
+                .append("since", since)
+                .append("lastReviewDate", lastReviewDate)
+                .append("extReviewDate", extReviewDate)
+                .append("sbfScoreView", sbfScoreView)
+                .append("loan", loan)
+                .append("moreOneYear", moreOneYear)
+                .append("annual", annual)
+                .append("loanRequestPattern", loanRequestPattern)
+                .append("refName", refName)
+                .append("refId", refId)
+                .append("basicInfoAccountViews", basicInfoAccountViews)
+                .append("applyBA", applyBA)
+                .append("baPaymentMethod", baPaymentMethod)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

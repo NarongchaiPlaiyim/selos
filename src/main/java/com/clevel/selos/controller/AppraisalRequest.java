@@ -83,7 +83,7 @@ public class AppraisalRequest implements Serializable {
         modeForButton = "add";
 
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 10001);
+        //session.setAttribute("workCaseId", 10001);
         user = (User)session.getAttribute("user");
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
@@ -294,18 +294,18 @@ public class AppraisalRequest implements Serializable {
             appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
 
             appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.success");
-            message = msg.get("app.customerAcceptance.message.body.save.success");
+            messageHeader = msg.get("app.appraisal.request.message.header.save.success");
+            message = msg.get("app.appraisal.request.message.body.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
 
             if(ex.getCause() != null){
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }

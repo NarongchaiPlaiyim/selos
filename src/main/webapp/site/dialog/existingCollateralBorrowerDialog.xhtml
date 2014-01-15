@@ -56,7 +56,7 @@
                 <tr>
                     <td class="title" style="width:145px;">วันทีทำการประเมิน :</td>
                     <td>
-                        <p:calendar  value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}" />
+                        <p:calendar  value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}" showOn="true" navigator="true"/>
                     </td>
                 </tr>
 
@@ -135,13 +135,19 @@
                 <tr>
                     <td class="title" style="width:145px;">ราคาประเมิน :</td>
                     <td>
-                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" />
+                        <p:inputText id="appraisalValue"  value="#{creditFacExisting.existingCollateralDetailView.appraisalValue}" >
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:appraisalValue"/>
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="width:145px;">จำนอง :</td>
                     <td>
-                        <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" />
+                        <p:inputText id="mortgageValue" value="#{creditFacExisting.existingCollateralDetailView.mortgageValue}" >
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update=":existingCollateralBorrowerDlgForm:mortgageValue"/>
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>

@@ -4,7 +4,9 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+        >
 
 <h:head>
     <title>SE-LOS : Account Information</title>
@@ -135,12 +137,16 @@
                             </p:column>
 
                             <p:column headerText="#{'Purpose'}" style="width: 110px;">
-                                <ui:repeat value="#{accountDetail.accountInfoPurposeViewList}" var="purposeList" varStatus="rowPurposeIndex">
-                                    <h:panelGroup rendered="#{purposeList.selected}">
-                                        <h:outputText value="#{purposeList.name}"/>
-                                        <br/>
-                                    </h:panelGroup>
-                                </ui:repeat>
+
+                                <h:panelGroup rendered="#{fn : length(accountDetail.accountInfoPurposeViewList) gt 0 ? true : false }">
+                                    <ui:repeat value="#{accountDetail.accountInfoPurposeViewList}" var="purposeList" varStatus="rowPurposeIndex">
+                                        <h:panelGroup rendered="#{purposeList.selected}">
+                                            <h:outputText value="#{purposeList.name}"/>
+                                            <br/>
+                                        </h:panelGroup>
+                                    </ui:repeat>
+                                </h:panelGroup>
+
                             </p:column>
 
                             <p:column headerText="" styleClass="center" style="width:54px;">

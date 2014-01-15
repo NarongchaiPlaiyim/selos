@@ -68,6 +68,12 @@ public class DBR implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Column(name = "totalMonthDebtBorrowerStart")
+    private BigDecimal totalMonthDebtBorrowerStart;
+
+    @Column(name = "totalMonthDebtBorrowerFinal")
+    private BigDecimal totalMonthDebtBorrowerFinal;
+
     public DBR() {
 
     }
@@ -198,6 +204,22 @@ public class DBR implements Serializable {
 
     public void setFinalDBR(BigDecimal finalDBR) {
         this.finalDBR = finalDBR;
+    }
+
+    public BigDecimal getTotalMonthDebtBorrowerStart() {
+        return totalMonthDebtBorrowerStart;
+    }
+
+    public void setTotalMonthDebtBorrowerStart(BigDecimal totalMonthDebtBorrowerStart) {
+        this.totalMonthDebtBorrowerStart = totalMonthDebtBorrowerStart;
+    }
+
+    public BigDecimal getTotalMonthDebtBorrowerFinal() {
+        return totalMonthDebtBorrowerFinal;
+    }
+
+    public void setTotalMonthDebtBorrowerFinal(BigDecimal totalMonthDebtBorrowerFinal) {
+        this.totalMonthDebtBorrowerFinal = totalMonthDebtBorrowerFinal;
     }
 
     @Override

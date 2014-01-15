@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 public class AppraisalDetailView implements Serializable {
     private long id;
@@ -22,7 +23,7 @@ public class AppraisalDetailView implements Serializable {
     private String purposeNewAppraisalLabel;
     private String purposeReviewBuildingLabel;
     private String characteristicLabel;
-    private int numberOfDocuments;
+    private BigDecimal numberOfDocuments;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -143,11 +144,11 @@ public class AppraisalDetailView implements Serializable {
         this.characteristic = characteristic;
     }
 
-    public int getNumberOfDocuments() {
+    public BigDecimal getNumberOfDocuments() {
         return numberOfDocuments;
     }
 
-    public void setNumberOfDocuments(int numberOfDocuments) {
+    public void setNumberOfDocuments(BigDecimal numberOfDocuments) {
         this.numberOfDocuments = numberOfDocuments;
     }
 

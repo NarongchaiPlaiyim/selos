@@ -35,11 +35,11 @@ public class QualitativeControl extends BusinessControl {
     public QualitativeControl() {}
 
 
-    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId ,User user) {
+    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId) {
         log.info("start saveQualitativeA ::: ");
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase ,user);
+        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase, getCurrentUser());
         qualitativeADAO.persist(qualitativeA);
 
     }
@@ -72,10 +72,10 @@ public class QualitativeControl extends BusinessControl {
     }
 
 
-    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId,User user) {
+    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId) {
         log.info("start saveQualitativeB ::: ");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase,user);
+        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase, getCurrentUser());
         qualitativeBDAO.persist(qualitativeB);
 
     }
@@ -104,12 +104,4 @@ public class QualitativeControl extends BusinessControl {
         return qualitativeView;
     }
 
-
-    /*public void save(WorkCase workCase) {
-        workCaseDAO.persist(workCase);
-    }*/
-
-    /*public void delete(WorkCase workCase) {
-        workCaseDAO.delete(workCase);
-    }*/
 }

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 @Entity
 @Table(name="wrk_appraisal_detail")
@@ -25,8 +26,8 @@ public class AppraisalDetail {
     private int purposeReviewBuilding;
     @Column(name="characteristic")
     private int characteristic;
-    @Column(name="name_of_documents")
-    private int numberOfDocuments;
+    @Column(name="number_of_documents")
+    private BigDecimal numberOfDocuments;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -104,11 +105,11 @@ public class AppraisalDetail {
         this.characteristic = characteristic;
     }
 
-    public int getNumberOfDocuments() {
+    public BigDecimal getNumberOfDocuments() {
         return numberOfDocuments;
     }
 
-    public void setNumberOfDocuments(int numberOfDocuments) {
+    public void setNumberOfDocuments(BigDecimal numberOfDocuments) {
         this.numberOfDocuments = numberOfDocuments;
     }
 

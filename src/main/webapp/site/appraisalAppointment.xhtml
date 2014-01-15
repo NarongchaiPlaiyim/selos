@@ -4,13 +4,14 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>Appointment</title>
     <h:outputStylesheet name="css/style.css" />
-    <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
     <h:outputScript library="js" name="custom.js" />
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 <h:body>
 <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
@@ -39,7 +40,7 @@
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
                     <tr>
-                        <td colspan="6"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
                     </tr>
                     <tr>
                         <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
@@ -89,15 +90,14 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="receivedTaskDate" showOn="button" navigator="true"
-                                        value="#{appraisalAppointment.appraisalView.receivedTaskDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
-                                <p:ajax event="dateSelect" update=":frmMain:appraisalDate" />
+                            <clv:BECalendar id="receivedTaskDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                            value="#{appraisalAppointment.appraisalView.receivedTaskDate}"
+                                            pattern="dd/MM/yyyy"
+                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            yearRange="1950:2100">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:calendar>
+                            </clv:BECalendar>
                         </td>
                     </tr>
                     <tr>
@@ -113,7 +113,7 @@
                                                itemValue="#{locationProperty.id}"/>
                             </p:selectOneMenu>
                         </td>
-                        <td class="title">
+                        <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
                         </td>
                         <td>
@@ -131,28 +131,29 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="appraisalDate" mindate="#{appraisalAppointment.currentDate}" showOn="button" navigator="true"
-                                        value="#{appraisalAppointment.appraisalView.appraisalDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
+                            <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                            value="#{appraisalAppointment.appraisalView.appraisalDate}"
+                                            pattern="dd/MM/yyyy"
+                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            yearRange="1950:2100">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalAppointment.onChangeAppraisalDate()}" update=":frmMain:dueDate,:frmMain:appointmentDate" />
-                            </p:calendar>
+                            </clv:BECalendar>
                         </td>
                         <td class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="dueDate" showOn="button" navigator="true"
-                                        value="#{appraisalAppointment.appraisalView.dueDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
+                            <clv:BECalendar id="dueDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                            value="#{appraisalAppointment.appraisalView.dueDate}"
+                                            pattern="dd/MM/yyyy"
+                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            yearRange="1950:2100">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:calendar>
+                            </clv:BECalendar>
+
                         </td>
                     </tr>
                     <tr>
@@ -173,11 +174,11 @@
                         <td colspan="6"><p:spacer width="5px"/> </td>
                     </tr>
                     <tr>
-                        <td colspan="6"><p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/> </td>
+                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/> </td>
                     </tr>
                     <tr>
                         <td colspan="6">
-                            <p:dataTable tableStyleClass="center" style="width: 100%"
+                            <p:dataTable tableStyleClass="center"
                                                        id="appraisalDetailViewTable"
                                                        var="appraisalDetailView"
                                                        value="#{appraisalAppointment.appraisalDetailViewList}"
@@ -245,7 +246,7 @@
                         <td colspan="6"><p:spacer/></td>
                     </tr>
                     <tr>
-                        <td colspan="6"><p:outputLabel value="#{msg.get('app.appraisal.label.contactHeader')}" style="font-size: 15px"/> </td>
+                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.contactHeader')}" style="font-size: 15px"/> </td>
                     </tr>
                     <tr>
                         <td colspan="6" style="width:100%">
@@ -299,15 +300,14 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="appointmentDate" mindate="#{appraisalAppointment.currentDate}" showOn="button" navigator="true"
-                                        value="#{appraisalAppointment.appraisalView.appointmentDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
-                                <f:convertDateTime pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
-                            </p:calendar>
-
+                            <clv:BECalendar id="appointmentDate" showOn="button" navigator="true" locale="th_TH"  showButtonPanel="true"
+                                            value="#{appraisalAppointment.appraisalView.appointmentDate}"
+                                            pattern="dd/MM/yyyy"
+                                            defaultdate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            mindate="#{appraisalAppointment.currentDateDDMMYY}"
+                                            yearRange="1950:2100">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                            </clv:BECalendar>
                         </td>
                         <td class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>
@@ -351,7 +351,7 @@
                     </tr>
                     <tr>
                         <td colspan="6">
-                            <p:dataTable tableStyleClass="center" style="width: 100%"
+                            <p:dataTable tableStyleClass="center"
                                          id="contactRecordDetailViewTable"
                                          var="contactRecordDetailView"
                                          value="#{appraisalAppointment.contactRecordDetailViewList}"
@@ -360,55 +360,50 @@
                                          rowIndexVar="rowIndex" >
                                 <p:columnGroup type="header">
                                     <p:row>
-                                        <p:column colspan="8" style="width:100%;"
+                                        <p:column colspan="7"
                                                   headerText="#{msg.get('app.contactRecordDetail.table.header')}" />
                                     </p:row>
                                     <p:row>
-                                        <p:column
+                                        <p:column style="min-width:50px;width:50px;max-width:50px;"
                                                 headerText=""/>
-                                        <p:column
+                                        <p:column style="min-width:200px;width:200px;max-width:200px;"
                                                 headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}"/>
-                                        <p:column
+                                        <p:column style="min-width:150px;width:150px;max-width:150px;"
                                                 headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}"/>
-                                        <p:column
-                                                headerText="#{msg.get('app.contactRecordDetail.table.acceptResult')}"/>
-                                        <p:column
+                                        <p:column  style="min-width:200px;width:200px;max-width:200px;"
                                                 headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}"/>
-                                        <p:column
+                                        <p:column  style="min-width:150px;width:150px;max-width:150px;"
                                                 headerText="#{msg.get('app.contactRecordDetail.table.reason')}" />
-                                        <p:column
+                                        <p:column style="min-width:270px;width:270px;max-width:270px;"
                                                 headerText="#{msg.get('app.contactRecordDetail.table.remark')}"/>
-                                        <p:column
+                                        <p:column style="min-width:80px;width:80px;max-width:80px;"
                                                 headerText=""/>
                                     </p:row>
                                 </p:columnGroup>
 
-                                <p:column headerText="" styleClass="center" style="width:4%;">
+                                <p:column headerText="" styleClass="center" >
                                     <p:outputLabel value="#{contactRecordDetailView.no}"/>
                                 </p:column>
-                                <p:column  styleClass="left" style="width:120px;" >
+                                <p:column  styleClass="left" >
                                     <p:outputLabel value="#{contactRecordDetailView.callingDate}" >
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />
                                     </p:outputLabel>
                                 </p:column>
-                                <p:column styleClass="left" style="width:100px;">
+                                <p:column styleClass="left" >
                                     <p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>
                                 </p:column>
-                                <p:column  styleClass="left" style="width:100px;">
-                                    <p:outputLabel value="#{contactRecordDetailView.acceptResultStr}"/>
-                                </p:column>
-                                <p:column styleClass="left" style="width:120px;" >
+                                <p:column styleClass="left"  >
                                     <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
                                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />
                                     </p:outputLabel>
                                 </p:column>
-                                <p:column styleClass="left" style="width:150px;">
+                                <p:column styleClass="left">
                                     <p:outputLabel value="#{contactRecordDetailView.reasonStr}"/>
                                 </p:column>
-                                <p:column  styleClass="left" style="width:200px;">
+                                <p:column  styleClass="left">
                                     <p:outputLabel value="#{contactRecordDetailView.remark}"/>
                                 </p:column>
-                                <p:column headerText="" styleClass="center" style="width:8%;">
+                                <p:column headerText="" styleClass="center">
                                     <p:commandButton icon="ui-icon-pencil"
                                                      action="#{appraisalAppointment.onEditContactRecordDetailView()}"
                                                      update=":contactRecordViewDlgForm"
@@ -438,7 +433,7 @@
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="6" class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}" style="font-size: 15px"/>
                         </td>
                     </tr>
@@ -479,7 +474,7 @@
         </div>
         <div class="clear"></div>
         <!-- Start Footer -->
-        <ui:include src="../resources/footer.xhtml" />
+        <ui:include src="include/footer.xhtml" />
         <!-- End Footer -->
     </div>
 </h:form>
@@ -489,11 +484,11 @@
     <ui:include src="dialog/appraisalDetailAppointmentDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="appraisalContactDetailDialog" header="Appraisal Contact Detail Information" widgetVar="appraisalContactDetailViewDlg" resizable="false"
-          modal="true" width="370" height="120" >
+          modal="true" width="380" height="100" >
     <ui:include src="dialog/appraisalContactDetailAppointmentDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="contactRecordDetailViewDialog" header="Contact Record Information" widgetVar="contactRecordDetailViewDlg" resizable="false"
-          modal="true" width="370" height="320" >
+          modal="true" width="380" height="270" >
     <ui:include src="dialog/contactRecordDetailViewAppraisalDialog.xhtml"/>
 </p:dialog>
 

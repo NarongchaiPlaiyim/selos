@@ -1,21 +1,23 @@
 package com.clevel.selos.integration.coms.model;
 
 public enum AddressType {
-    TYPE1("LAND","APPR_LAND", 1),
-    TYPE2("BUILDING","APPR_BUILDING", 2),
-    TYPE3("MACHINE","APPR_MACHINE", 3),
-    TYPE4("GOODS","APPR_GOODS", 4),
-    TYPE5("CAR","APPR_CAR", 5),
-    TYPE6("SHIP","APPR_SHIP", 6),
-    TYPE7("RENT","APPR_RENT", 7),
-    TYPE8("OTHER","APPR_OTHER", 8);
+    TYPE1("APPR_LAND", 1),
+    TYPE2("APPR_LAND", 2),
+    TYPE3("APPR_LAND", 3),
+    TYPE4("APPR_LAND", 4),
+    TYPE5("APPR_BUILDING", 5),
+    TYPE6("APPR_LAND", 6),
+    TYPE7("APPR_MACHINE", 7),
+    TYPE8("APPR_GOODS", 7),
+    TYPE9("APPR_CAR", 9),
+    TYPE10("APPR_SHIP", 10),
+    TYPE11("APPR_RENT", 11),
+    TYPE12("APPR_OTHER", 12);
 
-    String type;
     String tableName;
     int value;
 
-    AddressType(String type, String tableName, int value) {
-        this.type = type;
+    AddressType(String tableName, int value) {
         this.tableName = tableName;
         this.value = value;
     }
@@ -24,22 +26,8 @@ public enum AddressType {
         return this.tableName;
     }
 
-    public String type() {
-        return this.type;
-    }
-
     public int value() {
         return this.value;
-    }
-
-    public static AddressType getValue(String type) {
-        if (type != null && !type.trim().equals(""))
-            for (AddressType addressType : values()) {
-                if (addressType.type.equals(type.trim())) {
-                    return addressType;
-                }
-            }
-        return null;
     }
 
 }

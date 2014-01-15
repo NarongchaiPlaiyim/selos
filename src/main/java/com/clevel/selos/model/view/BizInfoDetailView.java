@@ -20,6 +20,7 @@ public class BizInfoDetailView implements Serializable {
     private BigDecimal incomeFactor;
     private BigDecimal adjustedIncomeFactor;
     private String bizComment;
+    private BigDecimal incomeAmount;
     private BigDecimal percentBiz;
     private String bizPermission;
     private String bizDocPermission;
@@ -152,6 +153,14 @@ public class BizInfoDetailView implements Serializable {
 
     public void setBizComment(String bizComment) {
         this.bizComment = bizComment;
+    }
+
+    public BigDecimal getIncomeAmount() {
+        return incomeAmount;
+    }
+
+    public void setIncomeAmount(BigDecimal incomeAmount) {
+        this.incomeAmount = incomeAmount;
     }
 
     public BigDecimal getPercentBiz() {
@@ -511,6 +520,7 @@ public class BizInfoDetailView implements Serializable {
                 append("incomeFactor", incomeFactor).
                 append("adjustedIncomeFactor", adjustedIncomeFactor).
                 append("bizComment", bizComment).
+                append("incomeAmount", incomeAmount).
                 append("percentBiz", percentBiz).
                 append("bizPermission", bizPermission).
                 append("bizDocPermission", bizDocPermission).

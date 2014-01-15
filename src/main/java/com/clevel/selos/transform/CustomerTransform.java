@@ -26,6 +26,12 @@ public class CustomerTransform extends Transform {
     CustomerCSITransform customerCSITransform;
 
     @Inject
+    SBFScoreTransform sbfScoreTransform;
+
+    @Inject
+    ServiceSegmentTransform serviceSegmentTransform;
+
+    @Inject
     CustomerDAO customerDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
@@ -83,7 +89,7 @@ public class CustomerTransform extends Transform {
         }
 
         customerInfoView.setDocumentAuthorizeBy(customer.getDocumentAuthorizeBy());
-        customerInfoView.setServiceSegment(customer.getServiceSegment());
+        customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(customer.getServiceSegment()));
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
         customerInfoView.setPercentShare(customer.getPercentShare());
         customerInfoView.setApproxIncome(customer.getApproxIncome());
@@ -140,7 +146,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setMobileNumber(customer.getMobileNumber());
         customerInfoView.setFaxNumber(customer.getFaxNumber());
         customerInfoView.setEmail(customer.getEmail());
-        customerInfoView.setConvenantFlag(customer.getConvenantFlag());
+        customerInfoView.setCovenantFlag(customer.getCovenantFlag());
         customerInfoView.setReviewFlag(customer.getReviewFlag());
         customerInfoView.setReason(customer.getReason());
 
@@ -150,7 +156,6 @@ public class CustomerTransform extends Transform {
         }
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setCsiFlag(customer.getCsiFlag());
-        customerInfoView.setServiceSegment(customer.getServiceSegment());
         customerInfoView.setSearchFromRM(customer.getSearchFromRM());
 
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
@@ -199,6 +204,8 @@ public class CustomerTransform extends Transform {
         customerInfoView.setPercentShare(customer.getPercentShare());
 
 		customerInfoView.setCsiFlag(customer.getCsiFlag());
+
+		customerInfoView.setShares(customer.getShares());
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -364,7 +371,7 @@ public class CustomerTransform extends Transform {
 
         //for new field
         customerInfoView.setAgeMonths(customer.getAgeMonths());
-        customerInfoView.setIsExistingSMECustomer(customer.getIsExistingSMECustomer());
+        customerInfoView.setExistingSMECustomer(customer.getExistingSMECustomer());
         customerInfoView.setLastReviewDate(customer.getLastReviewDate());
         customerInfoView.setExtendedReviewDate(customer.getExtendedReviewDate());
         customerInfoView.setExtendedReviewDateFlag(customer.getExtendedReviewDateFlag());
@@ -373,9 +380,9 @@ public class CustomerTransform extends Transform {
         customerInfoView.setLastContractDate(customer.getLastContractDate());
         customerInfoView.setNumberOfMonthsLastContractDate(customer.getNumberOfMonthsLastContractDate());
         customerInfoView.setAdjustClass(customer.getAdjustClass());
-        customerInfoView.setRatingFinal(customer.getRatingFinal());
+        customerInfoView.setRatingFinal(sbfScoreTransform.transformToView(customer.getRatingFinal()));
         customerInfoView.setUnpaidFeeInsurance(customer.getUnpaidFeeInsurance());
-        customerInfoView.setNoPendingClaimLG(customer.getNoPendingClaimLG());
+        customerInfoView.setPendingClaimLG(customer.getPendingClaimLG());
 
         //for show jurLv
         if(customer.getIsCommittee() == 1){
@@ -430,11 +437,10 @@ public class CustomerTransform extends Transform {
 
         customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
         customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
-        customer.setServiceSegment(customerInfoView.getServiceSegment());
+        customer.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
         customer.setCollateralOwner(customerInfoView.getCollateralOwner());
         customer.setPercentShare(customerInfoView.getPercentShare());
         customer.setApproxIncome(customerInfoView.getApproxIncome());
-        customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
         customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
 
         if(customerInfoView.getTitleTh() != null && customerInfoView.getTitleTh().getId() != 0){
@@ -449,10 +455,7 @@ public class CustomerTransform extends Transform {
 
         customer.setAge(customerInfoView.getAge());
         customer.setNcbFlag(customerInfoView.getNcbFlag());
-        customer.setSearchFromRM(customerInfoView.getSearchFromRM());
         customer.setCsiFlag(customerInfoView.getCsiFlag());
-        customer.setServiceSegment(customerInfoView.getServiceSegment());
-        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
         customer.setPercentShare(customerInfoView.getPercentShare());
 
         if(customerInfoView.getBusinessType() != null && customerInfoView.getBusinessType().getId() != 0){
@@ -482,7 +485,7 @@ public class CustomerTransform extends Transform {
         customer.setMobileNumber(customerInfoView.getMobileNumber());
         customer.setFaxNumber(customerInfoView.getFaxNumber());
         customer.setEmail(customerInfoView.getEmail());
-        customer.setConvenantFlag(customerInfoView.getConvenantFlag());
+        customer.setCovenantFlag(customerInfoView.getCovenantFlag());
         customer.setReviewFlag(customerInfoView.getReviewFlag());
         customer.setReason(customerInfoView.getReason());
 
@@ -514,6 +517,8 @@ public class CustomerTransform extends Transform {
         customer.setJuristicId(customerInfoView.getCommitteeId());
 
 		customer.setCsiFlag(customerInfoView.getCsiFlag());
+
+		customer.setShares(customerInfoView.getShares());
 
 //        log.info("transformToModel : customer before adding address : {}", customer);
 
@@ -784,7 +789,7 @@ public class CustomerTransform extends Transform {
 
         //for new field
         customer.setAgeMonths(customerInfoView.getAgeMonths());
-        customer.setIsExistingSMECustomer(customerInfoView.getIsExistingSMECustomer());
+        customer.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());
         customer.setLastReviewDate(customerInfoView.getLastReviewDate());
         customer.setExtendedReviewDate(customerInfoView.getExtendedReviewDate());
         customer.setExtendedReviewDateFlag(customerInfoView.getExtendedReviewDateFlag());
@@ -793,9 +798,11 @@ public class CustomerTransform extends Transform {
         customer.setLastContractDate(customerInfoView.getLastContractDate());
         customer.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
         customer.setAdjustClass(customerInfoView.getAdjustClass());
-        customer.setRatingFinal(customerInfoView.getRatingFinal());
+        customer.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
         customer.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
-        customer.setNoPendingClaimLG(customerInfoView.getNoPendingClaimLG());
+        customer.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+
+
 
         return customer;
     }

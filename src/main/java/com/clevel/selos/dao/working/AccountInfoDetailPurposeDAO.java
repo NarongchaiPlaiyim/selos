@@ -22,7 +22,7 @@ public class AccountInfoDetailPurposeDAO extends GenericDAO<AccountInfoDetailPur
     public List<AccountInfoDetailPurpose> findByAccountInfoDetailPurposeId(long accountInfoDetailPurposeId) {
         log.info("findByAccountInfoDetailPurposeId : {}", accountInfoDetailPurposeId);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("openAccount.id", accountInfoDetailPurposeId));
+        criteria.add(Restrictions.eq("accountInfoDetailPurpose.id", accountInfoDetailPurposeId));
         List<AccountInfoDetailPurpose> purposeList = criteria.list();
 
         return purposeList;

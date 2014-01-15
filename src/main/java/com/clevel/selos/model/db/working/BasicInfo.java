@@ -21,18 +21,10 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @OneToOne
-    @JoinColumn(name = "requesttype_id")
-    private RequestType requestType;
+    @Column(name = "is_no_unpaid_fee_insurance", length = 1)
+    private int noUnpaidFeeInsurance;
 
-    @OneToOne
-    @JoinColumn(name = "productgroup_id")
-    private ProductGroup productGroup;
-
-    @Column(name = "unpaid_fee_insurance")
-    private int unpaidFeeInsurance;
-
-    @Column(name = "no_pending_claim_lg")
+    @Column(name = "is_no_pending_claim_lg", length = 1)
     private int noPendingClaimLG;
 
     @Column(name = "construct_request_lg")
@@ -158,28 +150,12 @@ public class BasicInfo implements Serializable {
         this.workCase = workCase;
     }
 
-    public RequestType getRequestType() {
-        return requestType;
+    public int getNoUnpaidFeeInsurance() {
+        return noUnpaidFeeInsurance;
     }
 
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
-    }
-
-    public ProductGroup getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(ProductGroup productGroup) {
-        this.productGroup = productGroup;
-    }
-
-    public int getUnpaidFeeInsurance() {
-        return unpaidFeeInsurance;
-    }
-
-    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
-        this.unpaidFeeInsurance = unpaidFeeInsurance;
+    public void setNoUnpaidFeeInsurance(int noUnpaidFeeInsurance) {
+        this.noUnpaidFeeInsurance = noUnpaidFeeInsurance;
     }
 
     public int getNoPendingClaimLG() {
@@ -452,9 +428,7 @@ public class BasicInfo implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("workCase", workCase).
-                append("requestType", requestType).
-                append("productGroup", productGroup).
-                append("unpaidFeeInsurance", unpaidFeeInsurance).
+                append("noUnpaidFeeInsurance", noUnpaidFeeInsurance).
                 append("noPendingClaimLG", noPendingClaimLG).
                 append("constructionRequestLG", constructionRequestLG).
                 append("ableToGettingGuarantorJob", ableToGettingGuarantorJob).

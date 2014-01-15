@@ -6,15 +6,13 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
-import com.clevel.selos.model.view.BasicInfoAccountView;
-import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.rits.cloning.Cloner;
@@ -75,13 +73,15 @@ public class BasicInfo extends MandatoryFieldsControl {
     private BAPaymentMethodDAO baPaymentMethodDAO;
     @Inject
     private BankAccountTypeTransform bankAccountTypeTransform;
+    @Inject
+    private SBFScoreTransform sbfScoreTransform;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
     private List<SpecialProgram> specialProgramList;
     private List<RequestType> requestTypeList;
     private List<RiskType> riskTypeList;
-    private List<SBFScore> sbfScoreList;
+    private List<SBFScoreView> sbfScoreViewList;
     private List<Bank> bankList;
 
     private List<BankAccountType> bankAccountTypeList;
@@ -212,8 +212,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             }
         }
 
-        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
-        fieldsControl(fieldsControlViewList);
+//        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
+//        fieldsControl(fieldsControlViewList);
+        //todo: hardcode on this
+        fieldsControlHardCode();
 
         basicInfoView = new BasicInfoView();
 
@@ -221,7 +223,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         specialProgramList = specialProgramDAO.findAll();
         requestTypeList = requestTypeDAO.findAll();
         riskTypeList = riskTypeDAO.findAll();
-        sbfScoreList = sbfScoreDAO.findAll();
+        sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
@@ -959,6 +961,78 @@ public class BasicInfo extends MandatoryFieldsControl {
         return DateTime.now().toDate();
     }
 
+    //todo: hardcode on this
+    public void fieldsControlHardCode(){
+        reqApplicationNo = true;
+        disApplicationNo = true;
+        reqRefApplicationNo = false;
+        disRefApplicationNo = true;
+        reqCaNo = true;
+        disCaNo = true;
+        reqRequestType = true;
+        disRequestType = false;
+        reqProductGroup = true;
+        disProductGroup = false;
+        reqUnpaidFeeInsurance = false;
+        disUnpaidFeeInsurance = true;
+        reqNoPendingClaimLG = false;
+        disNoPendingClaimLG = true;
+        reqIsConstructionRequestLG = false;
+        disIsConstructionRequestLG = false;
+        reqIsAbleToGettingGuarantorJob = false;
+        disIsAbleToGettingGuarantorJob = false;
+        reqNoClaimLGHistory = false;
+        disNoClaimLGHistory = false;
+        reqNoRevokedLicense = false;
+        disNoRevokedLicense = false;
+        reqNoLateWorkDelivery = false;
+        disNoLateWorkDelivery = false;
+        reqIsAdequateOfCapitalResource = false;
+        disIsAdequateOfCapitalResource = false;
+        reqIsApplySpecialProgram = true;
+        disIsApplySpecialProgram = false;
+        reqSpecialProgramValue = false;
+        disSpecialProgramValue = false;
+        reqIsRefinanceIN = true;
+        disIsRefinanceIN = false;
+        reqRefinanceInValue = false;
+        disRefinanceInValue = false;
+        reqIsRefinanceOUT = true;
+        disIsRefinanceOUT = false;
+        reqRefinanceOutValue = false;
+        disRefinanceOutValue = false;
+        reqRiskCustomerType = true;
+        disRiskCustomerType = false;
+        reqQualitativeType = true;
+        disQualitativeType = false;
+        reqIsExistingSMECustomer = false;
+        disIsExistingSMECustomer = true;
+        reqExistingSMECustomerSince = false;
+        disExistingSMECustomerSince = false;
+        reqLastReviewDate = false;
+        disLastReviewDate = true;
+        reqExtendedReviewDate = false;
+        disExtendedReviewDate = true;
+        reqSCFScore = false;
+        disSCFScore = true;
+        reqRequestLoanWithSameName = false;
+        disRequestLoanWithSameName = true;
+        reqHaveLoanInOneYear = false;
+        disHaveLoanInOneYear = true;
+        reqPassAnnualReview = false;
+        disPassAnnualReview = true;
+        reqLoanRequestPattern = true;
+        disLoanRequestPattern = false;
+        reqReferralName = false;
+        disReferralName = false;
+        reqReferralID = false;
+        disReferralID = false;
+        reqIsApplyBA = false;
+        disIsApplyBA = false;
+        reqBaPaymentMethod = false;
+        disBaPaymentMethod = false;
+    }
+
     // Get Set
     public BasicInfoView getBasicInfoView() {
         return basicInfoView;
@@ -1032,12 +1106,12 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.basicInfoAccountPurposeViewList = basicInfoAccountPurposeViewList;
     }
 
-    public List<SBFScore> getSbfScoreList() {
-        return sbfScoreList;
+    public List<SBFScoreView> getSbfScoreViewList() {
+        return sbfScoreViewList;
     }
 
-    public void setSbfScoreList(List<SBFScore> sbfScoreList) {
-        this.sbfScoreList = sbfScoreList;
+    public void setSbfScoreViewList(List<SBFScoreView> sbfScoreViewList) {
+        this.sbfScoreViewList = sbfScoreViewList;
     }
 
     public List<Bank> getBankList() {

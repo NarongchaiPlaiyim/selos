@@ -66,6 +66,7 @@ public class BizInfoSummary implements Serializable {
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
+    private String incomeAmountDis;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal SumWeightIntvIncomeFactor;
@@ -125,53 +126,35 @@ public class BizInfoSummary implements Serializable {
     public void onCreation() {
         log.info("onCreation bizInfoSum");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("info WorkCase : {}", session.getAttribute("workCaseId"));
         disableOwnerName = false;
         disableExpiryDate = true;
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }
-        log.debug("info WorkCaseId is: {}" + workCaseId);
-        onSearchBizInfoSummaryByWorkCase();
 
+        log.debug("info WorkCaseId is: {}", workCaseId);
+
+        onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-
-        //user = (User)session.getAttribute("user");
-
-        //log.info("onCreation bizInfoSum " + user.getRole().toString());
-
-        //user.getRole().setId(102);
-
         bankStatementAvg = 0;
+
+        log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
         if(bankStmtSummaryView != null ){
-
-            /*if(RoleUser.ABDM.getValue() == user.getRole().getId()){
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-                }
-            }else if(RoleUser.BDM.getValue() == user.getRole().getId()){
-                if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
-                }
-            }*/
-
-            if(bankStmtSummaryView.getGrdTotalIncomeNetUW()!= null ){
+            if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
                 bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
             }else{
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM()!= null ){
+                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
                     bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
                 }
             }
-        }else{
-           log.info("bankStmtSummaryView is null ");
         }
+        log.debug("bankStatementAvg is " + bankStatementAvg);
 
-        log.info("bankStatementAvg is " + bankStatementAvg);
-
-        if (bizInfoSummaryView == null) {
+        if(bizInfoSummaryView == null) {
             fromDB = false;
             log.info("bizInfoSummaryView == null ");
 
@@ -213,24 +196,13 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSearchBizInfoSummaryByWorkCase() {
-        log.info(" Initial session ");
-        HttpSession session = FacesUtil.getSession(true);
-        log.info(" Initial session is " + session);
-
-        //session.setAttribute("workCaseId", 10001);
-
         log.info(" get FROM session workCaseId is " + workCaseId);
         try{
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
         }catch (Exception e){
-            log.info("error onSearchBizInfoSummaryByWorkCase : ", e);
-
+            log.error("error onSearchBizInfoSummaryByWorkCase : ", e);
         }
-
-        log.info(" get FROM session setGrdTotalIncomeNetBDM is " + bankStmtSummaryView.getGrdTotalIncomeNetBDM());
-        log.info(" get FROM session setGrdTotalIncomeNetUW is  " + bankStmtSummaryView.getGrdTotalIncomeNetUW());
-
     }
 
     public void onChangeProvince() {
@@ -261,85 +233,12 @@ public class BizInfoSummary implements Serializable {
 
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
-        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryViewId);
 
-
-        if (bizInfoDetailViewList.size() == 0) {
-            bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        } else {
-
-            double incomeAmountCal = 0;
-            double sumIncomeAmountD = 0;
-
-            double sumIncomePercentD = 0;
-            double incomePercentD = 0;
-
-            double adjustIncome = 0;
-            double adjustIncomeCal = 0;
-            double sumAdjust = 0;
-
-            long ar = 0;
-            double arCal = 0;
-            double sumAR = 0;
-
-            long ap = 0;
-            double apCal = 0;
-            double sumAP = 0;
-
-            long inv = 0;
-            double invCal = 0;
-            double sumINV = 0;
-
-            for (int i = 0; i < bizInfoDetailViewList.size(); i++) {
-
-                BizInfoDetailView temp = bizInfoDetailViewList.get(i);
-
-                incomePercentD = temp.getPercentBiz().doubleValue();
-                sumIncomePercentD += incomePercentD;
-                incomeAmountCal = bankStatementAvg * 12;
-                sumIncomeAmountD += incomeAmountCal;
-
-
-                adjustIncome = temp.getAdjustedIncomeFactor().doubleValue();
-                adjustIncomeCal = (adjustIncome * incomePercentD) / 100;
-                sumAdjust += adjustIncomeCal;
-
-                ar = temp.getBizDesc().getAr();
-                arCal = (ar * incomePercentD) / 100;
-                sumAR += arCal;
-
-                ap = temp.getBizDesc().getAp();
-                apCal = (ap * incomePercentD) / 100;
-                sumAP += apCal;
-
-                inv = temp.getBizDesc().getInv();
-
-                invCal = (inv * incomePercentD) / 100;
-                sumINV += invCal;
-
-            }
-
-            sumIncomeAmountDis = util.formatNumber(sumIncomeAmountD);
-
-            sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2, RoundingMode.HALF_UP);
-            sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2,RoundingMode.HALF_UP);
-            SumWeightAR = new BigDecimal(sumAR).setScale(2,RoundingMode.HALF_UP);
-            SumWeightAP = new BigDecimal(sumAP).setScale(2,RoundingMode.HALF_UP);
-            SumWeightINV = new BigDecimal(sumINV).setScale(2,RoundingMode.HALF_UP);
-            SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2,RoundingMode.HALF_UP);
-
-            bizInfoSummaryView.setCirculationAmount(sumIncomeAmount);
-            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
-            bizInfoSummaryView.setSumIncomeAmount(sumIncomeAmount);
-            bizInfoSummaryView.setSumIncomePercent(sumIncomePercent);
-            bizInfoSummaryView.setSumWeightAR(SumWeightAR);
-            bizInfoSummaryView.setSumWeightAP(SumWeightAP);
-            bizInfoSummaryView.setSumWeightINV(SumWeightINV);
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
-            if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
-                onCalSummaryTable();
-            }
+        if(bizInfoDetailViewList.size()>0 && bizInfoSummaryView.getCirculationAmount().doubleValue()>0){
+            onCalSummaryTable();
         }
+
     }
 
     private void onCheckInterview(){
@@ -704,6 +603,14 @@ public class BizInfoSummary implements Serializable {
 
     public void setSumIncomeAmountDis(String sumIncomeAmountDis) {
         this.sumIncomeAmountDis = sumIncomeAmountDis;
+    }
+
+    public String getIncomeAmountDis() {
+        return incomeAmountDis;
+    }
+
+    public void setIncomeAmountDis(String incomeAmountDis) {
+        this.incomeAmountDis = incomeAmountDis;
     }
 
     public Date getCurrentDate() {

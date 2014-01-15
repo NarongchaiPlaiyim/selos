@@ -122,12 +122,12 @@
                 <td>
                     <div style="float:left; margin-top: 4px;">
                         <p:selectOneMenu styleClass="largest" size="1"
-                                         value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNameViewSelected.name}">
+                                         value="#{accountInfo.accountInfoView.accountInfoDetailViewSelected.accountNameViewSelected.id}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{accountInfo.accountName}"
+                            <f:selectItems value="#{accountInfo.accountNameList}"
                                          var="accountNameList"
-                                         itemLabel="#{accountNameList}"
-                                         itemValue="#{accountNameList}"/>
+                                         itemLabel="#{accountNameList.name}"
+                                         itemValue="#{accountNameList.id}"/>
                         </p:selectOneMenu>
                     </div>
                     <div style="float:left; margin-left: 5px; margin-bottom: 4px;">
