@@ -1,10 +1,13 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
+import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.NewCreditTierDetail;
 import com.clevel.selos.model.view.NewCreditDetailView;
+import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
@@ -20,6 +23,8 @@ public class NewCreditDetailTransform extends Transform {
     NewCreditDetailDAO newCreditDetailDAO;
     @Inject
     NewCreditTierTransform newCreditTierTransform;
+    @Inject
+    NewCreditTierDetailDAO newCreditTierDetailDAO;
 
 /*    public List<NewCreditDetail> getNewCreditDetailForGuarantor(List<NewCreditDetailView> newCreditGrtViews, List<NewCreditDetail> newCreditDetailAll) {
         List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
@@ -155,10 +160,13 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setSuggestPrice(newCreditDetail.getSuggestPrice());
             newCreditDetailView.setTenor(newCreditDetail.getTenor());
 
-           /* if (newCreditDetail.getProposeCreditTierDetailList() != null) {
-                List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditDetail.getProposeCreditTierDetailList());
+            List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
+
+            if (newCreditTierDetailList.size()>0)
+            {
+                List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditTierDetailList);
                 newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-            }*/
+            }
 
             newCreditDetailViewList.add(newCreditDetailView);
         }

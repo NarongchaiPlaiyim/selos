@@ -111,6 +111,7 @@ public class NewCollateralInfoTransform extends Transform {
 
         for (NewCollateralDetail newCollateralDetail1 : newCollateralInfoViewList) {
             newCollateralInfoView = new NewCollateralInfoView();
+            newCollateralInfoView.setId(newCollateralDetail1.getId());
             newCollateralInfoView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralInfoView.setCreateBy(newCollateralDetail1.getCreateBy());
             newCollateralInfoView.setCreateDate(newCollateralDetail1.getCreateDate());
@@ -156,6 +157,7 @@ public class NewCollateralInfoTransform extends Transform {
 
     public NewCollateralInfoView transformsNewCollateralDetailToView(NewCollateralDetail newCollateralInfo) {
         NewCollateralInfoView newCollateralInfoView = new NewCollateralInfoView();
+        newCollateralInfoView.setId(newCollateralInfo.getId());
         newCollateralInfoView.setCreateDate(newCollateralInfo.getCreateDate());
         newCollateralInfoView.setCreateBy(newCollateralInfo.getCreateBy());
         newCollateralInfoView.setCreateDate(newCollateralInfo.getCreateDate());

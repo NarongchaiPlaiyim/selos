@@ -93,6 +93,7 @@ public class NewCollHeadDetailTransform extends Transform {
 
         for (NewCollateralHeadDetail collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadDetailView = new NewCollateralHeadDetailView();
+            newCollateralHeadDetailView.setId(collateralHeaderDetail.getId());
             newCollateralHeadDetailView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadDetailView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadDetailView.setModifyBy(collateralHeaderDetail.getModifyBy());

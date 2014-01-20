@@ -22,7 +22,7 @@ public class NewCollateralRelationDAO extends GenericDAO<NewCollateralRelCredit,
 
     @SuppressWarnings("unchecked")
     public List<NewCollateralRelCredit> getListCollRelationByNewCollateral(NewCollateralDetail newCollateralDetail) {
-        log.info("getListCollRelationByNewGuarantor. (newCollateralDetail: {})", newCollateralDetail);
+        log.info("getListCollRelationByNewGuarantor. (newCollateralDetail: {})", newCollateralDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralDetail", newCollateralDetail));
         criteria.addOrder(Order.asc("newCollateralDetail.id"));

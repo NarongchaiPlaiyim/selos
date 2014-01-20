@@ -22,7 +22,7 @@ public class NewCollateralDetailDAO extends GenericDAO<NewCollateralDetail, Long
     }
 
     public List<NewCollateralDetail> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findNewCollateralByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("findNewCollateralByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));

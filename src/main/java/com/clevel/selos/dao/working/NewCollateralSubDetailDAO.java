@@ -54,7 +54,7 @@ public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail
 
 
     public List<NewCollateralSubDetail> getAllNewSubCollateralDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
-        log.info("getAllNewCollateralSubDetailByNewCollHeadDetail. (newCollateralDetail: {})", newCollateralHeadDetail);
+        log.info("getAllNewCollateralSubDetailByNewCollHeadDetail. (newCollateralDetail: {})", newCollateralHeadDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralHeadDetail", newCollateralHeadDetail));
         criteria.addOrder(Order.asc("newCollateralHeadDetail.id"));

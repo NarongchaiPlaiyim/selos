@@ -30,7 +30,7 @@ public class NewFeeCreditDAO extends GenericDAO<NewFeeDetail, Long> {
     }
 
     public List<NewFeeDetail> findByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("findByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));

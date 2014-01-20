@@ -53,7 +53,7 @@ public class NewFeeDetailTransform extends Transform {
 
         for (NewFeeDetail newFeeDetail : newFeeDetailList) {
             newFeeDetailView = new NewFeeDetailView();
-
+            newFeeDetailView.setId(newFeeDetail.getId());
             newFeeDetailView.setCreateBy(newFeeDetail.getCreateBy());
             newFeeDetailView.setCreateDate(newFeeDetail.getCreateDate());
             newFeeDetailView.setModifyBy(newFeeDetail.getModifyBy());

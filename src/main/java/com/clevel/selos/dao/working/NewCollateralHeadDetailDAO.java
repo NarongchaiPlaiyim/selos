@@ -20,7 +20,7 @@ public class NewCollateralHeadDetailDAO extends GenericDAO<NewCollateralHeadDeta
     public NewCollateralHeadDetailDAO() {}
 
     public List<NewCollateralHeadDetail> findByNewCollateralDetail(NewCollateralDetail newCollateralDetail) {
-        log.info("findByNewCollateralDetail ::: {}", newCollateralDetail);
+        log.info("findByNewCollateralDetail ::: {}", newCollateralDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralDetail", newCollateralDetail));
         criteria.addOrder(Order.asc("id"));

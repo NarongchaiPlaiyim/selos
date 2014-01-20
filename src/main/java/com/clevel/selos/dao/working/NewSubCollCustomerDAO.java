@@ -22,7 +22,7 @@ public class NewSubCollCustomerDAO extends GenericDAO<NewCollateralSubCustomer, 
 
     @SuppressWarnings("unchecked")
     public List<NewCollateralSubCustomer> getListNewCollateralSubCustomer(NewCollateralSubDetail newCollateralSubDetail) {
-        log.info("getListNewCollateralSubCustomer. (newCollateralSubDetail: {})", newCollateralSubDetail);
+        log.info("getListNewCollateralSubCustomer. (newCollateralSubDetail: {})", newCollateralSubDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralSubDetail", newCollateralSubDetail));
         criteria.addOrder(Order.asc("newCollateralSubDetail.id"));
