@@ -4,13 +4,11 @@ import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.NewCollateralHeadDetailDAO;
 import com.clevel.selos.dao.working.NewCollateralRelationDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCollateralDetail;
-import com.clevel.selos.model.db.working.NewCollateralRelCredit;
-import com.clevel.selos.model.db.working.NewCreditDetail;
-import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.NewCollateralHeadDetailView;
 import com.clevel.selos.model.view.NewCollateralInfoView;
 import com.clevel.selos.model.view.NewCreditDetailView;
@@ -43,6 +41,8 @@ public class NewCollateralInfoTransform extends Transform {
     NewCreditDetailTransform newCreditDetailTransform;
     @Inject
     NewCollHeadDetailTransform newCollHeadDetailTransform;
+    @Inject
+    NewCollateralHeadDetailDAO newCollateralHeadDetailDAO;
 
     public NewCollateralDetail transformsNewCollateralInfoViewToModel(NewCollateralInfoView newCollateralInfoView, NewCreditFacility newCreditFacility, User user) {
         NewCollateralDetail newCollateralDetail = new NewCollateralDetail();
@@ -141,8 +141,9 @@ public class NewCollateralInfoTransform extends Transform {
 
             }
 
+            List<NewCollateralHeadDetail> newCollateralHeadDetails = newCollateralHeadDetailDAO.findByNewCollateralDetail(newCollateralDetail1);
             if (newCollateralDetail1.getNewCollateralHeadDetailList() != null) {
-                List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralDetail1.getNewCollateralHeadDetailList());
+                List<NewCollateralHeadDetailView> newCollateralHeadDetailViews = newCollHeadDetailTransform.transformToView(newCollateralHeadDetails);
                 newCollateralInfoView.setNewCollateralHeadDetailViewList(newCollateralHeadDetailViews);
             }
 

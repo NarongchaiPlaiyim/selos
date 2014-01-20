@@ -5,7 +5,6 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.view.NewCreditDetailView;
-import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
@@ -156,10 +155,10 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setSuggestPrice(newCreditDetail.getSuggestPrice());
             newCreditDetailView.setTenor(newCreditDetail.getTenor());
 
-            if (newCreditDetail.getProposeCreditTierDetailList() != null) {
+           /* if (newCreditDetail.getProposeCreditTierDetailList() != null) {
                 List<NewCreditTierDetailView> newCreditTierDetailViewList = newCreditTierTransform.transformToView(newCreditDetail.getProposeCreditTierDetailList());
                 newCreditDetailView.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-            }
+            }*/
 
             newCreditDetailViewList.add(newCreditDetailView);
         }

@@ -1,8 +1,10 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.NewCollateralSubDetailDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralDetail;
 import com.clevel.selos.model.db.working.NewCollateralHeadDetail;
+import com.clevel.selos.model.db.working.NewCollateralSubDetail;
 import com.clevel.selos.model.view.NewCollateralHeadDetailView;
 import com.clevel.selos.model.view.NewSubCollateralDetailView;
 
@@ -19,6 +21,8 @@ public class NewCollHeadDetailTransform extends Transform {
 
     @Inject
     NewSubCollDetailTransform newSubCollDetailTransform;
+    @Inject
+    NewCollateralSubDetailDAO newCollateralSubDetailDAO;
 
     public NewCollateralHeadDetail transformNewCollateralHeadDetailViewToModel(NewCollateralHeadDetailView newCollateralHeadDetailView, NewCollateralDetail collateralDetail, User user) {
 
@@ -108,8 +112,9 @@ public class NewCollHeadDetailTransform extends Transform {
             newCollateralHeadDetailView.setModifyBy(collateralHeaderDetail.getModifyBy());
             newCollateralHeadDetailView.setModifyDate(collateralHeaderDetail.getModifyDate());
 
-            if (collateralHeaderDetail.getNewCollateralSubDetailList() != null) {
-                List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(collateralHeaderDetail.getNewCollateralSubDetailList());
+            List<NewCollateralSubDetail> newCollateralSubDetails = newCollateralSubDetailDAO.getAllNewSubCollateralDetail(collateralHeaderDetail);
+            if (newCollateralSubDetails.size()>0) {
+                List<NewSubCollateralDetailView> newSubCollateralDetailViews = newSubCollDetailTransform.transformToView(newCollateralSubDetails);
                 newCollateralHeadDetailView.setNewSubCollateralDetailViewList(newSubCollateralDetailViews);
             }
 
