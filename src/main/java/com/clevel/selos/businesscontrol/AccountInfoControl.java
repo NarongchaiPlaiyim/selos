@@ -94,7 +94,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
         }
     }
 
-
     private void insertToDB(List<AccountInfoDetailView> accountInfoDetailViewList){
         accountInfoDetailViewList = safetyList(accountInfoDetailViewList);
         for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){
