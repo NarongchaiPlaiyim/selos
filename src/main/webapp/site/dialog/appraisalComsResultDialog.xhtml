@@ -9,7 +9,7 @@
         <tr>
             <td class="title">Job ID :</td>
             <td>
-                <p:inputText id="jobID" value="#{appraisalResult.collateralDetailView.jobID}"
+                <p:inputText id="jobID" value="#{appraisalResult.collateralDetailView.jobIDSearch}"
                              required="#{not empty param[searchButton.clientId]}"/>
             </td>
             <td>
@@ -17,7 +17,7 @@
                                  binding="#{searchButton}"
                                  process="@form"
                                  action="#{appraisalResult.onSearchCollateral}"
-                                 update=":msgBoxSystemMessagePanel :appraisalComsDlgForm"/>
+                                 update=":msgBoxSystemMessagePanel,:appraisalComsDlgForm"/>
             </td>
         </tr>
         <tr>
@@ -29,10 +29,10 @@
     <p:panel id="pnlComs" styleClass="panel">
         <table>
             <colgroup>
-                <col style="width:100px"/>
-                <col style="width:200px"/>
-                <col style="width:150px"/>
-                <col style="width:200px"/>
+                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
+                <col style="min-width: 200px;width: 200px;max-width: 200px"/>
             </colgroup>
             <tr>
                 <td>
@@ -47,7 +47,10 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.appraisalDate}"/>
+                    <p:outputLabel value="#{appraisalResult.collateralDetailView.appraisalDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                    </p:outputLabel>
+
                 </td>
             </tr>
             <tr>
@@ -104,6 +107,9 @@
                 </td>
                 <td>
                     <p:outputLabel value="#{collateralHeadDetailView.titleDeed}"/>
+
+                    <p:outputLabel value="#{collateralHeadDetailView.no}"/>
+
                 </td>
             </tr>
             <tr>
@@ -120,7 +126,7 @@
                 </td>
                 <td>
                     <p:outputLabel value="#{collateralHeadDetailView.appraisalValue}">
-                        <f:convertNumber pattern="#,##0"/>
+                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                     </p:outputLabel>
                 </td>
             </tr>
@@ -151,7 +157,7 @@
                             </p:row>
                         </p:columnGroup>
                         <p:column styleClass="center" style="width:4%;">
-                            <p:outputLabel value="#{rowIndex+1}"/>
+                            <p:outputLabel value="#{subCollateralDetailView.no}"/>
                         </p:column>
                         <p:column  styleClass="left">
                             <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
@@ -166,7 +172,7 @@
                         </p:column>
                         <p:column styleClass="right">
                             <p:outputLabel value="#{subCollateralDetailView.appraisalValue}">
-                                <f:convertNumber pattern="#,##0"/>
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             </p:outputLabel>
                         </p:column>
                     </p:dataTable>
@@ -195,7 +201,7 @@
                          value="#{msg.get('app.button.ok')}"
                          actionListener="#{appraisalResult.onSaveCollateralDetailView()}"
                          process="@form"
-                         update=":appraisalComsDlgForm,:frmMain"
+                         update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                          oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"/>
     </p:panel>

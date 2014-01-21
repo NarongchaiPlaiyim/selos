@@ -10,7 +10,6 @@
     <h:head>
         <title>Business Information Detail</title>
         <h:outputStylesheet name="css/style.css" />
-        <!-- <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/> -->
         <h:outputScript library="js" name="custom.js" />
         <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
@@ -35,7 +34,7 @@
                         <div id="content_lastupdate">Last update by <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyBy.userName}"/>, <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyDate}"/></div>
                     </div>
                     <div id="content_form">
-                        <table class="content_table_form" border="1">
+                        <table class="content_table_form">
                         <tr>
                             <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
                             <td colspan="3">
@@ -177,13 +176,14 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocExpiryDate')}"/>
                             </td>
                             <td>
-                                <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" disabled="#{bizInfoDetail.disable}"
+                                <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
+                                                disabled="#{bizInfoDetail.disable}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
                                                 mindate="#{bizInfoDetail.currentDateDDMMYY}"
                                                 pattern="dd/MM/yyyy"
                                                 yearRange="1950:2100"
-                                                locale="th_TH">
+                                                showButtonPanel="true">
                                     <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </clv:BECalendar>
                             </td>
@@ -201,8 +201,7 @@
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
-                                </p:inputText>
-                            </td>
+                                </p:inputText></td>
                         </tr>
                         <tr>
                             <td colspan="4" style="text-align: center;"><p:spacer width="2px"/></td>
@@ -920,7 +919,7 @@
     </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" width="350px"
                          header="#{bizInfoDetail.messageHeader}" message="#{bizInfoDetail.message}" >
             <p:commandButton value="OK"
                              process="@this"

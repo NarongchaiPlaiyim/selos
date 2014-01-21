@@ -33,6 +33,8 @@ public class DBRTransform extends Transform {
         dbrView.setMonthlyIncomePerMonth(dbr.getMonthlyIncomePerMonth());
         dbrView.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
         dbrView.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
+        dbrView.setTotalMonthDebtBorrowerFinal(dbr.getTotalMonthDebtBorrowerFinal());
+        dbrView.setTotalMonthDebtBorrowerStart(dbr.getTotalMonthDebtBorrowerStart());
         dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
         dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
         dbrView.setModifyDate(dbr.getModifyDate());
@@ -67,6 +69,10 @@ public class DBRTransform extends Transform {
         dbr.setModifyDate(now);
         dbr.setWorkCase(workCase);
         dbr.setIncomeFactor(dbrView.getIncomeFactor());
+        if(dbrView.isUpdateTotalDebtBorrower()){
+            dbr.setTotalMonthDebtBorrowerStart(dbrView.getTotalMonthDebtBorrowerStart());
+            dbr.setTotalMonthDebtBorrowerFinal(dbrView.getTotalMonthDebtBorrowerFinal());
+        }
         return dbr;
     }
 }

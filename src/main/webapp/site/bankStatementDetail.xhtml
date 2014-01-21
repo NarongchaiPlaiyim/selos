@@ -66,8 +66,7 @@
                                                          value="#{bankStatementDetail.bankStmtView.notCountIncome}"/>
                             </td>
                             <td style="border-style: none !important; padding-left: 5px;">
-                                <h:outputLabel for="countIncome"
-                                               value="#{msg.get('app.bankStmtDetail.checkbox.isNotCountIncome')}"/>
+                                <h:outputText value="#{msg.get('app.bankStmtDetail.checkbox.isNotCountIncome')}"/>
                             </td>
                         </tr>
                     </table>
@@ -78,7 +77,9 @@
                     <h:outputText value="#{msg.get('app.bankStmtDetail.label.bankName')}"/>
                 </td>
                 <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
-                    <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.bankView.code}">
+                    <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.bankView.code}"
+                                     required="#{not empty param[saveButton.clientId]}">
+                        <f:selectItem value="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{bankStatementDetail.bankViewList}" var="bank"
                                        itemLabel="#{bank.bankName}" itemValue="#{bank.code}"/>
                     </p:selectOneMenu>
