@@ -599,7 +599,7 @@
                                             <td class="title left">
                                                 <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                             </td>
-                                            <td class="smallest left">
+                                            <td class="small left">
                                                 <p:inputText styleClass="smallest"
                                                              value="#{custInfoSumIndi.customerInfoView.currentAddress.addressNo}"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCurNo}"
@@ -608,9 +608,11 @@
                                             <td class="title right">
                                                 <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                             </td>
-                                            <td class="smallest left">
+                                            <td class="small left">
                                                 <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.currentAddress.moo}"
-                                                        disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                        disabled="#{not custInfoSumIndi.enableAllFieldCus}"
+                                                        onkeydown="return onKeyDownNumber(event);"
+                                                        onkeypress="return onKeyPressNumber(event);"/>
                                             </td>
                                             <td class="small title right">
                                                 <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -625,7 +627,7 @@
                                                 <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                             </td>
                                             <td class="left" colspan="5">
-                                                <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.currentAddress.road}"
+                                                <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.currentAddress.road}"
                                                         disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
@@ -766,7 +768,7 @@
                                                 <td class="title left">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.addressNo}"
                                                                  disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId])
@@ -776,9 +778,11 @@
                                                 <td class="title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.moo}"
-                                                                 disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -793,7 +797,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                 </td>
                                                 <td class="left" colspan="5">
-                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
+                                                    <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
                                                                  disabled="#{custInfoSumIndi.customerInfoView.registerAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
@@ -939,7 +943,7 @@
                                                 <td class="title left">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.workAddress.addressNo}"
                                                                  disabled="#{custInfoSumIndi.customerInfoView.workAddress.addressTypeFlag != 3}"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndWorNo
@@ -948,9 +952,11 @@
                                                 <td class="title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.workAddress.moo}"
-                                                                 disabled="#{custInfoSumIndi.customerInfoView.workAddress.addressTypeFlag != 3}"/>
+                                                                 disabled="#{custInfoSumIndi.customerInfoView.workAddress.addressTypeFlag != 3}"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -965,7 +971,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                 </td>
                                                 <td class="left" colspan="5">
-                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.workAddress.road}"
+                                                    <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.workAddress.road}"
                                                                  disabled="#{custInfoSumIndi.customerInfoView.workAddress.addressTypeFlag != 3}"/>
                                                 </td>
                                             </tr>
@@ -1822,16 +1828,18 @@
                                                 <td class="title left">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.addressNo}"
                                                                  disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
                                                 </td>
                                                 <td class="title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.moo}"
-                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
+                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -1846,7 +1854,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                 </td>
                                                 <td class="left" colspan="5">
-                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.road}"
+                                                    <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.spouse.currentAddress.road}"
                                                                  disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
                                                 </td>
                                             </tr>
@@ -1977,16 +1985,18 @@
                                                     <td class="title left">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                                     </td>
-                                                    <td class="smallest left">
+                                                    <td class="small left">
                                                         <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressNo}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                     <td class="title right">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                                     </td>
-                                                    <td class="smallest left">
+                                                    <td class="small left">
                                                         <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.moo}"
-                                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressTypeFlag != 3}"/>
+                                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressTypeFlag != 3}"
+                                                                     onkeydown="return onKeyDownNumber(event);"
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                     <td class="small title right">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -2001,7 +2011,7 @@
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                     </td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.road}"
+                                                        <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.road}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.spouse.registerAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                 </tr>
@@ -2133,16 +2143,18 @@
                                                     <td class="title left">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.no')}"/>
                                                     </td>
-                                                    <td class="smallest left">
+                                                    <td class="small left">
                                                         <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.addressNo}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.spouse.workAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                     <td class="title right">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.moo')}"/>
                                                     </td>
-                                                    <td class="smallest left">
+                                                    <td class="small left">
                                                         <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.moo}"
-                                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.workAddress.addressTypeFlag != 3}"/>
+                                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.workAddress.addressTypeFlag != 3}"
+                                                                     onkeydown="return onKeyDownNumber(event);"
+                                                                     onkeypress="return onKeyPressNumber(event);"/>
                                                     </td>
                                                     <td class="small title right">
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.building')}"/>
@@ -2157,7 +2169,7 @@
                                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.road')}"/>
                                                     </td>
                                                     <td class="left" colspan="5">
-                                                        <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.road}"
+                                                        <p:inputText style="width:500px;" value="#{custInfoSumIndi.customerInfoView.spouse.workAddress.road}"
                                                                      disabled="#{custInfoSumIndi.customerInfoView.spouse.workAddress.addressTypeFlag != 3}"/>
                                                     </td>
                                                 </tr>
@@ -2464,7 +2476,7 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{custInfoSumIndi.severity}"
                          header="#{custInfoSumIndi.messageHeader}" message="#{custInfoSumIndi.message}" >
             <p:commandButton value="OK"
                              process="@this"
