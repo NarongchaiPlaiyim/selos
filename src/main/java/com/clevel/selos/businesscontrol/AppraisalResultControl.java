@@ -3,11 +3,14 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.CollateralHeaderDetailView;
-import com.clevel.selos.model.view.CollateralDetailView;
 import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.model.view.CollateralDetailView;
+import com.clevel.selos.model.view.CollateralHeaderDetailView;
 import com.clevel.selos.model.view.SubCollateralDetailView;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.AppraisalTransform;
+import com.clevel.selos.transform.NewCollHeadDetailTransform;
+import com.clevel.selos.transform.NewCollateralInfoTransform;
+import com.clevel.selos.transform.NewSubCollDetailTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;

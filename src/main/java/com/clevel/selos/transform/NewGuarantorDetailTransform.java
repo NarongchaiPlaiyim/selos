@@ -84,6 +84,7 @@ public class NewGuarantorDetailTransform extends Transform {
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             newGuarantorDetailView = new NewGuarantorDetailView();
             CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
+            newGuarantorDetailView.setId(newGuarantorDetail.getId());
             newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
             newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());
             newGuarantorDetailView.setModifyDate(newGuarantorDetail.getModifyDate());
@@ -116,6 +117,7 @@ public class NewGuarantorDetailTransform extends Transform {
 
         NewGuarantorDetailView newGuarantorDetailView = new NewGuarantorDetailView();
         CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
+        newGuarantorDetailView.setId(newGuarantorDetail.getId());
         newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
         newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());
         newGuarantorDetailView.setModifyDate(newGuarantorDetail.getModifyDate());

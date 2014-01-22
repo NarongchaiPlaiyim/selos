@@ -21,7 +21,7 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorRelCredit, L
 
     @SuppressWarnings("unchecked")
     public List<NewGuarantorRelCredit> getListGuarantorRelationByNewGuarantor(NewGuarantorDetail newGuarantorDetail) {
-        log.info("getListGuarantorRelationByNewGuarantor. (NewGuarantorDetail: {})", newGuarantorDetail);
+        log.info("getListGuarantorRelationByNewGuarantor. (NewGuarantorDetail: {})", newGuarantorDetail.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newGuarantorDetail", newGuarantorDetail));
         criteria.addOrder(Order.asc("newGuarantorDetail.id"));
