@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "wrk_new_collateral_mortgage")
+@Table(name = "wrk_new_coll_sub_mortgage")
 public class NewCollateralSubMortgage implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_MOR_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_MOR_ID", allocationSize = 1)
@@ -15,10 +15,10 @@ public class NewCollateralSubMortgage implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "new_collateral_sub_id")
-    private NewCollateralSubDetail newCollateralSubDetail;
+    private NewCollateralSub newCollateralSub;
 
     @OneToOne
-    @JoinColumn(name = "mortgage_id")
+    @JoinColumn(name = "mortgage_type_id")
     private MortgageType mortgageType;
 
     public long getId() {
@@ -29,12 +29,12 @@ public class NewCollateralSubMortgage implements Serializable {
         this.id = id;
     }
 
-    public NewCollateralSubDetail getNewCollateralSubDetail() {
-        return newCollateralSubDetail;
+    public NewCollateralSub getNewCollateralSub() {
+        return newCollateralSub;
     }
 
-    public void setNewCollateralSubDetail(NewCollateralSubDetail newCollateralSubDetail) {
-        this.newCollateralSubDetail = newCollateralSubDetail;
+    public void setNewCollateralSub(NewCollateralSub newCollateralSub) {
+        this.newCollateralSub = newCollateralSub;
     }
 
     public MortgageType getMortgageType() {

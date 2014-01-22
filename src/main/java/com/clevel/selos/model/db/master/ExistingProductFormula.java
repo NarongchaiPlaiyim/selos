@@ -13,9 +13,6 @@ public class ExistingProductFormula {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "credit_cus_type")
-    private int creditCusType;
-
     @Column(name = "tmb_product_code", length = 50)
     private String productCode;
 
@@ -65,14 +62,6 @@ public class ExistingProductFormula {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getCreditCusType() {
-        return creditCusType;
-    }
-
-    public void setCreditCusType(int creditCusType) {
-        this.creditCusType = creditCusType;
     }
 
     public String getProductCode() {
@@ -183,7 +172,6 @@ public class ExistingProductFormula {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("creditCusType", creditCusType)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("productProgram", productProgram)

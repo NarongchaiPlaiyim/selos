@@ -56,6 +56,12 @@ public class WorkCase implements Serializable {
     @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
 
+    @Column(name = "approve_type", length = 1, columnDefinition="int default 0")
+    private int approvedType;
+
+    @Column(name = "approve_result", length = 1, columnDefinition="int default 0")
+    private int approvedResult;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -180,6 +186,22 @@ public class WorkCase implements Serializable {
         this.borrowerType = borrowerType;
     }
 
+    public int getApprovedType() {
+        return approvedType;
+    }
+
+    public void setApprovedType(int approvedType) {
+        this.approvedType = approvedType;
+    }
+
+    public int getApprovedResult() {
+        return approvedResult;
+    }
+
+    public void setApprovedResult(int approvedResult) {
+        this.approvedResult = approvedResult;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -235,20 +257,22 @@ public class WorkCase implements Serializable {
                 .append("caNumber", caNumber)
                 .append("appNumber", appNumber)
                 .append("refAppNumber", refAppNumber)
-                .append("requestType", requestType)
-                .append("productGroup", productGroup)
+                .append("requestType", requestType != null?requestType.getName():"")
+                .append("productGroup", productGroup != null?productGroup.getName():"")
                 .append("wobNumber", wobNumber)
                 .append("lock", lock)
                 .append("lockUser", lockUser)
                 .append("step", step)
                 .append("status", status)
-                .append("borrowerType", borrowerType)
+                .append("borrowerType", borrowerType != null?borrowerType.getId():"")
+                .append("approvedType", approvedType)
+                .append("approvedResult", approvedResult)
                 .append("createDate", createDate)
-                .append("createBy", createBy)
+                .append("createBy", createBy != null ? createBy.getUserName(): "")
                 .append("modifyDate", modifyDate)
-                .append("modifyBy", modifyBy)
+                .append("modifyBy", modifyBy != null? modifyBy.getUserName():"")
                 .append("stepOwner", stepOwner)
-                .append("workCasePrescreen", workCasePrescreen)
+                .append("workCasePrescreen", workCasePrescreen != null?workCasePrescreen.getId(): "")
                 .toString();
     }
 }

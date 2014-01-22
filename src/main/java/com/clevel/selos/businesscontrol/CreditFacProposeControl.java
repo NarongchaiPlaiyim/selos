@@ -71,11 +71,11 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     CreditTypeDetailDAO creditTypeDetailDAO;
     @Inject
-    NewCollateralDetailDAO newCollateralDetailDAO;
+    NewCollateralDAO newCollateralDetailDAO;
     @Inject
-    NewCollateralSubDetailDAO newCollateralSubDetailDAO;
+    NewCollateralSubDAO newCollateralSubDetailDAO;
     @Inject
-    NewCollateralHeadDetailDAO newCollateralHeadDetailDAO;
+    NewCollateralHeadDAO newCollateralHeadDetailDAO;
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
     @Inject
@@ -99,15 +99,15 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorRelationDAO newGuarantorRelationDAO;
     @Inject
-    NewCollateralRelationDAO newCollateralRelationDAO;
+    NewCollateralCreditDAO newCollateralRelationDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
-    NewSubCollCustomerDAO newSubCollCustomerDAO;
+    NewCollateralSubOwnerDAO newSubCollCustomerDAO;
     @Inject
-    NewSubCollMortgageDAO newSubCollMortgageDAO;
+    NewCollateralSubMortgageDAO newSubCollMortgageDAO;
     @Inject
-    NewSubCollRelateDAO newSubCollRelateDAO;
+    NewCollateralSubRelatedDAO newSubCollRelateDAO;
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
     @Inject
@@ -214,21 +214,21 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("persist :: newConditionDetail ...");
 
 
-        List<NewCollateralDetail> collateralDetailListDel = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+        List<NewCollateral> collateralDetailListDel = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
         if (collateralDetailListDel.size() > 0) {
             for (int i = 0; i < collateralDetailListDel.size(); i++) {
                 log.info("collateralDetailListDel  is " + i);
-                NewCollateralDetail newCollateralDetail = collateralDetailListDel.get(i);
-                List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
+                NewCollateral newCollateralDetail = collateralDetailListDel.get(i);
+                List<NewCollateralCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
 
-                if (newCollateralDetail.getNewCollateralHeadDetailList().size() > 0) {
-                    for (int j = 0; j < newCollateralDetail.getNewCollateralHeadDetailList().size(); j++) {
-                        NewCollateralHeadDetail newCollateralHeadDetail = newCollateralDetail.getNewCollateralHeadDetailList().get(j);
-                        if (newCollateralHeadDetail.getNewCollateralSubDetailList().size() > 0) {
-                            for (int k = 0; k < newCollateralHeadDetail.getNewCollateralSubDetailList().size(); k++) {
-                                NewCollateralSubDetail newCollateralSubDetail = newCollateralHeadDetail.getNewCollateralSubDetailList().get(k);
+                if (newCollateralDetail.getNewCollateralHeadList().size() > 0) {
+                    for (int j = 0; j < newCollateralDetail.getNewCollateralHeadList().size(); j++) {
+                        NewCollateralHead newCollateralHeadDetail = newCollateralDetail.getNewCollateralHeadList().get(j);
+                        if (newCollateralHeadDetail.getNewCollateralSubList().size() > 0) {
+                            for (int k = 0; k < newCollateralHeadDetail.getNewCollateralSubList().size(); k++) {
+                                NewCollateralSub newCollateralSubDetail = newCollateralHeadDetail.getNewCollateralSubList().get(k);
 
-                                List<NewCollateralSubCustomer> newCollateralSubCustomerList = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
+                                List<NewCollateralSubOwner> newCollateralSubCustomerList = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
                                 if (newCollateralSubCustomerList.size() > 0) {
                                     newSubCollCustomerDAO.delete(newCollateralSubCustomerList);
                                     log.info("delete newCollateralSubCustomerList");
@@ -238,7 +238,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                     newSubCollMortgageDAO.delete(newCollateralSubMortgages);
                                     log.info("delete newCollateralSubMortgages");
                                 }
-                                List<NewCollateralSubRelate> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
+                                List<NewCollateralSubRelated> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
                                 if (newCollateralSubRelates.size() > 0) {
                                     newSubCollRelateDAO.delete(newCollateralSubRelates);
                                     log.info("delete newCollateralSubRelates");
@@ -305,37 +305,37 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         if (newCreditFacilityView.getNewCollateralInfoViewList() != null) {
-            List<NewCollateralDetail> newCollateralDetailList = newCollateralInfoTransform.transformsToModel(newCreditFacilityView.getNewCollateralInfoViewList(), newCreditFacility, user);
+            List<NewCollateral> newCollateralDetailList = newCollateralInfoTransform.transformsToModel(newCreditFacilityView.getNewCollateralInfoViewList(), newCreditFacility, user);
             newCollateralDetailDAO.persist(newCollateralDetailList);
             log.info("persist newCollateralDetailList...");
 
             for (int i = 0; i < newCollateralDetailList.size(); i++) {
                 log.info(" newCollateralDetailList  is " + i);
-                NewCollateralDetail newCollateralDetail = newCollateralDetailList.get(i);
+                NewCollateral newCollateralDetail = newCollateralDetailList.get(i);
                 NewCollateralInfoView newCollateralInfoView = newCreditFacilityView.getNewCollateralInfoViewList().get(i);
-                List<NewCollateralRelCredit> newCollateralRelCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralInfoView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+                List<NewCollateralCredit> newCollateralRelCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralInfoView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
                 newCollateralRelationDAO.persist(newCollateralRelCreditList);
                 log.info("persist newCollateralRelCreditList...");
 
                 for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
-                    NewCollateralHeadDetail newCollateralHeadDetail = newCollHeadDetailTransform.transformNewCollateralHeadDetailViewToModel(newCollateralHeadDetailView, newCollateralDetail, user);
+                    NewCollateralHead newCollateralHeadDetail = newCollHeadDetailTransform.transformNewCollateralHeadDetailViewToModel(newCollateralHeadDetailView, newCollateralDetail, user);
                     newCollateralHeadDetailDAO.persist(newCollateralHeadDetail);
                     log.info("persist newCollateralHeadDetail...{}", newCollateralHeadDetail.getId());
 
                     for (NewSubCollateralDetailView newSubCollateralDetailView : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
-                        NewCollateralSubDetail newCollateralSubDetail = newSubCollDetailTransform.transformNewSubCollateralDetailViewToModel(newSubCollateralDetailView, newCollateralHeadDetail, user);
+                        NewCollateralSub newCollateralSubDetail = newSubCollDetailTransform.transformNewSubCollateralDetailViewToModel(newSubCollateralDetailView, newCollateralHeadDetail, user);
                         newCollateralSubDetailDAO.persist(newCollateralSubDetail);
                         log.info("persist newCollateralSubDetail...{}", newCollateralSubDetail.getId());
 
                         for (NewSubCollateralDetailView newSubCollateralView : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
                             if (newSubCollateralView.getCollateralOwnerUWList() != null) {
-                                List<NewCollateralSubCustomer> newCollateralSubCustomerList = new ArrayList<NewCollateralSubCustomer>();
-                                NewCollateralSubCustomer newCollateralSubCustomer;
+                                List<NewCollateralSubOwner> newCollateralSubCustomerList = new ArrayList<NewCollateralSubOwner>();
+                                NewCollateralSubOwner newCollateralSubCustomer;
                                 for (CustomerInfoView customerInfoView : newSubCollateralView.getCollateralOwnerUWList()) {
                                     Customer customer = customerDAO.findById(customerInfoView.getId());
-                                    newCollateralSubCustomer = new NewCollateralSubCustomer();
+                                    newCollateralSubCustomer = new NewCollateralSubOwner();
                                     newCollateralSubCustomer.setCustomer(customer);
-                                    newCollateralSubCustomer.setNewCollateralSubDetail(newCollateralSubDetail);
+                                    newCollateralSubCustomer.setNewCollateralSub(newCollateralSubDetail);
                                     newCollateralSubCustomerList.add(newCollateralSubCustomer);
                                 }
 
@@ -352,7 +352,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                     MortgageType mortgage = mortgageTypeDAO.findById(mortgageType.getId());
                                     newCollateralSubMortgage = new NewCollateralSubMortgage();
                                     newCollateralSubMortgage.setMortgageType(mortgage);
-                                    newCollateralSubMortgage.setNewCollateralSubDetail(newCollateralSubDetail);
+                                    newCollateralSubMortgage.setNewCollateralSub(newCollateralSubDetail);
                                     newCollateralSubMortgageList.add(newCollateralSubMortgage);
                                 }
 
@@ -362,14 +362,14 @@ public class CreditFacProposeControl extends BusinessControl {
                             }
 
                             if (newSubCollateralView.getRelatedWithList() != null) {
-                                NewCollateralSubRelate newCollateralSubRelate;
+                                NewCollateralSubRelated newCollateralSubRelate;
                                 for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
                                     log.info("relatedView.getId() ::: {} ", relatedView.getId());
-                                    NewCollateralSubDetail relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getRelatedWithId());
+                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getRelatedWithId());
                                     log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                                    newCollateralSubRelate = new NewCollateralSubRelate();
-                                    newCollateralSubRelate.setNewCollateralSubDetailRel(relatedDetail);
-                                    newCollateralSubRelate.setNewCollateralSubDetail(newCollateralSubDetail);
+                                    newCollateralSubRelate = new NewCollateralSubRelated();
+                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
                                     newSubCollRelateDAO.persist(newCollateralSubRelate);
                                     log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
                                 }

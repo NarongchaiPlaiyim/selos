@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_new_collateral_detail")
-public class NewCollateralDetail implements Serializable {
+@Table(name = "wrk_new_collateral")
+public class NewCollateral implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_COL_DET_ID", sequenceName = "SEQ_WRK_NEW_COL_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COL_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_ID", sequenceName = "SEQ_WRK_NEW_COLL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_ID")
     private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -74,15 +74,11 @@ public class NewCollateralDetail implements Serializable {
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
 
-    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralHeadDetail> newCollateralHeadDetailList;
+    @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
+    private List<NewCollateralHead> newCollateralHeadList;
 
-    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralRelCredit> newCollateralRelCreditList;
-
-/*    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
-    private List<CreditTypeDetail> creditTypeDetailList;*/
-
+    @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
+    private List<NewCollateralCredit> newCollateralCreditList;
 
     public long getId() {
         return id;
@@ -196,20 +192,20 @@ public class NewCollateralDetail implements Serializable {
         this.newCreditFacility = newCreditFacility;
     }
 
-    public List<NewCollateralHeadDetail> getNewCollateralHeadDetailList() {
-        return newCollateralHeadDetailList;
+    public List<NewCollateralHead> getNewCollateralHeadList() {
+        return newCollateralHeadList;
     }
 
-    public void setNewCollateralHeadDetailList(List<NewCollateralHeadDetail> newCollateralHeadDetailList) {
-        this.newCollateralHeadDetailList = newCollateralHeadDetailList;
+    public void setNewCollateralHeadList(List<NewCollateralHead> newCollateralHeadList) {
+        this.newCollateralHeadList = newCollateralHeadList;
     }
 
-    public List<NewCollateralRelCredit> getNewCollateralRelCreditList() {
-        return newCollateralRelCreditList;
+    public List<NewCollateralCredit> getNewCollateralCreditList() {
+        return newCollateralCreditList;
     }
 
-    public void setNewCollateralRelCreditList(List<NewCollateralRelCredit> newCollateralRelCreditList) {
-        this.newCollateralRelCreditList = newCollateralRelCreditList;
+    public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
+        this.newCollateralCreditList = newCollateralCreditList;
     }
 
     public Date getCreateDate() {
