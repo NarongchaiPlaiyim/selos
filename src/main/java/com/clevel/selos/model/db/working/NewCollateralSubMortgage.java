@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Table(name = "wrk_new_coll_sub_mortgage")
 public class NewCollateralSubMortgage implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_MOR_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_MOR_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COL_MOR_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_SUB_MOR_ID", sequenceName = "SEQ_WRK_NEW_COLL_SUB_MOR_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_MOR_ID")
     private long id;
 
     @ManyToOne

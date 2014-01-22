@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_new_collateral")
+@Table(name = "wrk_new_coll")
 public class NewCollateral implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_ID", sequenceName = "SEQ_WRK_NEW_COLL_ID", allocationSize = 1)

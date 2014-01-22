@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_new_collateral_sub")
+@Table(name = "wrk_new_coll_sub")
 public class NewCollateralSub implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COLL_ID", sequenceName = "SEQ_WRK_NEW_SUB_COLL_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COLL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_SUB_ID", sequenceName = "SEQ_WRK_NEW_COLL_SUB_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_ID")
     private long id;
 
     @OneToOne
@@ -27,9 +27,6 @@ public class NewCollateralSub implements Serializable {
     @OneToOne
     @JoinColumn(name = "sub_collateral_type_id")
     private SubCollateralType  subCollateralType;
-
-    @Column(name = "relatedWith_id")
-    private long relatedWithId;
 
     @Column(name = "address")
     private String address;
@@ -211,14 +208,6 @@ public class NewCollateralSub implements Serializable {
         this.newCollateralSubRelatedList = newCollateralSubRelatedList;
     }
 
-    public long getRelatedWithId() {
-        return relatedWithId;
-    }
-
-    public void setRelatedWithId(long relatedWithId) {
-        this.relatedWithId = relatedWithId;
-    }
-
     public CollateralType getCollateralTypeType() {
         return collateralTypeType;
     }
@@ -241,7 +230,6 @@ public class NewCollateralSub implements Serializable {
                 .append("id", id)
                 .append("collateralTypeType", collateralTypeType)
                 .append("subCollateralType", subCollateralType)
-                .append("relatedWithId", relatedWithId)
                 .append("address", address)
                 .append("landOffice", landOffice)
                 .append("titleDeed", titleDeed)
