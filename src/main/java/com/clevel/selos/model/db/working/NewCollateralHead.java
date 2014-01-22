@@ -2,6 +2,7 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.PotentialCollateral;
+import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -13,16 +14,20 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_new_collateral_head_detail")
-public class NewCollateralHeadDetail implements Serializable {
+@Table(name = "wrk_new_coll_head")
+public class NewCollateralHead implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_COL_HEAD_DET_ID", sequenceName = "SEQ_WRK_NEW_COL_HEAD_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COL_HEAD_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_HEAD_ID", sequenceName = "SEQ_WRK_NEW_COLL_HEAD_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_HEAD_ID")
     private long id;
 
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType  headCollType;
+
+    @OneToOne
+    @JoinColumn(name = "sub_coll_type_id")
+    private SubCollateralType subCollateralType;
 
     @OneToOne
     @JoinColumn(name = "potential_collateral_id")
@@ -48,11 +53,11 @@ public class NewCollateralHeadDetail implements Serializable {
     private BigDecimal appraisalValue;
 
     @ManyToOne
-    @JoinColumn(name = "new_collateral_detail_id")
-    private NewCollateralDetail newCollateralDetail;
+    @JoinColumn(name = "new_collateral_id")
+    private NewCollateral newCollateral;
 
-    @OneToMany(mappedBy = "newCollateralHeadDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralSubDetail> newCollateralSubDetailList;
+    @OneToMany(mappedBy = "newCollateralHead", cascade = CascadeType.ALL)
+    private List<NewCollateralSub> newCollateralSubList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -175,28 +180,36 @@ public class NewCollateralHeadDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public NewCollateralDetail getNewCollateralDetail() {
-        return newCollateralDetail;
+    public NewCollateral getNewCollateral() {
+        return newCollateral;
     }
 
-    public void setNewCollateralDetail(NewCollateralDetail newCollateralDetail) {
-        this.newCollateralDetail = newCollateralDetail;
+    public void setNewCollateral(NewCollateral newCollateral) {
+        this.newCollateral = newCollateral;
     }
 
-    public List<NewCollateralSubDetail> getNewCollateralSubDetailList() {
-        return newCollateralSubDetailList;
+    public SubCollateralType getSubCollateralType() {
+        return subCollateralType;
     }
 
-    public void setNewCollateralSubDetailList(List<NewCollateralSubDetail> newCollateralSubDetailList) {
-        this.newCollateralSubDetailList = newCollateralSubDetailList;
+    public void setSubCollateralType(SubCollateralType subCollateralType) {
+        this.subCollateralType = subCollateralType;
     }
 
+    public List<NewCollateralSub> getNewCollateralSubList() {
+        return newCollateralSubList;
+    }
+
+    public void setNewCollateralSubList(List<NewCollateralSub> newCollateralSubList) {
+        this.newCollateralSubList = newCollateralSubList;
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("headCollType", headCollType)
+                .append("subCollateralType", subCollateralType)
                 .append("potential", potential)
                 .append("titleDeed", titleDeed)
                 .append("collateralLocation", collateralLocation)
@@ -204,8 +217,8 @@ public class NewCollateralHeadDetail implements Serializable {
                 .append("existingCredit", existingCredit)
                 .append("insuranceCompany", insuranceCompany)
                 .append("appraisalValue", appraisalValue)
-                .append("newCollateralDetail", newCollateralDetail)
-                .append("newCollateralSubDetailList", newCollateralSubDetailList)
+                .append("newCollateral", newCollateral)
+                .append("newCollateralSubList", newCollateralSubList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

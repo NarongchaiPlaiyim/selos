@@ -2,8 +2,8 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.NewCollateralSubCustomer;
-import com.clevel.selos.model.db.working.NewCollateralSubDetail;
+import com.clevel.selos.model.db.working.NewCollateralSub;
+import com.clevel.selos.model.db.working.NewCollateralSubOwner;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -12,21 +12,21 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class NewSubCollCustomerDAO extends GenericDAO<NewCollateralSubCustomer, Long> {
+public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, Long> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public NewSubCollCustomerDAO() {
+    public NewCollateralSubOwnerDAO() {
     }
 
     @SuppressWarnings("unchecked")
-    public List<NewCollateralSubCustomer> getListNewCollateralSubCustomer(NewCollateralSubDetail newCollateralSubDetail) {
-        log.info("getListNewCollateralSubCustomer. (newCollateralSubDetail: {})", newCollateralSubDetail.getId());
+    public List<NewCollateralSubOwner> getListNewCollateralSubCustomer(NewCollateralSub newCollateralSubDetail) {
+        log.info("getListNewCollateralSubCustomer. (newCollateralSubDetail: {})", newCollateralSubDetail);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralSubDetail", newCollateralSubDetail));
         criteria.addOrder(Order.asc("newCollateralSubDetail.id"));
-        List<NewCollateralSubCustomer> newCollateralSubCustomerList = (List<NewCollateralSubCustomer>)criteria.list();
+        List<NewCollateralSubOwner> newCollateralSubCustomerList = (List<NewCollateralSubOwner>)criteria.list();
         log.info("getList. (result size: {})", newCollateralSubCustomerList.size());
 
         return newCollateralSubCustomerList;

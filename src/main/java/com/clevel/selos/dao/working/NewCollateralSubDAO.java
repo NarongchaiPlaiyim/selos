@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail, Long> {
+public class NewCollateralSubDAO extends GenericDAO<NewCollateralSub, Long> {
     @Inject
     @SELOS
     Logger log;
 
     @Inject
-    public NewCollateralSubDetailDAO() {}
+    public NewCollateralSubDAO() {}
 
     @Inject
     WorkCaseDAO workCaseDAO;
@@ -25,22 +25,22 @@ public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail
     @Inject
     NewCreditFacilityDAO newCreditFacilityDAO;
 
-    public List<NewCollateralSubDetail> getAllSubCollateralThisWorkCase(long workCaseId) {
+    public List<NewCollateralSub> getAllNewSubCollateral(long workCaseId) {
         log.info("findAllSubCollThisWorkCase :: start :: {}", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        List<NewCollateralSubDetail> newCollateralSubDetailList = null;
+        List<NewCollateralSub> newCollateralSubDetailList = null;
         if (workCase != null) {
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
             if (newCreditFacility != null) {
                 if (newCreditFacility.getNewCollateralDetailList() != null) {
                     log.info("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
-                    for (NewCollateralDetail newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
+                    for (NewCollateral newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
                         log.info("newCollateralDetail :: id :: {}", newCollateralDetail.getId());
-                        if (newCollateralDetail.getNewCollateralHeadDetailList() != null) {
-                            log.info("newCollateralDetail.getNewCollateralHeadDetailList() :: {}", newCollateralDetail.getNewCollateralHeadDetailList().size());
-                            for (NewCollateralHeadDetail newCollateralHeadDetail : newCollateralDetail.getNewCollateralHeadDetailList()) {
-                                log.info("newCollateralHeadDetail .id:: {}", newCollateralHeadDetail.getId());
-                                newCollateralSubDetailList = getAllNewSubCollateralDetail(newCollateralHeadDetail);
+                        if (newCollateralDetail.getNewCollateralHeadList() != null) {
+                            log.info("newCollateralDetail.getNewCollateralHeadList() :: {}", newCollateralDetail.getNewCollateralHeadList().size());
+                            for (NewCollateralHead newCollateralHead : newCollateralDetail.getNewCollateralHeadList()) {
+                                log.info("newCollateralHeadDetail .id:: {}", newCollateralHead.getId());
+                                newCollateralSubDetailList = getAllNewSubCollateral(newCollateralHead);
                             }
                         }
                     }
@@ -48,17 +48,17 @@ public class NewCollateralSubDetailDAO extends GenericDAO<NewCollateralSubDetail
             }
         }
 
-        log.info("newCollateralSubDetailList end :::");
+        log.info("newCollateralSubList end :::");
         return newCollateralSubDetailList;
     }
 
 
-    public List<NewCollateralSubDetail> getAllNewSubCollateralDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
-        log.info("getAllNewCollateralSubDetailByNewCollHeadDetail. (newCollateralDetail: {})", newCollateralHeadDetail.getId());
+    public List<NewCollateralSub> getAllNewSubCollateral(NewCollateralHead newCollateralHeadDetail) {
+        log.info("getAllNewCollateralSubDetailByNewCollHeadDetail. (newCollateralDetail: {})", newCollateralHeadDetail);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateralHeadDetail", newCollateralHeadDetail));
         criteria.addOrder(Order.asc("newCollateralHeadDetail.id"));
-        List<NewCollateralSubDetail> newCollateralSubDetails = (List<NewCollateralSubDetail>) criteria.list();
+        List<NewCollateralSub> newCollateralSubDetails = (List<NewCollateralSub>) criteria.list();
         log.info("getList. (result size: {})", newCollateralSubDetails.size());
 
         return newCollateralSubDetails;
