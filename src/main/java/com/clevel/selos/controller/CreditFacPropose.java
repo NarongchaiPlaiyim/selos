@@ -1461,8 +1461,8 @@ public class CreditFacPropose implements Serializable {
 
         try {
             if ((newCreditFacilityView.getInvestedCountry().getId() != 0) && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
-                if ((newCreditFacilityView.getNewCreditDetailViewList().size() > 0) && (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0)
-                        && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
+//                if ((newCreditFacilityView.getNewCreditDetailViewList().size() > 0) && (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0)
+//                        && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
                         log.info("Bean :: onSaveNewCreditFacility ::");
@@ -1482,7 +1482,7 @@ public class CreditFacPropose implements Serializable {
 
                     onCreation();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                }
+//                }
             } else {
                 messageHeader = msg.get("app.propose.response.cannot.save");
                 message = msg.get("app.propose.response.desc.cannot.save");

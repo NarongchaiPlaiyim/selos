@@ -129,7 +129,6 @@ public class NewSubCollDetailTransform extends Transform {
             List<NewSubCollateralDetailView> relateList = new ArrayList<NewSubCollateralDetailView>();
             if (newCollateralSubRelateList != null) {
                 for (NewCollateralSubRelate newCollateralSubRelate : newCollateralSubRelateList) {
-
                     // transform to view???
                 }
                 newSubCollateralDetailView.setRelatedWithList(relateList);

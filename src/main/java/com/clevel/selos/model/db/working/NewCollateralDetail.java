@@ -80,9 +80,6 @@ public class NewCollateralDetail implements Serializable {
     @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
     private List<NewCollateralRelCredit> newCollateralRelCreditList;
 
-/*    @OneToMany(mappedBy = "newCollateralDetail", cascade = CascadeType.ALL)
-    private List<CreditTypeDetail> creditTypeDetailList;*/
-
 
     public long getId() {
         return id;

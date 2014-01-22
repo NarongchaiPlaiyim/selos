@@ -115,7 +115,8 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
 
-    public CreditFacProposeControl() {}
+    public CreditFacProposeControl() {
+    }
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -180,9 +181,15 @@ public class CreditFacProposeControl extends BusinessControl {
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
 
+//        NewCreditFacility newCreditFacilityDelete = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+//        if (newCreditFacilityDelete != null) {
+//            onDeleteAllDetailOfNewCreditFacility(newCreditFacilityDelete);
+//        }
+
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
         newCreditFacilityDAO.persist(newCreditFacility);
         log.info("persist :: creditFacilityPropose...");
+
 
         if (newCreditFacilityView.getNewFeeDetailViewList().size() > 0) {
             log.info("newCreditFacilityView.getNewFeeDetailViewList().size() ::  {}", newCreditFacilityView.getNewFeeDetailViewList().size());
@@ -198,55 +205,6 @@ public class CreditFacProposeControl extends BusinessControl {
             log.info("persist :: newConditionDetail ...");
         }
 
-//        List<NewCollateralDetail> collateralDetailListDel = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
-//        if (collateralDetailListDel.size() > 0) {
-//            for (int i = 0; i < collateralDetailListDel.size(); i++) {
-//                log.info("collateralDetailListDel  is " + i);
-//                NewCollateralDetail newCollateralDetail = collateralDetailListDel.get(i);
-//                List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
-//
-//                if (newCollateralDetail.getNewCollateralHeadDetailList().size() > 0) {
-//                    for (int j = 0; j < newCollateralDetail.getNewCollateralHeadDetailList().size(); j++) {
-//                        NewCollateralHeadDetail newCollateralHeadDetail = newCollateralDetail.getNewCollateralHeadDetailList().get(j);
-//                        if (newCollateralHeadDetail.getNewCollateralSubDetailList().size() > 0) {
-//                            for (int k = 0; k < newCollateralHeadDetail.getNewCollateralSubDetailList().size(); k++) {
-//                                NewCollateralSubDetail newCollateralSubDetail = newCollateralHeadDetail.getNewCollateralSubDetailList().get(k);
-//
-//                                List<NewCollateralSubCustomer> newCollateralSubCustomerList = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
-//                                if (newCollateralSubCustomerList.size() > 0) {
-//                                    newSubCollCustomerDAO.delete(newCollateralSubCustomerList);
-//                                    log.info("delete newCollateralSubCustomerList");
-//                                }
-//                                List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListNewCollateralSubMortgage(newCollateralSubDetail);
-//                                if (newCollateralSubMortgages.size() > 0) {
-//                                    newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-//                                    log.info("delete newCollateralSubMortgages");
-//                                }
-//                                List<NewCollateralSubRelate> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
-//                                if (newCollateralSubRelates.size() > 0) {
-//                                    newSubCollRelateDAO.delete(newCollateralSubRelates);
-//                                    log.info("delete newCollateralSubRelates");
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                if (newCollateralRelCredits.size() > 0) {
-//                    newCollateralRelationDAO.delete(newCollateralRelCredits);
-//                    log.info("delete newCollateralRelCredits");
-//                }
-//            }
-//            newCollateralDetailDAO.delete(collateralDetailListDel);
-//            log.info("delete collateralDetailListDelete");
-//        }
-
-//        List<NewCreditDetail> newCreditListDelete = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
-//        if (newCreditListDelete.size() > 0) {
-//            newCreditDetailDAO.delete(newCreditListDelete);
-//            log.info("delete newCreditListDel");
-//        }
-
         List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, user);
         newCreditDetailDAO.persist(newCreditDetailList);
         log.info("persist newCreditDetailList...");
@@ -255,6 +213,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.info(" newCreditDetailList  is " + i);
             NewCreditDetail newCreditDetail = newCreditDetailList.get(i);
             NewCreditDetailView newCreditDetailView = newCreditFacilityView.getNewCreditDetailViewList().get(i);
+
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList(), newCreditDetail, user);
             newCreditTierDetailDAO.persist(newCreditTierDetailList);
             log.info("persist newCreditTierDetailList...{}", newCreditTierDetailList.size());
@@ -265,47 +224,47 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("persist newCollateralDetailList...");
 
         for (int i = 0; i < newCollateralDetailList.size(); i++) {
-            log.info(" newCollateralDetailList  is " + i);
+            log.info(" newCollateralDetailList getId  is " + newCollateralDetailList.get(i).getId());
             NewCollateralDetail newCollateralDetail = newCollateralDetailList.get(i);
 
-            List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
-
-            if (newCollateralDetail.getNewCollateralHeadDetailList().size() > 0) {
-                for (int j = 0; j < newCollateralDetail.getNewCollateralHeadDetailList().size(); j++) {
-                    NewCollateralHeadDetail newCollateralHeadDetail = newCollateralDetail.getNewCollateralHeadDetailList().get(j);
-                    if (newCollateralHeadDetail.getNewCollateralSubDetailList().size() > 0) {
-                        for (int k = 0; k < newCollateralHeadDetail.getNewCollateralSubDetailList().size(); k++) {
-                            NewCollateralSubDetail newCollateralSubDetail = newCollateralHeadDetail.getNewCollateralSubDetailList().get(k);
-
-                            List<NewCollateralSubCustomer> newCollateralSubCustomerList = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
-                            if (newCollateralSubCustomerList.size() > 0) {
-                                newSubCollCustomerDAO.delete(newCollateralSubCustomerList);
-                                log.info("delete newCollateralSubCustomerList");
-                            }
-                            List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListNewCollateralSubMortgage(newCollateralSubDetail);
-                            if (newCollateralSubMortgages.size() > 0) {
-                                newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-                                log.info("delete newCollateralSubMortgages");
-                            }
-                            List<NewCollateralSubRelate> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
-                            if (newCollateralSubRelates.size() > 0) {
-                                newSubCollRelateDAO.delete(newCollateralSubRelates);
-                                log.info("delete newCollateralSubRelates");
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (newCollateralRelCredits.size() > 0) {
-                newCollateralRelationDAO.delete(newCollateralRelCredits);
-                log.info("delete newCollateralRelCredits");
-            }
+//            List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
+//            if (newCollateralRelCredits.size() > 0) {
+//                newCollateralRelationDAO.delete(newCollateralRelCredits);
+//                log.info("delete newCollateralRelCredits");
+//            }
 
             NewCollateralInfoView newCollateralInfoView = newCreditFacilityView.getNewCollateralInfoViewList().get(i);
             List<NewCollateralRelCredit> newCollateralRelCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralInfoView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
             newCollateralRelationDAO.persist(newCollateralRelCreditList);
             log.info("persist newCollateralRelCreditList...");
+
+//            if (newCollateralDetail.getNewCollateralHeadDetailList().size() > 0) {
+//                for (int j = 0; j < newCollateralDetail.getNewCollateralHeadDetailList().size(); j++) {
+//                    NewCollateralHeadDetail newCollateralHeadDetail = newCollateralDetail.getNewCollateralHeadDetailList().get(j);
+//                    if (newCollateralHeadDetail.getNewCollateralSubDetailList().size() > 0) {
+//                        for (int k = 0; k < newCollateralHeadDetail.getNewCollateralSubDetailList().size(); k++) {
+//                            NewCollateralSubDetail newCollateralSubDetail = newCollateralHeadDetail.getNewCollateralSubDetailList().get(k);
+//
+//                            List<NewCollateralSubCustomer> newCollateralSubCustomerList = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
+//                            if (newCollateralSubCustomerList.size() > 0) {
+//                                newSubCollCustomerDAO.delete(newCollateralSubCustomerList);
+//                                log.info("delete newCollateralSubCustomerList");
+//                            }
+//                            List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListNewCollateralSubMortgage(newCollateralSubDetail);
+//                            if (newCollateralSubMortgages.size() > 0) {
+//                                newSubCollMortgageDAO.delete(newCollateralSubMortgages);
+//                                log.info("delete newCollateralSubMortgages");
+//                            }
+//                            List<NewCollateralSubRelate> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
+//                            if (newCollateralSubRelates.size() > 0) {
+//                                newSubCollRelateDAO.delete(newCollateralSubRelates);
+//                                log.info("delete newCollateralSubRelates");
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
 
             for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
                 NewCollateralHeadDetail newCollateralHeadDetail = newCollHeadDetailTransform.transformNewCollateralHeadDetailViewToModel(newCollateralHeadDetailView, newCollateralDetail, user);
@@ -328,10 +287,8 @@ public class CreditFacProposeControl extends BusinessControl {
                                 newCollateralSubCustomer.setNewCollateralSubDetail(newCollateralSubDetail);
                                 newCollateralSubCustomerList.add(newCollateralSubCustomer);
                             }
-
                             newSubCollCustomerDAO.persist(newCollateralSubCustomerList);
                             log.info("persist newCollateralSubCustomerList...{}", newCollateralSubCustomerList.size());
-
                         }
 
                         if (newSubCollateralView.getMortgageList() != null) {
@@ -345,30 +302,27 @@ public class CreditFacProposeControl extends BusinessControl {
                                 newCollateralSubMortgage.setNewCollateralSubDetail(newCollateralSubDetail);
                                 newCollateralSubMortgageList.add(newCollateralSubMortgage);
                             }
-
                             newSubCollMortgageDAO.persist(newCollateralSubMortgageList);
                             log.info("persist newCollateralSubMortgageList...{}", newCollateralSubMortgageList.size());
-
                         }
 
-                        if (newSubCollateralView.getRelatedWithList() != null) {
-                            NewCollateralSubRelate newCollateralSubRelate;
-                            for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
-                                log.info("relatedView.getId() ::: {} ", relatedView.getId());
-                                NewCollateralSubDetail relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getRelatedWithId());
-                                log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                                newCollateralSubRelate = new NewCollateralSubRelate();
-                                newCollateralSubRelate.setNewCollateralSubDetailRel(relatedDetail);
-                                newCollateralSubRelate.setNewCollateralSubDetail(newCollateralSubDetail);
-                                newSubCollRelateDAO.persist(newCollateralSubRelate);
-                                log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
-                            }
-                        }
+//                        if (newSubCollateralView.getRelatedWithList() != null) {
+//                            NewCollateralSubRelate newCollateralSubRelate;
+//                            for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
+//                                log.info("relatedView.getId() ::: {} ", relatedView.getId());
+//                                NewCollateralSubDetail relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getRelatedWithId());
+//                                log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+//                                newCollateralSubRelate = new NewCollateralSubRelate();
+//                                newCollateralSubRelate.setNewCollateralSubDetailRel(relatedDetail);
+//                                newCollateralSubRelate.setNewCollateralSubDetail(newCollateralSubDetail);
+//                                newSubCollRelateDAO.persist(newCollateralSubRelate);
+//                                log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
+//                            }
+//                        }
                     }
                 }
             }
         }
-
 
         List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
         newGuarantorDetailDAO.persist(newGuarantorDetailList);
@@ -379,11 +333,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
             NewGuarantorDetail newGuarantorDetail = newGuarantorDetailList.get(i);
 
-            List<NewGuarantorRelCredit> newGuarantorRelCreditListDelete = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            if (newGuarantorRelCreditListDelete.size() > 0) {
-                newGuarantorRelationDAO.delete(newGuarantorRelCreditListDelete);
-                log.info("delete newGuarantorRelCreditListDelete");
-            }
+//            List<NewGuarantorRelCredit> newGuarantorRelCreditListDelete = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
+//            if (newGuarantorRelCreditListDelete.size() > 0) {
+//                newGuarantorRelationDAO.delete(newGuarantorRelCreditListDelete);
+//                log.info("delete newGuarantorRelCreditListDelete");
+//            }
 
             NewGuarantorDetailView newGuarantorDetailView = newCreditFacilityView.getNewGuarantorDetailViewList().get(i);
             List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getNewCreditDetailViewList(), newCreditDetailList, newGuarantorDetail, user);
@@ -392,9 +346,45 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
 
-        calculateTotalProposeAmount(workCaseId);
+//        calculateTotalProposeAmount(workCaseId);
 
         log.info("onSaveNewCreditFacility  end :: {}", workCaseId);
+    }
+
+    public void onDeleteAllDetailOfNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("start delete all list under newCreditFacility id is :: {}", newCreditFacility.getId());
+        List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
+//        List<NewCreditDetail> newCreditList =  newCreditFacility.getNewCreditDetailList();
+        log.info("newCreditList .size :: {}",newCreditList.size());
+        if (newCreditList.size() > 0) {
+            for (NewCreditDetail newCreditDetail : newCreditList) {
+                List<NewCreditTierDetail> newCreditTierDetails = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
+                newCreditTierDetailDAO.delete(newCreditTierDetails);
+            }
+
+            List<NewCollateralDetail> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+//            List<NewCollateralDetail> newCollateralDetailList = newCreditFacility.getNewCollateralDetailList();
+            for (NewCollateralDetail newCollateralDetail : newCollateralDetailList) {
+                List<NewCollateralRelCredit> newCollateralRelCredits = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateralDetail);
+                if (newCollateralRelCredits.size() > 0) {
+                    newCollateralRelationDAO.delete(newCollateralRelCredits);
+                    log.info("delete newCollateralRelCredits");
+                }
+            }
+
+            List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
+//            List<NewGuarantorDetail> newGuarantorDetails = newCreditFacility.getNewGuarantorDetailList();
+            for(NewGuarantorDetail newGuarantorDetail:newGuarantorDetails){
+                List<NewGuarantorRelCredit> newGuarantorRelCreditListDelete = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
+                if (newGuarantorRelCreditListDelete.size() > 0) {
+                    newGuarantorRelationDAO.delete(newGuarantorRelCreditListDelete);
+                    log.info("delete newGuarantorRelCreditListDelete");
+                }
+            }
+
+            newCreditDetailDAO.delete(newCreditList);
+        }
+        log.info("Delete newCreditList success :: after size is  :: {}", newCreditList.size());
     }
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
@@ -416,7 +406,7 @@ public class CreditFacProposeControl extends BusinessControl {
         log.info("calculateTotalProposeAmount start ::: ");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         if (workCase != null) {
-            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if (newCreditFacility != null) {
                 log.info("newCreditFacility .id::: {}", newCreditFacility.getId());
                 BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);

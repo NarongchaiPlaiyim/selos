@@ -19,20 +19,11 @@ public class NewFeeCreditDAO extends GenericDAO<NewFeeDetail, Long> {
     @Inject
     public NewFeeCreditDAO() {}
 
-    public List<NewFeeDetail> findNewFeeDetailById(long newFeeDetailId) {
-        log.info("findNewFeeDetailById ::: {}", newFeeDetailId);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newFeeDetail.id", newFeeDetailId));
-        criteria.addOrder(Order.asc("id"));
-        List<NewFeeDetail> newFeeDetailList = (List<NewFeeDetail>) criteria.list();
-        log.info("newFeeDetailList ::: size : {}", newFeeDetailList.size());
-        return newFeeDetailList;
-    }
 
     public List<NewFeeDetail> findByNewCreditFacility(NewCreditFacility newCreditFacility) {
         log.info("findByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCreditFacility.id", newCreditFacility.getId()));
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));
         List<NewFeeDetail> newFeeDetailList = (List<NewFeeDetail>) criteria.list();
         log.info("newFeeDetailList ::: size : {}", newFeeDetailList.size());
