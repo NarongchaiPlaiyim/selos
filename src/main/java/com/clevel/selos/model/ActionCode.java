@@ -19,6 +19,6 @@ public enum ActionCode {
     }
 
     public long value(){
-        return this.value();
+        return this.value;
     }
 }

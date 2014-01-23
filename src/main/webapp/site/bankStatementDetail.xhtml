@@ -14,6 +14,18 @@
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style type="text/css">
+        .ui-datatable thead th {
+            white-space: normal !important;
+        }
+        .ui-datatable tbody td {
+            border-color: #868686 !important;
+        }
+        .calendar_right input {
+            background: #ffffff !important;
+            border: 1px solid #868686 !important;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -31,18 +43,18 @@
         <!-- End Menu -->
 
         <!-- Override CSS -->
-        <style scoped="scoped">
-            .ui-datatable thead th {
-                white-space: normal !important;
-            }
-            .ui-datatable tbody td {
-                border-color: #868686;
-            }
-            .calendar_right input {
-                background: #ffffff !important;
-                border: 1px solid #868686;
-            }
-        </style>
+        <!--<style scoped="scoped">-->
+            <!--.ui-datatable thead th {-->
+                <!--white-space: normal !important;-->
+            <!--}-->
+            <!--.ui-datatable tbody td {-->
+                <!--border-color: #868686;-->
+            <!--}-->
+            <!--.calendar_right input {-->
+                <!--background: #ffffff !important;-->
+                <!--border: 1px solid #868686;-->
+            <!--}-->
+        <!--</style>-->
         <div id="content_container">
             <div id="content_name">#{msg.get('app.bankStmtDetail.header')}</div>
             <div id="content">
@@ -824,13 +836,13 @@
                     <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                      binding="#{saveButton}"
                                      actionListener="#{bankStatementDetail.onSave()}"
-                                     process=":frmMain"
+                                     process="@form"
                                      update=":frmMain,:msgBoxSystemMessagePanel"
                                      styleClass="smaller"/>
                     <p:spacer width="5" height="0"/>
                     <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                      actionListener="#{bankStatementDetail.onCreation()}"
-                                     process=":frmMain"
+                                     process="@form"
                                      update=":frmMain"
                                      styleClass="smaller"/>
                 </td>
