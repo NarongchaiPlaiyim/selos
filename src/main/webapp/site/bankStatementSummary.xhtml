@@ -88,7 +88,7 @@
                                                          binding="#{refreshButton}"
                                                          disabled="#{bankStatementSummary.disableRefresh}"
                                                          action="#{bankStatementSummary.onRefresh()}"
-                                                         process="@form"
+                                                         process=":frmMain"
                                                          update=":frmMain"
                                                          styleClass="smaller"/>
                                     </td>
@@ -109,7 +109,7 @@
                         <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddTmbBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddTMBBankStmt()}"
-                                             process="@form"
+                                             process=":frmMain"
                                              update=":frmMain,:msgBoxSystemMessagePanel,:confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>
@@ -338,7 +338,7 @@
                         <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddOthBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddOtherBankStmt()}"
-                                             process="@form"
+                                             process=":frmMain"
                                              update=":frmMain,:msgBoxSystemMessagePanel,:confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>
@@ -782,7 +782,7 @@
                             <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                              binding="#{saveButton}"
                                              actionListener="#{bankStatementSummary.onSaveSummary()}"
-                                             process="@form"
+                                             process=":frmMain"
                                              update=":frmMain,:msgBoxSystemMessagePanel"
                                              styleClass="smaller"/>
                         </td>
