@@ -1137,15 +1137,15 @@
 <td colspan="2">
 
 
-<ui:repeat value="#{creditFacPropose.newCreditFacilityView.newCollateralInfoViewList}"
-           var="newCollateralInfoView"  varStatus="collIndex">
+<ui:repeat value="#{creditFacPropose.newCreditFacilityView.newCollateralViewList}"
+           var="newCollateralView"  varStatus="collIndex">
 <table style="width:100%">
 <tr>
     <td class="title" style="width:150px;text-align: left">
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
     </td>
     <td style="width:150px;text-align: left">
-        <h:outputText id="jobID" value="#{newCollateralInfoView.jobID}"/>
+        <h:outputText id="jobID" value="#{newCollateralView.jobID}"/>
     </td>
     <td colspan="2" style="text-align:right;">
         <p:commandButton value="Edit"
@@ -1153,14 +1153,14 @@
                          update=":collateralDlgForm"
                          process="@this"
                          oncomplete="collateralInfoDlg.show();">
-            <f:setPropertyActionListener value="#{newCollateralInfoView}"
+            <f:setPropertyActionListener value="#{newCollateralView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
             <f:setPropertyActionListener value="#{collIndex.index}"
                                          target="#{creditFacPropose.rowIndexCollateral}"/>
         </p:commandButton>
         <p:commandButton value="Remove" process="@this"
                          oncomplete="confirmDeleteCollateralInfoDlg.show()">
-            <f:setPropertyActionListener value="#{newCollateralInfoView}"
+            <f:setPropertyActionListener value="#{newCollateralView}"
                                          target="#{creditFacPropose.selectCollateralDetailView}"/>
         </p:commandButton>
     </td>
@@ -1171,7 +1171,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.appraisalDate}">
+        <h:outputText value="#{newCollateralView.appraisalDate}">
             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </h:outputText>
     </td>
@@ -1181,7 +1181,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.aadDecision}"/>
+        <h:outputText value="#{newCollateralView.aadDecision}"/>
     </td>
 </tr>
 <tr>
@@ -1189,14 +1189,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
     <td  style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.aadDecisionReason}"/>
+        <h:outputText value="#{newCollateralView.aadDecisionReason}"/>
     </td>
     <td class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
     <td  style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.aadDecisionReasonDetail}"/>
+        <h:outputText value="#{newCollateralView.aadDecisionReasonDetail}"/>
     </td>
 </tr>
 <tr>
@@ -1204,14 +1204,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
     </td>
     <td>
-        <h:outputText  value="#{newCollateralInfoView.usage}"/>
+        <h:outputText  value="#{newCollateralView.usage}"/>
     </td>
     <td  class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
     </td>
     <td  style="text-align: left">
-        <h:outputText  value="#{newCollateralInfoView.typeOfUsage}"/>
+        <h:outputText  value="#{newCollateralView.typeOfUsage}"/>
     </td>
 </tr>
 <tr>
@@ -1219,14 +1219,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
     </td>
     <td  style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.mortgageCondition}"/>
+        <h:outputText value="#{newCollateralView.mortgageCondition}"/>
     </td>
     <td class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
     </td>
     <td  style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.mortgageConditionDetail}"/>
+        <h:outputText value="#{newCollateralView.mortgageConditionDetail}"/>
     </td>
 </tr>
 <tr>
@@ -1235,7 +1235,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3">
-        <p:dataTable value="#{newCollateralInfoView.newCreditDetailViewList}"
+        <p:dataTable value="#{newCollateralView.newCreditDetailViewList}"
                      var="creditTypeDetailItem"
                      rowKey="#{creditTypeDetailItem.NewCreditDetailView}"
                      rowIndexVar="rowIndex">
@@ -1292,7 +1292,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
     </td>
     <td colspan="3"  style="text-align: left">
-        <h:outputText value="#{newCollateralInfoView.bdmComments}"/>
+        <h:outputText value="#{newCollateralView.bdmComments}"/>
     </td>
 </tr>
 <tr>
@@ -1301,7 +1301,7 @@
     </td>
 </tr>
 
-<ui:repeat value="#{newCollateralInfoView.newCollateralHeadDetailViewList}"
+<ui:repeat value="#{newCollateralView.newCollateralHeadViewList}"
            var="CollateralHeaderDetailView">
     <tr>
         <td class="title" style="width: 200px;">
@@ -1386,10 +1386,10 @@
         <td colspan="4">
             <p:dataTable tableStyleClass="center"
                          id="subCollateralDetailViewTable"
-                         value="#{CollateralHeaderDetailView.newSubCollateralDetailViewList}"
-                         var="newSubCollateralDetailView"
+                         value="#{CollateralHeaderDetailView.newCollateralSubViewList}"
+                         var="newCollateralSubView"
                          paginator="false"
-                         rowKey="#{newSubCollateralDetailView.SubCollateralDetailView}"
+                         rowKey="#{newCollateralSubView.SubCollateralDetailView}"
                          rowIndexVar="rowIndex">
                 <p:columnGroup type="header">
                     <p:row>
@@ -1412,41 +1412,41 @@
                     <h:outputText value="#{rowIndex+1}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{newSubCollateralDetailView.subCollateralType.description}"/><br/>
-                    <h:outputText value="#{newSubCollateralDetailView.address}"/><br/>
-                    <h:outputText value="#{newSubCollateralDetailView.landOffice}"/>
+                    <h:outputText value="#{newCollateralSubView.subCollateralType.description}"/><br/>
+                    <h:outputText value="#{newCollateralSubView.address}"/><br/>
+                    <h:outputText value="#{newCollateralSubView.landOffice}"/>
                 </p:column>
                 <p:column styleClass="center" style="width:4%;">
-                    <h:outputText value="#{newSubCollateralDetailView.titleDeed}"/>
+                    <h:outputText value="#{newCollateralSubView.titleDeed}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <h:outputText value="#{newSubCollateralDetailView.collateralOwnerAAD}"/>
+                    <h:outputText value="#{newCollateralSubView.collateralOwnerAAD}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
+                    <ui:repeat value="#{newCollateralSubView.collateralOwnerUWList}"
                                var="collateralOwnerUW"  varStatus="a">
                         <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.mortgageList}"
+                    <ui:repeat value="#{newCollateralSubView.mortgageList}"
                                var="mortgage"  varStatus="b">
                         <h:outputText value="#{mortgage.mortgage}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
+                    <ui:repeat value="#{newCollateralSubView.relatedWithList}"
                                var="relatedWith"  varStatus="c">
-                        <h:outputText value="#{not empty newSubCollateralDetailView.relatedWithList and fn:length(newSubCollateralDetailView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
+                        <h:outputText value="#{not empty newCollateralSubView.relatedWithList and fn:length(newCollateralSubView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right">
-                    <h:outputText value="#{newSubCollateralDetailView.appraisalValue}">
+                    <h:outputText value="#{newCollateralSubView.appraisalValue}">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="right">
-                    <h:outputText value="#{newSubCollateralDetailView.mortgageValue}">
+                    <h:outputText value="#{newCollateralSubView.mortgageValue}">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                     </h:outputText>
                 </p:column>

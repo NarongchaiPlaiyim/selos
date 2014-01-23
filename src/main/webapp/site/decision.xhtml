@@ -2318,7 +2318,7 @@
                                         </td>
                                     </tr>
                                     <!-- BEGIN: Collateral Header -->
-                                    <ui:repeat value="#{proposeColl.newCollateralHeadDetailViewList}" var="collHeader">
+                                    <ui:repeat value="#{proposeColl.newCollateralHeadViewList}" var="collHeader">
                                         <tr>
                                             <td class="title left large">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
@@ -2379,7 +2379,7 @@
                                         <tr>
                                             <td colspan="4">
                                                 <!-- Sub Collateral -->
-                                                <p:dataTable var="subColl" value="#{collHeader.newSubCollateralDetailViewList}"
+                                                <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
                                                              paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
                                                              style="width: 100%">
 
@@ -2611,7 +2611,7 @@
                                     </td>
                                 </tr>
                                 <!-- BEGIN: Collateral Header -->
-                                <ui:repeat value="#{proposeColl.newCollateralHeadDetailViewList}" var="collHeader">
+                                <ui:repeat value="#{proposeColl.newCollateralHeadViewList}" var="collHeader">
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.potential')}</td>
                                         <td class="left" colspan="3">
@@ -2672,7 +2672,7 @@
                                     <tr>
                                         <td colspan="4">
                                             <!-- Sub Collateral -->
-                                            <p:dataTable var="subColl" value="#{collHeader.newSubCollateralDetailViewList}"
+                                            <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
                                                          paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 

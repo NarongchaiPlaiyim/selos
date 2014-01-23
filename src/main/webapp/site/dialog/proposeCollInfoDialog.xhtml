@@ -15,7 +15,7 @@
     </td>
     <td style="width: 100px;">
         <p:inputText id="jobID"
-                     value="#{creditFacPropose.newCollateralInfoView.jobID}"
+                     value="#{creditFacPropose.newCollateralView.jobID}"
                      required="#{not empty param[retrieveButton.clientId]}" />
     </td>
     <td colspan="2" style="text-align: right;">
@@ -39,7 +39,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <p:inputText value="#{creditFacPropose.newCollateralInfoView.appraisalDate}">
+        <p:inputText value="#{creditFacPropose.newCollateralView.appraisalDate}">
             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </p:inputText>
     </td>
@@ -49,7 +49,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
     </td>
     <td colspan="3" style="text-align: left">
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecision}" style="width: 300px;"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.aadDecision}" style="width: 300px;"/>
     </td>
 </tr>
 <tr>
@@ -57,14 +57,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
     </td>
     <td  class="title" style="width:100px;text-align: left">
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecisionReason}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.aadDecisionReason}"/>
     </td>
     <td  class="title" style="width:250px;text-align: left">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
     </td>
     <td>
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.aadDecisionReasonDetail}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.aadDecisionReasonDetail}"/>
     </td>
 </tr>
 <tr>
@@ -72,14 +72,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
     </td>
     <td>
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.usage}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.usage}"/>
     </td>
     <td  class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
     </td>
     <td>
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.typeOfUsage}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.typeOfUsage}"/>
     </td>
 </tr>
 <tr>
@@ -87,14 +87,14 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
     </td>
     <td>
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.mortgageCondition}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.mortgageCondition}"/>
     </td>
     <td  class="title">
         <p:outputLabel
                 value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
     </td>
     <td>
-        <p:inputText  value="#{creditFacPropose.newCollateralInfoView.mortgageConditionDetail}"/>
+        <p:inputText  value="#{creditFacPropose.newCollateralView.mortgageConditionDetail}"/>
     </td>
 </tr>
 <tr>
@@ -103,7 +103,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3" style="width:600px;">
-        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralInfoView.newCreditDetailViewList}">
+        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralView.newCreditDetailViewList}">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;padding: 5px 10px !important;"/>
@@ -158,7 +158,7 @@
         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
     </td>
     <td colspan="3">
-        <p:inputTextarea cols="115" rows="3" value="#{creditFacPropose.newCollateralInfoView.bdmComments}"/>
+        <p:inputTextarea cols="115" rows="3" value="#{creditFacPropose.newCollateralView.bdmComments}"/>
     </td>
 </tr>
 <tr>
@@ -166,7 +166,7 @@
         <div class="separate"></div>
     </td>
 </tr>
-<ui:repeat value="#{creditFacPropose.newCollateralInfoView.newCollateralHeadDetailViewList}"
+<ui:repeat value="#{creditFacPropose.newCollateralView.newCollateralHeadViewList}"
            var="CollateralHeaderDetailView" varStatus="i">
     <tr>
         <td class="title" style="width: 250px;">
@@ -309,9 +309,9 @@
             <p:dataTable tableStyleClass="center"
                          paginator="false"
                          id="subCollateralDetailViewTable"
-                         value="#{CollateralHeaderDetailView.newSubCollateralDetailViewList}"
-                         var="newSubCollateralDetailView"
-                         rowKey="#{newSubCollateralDetailView.SubCollateralDetailView}"
+                         value="#{CollateralHeaderDetailView.newCollateralSubViewList}"
+                         var="newCollateralSubView"
+                         rowKey="#{newCollateralSubView.SubCollateralDetailView}"
                          rowIndexVar="rowIndex">
                 <p:columnGroup type="header">
                     <p:row>
@@ -334,41 +334,41 @@
                     <h:outputText value="#{rowIndex+1}"/>
                 </p:column>
                 <p:column styleClass="left" style="width: 100px;">
-                    <h:outputText value="#{newSubCollateralDetailView.subCollateralType.description}"/><br/>
-                    <h:outputText value="#{newSubCollateralDetailView.address}"/><br/>
-                    <h:outputText value="#{newSubCollateralDetailView.landOffice}"/>
+                    <h:outputText value="#{newCollateralSubView.subCollateralType.description}"/><br/>
+                    <h:outputText value="#{newCollateralSubView.address}"/><br/>
+                    <h:outputText value="#{newCollateralSubView.landOffice}"/>
                 </p:column>
                 <p:column styleClass="center" style="width:20px;">
-                    <h:outputText value="#{newSubCollateralDetailView.titleDeed}"/>
+                    <h:outputText value="#{newCollateralSubView.titleDeed}"/>
                 </p:column>
                 <p:column styleClass="left" style="width: 100px;">
-                   <h:outputText value="#{newSubCollateralDetailView.collateralOwnerAAD}"/>
+                   <h:outputText value="#{newCollateralSubView.collateralOwnerAAD}"/>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.collateralOwnerUWList}"
+                    <ui:repeat value="#{newCollateralSubView.collateralOwnerUWList}"
                                var="collateralOwnerUW"  varStatus="a">
                          <h:outputText value="#{collateralOwnerUW.firstNameTh}  #{collateralOwnerUW.lastNameTh}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.mortgageList}"
+                    <ui:repeat value="#{newCollateralSubView.mortgageList}"
                                var="mortgage"  varStatus="b">
                         <h:outputText value="#{mortgage.mortgage}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="left">
-                    <ui:repeat value="#{newSubCollateralDetailView.relatedWithList}"
+                    <ui:repeat value="#{newCollateralSubView.relatedWithList}"
                                var="relatedWith"  varStatus="c">
-                        <h:outputText value="#{not empty newSubCollateralDetailView.relatedWithList and fn:length(newSubCollateralDetailView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
+                        <h:outputText value="#{not empty newCollateralSubView.relatedWithList and fn:length(newCollateralSubView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/><br/>
                     </ui:repeat>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
-                    <h:outputText value="#{newSubCollateralDetailView.appraisalValue}">
+                    <h:outputText value="#{newCollateralSubView.appraisalValue}">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
                 <p:column styleClass="right" style="width: 100px;">
-                    <h:outputText value="#{newSubCollateralDetailView.mortgageValue}">
+                    <h:outputText value="#{newCollateralSubView.mortgageValue}">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </h:outputText>
                 </p:column>
@@ -380,7 +380,7 @@
                                      oncomplete="subCollateralInfoDlg.show();">
                         <f:setPropertyActionListener value="#{i.index}"
                                                      target="#{creditFacPropose.rowCollHeadIndex}"/>
-                        <f:setPropertyActionListener value="#{newSubCollateralDetailView}"
+                        <f:setPropertyActionListener value="#{newCollateralSubView}"
                                                      target="#{creditFacPropose.subCollateralDetailItem}"/>
                         <f:setPropertyActionListener value="#{rowIndex}"
                                                      target="#{creditFacPropose.rowSubIndex}"/>
@@ -388,7 +388,7 @@
                     <p:commandButton icon="ui-icon-trash"
                                      process="@this"
                                      oncomplete="confirmDeleteSubCollateralInfoDlg.show()">
-                        <f:setPropertyActionListener value="#{newSubCollateralDetailView}"
+                        <f:setPropertyActionListener value="#{newCollateralSubView}"
                                                      target="#{creditFacPropose.subCollateralDetailItem}"/>
                     </p:commandButton>
                 </p:column>
