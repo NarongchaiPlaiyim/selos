@@ -1065,56 +1065,9 @@ public class CreditFacPropose implements Serializable {
     public void onDeleteMortgageType(int row) {
         newSubCollateralDetailView.getMortgageList().remove(row);
     }
-/*
 
     public void onAddRelatedWith() {
-//        for (NewSubCollateralDetailView relatedWithThis : newSubCollateralDetailView.getRelatedWithList()) {
-//            if (relatedWithSelected.getId() == relatedWithThis.getId()) {
-//                messageHeader = msg.get("app.propose.exception");
-//                message = msg.get("app.propose.desc.add.relatedWith");
-//                messageErr = true;
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            } else {
-        log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getRelatedWithId());
-
-        if (newSubCollateralDetailView.getRelatedWithId() == 0) {
-            log.error("Can not add relatedWith because id = 0!");
-            return;
-        }
-
-        NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(relatedWithSelected.getRelatedWithId());
-        if (relatedWithSelected.getRelatedWithList() != null) {
-            newSubCollateralDetailView.getRelatedWithList().add(relatedWith);
-//            newSubCollateralDetailView.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
-        }
-    }
-
-    public void onDeleteRelatedWith(int row) {
-        newSubCollateralDetailView.getRelatedWithList().remove(row);
-    }
-
-    public NewSubCollateralDetailView getIdNewSubCollateralDetail(long newSubCollateralId) {
-        NewSubCollateralDetailView newSubCollateralReturn = new NewSubCollateralDetailView();
-        if (newCreditFacilityView.getNewCollateralInfoViewList().size() > 0) {
-            for (NewCollateralInfoView newCollateralInfoView : Util.safetyList(newCreditFacilityView.getNewCollateralInfoViewList())) {
-                for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
-                    for (NewSubCollateralDetailView newSubCollateralDetailOnAdded : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
-                        log.info("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getId());
-                        log.info("newSubCollateralDetailView1 title deed ::: {}", newSubCollateralDetailOnAdded.getTitleDeed());
-                        if (newSubCollateralId == newSubCollateralDetailOnAdded.getId()) {
-                            newSubCollateralReturn = newSubCollateralDetailOnAdded;
-                        }
-                    }
-                }
-            }
-        }
-        return newSubCollateralReturn;
-    }
-
-*/
-
-    public void onAddRelatedWith() {
-        log.debug("onAddRelatedWith() relatedWithSelected.relatedWithId = {}", relatedWithSelected.getId());
+        log.debug("onAddRelatedWith() relatedWithSelected.getId = {}", relatedWithSelected.getId());
         if (relatedWithSelected.getId() == 0) {
             log.error("Can not add RelatedWith because id = 0!");
             return;

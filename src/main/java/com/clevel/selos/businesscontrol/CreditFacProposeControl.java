@@ -169,7 +169,7 @@ public class CreditFacProposeControl extends BusinessControl {
         return newCreditFacilityView;
     }
 
-    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
+    public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId ) {
         log.info("onSaveNewCreditFacility begin");
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -323,19 +323,19 @@ public class CreditFacProposeControl extends BusinessControl {
 
                             }
 
-//                            if (newSubCollateralView.getRelatedWithList() != null) {
-//                                NewCollateralSubRelated newCollateralSubRelate;
-//                                for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
-//                                    log.info("relatedView.getId() ::: {} ", relatedView.getId());
-//                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getRelatedWithId());
-//                                    log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-//                                    newCollateralSubRelate = new NewCollateralSubRelated();
-//                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-//                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
-//                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
-//                                    log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
-//                                }
-//                            }
+                            if (newSubCollateralView.getRelatedWithList() != null) {
+                                NewCollateralSubRelated newCollateralSubRelate;
+                                for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
+                                    log.info("relatedView.getId() ::: {} ", relatedView.getId());
+                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
+                                    log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+                                    newCollateralSubRelate = new NewCollateralSubRelated();
+                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
+                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
+                                    log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
+                                }
+                            }
                         }
                     }
                 }
@@ -357,7 +357,7 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-//        calculateTotalProposeAmount(workCaseId);
+        calculateTotalProposeAmount(workCaseId);
 
         log.info("onSaveNewCreditFacility  end :: {}", workCaseId);
     }
