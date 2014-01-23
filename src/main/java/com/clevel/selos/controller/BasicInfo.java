@@ -107,6 +107,7 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     private String messageHeader;
     private String message;
+    private String severity;
 
     //session
     private long workCaseId;
@@ -693,17 +694,19 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onSave(){
         try{
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId);
-            messageHeader = "Save Basic Info Success.";
-            message = "Save data in Basic Information success.";
+            messageHeader = "Information.";
+            message = "Save data in basic information success.";
+            severity = "info";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Basic Info Failed.";
+            messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+                message = "Save basic info data failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+                message = "Save basic info data failed. Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             onCreation();
         }
@@ -929,30 +932,30 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onRefreshInterfaceInfo(){
         try{
-//            messageHeader = "Refresh Interface Info Complete.";
-            messageHeader = "Refresh Interface Info Failed.";
-//            message = "Refresh Interface Info Complete.";
+            messageHeader = "Information.";
             message = "Waiting for this function.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("refreshInterfaceInfo Exception : {}", ex);
-            messageHeader = "Refresh Interface Info Failed.";
+            messageHeader = "Error.";
             message = ex.getMessage();
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onDuplicateApplication(){
         try{
-//            messageHeader = "Duplicate Application Complete.";
-            messageHeader = "Duplicate Application Failed.";
-//            message = "Duplicate Application Complete.";
+            messageHeader = "Information.";
             message = "Waiting for this function.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("duplicateApplication Exception : {}", ex);
-            messageHeader = "Duplicate Application Failed.";
+            messageHeader = "Error.";
             message = ex.getMessage();
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1745,5 +1748,13 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setAccDlg(String accDlg) {
         this.accDlg = accDlg;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

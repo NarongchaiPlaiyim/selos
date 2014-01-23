@@ -218,7 +218,7 @@ public class NewCreditFacility implements Serializable {
     private List<NewCreditDetail> newCreditDetailList;
 
     @OneToMany(mappedBy = "newCreditFacility", cascade = CascadeType.ALL)
-    private List<NewCollateralDetail> newCollateralDetailList;
+    private List<NewCollateral> newCollateralDetailList;
 
     @OneToMany(mappedBy = "newCreditFacility", cascade = CascadeType.ALL)
     private List<NewGuarantorDetail> newGuarantorDetailList;
@@ -682,11 +682,11 @@ public class NewCreditFacility implements Serializable {
         this.newCreditDetailList = newCreditDetailList;
     }
 
-    public List<NewCollateralDetail> getNewCollateralDetailList() {
+    public List<NewCollateral> getNewCollateralDetailList() {
         return newCollateralDetailList;
     }
 
-    public void setNewCollateralDetailList(List<NewCollateralDetail> newCollateralDetailList) {
+    public void setNewCollateralDetailList(List<NewCollateral> newCollateralDetailList) {
         this.newCollateralDetailList = newCollateralDetailList;
     }
 

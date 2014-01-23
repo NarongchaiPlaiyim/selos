@@ -111,6 +111,7 @@ public class NewCreditFacilityTransform extends Transform {
     public NewCreditFacilityView transformToView(NewCreditFacility newCreditFacility) {
         NewCreditFacilityView newCreditFacilityView = new NewCreditFacilityView();
 
+        newCreditFacilityView.setId(newCreditFacility.getId());
         newCreditFacilityView.setCreateDate(newCreditFacility.getCreateDate());
         newCreditFacilityView.setCreateBy(newCreditFacility.getCreateBy());
         newCreditFacilityView.setModifyDate(newCreditFacility.getModifyDate());

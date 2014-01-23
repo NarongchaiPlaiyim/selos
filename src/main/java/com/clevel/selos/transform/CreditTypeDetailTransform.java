@@ -3,7 +3,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.CreditTypeDetail;
-import com.clevel.selos.model.db.working.NewCollateralDetail;
+import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.view.CreditTypeDetailView;
 import com.clevel.selos.util.Util;
@@ -54,7 +54,7 @@ public class CreditTypeDetailTransform extends Transform {
         return creditTypeDetailList;
     }
 
-    public List<CreditTypeDetail> transformToModelForCollateral(List<CreditTypeDetailView> creditTypeDetailViewList,NewCollateralDetail newCollateralDetail,User user){
+    public List<CreditTypeDetail> transformToModelForCollateral(List<CreditTypeDetailView> creditTypeDetailViewList,NewCollateral newCollateralDetail,User user){
 
         List<CreditTypeDetail> creditTypeDetailList = new ArrayList<CreditTypeDetail>();
         CreditTypeDetail creditTypeDetail;

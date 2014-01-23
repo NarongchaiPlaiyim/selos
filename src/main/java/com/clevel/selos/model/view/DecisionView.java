@@ -50,7 +50,7 @@ public class DecisionView implements Serializable {
     // Propose
     private List<NewCreditDetailView> proposeCreditList;
     private List<NewFeeDetailView> proposeFeeInfoList;
-    private List<NewCollateralInfoView> proposeCollateralList;
+    private List<NewCollateralView> proposeCollateralList;
     private List<NewGuarantorDetailView> proposeGuarantorList;
 
     private BigDecimal proposeTotalCreditLimit;
@@ -61,7 +61,7 @@ public class DecisionView implements Serializable {
 
     // Approve
     private List<NewCreditDetailView> approveCreditList;
-    private List<NewCollateralInfoView> approveCollateralList;
+    private List<NewCollateralView> approveCollateralList;
     private List<NewGuarantorDetailView> approveGuarantorList;
 
     private BigDecimal approveTotalCreditLimit;
@@ -386,11 +386,11 @@ public class DecisionView implements Serializable {
         this.proposeFeeInfoList = proposeFeeInfoList;
     }
 
-    public List<NewCollateralInfoView> getProposeCollateralList() {
+    public List<NewCollateralView> getProposeCollateralList() {
         return proposeCollateralList;
     }
 
-    public void setProposeCollateralList(List<NewCollateralInfoView> proposeCollateralList) {
+    public void setProposeCollateralList(List<NewCollateralView> proposeCollateralList) {
         this.proposeCollateralList = proposeCollateralList;
     }
 
@@ -426,11 +426,11 @@ public class DecisionView implements Serializable {
         this.approveCreditList = approveCreditList;
     }
 
-    public List<NewCollateralInfoView> getApproveCollateralList() {
+    public List<NewCollateralView> getApproveCollateralList() {
         return approveCollateralList;
     }
 
-    public void setApproveCollateralList(List<NewCollateralInfoView> approveCollateralList) {
+    public void setApproveCollateralList(List<NewCollateralView> approveCollateralList) {
         this.approveCollateralList = approveCollateralList;
     }
 

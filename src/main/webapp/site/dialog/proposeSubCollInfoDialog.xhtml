@@ -15,7 +15,7 @@
     </td>
     <td style="width: 300px;" class="left">
         <p:selectOneMenu id="dlgSubCollateralType"
-                         value="#{creditFacPropose.newSubCollateralDetailView.subCollateralType.id}"
+                         value="#{creditFacPropose.newCollateralSubView.subCollateralType.id}"
                          size="1"
                          style="min-width: 150px; width: 150px; max-width: 150px;"
                          required="#{not empty param[addSubCollDlg.clientId]}">
@@ -32,7 +32,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.titleDeed}"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.titleDeed}"
                      required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
@@ -41,7 +41,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.address}" style="width:300px;"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.address}" style="width:300px;"
                      required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
@@ -50,7 +50,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.landOffice}"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.landOffice}"
                      required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
@@ -59,7 +59,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerAAD}"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.collateralOwnerAAD}"
                      required="#{not empty param[addSubCollDlg.clientId]}"/>
     </td>
 </tr>
@@ -73,7 +73,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgCollateralOwnerUW"
-                                     value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUW.id}"
+                                     value="#{creditFacPropose.newCollateralSubView.collateralOwnerUW.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -103,7 +103,7 @@
     </td>
     <td>
         <p:dataTable id="CollOwnerUWTb"
-                     value="#{creditFacPropose.newSubCollateralDetailView.collateralOwnerUWList}"
+                     value="#{creditFacPropose.newCollateralSubView.collateralOwnerUWList}"
                      var="collateralOwnerUWItem"
                      rowKey="#{collateralOwnerUWItem.id}"
                      rowIndexVar="rowIndex">
@@ -147,7 +147,7 @@
             <tr>
                 <td>
                     <p:selectOneMenu id="dlgMortgageType"
-                                     value="#{creditFacPropose.newSubCollateralDetailView.mortgageType.id}"
+                                     value="#{creditFacPropose.newCollateralSubView.mortgageType.id}"
                                      size="1"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[addSubCollDlg.clientId]}">
@@ -177,7 +177,7 @@
     </td>
     <td>
         <p:dataTable id="MortgageTb"
-                     value="#{creditFacPropose.newSubCollateralDetailView.mortgageList}"
+                     value="#{creditFacPropose.newCollateralSubView.mortgageList}"
                      var="mortgageItem"
                      rowKey="#{mortgageItem.MortgageType}"
                      rowIndexVar="rowIndex">
@@ -249,7 +249,7 @@
     </td>
     <td>
         <p:dataTable id="RelatedWithTb"
-                     value="#{creditFacPropose.newSubCollateralDetailView.relatedWithList}"
+                     value="#{creditFacPropose.newCollateralSubView.relatedWithList}"
                      var="relatedWithItem"
                      rowKey="#{relatedWithItem.NewCollateralSubDetail}"
                      rowIndexVar="rowIndex">
@@ -289,7 +289,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.appraisalValue}"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
                      style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
                      maxlength="18"
                      required="#{not empty param[addSubCollDlg.clientId]}">
@@ -306,7 +306,7 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
     </td>
     <td>
-        <p:inputText value="#{creditFacPropose.newSubCollateralDetailView.mortgageValue}"
+        <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
                      style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
                      maxlength="18"
                      required="#{not empty param[addSubCollDlg.clientId]}">

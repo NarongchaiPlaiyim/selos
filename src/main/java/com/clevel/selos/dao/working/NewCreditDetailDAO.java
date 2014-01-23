@@ -20,7 +20,7 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
     public NewCreditDetailDAO() {}
 
     public List<NewCreditDetail> findNewCreditDetailByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));

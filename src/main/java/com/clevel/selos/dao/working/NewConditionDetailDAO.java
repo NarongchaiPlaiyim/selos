@@ -19,18 +19,8 @@ public class NewConditionDetailDAO extends GenericDAO<NewConditionDetail, Long> 
     @Inject
     public NewConditionDetailDAO() {}
 
-    public List<NewConditionDetail> findNewConditionDetailById(long newConditionDetailId) {
-        log.info("findNewConditionDetailById ::: {}", newConditionDetailId);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newFeeDetail.id", newConditionDetailId));
-        criteria.addOrder(Order.asc("id"));
-        List<NewConditionDetail> newConditionDetailList = (List<NewConditionDetail>) criteria.list();
-        log.info("newConditionDetailList ::: size : {}", newConditionDetailList.size());
-        return newConditionDetailList;
-    }
-
     public List<NewConditionDetail> findByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("findByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));

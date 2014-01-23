@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_new_col_relation")
-public class NewCollateralRelCredit implements Serializable {
+@Table(name = "wrk_new_coll_credit")
+public class NewCollateralCredit implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_CREDIT_ID", sequenceName = "SEQ_WRK_NEW_COLL_CREDIT_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_CREDIT_ID")
@@ -16,7 +16,7 @@ public class NewCollateralRelCredit implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "new_collateral_id")
-    private NewCollateralDetail newCollateralDetail;
+    private NewCollateral newCollateral;
 
     @OneToOne
     @JoinColumn(name = "new_credit_detail_id")
@@ -47,12 +47,12 @@ public class NewCollateralRelCredit implements Serializable {
         this.id = id;
     }
 
-    public NewCollateralDetail getNewCollateralDetail() {
-        return newCollateralDetail;
+    public NewCollateral getNewCollateral() {
+        return newCollateral;
     }
 
-    public void setNewCollateralDetail(NewCollateralDetail newCollateralDetail) {
-        this.newCollateralDetail = newCollateralDetail;
+    public void setNewCollateral(NewCollateral newCollateral) {
+        this.newCollateral = newCollateral;
     }
 
     public NewCreditDetail getNewCreditDetail() {
