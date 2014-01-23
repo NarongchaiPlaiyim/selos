@@ -111,8 +111,7 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
 
-    public CreditFacProposeControl() {
-    }
+    public CreditFacProposeControl(){}
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
@@ -127,6 +126,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
                     List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
                     if (newFeeDetailList.size() > 0) {
+                        log.info("newCreditFacility.getNewFeeDetailList() :: {}",newCreditFacility.getNewFeeDetailList());
                         List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newFeeDetailList);
                         newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                     }

@@ -251,7 +251,7 @@ public class CreditFacPropose implements Serializable {
 
             modeForDB = ModeForDB.ADD_DB;
             WorkCase workCase = workCaseDAO.findById(workCaseId);
-
+            hashSeqCredit = new Hashtable<String, String>();
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
 
@@ -334,7 +334,7 @@ public class CreditFacPropose implements Serializable {
         if (newCreditDetailView == null) {
             newCreditDetailView = new NewCreditDetailView();
             seq = 0;
-            hashSeqCredit = new Hashtable<String, String>();
+//            hashSeqCredit = new Hashtable<String, String>();
         }
 
         if (productProgramList == null) {

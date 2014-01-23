@@ -554,6 +554,11 @@ public class CustomerInfoJuristic implements Serializable {
                 severity = "alert";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+        } else {
+            messageHeader = "Information.";
+            message = "Cause this customer do not search from RM";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
@@ -574,6 +579,7 @@ public class CustomerInfoJuristic implements Serializable {
             if(customer.getId() != customerInfoView.getId()){
                 messageHeader = "Information.";
                 message = "Registration Id is already exist";
+                severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
@@ -592,6 +598,7 @@ public class CustomerInfoJuristic implements Serializable {
             onEditJuristic();
             messageHeader = "Information.";
             message = "Save juristic data success.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             messageHeader = "Error.";
@@ -600,6 +607,7 @@ public class CustomerInfoJuristic implements Serializable {
             } else {
                 message = "Save juristic failed. Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
