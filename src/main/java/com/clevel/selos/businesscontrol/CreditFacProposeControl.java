@@ -39,7 +39,7 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     CreditTypeDetailTransform creditTypeDetailTransform;
     @Inject
-    NewCollateralInfoTransform newCollateralInfoTransform;
+    NewCollateralTransform newCollateralTransform;
     @Inject
     NewGuarantorDetailTransform newGuarantorDetailTransform;
     @Inject
@@ -141,8 +141,8 @@ public class CreditFacProposeControl extends BusinessControl {
                     List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                     if (newCollateralDetailList.size() > 0) {
                         log.info("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
-                        List<NewCollateralInfoView> newCollateralInfoViewList = newCollateralInfoTransform.transformsCollateralToView(newCollateralDetailList);
-                        newCreditFacilityView.setNewCollateralInfoViewList(newCollateralInfoViewList);
+                        List<NewCollateralView> newCollateralViewList = newCollateralTransform.transformsCollateralToView(newCollateralDetailList);
+                        newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
                     List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
@@ -267,30 +267,30 @@ public class CreditFacProposeControl extends BusinessControl {
             log.info("persist newCreditTierDetailList...{}", newCreditTierDetailList.size());
         }
 
-        if (newCreditFacilityView.getNewCollateralInfoViewList() != null) {
-            List<NewCollateral> newCollateralList = newCollateralInfoTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralInfoViewList(), newCreditFacility, user);
+        if (newCreditFacilityView.getNewCollateralViewList() != null) {
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user);
             newCollateralDetailDAO.persist(newCollateralList);
             log.info("persist newCollateralDetailList...");
 
             for (int i = 0; i < newCollateralList.size(); i++) {
                 log.info(" newCollateralDetailList  is " + i);
                 NewCollateral newCollateralDetail = newCollateralList.get(i);
-                NewCollateralInfoView newCollateralInfoView = newCreditFacilityView.getNewCollateralInfoViewList().get(i);
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralInfoView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+                NewCollateralView newCollateralView = newCreditFacilityView.getNewCollateralViewList().get(i);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
                 newCollateralRelationDAO.persist(newCollateralCreditList);
                 log.info("persist newCollateralRelCreditList...");
 
-                for (NewCollateralHeadDetailView newCollateralHeadDetailView : newCollateralInfoView.getNewCollateralHeadDetailViewList()) {
-                    NewCollateralHead newCollateralHeadDetail = newCollateralInfoTransform.transformCollateralHeadToModel(newCollateralHeadDetailView, newCollateralDetail, user);
+                for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
+                    NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
                     newCollateralHeadDetailDAO.persist(newCollateralHeadDetail);
                     log.info("persist newCollateralHeadDetail...{}", newCollateralHeadDetail.getId());
 
-                    for (NewSubCollateralDetailView newSubCollateralDetailView : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
-                        NewCollateralSub newCollateralSubDetail = newCollateralInfoTransform.transformCollateralSubToModel(newSubCollateralDetailView, newCollateralHeadDetail, user);
+                    for (NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()) {
+                        NewCollateralSub newCollateralSubDetail = newCollateralTransform.transformCollateralSubToModel(newCollateralSubView, newCollateralHeadDetail, user);
                         newCollateralSubDetailDAO.persist(newCollateralSubDetail);
                         log.info("persist newCollateralSubDetail...{}", newCollateralSubDetail.getId());
 
-                        for (NewSubCollateralDetailView newSubCollateralView : newCollateralHeadDetailView.getNewSubCollateralDetailViewList()) {
+                        for (NewCollateralSubView newSubCollateralView : newCollateralHeadView.getNewCollateralSubViewList()) {
                             if (newSubCollateralView.getCollateralOwnerUWList() != null) {
                                 List<NewCollateralSubOwner> newCollateralSubCustomerList = new ArrayList<NewCollateralSubOwner>();
                                 NewCollateralSubOwner newCollateralSubCustomer;
@@ -325,7 +325,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
                             if (newSubCollateralView.getRelatedWithList() != null) {
                                 NewCollateralSubRelated newCollateralSubRelate;
-                                for (NewSubCollateralDetailView relatedView : newSubCollateralView.getRelatedWithList()) {
+                                for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
                                     log.info("relatedView.getId() ::: {} ", relatedView.getId());
                                     NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
                                     log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());

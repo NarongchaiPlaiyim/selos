@@ -8,9 +8,7 @@ import com.clevel.selos.model.view.CollateralDetailView;
 import com.clevel.selos.model.view.CollateralHeaderDetailView;
 import com.clevel.selos.model.view.SubCollateralDetailView;
 import com.clevel.selos.transform.AppraisalTransform;
-import com.clevel.selos.transform.NewCollHeadDetailTransform;
-import com.clevel.selos.transform.NewCollateralInfoTransform;
-import com.clevel.selos.transform.NewSubCollDetailTransform;
+import com.clevel.selos.transform.NewCollateralTransform;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -40,11 +38,8 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     AppraisalTransform appraisalTransform;
     @Inject
-    NewCollateralInfoTransform collateralDetailTransform;
-    @Inject
-    NewCollHeadDetailTransform collateralHeaderDetailTransform;
-    @Inject
-    NewSubCollDetailTransform subCollateralDetailTransform;
+    NewCollateralTransform collateralDetailTransform;
+
 
     @Inject
     public AppraisalResultControl(){

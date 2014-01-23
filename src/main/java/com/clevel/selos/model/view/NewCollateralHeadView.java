@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCollateralHeadDetailView {
+public class NewCollateralHeadView {
     private long id;
     private int no;
     private String titleDeed;
@@ -29,9 +29,9 @@ public class NewCollateralHeadDetailView {
     private User createBy;
     private User modifyBy;
 
-    List<NewSubCollateralDetailView> newSubCollateralDetailViewList;
+    List<NewCollateralSubView> newCollateralSubViewList;
 
-    public NewCollateralHeadDetailView(){
+    public NewCollateralHeadView(){
           reset();
     }
 
@@ -44,7 +44,7 @@ public class NewCollateralHeadDetailView {
         this.existingCredit = BigDecimal.ZERO;
         this.insuranceCompany = 0;
         this.titleDeed = "";
-        this.newSubCollateralDetailViewList = new ArrayList<NewSubCollateralDetailView>();
+        this.newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
     }
 
     public long getId() {
@@ -127,12 +127,12 @@ public class NewCollateralHeadDetailView {
         this.modifyBy = modifyBy;
     }
 
-    public List<NewSubCollateralDetailView> getNewSubCollateralDetailViewList() {
-        return newSubCollateralDetailViewList;
+    public List<NewCollateralSubView> getNewCollateralSubViewList() {
+        return newCollateralSubViewList;
     }
 
-    public void setNewSubCollateralDetailViewList(List<NewSubCollateralDetailView> newSubCollateralDetailViewList) {
-        this.newSubCollateralDetailViewList = newSubCollateralDetailViewList;
+    public void setNewCollateralSubViewList(List<NewCollateralSubView> newCollateralSubViewList) {
+        this.newCollateralSubViewList = newCollateralSubViewList;
     }
 
     public BigDecimal getExistingCredit() {
@@ -184,7 +184,7 @@ public class NewCollateralHeadDetailView {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("newSubCollateralDetailViewList", newSubCollateralDetailViewList)
+                .append("newCollateralSubViewList", newCollateralSubViewList)
                 .toString();
     }
 }
