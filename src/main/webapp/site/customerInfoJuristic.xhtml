@@ -60,13 +60,14 @@
                                                        var="docType"
                                                        itemLabel="#{docType.description}"
                                                        itemValue="#{docType.id}"/>
+                                        <p:ajax update="searchInputText"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title">#{msg.get('app.custInfoJuri.content.search.by')}</td>
                                 <td>
-                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoSearch.searchBy}"
+                                    <p:selectOneRadio value="#{custInfoSumJuris.customerInfoSearch.searchBy}" id="searchRadio"
                                                       required="#{not empty param[searchButton.clientId]}"
                                                       disabled="#{custInfoSumJuris.editForm}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.search.citizenId')}" itemValue="1"/>
@@ -74,12 +75,12 @@
                                     </p:selectOneRadio>
                                 </td>
                                 <td style="width: 200px; max-width: 200px; min-width: 200px;">
-                                    <p:inputText value="#{custInfoSumJuris.customerInfoSearch.searchId}" maxlength="15"
+                                    <p:inputText value="#{custInfoSumJuris.customerInfoSearch.searchId}" maxlength="15" id="searchInputText"
                                                  style="width: 180px; max-width: 180px; min-width: 180px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
                                                  required="#{not empty param[searchButton.clientId]}"
-                                                 disabled="#{custInfoSumJuris.editForm}"/>
+                                                 disabled="#{custInfoSumJuris.editForm || custInfoSumJuris.customerInfoSearch.documentType.id == 0}"/>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
@@ -641,7 +642,7 @@
                                             <td class="title left">
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.no')}"/>
                                             </td>
-                                            <td class="smallest left">
+                                            <td class="small left">
                                                 <p:inputText styleClass="smallest"
                                                              value="#{custInfoSumJuris.customerInfoView.registerAddress.addressNo}"
                                                              required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegNo}"
@@ -650,9 +651,11 @@
                                             <td class="title right">
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.moo')}"/>
                                             </td>
-                                            <td class="smallest left">
+                                            <td class="small left">
                                                 <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.registerAddress.moo}"
-                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"
+                                                             onkeydown="return onKeyDownNumber(event);"
+                                                             onkeypress="return onKeyPressNumber(event);"/>
                                             </td>
                                             <td class="small title right">
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.building')}"/>
@@ -667,7 +670,7 @@
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.road')}"/>
                                             </td>
                                             <td class="left" colspan="5">
-                                                <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.road}"
+                                                <p:inputText style="width:500px;" value="#{custInfoSumJuris.customerInfoView.registerAddress.road}"
                                                              disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
                                             </td>
                                         </tr>
@@ -804,7 +807,7 @@
                                                 <td class="title left">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.no')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.addressNo}"
                                                                  disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
                                                                             || not custInfoSumJuris.enableAllFieldCus}"
@@ -814,10 +817,12 @@
                                                 <td class="title right">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.moo')}"/>
                                                 </td>
-                                                <td class="smallest left">
+                                                <td class="small left">
                                                     <p:inputText styleClass="smallest" value="#{custInfoSumJuris.customerInfoView.workAddress.moo}"
                                                                  disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
-                                                                            || not custInfoSumJuris.enableAllFieldCus}"/>
+                                                                            || not custInfoSumJuris.enableAllFieldCus}"
+                                                                 onkeydown="return onKeyDownNumber(event);"
+                                                                 onkeypress="return onKeyPressNumber(event);"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.building')}"/>
@@ -833,7 +838,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.road')}"/>
                                                 </td>
                                                 <td class="left" colspan="5">
-                                                    <p:inputText style="width:400px;" value="#{custInfoSumJuris.customerInfoView.workAddress.road}"
+                                                    <p:inputText style="width:500px;" value="#{custInfoSumJuris.customerInfoView.workAddress.road}"
                                                                  disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
                                                                             || not custInfoSumJuris.enableAllFieldCus}"/>
                                                 </td>
@@ -1184,8 +1189,8 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{custInfoSumJuris.messageHeader}" message="#{custInfoSumJuris.message}" >
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{custInfoSumJuris.severity}"
+                         header="#{custInfoSumJuris.messageHeader}" message="#{custInfoSumJuris.message}">
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"

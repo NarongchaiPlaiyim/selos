@@ -139,6 +139,7 @@ public class CustomerInfoIndividual implements Serializable {
 
     private String messageHeader;
     private String message;
+    private String severity;
 
 //    private int addressFlagForm2;
 //    private int addressFlagForm3;
@@ -1008,6 +1009,16 @@ public class CustomerInfoIndividual implements Serializable {
                         }
                     }
 
+                    //if address is null
+                    if(customerInfoView.getRegisterAddress() == null){
+                        customerInfoView.setRegisterAddress(new AddressView());
+                        customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
+                    }
+                    if(customerInfoView.getWorkAddress() == null){
+                        customerInfoView.setWorkAddress(new AddressView());
+                        customerInfoView.getWorkAddress().setAddressTypeFlag(3);
+                    }
+
                     //for spouse
                     if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
                         enableAllFieldCusSpouse = true;
@@ -1056,6 +1067,17 @@ public class CustomerInfoIndividual implements Serializable {
                                             customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
                                         }
                                     }
+
+                                    //if address is null
+                                    if(customerInfoView.getSpouse().getRegisterAddress() == null){
+                                        customerInfoView.getSpouse().setRegisterAddress(new AddressView());
+                                        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                                    }
+                                    if(customerInfoView.getSpouse().getWorkAddress() == null){
+                                        customerInfoView.getSpouse().setWorkAddress(new AddressView());
+                                        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                                    }
+
                                     enableSpouseDocumentType = false;
                                     enableSpouseCitizenId = false;
                                 } else {
@@ -1074,21 +1096,23 @@ public class CustomerInfoIndividual implements Serializable {
                     enableDocumentType = false;
                     enableCitizenId = false;
 
-                    messageHeader = "Customer search complete.";
-                    message = "Customer found.";
+                    messageHeader = "Information.";
+                    message = "Search customer found.";
+                    severity = "info";
                 }else{
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
                     enableCitizenId = true;
-
-                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    messageHeader = "Information.";
                     message = "Search customer not found.";
+                    severity = "info";
                 }
             } else {
                 enableDocumentType = true;
                 enableCitizenId = true;
-                messageHeader = "Customer search failed.";
+                messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
+                severity = "info";
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
@@ -1103,8 +1127,9 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
             log.debug("onSearchCustomerInfo Exception : {}", ex);
-            messageHeader = "Customer search failed.";
+            messageHeader = "Error.";
             message = ex.getMessage();
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1184,22 +1209,26 @@ public class CustomerInfoIndividual implements Serializable {
                                 }
                             }
                         }
-                        messageHeader = "Refresh Interface Info complete.";
-                        message = "Customer found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info complete.";
+                        severity = "info";
                     } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
-                        messageHeader = customerInfoResultView.getActionResult().toString();
-                        message = "Refresh Interface Info Customer not found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info failed.";
+                        severity = "info";
                     }
                 } else {
-                    messageHeader = "Refresh Interface Info Failed.";
+                    messageHeader = "Information.";
                     message = customerInfoResultView.getReason();
+                    severity = "info";
                 }
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
-                messageHeader = "Refresh Interface Info Failed.";
+                messageHeader = "Error.";
                 message = ex.getMessage();
+                severity = "alert";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
@@ -1211,27 +1240,32 @@ public class CustomerInfoIndividual implements Serializable {
                         log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
                         customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
 
-                        messageHeader = "Refresh Interface Info complete.";
-                        message = "Customer found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info complete.";
+                        severity = "info";
                     } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
-                        messageHeader = cusSpouseResultView.getActionResult().toString();
-                        message = "Refresh Interface Info Customer not found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info failed.";
+                        severity = "info";
                     }
                 } else {
-                    messageHeader = "Refresh Interface Info Failed.";
+                    messageHeader = "Information.";
                     message = cusSpouseResultView.getReason();
+                    severity = "info";
                 }
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
-                messageHeader = "Refresh Interface Info Failed.";
+                messageHeader = "Error.";
                 message = ex.getMessage();
+                severity = "alert";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
-            messageHeader = "Refresh Interface Info Failed.";
+            messageHeader = "Information.";
             message = "Cause this customer do not search from RM";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1269,21 +1303,24 @@ public class CustomerInfoIndividual implements Serializable {
                     enableDocumentType = false;
                     enableCitizenId = false;
 
-                    messageHeader = "Customer search complete.";
-                    message = "Customer found.";
+                    messageHeader = "Information.";
+                    message = "Search customer found.";
+                    severity = "info";
                 }else{
                     log.debug("onSearchSpouseCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
                     enableCitizenId = true;
 
-                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    messageHeader = "Information.";
                     message = "Search customer not found.";
+                    severity = "info";
                 }
             } else {
                 enableDocumentType = true;
                 enableCitizenId = true;
-                messageHeader = "Customer search failed.";
+                messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
+                severity = "info";
                 CustomerInfoView cus = new CustomerInfoView();
                 cus.reset();
                 customerInfoView.setSpouse(cus);
@@ -1304,8 +1341,9 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
             customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
             log.debug("onSearchSpouseCustomerInfo Exception : {}", ex);
-            messageHeader = "Customer search failed.";
+            messageHeader = "Error.";
             message = ex.getMessage();
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1315,16 +1353,18 @@ public class CustomerInfoIndividual implements Serializable {
         //check citizen id
         if(customerInfoView.getSpouse() != null){
             if(customerInfoView.getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
-                messageHeader = "Save Individual Failed.";
+                messageHeader = "Information.";
                 message = "Citizen Id is already exist";
+                severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
             Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getSpouse().getCitizenId(),workCaseId);
             if(customer != null && customer.getId() != 0){
                 if(customer.getId() != customerInfoView.getSpouse().getId()){
-                    messageHeader = "Save Individual Failed.";
+                    messageHeader = "Information.";
                     message = "Citizen Id is already exist";
+                    severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
@@ -1334,8 +1374,9 @@ public class CustomerInfoIndividual implements Serializable {
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
-                messageHeader = "Save Individual Failed.";
+                messageHeader = "Information.";
                 message = "Citizen Id is already exist";
+                severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
@@ -1392,16 +1433,18 @@ public class CustomerInfoIndividual implements Serializable {
             isFromSummaryParam = true;
             onAddNewIndividual();
             onEditIndividual();
-            messageHeader = "Save Individual Success.";
-            message = "Save Individual data success.";
+            messageHeader = "Information.";
+            message = "Save individual data success.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Individual Failed.";
+            messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save Individual failed. Cause : " + ex.getCause().toString();
+                message = "Save individual failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Individual failed. Cause : " + ex.getMessage();
+                message = "Save individual failed. Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1412,8 +1455,9 @@ public class CustomerInfoIndividual implements Serializable {
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
-                messageHeader = "Save Individual Failed.";
+                messageHeader = "Information.";
                 message = "Citizen Id is already exist";
+                severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return "";
             }
@@ -1425,15 +1469,17 @@ public class CustomerInfoIndividual implements Serializable {
             for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
                 if(isEditFromJuristic) {
                     if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && rowIndex != indexList){
-                        messageHeader = "Save Individual Failed.";
+                        messageHeader = "Information.";
                         message = "Citizen Id is already exist";
+                        severity = "info";
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         return "";
                     }
                 } else {
                     if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
-                        messageHeader = "Save Individual Failed.";
+                        messageHeader = "Information.";
                         message = "Citizen Id is already exist";
+                        severity = "info";
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         return "";
                     }
@@ -2686,5 +2732,13 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setEnableAllFieldCus(boolean enableAllFieldCus) {
         this.enableAllFieldCus = enableAllFieldCus;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }
