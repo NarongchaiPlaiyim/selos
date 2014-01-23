@@ -100,10 +100,10 @@
 
                             <tr>
                                 <td style="padding-bottom: 20px;" colspan="4">
-                                    <p:commandButton type="button" styleClass="largest"
-                                                     value="#{msg.get('app.custInfoJuri.content.button.refresh')}"
+                                    <p:commandButton value="#{msg.get('app.custInfoJuri.content.button.refresh')}" id="btnRefresh"
+                                                     process="@form" styleClass="largest"
                                                      actionListener="#{custInfoSumJuris.onRefreshInterfaceInfo()}"
-                                                     update=":msgBoxSystemMessagePanel :frmMain" />
+                                                     update=":msgBoxSystemMessagePanel :frmMain"/>
                                 </td>
                             </tr>
                             <tr>
