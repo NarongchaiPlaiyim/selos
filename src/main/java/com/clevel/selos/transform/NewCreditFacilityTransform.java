@@ -29,7 +29,7 @@ public class NewCreditFacilityTransform extends Transform {
         NewCreditFacility newCreditFacility = new NewCreditFacility();
 
         newCreditFacility.setWorkCase(workCase);
-
+//        newCreditFacility.set
         if (newCreditFacilityView.getId() != 0) {
             newCreditFacility.setId(newCreditFacilityView.getId());
             newCreditFacility.setCreateDate(newCreditFacilityView.getCreateDate());
