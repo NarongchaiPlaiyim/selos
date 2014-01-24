@@ -260,7 +260,7 @@ public class BankStmtControl extends BusinessControl {
      * @return avgAmount
      */
     public BigDecimal calAvgAmount(int seasonalFlag, BigDecimal sumAmount) {
-        return Util.divide(sumAmount, seasonalFlag == 1 ? 12 : 6);
+        return Util.divide(sumAmount, seasonalFlag == RadioValue.YES.value() ? 12 : 6);
     }
 
     /**
@@ -696,8 +696,8 @@ public class BankStmtControl extends BusinessControl {
 
     public void bankStmtDetailCalculation(BankStmtView bankStmtView, int seasonalFlag) {
         if (bankStmtView == null
-                || bankStmtView.getBankStmtDetailViewList() == null
-                || bankStmtView.getBankStmtDetailViewList().size() == 0)
+            || bankStmtView.getBankStmtDetailViewList() == null
+            || bankStmtView.getBankStmtDetailViewList().size() == 0)
             return;
 
         List<BankStmtDetailView> bankStmtDetailViewList = bankStmtView.getBankStmtDetailViewList();

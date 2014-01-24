@@ -752,7 +752,12 @@ tfoot {
     max-width: 450px !important;
     width: auto;
 }
-
+.ui-chkbox-box {
+    margin-bottom: -10px !important;
+}
+.ui-chkbox-box.ui-widget.ui-corner-all.ui-state-default.ui-state-active {
+    margin-top: -18px !important;
+}
 
 /*////////////////////////////////////////////////////////// ISA    */
 
