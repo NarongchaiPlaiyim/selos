@@ -20,7 +20,7 @@ public class NewGuarantorDetailDAO extends GenericDAO<NewGuarantorDetail, Long> 
     public NewGuarantorDetailDAO() {}
 
     public List<NewGuarantorDetail> findNewGuarantorByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("findNewCreditDetailByNewCreditFacility ::: {}", newCreditFacility.getId());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));

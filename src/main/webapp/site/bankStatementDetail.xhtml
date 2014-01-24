@@ -14,6 +14,24 @@
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style type="text/css">
+        .ui-datatable thead th {
+            white-space: normal !important;
+        }
+        .ui-datatable tbody td {
+            border-color: #868686 !important;
+        }
+        .calendar_right input {
+            background: #ffffff !important;
+            border: 1px solid #868686 !important;
+        }
+        .ui-chkbox-box {
+            margin-bottom: -20px;
+        }
+        .ui-chkbox-box.ui-widget.ui-corner-all.ui-state-default.ui-state-active {
+            margin-top: -18px;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -31,18 +49,18 @@
         <!-- End Menu -->
 
         <!-- Override CSS -->
-        <style scoped="scoped">
-            .ui-datatable thead th {
-                white-space: normal !important;
-            }
-            .ui-datatable tbody td {
-                border-color: #868686;
-            }
-            .calendar_right input {
-                background: #ffffff !important;
-                border: 1px solid #868686;
-            }
-        </style>
+        <!--<style scoped="scoped">-->
+            <!--.ui-datatable thead th {-->
+                <!--white-space: normal !important;-->
+            <!--}-->
+            <!--.ui-datatable tbody td {-->
+                <!--border-color: #868686;-->
+            <!--}-->
+            <!--.calendar_right input {-->
+                <!--background: #ffffff !important;-->
+                <!--border: 1px solid #868686;-->
+            <!--}-->
+        <!--</style>-->
         <div id="content_container">
             <div id="content_name">#{msg.get('app.bankStmtDetail.header')}</div>
             <div id="content">
@@ -79,7 +97,7 @@
                 <td class="left" style="#{bankStatementDetail.numberOfMonths > 6 ? 'min-width: 1125px; width: 1125px; max-width: 1125px;' : ''}">
                     <p:selectOneMenu value="#{bankStatementDetail.bankStmtView.bankView.code}"
                                      required="#{not empty param[saveButton.clientId]}">
-                        <f:selectItem value="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{bankStatementDetail.bankViewList}" var="bank"
                                        itemLabel="#{bank.bankName}" itemValue="#{bank.code}"/>
                     </p:selectOneMenu>
@@ -274,7 +292,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
@@ -290,7 +308,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
@@ -504,7 +522,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.#" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>

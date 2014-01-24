@@ -124,6 +124,7 @@ public class CustomerInfoJuristic implements Serializable {
 
     private String messageHeader;
     private String message;
+    private String severity;
 
 //    private int addressFlagForm2;
 //    private int addressFlagForm3;
@@ -231,7 +232,9 @@ public class CustomerInfoJuristic implements Serializable {
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
+        customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
+        customerInfoView.getWorkAddress().setAddressTypeFlag(3);
 
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
@@ -439,6 +442,7 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             enableAllFieldCus = true;
+            isEditForm = true;
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
                 log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
@@ -450,7 +454,6 @@ public class CustomerInfoJuristic implements Serializable {
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
                     customerInfoView.setCollateralOwner(1);
-                    isEditForm = true;
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                         if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
 //                            addressFlagForm2 = 1;
@@ -462,25 +465,32 @@ public class CustomerInfoJuristic implements Serializable {
                         customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                     }
 
+                    if(customerInfoView.getWorkAddress() == null){
+                        customerInfoView.setWorkAddress(new AddressView());
+                        customerInfoView.getWorkAddress().setAddressTypeFlag(3);
+                    }
+
                     enableDocumentType = false;
                     enableCitizenId = false;
 
-                    messageHeader = "Customer search complete.";
-                    message = "Customer found.";
+                    messageHeader = "Information.";
+                    message = "Search customer found.";
+                    severity = "info";
                 }else{
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
                     enableCitizenId = true;
 
-                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    messageHeader = "Information.";
                     message = "Search customer not found.";
+                    severity = "info";
                 }
             } else {
                 enableDocumentType = true;
                 enableCitizenId = true;
-                messageHeader = "Customer search failed.";
+                messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
-
+                severity = "info";
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
@@ -493,8 +503,9 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
             log.debug("onSearchCustomerInfo Exception : {}", ex);
-            messageHeader = "Customer search failed.";
+            messageHeader = "Error.";
             message = ex.getMessage();
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -521,24 +532,33 @@ public class CustomerInfoJuristic implements Serializable {
                             }
                         }
 
-                        messageHeader = "Refresh Interface Info complete.";
-                        message = "Customer found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info complete.";
+                        severity = "info";
                     }else{
                         log.debug("refreshInterfaceInfo ::: customer not found.");
-                        messageHeader = customerInfoResultView.getActionResult().toString();
-                        message = "Refresh Interface Info Customer not found.";
+                        messageHeader = "Information.";
+                        message = "Refresh interface info failed.";
+                        severity = "info";
                     }
                 } else {
-                    messageHeader = "Refresh Interface Info Failed.";
-                    message = customerInfoResultView.getReason();
+                    messageHeader = "Information.";
+                    message = "Refresh interface info failed.";
+                    severity = "info";
                 }
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
-                messageHeader = "Refresh Interface Info Failed.";
+                messageHeader = "Error.";
                 message = ex.getMessage();
+                severity = "alert";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+        } else {
+            messageHeader = "Information.";
+            message = "Cause this customer do not search from RM";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
@@ -557,8 +577,9 @@ public class CustomerInfoJuristic implements Serializable {
         Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
         if(customer != null && customer.getId() != 0){
             if(customer.getId() != customerInfoView.getId()){
-                messageHeader = "Save Juristic Failed.";
+                messageHeader = "Information.";
                 message = "Registration Id is already exist";
+                severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
@@ -575,16 +596,18 @@ public class CustomerInfoJuristic implements Serializable {
             isFromSummaryParam = true;
             onAddNewJuristic();
             onEditJuristic();
-            messageHeader = "Save Juristic Success.";
-            message = "Save Juristic data success.";
+            messageHeader = "Information.";
+            message = "Save juristic data success.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Juristic Failed.";
+            messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save Juristic failed. Cause : " + ex.getCause().toString();
+                message = "Save juristic failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Juristic failed. Cause : " + ex.getMessage();
+                message = "Save juristic failed. Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1080,5 +1103,13 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setEnableAllFieldCus(boolean enableAllFieldCus) {
         this.enableAllFieldCus = enableAllFieldCus;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

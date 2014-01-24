@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewSubCollateralDetailView {
+public class NewCollateralSubView {
     private long id;
     private int no;
     private SubCollateralType subCollateralType;
@@ -25,7 +25,7 @@ public class NewSubCollateralDetailView {
     private MortgageType mortgageType;
     private List<MortgageType> mortgageList;
     private long relatedWithId;
-    private List<NewSubCollateralDetailView> relatedWithList;
+    private List<NewCollateralSubView> relatedWithList;
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
     private Date createDate;
@@ -33,7 +33,7 @@ public class NewSubCollateralDetailView {
     private User createBy;
     private User modifyBy;
 
-    public NewSubCollateralDetailView() {
+    public NewCollateralSubView() {
         reset();
     }
 
@@ -49,7 +49,7 @@ public class NewSubCollateralDetailView {
         this.mortgageType= new MortgageType();
         this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
         this.mortgageList = new ArrayList<MortgageType>();
-        this.relatedWithList = new ArrayList<NewSubCollateralDetailView>();
+        this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
     }
 
@@ -190,11 +190,11 @@ public class NewSubCollateralDetailView {
         this.collateralOwnerUWList = collateralOwnerUWList;
     }
 
-    public List<NewSubCollateralDetailView> getRelatedWithList() {
+    public List<NewCollateralSubView> getRelatedWithList() {
         return relatedWithList;
     }
 
-    public void setRelatedWithList(List<NewSubCollateralDetailView> relatedWithList) {
+    public void setRelatedWithList(List<NewCollateralSubView> relatedWithList) {
         this.relatedWithList = relatedWithList;
     }
 

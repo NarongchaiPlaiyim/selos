@@ -13,15 +13,18 @@ public class SubCollateralType {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "code")
+    @Column(name = "code", length = 2)
     private String code;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 6)
     private String description;
 
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType collateralType;
+
+    @Column(name = "default_type", length = 1, columnDefinition = "int default 0")
+    private int defaultType;
 
     @Column(name = "active")
     private int active;
@@ -66,6 +69,14 @@ public class SubCollateralType {
         this.active = active;
     }
 
+    public int getDefaultType() {
+        return defaultType;
+    }
+
+    public void setDefaultType(int defaultType) {
+        this.defaultType = defaultType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -73,6 +84,7 @@ public class SubCollateralType {
                 .append("code", code)
                 .append("description", description)
                 .append("collateralType", collateralType)
+                .append("defaultType", defaultType)
                 .append("active", active)
                 .toString();
     }

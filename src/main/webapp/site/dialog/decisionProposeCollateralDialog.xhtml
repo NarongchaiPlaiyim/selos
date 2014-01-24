@@ -182,7 +182,7 @@
                 </td>
             </tr>
 
-            <ui:repeat value="#{decision.selectedAppProposeCollateral.newCollateralHeadDetailViewList}"
+            <ui:repeat value="#{decision.selectedAppProposeCollateral.newCollateralHeadViewList}"
                        var="collHeadDetail" varStatus="i">
                 <tr>
                     <td class="title" style="width: 170px;">
@@ -315,7 +315,7 @@
                 <tr>
                     <td colspan="4">
                         <p:dataTable id="subCollateralDetailViewTable"
-                                     value="#{collHeadDetail.newSubCollateralDetailViewList}"
+                                     value="#{collHeadDetail.newCollateralSubViewList}"
                                      var="subCollateralDetail"
                                      rowKey="#{subCollateralDetail}"
                                      rowIndexVar="rowIndex"

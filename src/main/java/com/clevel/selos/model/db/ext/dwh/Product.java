@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.db.ext.dwh;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "mst_dwh_product")
-public class DWHProduct {
+@Table(name = "ext_dwh_product")
+public class Product {
     @Id
     @Column(name = "prod_master_key")
     private int prodMasterKey;

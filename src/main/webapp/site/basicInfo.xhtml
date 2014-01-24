@@ -672,7 +672,7 @@
     </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{basicInfo.severity}"
                          header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
             <p:commandButton value="OK"
                              process="@this"

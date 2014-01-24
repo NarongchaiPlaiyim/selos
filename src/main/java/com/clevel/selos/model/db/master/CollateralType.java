@@ -15,9 +15,9 @@ public class CollateralType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code")
+    @Column(name = "code", length = 6)
     private String code;
-    @Column(name = "description")
+    @Column(name = "description", length = 200)
     private String description;
     @Column(name = "active")
     private int active;

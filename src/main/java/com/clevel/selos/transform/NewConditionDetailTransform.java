@@ -50,6 +50,7 @@ public class NewConditionDetailTransform extends Transform {
 
         for(NewConditionDetail newConditionDetail : newConditionDetailList){
             newConditionDetailView = new NewConditionDetailView();
+            newConditionDetailView.setId(newConditionDetail.getId());
             newConditionDetailView.setCreateBy(newConditionDetail.getCreateBy());
             newConditionDetailView.setCreateDate(newConditionDetail.getCreateDate());
             newConditionDetailView.setNo(newConditionDetail.getNo());

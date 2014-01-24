@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.master;
 
+import com.clevel.selos.model.db.ext.dwh.Product;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,9 +12,6 @@ public class ExistingProductFormula {
     @Id
     @Column(name = "id")
     private int id;
-
-    @Column(name = "credit_cus_type")
-    private int creditCusType;
 
     @Column(name = "tmb_product_code", length = 50)
     private String productCode;
@@ -35,7 +33,7 @@ public class ExistingProductFormula {
 
     @ManyToOne
     @JoinColumn(name = "product_master_id", nullable = true)
-    private DWHProduct dwhProduct;
+    private Product dwhProduct;
 
     @Column(name = "exposure_method")
     private int exposureMethod;
@@ -64,14 +62,6 @@ public class ExistingProductFormula {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getCreditCusType() {
-        return creditCusType;
-    }
-
-    public void setCreditCusType(int creditCusType) {
-        this.creditCusType = creditCusType;
     }
 
     public String getProductCode() {
@@ -114,11 +104,11 @@ public class ExistingProductFormula {
         this.productSegment = productSegment;
     }
 
-    public DWHProduct getDwhProduct() {
+    public Product getDwhProduct() {
         return dwhProduct;
     }
 
-    public void setDwhProduct(DWHProduct dwhProduct) {
+    public void setDwhProduct(Product dwhProduct) {
         this.dwhProduct = dwhProduct;
     }
 
@@ -182,7 +172,6 @@ public class ExistingProductFormula {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("creditCusType", creditCusType)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("productProgram", productProgram)

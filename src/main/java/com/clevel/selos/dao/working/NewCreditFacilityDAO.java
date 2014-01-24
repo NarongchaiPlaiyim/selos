@@ -30,10 +30,9 @@ public class NewCreditFacilityDAO extends GenericDAO<NewCreditFacility, Long> {
 
     public NewCreditFacility findByWorkCase(WorkCase workCase) {
         log.info("findByWorkCaseId : {}", workCase);
-
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
-        NewCreditFacility newCreditFacility = (NewCreditFacility) criteria.uniqueResult();
+        NewCreditFacility newCreditFacility = (NewCreditFacility)criteria.uniqueResult();
 
         return newCreditFacility;
     }
