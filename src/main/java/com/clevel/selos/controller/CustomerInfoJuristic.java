@@ -512,6 +512,14 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onRefreshInterfaceInfo(){
         if(customerInfoView.getSearchFromRM() == 1){
+            long cusId = customerInfoView.getId();
+            int relId = 0;
+            int refId = 0;
+            if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
+                relId = customerInfoView.getRelation().getId();
+                refId = customerInfoView.getReference().getId();
+            }
+
             log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
             CustomerInfoResultView customerInfoResultView;
             try{
@@ -522,12 +530,18 @@ public class CustomerInfoJuristic implements Serializable {
                     if(customerInfoResultView.getCustomerInfoView() != null){
                         log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
+                        customerInfoView.setId(cusId);
+                        Relation relation = new Relation();
+                        relation.setId(relId);
+                        customerInfoView.setRelation(relation);
+                        Reference reference = new Reference();
+                        reference.setId(refId);
+                        customerInfoView.setReference(reference);
+
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
                             if(customerInfoControl.checkAddress(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress()) == 1){
-//                                addressFlagForm2 = 1;
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(1);
                             } else {
-//                                addressFlagForm2 = 3;
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                             }
                         }
