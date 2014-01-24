@@ -49,7 +49,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="true" readonly="true">
+                                                <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right" required="#{not empty param[dbrSaveBtn.clientId]}" readonly="true">
                                                      <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                 </p:inputText>
                                             </td>
@@ -80,7 +80,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="true"  onclick="this.select()"
+                                                <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}" style="text-align: right;" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust"/>
@@ -94,7 +94,7 @@
                                                 <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
                                             </td>
                                             <td>
-                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="true"  onclick="this.select()"
+                                                <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}"  style="text-align: right" required="#{not empty param[dbrSaveBtn.clientId]}"  onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" >
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                     <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth"/>
@@ -314,6 +314,7 @@
                                     <div class="center">
                                         <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                          styleClass="medium"
+                                                         binding="#{dbrSaveBtn}"
                                                          action="#{dbrInfo.onSaveDBRInfo}"
                                                          onclick="onOneClick('frmMain:btnSave', true);"
                                                          oncomplete="onOneClick('frmMain:btnSave', false);"

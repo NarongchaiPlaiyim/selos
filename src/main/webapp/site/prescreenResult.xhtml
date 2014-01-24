@@ -466,6 +466,19 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
+<p:panel id="msgBoxRedirectPanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                     header="#{prescreenResult.messageHeader}">
+        <f:facet name="message">
+            <h:outputText value="#{prescreenResult.message}" escape="false"/>
+        </f:facet>
+        <p:commandButton value="OK"
+                         action="#{baseController.onGoToInbox}"
+                         process="@this"
+                         update=":frmMain"
+                         oncomplete="msgBoxRedirectDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
 <p:blockUI widgetVar="blockInbox" block=":frmMain" trigger="frmMain:btnRetrieveInterfaceInfo">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>

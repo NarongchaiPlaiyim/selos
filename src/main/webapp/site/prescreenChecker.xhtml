@@ -9,8 +9,6 @@
     <h:head>
         <title>SE-LOS : Prescreen Checker</title>
         <h:outputStylesheet name="css/style.css" />
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <h:outputScript library="js" name="custom.js" />
     </h:head>
 
@@ -112,7 +110,7 @@
                                  oncomplete="blockUICheckCSI.hide()"/>
                 <p:remoteCommand name="commandSubmitCase"
                                  action="#{prescreenChecker.onCompleteChecker()}"
-                                 update=":frmMain :msgBoxSystemMessagePanel"
+                                 update=":frmMain :msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                  onstart="blockUISubmitCase.show()"
                                  oncomplete="blockUISubmitCase.hide()"/>
             </h:form>
@@ -140,12 +138,27 @@
         </p:panel>
 
         <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                             header="#{prescreenChecker.messageHeader}" message="#{prescreenChecker.message}">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                             header="#{prescreenChecker.messageHeader}" >
+                <f:facet name="message">
+                    <h:outputText value="#{prescreenChecker.message}" escape="false"/>
+                </f:facet>
                 <p:commandButton value="OK"
                                  process="@this"
-                                 update=":frmMain"
+                                 update="frmMain"
                                  oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+        <p:panel id="msgBoxRedirectPanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                             header="#{prescreenChecker.messageHeader}" >
+                <f:facet name="message">
+                    <h:outputText value="#{prescreenChecker.message}" escape="false"/>
+                </f:facet>
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 actionListener="#{baseController.onGoToInbox()}"
+                                 oncomplete="msgBoxRedirectDlg.hide()" />
             </p:confirmDialog>
         </p:panel>
         <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"

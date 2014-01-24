@@ -310,4 +310,15 @@ public class Util implements Serializable {
     public static boolean isTrueForCheckBox(int value){
        return (value == 2)?true:false;
     }
+
+    public static String getMessageException(Exception ex){
+        String message = "";
+        if(ex.getCause() != null){
+            message = ex.getCause().toString();
+        } else {
+            message = ex.getMessage();
+        }
+
+        return message;
+    }
 }

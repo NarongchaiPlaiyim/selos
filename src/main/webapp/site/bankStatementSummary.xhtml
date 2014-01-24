@@ -14,6 +14,15 @@
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style type="text/css">
+        .ui-datatable thead th {
+            white-space: normal !important;
+        }
+        .calendar_right input {
+            background: #ffffff !important;
+            border: 1px solid #868686 !important;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -29,18 +38,18 @@
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml"/>
             <!-- End Menu -->
-            <style scoped="scoped">
-                .ui-datatable thead th {
-                    white-space: normal !important;
-                }
-                /*input[readonly="readonly"], input[readonly] {*/
-                    /*background: #ffffff !important;*/
-                /*}*/
-                .calendar_right input {
-                    background: #ffffff !important;
-                    border: 1px solid #868686;
-                }
-            </style>
+            <!--<style scoped="scoped">-->
+                <!--.ui-datatable thead th {-->
+                    <!--white-space: normal !important;-->
+                <!--}-->
+                <!--/*input[readonly="readonly"], input[readonly] {*/-->
+                    <!--/*background: #ffffff !important;*/-->
+                <!--/*}*/-->
+                <!--.calendar_right input {-->
+                    <!--background: #ffffff !important;-->
+                    <!--border: 1px solid #868686;-->
+                <!--}-->
+            <!--</style>-->
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.bankStmtSum.header')}</div>
                 <div id="content">
@@ -109,7 +118,7 @@
                         <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddTmbBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddTMBBankStmt()}"
-                                             process="@form"
+                                             process=":frmMain"
                                              update=":frmMain,:msgBoxSystemMessagePanel,:confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>
@@ -338,7 +347,7 @@
                         <td class="left" style="min-width: 900px; width: 900px; max-width: 900px;">
                             <p:commandButton id="btnAddOthBank" value="#{msg.get('app.button.add')}"
                                              action="#{bankStatementSummary.onClickAddOtherBankStmt()}"
-                                             process="@form"
+                                             process=":frmMain"
                                              update=":frmMain,:msgBoxSystemMessagePanel,:confirmChangeScreenBankStmtDialog"
                                              styleClass="smaller"/>
                         </td>

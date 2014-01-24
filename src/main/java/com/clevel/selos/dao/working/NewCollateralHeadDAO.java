@@ -19,10 +19,10 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
     @Inject
     public NewCollateralHeadDAO() {}
 
-    public List<NewCollateralHead> findByNewCollateralDetail(NewCollateral newCollateralDetail) {
-        log.info("findByNewCollateralDetail ::: {}", newCollateralDetail);
+    public List<NewCollateralHead> findByNewCollateralDetail(NewCollateral newCollateral) {
+        log.info("v ::: {}", newCollateral);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateralDetail", newCollateralDetail));
+        criteria.add(Restrictions.eq("newCollateral", newCollateral));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
         log.info("newCollateralHeadDetails ::: size : {}", newCollateralHeadDetails.size());

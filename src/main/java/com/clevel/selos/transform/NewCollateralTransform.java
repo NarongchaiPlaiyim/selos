@@ -124,12 +124,12 @@ public class NewCollateralTransform extends Transform {
                 newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViews);
             }
 
-
             newCollateralViewList.add(newCollateralView);
         }
         return newCollateralViewList;
     }
 
+/*
     public List<NewCollateralHead> transformCollateralHeadToModel(List<NewCollateralHeadView> newCollateralHeadViewList, NewCollateral collateralDetail, User user) {
 
         List<NewCollateralHead> collateralHeaderDetailList = new ArrayList<NewCollateralHead>();
@@ -163,6 +163,7 @@ public class NewCollateralTransform extends Transform {
 
         return collateralHeaderDetailList;
     }
+*/
 
     public NewCollateralHead transformCollateralHeadToModel(NewCollateralHeadView newCollateralHeadView, NewCollateral collateralDetail, User user) {
 
@@ -193,7 +194,7 @@ public class NewCollateralTransform extends Transform {
     }
 
     public List<NewCollateralHeadView> transformCollateralHeadToView(List<NewCollateralHead> collateralHeaderDetailList) {
-
+        log.info("transformCollateralHeadToView ::collateralHeaderDetailList.size :: {}",collateralHeaderDetailList.size());
         List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         NewCollateralHeadView newCollateralHeadView;
 
@@ -231,6 +232,7 @@ public class NewCollateralTransform extends Transform {
         return newCollateralHeadViewList;
     }
 
+/*
     public List<NewCollateralSub> transformCollateralSubToModel(List<NewCollateralSubView> newCollateralSubViewList, NewCollateralHead collateralHeaderDetail, User user) {
 
         List<NewCollateralSub> subCollateralDetailList = new ArrayList<NewCollateralSub>();
@@ -259,9 +261,10 @@ public class NewCollateralTransform extends Transform {
 
         return subCollateralDetailList;
     }
+*/
 
     public List<NewCollateralSubView> transformCollateralSubToView(List<NewCollateralSub> subCollateralDetailList) {
-
+        log.info(" transformCollateralSubToView ::subCollateralDetailList.size :: {} ",subCollateralDetailList.size());
         List<NewCollateralSubView> newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
         NewCollateralSubView newCollateralSubView;
 
