@@ -502,10 +502,10 @@ public class PrescreenMaker implements Serializable {
             getProductProgramList();
         }
 
-        if(stepId == 1001){
+        /*if(stepId == 1001){
             bdmCheckerList = userDAO.findBDMChecker(user);
             log.debug("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
-        }
+        }*/
 
         if(stepId == 1003){
             businessGroupList = businessGroupDAO.findAll();
@@ -620,21 +620,20 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onCloseSale(){
-        //TODO clone data for Full Application
         log.debug("onCloseSale ::: queueName : {}", queueName);
         try{
             prescreenBusinessControl.duplicateData(workCasePreScreenId);
-
-            //TODO get nextStep
-            String actionCode = "1008";
-            prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+            prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
 
             messageHeader = "Information";
-            message = "Close Sale Complete.";
-            //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            FacesUtil.redirect("/site/inbox.jsf");
+            message = "Close Sales Complete.";
         } catch (Exception ex){
-            log.error("duplicate data failed : ", ex);
+            messageHeader = "Exception";
+            message = "Close Sales Failed, " + ex.getMessage();
+
+            log.error("onCloseSale failed : ", ex);
+        } finally {
+            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
         }
     }
 
@@ -654,12 +653,11 @@ public class PrescreenMaker implements Serializable {
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('facilityDlg').show()");
         }
-
     }
 
     public void onEditFacility() {
         modeForButton = ModeForButton.EDIT;
-        log.debug("onEditFacility ::: selecteFacilityItem : {}", selectFacilityItem);
+        log.debug("onEditFacility ::: selectFacilityItem : {}", selectFacilityItem);
 
         facility = new FacilityView();
         ProductProgram productProgram = selectFacilityItem.getProductProgram();
@@ -731,19 +729,15 @@ public class PrescreenMaker implements Serializable {
 
         borrowerInfo = new CustomerInfoView();
         borrowerInfo.reset();
+
         CustomerInfoView spouse = new CustomerInfoView();
         spouse.reset();
         spouse.setSpouse(null);
         borrowerInfo.setSpouse(spouse);
 
-        //spouseInfo = new CustomerInfoView();
-
         customerEntity = new CustomerEntity();
 
-
-        //spouseInfo.reset();
-
-        if(stepId == 1001){
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
             borrowerInfo.getRelation().setId(1);    //Set default relation to borrower
             //TODO Check caseBorrowerType;
             if(caseBorrowerTypeId == BorrowerType.INDIVIDUAL.value()){    //case borrower type = individual
@@ -2250,46 +2244,51 @@ public class PrescreenMaker implements Serializable {
         }
     }
 
+    public void onOpenAssignCheckerDialog(){
+        bdmCheckerList = userDAO.findBDMChecker(user);
+        prescreenView.setCheckerId("");
+        prescreenView.setRemark("");
+        log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+    }
+
     public void onAssignToChecker(){
-        log.debug("onAssignToChecker ::: bdmChecker : {}", prescreenView.getCheckerId());
-        log.debug("onAssignToChecker ::: queueName : {}", queueName);
-        //TODO get nextStep
-        String actionCode = "1001";
-        String checkerId = prescreenView.getCheckerId();
+        log.debug("onAssignToChecker ::: starting...");
+        boolean complete = false;
         try {
-            prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
-            FacesUtil.redirect("/site/inbox.jsf");
-            return;
-        } catch (Exception ex) {
-            log.error("onAssignToChecker ::: exception : {}", ex);
-            messageHeader = "Assign to checker failed.";
-            if(ex.getCause() != null){
-                message = "Assign to checker failed. Cause : " + ex.getCause().toString();
+            if(prescreenView.getCheckerId() != null && !prescreenView.getCheckerId().equals("")) {
+                prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, prescreenView.getCheckerId(), ActionCode.ASSIGN_TO_CHECKER.getVal());
+                complete = true;
+                messageHeader = "Information.";
+                message = "Assign to checker complete.";
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
             } else {
-                message = "Assign to checker failed. Cause : " + ex.getMessage();
+                complete = false;
             }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+            log.debug("onAssignToChecker ::: complete");
+        } catch (Exception ex) {
+            messageHeader = "Assign to checker failed.";
+            message = "Assign to checker failed. Cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+
+            log.error("onAssignToChecker ::: exception : {}", ex);
         }
     }
 
     public void onCancelCA(){
-        log.debug("onCancelCA ::: queueName : {}", queueName);
-        //TODO get nextStep
-        String actionCode = "1003";
-        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+        try{
+            prescreenBusinessControl.cancelCase(workCasePreScreenId, queueName, ActionCode.CANCEL_CA_PRESCREEN.getVal());
+            messageHeader = "Information.";
+            message = "Cancel CA Complete.";
 
-        messageHeader = "Information";
-        message = "Cancel CA Complete.";
-        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxRedirect.show()");
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Cancel CA Failed, cause : " + Util.getMessageException(ex);
 
-        try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-            return;
-        } catch (Exception ex) {
-            log.error("Error to redirect : {}", ex.getMessage());
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-
     }
 
     // *** Function for Prescreen Maker ***//
