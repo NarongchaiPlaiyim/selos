@@ -1926,21 +1926,21 @@ body .ui-tooltip {
     /** to overide theme button **/
     border: 1px solid #0E73BB !important;
     background: #299BE1 !important;
-    font-size: 11px;
+    font-size: 12px!important;
 }
 
 .blueButton:hover {
     /** to overide theme button **/
     border: 1px solid #005B9A !important;
     background: #005B9A !important;
-    font-size: 11px;
+    font-size: 12px!important;
 }
 
 .blueButton[disabled] {
     /** to overide theme button **/
     border: 1px solid #0E73BB !important;
     background: #299BE1 !important;
-    font-size: 11px;
+    font-size: 12px!important;
 }
 
 .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {

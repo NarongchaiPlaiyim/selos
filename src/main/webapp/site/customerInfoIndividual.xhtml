@@ -134,10 +134,11 @@
                             <tr>
                                 <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.relationship')}"/>
+                                    <h:outputText id="rela1" value="#{custInfoSumIndi.relationMainCusId} - #{custInfoSumIndi.relationSpouseCusId}"/>
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumIndi.customerInfoView.relation.id}"
+                                                     value="#{custInfoSumIndi.relationMainCusId}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndRelation}"
                                                      disabled="#{custInfoSumIndi.editBorrower || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -147,7 +148,7 @@
                                                        itemValue="#{relation.id}"/>
                                         <p:ajax event="change"
                                                 listener="#{custInfoSumIndi.onChangeRelation()}"
-                                                update=":frmMain:reference,:frmMain:collateral,:frmMain:relationSpouse"/>
+                                                update=":frmMain:reference,:frmMain:collateral,:frmMain:relationSpouse,rela1"/>
                                     </p:selectOneMenu>
                                 </td>
 
@@ -172,7 +173,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
-                                                     value="#{custInfoSumIndi.customerInfoView.reference.id}" id="reference"
+                                                     value="#{custInfoSumIndi.referenceMainCusId}" id="reference"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndReference}"
                                                      disabled="#{custInfoSumIndi.editBorrower || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -560,8 +561,8 @@
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoView.maritalStatus.id}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndMarriage}"
-                                                     disabled="#{(custInfoSumIndi.customerInfoView.relation.id == 1
-                                                        and custInfoSumIndi.customerInfoView.spouse.relation.id == 1)
+                                                     disabled="#{(custInfoSumIndi.relationMainCusId == 1
+                                                        and custInfoSumIndi.relationSpouseCusId == 1)
                                                         || not custInfoSumIndi.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.maritalStatusList}"
@@ -1404,7 +1405,7 @@
                                     </td>
                                     <td>
                                         <p:selectOneMenu size="1" style="width: 200px;" id="relationSpouse"
-                                                         value="#{custInfoSumIndi.customerInfoView.spouse.relation.id}"
+                                                         value="#{custInfoSumIndi.relationSpouseCusId}"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoRelation}"
                                                          disabled="#{custInfoSumIndi.editSpouseBorrower || not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -1440,7 +1441,7 @@
                                     </td>
                                     <td>
                                         <p:selectOneMenu size="1" id="reference2" style="width: 300px; max-width: 300px; min-width: 300px;"
-                                                         value="#{custInfoSumIndi.customerInfoView.spouse.reference.id}"
+                                                         value="#{custInfoSumIndi.referenceSpouseCusId}"
                                                          required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqSpoReference}"
                                                          disabled="#{custInfoSumIndi.editSpouseBorrower || not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>

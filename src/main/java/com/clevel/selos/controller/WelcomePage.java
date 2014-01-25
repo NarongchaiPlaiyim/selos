@@ -25,6 +25,8 @@ import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.view.NewCollateralView;
+import com.clevel.selos.model.view.CollateralDetailResultView;
+import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.report.ReportService;
 import com.clevel.selos.report.SimpleReport;
 import com.clevel.selos.system.audit.SystemAuditor;

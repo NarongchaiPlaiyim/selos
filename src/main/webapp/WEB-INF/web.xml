@@ -39,17 +39,6 @@
             /WEB-INF/spring-security.xml
         </param-value>
     </context-param>
-    <!--
-        Problem:
-            com.ibm.ws.webcontainer.srt.SRTServletResponse setIntHeader WARNING: Cannot set header. Response already committed.
-            (Empty page after update components in .xhtml)
-        Ref:
-            http://forum.primefaces.org/viewtopic.php?f=3&t=19162
-    -->
-    <context-param>
-        <param-name>com.sun.faces.resourceBufferSize</param-name>
-        <param-value>32768</param-value>
-    </context-param>
 
     <!-- Servlet Mapping -->
     <servlet>
