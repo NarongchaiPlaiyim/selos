@@ -4,9 +4,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
-import com.clevel.selos.model.view.CollateralDetailView;
-import com.clevel.selos.model.view.CollateralHeaderDetailView;
-import com.clevel.selos.model.view.SubCollateralDetailView;
+import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.transform.AppraisalTransform;
 import com.clevel.selos.transform.NewCollateralTransform;
 import org.slf4j.Logger;
@@ -22,55 +20,61 @@ public class AppraisalResultControl extends BusinessControl {
     private Logger log;
 
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    AppraisalDAO appraisalDAO;
+    private AppraisalDAO appraisalDAO;
     @Inject
-    NewCollateralHead newCollateralHead;
+    private NewCollateralDAO newCollateralDAO;
+    @Inject
+    private NewCollateralHeadDAO newCollateralHeadDAO;
+    @Inject
+    private NewCollateralSubDAO newCollateralSubDAO;
+    @Inject
+    private AppraisalTransform appraisalTransform;
+    @Inject
+    private NewCollateralTransform collateralDetailTransform;
 
-    @Inject
-    NewCollateralDAO newCollateralDAO;
-    @Inject
-    NewCollateralHeadDAO newCollateralHeadDAO;
-    @Inject
-    NewCollateralSubDAO newCollateralSubDAO;
-
-    @Inject
-    AppraisalTransform appraisalTransform;
-    @Inject
-    NewCollateralTransform collateralDetailTransform;
-
+    private List<NewCollateralView> newCollateralViewList;
+    private NewCollateralView newCollateralView;
 
     @Inject
     public AppraisalResultControl(){
 
     }
 
-    public AppraisalView getAppraisalResultByWorkCase(long workCaseId){
-        log.info("getAppraisalByWorkCase ");
+    public AppraisalView getAppraisalResult(long workCaseId){
+        log.info("-- getAppraisalResult ::: workCaseId : {}", workCaseId);
 
         Appraisal appraisal;
         AppraisalView appraisalView;
         List<NewCollateral> newCollateralList;
-        List<CollateralDetailView> collateralDetailViewList;
-        List<NewCollateralHead> newCollateralHeadList;
-        List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
-        List<NewCollateralSub> newCollateralSubList;
-        List<SubCollateralDetailView> subCollateralDetailViewList;
-        //CollateralDetail collateralDetail;
-        //CollateralHeaderDetail collateralHeaderDetail;
-
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.info("workCase after findById " + workCase );
-
-        appraisal  = appraisalDAO.onSearchByWorkCase(workCase);
+//        List<CollateralDetailView> collateralDetailViewList;
+//        List<NewCollateralHead> newCollateralHeadList;
+//        List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
+//        List<NewCollateralSub> newCollateralSubList;
+//        List<SubCollateralDetailView> subCollateralDetailViewList;
 
 
-        if( appraisal != null){
+
+//        WorkCase workCase = workCaseDAO.findById(workCaseId);
+//        log.info("workCase after findById " + workCase );
+//        appraisal = appraisalDAO.onSearchByWorkCase(workCase);
+
+        appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+        appraisalView = null;
+        if(appraisal != null){
+            appraisalView = appraisalTransform.transformToView(appraisal);
+            log.info("-- getAppraisalResult ::: AppraisalView : {}", appraisalView);
+            return appraisalView;
+        } else {
+            return appraisalView;
+        }
+
+        /*if( appraisal != null){
             log.info("appraisal != null ");
             appraisalView = appraisalTransform.transformToView(appraisal);
 
-            /*collateralDetailList = collateralDetailDAO.findByAppraisal(appraisal);
+            collateralDetailList = collateralDetailDAO.findByAppraisal(appraisal);
             log.info("collateralDetailList.size() is " + collateralDetailList.size());
             if(collateralDetailList.size()>0){
                 collateralDetailViewList = collateralDetailTransform.transformToView(collateralDetailList);
@@ -96,18 +100,18 @@ public class AppraisalResultControl extends BusinessControl {
                     collateralDetailViewList.get(i).setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
                 }
                 appraisalView.setCollateralDetailViewList(collateralDetailViewList);
-            }*/
+            }
 
         }else{
             appraisalView = null;
         }
-        return appraisalView;
+        return appraisalView;*/
     }
 
     public void onSaveAppraisalResult(AppraisalView appraisalView,long workCaseId){
         log.info("onSaveAppraisalResult begin ");
         Appraisal appraisal;
-        List<CollateralDetailView> collateralDetailViewList;
+//        List<CollateralDetailView> collateralDetailViewList;
 //        List<CollateralDetail> collateralDetailList;
 //        List<CollateralHeaderDetailView> collateralHeaderDetailViewList;
 //        List<CollateralHeaderDetail> collateralHeaderDetailList;

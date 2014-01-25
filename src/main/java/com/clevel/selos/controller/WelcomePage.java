@@ -4,7 +4,6 @@ import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.bpm.model.BPMInbox;
@@ -25,8 +24,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.view.CollateralDetailResultView;
-import com.clevel.selos.model.view.CollateralDetailView;
+import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.report.ReportService;
 import com.clevel.selos.report.SimpleReport;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -35,11 +33,10 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.business.CallateralBizTransform;
+import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.primefaces.model.StreamedContent;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -124,7 +121,7 @@ public class WelcomePage implements Serializable {
     RMTitleDAO rmTitleDAO;
 
     @Inject
-    CallateralBizTransform callateralBizTransform;
+    CollateralBizTransform callateralBizTransform;
 
 //    @Inject
 //    @Config(name = "system.name")
@@ -230,7 +227,7 @@ public class WelcomePage implements Serializable {
             AppraisalDataResult appraisalDataResult = new AppraisalDataResult();
             appraisalDataResult = coms.getAppraisalData("BDM001","PR5401-036-00001");
             log.debug("appraisalDataResult result : {}", appraisalDataResult);
-            CollateralDetailView collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
+            NewCollateralView collateralDetailView = callateralBizTransform.transformCollteral(appraisalDataResult);
             log.debug("collateralDetailView result : {}", collateralDetailView);
         } catch (Exception e) {
             log.error("", e);
