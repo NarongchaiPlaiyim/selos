@@ -28,8 +28,8 @@ public class NewCollateralCreditTransform extends Transform {
             newCollateralRelCredit = new NewCollateralCredit();
             if (newCollateralRelCredit.getId() != 0) {
                 newCollateralRelCredit.setId(newCreditDetailView.getId());
-                newCollateralRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
-                newCollateralRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
+                newCollateralRelCredit.setModifyDate(newCreditDetailView.getModifyDate());
+                newCollateralRelCredit.setModifyBy(newCreditDetailView.getModifyBy());
             } else { // id = 0 create new
                 newCollateralRelCredit.setCreateDate(new Date());
                 newCollateralRelCredit.setCreateBy(user);

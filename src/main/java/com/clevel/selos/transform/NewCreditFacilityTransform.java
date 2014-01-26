@@ -32,8 +32,8 @@ public class NewCreditFacilityTransform extends Transform {
 
         if (newCreditFacilityView.getId() != 0) {
             newCreditFacility.setId(newCreditFacilityView.getId());
-            newCreditFacility.setCreateDate(newCreditFacilityView.getCreateDate());
-            newCreditFacility.setCreateBy(newCreditFacilityView.getCreateBy());
+            newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
+            newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
         } else { // id = 0 create new
             newCreditFacility.setCreateDate(new Date());
             newCreditFacility.setCreateBy(user);
