@@ -55,14 +55,14 @@ public class NewCollateralTransform extends Transform {
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
 //              newCollateral.setType(); 'P'
-            if (newCollateralView.getId() != 0) {
-                newCollateral.setId(newCollateralView.getId());
-                newCollateral.setCreateDate(newCollateralView.getCreateDate());
-                newCollateral.setCreateBy(newCollateralView.getCreateBy());
-            } else { // id = 0 create new
-                newCollateral.setCreateDate(new Date());
-                newCollateral.setCreateBy(user);
-            }
+//            if (newCollateralView.getId() != 0) {
+//                newCollateral.setId(newCollateralView.getId());
+//                newCollateral.setCreateDate(newCollateralView.getCreateDate());
+//                newCollateral.setCreateBy(newCollateralView.getCreateBy());
+//            } else { // id = 0 create new
+//                newCollateral.setCreateDate(new Date());
+//                newCollateral.setCreateBy(user);
+//            }
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
             newCollateral.setAadDecisionReason(newCollateralView.getAadDecisionReason());
@@ -87,7 +87,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
-            newCollateralView.setId(newCollateralDetail1.getId());
+//            newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
