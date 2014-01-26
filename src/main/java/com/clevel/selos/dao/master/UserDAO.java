@@ -3,6 +3,7 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -35,6 +36,31 @@ public class UserDAO extends GenericDAO<User,String> {
         criteria.addOrder(Order.asc("id"));
         List<User> userList = criteria.list();
         //log.debug("findBDMChecker. (result size: {})", userList.size());
+
+        return userList;
+    }
+
+    public List<User> findABDMList(User user, Role abdmRole){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role", abdmRole));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("id"));
+
+        List<User> userList = criteria.list();
+
+        return userList;
+
+    }
+
+    public List<User> findUserListByRole(User user, Role role){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("role", role));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
+        criteria.addOrder(Order.asc("id"));
+
+        List<User> userList = criteria.list();
 
         return userList;
     }

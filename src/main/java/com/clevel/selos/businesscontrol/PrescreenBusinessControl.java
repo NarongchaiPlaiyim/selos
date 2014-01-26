@@ -24,7 +24,6 @@ import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
@@ -36,7 +35,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Stateless
@@ -1229,19 +1227,27 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for BPM *** //
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode) throws Exception{
-        bpmExecutor.preScreenAssignToChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception {
+        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
     }
 
-    public void cancelCase(long workCasePreScreenId, String queueName, String actionCode){
-        bpmExecutor.cancelCase();
+    public void cancelCase(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
+        bpmExecutor.cancelCase(workCasePreScreenId, 0, queueName, actionCode);
     }
 
-    public void closeSale(long workCasePreScreenId, String queueName, String actionCode){
-
+    public void closeSale(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
+        bpmExecutor.closeSales(workCasePreScreenId, queueName, actionCode);
     }
 
-    public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
+    public void returnBDM(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
+        bpmExecutor.returnMaker(workCasePreScreenId, queueName, actionCode);
+    }
+
+    public void submitBDM(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
+        bpmExecutor.submitMaker(workCasePreScreenId, queueName, actionCode);
+    }
+
+    /*public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
@@ -1256,7 +1262,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("nextStepPreScreen ::: Action_Name : {}", action.getName());
 
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
-    }
+    }*/
 
     //*** Function for PreScreen Checker ***//
     public String getBDMMakerName(long workCasePreScreenId){
