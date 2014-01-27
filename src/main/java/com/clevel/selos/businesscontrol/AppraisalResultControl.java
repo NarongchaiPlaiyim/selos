@@ -127,8 +127,7 @@ public class AppraisalResultControl extends BusinessControl {
     public void onSaveAppraisalResult(final AppraisalView appraisalView,final long workCaseId){
         log.info("onSaveAppraisalResult begin ");
 
-
-        workCase = workCaseDAO.findById(workCaseId);
+        workCase = workCaseDAO.findById(4L);
         appraisal = appraisalTransform.transformToModel(appraisalView);
         appraisal.setWorkCase(workCase);
 

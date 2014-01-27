@@ -186,7 +186,7 @@
                                              oncomplete="appraisalComsViewDlg.show()"/>
                         </td>
                     </tr>
-                    <ui:repeat value="#{appraisalResult.newCollateralViewList}" var="collateralDetailView" id="collateralDetailViewRepeat">
+                    <ui:repeat value="#{appraisalResult.newCollateralViewList}" var="collateralDetailView" id="collateralDetailViewRepeat" varStatus="rowIndex" >
                     <tr>
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
@@ -214,6 +214,7 @@
                                                               process=":frmMain"
                                                               oncomplete="appraisalComsViewDlg.show();">
                                                  <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
+                                                 <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
                                              </p:commandButton>
                                              <p:commandButton value="Remove" process="@this"
                                                               oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >

@@ -36,6 +36,8 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         log.debug("-- updateAppraisalFlag()");
         long id = newCollateral.getId();
         if(isRecordExist(Restrictions.eq("id", id))){
+            log.debug("id : {} is exist", id);
+            newCollateral.setAppraisalRequest(2);
             save(newCollateral);
             log.debug("-- NewCollateral(id : {}) has Updated", id);
         }
