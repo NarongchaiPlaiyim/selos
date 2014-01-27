@@ -19,7 +19,7 @@ public class AppraisalTransform extends Transform {
 
     }
 
-    public Appraisal transformToModel(AppraisalView appraisalView){
+    public Appraisal transformToModel(final AppraisalView appraisalView){
 
         Appraisal appraisal = new Appraisal();
         if(appraisalView.getId()==0){
