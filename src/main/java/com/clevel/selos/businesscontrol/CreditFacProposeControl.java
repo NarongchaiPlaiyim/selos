@@ -385,7 +385,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //                log.info("delete newCollateralRelCredits");
 //            }
 
-            List<NewCollateralHead> newCollateralHeadList = newCollateralHeadDetailDAO.findByNewCollateralDetail(newCollateral);
+            List<NewCollateralHead> newCollateralHeadList = newCollateralHeadDetailDAO.findByNewCollateral(newCollateral);
 
             for (NewCollateralHead newCollateralHead : newCollateralHeadList) {
                 log.info("newCollateralHead.id :: {}", newCollateralHead.getId());
