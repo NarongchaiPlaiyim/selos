@@ -15,9 +15,7 @@ import java.util.List;
 public class NewGuarantorDetailTransform extends Transform {
 
     @Inject
-    public NewGuarantorDetailTransform() {
-    }
-
+    public NewGuarantorDetailTransform() {}
     @Inject
     CustomerDAO customerDAO;
     @Inject
