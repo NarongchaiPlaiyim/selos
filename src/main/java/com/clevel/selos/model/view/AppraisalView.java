@@ -33,7 +33,7 @@ public class AppraisalView implements Serializable {
     private List<AppraisalDetailView> appraisalDetailViewList;
     private List<AppraisalContactDetailView> appraisalContactDetailViewList;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
-    private List<CollateralDetailView> collateralDetailViewList;
+    private List<NewCollateralView> newCollateralViewList;
     private WorkCase workCase;
     private Date createDate;
     private Date modifyDate;
@@ -212,13 +212,7 @@ public class AppraisalView implements Serializable {
         this.contactRecordDetailViewList = contactRecordDetailViewList;
     }
 
-    public List<CollateralDetailView> getCollateralDetailViewList() {
-        return collateralDetailViewList;
-    }
 
-    public void setCollateralDetailViewList(List<CollateralDetailView> collateralDetailViewList) {
-        this.collateralDetailViewList = collateralDetailViewList;
-    }
 
     public WorkCase getWorkCase() {
         return workCase;
@@ -260,6 +254,14 @@ public class AppraisalView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public List<NewCollateralView> getNewCollateralViewList() {
+        return newCollateralViewList;
+    }
+
+    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
+        this.newCollateralViewList = newCollateralViewList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -275,15 +277,16 @@ public class AppraisalView implements Serializable {
                 .append("provinceOfProperty", provinceOfProperty)
                 .append("appraisalDate", appraisalDate)
                 .append("dueDate", dueDate)
+                .append("AADAdminRemark", AADAdminRemark)
                 .append("appointmentDate", appointmentDate)
                 .append("appointmentTime", appointmentTime)
                 .append("appointmentCusName", appointmentCusName)
                 .append("cancelAppointment", cancelAppointment)
-                .append("AADAdminRemark", AADAdminRemark)
+                .append("appointmentRemark", appointmentRemark)
                 .append("appraisalDetailViewList", appraisalDetailViewList)
                 .append("appraisalContactDetailViewList", appraisalContactDetailViewList)
                 .append("contactRecordDetailViewList", contactRecordDetailViewList)
-                .append("collateralDetailViewList", collateralDetailViewList)
+                .append("newCollateralViewList", newCollateralViewList)
                 .append("workCase", workCase)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

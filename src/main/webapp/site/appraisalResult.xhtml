@@ -28,7 +28,7 @@
         <div id="content_container">
             <div id="content_name"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisalRequest.header')}"/></div>
             <div id="content">
-                <table id="table_content" style="width: 100%;" class="content_table_form">
+                <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
                     <tr>
                         <td colspan="6" class="right" style="padding-right: 1%;">
                             Last update by <p:outputLabel value="#{appraisalResult.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalResult.appraisalView.modifyDate}"/>
@@ -169,7 +169,12 @@
                     <tr>
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
+
+
                     <tr>
+                        <td class="title">
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalReport')}"/>
+                        </td>
                         <td class="left" colspan="6">
                             <p:commandButton id="btnAddCollateralDetail"
                                              value="#{msg.get('app.button.add')}"
@@ -181,30 +186,14 @@
                                              oncomplete="appraisalComsViewDlg.show()"/>
                         </td>
                     </tr>
-                    <ui:repeat value="#{appraisalResult.collateralDetailViewList}" var="collateralDetailView" id="collateralDetailViewRepeat">
+                    <ui:repeat value="#{appraisalResult.newCollateralViewList}" var="collateralDetailView" id="collateralDetailViewRepeat" varStatus="rowIndex" >
                     <tr>
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
                     <tr>
-                        <td colspan="6" align="right">
-                            <p:commandButton value="Edit"
-                                             action="#{appraisalResult.onEditCollateralDetailView()}"
-                                             update=":appraisalComsDlgForm"
-                                             process=":frmMain"
-                                             oncomplete="appraisalComsViewDlg.show();">
-                                <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
-                            </p:commandButton>
-                            <p:commandButton value="Remove" process="@this"
-                                             oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
-                                <f:setPropertyActionListener value="#{collateralDetailView}"
-                                                             target="#{appraisalResult.selectCollateralDetailView}"/>
-                            </p:commandButton>
-                        </td>
-                    </tr>
-                    <tr>
                         <td colspan="6">
                             <p:panel styleClass="panel">
-                                 <table style="width: 80%">
+                                 <table style="width: 80%" border="0">
                                      <colgroup>
                                          <col style="width:150px"/>
                                          <col style="width:250px"/>
@@ -217,6 +206,21 @@
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.jobID}"/>
+                                         </td>
+                                         <td>
+                                             <p:commandButton value="Edit"
+                                                              action="#{appraisalResult.onEditCollateralDetailView()}"
+                                                              update=":appraisalComsDlgForm"
+                                                              process=":frmMain"
+                                                              oncomplete="appraisalComsViewDlg.show();">
+                                                 <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}" />
+                                                 <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
+                                             </p:commandButton>
+                                             <p:commandButton value="Remove" process="@this"
+                                                              oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
+                                                 <f:setPropertyActionListener value="#{collateralDetailView}"
+                                                                              target="#{appraisalResult.selectCollateralDetailView}"/>
+                                             </p:commandButton>
                                          </td>
                                      </tr>
                                      <tr>
@@ -234,7 +238,7 @@
                                              <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                                          </td>
                                          <td>
-                                             <p:outputLabel value="#{collateralDetailView.AADDecision}"/>
+                                             <p:outputLabel value="#{collateralDetailView.aadDecision}"/>
                                          </td>
                                      </tr>
                                      <tr>
@@ -242,13 +246,13 @@
                                              <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
                                          </td>
                                          <td>
-                                             <p:outputLabel value="#{collateralDetailView.AADDecisionReason}"/>
+                                             <p:outputLabel value="#{collateralDetailView.aadDecisionReason}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
                                          </td>
                                          <td>
-                                             <p:outputLabel value="#{collateralDetailView.AADDecisionReasonDetail}"/>
+                                             <p:outputLabel value="#{collateralDetailView.aadDecisionReasonDetail}"/>
                                          </td>
                                      </tr>
                                      <tr>
@@ -285,8 +289,8 @@
                                          </td>
                                      </tr>
                                  </table>
-                                 <ui:repeat value="#{collateralDetailView.collateralHeaderDetailViewList}" var="collateralHeadDetailView">
-                                     <table style="width: 100%">
+                                 <ui:repeat value="#{collateralDetailView.newCollateralHeadViewList}" var="collateralHeadDetailView">
+                                     <table style="width: 100%" border="0">
                                          <colgroup>
                                              <col style="width:250px"/>
                                              <col style="width:auto"/>
@@ -330,9 +334,9 @@
                                                  <p:dataTable style="width: auto"
                                                               id="subCollateralDetailViewTable"
                                                               var="subCollateralDetailView"
-                                                              value="#{collateralHeadDetailView.subCollateralDetailViewList}"
+                                                              value="#{collateralHeadDetailView.newCollateralSubViewList}"
                                                               paginator="false"
-                                                              rowKey="#{subCollateralDetailView.id}"
+                                                              rowKey="#{subCollateralDetailView}"
                                                               rowIndexVar="rowIndex" >
                                                      <p:columnGroup type="header">
                                                          <p:row>

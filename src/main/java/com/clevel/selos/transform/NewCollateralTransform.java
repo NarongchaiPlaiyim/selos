@@ -117,7 +117,7 @@ public class NewCollateralTransform extends Transform {
 
             }
 
-            List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateralDetail(newCollateralDetail1);
+            List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateral(newCollateralDetail1);
             if (newCollateralDetail1.getNewCollateralHeadList() != null) {
                 List<NewCollateralHeadView> newCollateralHeadViews = transformCollateralHeadToView(newCollateralHeadDetails);
                 newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViews);

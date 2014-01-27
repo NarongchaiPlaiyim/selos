@@ -227,11 +227,6 @@ public class CreditFacProposeControl extends BusinessControl {
                 newCollateralRelationDAO.persist(newCollateralCreditList);
                 log.info("persist newCollateralCreditList...");
 
-                List<NewCollateralHead> newCollateralHeadList = newCollateralTransform.transformCollateralHeadToModel(newCollateralView.getNewCollateralHeadViewList(), newCollateralDetail, user);
-                newCollateralHeadDetailDAO.delete(newCollateralHeadList);
-                log.info("persist newCollateralHeadList...{}", newCollateralHeadList.size());
-
-
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
                     NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
                     newCollateralHeadDetailDAO.persist(newCollateralHeadDetail);
@@ -417,7 +412,6 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
     }
-
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
         log.info("calTotalGuaranteeAmount start :: ");

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class SubCollateralData implements Serializable {
     private String collId;
     private String headCollId;
+    private String landOffice;
     private long runningNumber;
     private String headCollType;
     private String subCollType;
@@ -116,11 +117,20 @@ public class SubCollateralData implements Serializable {
         this.address = address;
     }
 
+    public String getLandOffice() {
+        return landOffice;
+    }
+
+    public void setLandOffice(String landOffice) {
+        this.landOffice = landOffice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("collId", collId)
                 .append("headCollId", headCollId)
+                .append("landOffice", landOffice)
                 .append("runningNumber", runningNumber)
                 .append("headCollType", headCollType)
                 .append("subCollType", subCollType)
