@@ -20,7 +20,7 @@ public class NewCollateral implements Serializable {
     @Column(name = "coll_type")
     private String collType;
 
-    @Column(name = "appraisal_request")
+    @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
     private int appraisalRequest;
 
     @Temporal(TemporalType.TIMESTAMP)
