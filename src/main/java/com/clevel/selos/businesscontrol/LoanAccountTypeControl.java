@@ -9,6 +9,7 @@ import com.clevel.selos.transform.LoanAccountTypeTransform;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -30,8 +31,10 @@ public class LoanAccountTypeControl extends BusinessControl {
 
     public List<LoanAccountTypeView> getListLoanTypeByWorkcase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        List<AccountType> loanAccountTypes = loanAccountTypeDAO.getListLoanTypeByCusEntity(workCase.getBorrowerType().getId());
-
+        List<AccountType> loanAccountTypes = new ArrayList<AccountType>();
+        if(workCase.getBorrowerType().getId() != 0){
+           loanAccountTypes = loanAccountTypeDAO.getListLoanTypeByCusEntity(workCase.getBorrowerType().getId());
+        }
         List<LoanAccountTypeView> loanTypeViews = loanAccountTypeTransform.getLoanAccountTypeViews(loanAccountTypes);
         return loanTypeViews;
     }
