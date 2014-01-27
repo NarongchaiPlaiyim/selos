@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 @Stateless

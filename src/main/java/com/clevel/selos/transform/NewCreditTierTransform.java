@@ -7,7 +7,6 @@ import com.clevel.selos.model.view.NewCreditTierDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewCreditTierTransform extends Transform {
@@ -16,23 +15,17 @@ public class NewCreditTierTransform extends Transform {
     public NewCreditTierTransform() {
     }
 
-    public List<NewCreditTierDetail> transformToModel(List<NewCreditTierDetailView> newCreditTierDetailViewList,NewCreditDetail newCreditDetail,User user){
+    public List<NewCreditTierDetail> transformToModel(List<NewCreditTierDetailView> newCreditTierDetailViewList, NewCreditDetail newCreditDetail, User user) {
 
         List<NewCreditTierDetail> newCreditTierDetailList = new ArrayList<NewCreditTierDetail>();
         NewCreditTierDetail newCreditTierDetail;
 
-        for (NewCreditTierDetailView newCreditTierDetailView : newCreditTierDetailViewList){
+        for (NewCreditTierDetailView newCreditTierDetailView : newCreditTierDetailViewList) {
             newCreditTierDetail = new NewCreditTierDetail();
-
-            if (newCreditTierDetailView.getId() != 0) {
-                newCreditTierDetail.setId(newCreditTierDetailView.getId());
-                newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
-                newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
-            } else { // id = 0 create new
-                newCreditTierDetail.setCreateDate(new Date());
-                newCreditTierDetail.setCreateBy(user);
-            }
-
+            newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
+            newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
+            newCreditTierDetail.setModifyDate(newCreditTierDetailView.getModifyDate());
+            newCreditTierDetail.setModifyBy(user);
             newCreditTierDetail.setNo(newCreditTierDetailView.getNo());
             newCreditTierDetail.setFinalPriceRate(newCreditTierDetailView.getFinalPriceRate());
             newCreditTierDetail.setSuggestBasePrice(newCreditTierDetailView.getSuggestBasePrice());
@@ -59,8 +52,7 @@ public class NewCreditTierTransform extends Transform {
         List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
         NewCreditTierDetailView newFeeDetailView;
 
-        for(NewCreditTierDetail newCreditTierDetail : newCreditTierDetailList)
-        {
+        for (NewCreditTierDetail newCreditTierDetail : newCreditTierDetailList) {
             newFeeDetailView = new NewCreditTierDetailView();
             newFeeDetailView.setCreateDate(newCreditTierDetail.getCreateDate());
             newFeeDetailView.setCreateBy(newCreditTierDetail.getCreateBy());
@@ -81,7 +73,7 @@ public class NewCreditTierTransform extends Transform {
             newFeeDetailView.setSuggestPrice(newCreditTierDetail.getSuggestPrice());
             newFeeDetailView.setTenor(newCreditTierDetail.getTenor());
             newCreditTierDetailViewList.add(newFeeDetailView);
-    }
+        }
 
         return newCreditTierDetailViewList;
     }

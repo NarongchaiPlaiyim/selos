@@ -1,7 +1,9 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
+import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
@@ -20,6 +22,8 @@ public class QualitativeTransform extends Transform {
     QualitativeBDAO qualitativeBDAO;
     @Inject
     QualitativeADAO qualitativeADAO;
+    @Inject
+    QualityLevelDAO qualityLevelDAO;
 
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");
@@ -107,7 +111,11 @@ public class QualitativeTransform extends Transform {
         qualitativeA.setProperties_dl11(convertToDB(qualitativeAView.isProperties_dl11()));
         qualitativeA.setProperties_dl12(convertToDB(qualitativeAView.isProperties_dl12()));
         qualitativeA.setProperties_dl13(convertToDB(qualitativeAView.isProperties_dl13()));
-        qualitativeA.setQualityLevel(qualitativeAView.getQualityLevel());
+        if(qualitativeAView.getQualityLevel() != null && qualitativeAView.getQualityLevel().getId() != 0){
+            qualitativeA.setQualityLevel(qualityLevelDAO.findById(qualitativeAView.getQualityLevel().getId()));
+        } else {
+            qualitativeA.setQualityLevel(null);
+        }
         qualitativeA.setReason(qualitativeAView.getReason());
         qualitativeA.setQualityResult(qualitativeAView.getQualityResult());
 
@@ -190,7 +198,11 @@ public class QualitativeTransform extends Transform {
         qualitativeView.setProperties_dl11(convertToView(qualitativeA.getProperties_dl11()));
         qualitativeView.setProperties_dl12(convertToView(qualitativeA.getProperties_dl12()));
         qualitativeView.setProperties_dl13(convertToView(qualitativeA.getProperties_dl13()));
-        qualitativeView.setQualityLevel(qualitativeA.getQualityLevel());
+        if(qualitativeA.getQualityLevel() != null){
+            qualitativeView.setQualityLevel(qualitativeA.getQualityLevel());
+        } else {
+            qualitativeView.setQualityLevel(new QualityLevel());
+        }
         qualitativeView.setReason(qualitativeA.getReason());
         qualitativeView.setQualityResult(qualitativeA.getQualityResult());
 
@@ -282,7 +294,11 @@ public class QualitativeTransform extends Transform {
         qualitativeB.setProperties_dl11(convertToDB(qualitativeBView.isProperties_dl11()));
         qualitativeB.setProperties_dl12(convertToDB(qualitativeBView.isProperties_dl12()));
         qualitativeB.setProperties_dl13(convertToDB(qualitativeBView.isProperties_dl13()));
-        qualitativeB.setQualityLevel(qualitativeBView.getQualityLevel());
+        if(qualitativeBView.getQualityLevel() != null && qualitativeBView.getQualityLevel().getId() != 0){
+            qualitativeB.setQualityLevel(qualityLevelDAO.findById(qualitativeBView.getQualityLevel().getId()));
+        } else {
+            qualitativeB.setQualityLevel(null);
+        }
         qualitativeB.setReason(qualitativeBView.getReason());
         qualitativeB.setQualityResult(qualitativeBView.getQualityResult());
         return qualitativeB;
@@ -364,7 +380,11 @@ public class QualitativeTransform extends Transform {
         qualitativeBView.setProperties_dl11(convertToView(qualitativeB.getProperties_dl11()));
         qualitativeBView.setProperties_dl12(convertToView(qualitativeB.getProperties_dl12()));
         qualitativeBView.setProperties_dl13(convertToView(qualitativeB.getProperties_dl13()));
-        qualitativeBView.setQualityLevel(qualitativeB.getQualityLevel());
+        if(qualitativeB.getQualityLevel() != null){
+            qualitativeBView.setQualityLevel(qualitativeB.getQualityLevel());
+        } else {
+            qualitativeBView.setQualityLevel(new QualityLevel());
+        }
         qualitativeBView.setReason(qualitativeB.getReason());
         qualitativeBView.setQualityResult(qualitativeB.getQualityResult());
         return qualitativeBView;

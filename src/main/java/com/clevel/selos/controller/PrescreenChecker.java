@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
@@ -19,6 +20,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -215,46 +217,59 @@ public class PrescreenChecker implements Serializable {
         returnReason = new Reason();
         reasonList = new ArrayList<Reason>();
         reasonList = reasonDAO.getCancelList();
+        remark = "";
 
         bdmMakerName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
     }
 
     public void onSubmitReturnToMaker(){
-        log.debug("onReturnToMaker :::");
-        //Only return to MAKER actionCode =
-        String actionCode = "1005";
-        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
-        try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-            return;
-        } catch (Exception ex) {
-            log.error("Error to redirect : {}", ex.getMessage());
+        log.debug("onReturnToMaker ::: starting...");
+        boolean complete = false;
+        try{
+            if(returnReason != null && returnReason.getId() != 0 && !Integer.toString(returnReason.getId()).equals("")){
+                prescreenBusinessControl.returnBDM(workCasePreScreenId, queueName, ActionCode.RETURN_TO_BDM_PRESCREEN.getVal());
+                messageHeader = "Information.";
+                message = "Return to BDM Maker success. Click 'OK' return to inbox.";
+                complete = true;
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
+                log.debug("onReturnToMaker ::: success...");
+            } else {
+                complete = false;
+            }
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = "Return to BDM Maker failed. " + Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.error("onReturnToMaker ::: error... : ", ex);
+            RequestContext.getCurrentInstance().addCallbackParam("functionComplete", false);
         }
     }
 
     public void onCheckNCB(){
-        //To Get NCB Data and submit to MAKER
-        log.debug("onCheckNCB :::");
+        //To get NCB data
+        log.debug("onCheckNCB ::: starting...");
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             ncbOutputView = prescreenBusinessControl.getNCBFromNCB(customerInfoViewList, userId, workCasePreScreenId);
-
             RequestContext.getCurrentInstance().execute("commandSaveNCB()");
+            log.debug("onCheckNCB ::: success...");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Check NCB failed.";
-            message = ex.getMessage();
+            messageHeader = "Exception.";
+            message = "Check NCB failed." + Util.getMessageException(ex);
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onSaveNCB(){
+        //To save NCB data
+        log.debug("onSaveNCB ::: starting...");
         try{
             ncbViewList = prescreenBusinessControl.getNCBData(ncbOutputView, workCasePreScreenId);
-            log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
+            log.debug("onSaveNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
             int customerEntityId = 0;
@@ -279,7 +294,7 @@ public class PrescreenChecker implements Serializable {
                     index = 0;
                     for(CustomerInfoView customerInfoView : customerInfoViewList){
                         if(item.getIdNumber() != null){
-                            log.debug("onCheckNCB ::: index : {}", index);
+                            log.debug("onSaveNCB ::: index : {}", index);
                             if(customerInfoView.getCustomerEntity() != null){
                                 if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
                                     if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
@@ -294,7 +309,7 @@ public class PrescreenChecker implements Serializable {
                                     }
                                 }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
                                     if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
-                                        log.debug("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
+                                        log.debug("onSaveNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
                                         if(item.getResult() == ActionResult.SUCCESS){
@@ -306,28 +321,32 @@ public class PrescreenChecker implements Serializable {
                                 }
                             }
                         }
-                        log.debug("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
+                        log.debug("onSaveNCB ::: setCustomerInfo : {}", customerInfoView);
                         customerInfoViewList.set(index, customerInfoView);
                         index = index + 1;
                     }
                 }
                 //TODO update customer to database
-                log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
+                log.debug("onSaveNCB ::: customerInfoViewList : {}", customerInfoViewList);
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, ncbViewList, customerEntityId, workCasePreScreenId);
-                log.debug("onCheckNCB ::: failedCount : {}", failedCount);
+                log.debug("onSaveNCB ::: savePreScreenChecker success...");
+                log.debug("onSaveNCB ::: failedCount : {}", failedCount);
             }
+
             if(failedCount != 0){
                 success = false;
             } else {
                 success = true;
             }
+
             RequestContext.getCurrentInstance().execute("commandCheckCSI()");
+            log.debug("onSaveNCB ::: success...");
         } catch (Exception ex){
-            log.error("Exception : {}", ex);
-            messageHeader = "Save NCB failed.";
-            message = ex.getMessage();
+            messageHeader = "Exception.";
+            message = "Save NCB failed. " + Util.getMessageException(ex);
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.error("onSaveNCB ::: Exception : ", ex);
         }
 
     }
@@ -335,8 +354,6 @@ public class PrescreenChecker implements Serializable {
     public void onCheckCSI(){
         try{
             if(ncbViewList != null && ncbViewList.size() > 0){
-                //TODO Generate row for textBox to check Citizen id
-
                 int failedCount = 0;
                 List<CSIResult> csiResultList = new ArrayList<CSIResult>();
                 csiResultList = prescreenBusinessControl.getCSIData(ncbViewList, customerEntityId, userId, workCasePreScreenId);
@@ -471,11 +488,11 @@ public class PrescreenChecker implements Serializable {
                 }
             }
         } catch (Exception ex){
-            log.error("Exception : {}", ex);
-            messageHeader = "Check CSI failed.";
-            message = ex.getMessage();
+            messageHeader = "Exception.";
+            message = "Check CSI failed. " + Util.getMessageException(ex);
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.error("onCheckCSI ::: Exception : ", ex);
         }
     }
 
@@ -485,22 +502,15 @@ public class PrescreenChecker implements Serializable {
             //TODO submit case
             try{
                 log.debug("Submit case to Maker :::");
-                String actionCode = "1004";
-                prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+                prescreenBusinessControl.submitBDM(workCasePreScreenId, queueName, ActionCode.CHECK_NCB.getVal());
+                messageHeader = "Information.";
+                message = "Check NCB success. Click 'OK' return to inbox.";
+                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
             }catch (Exception ex){
-                messageHeader = "Submit case failed.";
+                messageHeader = "Exception.";
                 message = ex.getMessage();
                 messageErr = true;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
-            //TODO Redirect to inbox
-            log.debug("onCheckNCB ::: success without failed. redirect to inbox!");
-            try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
             }
         }
     }

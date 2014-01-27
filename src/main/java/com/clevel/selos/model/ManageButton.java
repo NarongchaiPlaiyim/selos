@@ -3,14 +3,18 @@ package com.clevel.selos.model;
 import java.io.Serializable;
 
 public class ManageButton implements Serializable {
+    private boolean assignToCheckerButton;
+    private boolean assignToABDMButton;
+    private boolean cancelCAButton;
     private boolean checkNCBButton;
     private boolean checkBRMSButton;
     private boolean checkMandateDocButton;
-    private boolean cancelCAButton;
-    private boolean assignToCheckerButton;
-    private boolean returnToMakerButton;
+    private boolean checkCriteriaButton;
     private boolean closeSaleButton;
+    private boolean returnToMakerButton;
     private boolean requestAppraisalButton;
+    private boolean submitCAButton;
+    private boolean viewRelatedCA;
 
     public boolean isCheckNCBButton() {
         return checkNCBButton;
@@ -74,5 +78,37 @@ public class ManageButton implements Serializable {
 
     public void setRequestAppraisalButton(boolean requestAppraisalButton) {
         this.requestAppraisalButton = requestAppraisalButton;
+    }
+
+    public boolean isAssignToABDMButton() {
+        return assignToABDMButton;
+    }
+
+    public void setAssignToABDMButton(boolean assignToABDMButton) {
+        this.assignToABDMButton = assignToABDMButton;
+    }
+
+    public boolean isCheckCriteriaButton() {
+        return checkCriteriaButton;
+    }
+
+    public void setCheckCriteriaButton(boolean checkCriteriaButton) {
+        this.checkCriteriaButton = checkCriteriaButton;
+    }
+
+    public boolean isViewRelatedCA() {
+        return viewRelatedCA;
+    }
+
+    public void setViewRelatedCA(boolean viewRelatedCA) {
+        this.viewRelatedCA = viewRelatedCA;
+    }
+
+    public boolean isSubmitCAButton() {
+        return submitCAButton;
+    }
+
+    public void setSubmitCAButton(boolean submitCAButton) {
+        this.submitCAButton = submitCAButton;
     }
 }

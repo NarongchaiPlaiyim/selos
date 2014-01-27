@@ -70,7 +70,7 @@ public class NewCreditFacilityView implements Serializable {
 
     private List<NewFeeDetailView> newFeeDetailViewList;
     private List<NewCreditDetailView> newCreditDetailViewList;
-    private List<NewCollateralInfoView> newCollateralInfoViewList;
+    private List<NewCollateralView> newCollateralViewList;
     private List<NewGuarantorDetailView> newGuarantorDetailViewList;
     private List<NewConditionDetailView> newConditionDetailViewList;
 
@@ -147,7 +147,7 @@ public class NewCreditFacilityView implements Serializable {
 
         this.newFeeDetailViewList = new ArrayList<NewFeeDetailView>();
         this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
-        this.newCollateralInfoViewList = new ArrayList<NewCollateralInfoView>();
+        this.newCollateralViewList = new ArrayList<NewCollateralView>();
         this.newGuarantorDetailViewList = new ArrayList<NewGuarantorDetailView>();
         this.newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
 
@@ -341,12 +341,12 @@ public class NewCreditFacilityView implements Serializable {
         this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
-    public List<NewCollateralInfoView> getNewCollateralInfoViewList() {
-        return newCollateralInfoViewList;
+    public List<NewCollateralView> getNewCollateralViewList() {
+        return newCollateralViewList;
     }
 
-    public void setNewCollateralInfoViewList(List<NewCollateralInfoView> newCollateralInfoViewList) {
-        this.newCollateralInfoViewList = newCollateralInfoViewList;
+    public void setNewCollateralViewList(List<NewCollateralView> newCollateralViewList) {
+        this.newCollateralViewList = newCollateralViewList;
     }
 
     public BigDecimal getExistingSMELimit() {

@@ -2,7 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.working.NewCollateralDetail;
+import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -12,21 +12,21 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class NewCollateralDetailDAO extends GenericDAO<NewCollateralDetail, Long> {
+public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
     @Inject
     @SELOS
     Logger log;
 
     @Inject
-    public NewCollateralDetailDAO() {
+    public NewCollateralDAO() {
     }
 
-    public List<NewCollateralDetail> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
+    public List<NewCollateral> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
         log.info("findNewCollateralByNewCreditFacility ::: {}", newCreditFacility);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));
-        List<NewCollateralDetail> newCollateralDetailList = (List<NewCollateralDetail>) criteria.list();
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
         return newCollateralDetailList;
     }

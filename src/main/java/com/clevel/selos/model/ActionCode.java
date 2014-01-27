@@ -12,13 +12,13 @@ public enum ActionCode {
     CANCEL_APPRAISAL(1025),         SUBMIT_TO_ZM(1026),             CUSTOMER_ACCEPT(1027),
     REQUEST_PRICE_REDUCE(1028),     PENDING_FOR_DECISION(1029);
 
-    long value;
+    long val;
 
-    private ActionCode(long value){
-        this.value = value;
+    private ActionCode(long val){
+        this.val = val;
     }
 
-    public long value(){
-        return this.value();
+    public long getVal(){
+        return this.val;
     }
 }

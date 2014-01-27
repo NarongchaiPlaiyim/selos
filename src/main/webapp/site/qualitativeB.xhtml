@@ -56,7 +56,8 @@
             <tr>
                 <td>
                     <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}">
-                        <f:ajax event="click" listener="#{qualitative.onClickQuality(1)}" />
+                        <!--<f:ajax event="click" listener="#{qualitative.onClickQuality(1)}" />-->
+                        <p:ajax event="click" listener="#{qualitative.onClickQuality(1)}" update="dlgQualityLevelB" />
                     </h:selectBooleanCheckbox>
                 </td>
                 <td>
@@ -887,14 +888,14 @@
                     <table class="table_noborder">
                         <tr>
                             <td class="title" style="width: 30%;text-align: left">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}" for="dlgQualityLevelA"/>
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}" for="dlgQualityLevelB"/>
                             </td>
                             <td>
-                                <p:selectOneMenu id="dlgQualityLevelA"
+                                <p:selectOneMenu id="dlgQualityLevelB"
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="#{(not empty param[addQualitativeButton.clientId]) and (qualitative.qualitativeView.qualityResult != '')}">
+                                                 required="#{(not empty param[addQualitativeB.clientId]) and (qualitative.qualitativeView.qualityResult != '')}">
                                     <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsB"
@@ -909,7 +910,7 @@
                             </td>
                             <td>
                                 <p:inputTextarea id="remark" cols="70" rows="3" name="remark"
-                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeButton.clientId])}"
+                                                 required="#{(qualitative.requiredReason) and (not empty param[addQualitativeB.clientId])}"
                                                  value="#{qualitative.qualitativeView.reason}"/>
                             </td>
                         </tr>

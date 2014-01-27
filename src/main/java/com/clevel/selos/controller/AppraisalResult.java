@@ -643,7 +643,7 @@ public class AppraisalResult implements Serializable {
             appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
             log.info("end coms ");
             searchCOMS = true;
-            collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult);
+            //collateralDetailView = callateralBizTransform.transformCallteral(appraisalDataResult); //TODO: change CollateralDetailView to NewCollateralView
 
             for(int i=0;i<collateralDetailView.getCollateralHeaderDetailViewList().size();i++){
                 onSetRowNoHeaderCollaral(collateralDetailView.getCollateralHeaderDetailViewList());

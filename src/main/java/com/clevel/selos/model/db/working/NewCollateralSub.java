@@ -1,7 +1,10 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,19 +13,20 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_new_collateral_sub_detail")
-public class NewCollateralSubDetail implements Serializable {
+@Table(name = "wrk_new_coll_sub")
+public class NewCollateralSub implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_NEW_SUB_COL_DET_ID", sequenceName = "SEQ_WRK_NEW_SUB_COL_DET_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_SUB_COL_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_SUB_ID", sequenceName = "SEQ_WRK_NEW_COLL_SUB_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "sub_collateral_type_id")
-    private SubCollateralType  subCollTypeCaption;
+    @JoinColumn(name = "collateral_type_id")
+    private CollateralType collateralTypeType;
 
-    @Column(name = "relatedWith_id")
-    private long relatedWithId;
+    @OneToOne
+    @JoinColumn(name = "sub_collateral_type_id")
+    private SubCollateralType  subCollateralType;
 
     @Column(name = "address")
     private String address;
@@ -62,17 +66,17 @@ public class NewCollateralSubDetail implements Serializable {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name = "new_collateral_head_detail_id")
-    private NewCollateralHeadDetail newCollateralHeadDetail;
+    @JoinColumn(name = "new_collateral_head_id")
+    private NewCollateralHead newCollateralHead;
 
-    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
     private List<NewCollateralSubMortgage> newCollateralSubMortgageList;
 
-    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralSubCustomer> newCollateralSubCustomerList;
+    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
+    private List<NewCollateralSubOwner> newCollateralSubOwnerList;
 
-    @OneToMany(mappedBy = "newCollateralSubDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralSubRelate> newCollateralSubRelateList;
+    @OneToMany(mappedBy = "newCollateralSub", cascade = CascadeType.ALL)
+    private List<NewCollateralSubRelated> newCollateralSubRelatedList;
 
     public long getId() {
         return id;
@@ -82,13 +86,7 @@ public class NewCollateralSubDetail implements Serializable {
         this.id = id;
     }
 
-    public SubCollateralType getSubCollTypeCaption() {
-        return subCollTypeCaption;
-    }
 
-    public void setSubCollTypeCaption(SubCollateralType subCollTypeCaption) {
-        this.subCollTypeCaption = subCollTypeCaption;
-    }
 
     public String getAddress() {
         return address;
@@ -178,12 +176,12 @@ public class NewCollateralSubDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public NewCollateralHeadDetail getNewCollateralHeadDetail() {
-        return newCollateralHeadDetail;
+    public NewCollateralHead getNewCollateralHead() {
+        return newCollateralHead;
     }
 
-    public void setNewCollateralHeadDetail(NewCollateralHeadDetail newCollateralHeadDetail) {
-        this.newCollateralHeadDetail = newCollateralHeadDetail;
+    public void setNewCollateralHead(NewCollateralHead newCollateralHead) {
+        this.newCollateralHead = newCollateralHead;
     }
 
     public List<NewCollateralSubMortgage> getNewCollateralSubMortgageList() {
@@ -194,27 +192,59 @@ public class NewCollateralSubDetail implements Serializable {
         this.newCollateralSubMortgageList = newCollateralSubMortgageList;
     }
 
-    public List<NewCollateralSubCustomer> getNewCollateralSubCustomerList() {
-        return newCollateralSubCustomerList;
+    public List<NewCollateralSubOwner> getNewCollateralSubOwnerList() {
+        return newCollateralSubOwnerList;
     }
 
-    public void setNewCollateralSubCustomerList(List<NewCollateralSubCustomer> newCollateralSubCustomerList) {
-        this.newCollateralSubCustomerList = newCollateralSubCustomerList;
+    public void setNewCollateralSubOwnerList(List<NewCollateralSubOwner> newCollateralSubOwnerList) {
+        this.newCollateralSubOwnerList = newCollateralSubOwnerList;
     }
 
-    public List<NewCollateralSubRelate> getNewCollateralSubRelateList() {
-        return newCollateralSubRelateList;
+    public List<NewCollateralSubRelated> getNewCollateralSubRelatedList() {
+        return newCollateralSubRelatedList;
     }
 
-    public void setNewCollateralSubRelateList(List<NewCollateralSubRelate> newCollateralSubRelateList) {
-        this.newCollateralSubRelateList = newCollateralSubRelateList;
+    public void setNewCollateralSubRelatedList(List<NewCollateralSubRelated> newCollateralSubRelatedList) {
+        this.newCollateralSubRelatedList = newCollateralSubRelatedList;
     }
 
-    public long getRelatedWithId() {
-        return relatedWithId;
+    public CollateralType getCollateralTypeType() {
+        return collateralTypeType;
     }
 
-    public void setRelatedWithId(long relatedWithId) {
-        this.relatedWithId = relatedWithId;
+    public void setCollateralTypeType(CollateralType collateralTypeType) {
+        this.collateralTypeType = collateralTypeType;
+    }
+
+    public SubCollateralType getSubCollateralType() {
+        return subCollateralType;
+    }
+
+    public void setSubCollateralType(SubCollateralType subCollateralType) {
+        this.subCollateralType = subCollateralType;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("collateralTypeType", collateralTypeType)
+                .append("subCollateralType", subCollateralType)
+                .append("address", address)
+                .append("landOffice", landOffice)
+                .append("titleDeed", titleDeed)
+                .append("collateralOwner", collateralOwner)
+                .append("collateralOwnerAAD", collateralOwnerAAD)
+                .append("appraisalValue", appraisalValue)
+                .append("mortgageValue", mortgageValue)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("newCollateralHead", newCollateralHead)
+                .append("newCollateralSubMortgageList", newCollateralSubMortgageList)
+                .append("newCollateralSubOwnerList", newCollateralSubOwnerList)
+                .append("newCollateralSubRelatedList", newCollateralSubRelatedList)
+                .toString();
     }
 }

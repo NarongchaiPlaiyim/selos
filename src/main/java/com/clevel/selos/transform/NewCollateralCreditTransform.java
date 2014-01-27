@@ -2,8 +2,8 @@ package com.clevel.selos.transform;
 
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.NewCollateralDetail;
-import com.clevel.selos.model.db.working.NewCollateralRelCredit;
+import com.clevel.selos.model.db.working.NewCollateral;
+import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.view.NewCreditDetailView;
 
@@ -19,21 +19,21 @@ public class NewCollateralCreditTransform extends Transform {
     }
 
 
-    public List<NewCollateralRelCredit> transformsToModelForCollateral(List<NewCreditDetailView> newCreditDetailViewList,List<NewCreditDetail> newCreditDetailList  ,NewCollateralDetail newCollateralDetail,User user){
+    public List<NewCollateralCredit> transformsToModelForCollateral(List<NewCreditDetailView> newCreditDetailViewList,List<NewCreditDetail> newCreditDetailList  ,NewCollateral newCollateralDetail,User user){
 
-       List<NewCollateralRelCredit> newCollateralCreditList = new ArrayList<NewCollateralRelCredit>();
-       NewCollateralRelCredit newCollateralRelCredit;
+       List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
+       NewCollateralCredit newCollateralRelCredit;
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-            newCollateralRelCredit = new NewCollateralRelCredit();
-            if (newCollateralRelCredit.getId() != 0) {
-                newCollateralRelCredit.setId(newCreditDetailView.getId());
-                newCollateralRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
-                newCollateralRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
-            } else { // id = 0 create new
-                newCollateralRelCredit.setCreateDate(new Date());
-                newCollateralRelCredit.setCreateBy(user);
-            }
+            newCollateralRelCredit = new NewCollateralCredit();
+//            if (newCollateralRelCredit.getId() != 0) {
+//                newCollateralRelCredit.setId(newCreditDetailView.getId());
+//                newCollateralRelCredit.setModifyDate(newCreditDetailView.getModifyDate());
+//                newCollateralRelCredit.setModifyBy(newCreditDetailView.getModifyBy());
+//            } else { // id = 0 create new
+//                newCollateralRelCredit.setCreateDate(new Date());
+//                newCollateralRelCredit.setCreateBy(user);
+//            }
 
             newCollateralRelCredit.setModifyDate(new Date());
             newCollateralRelCredit.setModifyBy(user);
@@ -48,7 +48,7 @@ public class NewCollateralCreditTransform extends Transform {
                 }
             }
 
-            newCollateralRelCredit.setNewCollateralDetail(newCollateralDetail);
+            newCollateralRelCredit.setNewCollateral(newCollateralDetail);
             newCollateralCreditList.add(newCollateralRelCredit);
         }
 

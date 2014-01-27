@@ -22,23 +22,23 @@ public class CallateralBizTransform extends BusinessTransform {
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
 
-    public CollateralDetailView transformCallteral(AppraisalDataResult appraisalDataResult) {
-        CollateralDetailView collateralDetailView = new CollateralDetailView();
+    public NewCollateralView transformCallteral(AppraisalDataResult appraisalDataResult) {
+        NewCollateralView collateralDetailView = new NewCollateralView();
         if(appraisalDataResult!=null){
             AppraisalData appraisalData = appraisalDataResult.getAppraisalData();
             collateralDetailView.setJobID(appraisalData.getJobId());
             collateralDetailView.setAppraisalDate(appraisalData.getAppraisalDate());
-            collateralDetailView.setAADDecision(appraisalData.getAadDecision());
-            collateralDetailView.setAADDecisionReason(appraisalData.getAadDecisionReason());
-            collateralDetailView.setAADDecisionReasonDetail(appraisalData.getAadDecisionReasonDetail());
+            collateralDetailView.setAadDecision(appraisalData.getAadDecision());
+            collateralDetailView.setAadDecisionReason(appraisalData.getAadDecisionReason());
+            collateralDetailView.setAadDecisionReasonDetail(appraisalData.getAadDecisionReasonDetail());
             collateralDetailView.setMortgageCondition(appraisalData.getMortgageCondition());
             collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
 
             List<HeadCollateralData> headCollateralDataList = appraisalData.getHeadCollateralDataList();
-            List<CollateralHeaderDetailView> collateralHeaderDetailViewList = new ArrayList<CollateralHeaderDetailView>();
+            List<NewCollateralHeadView> collateralHeaderDetailViewList = new ArrayList<NewCollateralHeadView>();
             if(headCollateralDataList!=null && headCollateralDataList.size()>0){
                 for(HeadCollateralData headCollateralData: headCollateralDataList){
-                    CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
+                    NewCollateralHeadView collateralHeaderDetailView = new NewCollateralHeadView();
                     collateralHeaderDetailView.setTitleDeed(headCollateralData.getTitleDeed());
                     collateralHeaderDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
                     collateralHeaderDetailView.setAppraisalValue(headCollateralData.getAppraisalValue());
@@ -50,10 +50,10 @@ public class CallateralBizTransform extends BusinessTransform {
                     //TODO: add field : subCollType
 
                     List<SubCollateralData> subCollateralDataList = headCollateralData.getSubCollateralDataList();
-                    List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
+                    List<NewCollateralSubView> subCollateralDetailViewList = new ArrayList<NewCollateralSubView>();
                     if(subCollateralDataList!=null && subCollateralDataList.size()>0){
                         for(SubCollateralData subCollateralData: subCollateralDataList){
-                            SubCollateralDetailView subCollateralDetailView = new SubCollateralDetailView();
+                            NewCollateralSubView subCollateralDetailView = new NewCollateralSubView();
                             if(collateralType!=null && collateralType.getId()!=0){
                                 SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,subCollateralData.getSubCollType());
                                 subCollateralDetailView.setSubCollateralType(subCollateralType);
@@ -66,11 +66,11 @@ public class CallateralBizTransform extends BusinessTransform {
                             subCollateralDetailViewList.add(subCollateralDetailView);
                         }
                     }
-                    collateralHeaderDetailView.setSubCollateralDetailViewList(subCollateralDetailViewList);
+                    collateralHeaderDetailView.setNewCollateralSubViewList(subCollateralDetailViewList);
                     collateralHeaderDetailViewList.add(collateralHeaderDetailView);
                 }
             }
-            collateralDetailView.setCollateralHeaderDetailViewList(collateralHeaderDetailViewList);
+            collateralDetailView.setNewCollateralHeadViewList(collateralHeaderDetailViewList);
         }
         return collateralDetailView;
     }
