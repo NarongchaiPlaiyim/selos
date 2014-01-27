@@ -46,7 +46,7 @@ public class NewGuarantorCreditTransform extends Transform {
                     log.info("newGuarantorRelCredit id is " + newGuarantorRelCredit.getNewCreditDetail().getId());
                 }
             }
-
+            newGuarantorRelCredit.setNewCreditFacility(newGuarantorRelCredit.getNewCreditFacility());
             newGuarantorRelCredit.setNewGuarantorDetail(newGuarantorDetail);
             newGuarantorRelCreditList.add(newGuarantorRelCredit);
         }

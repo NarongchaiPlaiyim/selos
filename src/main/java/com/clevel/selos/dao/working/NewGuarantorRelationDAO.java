@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.db.working.NewGuarantorRelCredit;
 import org.hibernate.Criteria;
@@ -31,5 +32,17 @@ public class NewGuarantorRelationDAO extends GenericDAO<NewGuarantorRelCredit, L
         return newGuarantorRelCreditList;
 
     }
+
+    public List<NewGuarantorRelCredit> getListGuarantorCreditByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("getListGuarantorCreditByNewCreditFacility. (newCreditFacility: {})", newCreditFacility.getId());
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        List<NewGuarantorRelCredit> newGuarantorRelCreditList = (List<NewGuarantorRelCredit>)criteria.list();
+        log.info("getList. (result size: {})", newGuarantorRelCreditList.size());
+
+        return newGuarantorRelCreditList;
+
+    }
+
 
 }
