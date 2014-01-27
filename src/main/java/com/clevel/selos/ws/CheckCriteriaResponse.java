@@ -5,14 +5,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class CheckCriteriaResponse {
-    int code;
+    String code;
     String message;
 
     public CheckCriteriaResponse(){
 
     }
 
-    public CheckCriteriaResponse(int code, String message) {
+    public CheckCriteriaResponse(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -24,11 +24,11 @@ public class CheckCriteriaResponse {
 
 
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
