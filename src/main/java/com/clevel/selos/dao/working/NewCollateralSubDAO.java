@@ -65,4 +65,16 @@ public class NewCollateralSubDAO extends GenericDAO<NewCollateralSub, Long> {
 
     }
 
+    public List<NewCollateralSub> findByNewCollateralHead(NewCollateralHead newCollateralHead) {
+        log.info("getAllNewSubCollateral. (newCollateralHead: {})", newCollateralHead);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateralHead", newCollateralHead));
+        criteria.addOrder(Order.asc("newCollateralHead.id"));
+        List<NewCollateralSub> newCollateralSubDetails = (List<NewCollateralSub>) criteria.list();
+        log.info("getList. (result size: {})", newCollateralSubDetails.size());
+
+        return newCollateralSubDetails;
+
+    }
+
 }

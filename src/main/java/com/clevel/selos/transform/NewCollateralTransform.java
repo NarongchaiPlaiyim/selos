@@ -54,7 +54,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-//              newCollateral.setType(); 'P'
+            newCollateral.setCollType("P");
 //            if (newCollateralView.getId() != 0) {
 //                newCollateral.setId(newCollateralView.getId());
 //                newCollateral.setCreateDate(newCollateralView.getCreateDate());
@@ -118,7 +118,7 @@ public class NewCollateralTransform extends Transform {
 
             }
 
-            List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateralDetail(newCollateralDetail1);
+            List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateral(newCollateralDetail1);
             if (newCollateralDetail1.getNewCollateralHeadList() != null) {
                 List<NewCollateralHeadView> newCollateralHeadViews = transformCollateralHeadToView(newCollateralHeadDetails);
                 newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViews);

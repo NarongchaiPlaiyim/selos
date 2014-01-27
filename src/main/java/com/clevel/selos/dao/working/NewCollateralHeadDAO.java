@@ -19,7 +19,7 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
     @Inject
     public NewCollateralHeadDAO() {}
 
-    public List<NewCollateralHead> findByNewCollateralDetail(NewCollateral newCollateral) {
+    public List<NewCollateralHead> findByNewCollateral(NewCollateral newCollateral) {
         log.info("v ::: {}", newCollateral);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral", newCollateral));
@@ -28,4 +28,5 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
         log.info("newCollateralHeadDetails ::: size : {}", newCollateralHeadDetails.size());
         return newCollateralHeadDetails;
     }
+
 }
