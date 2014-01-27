@@ -54,15 +54,15 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-
-            if (newCollateralView.getId() != 0) {
-                newCollateral.setId(newCollateralView.getId());
-                newCollateral.setCreateDate(newCollateralView.getCreateDate());
-                newCollateral.setCreateBy(newCollateralView.getCreateBy());
-            } else { // id = 0 create new
-                newCollateral.setCreateDate(new Date());
-                newCollateral.setCreateBy(user);
-            }
+            newCollateral.setCollType("P");
+//            if (newCollateralView.getId() != 0) {
+//                newCollateral.setId(newCollateralView.getId());
+//                newCollateral.setCreateDate(newCollateralView.getCreateDate());
+//                newCollateral.setCreateBy(newCollateralView.getCreateBy());
+//            } else { // id = 0 create new
+//                newCollateral.setCreateDate(new Date());
+//                newCollateral.setCreateBy(user);
+//            }
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
             newCollateral.setAadDecisionReason(newCollateralView.getAadDecisionReason());
@@ -87,7 +87,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
-            newCollateralView.setId(newCollateralDetail1.getId());
+//            newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
@@ -129,55 +129,14 @@ public class NewCollateralTransform extends Transform {
         return newCollateralViewList;
     }
 
-/*
-    public List<NewCollateralHead> transformCollateralHeadToModel(List<NewCollateralHeadView> newCollateralHeadViewList, NewCollateral collateralDetail, User user) {
-
-        List<NewCollateralHead> collateralHeaderDetailList = new ArrayList<NewCollateralHead>();
-        NewCollateralHead collateralHeaderDetail;
-
-        for (NewCollateralHeadView newCollateralHeadView : newCollateralHeadViewList) {
-            collateralHeaderDetail = new NewCollateralHead();
-
-            if (newCollateralHeadView.getId() != 0) {
-                collateralHeaderDetail.setId(newCollateralHeadView.getId());
-                collateralHeaderDetail.setCreateDate(newCollateralHeadView.getCreateDate());
-                collateralHeaderDetail.setCreateBy(newCollateralHeadView.getCreateBy());
-            } else { // id = 0 create new
-                collateralHeaderDetail.setCreateDate(new Date());
-                collateralHeaderDetail.setCreateBy(user);
-            }
-
-            collateralHeaderDetail.setHeadCollType(newCollateralHeadView.getHeadCollType());
-            collateralHeaderDetail.setPotential(newCollateralHeadView.getPotentialCollateral());
-            collateralHeaderDetail.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
-            collateralHeaderDetail.setTitleDeed(newCollateralHeadView.getTitleDeed());
-            collateralHeaderDetail.setCollTypePercentLTV(newCollateralHeadView.getCollTypePercentLTV());
-            collateralHeaderDetail.setExistingCredit(newCollateralHeadView.getExistingCredit());
-            collateralHeaderDetail.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
-            collateralHeaderDetail.setAppraisalValue(newCollateralHeadView.getAppraisalValue());
-            collateralHeaderDetail.setModifyBy(newCollateralHeadView.getModifyBy());
-            collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
-            collateralHeaderDetail.setNewCollateral(collateralDetail);
-            collateralHeaderDetailList.add(collateralHeaderDetail);
-        }
-
-        return collateralHeaderDetailList;
-    }
-*/
 
     public NewCollateralHead transformCollateralHeadToModel(NewCollateralHeadView newCollateralHeadView, NewCollateral collateralDetail, User user) {
 
         NewCollateralHead collateralHeaderDetail = new NewCollateralHead();
-
-        if (newCollateralHeadView.getId() != 0) {
-            collateralHeaderDetail.setId(newCollateralHeadView.getId());
-            collateralHeaderDetail.setCreateDate(newCollateralHeadView.getCreateDate());
-            collateralHeaderDetail.setCreateBy(newCollateralHeadView.getCreateBy());
-        } else { // id = 0 create new
-            collateralHeaderDetail.setCreateDate(new Date());
-            collateralHeaderDetail.setCreateBy(user);
-        }
-
+        collateralHeaderDetail.setCreateDate(newCollateralHeadView.getCreateDate());
+        collateralHeaderDetail.setCreateBy(newCollateralHeadView.getCreateBy());
+        collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
+        collateralHeaderDetail.setModifyBy(user);
         collateralHeaderDetail.setHeadCollType(newCollateralHeadView.getHeadCollType());
         collateralHeaderDetail.setPotential(newCollateralHeadView.getPotentialCollateral());
         collateralHeaderDetail.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
@@ -194,13 +153,12 @@ public class NewCollateralTransform extends Transform {
     }
 
     public List<NewCollateralHeadView> transformCollateralHeadToView(List<NewCollateralHead> collateralHeaderDetailList) {
-        log.info("transformCollateralHeadToView ::collateralHeaderDetailList.size :: {}",collateralHeaderDetailList.size());
+        log.info("transformCollateralHeadToView ::collateralHeaderDetailList.size :: {}", collateralHeaderDetailList.size());
         List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         NewCollateralHeadView newCollateralHeadView;
 
         for (NewCollateralHead collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadView = new NewCollateralHeadView();
-            newCollateralHeadView.setId(collateralHeaderDetail.getId());
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
@@ -232,39 +190,8 @@ public class NewCollateralTransform extends Transform {
         return newCollateralHeadViewList;
     }
 
-/*
-    public List<NewCollateralSub> transformCollateralSubToModel(List<NewCollateralSubView> newCollateralSubViewList, NewCollateralHead collateralHeaderDetail, User user) {
-
-        List<NewCollateralSub> subCollateralDetailList = new ArrayList<NewCollateralSub>();
-        NewCollateralSub subCollateralDetail;
-
-        for (NewCollateralSubView newCollateralSubView : newCollateralSubViewList) {
-            subCollateralDetail = new NewCollateralSub();
-
-            if (newCollateralSubView.getId() != 0) {
-                subCollateralDetail.setId(newCollateralSubView.getId());
-                subCollateralDetail.setCreateDate(newCollateralSubView.getCreateDate());
-                subCollateralDetail.setCreateBy(newCollateralSubView.getCreateBy());
-            } else { // id = 0 create new
-                subCollateralDetail.setCreateDate(new Date());
-                subCollateralDetail.setCreateBy(user);
-            }
-
-            subCollateralDetail.setTitleDeed(newCollateralSubView.getTitleDeed());
-            subCollateralDetail.setAppraisalValue(newCollateralSubView.getAppraisalValue());
-            subCollateralDetail.setAddress(newCollateralSubView.getAddress());
-            subCollateralDetail.setCollateralOwner(newCollateralSubView.getCollateralOwner());
-            subCollateralDetail.setSubCollateralType(newCollateralSubView.getSubCollateralType());
-            subCollateralDetail.setNewCollateralHead(collateralHeaderDetail);
-            subCollateralDetailList.add(subCollateralDetail);
-        }
-
-        return subCollateralDetailList;
-    }
-*/
-
     public List<NewCollateralSubView> transformCollateralSubToView(List<NewCollateralSub> subCollateralDetailList) {
-        log.info(" transformCollateralSubToView ::subCollateralDetailList.size :: {} ",subCollateralDetailList.size());
+        log.info(" transformCollateralSubToView ::subCollateralDetailList.size :: {} ", subCollateralDetailList.size());
         List<NewCollateralSubView> newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
         NewCollateralSubView newCollateralSubView;
 
