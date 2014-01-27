@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewCollateralTransform extends Transform {
@@ -152,6 +151,33 @@ public class NewCollateralTransform extends Transform {
         return collateralHeaderDetail;
     }
 
+
+    public List<NewCollateralHead> transformCollateralHeadToModel(List<NewCollateralHeadView> newCollateralHeadViewList, NewCollateral collateralDetail, User user) {
+        List<NewCollateralHead> newCollateralHeadList = new ArrayList<NewCollateralHead>();
+        NewCollateralHead newCollateralHead;
+
+        for (NewCollateralHeadView newCollateralHeadView : newCollateralHeadViewList) {
+            newCollateralHead = new NewCollateralHead();
+            newCollateralHead.setCreateDate(newCollateralHeadView.getCreateDate());
+            newCollateralHead.setCreateBy(newCollateralHeadView.getCreateBy());
+            newCollateralHead.setModifyDate(newCollateralHeadView.getModifyDate());
+            newCollateralHead.setModifyBy(user);
+            newCollateralHead.setHeadCollType(newCollateralHeadView.getHeadCollType());
+            newCollateralHead.setPotential(newCollateralHeadView.getPotentialCollateral());
+            newCollateralHead.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
+            newCollateralHead.setTitleDeed(newCollateralHeadView.getTitleDeed());
+            newCollateralHead.setCollTypePercentLTV(newCollateralHeadView.getCollTypePercentLTV());
+            newCollateralHead.setExistingCredit(newCollateralHeadView.getExistingCredit());
+            newCollateralHead.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
+            newCollateralHead.setAppraisalValue(newCollateralHeadView.getAppraisalValue());
+            newCollateralHead.setModifyBy(newCollateralHeadView.getModifyBy());
+            newCollateralHead.setModifyDate(newCollateralHeadView.getModifyDate());
+            newCollateralHead.setNewCollateral(collateralDetail);
+            newCollateralHeadList.add(newCollateralHead);
+        }
+        return newCollateralHeadList;
+    }
+
     public List<NewCollateralHeadView> transformCollateralHeadToView(List<NewCollateralHead> collateralHeaderDetailList) {
         log.info("transformCollateralHeadToView ::collateralHeaderDetailList.size :: {}", collateralHeaderDetailList.size());
         List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
@@ -248,14 +274,14 @@ public class NewCollateralTransform extends Transform {
 
         NewCollateralSub subCollateralDetail = new NewCollateralSub();
 
-        if (newCollateralSubView.getId() != 0) {
-            subCollateralDetail.setId(newCollateralSubView.getId());
-            subCollateralDetail.setCreateDate(newCollateralSubView.getCreateDate());
-            subCollateralDetail.setCreateBy(newCollateralSubView.getCreateBy());
-        } else { // id = 0 create new
-            subCollateralDetail.setCreateDate(new Date());
-            subCollateralDetail.setCreateBy(user);
-        }
+//        if (newCollateralSubView.getId() != 0) {
+//            subCollateralDetail.setId(newCollateralSubView.getId());
+//            subCollateralDetail.setCreateDate(newCollateralSubView.getCreateDate());
+//            subCollateralDetail.setCreateBy(newCollateralSubView.getCreateBy());
+//        } else { // id = 0 create new
+//            subCollateralDetail.setCreateDate(new Date());
+//            subCollateralDetail.setCreateBy(user);
+//        }
 
         subCollateralDetail.setTitleDeed(newCollateralSubView.getTitleDeed());
         subCollateralDetail.setAppraisalValue(newCollateralSubView.getAppraisalValue());

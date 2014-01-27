@@ -5,27 +5,20 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class SubCollateralTypeDAO extends GenericDAO<SubCollateralType, Integer> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public SubCollateralTypeDAO() {
-    }
+    public SubCollateralTypeDAO() {}
 
-    public SubCollateralType findByBySubColCode(SubCollateralType subCollateralType) {
-        log.info("getListBySubColCode. (subCollateralType: {})", subCollateralType);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("collateralType", subCollateralType.getCollateralType()));
-        criteria.add(Restrictions.eq("code", subCollateralType.getCode()));
-        SubCollateralType subCollateralTypeResult = (SubCollateralType)criteria.uniqueResult();
-        return subCollateralTypeResult;
-    }
 
     public SubCollateralType findByHeadAndSubColCode(CollateralType collateralType, String subCode) {
         log.info("findByHeadCodeAndSubColCode. (collateralType: {}, subCode: {})", collateralType,subCode);
@@ -34,5 +27,15 @@ public class SubCollateralTypeDAO extends GenericDAO<SubCollateralType, Integer>
         criteria.add(Restrictions.eq("code", subCode));
         SubCollateralType subCollateralTypeResult = (SubCollateralType)criteria.uniqueResult();
         return subCollateralTypeResult;
+    }
+
+    public List<SubCollateralType> findByCollateralType(CollateralType collateralType) {
+        log.info("findByCollateralType. (collateralType) :: {}",collateralType.getId());
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("collateralType.id", collateralType.getId()));
+        criteria.addOrder(Order.asc("id"));
+        List<SubCollateralType> list = (List<SubCollateralType>)criteria.list();
+        log.info("getList. (result size: {})", list.size());
+        return list;
     }
 }
