@@ -216,7 +216,7 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user);
             newCollateralDetailDAO.persist(newCollateralList);
             log.info("persist newCollateralDetailList...");
-            onDeleteDetailOfNewCollateral(newCollateralList);
+//            onDeleteDetailOfNewCollateral(newCollateralList);
 
             for (int i = 0; i < newCollateralList.size(); i++) {
                 log.info(" newCollateralDetailList  is " + i);
@@ -376,18 +376,18 @@ public class CreditFacProposeControl extends BusinessControl {
         }
     }
 
-    public void onDeleteDetailOfNewCollateral(List<NewCollateral> newCollateralList) {
-        log.info("START onDeleteDetailOfNewCollateral newCollateralList.size :: {} ", newCollateralList.size());
-        for (NewCollateral newCollateral : newCollateralList) {
-            log.info("newCollateral.id::{}", newCollateral.getId());
-            List<NewCollateralCredit> newCollateralRelCreditList = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateral);
-            if (newCollateralRelCreditList.size() > 0) {
-                log.info("newCollateralRelCreditList::: {}", newCollateralRelCreditList.size());
-                newCollateralRelationDAO.delete(newCollateralRelCreditList);
-                log.info("delete newCollateralRelCredits");
-            }
-        }
-    }
+//    public void onDeleteDetailOfNewCollateral(List<NewCollateral> newCollateralList) {
+//        log.info("START onDeleteDetailOfNewCollateral newCollateralList.size :: {} ", newCollateralList.size());
+//        for (NewCollateral newCollateral : newCollateralList) {
+//            log.info("newCollateral.id::{}", newCollateral.getId());
+//            List<NewCollateralCredit> newCollateralRelCreditList = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateral);
+//            if (newCollateralRelCreditList.size() > 0) {
+//                log.info("newCollateralRelCreditList::: {}", newCollateralRelCreditList.size());
+//                newCollateralRelationDAO.delete(newCollateralRelCreditList);
+//                log.info("delete newCollateralRelCredits");
+//            }
+//        }
+//    }
 
     public void onDeleteDetailOfNewCollateralSub(NewCollateralSub newCollateralSubDetail) {
         log.info("START onDeleteDetailOfNewCollateralSub newCollateralSubDetail.size :: {} ", newCollateralSubDetail.getId());
