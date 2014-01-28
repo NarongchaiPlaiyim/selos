@@ -23,7 +23,7 @@
                     </td>
                     <td>
                         <p:selectOneMenu id="loanAccountType" value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true" style="width: 170px;">
-                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                             <f:selectItems value="#{dbrInfo.loanAccountTypes}"
                                            var="loanAccountType"
                                            itemLabel="#{loanAccountType.name}"

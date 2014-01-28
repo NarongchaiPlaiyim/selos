@@ -583,7 +583,9 @@ public class CreditFacPropose implements Serializable {
         modeForButton = ModeForButton.EDIT;
         log.info("rowIndex :: {}", rowIndex);
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
-        ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
+        onChangeRequestType();
+//        ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
+        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
 
         if (rowIndex < newCreditFacilityView.getNewCreditDetailViewList().size()) {
@@ -604,7 +606,7 @@ public class CreditFacPropose implements Serializable {
             newCreditDetailView.setSuggestBasePrice(proposeCreditDetailSelected.getSuggestBasePrice());
             newCreditDetailView.setSuggestInterest(proposeCreditDetailSelected.getSuggestInterest());
             newCreditDetailView.setFrontEndFee(proposeCreditDetailSelected.getFrontEndFee());
-            newCreditDetailView.setLoanPurpose(newCreditDetailView.getLoanPurpose());
+            newCreditDetailView.setLoanPurpose(proposeCreditDetailSelected.getLoanPurpose());
             newCreditDetailView.setRemark(proposeCreditDetailSelected.getRemark());
             newCreditDetailView.setDisbursement(proposeCreditDetailSelected.getDisbursement());
             newCreditDetailView.setHoldLimitAmount(proposeCreditDetailSelected.getHoldLimitAmount());
@@ -1227,8 +1229,6 @@ public class CreditFacPropose implements Serializable {
         Cloner cloner = new Cloner();
         newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
         newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
-//        newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
-//        newGuarantorDetailView.setNewCreditDetailViewList(findGuarantorCreditType());
 
     }
 
@@ -1244,14 +1244,12 @@ public class CreditFacPropose implements Serializable {
             Cloner cloner = new Cloner();
             newCreditDetailListTemp = cloner.deepClone(newCreditDetailList);
             newGuarantorDetailView.setNewCreditDetailViewList(newCreditDetailListTemp);
-//            newGuarantorDetailView.setNewCreditDetailViewList(new ArrayList<NewCreditDetailView>());
-//            newGuarantorDetailView.setNewCreditDetailViewList(findGuarantorCreditType());
 
             if (newGuarantorDetailViewItem.getNewCreditDetailViewList().size() > 0) {
                 for (int i = 0; i < newGuarantorDetailViewItem.getNewCreditDetailViewList().size(); i++) {
                     for (int j = tempSeq; j < newCreditDetailListTemp.size(); j++) {
                         log.info("creditType at " + j + " seq is     " + newCreditDetailListTemp.get(j).getSeq());
-
+                        log.info("newGuarantorDetailViewItem.getNewCreditDetailViewList().get(i).getGuaranteeAmount() :: {}",newGuarantorDetailViewItem.getNewCreditDetailViewList().get(i).getGuaranteeAmount());
                         if (newGuarantorDetailViewItem.getNewCreditDetailViewList().get(i).getSeq() == newCreditDetailListTemp.get(j).getSeq()) {
                             newGuarantorDetailView.getNewCreditDetailViewList().get(j).setNoFlag(true);
                             newGuarantorDetailView.getNewCreditDetailViewList().get(j).setGuaranteeAmount(newGuarantorDetailViewItem.getNewCreditDetailViewList().get(i).getGuaranteeAmount());
