@@ -1,15 +1,15 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.AccountInfoControl;
+import com.clevel.selos.dao.master.AccountProductDAO;
+import com.clevel.selos.dao.master.AccountPurposeDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankBranchDAO;
-import com.clevel.selos.dao.master.OpenAccountProductDAO;
-import com.clevel.selos.dao.master.OpenAccountPurposeDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.AccountPurpose;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.db.master.OpenAccountProduct;
-import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,17 +38,17 @@ public class AccountInfo implements Serializable {
     Message msg;
 
     @Inject
-    private OpenAccountProductDAO productTypeDAO;
+    private AccountProductDAO productTypeDAO;
     @Inject
     private BankAccountTypeDAO accountTypeDAO;
     @Inject
-    private OpenAccountPurposeDAO purposeDAO;
+    private AccountPurposeDAO purposeDAO;
     @Inject
     private AccountInfoControl accountInfoControl;
     @Inject
     private BankBranchDAO bankBranchDAO;
 
-    private List<OpenAccountPurpose> purposeList;
+    private List<AccountPurpose> purposeList;
 
     private String messageHeader;
     private String message;
@@ -68,7 +67,7 @@ public class AccountInfo implements Serializable {
 
     //*** Drop down List ***//
     private List<BankAccountType> accountTypeList;
-    private List<OpenAccountProduct> productTypeList;
+    private List<AccountProduct> productTypeList;
     private List<BankBranch> branchList;
     private List<AccountNameView> accountNameList;
 
@@ -190,7 +189,7 @@ public class AccountInfo implements Serializable {
         id = (int) accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().getId();
         log.debug("-- Product Type id : {}", id);
         if(0 != id){
-            for (OpenAccountProduct productType : productTypeList){
+            for (AccountProduct productType : productTypeList){
                 if (productType.getId() == id){
                     accountInfoView.getAccountInfoDetailViewSelected().getProductTypeView().setName(productType.getName());
                     log.debug("-- Product Type : {}", productType.getName());
@@ -283,7 +282,7 @@ public class AccountInfo implements Serializable {
 
         purposeViewList = new ArrayList<AccountInfoPurposeView>();
         AccountInfoPurposeView purposeView = null;
-        for(OpenAccountPurpose purpose : purposeList){
+        for(AccountPurpose purpose : purposeList){
             purposeView = new AccountInfoPurposeView();
             purposeView.setName(purpose.getName());
             purposeView.setId(purpose.getId());
@@ -343,11 +342,11 @@ public class AccountInfo implements Serializable {
         this.branchList = branchList;
     }
 
-    public OpenAccountProductDAO getProductTypeDAO() {
+    public AccountProductDAO getProductTypeDAO() {
         return productTypeDAO;
     }
 
-    public void setProductTypeDAO(OpenAccountProductDAO productTypeDAO) {
+    public void setProductTypeDAO(AccountProductDAO productTypeDAO) {
         this.productTypeDAO = productTypeDAO;
     }
 
@@ -359,19 +358,19 @@ public class AccountInfo implements Serializable {
         this.accountTypeDAO = accountTypeDAO;
     }
 
-    public OpenAccountPurposeDAO getPurposeDAO() {
+    public AccountPurposeDAO getPurposeDAO() {
         return purposeDAO;
     }
 
-    public void setPurposeDAO(OpenAccountPurposeDAO purposeDAO) {
+    public void setPurposeDAO(AccountPurposeDAO purposeDAO) {
         this.purposeDAO = purposeDAO;
     }
 
-    public List<OpenAccountPurpose> getPurposeList() {
+    public List<AccountPurpose> getPurposeList() {
         return purposeList;
     }
 
-    public void setPurposeList(List<OpenAccountPurpose> purposeList) {
+    public void setPurposeList(List<AccountPurpose> purposeList) {
         this.purposeList = purposeList;
     }
 
@@ -423,11 +422,11 @@ public class AccountInfo implements Serializable {
         this.accountTypeList = accountTypeList;
     }
 
-    public List<OpenAccountProduct> getProductTypeList() {
+    public List<AccountProduct> getProductTypeList() {
         return productTypeList;
     }
 
-    public void setProductTypeList(List<OpenAccountProduct> productTypeList) {
+    public void setProductTypeList(List<AccountProduct> productTypeList) {
         this.productTypeList = productTypeList;
     }
 

@@ -53,7 +53,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-            newCollateral.setCollType("P");
+            newCollateral.setProposeType("P");
 //            if (newCollateralView.getId() != 0) {
 //                newCollateral.setId(newCollateralView.getId());
 //                newCollateral.setCreateDate(newCollateralView.getCreateDate());

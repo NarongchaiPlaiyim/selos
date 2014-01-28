@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_disbursement")
-public class Disbursement implements Serializable {
+@Table(name = "mst_disbursement_type")
+public class DisbursementType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
@@ -22,7 +22,7 @@ public class Disbursement implements Serializable {
     @Column(name = "active")
     private int active;
 
-    public Disbursement() {
+    public DisbursementType() {
     }
 
     public int getId() {

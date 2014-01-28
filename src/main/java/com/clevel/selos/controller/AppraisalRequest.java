@@ -293,7 +293,7 @@ public class AppraisalRequest implements Serializable {
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
             appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
 
-            appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId);
+            appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
             messageHeader = msg.get("app.appraisal.request.message.header.save.success");
             message = msg.get("app.appraisal.request.message.body.save.success");
             onCreation();

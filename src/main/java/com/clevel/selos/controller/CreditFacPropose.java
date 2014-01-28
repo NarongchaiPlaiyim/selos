@@ -89,7 +89,7 @@ public class CreditFacPropose implements Serializable {
     private ProductGroup productGroup;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
-    private List<Disbursement> disbursementList;
+    private List<DisbursementType> disbursementList;
     private List<BaseRate> baseRateList;
     private NewCreditFacilityView newCreditFacilityView;
     private List<LoanPurpose> loanPurposeList;
@@ -285,7 +285,7 @@ public class CreditFacPropose implements Serializable {
                 productGroup = null;
             } else{
                 log.info("workCase.id ::: {}", workCase.getId());
-                productGroup =  workCase.getProductGroup();
+                productGroup =  basicInfo.getProductGroup();
             }
 
             tcg = TCGDAO.findByWorkCaseId(workCaseId);
@@ -346,7 +346,7 @@ public class CreditFacPropose implements Serializable {
         }
 
         if (disbursementList == null) {
-            disbursementList = new ArrayList<Disbursement>();
+            disbursementList = new ArrayList<DisbursementType>();
         }
 
         if (newConditionDetailView == null) {
@@ -585,13 +585,14 @@ public class CreditFacPropose implements Serializable {
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
         onChangeRequestType();
 //        ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
-        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+        ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailSelected.getProductProgram().getId());
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        CreditType creditType = creditTypeDAO.findById(proposeCreditDetailSelected.getCreditType().getId());
 
         if (rowIndex < newCreditFacilityView.getNewCreditDetailViewList().size()) {
             newCreditDetailView = new NewCreditDetailView();
             newCreditDetailView.setProductProgram(productProgram);
-            newCreditDetailView.setCreditType(proposeCreditDetailSelected.getCreditType());
+            newCreditDetailView.setCreditType(creditType);
             newCreditDetailView.setRequestType(proposeCreditDetailSelected.getRequestType());
             newCreditDetailView.setRefinance(proposeCreditDetailSelected.getRefinance());
             newCreditDetailView.setProductCode(proposeCreditDetailSelected.getProductCode());
@@ -628,7 +629,7 @@ public class CreditFacPropose implements Serializable {
                 ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
                 CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
                 LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurpose().getId());
-                Disbursement disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
+                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
 
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
                 creditDetailAdd.setProductProgram(productProgram);
@@ -662,7 +663,7 @@ public class CreditFacPropose implements Serializable {
                 ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
                 CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
                 LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurpose().getId());
-                Disbursement disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
+                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
 
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductProgram(productProgram);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setCreditType(creditType);
@@ -1416,11 +1417,13 @@ public class CreditFacPropose implements Serializable {
 //                        && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                         log.info("Bean :: onSaveNewCreditFacility ::");
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else {
@@ -1535,11 +1538,11 @@ public class CreditFacPropose implements Serializable {
         this.creditTypeList = creditTypeList;
     }
 
-    public List<Disbursement> getDisbursementList() {
+    public List<DisbursementType> getDisbursementList() {
         return disbursementList;
     }
 
-    public void setDisbursementList(List<Disbursement> disbursementList) {
+    public void setDisbursementList(List<DisbursementType> disbursementList) {
         this.disbursementList = disbursementList;
     }
 

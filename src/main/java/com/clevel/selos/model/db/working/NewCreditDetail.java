@@ -122,8 +122,8 @@ public class NewCreditDetail implements Serializable {
     private BaseRate suggestBasePrice;
 
     @OneToOne
-    @JoinColumn(name = "disbursement_id")
-    private Disbursement disbursement;
+    @JoinColumn(name = "disbursement_type_id")
+    private DisbursementType disbursementType;
 
     @OneToOne
     @JoinColumn(name = "loan_purpose_id")
@@ -404,12 +404,12 @@ public class NewCreditDetail implements Serializable {
         this.suggestBasePrice = suggestBasePrice;
     }
 
-    public Disbursement getDisbursement() {
-        return disbursement;
+    public DisbursementType getDisbursementType() {
+        return disbursementType;
     }
 
-    public void setDisbursement(Disbursement disbursement) {
-        this.disbursement = disbursement;
+    public void setDisbursementType(DisbursementType disbursementType) {
+        this.disbursementType = disbursementType;
     }
 
     public LoanPurpose getLoanPurpose() {
@@ -546,7 +546,7 @@ public class NewCreditDetail implements Serializable {
                 .append("creditType", creditType)
                 .append("standardBasePrice", standardBasePrice)
                 .append("suggestBasePrice", suggestBasePrice)
-                .append("disbursement", disbursement)
+                .append("disbursementType", disbursementType)
                 .append("loanPurpose", loanPurpose)
                 .append("newCreditFacility", newCreditFacility)
                 .append("proposeCreditTierDetailList", proposeCreditTierDetailList)

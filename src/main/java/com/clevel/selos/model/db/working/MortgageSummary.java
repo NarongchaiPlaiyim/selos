@@ -16,8 +16,8 @@ public class MortgageSummary implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @OneToMany(mappedBy = "basicInfo")
-    private List<OpenAccount> openAccountList;
+    //@OneToMany(mappedBy = "basicInfo")
+    //private List<OpenAccount> openAccountList;
 
     public long getId() {
         return id;

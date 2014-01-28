@@ -77,16 +77,13 @@ public class Appraisal implements Serializable {
     private String AADAdminRemark;
 
     @OneToMany(mappedBy = "appraisal")
-    private List<AppraisalDetail> appraisalDetailList;
+    private List<AppraisalPurpose> appraisalDetailList;
 
     @OneToMany(mappedBy = "appraisal")
     private List<AppraisalContactDetail> appraisalContactDetailList;
 
-    @OneToMany(mappedBy = "appraisal")
-    private List<ContactRecordDetail> contactRecordDetailList;
-
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name="workcase_appraisal_id")
     private WorkCase workCase;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -253,11 +250,11 @@ public class Appraisal implements Serializable {
         this.AADAdminRemark = AADAdminRemark;
     }
 
-    public List<AppraisalDetail> getAppraisalDetailList() {
+    public List<AppraisalPurpose> getAppraisalDetailList() {
         return appraisalDetailList;
     }
 
-    public void setAppraisalDetailList(List<AppraisalDetail> appraisalDetailList) {
+    public void setAppraisalDetailList(List<AppraisalPurpose> appraisalDetailList) {
         this.appraisalDetailList = appraisalDetailList;
     }
 
@@ -267,14 +264,6 @@ public class Appraisal implements Serializable {
 
     public void setAppraisalContactDetailList(List<AppraisalContactDetail> appraisalContactDetailList) {
         this.appraisalContactDetailList = appraisalContactDetailList;
-    }
-
-    public List<ContactRecordDetail> getContactRecordDetailList() {
-        return contactRecordDetailList;
-    }
-
-    public void setContactRecordDetailList(List<ContactRecordDetail> contactRecordDetailList) {
-        this.contactRecordDetailList = contactRecordDetailList;
     }
 
     public WorkCase getWorkCase() {
@@ -339,7 +328,6 @@ public class Appraisal implements Serializable {
                 .append("AADAdminRemark", AADAdminRemark)
                 .append("appraisalDetailList", appraisalDetailList)
                 .append("appraisalContactDetailList", appraisalContactDetailList)
-                .append("contactRecordDetailList", contactRecordDetailList)
                 .append("workCase", workCase)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

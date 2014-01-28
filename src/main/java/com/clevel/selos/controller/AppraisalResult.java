@@ -89,6 +89,7 @@ public class AppraisalResult implements Serializable {
     private Date currentDate;
     private boolean searchCOMS;
     private int rowCollateral;
+    private boolean flagReadOnly;
 
     private User user;
     private Long workCaseId;
@@ -151,31 +152,26 @@ public class AppraisalResult implements Serializable {
         newCollateralViewList = new ArrayList<NewCollateralView>();
         newCollateralViewList.add(newCollateralViewForTest());
         newCollateralViewList.add(newCollateralViewForTest2());
+
+        appraisalView = new AppraisalView();
+        flagReadOnly = false;
     }
 
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
         init();
-
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
+        log.debug("-- User : {}", ""+user.toString());
 
-        try{
-            workCaseId = (Long)session.getAttribute("workCaseId");
-        } catch (Exception e) {
-//            workCaseId = 0L;
-            workCaseId = 2001L;//for test.
-        }
-        workCaseId = 2L;//for test.
+        workCaseId = 4L;
         log.info("-- workCaseId :: {} ",workCaseId);
 
         if(workCaseId != 0 ){
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId);
             if(appraisalView != null){
                 newCollateralViewList = appraisalView.getNewCollateralViewList();
-
-
                 if(newCollateralViewList != null){
                     for(NewCollateralView collateralView : newCollateralViewList){
                         newCollateralHeadViewList = collateralView.getNewCollateralHeadViewList();
@@ -191,15 +187,10 @@ public class AppraisalResult implements Serializable {
                         }
                         newCollateralViewList.add(collateralView);
                     }
-                } else {
-//                    log.debug("-- newCollateralViewList is null and than create newCollateralViewList");
+                } else {;
                     newCollateralViewList = new ArrayList<NewCollateralView>();
                 }
-
-
-                onSearchCollateral();
                 data();
-
             } else {
                 log.debug("-- appraisalView is null");
 
@@ -338,9 +329,10 @@ public class AppraisalResult implements Serializable {
         }
     }
     public void onAddCollateralDetailView(){
-        //Add
+        //Add from main page
         log.info("-- onAddCollateralDetailView >>> begin ");
         modeForButton = ModeForButton.ADD;
+        flagReadOnly = false;
         newCollateralView = new NewCollateralView();
         searchCOMS = false;
     }
@@ -351,11 +343,7 @@ public class AppraisalResult implements Serializable {
         boolean flag = true;
         try{
             if(ModeForButton.ADD.equals(modeForButton)){
-                for(NewCollateralView view : newCollateralViewList){
-                    if(view.getJobID().equals(jobIDSearch)){
-                        flag = false;
-                    }
-                }
+                flag = checkJobIdExist(newCollateralViewList, jobIDSearch);
                 if(flag){
                     newCollateralView = callCOM_S(jobIDSearch);
                 } else {
@@ -368,6 +356,14 @@ public class AppraisalResult implements Serializable {
             log.error("Exception : {}", ex);
         }
         log.info("onCallRetrieveAppraisalReportInfo End");
+    }
+    private boolean checkJobIdExist(final List<NewCollateralView> viewList, String jobIDSearch){
+        for(NewCollateralView view : viewList){
+            if(view.getJobID().equals(jobIDSearch)){
+                return false;
+            }
+        }
+        return true;
     }
 
     private NewCollateralView callCOM_S(final String jobIDSearch){
@@ -387,25 +383,24 @@ public class AppraisalResult implements Serializable {
 
 
     public void onSaveCollateralDetailView(){
+        log.debug("-- onSaveCollateralDetailView()");
         //click save from dialog
         boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
         Cloner cloner = new Cloner();
-        if(!searchCOMS){
-            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
-            newCollateralView = new NewCollateralView();
-            newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
-            message = "ไม่สามารถบันทึกได้ เนื่องจากไม่พบข้อมูล AAD ";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
+//        if(!searchCOMS){
+//            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
+//            newCollateralView = new NewCollateralView();
+//            newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
+//
+//            message = "ไม่สามารถบันทึกได้ เนื่องจากไม่พบข้อมูล AAD ";
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            return;
+//        }
 
-        log.info( "onSaveCollateralDetailView rowCollateral " + rowCollateral);
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- Flag {}", ModeForButton.ADD);
             complete=true;
             log.info("onSaveCollateralDetailView add >>> begin ");
-            log.info("newCollateralViewList size >>> is " + newCollateralViewList.size());
             newCollateralViewList.add(newCollateralView);
             log.info("onSaveCollateralDetailView add >>> end ");
         }else if(ModeForButton.EDIT.equals(modeForButton)){
@@ -413,15 +408,18 @@ public class AppraisalResult implements Serializable {
             log.debug("-- Flag {}", ModeForButton.EDIT);
             newCollateralViewList.set(rowCollateral, newCollateralView);
             log.info("onSaveCollateralDetailView edit >>> begin ");
-
         }
 
+        RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
     }
     public void onEditCollateralDetailView(){
         log.info("-- onEditCollateralDetailView " + newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
         newCollateralView = selectCollateralDetailView;
+        flagReadOnly = true;
+
+
 //        selectCollateralDetailView
 //        //*** Check list size ***//
 //        rowCollateral =  selectCollateralDetailView.getNo();
@@ -442,10 +440,9 @@ public class AppraisalResult implements Serializable {
 //        }
     }
     public void onDeleteCollateralDetailView(){
-        log.info(" onDeleteCollateralDetailView " + newCollateralViewList.size());
         newCollateralViewList.remove(selectCollateralDetailView);
+        log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
 //        onSetRowNoCollateralDetailView();
-        log.info( " onDeleteCollateralDetailView end ");
     }
     public void onSetRowNoCollateralDetailView(){
 //        CollateralDetailView collateralDetailViewRow;
@@ -455,7 +452,7 @@ public class AppraisalResult implements Serializable {
 //        }
     }
     public void onSaveAppraisalResult() {
-        log.info("onSaveAppraisalResult::::");
+        log.info("-- onSaveAppraisalResult");
 //        log.info("collateralDetailViewList.size()        ::: {} ", collateralDetailViewList.size());
         try{
             if(appraisalView.getId() == 0){
@@ -969,6 +966,14 @@ public class AppraisalResult implements Serializable {
 
     public void setRowCollateral(int rowCollateral) {
         this.rowCollateral = rowCollateral;
+    }
+
+    public boolean isFlagReadOnly() {
+        return flagReadOnly;
+    }
+
+    public void setFlagReadOnly(boolean flagReadOnly) {
+        this.flagReadOnly = flagReadOnly;
     }
 
     //todo : for test

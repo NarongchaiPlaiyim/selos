@@ -114,7 +114,7 @@ public class CreditFacExistingControl extends BusinessControl {
 
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.info("workCase Id  "+ workCase.getId() + " getCaNumber " + workCase.getCaNumber());
+        log.info("workCase Id  "+ workCase.getId() + " getApp " + workCase.getAppNumber());
 
         ExistingCreditFacility existingCreditFacility = existingCreditFacilityTransform.transformsToModelDB(existingCreditFacilityView, workCase, user);
         existingCreditFacilityDAO.persist(existingCreditFacility);
@@ -381,7 +381,8 @@ public class CreditFacExistingControl extends BusinessControl {
 
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.info("workCase Id  "+ workCase.getId() + " getCaNumber " + workCase.getCaNumber());
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        log.info("workCase Id  "+ workCase.getId() + " getCaNumber " + basicInfo.getCaNumber());
         ExistingCreditFacility existingCreditFacility;
         ExistingCreditFacilityView existingCreditFacilityView;
 

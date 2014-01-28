@@ -18,7 +18,6 @@ public class AppraisalContactDetailTransform extends Transform {
         AppraisalContactDetail appraisalContactDetail = new AppraisalContactDetail();
 
         appraisalContactDetail.setAppraisal(appraisal);
-        appraisalContactDetail.setNo(appraisalContactDetailView.getNo());
         appraisalContactDetail.setCustomerName(appraisalContactDetailView.getCustomerName());
         appraisalContactDetail.setContactNo(appraisalContactDetailView.getContactNo());
 
@@ -39,7 +38,6 @@ public class AppraisalContactDetailTransform extends Transform {
 
             AppraisalContactDetailView appraisalContactDetailView = new AppraisalContactDetailView();
 
-            appraisalContactDetailView.setNo(appraisalContactDetail.getNo());
             appraisalContactDetailView.setCustomerName(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo(appraisalContactDetail.getContactNo());
 
