@@ -23,10 +23,6 @@ public class NewGuarantorRelCredit implements Serializable {
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "new_credit_facility_id")
-    private NewCreditFacility newCreditFacility;
-
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
 
@@ -76,14 +72,6 @@ public class NewGuarantorRelCredit implements Serializable {
 
     public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
         this.guaranteeAmount = guaranteeAmount;
-    }
-
-    public NewCreditFacility getNewCreditFacility() {
-        return newCreditFacility;
-    }
-
-    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
-        this.newCreditFacility = newCreditFacility;
     }
 
     public Date getCreateDate() {

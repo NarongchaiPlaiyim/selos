@@ -15,7 +15,8 @@ import java.util.List;
 public class NewGuarantorCreditTransform extends Transform {
 
     @Inject
-    public NewGuarantorCreditTransform() {}
+    public NewGuarantorCreditTransform() {
+    }
 
 
     public List<NewGuarantorRelCredit> transformsToModelForGuarantor(List<NewCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, User user) {
@@ -46,7 +47,6 @@ public class NewGuarantorCreditTransform extends Transform {
                     log.info("newGuarantorRelCredit id is " + newGuarantorRelCredit.getNewCreditDetail().getId());
                 }
             }
-            newGuarantorRelCredit.setNewCreditFacility(newGuarantorRelCredit.getNewCreditFacility());
             newGuarantorRelCredit.setNewGuarantorDetail(newGuarantorDetail);
             newGuarantorRelCreditList.add(newGuarantorRelCredit);
         }

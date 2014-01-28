@@ -585,13 +585,14 @@ public class CreditFacPropose implements Serializable {
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
         onChangeRequestType();
 //        ProductProgram productProgram = proposeCreditDetailSelected.getProductProgram();
-        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+        ProductProgram productProgram = productProgramDAO.findById(proposeCreditDetailSelected.getProductProgram().getId());
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        CreditType creditType = creditTypeDAO.findById(proposeCreditDetailSelected.getCreditType().getId());
 
         if (rowIndex < newCreditFacilityView.getNewCreditDetailViewList().size()) {
             newCreditDetailView = new NewCreditDetailView();
             newCreditDetailView.setProductProgram(productProgram);
-            newCreditDetailView.setCreditType(proposeCreditDetailSelected.getCreditType());
+            newCreditDetailView.setCreditType(creditType);
             newCreditDetailView.setRequestType(proposeCreditDetailSelected.getRequestType());
             newCreditDetailView.setRefinance(proposeCreditDetailSelected.getRefinance());
             newCreditDetailView.setProductCode(proposeCreditDetailSelected.getProductCode());
@@ -1416,11 +1417,13 @@ public class CreditFacPropose implements Serializable {
 //                        && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
                     if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                         log.info("Bean :: onSaveNewCreditFacility ::");
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                         creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                        creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
                         messageHeader = msg.get("app.header.save.success");
                         message = msg.get("app.propose.response.save.success");
                     } else {
