@@ -19,6 +19,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
 
     @Inject
     public NewCollateralDAO() {
+
     }
 
     public List<NewCollateral> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
@@ -29,6 +30,17 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
         return newCollateralDetailList;
+    }
+
+    public void updateAppraisalFlag(final NewCollateral newCollateral) {
+        log.debug("-- updateAppraisalFlag()");
+        long id = newCollateral.getId();
+        if(isRecordExist(Restrictions.eq("id", id))){
+            log.debug("id : {} is exist", id);
+            newCollateral.setAppraisalRequest(2);
+            save(newCollateral);
+            log.debug("-- NewCollateral(id : {}) has Updated", id);
+        }
     }
 
 

@@ -25,14 +25,14 @@ public class NewGuarantorCreditTransform extends Transform {
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
             newGuarantorRelCredit = new NewGuarantorRelCredit();
-            if (newGuarantorRelCredit.getId() != 0) {
-                newGuarantorRelCredit.setId(newCreditDetailView.getId());
-                newGuarantorRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
-                newGuarantorRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
-            } else { // id = 0 create new
-                newGuarantorRelCredit.setCreateDate(new Date());
-                newGuarantorRelCredit.setCreateBy(user);
-            }
+//            if (newGuarantorRelCredit.getId() != 0) {
+//                newGuarantorRelCredit.setId(newCreditDetailView.getId());
+//                newGuarantorRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
+//                newGuarantorRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
+//            } else { // id = 0 create new
+//                newGuarantorRelCredit.setCreateDate(new Date());
+//                newGuarantorRelCredit.setCreateBy(user);
+//            }
 
             newGuarantorRelCredit.setModifyDate(new Date());
             newGuarantorRelCredit.setModifyBy(user);
@@ -46,7 +46,7 @@ public class NewGuarantorCreditTransform extends Transform {
                     log.info("newGuarantorRelCredit id is " + newGuarantorRelCredit.getNewCreditDetail().getId());
                 }
             }
-
+            newGuarantorRelCredit.setNewCreditFacility(newGuarantorRelCredit.getNewCreditFacility());
             newGuarantorRelCredit.setNewGuarantorDetail(newGuarantorDetail);
             newGuarantorRelCreditList.add(newGuarantorRelCredit);
         }

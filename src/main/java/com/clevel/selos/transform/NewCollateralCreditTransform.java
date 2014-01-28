@@ -26,14 +26,14 @@ public class NewCollateralCreditTransform extends Transform {
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
             newCollateralRelCredit = new NewCollateralCredit();
-            if (newCollateralRelCredit.getId() != 0) {
-                newCollateralRelCredit.setId(newCreditDetailView.getId());
-                newCollateralRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
-                newCollateralRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
-            } else { // id = 0 create new
-                newCollateralRelCredit.setCreateDate(new Date());
-                newCollateralRelCredit.setCreateBy(user);
-            }
+//            if (newCollateralRelCredit.getId() != 0) {
+//                newCollateralRelCredit.setId(newCreditDetailView.getId());
+//                newCollateralRelCredit.setModifyDate(newCreditDetailView.getModifyDate());
+//                newCollateralRelCredit.setModifyBy(newCreditDetailView.getModifyBy());
+//            } else { // id = 0 create new
+//                newCollateralRelCredit.setCreateDate(new Date());
+//                newCollateralRelCredit.setCreateBy(user);
+//            }
 
             newCollateralRelCredit.setModifyDate(new Date());
             newCollateralRelCredit.setModifyBy(user);
@@ -49,6 +49,7 @@ public class NewCollateralCreditTransform extends Transform {
             }
 
             newCollateralRelCredit.setNewCollateral(newCollateralDetail);
+            newCollateralRelCredit.setNewCreditFacility(newCollateralDetail.getNewCreditFacility());
             newCollateralCreditList.add(newCollateralRelCredit);
         }
 

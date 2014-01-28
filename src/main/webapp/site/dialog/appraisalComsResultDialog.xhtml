@@ -9,14 +9,14 @@
         <tr>
             <td class="title">Job ID :</td>
             <td>
-                <p:inputText id="jobID" value="#{appraisalResult.collateralDetailView.jobIDSearch}"
+                <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobIDSearch}"
                              required="#{not empty param[searchButton.clientId]}"/>
             </td>
             <td>
                 <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
                                  binding="#{searchButton}"
                                  process="@form"
-                                 action="#{appraisalResult.onSearchCollateral}"
+                                 action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
                                  update=":msgBoxSystemMessagePanel,:appraisalComsDlgForm"/>
             </td>
         </tr>
@@ -39,7 +39,7 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.jobID}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.jobID}"/>
                 </td>
             </tr>
             <tr>
@@ -47,7 +47,7 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.appraisalDate}">
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.appraisalDate}">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:outputLabel>
 
@@ -58,7 +58,7 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.AADDecision}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecision}"/>
                 </td>
             </tr>
             <tr>
@@ -66,13 +66,13 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.AADDecisionReason}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReason}"/>
                 </td>
                 <td>
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.AADDecisionReasonDetail}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.aadDecisionReasonDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -80,13 +80,13 @@
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.mortgageCondition}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageCondition}"/>
                 </td>
                 <td>
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
                 </td>
                 <td>
-                    <p:outputLabel value="#{appraisalResult.collateralDetailView.mortgageConditionDetail}"/>
+                    <p:outputLabel value="#{appraisalResult.newCollateralView.mortgageConditionDetail}"/>
                 </td>
             </tr>
             <tr>
@@ -100,7 +100,7 @@
                 <col style="width:180px"/>
                 <col style="width:auto"/>
             </colgroup>
-            <ui:repeat value="#{appraisalResult.collateralDetailView.collateralHeaderDetailViewList}" var="collateralHeadDetailView" >
+            <ui:repeat value="#{appraisalResult.newCollateralView.newCollateralHeadViewList}" var="collateralHeadDetailView" >
             <tr>
                 <td>
                     <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
@@ -143,9 +143,9 @@
                     <p:dataTable tableStyleClass="center" style="width: 100%"
                                  id="subCollateralDetailViewTable"
                                  var="subCollateralDetailView"
-                                 value="#{collateralHeadDetailView.subCollateralDetailViewList}"
+                                 value="#{collateralHeadDetailView.newCollateralSubViewList}"
                                  paginator="false"
-                                 rowKey="#{subCollateralDetailView.id}"
+                                 rowKey="#{subCollateralDetailView}"
                                  rowIndexVar="rowIndex" >
                         <p:columnGroup type="header">
                             <p:row>

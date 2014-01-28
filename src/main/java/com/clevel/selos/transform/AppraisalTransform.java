@@ -8,9 +8,18 @@ import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.view.AppraisalView;
 import org.joda.time.DateTime;
 
-public class AppraisalTransform extends Transform {
+import javax.inject.Inject;
 
-    public Appraisal transformToModel(AppraisalView appraisalView){
+public class AppraisalTransform extends Transform {
+    @Inject
+    NewCollateralTransform collateralDetailTransform;
+
+    @Inject
+    public AppraisalTransform() {
+
+    }
+
+    public Appraisal transformToModel(final AppraisalView appraisalView){
 
         Appraisal appraisal = new Appraisal();
         if(appraisalView.getId()==0){
@@ -94,6 +103,12 @@ public class AppraisalTransform extends Transform {
         appraisalView.setCreateDate(appraisal.getCreateDate());
         appraisalView.setModifyBy(appraisal.getModifyBy());
         appraisalView.setModifyDate(appraisal.getModifyDate());
+
+
+
+
+
+
 
         return appraisalView;
     }

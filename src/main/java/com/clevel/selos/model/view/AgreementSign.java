@@ -1,7 +1,7 @@
-package com.clevel.selos.model;
+package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.PreDisbursementView;
+import com.clevel.selos.model.view.AgreementSingView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import org.slf4j.Logger;
@@ -13,8 +13,8 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 @ViewScoped
-@ManagedBean(name = "preDisbursement")
-public class PreDisbursement implements Serializable {
+@ManagedBean(name = "agreementSign")
+public class AgreementSign implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -23,12 +23,11 @@ public class PreDisbursement implements Serializable {
     @NormalMessage
     Message msg;
 
-    private boolean flag;
-
-    private PreDisbursementView preDisbursementView;
+    //*** View ***//
+    private AgreementSingView agreementSingView;
 
     @Inject
-    public PreDisbursement() {
+    public AgreementSign() {
 
     }
 
@@ -38,14 +37,14 @@ public class PreDisbursement implements Serializable {
     }
 
     private void init(){
-        preDisbursementView = new PreDisbursementView();
+        agreementSingView = new AgreementSingView();
     }
 
-    public PreDisbursementView getPreDisbursementView() {
-        return preDisbursementView;
+    public AgreementSingView getAgreementSingView() {
+        return agreementSingView;
     }
 
-    public void setPreDisbursementView(PreDisbursementView preDisbursementView) {
-        this.preDisbursementView = preDisbursementView;
+    public void setAgreementSingView(AgreementSingView agreementSingView) {
+        this.agreementSingView = agreementSingView;
     }
 }

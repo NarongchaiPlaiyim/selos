@@ -17,6 +17,12 @@ public class NewCollateral implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_ID")
     private long id;
 
+    @Column(name = "coll_type")
+    private String collType;
+
+    @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
+    private int appraisalRequest;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "appraisal_date")
     private Date appraisalDate;
@@ -86,6 +92,22 @@ public class NewCollateral implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCollType() {
+        return collType;
+    }
+
+    public void setCollType(String collType) {
+        this.collType = collType;
+    }
+
+    public int getAppraisalRequest() {
+        return appraisalRequest;
+    }
+
+    public void setAppraisalRequest(int appraisalRequest) {
+        this.appraisalRequest = appraisalRequest;
     }
 
     public Date getAppraisalDate() {
