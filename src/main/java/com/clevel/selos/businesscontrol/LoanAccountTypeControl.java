@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.AccountTypeDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.master.AccountType;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.LoanAccountTypeView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
@@ -20,17 +22,18 @@ public class LoanAccountTypeControl extends BusinessControl {
     @Inject
     AccountTypeDAO loanAccountTypeDAO;
 
+    @Inject
+    BasicInfoDAO basicInfoDAO;
+
 	@Inject
     public LoanAccountTypeControl(){
 
     }
 
-	@Inject
-    WorkCaseDAO workCaseDAO;
-
     public List<LoanAccountTypeView> getListLoanTypeByWorkcase(long workCaseId) {
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        List<AccountType> loanAccountTypes = loanAccountTypeDAO.getListLoanTypeByCusEntity(workCase.getBorrowerType().getId());
+
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        List<AccountType> loanAccountTypes = loanAccountTypeDAO.getListLoanTypeByCusEntity(basicInfo.getBorrowerType().getId());
 
         List<LoanAccountTypeView> loanTypeViews = loanAccountTypeTransform.getLoanAccountTypeViews(loanAccountTypes);
         return loanTypeViews;

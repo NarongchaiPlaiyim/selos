@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +80,10 @@ public class NewCollateral implements Serializable {
 
     @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
     private List<NewCollateralCredit> newCollateralCreditList;
+
+    /*** For Post - Insurance Premium Quote Process ***/
+    @Column(name = "premium_amount", length = 14, scale = 2)
+    private BigDecimal premiumAmount;
 
     public long getId() {
         return id;

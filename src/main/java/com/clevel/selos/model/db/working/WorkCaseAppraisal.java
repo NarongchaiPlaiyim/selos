@@ -11,32 +11,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case_appraisal")
-public class WorkCaseAppraisal {
+public class WorkCaseAppraisal extends AbstractWorkCase {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_CASE_APPRAISAL_ID", sequenceName = "SEQ_WRK_CASE_APPRAISAL_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_APPRAISAL_ID")
     @Column(name = "id", nullable = false)
     private long id;
-
-    @Column(name = "app_number", nullable = false)
-    private String appNumber;
-
-    @Column(name = "wob_number")
-    private String wobNumber;
-
-    @Column(name = "case_lock")
-    private int lock;
-
-    @Column(name = "lock_user")
-    private String lockUser;
-
-    @OneToOne
-    @JoinColumn(name = "step_id")
-    private Step step;
-
-    @OneToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
 
     @OneToOne
     @JoinColumn(name = "request_by")
@@ -59,15 +39,15 @@ public class WorkCaseAppraisal {
     private Date approveDate;
 
     @OneToOne
-    @JoinColumn(name = "modify_by")
-    private User modifyBy;
-
-    @OneToOne
     @JoinColumn(name = "step_owner")
     private User stepOwner;
 
     @Column(name = "appraisal_result", length = 2)
     private int appraisalResult;
+
+    @OneToOne
+    @JoinColumn(name = "wrk_case_id")
+    private WorkCase workCase;
 
     public long getId() {
         return id;
@@ -187,6 +167,14 @@ public class WorkCaseAppraisal {
 
     public void setAppraisalResult(int appraisalResult) {
         this.appraisalResult = appraisalResult;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
     }
 
     @Override

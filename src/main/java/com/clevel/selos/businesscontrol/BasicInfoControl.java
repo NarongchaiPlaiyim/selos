@@ -3,22 +3,20 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.integration.brms.service.document.apprisalrules.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BasicInfoAccPurposeTransform;
 import com.clevel.selos.transform.BasicInfoAccountTransform;
 import com.clevel.selos.transform.BasicInfoTransform;
 import com.clevel.selos.util.Util;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.management.relation.RelationType;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +36,7 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     OpenAccountDAO openAccountDAO;
     @Inject
-    OpenAccPurposeDAO openAccPurposeDAO;
+    OpenAccountPurposeDAO openAccPurposeDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
     @Inject
@@ -88,11 +86,11 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         CustomerEntity customerEntity = new CustomerEntity();
-        if(workCase != null){
-            if(workCase.getBorrowerType() != null){
-                customerEntity = workCase.getBorrowerType();
+        if(basicInfo != null){
+            if(basicInfo.getBorrowerType() != null){
+                customerEntity = basicInfo.getBorrowerType();
             } else {
                 log.error("[WorkCase] - Borrower Type is Null !!");
             }
@@ -222,13 +220,13 @@ public class BasicInfoControl extends BusinessControl {
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
 
-        workCase.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
-        workCase.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
+        basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
+        basicInfo.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
         workCaseDAO.persist(workCase);
 
         List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
         for (OpenAccount oa : openAccountList) {
-            List<OpenAccPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
+            List<OpenAccountPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
             openAccPurposeDAO.delete(openAccPurposeList);
         }
         openAccountDAO.delete(openAccountList);
@@ -241,7 +239,7 @@ public class BasicInfoControl extends BusinessControl {
 
                 for (BasicInfoAccountPurposeView biapv : biav.getBasicInfoAccountPurposeView()) {
                     if (biapv.isSelected()) {
-                        OpenAccPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv, openAccount);
+                        OpenAccountPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv, openAccount);
                         openAccPurposeDAO.save(openAccPurpose);
                     }
                 }

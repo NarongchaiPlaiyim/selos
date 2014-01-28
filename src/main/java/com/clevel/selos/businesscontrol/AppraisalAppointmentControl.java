@@ -53,7 +53,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
         Appraisal appraisal;
         AppraisalView appraisalView;
-        List<AppraisalDetail> appraisalDetailList;
+        List<AppraisalPurpose> appraisalDetailList;
         List<AppraisalDetailView> appraisalDetailViewList;
         List<AppraisalContactDetail> appraisalContactDetailList;
         List<AppraisalContactDetailView> appraisalContactDetailViewList;
@@ -98,7 +98,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
         log.info("onSaveAppraisalRequest ");
         Appraisal appraisal;
         List<AppraisalDetailView> appraisalDetailViewList;
-        List<AppraisalDetail> appraisalDetailList;
+        List<AppraisalPurpose> appraisalDetailList;
         List<AppraisalContactDetailView> appraisalContactDetailViewList;
         List<AppraisalContactDetail> appraisalContactDetailList;
         List<ContactRecordDetail> contactRecordDetailList;
@@ -117,7 +117,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
         contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
 
         if(appraisalDetailViewList.size()>0){
-            List<AppraisalDetail>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
+            List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
             appraisalDetailDAO.delete(appraisalDetailListDel);
         }
         appraisalDetailList = appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);

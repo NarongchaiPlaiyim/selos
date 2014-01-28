@@ -142,13 +142,13 @@ public class TCGInfoControl extends BusinessControl {
             PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
             log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
 
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            if (Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+
+            if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
                 ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
             }
 
             if (ltvPercentBig == null) {
-                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
                 if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
                         Util.isTrue(basicInfo.getPassAnnualReview()) &&
                         Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&

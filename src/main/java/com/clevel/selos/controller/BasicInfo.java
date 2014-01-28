@@ -4,7 +4,6 @@ import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -60,9 +59,9 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     private BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
-    private OpenAccountProductDAO openAccountProductDAO;
+    private AccountProductDAO openAccountProductDAO;
     @Inject
-    private OpenAccountPurposeDAO openAccountPurposeDAO;
+    private AccountPurposeDAO openAccountPurposeDAO;
     @Inject
     private BankDAO bankDAO;
     @Inject
@@ -85,8 +84,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     private List<Bank> bankList;
 
     private List<BankAccountType> bankAccountTypeList;
-    private List<OpenAccountProduct> openAccountProductList;
-    private List<OpenAccountPurpose> openAccountPurposeList;
+    private List<AccountProduct> openAccountProductList;
+    private List<AccountPurpose> openAccountPurposeList;
 
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
 
@@ -227,11 +226,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        openAccountProductList = new ArrayList<OpenAccountProduct>();
+        openAccountProductList = new ArrayList<AccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
+        for(AccountPurpose oap : openAccountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -428,11 +427,11 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
 
-        openAccountProductList = new ArrayList<OpenAccountProduct>();
+        openAccountProductList = new ArrayList<AccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
+        for(AccountPurpose oap : openAccountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -447,7 +446,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         onChangeAccountType();
 
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
+        for(AccountPurpose oap : openAccountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -1090,11 +1089,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.bankAccountTypeList = bankAccountTypeList;
     }
 
-    public List<OpenAccountProduct> getOpenAccountProductList() {
+    public List<AccountProduct> getOpenAccountProductList() {
         return openAccountProductList;
     }
 
-    public void setOpenAccountProductList(List<OpenAccountProduct> openAccountProductList) {
+    public void setOpenAccountProductList(List<AccountProduct> openAccountProductList) {
         this.openAccountProductList = openAccountProductList;
     }
 
