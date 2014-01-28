@@ -16,25 +16,35 @@ public class BankStatementSummaryDAO extends GenericDAO<BankStatementSummary, Lo
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public BankStatementSummaryDAO() {
-
     }
 
-    public BankStatementSummary getByWorkCase(WorkCase workCase){
+    public BankStatementSummary getByWorkCase(WorkCase workCase) {
+        log.info("getByWorkCase : {}", workCase);
         BankStatementSummary bankStatementSummary = new BankStatementSummary();
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCase.getId()));
-        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+//        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+        List list = criteria.list();
+        if (list != null && list.size() > 0) {
+            bankStatementSummary = (BankStatementSummary) list.get(0);
+        }
         return bankStatementSummary;
     }
 
     public BankStatementSummary findByWorkCaseId(long workCaseId) {
         log.info("findByWorkCaseId : {}", workCaseId);
+        BankStatementSummary bankStatementSummary = new BankStatementSummary();
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.addOrder(Order.asc("id"));
-        BankStatementSummary bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+//        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
+        List list = criteria.list();
+        if (list != null && list.size() > 0) {
+            bankStatementSummary = (BankStatementSummary) list.get(0);
+        }
         return bankStatementSummary;
     }
 }
