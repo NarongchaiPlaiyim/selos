@@ -218,8 +218,8 @@
                                              </p:commandButton>
                                              <p:commandButton value="Remove" process="@this"
                                                               oncomplete="confirmDeleteCollateralDetailViewDlg.show()" >
-                                                 <f:setPropertyActionListener value="#{collateralDetailView}"
-                                                                              target="#{appraisalResult.selectCollateralDetailView}"/>
+                                                 <f:setPropertyActionListener value="#{collateralDetailView}" target="#{appraisalResult.selectCollateralDetailView}"/>
+                                                 <f:setPropertyActionListener value="#{rowIndex.index}" target="#{appraisalResult.rowCollateral}" />
                                              </p:commandButton>
                                          </td>
                                      </tr>

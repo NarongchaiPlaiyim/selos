@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.AppraisalDAO;
 import com.clevel.selos.dao.working.AppraisalDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.AppraisalDetail;
@@ -83,7 +84,7 @@ public class AppraisalRequestControl extends BusinessControl {
         return appraisalView;
     }
 
-    public void onSaveAppraisalRequest(AppraisalView appraisalView,long workCaseId){
+    public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final User user){
         log.info("onSaveAppraisalRequest ");
         Appraisal appraisal;
         List<AppraisalDetailView> appraisalDetailViewList;
@@ -93,7 +94,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        appraisal = appraisalTransform.transformToModel(appraisalView);
+        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
         appraisal.setWorkCase(workCase);
 
         appraisalDAO.persist(appraisal);
