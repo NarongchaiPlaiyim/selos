@@ -763,3 +763,9 @@ function onKeyDownAccountName(evt){
 
     return true;
 }
+
+function checkLengthText(obj){
+    var str = obj.value;
+    var maxLength = 490;
+    obj.value = str.substring(0,maxLength);
+}
