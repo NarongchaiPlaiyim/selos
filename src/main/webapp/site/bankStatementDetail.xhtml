@@ -47,20 +47,6 @@
         <!-- Start Menu -->
         <ui:include src="include/menubar.xhtml"/>
         <!-- End Menu -->
-
-        <!-- Override CSS -->
-        <!--<style scoped="scoped">-->
-            <!--.ui-datatable thead th {-->
-                <!--white-space: normal !important;-->
-            <!--}-->
-            <!--.ui-datatable tbody td {-->
-                <!--border-color: #868686;-->
-            <!--}-->
-            <!--.calendar_right input {-->
-                <!--background: #ffffff !important;-->
-                <!--border: 1px solid #868686;-->
-            <!--}-->
-        <!--</style>-->
         <div id="content_container">
             <div id="content_name">#{msg.get('app.bankStmtDetail.header')}</div>
             <div id="content">
@@ -487,7 +473,7 @@
                                                 style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                 <p:inputText value="#{item.monthBalance}"
                                                              onclick="this.select()"
-                                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
+                                                             onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
                                                              styleClass="right">
                                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
