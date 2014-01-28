@@ -93,7 +93,7 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
 
             bizInfoDetailDAO.persist(bizInfoDetail);
-            log.info("bizInfoDetailDAO persist end id is " + bizInfoDetail.getId());
+            log.info("bizInfoDetailDAO persist end id is {}",bizInfoDetail.getId());
 
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
@@ -106,8 +106,8 @@ public class BizInfoDetailControl extends BusinessControl {
                 bizProductDetailDAO.delete(bizProductDetailLisDelete);
             }
 
-            for (int i = 0; i < bizProductDetailViewList.size(); i++) {
-                bizProductDetailViewTemp = bizProductDetailViewList.get(i);
+            for (BizProductDetailView aBizProductDetailViewList : bizProductDetailViewList) {
+                bizProductDetailViewTemp = aBizProductDetailViewList;
                 bizProductDetailTemp = bizProductDetailTransform.transformToModel(bizProductDetailViewTemp, bizInfoDetail);
                 bizProductDetailList.add(bizProductDetailTemp);
             }
@@ -120,12 +120,12 @@ public class BizInfoDetailControl extends BusinessControl {
                 List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
 
                 bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
-                log.info("supplierDetailList delete end " + bizSupplierListDelete.size());
+                log.info("supplierDetailList delete end {}",bizSupplierListDelete.size());
             }
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
-            for (int i = 0; i < supplierDetailList.size(); i++) {
-                stakeHolderDetailViewTemp = supplierDetailList.get(i);
+            for (BizStakeHolderDetailView aSupplierDetailList : supplierDetailList) {
+                stakeHolderDetailViewTemp = aSupplierDetailList;
                 bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp, bizInfoDetail);
                 bizStakeHolderDetailTemp.setStakeHolderType("1");
                 bizSupplierList.add(bizStakeHolderDetailTemp);
@@ -153,7 +153,7 @@ public class BizInfoDetailControl extends BusinessControl {
             onSaveSumOnSummary(bizInfoSummaryId,workCaseId);
             return bizInfoDetailView;
         } catch (Exception e) {
-            log.error("onSaveBizInfoToDB error" + e);
+            log.error("onSaveBizInfoToDB error: {}",e);
             return bizInfoDetailView;
         } finally {
             log.info("onSaveBizInfoToDB end");
@@ -167,10 +167,7 @@ public class BizInfoDetailControl extends BusinessControl {
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
 
-        if (bizInfoDetailList.size() == 0) {
-            bizInfoDetailList = new ArrayList<BizInfoDetail>();
-            return;
-        } else {
+        if (bizInfoDetailList.size() != 0) {
 
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
             if(bankStmtSummaryView != null ){
@@ -205,14 +202,12 @@ public class BizInfoDetailControl extends BusinessControl {
             double invCal = 0;
             double sumINV = 0;
 
-            for (int i = 0; i < bizInfoDetailList.size(); i++) {
-
-                BizInfoDetail bizInfoDetail = bizInfoDetailList.get(i);
+            for (BizInfoDetail bizInfoDetail : bizInfoDetailList) {
 
                 incomePercentD = bizInfoDetail.getPercentBiz().doubleValue();
                 sumIncomePercentD += incomePercentD;
                 incomeAmountCal = bankStatementAvg * 12;
-                bizInfoDetail.setIncomeAmount( new BigDecimal(incomeAmountCal).setScale(2, RoundingMode.HALF_UP));
+                bizInfoDetail.setIncomeAmount(new BigDecimal(incomeAmountCal).setScale(2, RoundingMode.HALF_UP));
                 sumIncomeAmountD += incomeAmountCal;
 
                 adjustIncome = bizInfoDetail.getAdjustedIncomeFactor().doubleValue();
@@ -266,11 +261,11 @@ public class BizInfoDetailControl extends BusinessControl {
 
             bizDescId = bizDescReq.getId();
             bizDescRes = businessDescriptionDAO.findById(bizDescId);
-            log.info("onFindBizDescByID before return is   >> " + bizDescRes.toString());
+            log.info("onFindBizDescByID before return is   >> {}",bizDescRes);
 
             return bizDescRes;
         } catch (Exception e) {
-            log.error("onFindBizDescByID error" + e);
+            log.error("onFindBizDescByID error: {}",e);
             return null;
         } finally {
 
@@ -299,20 +294,20 @@ public class BizInfoDetailControl extends BusinessControl {
             log.info("onFindByID begin");
 
 
-            log.info("bizInfoDetailId " + bizInfoDetailId);
+            log.info("bizInfoDetailId {}",bizInfoDetailId);
 
             bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailId);
 
-            log.info("bizInfoDetail bizCode after findById " + bizInfoDetail.getBizCode());
+            log.info("bizInfoDetail bizCode after findById {}",bizInfoDetail.getBizCode());
 
             bizInfoDetailView = bizInfoDetailTransform.transformToView(bizInfoDetail);
-            log.info("bizInfoDetailView bizCode after transform" + bizInfoDetail.getBizCode());
+            log.info("bizInfoDetailView bizCode after transform {}",bizInfoDetail.getBizCode());
 
             bizProductDetailViewList = new ArrayList<BizProductDetailView>();
             bizProductDetailList = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
 
-            for (int i = 0; i < bizProductDetailList.size(); i++) {
-                bizProductDetailTemp = bizProductDetailList.get(i);
+            for (BizProductDetail aBizProductDetailList : bizProductDetailList) {
+                bizProductDetailTemp = aBizProductDetailList;
                 bizProductDetailViewTemp = bizProductDetailTransform.transformToView(bizProductDetailTemp);
                 bizProductDetailViewList.add(bizProductDetailViewTemp);
             }
@@ -320,8 +315,8 @@ public class BizInfoDetailControl extends BusinessControl {
             supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
             bizSupplierList = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
 
-            for (int i = 0; i < bizSupplierList.size(); i++) {
-                bizStakeHolderDetailTemp = bizSupplierList.get(i);
+            for (BizStakeHolderDetail aBizSupplierList : bizSupplierList) {
+                bizStakeHolderDetailTemp = aBizSupplierList;
                 stakeHolderDetailViewTemp = bizStakeHolderDetailTransform.transformToView(bizStakeHolderDetailTemp);
                 supplierDetailList.add(stakeHolderDetailViewTemp);
             }
@@ -329,23 +324,23 @@ public class BizInfoDetailControl extends BusinessControl {
             buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
             bizBuyerList = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
 
-            for (int i = 0; i < bizBuyerList.size(); i++) {
-                bizStakeHolderDetailTemp = bizBuyerList.get(i);
+            for (BizStakeHolderDetail aBizBuyerList : bizBuyerList) {
+                bizStakeHolderDetailTemp = aBizBuyerList;
                 stakeHolderDetailViewTemp = bizStakeHolderDetailTransform.transformToView(bizStakeHolderDetailTemp);
                 buyerDetailList.add(stakeHolderDetailViewTemp);
             }
 
             bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-            log.info("bizProduct size " + bizInfoDetailView.getBizProductDetailViewList().size());
+            log.info("bizProduct size {}",bizInfoDetailView.getBizProductDetailViewList().size());
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            log.info("supplier size " + bizInfoDetailView.getSupplierDetailList().size());
+            log.info("supplier size {}",bizInfoDetailView.getSupplierDetailList().size());
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            log.info("buyer size  " + bizInfoDetailView.getBuyerDetailList().size());
+            log.info("buyer size {}",bizInfoDetailView.getBuyerDetailList().size());
 
             return bizInfoDetailView;
 
         } catch (Exception e) {
-            log.error("onFindByID error" + e);
+            log.error("onFindByID error {}",e);
             return null;
         } finally {
             log.info("onFindByID end");
@@ -356,7 +351,7 @@ public class BizInfoDetailControl extends BusinessControl {
         BizInfoDetail bizInfoDetail;
         try {
             log.info("onDeleteBizInfoToDB begin");
-            log.info("onDeleteBizInfoToDB id is " + bizInfoDetailView.getId());
+            log.info("onDeleteBizInfoToDB id is {}",bizInfoDetailView.getId());
             bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailView.getId());
 
             List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
@@ -371,7 +366,7 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoDetailDAO.delete(bizInfoDetail);
 
         } catch (Exception e) {
-            log.error("onDeleteBizInfoToDB error" + e);
+            log.error("onDeleteBizInfoToDB error {}",e);
         } finally {
 
             log.info("onDeleteBizInfoToDB end");
