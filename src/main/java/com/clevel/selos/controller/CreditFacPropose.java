@@ -1202,27 +1202,6 @@ public class CreditFacPropose implements Serializable {
     }
 // END Add SUB Collateral
 
-   /* public List<NewCreditDetailView> findGuarantorCreditType(){
-        List<NewCreditDetailView> guarantorCreditDetailList = new ArrayList<NewCreditDetailView>();
-        NewCreditDetailView  guarantorCreditDetail;
-        if (newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0) {
-            for (NewCreditDetailView newCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
-                guarantorCreditDetail = new NewCreditDetailView();
-                guarantorCreditDetail.setAccountName(newCreditDetail.getAccountName());
-                guarantorCreditDetail.setAccountNumber(newCreditDetail.getAccountNumber());
-                guarantorCreditDetail.setAccountSuf(newCreditDetail.getAccountSuf());
-                guarantorCreditDetail.setProductProgram(newCreditDetail.getProductProgram());
-                guarantorCreditDetail.setCreditType(newCreditDetail.getCreditType());
-                guarantorCreditDetail.setRequestType(newCreditDetail.getRequestType());
-                guarantorCreditDetail.setLimit(newCreditDetail.getLimit());
-                guarantorCreditDetail.setGuaranteeAmount(newCreditDetail.getGuaranteeAmount());
-                guarantorCreditDetailList.add(guarantorCreditDetail);
-            }
-        }
-
-       return guarantorCreditDetailList;
-    }*/
-
     //  Start Guarantor //
     public void onAddGuarantorInfo() {
         newGuarantorDetailView = new NewGuarantorDetailView();
