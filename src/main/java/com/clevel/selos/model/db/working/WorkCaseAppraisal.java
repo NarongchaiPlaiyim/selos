@@ -46,7 +46,7 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
     private int appraisalResult;
 
     @OneToOne
-    @JoinColumn(name = "wrk_case_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     public long getId() {
