@@ -56,7 +56,11 @@ public class FullApplicationControl extends BusinessControl {
         return zmUserList;
     }
 
-    public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception{
+    public void assignToABDM(String abdmUserId, String queueName, long workCaseId) throws Exception {
         bpmExecutor.assignToABDM(workCaseId, queueName, abdmUserId, ActionCode.ASSIGN_TO_ABDM.getVal());
+    }
+
+    public void submitToZM(String zmUserId, String queueName, long workCaseId) throws Exception {
+        bpmExecutor.submitZM(workCaseId, queueName, zmUserId, ActionCode.SUBMIT_TO_ZM.getVal());
     }
 }

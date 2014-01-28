@@ -247,4 +247,12 @@
         </p:dialog>
     </p:panel>
 
+    <p:panel id="submitZMPanel" styleClass="panel">
+        <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="400" height="160">
+            <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
 </ui:composition>
