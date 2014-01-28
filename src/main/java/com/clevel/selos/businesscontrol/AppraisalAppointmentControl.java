@@ -106,7 +106,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        appraisal = appraisalTransform.transformToModel(appraisalView);
+        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, getCurrentUser());
         appraisal.setWorkCase(workCase);
 
         appraisalDAO.persist(appraisal);

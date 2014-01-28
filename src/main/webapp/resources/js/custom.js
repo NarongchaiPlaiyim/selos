@@ -264,7 +264,7 @@ function onKeyPressText(evt){
 
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
         keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
-        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 94 || keyCode == 123 || keyCode == 125){
         return false;
     }
 
@@ -274,11 +274,13 @@ function onKeyPressText(evt){
 function onKeyDownText(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
-    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
-        return true;
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 94 || keyCode == 123 || keyCode == 125){
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 function onKeyPressAddress(evt){
@@ -453,6 +455,24 @@ function onCheckRightClick(event){
         return true;
     }
 }*/
+
+function handleReturnMakerDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        returnMakerDlg.hide();
+    }
+}
+
+function handleAssignCheckerDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        assignCheckerDlg.hide();
+    }
+}
+
+function handleAssignABDMDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        assignABDMDialog.hide();
+    }
+}
 
 function handleDisbursementMcDialogRequest(xhr, status, args) {
     if (args.functionComplete) {

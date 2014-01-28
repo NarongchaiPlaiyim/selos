@@ -3,14 +3,14 @@ package com.clevel.selos.ws;
 import java.io.Serializable;
 
 public enum WSBRMSResponse implements Serializable {
-    NOT_REJECT(0), REJECT(1);
-    int code;
+    APPROVE("A"), REJECT("R");
+    String code;
 
-    WSBRMSResponse(int code) {
+    WSBRMSResponse(String code) {
         this.code = code;
     }
 
-    public int code() {
+    public String code() {
         return this.code;
     }
 }

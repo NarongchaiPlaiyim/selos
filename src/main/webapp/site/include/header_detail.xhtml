@@ -1,61 +1,102 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-            <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton"
+            <!--View Relate CA-->
+            <p:commandButton id="btnViewRelatedCA" value="#{msg.get('app.header.button.viewRelatedCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.viewRelatedCA')}"
+                             rendered="#{baseController.manageButton.viewRelatedCA}"
+                             >
+
+            </p:commandButton>
+            <!--Return to Maker-->
+            <p:commandButton id="btnReturnMaker" value="#{msg.get('app.header.button.returnMaker')}" styleClass="blueButton" title="#{msg.get('app.header.button.returnMaker')}"
                              rendered="#{baseController.manageButton.checkNCBButton}"
-                             actionListener="#{prescreenChecker.onReturnToMaker()}" oncomplete="testHandle()"
-                             update=":returnMakerDlgForm" onclick="returnMakerDlg.show()"/>
-            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton"
+                             actionListener="#{prescreenChecker.onReturnToMaker()}"
+                             oncomplete="returnMakerDlg.show()"
+                             update=":returnMakerDlgForm">
+                <p:resetInput target=":returnMakerDlgForm"/>
+            </p:commandButton>
+            <!--Check NCB-->
+            <p:commandButton id="btnCheckNCB" value="#{msg.get('app.header.button.checkNCB')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkNCB')}"
                              rendered="#{baseController.manageButton.checkNCBButton}"
                              actionListener="#{prescreenChecker.onCheckCustomer}" process="@form"
-                             onclick="blockUICheckCustomer.show()"
-                             oncomplete="blockUICheckCustomer.hide()" update=":frmMain :msgBoxSystemMessagePanel"/>
-            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton"
-                             rendered="#{baseController.manageButton.assignToCheckerButton}"
-                             disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()"
-                             update=":assignCheckerDlgForm">
-                <p:resetInput target=":assignCheckerDlgPanel"/>
+                             oncomplete="blockUICheckCustomer.hide()"
+                             update=":frmMain :msgBoxSystemMessagePanel"
+                             onclick="blockUICheckCustomer.show()"/>
+            <!--Assign To Checker-->
+            <p:commandButton id="btnAssignChecker" value="#{msg.get('app.header.button.assignChecker')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignChecker')}"
+                             rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}"
+                             process="@this"
+                             actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
+                             oncomplete="assignCheckerDlg.show()"
+                             update=":assignABDMDlgPanel">
+                <p:resetInput target=":assignABDMDlgPanel"/>
             </p:commandButton>
-            <p:commandButton id="btnMandateDoc" value="Check Mandate Doc" styleClass="blueButton"
+            <!--Mandate Document-->
+            <p:commandButton id="btnMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
                              rendered="#{baseController.manageButton.checkMandateDocButton}" disabled="true"/>
-            <p:commandButton id="btnCheckPreScreen" value="Check Prescreen" styleClass="blueButton"
+            <!--Check PreScreen (BRMS)-->
+            <p:commandButton id="btnCheckPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkPreScreen')}"
                              rendered="#{baseController.manageButton.checkBRMSButton}"
                              action="#{prescreenMaker.onCheckPreScreen}" disabled="true"/>
-            <p:commandButton id="btnRequestAppraisal" value="Request Appraisal" styleClass="blueButton"
+            <!--Request Appraisal-->
+            <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
                              rendered="#{baseController.manageButton.requestAppraisalButton}" disabled="true"/>
-            <p:commandButton id="btnCancelCA" value="Cancel CA" styleClass="blueButton"
+            <!--Check Criteria-->
+            <p:commandButton id="btnCheckCriteria" value="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton" title="#{msg.get('app.header.button.checkCriteria')}"
+                             rendered="#{baseController.manageButton.checkCriteriaButton}"
+                    >
+
+            </p:commandButton>
+            <!--Assign to ABDM-->
+            <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton" title="#{msg.get('app.header.button.assignABDM')}"
+                             rendered="#{baseController.manageButton.assignToABDMButton}"
+                             actionListener="#{baseController.onOpenAssignToABDM()}"
+                             oncomplete="assignABDMDlg.show()"
+                             update=":frmMain:assignABDMPanel">
+
+            </p:commandButton>
+            <!--Cancel CA-->
+            <p:commandButton id="btnCancelCA" value="#{msg.get('app.header.button.cancelCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.cancelCA')}"
                              rendered="#{baseController.manageButton.cancelCAButton}" type="button"
                              onclick="confirmCancelCA.show()"/>
-            <p:confirmDialog header="Confirmation" message="Are you sure to Cancel CA?" styleClass="left"
-                             icon="ui-icon-alert"
-                             widgetVar="confirmCancelCA" global="false" showEffect="fade"
-                             rendered="#{baseController.manageButton.cancelCAButton}">
-                <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                 update=":msgBoxSystemMessagePanel"
-                                 actionListener="#{prescreenMaker.onCancelCA}"
-                                 process="@this" oncomplete="confirmCancelCA.hide()"/>
-                <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
-            </p:confirmDialog>
-            <p:commandButton id="btnCloseSale" value="Closed Sales" styleClass="blueButton"
+                <p:confirmDialog header="Confirmation" message="Are you sure to Cancel CA?" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmCancelCA" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.cancelCAButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":msgBoxSystemMessagePanel"
+                                     actionListener="#{prescreenMaker.onCancelCA}"
+                                     process="@this" oncomplete="confirmCancelCA.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+            <!--Submit Case-->
+            <p:commandButton id="btnSubmitCase" value="#{msg.get('app.header.button.submitCA')}" styleClass="blueButton" title="#{msg.get('app.header.button.submitCA')}"
+                             rendered="#{baseController.manageButton.submitCAButton}"
+                    >
+
+            </p:commandButton>
+            <!--Close Sale-->
+            <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton" title="#{msg.get('app.header.button.closeSale')}"
                              rendered="#{baseController.manageButton.closeSaleButton}" type="button"
                              onclick="confirmCloseSaleCA.show()"/>
-            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale?" styleClass="left"
-                             icon="ui-icon-alert"
-                             widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
-                             rendered="#{baseController.manageButton.closeSaleButton}">
-                <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                 update=":msgBoxSystemMessagePanel"
-                                 actionListener="#{prescreenMaker.onCloseSale()}"
-                                 process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
-                <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
-                                 styleClass="ui-confirmdialog-no"/>
-            </p:confirmDialog>
+                <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale?" styleClass="left"
+                                 icon="ui-icon-alert"
+                                 widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
+                                 rendered="#{baseController.manageButton.closeSaleButton}">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":msgBoxSystemMessagePanel"
+                                     actionListener="#{prescreenMaker.onCloseSale()}"
+                                     process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
+                    <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
         </div>
         <div class="clear"></div>
         <div id="header_information">
@@ -174,4 +215,36 @@
             }
         }
     </script>
+    <p:panel id="msgBoxBaseMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxBaseMessageDialog" widgetVar="msgBoxBaseMessageDlg" styleClass="messageDialog"
+                         header="#{baseController.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{baseController.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             oncomplete="msgBoxBaseMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
+    <p:panel id="msgBoxBaseRedirectPanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxBaseRedirectDialog" widgetVar="msgBoxBaseRedirectDlg" styleClass="messageDialog"
+                         header="#{baseController.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{baseController.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             action="#{baseController.onGoToInbox}"/>
+        </p:confirmDialog>
+    </p:panel>
+
+    <p:panel id="assignABDMPanel" styleClass="panel">
+        <p:dialog id="assignABDMDialog" widgetVar="assignABDMDlg" header="Assign To ABDM"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="400" height="160">
+            <ui:include src="/site/dialog/assignABDMDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
 </ui:composition>

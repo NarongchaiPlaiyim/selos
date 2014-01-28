@@ -44,6 +44,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
 
     private AccountInfo accountInfo;
     private WorkCase workCase;
+    private User user;
     private List<AccountInfoDetailView> accountInfoDetailViewList;
     private List<AccountInfoDetail> accountInfoDetailList;
     private AccountInfoDetail accountInfoDetail;
@@ -56,7 +57,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     public AccountInfoControl() {
 
     }
-
     public AccountInfoView getAccountInfo(long workCaseId) {
         log.info("-- getAccountInfo ::: workCaseId : {}", workCaseId);
         accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
@@ -69,15 +69,13 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             return accountInfoView;
         }
     }
-
     public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
         log.debug("-- saveAccountInfo({}, {})", accountInfoView.toString(), workCaseId);
-        User user = getCurrentUser();
+
+        user = getCurrentUser();
         workCase = workCaseDAO.findById(workCaseId);
-        accountInfoView.getId();
 
         accountInfo = accountInfoTransform.transformToModel(accountInfoView, workCase, user);
-
         accountInfoDAO.persist(accountInfo);
 
         accountInfoDetailList = safetyList(accountInfoDetailDAO.findByAccountInfoDetailId(accountInfo.getId()));
@@ -92,7 +90,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             insertToDB(accountInfoDetailViewList);
         }
     }
-
     private void insertToDB(List<AccountInfoDetailView> accountInfoDetailViewList){
         accountInfoDetailViewList = safetyList(accountInfoDetailViewList);
         for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){

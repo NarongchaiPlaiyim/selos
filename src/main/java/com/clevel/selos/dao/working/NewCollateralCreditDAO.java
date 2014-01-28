@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
+import com.clevel.selos.model.db.working.NewCreditFacility;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -21,16 +22,28 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
     }
 
     @SuppressWarnings("unchecked")
-    public List<NewCollateralCredit> getListCollRelationByNewCollateral(NewCollateral newCollateralDetail) {
-        log.info("getListCollRelationByNewGuarantor. (newCollateralDetail: {})", newCollateralDetail);
+    public List<NewCollateralCredit> getListCollRelationByNewCollateral(NewCollateral newCollateral) {
+        log.info("getListCollRelationByNewGuarantor. (newCollateral: {})", newCollateral);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateralDetail", newCollateralDetail));
-        criteria.addOrder(Order.asc("newCollateralDetail.id"));
+        criteria.add(Restrictions.eq("newCollateral", newCollateral));
+        criteria.addOrder(Order.asc("newCollateral.id"));
         List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
         log.info("getList. (result size: {})", newCollateralRelCreditList.size());
 
         return newCollateralRelCreditList;
 
     }
+
+    public List<NewCollateralCredit> getListCollRelationByNewCreditFacility(NewCreditFacility newCreditFacility) {
+        log.info("getListCollRelationByNewCreditFacility. (newCreditFacility: {})", newCreditFacility);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        List<NewCollateralCredit> newCollateralRelCreditList = (List<NewCollateralCredit>)criteria.list();
+        log.info("getList. (result size: {})", newCollateralRelCreditList.size());
+
+        return newCollateralRelCreditList;
+
+    }
+
 
 }

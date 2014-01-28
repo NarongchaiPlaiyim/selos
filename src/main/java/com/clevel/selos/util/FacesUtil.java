@@ -54,6 +54,7 @@ public class FacesUtil implements Serializable {
             ec.redirect(url);
         } catch (Exception e) {
             log.error("Exception while redirection! (contextPath: {}, uriPath: {})", contextPath, uriPath);
+            log.error("", e);
         }
     }
 }

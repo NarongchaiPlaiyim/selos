@@ -129,8 +129,8 @@ public class Decision implements Serializable {
 
     // View Selected for Add/Edit/Delete
     private NewCreditDetailView selectedAppProposeCredit;
-    private NewCollateralInfoView selectedAppProposeCollateral;
-    private NewSubCollateralDetailView selectedAppSubCollateral;
+    private NewCollateralView selectedAppProposeCollateral;
+    private NewCollateralSubView selectedAppSubCollateral;
     private NewGuarantorDetailView selectedAppProposeGuarantor;
 
     // Retrieve Price/Fee
@@ -169,7 +169,7 @@ public class Decision implements Serializable {
     private List<SubCollateralType> subCollateralTypeList;
     private List<CustomerInfoView> collateralOwnerUwAllList;
     private List<MortgageType> mortgageTypeList;
-    private List<NewSubCollateralDetailView> relatedWithAllList;
+    private List<NewCollateralSubView> relatedWithAllList;
     private List<NewCreditDetailView> collateralCreditTypeList;
     private List<NewCreditDetailView> selectedCollateralCrdTypeItems;
     private List<NewCreditDetailView> collCrdTypePrev;
@@ -242,11 +242,11 @@ public class Decision implements Serializable {
         collateralOwnerUwAllList = new ArrayList<CustomerInfoView>();
         mortgageTypeList = mortgageTypeDAO.findAll();
         // Example related with data
-        relatedWithAllList = new ArrayList<NewSubCollateralDetailView>();
-        NewSubCollateralDetailView subColl_1 = new NewSubCollateralDetailView();
+        relatedWithAllList = new ArrayList<NewCollateralSubView>();
+        NewCollateralSubView subColl_1 = new NewCollateralSubView();
         subColl_1.setId(1l);
         subColl_1.setTitleDeed("Sub-Coll 1");
-        NewSubCollateralDetailView subColl_2 = new NewSubCollateralDetailView();
+        NewCollateralSubView subColl_2 = new NewCollateralSubView();
         subColl_2.setId(2l);
         subColl_2.setTitleDeed("Sub-Coll 2");
 
@@ -671,7 +671,7 @@ public class Decision implements Serializable {
         // Propose Collateral
         collateralCreditTypeList = cloner.deepClone(sharedCreditTypeList);
 
-        NewCollateralInfoView proposeCollateral1 = new NewCollateralInfoView();
+        NewCollateralView proposeCollateral1 = new NewCollateralView();
         proposeCollateral1.setJobID("#001");
         proposeCollateral1.setAadDecision("Accept");
         proposeCollateral1.setAadDecisionReason("Reason Example");
@@ -684,7 +684,7 @@ public class Decision implements Serializable {
         proposeCollateral1.setNewCreditDetailViewList(cloner.deepClone(sharedCreditTypeList));
 
         // Collateral Head
-        NewCollateralHeadDetailView collateralHeader1 = new NewCollateralHeadDetailView();
+        NewCollateralHeadView collateralHeader1 = new NewCollateralHeadView();
         collateralHeader1.setPotentialCollateral(potentialCollateral);
         collateralHeader1.setCollTypePercentLTV(collateralType);
         collateralHeader1.setExistingCredit(BigDecimal.valueOf(1234567.89));
@@ -695,7 +695,7 @@ public class Decision implements Serializable {
         collateralHeader1.setInsuranceCompany(RadioValue.NOT_SELECTED.value());
 
         // Sub Collateral Detail of Collateral Head Detail
-        NewSubCollateralDetailView subCollateral1 = new NewSubCollateralDetailView();
+        NewCollateralSubView subCollateral1 = new NewCollateralSubView();
         subCollateral1.setSubCollateralType(subCollateralType);
         subCollateral1.setAddress("234 Jompol, Jatujak, Bangkok");
         subCollateral1.setLandOffice("Ladpraow");
@@ -709,7 +709,7 @@ public class Decision implements Serializable {
         subCollateral1.setAppraisalValue(BigDecimal.valueOf(2000000.00));
         subCollateral1.setMortgageValue(BigDecimal.valueOf(3200000.00));
 
-        NewSubCollateralDetailView subCollateral2 = new NewSubCollateralDetailView();
+        NewCollateralSubView subCollateral2 = new NewCollateralSubView();
         subCollateral2.setSubCollateralType(subCollateralType);
         subCollateral2.setAddress("567 Jompol, Jatujak, Bangkok");
         subCollateral2.setLandOffice("Ladpraow 17");
@@ -723,16 +723,16 @@ public class Decision implements Serializable {
         subCollateral2.setAppraisalValue(BigDecimal.valueOf(2457000.00));
         subCollateral2.setMortgageValue(BigDecimal.valueOf(520000.00));
 
-        List<NewSubCollateralDetailView> subCollateralList = new ArrayList<NewSubCollateralDetailView>();
+        List<NewCollateralSubView> subCollateralList = new ArrayList<NewCollateralSubView>();
         subCollateralList.add(subCollateral1);
         subCollateralList.add(subCollateral2);
-        collateralHeader1.setNewSubCollateralDetailViewList(subCollateralList);
+        collateralHeader1.setNewCollateralSubViewList(subCollateralList);
 
-        List<NewCollateralHeadDetailView> collateralHeaderList = new ArrayList<NewCollateralHeadDetailView>();
+        List<NewCollateralHeadView> collateralHeaderList = new ArrayList<NewCollateralHeadView>();
         collateralHeaderList.add(collateralHeader1);
-        proposeCollateral1.setNewCollateralHeadDetailViewList(collateralHeaderList);
+        proposeCollateral1.setNewCollateralHeadViewList(collateralHeaderList);
 
-        List<NewCollateralInfoView> proposeCollateralList = new ArrayList<NewCollateralInfoView>();
+        List<NewCollateralView> proposeCollateralList = new ArrayList<NewCollateralView>();
         proposeCollateralList.add(proposeCollateral1);
         decisionView.setProposeCollateralList(proposeCollateralList);
 
@@ -743,7 +743,7 @@ public class Decision implements Serializable {
         log.debug("Set Collateral Sequence number usage");
         for (int i=0; i<decisionView.getApproveCollateralList().size(); i++) {
             log.debug("Collateral[{}]", i);
-            NewCollateralInfoView coll = decisionView.getApproveCollateralList().get(i);
+            NewCollateralView coll = decisionView.getApproveCollateralList().get(i);
 
             for (int j=0; j<coll.getNewCreditDetailViewList().size(); j++) {
                 NewCreditDetailView collCredit = coll.getNewCreditDetailViewList().get(j);
@@ -826,8 +826,8 @@ public class Decision implements Serializable {
         initSelectItemsList();
 
         selectedAppProposeCredit = new NewCreditDetailView();
-        selectedAppProposeCollateral = new NewCollateralInfoView();
-        selectedAppSubCollateral = new NewSubCollateralDetailView();
+        selectedAppProposeCollateral = new NewCollateralView();
+        selectedAppSubCollateral = new NewCollateralSubView();
         selectedAppProposeGuarantor = new NewGuarantorDetailView();
 
         // Initial sequence number credit
@@ -1195,7 +1195,7 @@ public class Decision implements Serializable {
         boolean success = false;
 
         log.debug("===> Edit - Collateral: {}", selectedAppProposeCollateral);
-        NewCollateralInfoView collateralInfoEdit = decisionView.getApproveCollateralList().get(rowIndexCollateral);
+        NewCollateralView collateralInfoEdit = decisionView.getApproveCollateralList().get(rowIndexCollateral);
         collateralInfoEdit.setJobID(selectedAppProposeCollateral.getJobID());
         collateralInfoEdit.setAppraisalDate(selectedAppProposeCollateral.getAppraisalDate());
         collateralInfoEdit.setAadDecision(selectedAppProposeCollateral.getAadDecision());
@@ -1210,7 +1210,7 @@ public class Decision implements Serializable {
         collateralInfoEdit.setMortgageCondition(selectedAppProposeCollateral.getMortgageCondition());
         collateralInfoEdit.setMortgageConditionDetail(selectedAppProposeCollateral.getMortgageConditionDetail());
         collateralInfoEdit.setBdmComments(selectedAppProposeCollateral.getBdmComments());
-        collateralInfoEdit.setNewCollateralHeadDetailViewList(selectedAppProposeCollateral.getNewCollateralHeadDetailViewList());
+        collateralInfoEdit.setNewCollateralHeadViewList(selectedAppProposeCollateral.getNewCollateralHeadViewList());
 
         if (selectedCollateralCrdTypeItems != null && selectedCollateralCrdTypeItems.size() > 0) {
             collateralInfoEdit.getNewCreditDetailViewList().clear();
@@ -1238,7 +1238,7 @@ public class Decision implements Serializable {
 
     public void onAddSubCollateral() {
         log.debug("onAddSubCollateral()");
-        selectedAppSubCollateral = new NewSubCollateralDetailView();
+        selectedAppSubCollateral = new NewCollateralSubView();
         modeEditSubColl = false;
     }
 
@@ -1251,8 +1251,8 @@ public class Decision implements Serializable {
         log.debug("onDeleteSubCollateral() rowIndexCollateral: {}, rowIndexCollHead: {}, rowIndexSubColl: {}",
                 rowIndexCollateral, rowIndexCollHead, rowIndexSubColl);
         decisionView.getApproveCollateralList().get(rowIndexCollateral)
-                .getNewCollateralHeadDetailViewList().get(rowIndexCollHead)
-                .getNewSubCollateralDetailViewList().remove(rowIndexSubColl);
+                .getNewCollateralHeadViewList().get(rowIndexCollHead)
+                .getNewCollateralSubViewList().remove(rowIndexSubColl);
     }
 
     public void onSaveSubCollateral() {
@@ -1261,8 +1261,8 @@ public class Decision implements Serializable {
 
         if (modeEditSubColl) {
             log.debug("===> Edit - SubCollateral: {}", selectedAppSubCollateral);
-            NewSubCollateralDetailView subCollEdit = selectedAppProposeCollateral.getNewCollateralHeadDetailViewList().get(rowIndexCollHead)
-                    .getNewSubCollateralDetailViewList().get(rowIndexSubColl);
+            NewCollateralSubView subCollEdit = selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
+                    .getNewCollateralSubViewList().get(rowIndexSubColl);
             SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedAppSubCollateral.getSubCollateralType().getId());
             subCollEdit.setSubCollateralType(subCollateralType);
             subCollEdit.setTitleDeed(selectedAppSubCollateral.getTitleDeed());
@@ -1280,7 +1280,7 @@ public class Decision implements Serializable {
         else {
             //Add New
             log.debug("===> Add New - SubCollateral: {}", selectedAppSubCollateral);
-            NewSubCollateralDetailView subCollAdd = new NewSubCollateralDetailView();
+            NewCollateralSubView subCollAdd = new NewCollateralSubView();
             SubCollateralType subCollateralType = subCollateralTypeDAO.findById(selectedAppSubCollateral.getSubCollateralType().getId());
             subCollAdd.setSubCollateralType(subCollateralType);
             subCollAdd.setTitleDeed(selectedAppSubCollateral.getTitleDeed());
@@ -1293,12 +1293,12 @@ public class Decision implements Serializable {
             subCollAdd.setAppraisalValue(selectedAppSubCollateral.getAppraisalValue());
             subCollAdd.setMortgageValue(selectedAppSubCollateral.getMortgageValue());
 
-            if (selectedAppProposeCollateral.getNewCollateralHeadDetailViewList().get(rowIndexCollHead).getNewSubCollateralDetailViewList() == null) {
-                selectedAppProposeCollateral.getNewCollateralHeadDetailViewList().get(rowIndexCollHead).setNewSubCollateralDetailViewList(new ArrayList<NewSubCollateralDetailView>());
+            if (selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).getNewCollateralSubViewList() == null) {
+                selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead).setNewCollateralSubViewList(new ArrayList<NewCollateralSubView>());
             }
 
-            selectedAppProposeCollateral.getNewCollateralHeadDetailViewList().get(rowIndexCollHead)
-                    .getNewSubCollateralDetailViewList().add(subCollAdd);
+            selectedAppProposeCollateral.getNewCollateralHeadViewList().get(rowIndexCollHead)
+                    .getNewCollateralSubViewList().add(subCollAdd);
 
             success = true;
         }
@@ -1351,18 +1351,18 @@ public class Decision implements Serializable {
             return;
         }
 
-        NewSubCollateralDetailView relatedWith = getIdNewSubCollateralDetail(selectedAppSubCollateral.getRelatedWithId());
+        NewCollateralSubView relatedWith = getIdNewSubCollateralDetail(selectedAppSubCollateral.getRelatedWithId());
         if (selectedAppSubCollateral.getRelatedWithList() != null) {
-            selectedAppSubCollateral.setRelatedWithList(new ArrayList<NewSubCollateralDetailView>());
+            selectedAppSubCollateral.setRelatedWithList(new ArrayList<NewCollateralSubView>());
         }
         selectedAppSubCollateral.getRelatedWithList().add(relatedWith);
     }
 
-    public NewSubCollateralDetailView getIdNewSubCollateralDetail(long newSubCollateralId) {
-        NewSubCollateralDetailView newSubCollateralReturn = new NewSubCollateralDetailView();
-        for (NewCollateralInfoView newCollateralInfoView : Util.safetyList(decisionView.getApproveCollateralList())) {
-            for (NewCollateralHeadDetailView newCollateralHeadDetailView : Util.safetyList(newCollateralInfoView.getNewCollateralHeadDetailViewList())) {
-                for (NewSubCollateralDetailView newSubCollateralDetailOnAdded : Util.safetyList(newCollateralHeadDetailView.getNewSubCollateralDetailViewList())) {
+    public NewCollateralSubView getIdNewSubCollateralDetail(long newSubCollateralId) {
+        NewCollateralSubView newSubCollateralReturn = new NewCollateralSubView();
+        for (NewCollateralView newCollateralView : Util.safetyList(decisionView.getApproveCollateralList())) {
+            for (NewCollateralHeadView newCollateralHeadView : Util.safetyList(newCollateralView.getNewCollateralHeadViewList())) {
+                for (NewCollateralSubView newSubCollateralDetailOnAdded : Util.safetyList(newCollateralHeadView.getNewCollateralSubViewList())) {
                     log.info("newSubCollateralDetailView1 id ::: {}", newSubCollateralDetailOnAdded.getId());
                     log.info("newSubCollateralDetailView1 title deed ::: {}", newSubCollateralDetailOnAdded.getTitleDeed());
                     if (newSubCollateralId == newSubCollateralDetailOnAdded.getId()) {
@@ -1601,11 +1601,11 @@ public class Decision implements Serializable {
         this.selectedAppProposeCredit = selectedAppProposeCredit;
     }
 
-    public NewCollateralInfoView getSelectedAppProposeCollateral() {
+    public NewCollateralView getSelectedAppProposeCollateral() {
         return selectedAppProposeCollateral;
     }
 
-    public void setSelectedAppProposeCollateral(NewCollateralInfoView selectedAppProposeCollateral) {
+    public void setSelectedAppProposeCollateral(NewCollateralView selectedAppProposeCollateral) {
         this.selectedAppProposeCollateral = selectedAppProposeCollateral;
     }
 
@@ -1809,11 +1809,11 @@ public class Decision implements Serializable {
         this.mortgageTypeList = mortgageTypeList;
     }
 
-    public List<NewSubCollateralDetailView> getRelatedWithAllList() {
+    public List<NewCollateralSubView> getRelatedWithAllList() {
         return relatedWithAllList;
     }
 
-    public void setRelatedWithAllList(List<NewSubCollateralDetailView> relatedWithAllList) {
+    public void setRelatedWithAllList(List<NewCollateralSubView> relatedWithAllList) {
         this.relatedWithAllList = relatedWithAllList;
     }
 
@@ -1833,11 +1833,11 @@ public class Decision implements Serializable {
         this.rowIndexSubColl = rowIndexSubColl;
     }
 
-    public NewSubCollateralDetailView getSelectedAppSubCollateral() {
+    public NewCollateralSubView getSelectedAppSubCollateral() {
         return selectedAppSubCollateral;
     }
 
-    public void setSelectedAppSubCollateral(NewSubCollateralDetailView selectedAppSubCollateral) {
+    public void setSelectedAppSubCollateral(NewCollateralSubView selectedAppSubCollateral) {
         this.selectedAppSubCollateral = selectedAppSubCollateral;
     }
 

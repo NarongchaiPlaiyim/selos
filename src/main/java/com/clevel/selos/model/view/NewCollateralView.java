@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCollateralInfoView implements Serializable {
+public class NewCollateralView implements Serializable {
     private long id;
     private String jobID;
     private Date appraisalDate;
@@ -29,10 +29,13 @@ public class NewCollateralInfoView implements Serializable {
     private User modifyBy;
     private int isApproved;
 
-    private List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList;
+    private List<NewCollateralHeadView> newCollateralHeadViewList;
     private List<NewCreditDetailView> newCreditDetailViewList;
 
-    public NewCollateralInfoView(){
+    //Added by Chai
+    private String jobIDSearch;
+
+    public NewCollateralView(){
         reset();
     }
 
@@ -50,7 +53,7 @@ public class NewCollateralInfoView implements Serializable {
         this.mortgageConditionDetail = "";
         this.bdmComments= "";
 
-        this.newCollateralHeadDetailViewList = new ArrayList<NewCollateralHeadDetailView>();
+        this.newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
     }
 
@@ -198,12 +201,12 @@ public class NewCollateralInfoView implements Serializable {
         isApproved = approved;
     }
 
-    public List<NewCollateralHeadDetailView> getNewCollateralHeadDetailViewList() {
-        return newCollateralHeadDetailViewList;
+    public List<NewCollateralHeadView> getNewCollateralHeadViewList() {
+        return newCollateralHeadViewList;
     }
 
-    public void setNewCollateralHeadDetailViewList(List<NewCollateralHeadDetailView> newCollateralHeadDetailViewList) {
-        this.newCollateralHeadDetailViewList = newCollateralHeadDetailViewList;
+    public void setNewCollateralHeadViewList(List<NewCollateralHeadView> newCollateralHeadViewList) {
+        this.newCollateralHeadViewList = newCollateralHeadViewList;
     }
 
     public List<NewCreditDetailView> getNewCreditDetailViewList() {
@@ -212,6 +215,14 @@ public class NewCollateralInfoView implements Serializable {
 
     public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
         this.newCreditDetailViewList = newCreditDetailViewList;
+    }
+
+    public String getJobIDSearch() {
+        return jobIDSearch;
+    }
+
+    public void setJobIDSearch(String jobIDSearch) {
+        this.jobIDSearch = jobIDSearch;
     }
 
     @Override
@@ -235,8 +246,9 @@ public class NewCollateralInfoView implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("isApproved", isApproved)
-                .append("newCollateralHeadDetailViewList", newCollateralHeadDetailViewList)
+                .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("jobIDSearch", jobIDSearch)
                 .toString();
     }
 }

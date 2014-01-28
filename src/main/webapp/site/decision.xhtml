@@ -14,6 +14,24 @@
     <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <!-- Override CSS -->
+    <style>
+        .ui-datatable thead th {
+            white-space: normal !important;
+        }
+        .ui-datatable tbody td {
+            border-color: #868686 !important;
+        }
+        tfoot {
+            background: none !important;
+        }
+        table.ovr-border {
+            margin: 0 auto !important;
+        }
+        table.ovr-border tbody td {
+            border-style: none !important;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -29,26 +47,6 @@
         <!-- Start Menu -->
         <ui:include src="include/menubar.xhtml"/>
         <!-- End Menu -->
-
-        <!-- Override CSS -->
-        <style scoped="scoped">
-            .ui-datatable thead th {
-                white-space: normal !important;
-            }
-            .ui-datatable tbody td {
-                border-color: #868686;
-            }
-            tfoot {
-                background: none;
-            }
-            table.ovr-border {
-                margin: 0 auto;
-            }
-            table.ovr-border tbody td {
-                border-style: none !important;
-            }
-        </style>
-
         <div id="content_container">
             <div id="content_name">#{msg.get('app.decision.header')}</div>
             <div id="content">
@@ -2318,7 +2316,7 @@
                                         </td>
                                     </tr>
                                     <!-- BEGIN: Collateral Header -->
-                                    <ui:repeat value="#{proposeColl.newCollateralHeadDetailViewList}" var="collHeader">
+                                    <ui:repeat value="#{proposeColl.newCollateralHeadViewList}" var="collHeader">
                                         <tr>
                                             <td class="title left large">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
@@ -2379,7 +2377,7 @@
                                         <tr>
                                             <td colspan="4">
                                                 <!-- Sub Collateral -->
-                                                <p:dataTable var="subColl" value="#{collHeader.newSubCollateralDetailViewList}"
+                                                <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
                                                              paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
                                                              style="width: 100%">
 
@@ -2611,7 +2609,7 @@
                                     </td>
                                 </tr>
                                 <!-- BEGIN: Collateral Header -->
-                                <ui:repeat value="#{proposeColl.newCollateralHeadDetailViewList}" var="collHeader">
+                                <ui:repeat value="#{proposeColl.newCollateralHeadViewList}" var="collHeader">
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.potential')}</td>
                                         <td class="left" colspan="3">
@@ -2672,7 +2670,7 @@
                                     <tr>
                                         <td colspan="4">
                                             <!-- Sub Collateral -->
-                                            <p:dataTable var="subColl" value="#{collHeader.newSubCollateralDetailViewList}"
+                                            <p:dataTable var="subColl" value="#{collHeader.newCollateralSubViewList}"
                                                          paginator="false" rowKey="#{subColl}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 
