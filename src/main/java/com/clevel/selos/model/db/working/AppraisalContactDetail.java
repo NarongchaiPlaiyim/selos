@@ -14,9 +14,6 @@ public class AppraisalContactDetail {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_APPRAISAL_CONTACT_ID")
     private long id;
 
-    @Column(name="no")
-    private int no;
-
     @Column(name="customer_name")
     private String customerName;
 
@@ -49,14 +46,6 @@ public class AppraisalContactDetail {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public int getNo() {
-        return no;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
     }
 
     public String getCustomerName() {
@@ -119,7 +108,6 @@ public class AppraisalContactDetail {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("no", no)
                 .append("customerName", customerName)
                 .append("contactNo", contactNo)
                 .append("createDate", createDate)

@@ -1,6 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.OpenAccountProduct;
+import com.clevel.selos.model.db.master.AccountProduct;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.view.BankAccountTypeView;
@@ -23,23 +23,23 @@ public class BasicInfoAccountTransform extends Transform {
     public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo) {
         OpenAccount openAccount = new OpenAccount();
 
-        openAccount.setBasicInfo(basicInfo);
-
-        if (basicInfoAccountView.getId() != 0) {
-            openAccount.setId(basicInfoAccountView.getId());
-        }
-
-        openAccount.setAccountName(basicInfoAccountView.getAccountName());
-
-        openAccount.setAccountProduct(basicInfoAccountView.getProduct());
-        if (openAccount.getAccountProduct().getId() == 0) {
-            openAccount.setAccountProduct(null);
-        }
-
-        openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
-        if (openAccount.getBankAccountType().getId() == 0) {
-            openAccount.setBankAccountType(null);
-        }
+//        openAccount.setBasicInfo(basicInfo);
+//
+//        if (basicInfoAccountView.getId() != 0) {
+//            openAccount.setId(basicInfoAccountView.getId());
+//        }
+//
+//        openAccount.setAccountName(basicInfoAccountView.getAccountName());
+//
+//        openAccount.setAccountProduct(basicInfoAccountView.getProduct());
+//        if (openAccount.getAccountProduct().getId() == 0) {
+//            openAccount.setAccountProduct(null);
+//        }
+//
+//        openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
+//        if (openAccount.getBankAccountType().getId() == 0) {
+//            openAccount.setBankAccountType(null);
+//        }
 
         return openAccount;
     }
@@ -47,26 +47,26 @@ public class BasicInfoAccountTransform extends Transform {
     public BasicInfoAccountView transformToView(OpenAccount openAccount) {
         BasicInfoAccountView basicInfoAccountView = new BasicInfoAccountView();
 
-        basicInfoAccountView.setId(openAccount.getId());
-
-        basicInfoAccountView.setAccountName(openAccount.getAccountName());
-
-        basicInfoAccountView.setProduct(openAccount.getAccountProduct());
+//        basicInfoAccountView.setId(openAccount.getId());
+//
+//        basicInfoAccountView.setAccountName(openAccount.getAccountName());
+//
+//        basicInfoAccountView.setProduct(openAccount.getAccountProduct());
         if (basicInfoAccountView.getProduct() == null) {
-            basicInfoAccountView.setProduct(new OpenAccountProduct());
+            basicInfoAccountView.setProduct(new AccountProduct());
             basicInfoAccountView.getProduct().setName("-"); // for view
         }
 
-        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
+//        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
         if (basicInfoAccountView.getBankAccountTypeView() == null) {
             basicInfoAccountView.setBankAccountTypeView(new BankAccountTypeView());
             basicInfoAccountView.getBankAccountTypeView().setName("-"); // for view
         }
 
         BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();
-        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());
+//        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());
 
-        basicInfoAccountView.setBasicInfoAccountPurposeView(basicInfoAccountPurposeViews);
+//        basicInfoAccountView.setBasicInfoAccountPurposeView(basicInfoAccountPurposeViews);
 
         //for show view
         if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() > 0){

@@ -26,7 +26,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     @Inject
     private OpenAccountDAO openAccountDAO;
     @Inject
-    private OpenAccPurposeDAO openAccPurposeDAO;
+    private OpenAccountPurposeDAO openAccPurposeDAO;
     @Inject
     private AccountInfoDAO accountInfoDAO;
     @Inject
@@ -57,7 +57,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     public AccountInfoControl() {
 
     }
-
     public AccountInfoView getAccountInfo(long workCaseId) {
         log.info("-- getAccountInfo ::: workCaseId : {}", workCaseId);
         accountInfo = accountInfoDAO.findByWorkCaseId(workCaseId);
@@ -70,7 +69,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             return accountInfoView;
         }
     }
-
     public void saveAccountInfo(final AccountInfoView accountInfoView,final long workCaseId){
         log.debug("-- saveAccountInfo({}, {})", accountInfoView.toString(), workCaseId);
 
@@ -92,7 +90,6 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             insertToDB(accountInfoDetailViewList);
         }
     }
-
     private void insertToDB(List<AccountInfoDetailView> accountInfoDetailViewList){
         accountInfoDetailViewList = safetyList(accountInfoDetailViewList);
         for(AccountInfoDetailView dialogView : accountInfoDetailViewList ){

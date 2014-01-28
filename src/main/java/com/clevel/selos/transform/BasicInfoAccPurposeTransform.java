@@ -1,47 +1,47 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.OpenAccPurpose;
+import com.clevel.selos.dao.master.AccountPurposeDAO;
+import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BasicInfoAccPurposeTransform extends Transform {
 
-    public OpenAccPurpose transformToModel(BasicInfoAccountPurposeView basicInfoAccountPurposeView, OpenAccount openAccount) {
-        OpenAccPurpose openAccPurpose = new OpenAccPurpose();
+    @Inject
+    private AccountPurposeDAO accountPurposeDAO;
 
-        openAccPurpose.setOpenAccount(openAccount);
+    public OpenAccountPurpose transformToModel(BasicInfoAccountPurposeView basicInfoAccountPurposeView, OpenAccount openAccount) {
 
-        if (basicInfoAccountPurposeView.getPurpose().getId() != 0) {
-            openAccPurpose.setId(basicInfoAccountPurposeView.getPurpose().getId());
-        }
+        OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
+        openAccountPurpose.setOpenAccount(openAccount);
+        openAccountPurpose.setAccountPurpose(basicInfoAccountPurposeView.getPurpose());
 
-        openAccPurpose.setPurposeName(basicInfoAccountPurposeView.getPurpose().getName());
-
-        return openAccPurpose;
+        return openAccountPurpose;
     }
 
-    public BasicInfoAccountPurposeView transformToView(OpenAccPurpose openAccPurpose) {
+    public BasicInfoAccountPurposeView transformToView(OpenAccountPurpose openAccPurpose) {
         BasicInfoAccountPurposeView basicInfoAccountPurposeView = new BasicInfoAccountPurposeView();
-        OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
+        AccountPurpose openAccountPurpose = new AccountPurpose();
 
         basicInfoAccountPurposeView.setSelected(true);
 
         openAccountPurpose.setId(openAccPurpose.getId());
-        openAccountPurpose.setName(openAccPurpose.getPurposeName());
+        //openAccountPurpose.setName(openAccPurpose.getPurposeName());
 
         basicInfoAccountPurposeView.setPurpose(openAccountPurpose);
 
         return basicInfoAccountPurposeView;
     }
 
-    public List<BasicInfoAccountPurposeView> transformToViewList(List<OpenAccPurpose> openAccPurposeList) {
+    public List<BasicInfoAccountPurposeView> transformToViewList(List<OpenAccountPurpose> openAccPurposeList) {
         List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = new ArrayList<BasicInfoAccountPurposeView>();
         if (openAccPurposeList != null) {
-            for (OpenAccPurpose oap : openAccPurposeList) {
+            for (OpenAccountPurpose oap : openAccPurposeList) {
                 BasicInfoAccountPurposeView basicInfoAccountPurposeView = transformToView(oap);
                 basicInfoAccountPurposeViews.add(basicInfoAccountPurposeView);
             }

@@ -160,7 +160,7 @@ public class Decision implements Serializable {
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private List<BaseRate> baseRateList;
     private List<LoanPurpose> loanPurposeList;
-    private List<Disbursement> disbursementList;
+    private List<DisbursementType> disbursementList;
     private int rowIndexCredit;
 
     // Propose/Approve - Collateral
@@ -292,7 +292,7 @@ public class Decision implements Serializable {
         LoanPurpose loanPurpose = new LoanPurpose();
         loanPurpose.setDescription("Loan Purpose Example");
 
-        Disbursement disbursement = new Disbursement();
+        DisbursementType disbursement = new DisbursementType();
         disbursement.setDisbursement("Normal Disbursement");
 
         List<ExistingSplitLineDetailView> splitLineList = new ArrayList<ExistingSplitLineDetailView>();
@@ -966,7 +966,7 @@ public class Decision implements Serializable {
             ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
             CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
             LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurpose().getId());
-            Disbursement disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursement().getId());
+            DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursement().getId());
 
             if (modeEditCredit) {
                 NewCreditDetailView creditDetailEdit = decisionView.getApproveCreditList().get(rowIndexCredit);
@@ -1657,11 +1657,11 @@ public class Decision implements Serializable {
         this.baseRateList = baseRateList;
     }
 
-    public List<Disbursement> getDisbursementList() {
+    public List<DisbursementType> getDisbursementList() {
         return disbursementList;
     }
 
-    public void setDisbursementList(List<Disbursement> disbursementList) {
+    public void setDisbursementList(List<DisbursementType> disbursementList) {
         this.disbursementList = disbursementList;
     }
 

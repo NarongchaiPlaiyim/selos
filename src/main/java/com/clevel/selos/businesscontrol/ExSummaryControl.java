@@ -154,7 +154,7 @@ public class ExSummaryControl extends BusinessControl {
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         BigDecimal bizSize = BigDecimal.ZERO;
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
+            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // id = 1 use bank stmt
                 if(bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
                     bizSize = bankStatementSummary.getGrdTotalIncomeGross();
                 }
@@ -221,7 +221,7 @@ public class ExSummaryControl extends BusinessControl {
             exSumCharacteristicView.setFinalDBR(dbr.getFinalDBR());
         }
         if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
-            if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getRegistrationDate());
             } else {
                 exSumCharacteristicView.setStartBusinessDate(bizInfoSummaryView.getEstablishDate());
@@ -462,6 +462,7 @@ public class ExSummaryControl extends BusinessControl {
 //    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
     public void calGroupSaleBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary & Customer Info Juristic , Pls Call me !!
         WorkCase workCase = workCaseDAO.findById(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
         User user = getCurrentUser();
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -469,7 +470,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummary = new ExSummary();
             exSummary.setWorkCase(workCase);
         }
-        if(workCase.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+        if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
             if(user.getRole().getId() != RoleValue.UW.id()){//Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
 //            exSumCharacteristicView.setGroupSaleBDM(bankStatementSummary.getGrdTotalIncomeGross());

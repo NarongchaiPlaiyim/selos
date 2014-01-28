@@ -107,17 +107,17 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setId(basicInfo.getId());
 
         basicInfoView.setAppNo(workCase.getAppNumber());
-        basicInfoView.setRefAppNo(workCase.getRefAppNumber());
-        basicInfoView.setCaNo(workCase.getCaNumber());
+        basicInfoView.setRefAppNo(basicInfo.getRefAppNumber());
+        basicInfoView.setCaNo(basicInfo.getCaNumber());
 
         basicInfoView.setId(basicInfo.getId());
 
-        basicInfoView.setRequestType(workCase.getRequestType());
+        basicInfoView.setRequestType(basicInfo.getRequestType());
         if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
         }
 
-        basicInfoView.setProductGroup(workCase.getProductGroup());
+        basicInfoView.setProductGroup(basicInfo.getProductGroup());
         if(basicInfoView.getProductGroup() == null){
             basicInfoView.setProductGroup(new ProductGroup());
         }
@@ -187,9 +187,9 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
 
-        List<BasicInfoAccountView> basicInfoAccountViewList = basicInfoAccountTransform.transformToViewList(basicInfo.getOpenAccountList());
+        //List<BasicInfoAccountView> basicInfoAccountViewList = basicInfoAccountTransform.transformToViewList(basicInfo.getOpenAccountList());
 
-        basicInfoView.setBasicInfoAccountViews(basicInfoAccountViewList);
+        //basicInfoView.setBasicInfoAccountViews(basicInfoAccountViewList);
 
         return basicInfoView;
     }

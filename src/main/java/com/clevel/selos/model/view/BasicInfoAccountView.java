@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.OpenAccountProduct;
+import com.clevel.selos.model.db.master.AccountProduct;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,7 +12,7 @@ public class BasicInfoAccountView implements Serializable {
     private long id;
     private String accountName;
     private BankAccountTypeView bankAccountTypeView;
-    private OpenAccountProduct product;
+    private AccountProduct product;
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
     private String purposeForShow;
 
@@ -22,7 +22,7 @@ public class BasicInfoAccountView implements Serializable {
 
     public void reset() {
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.product = new OpenAccountProduct();
+        this.product = new AccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
     }
 
@@ -50,11 +50,11 @@ public class BasicInfoAccountView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public OpenAccountProduct getProduct() {
+    public AccountProduct getProduct() {
         return product;
     }
 
-    public void setProduct(OpenAccountProduct product) {
+    public void setProduct(AccountProduct product) {
         this.product = product;
     }
 
