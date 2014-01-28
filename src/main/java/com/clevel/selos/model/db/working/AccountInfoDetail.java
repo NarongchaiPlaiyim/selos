@@ -1,8 +1,8 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.AccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
-import com.clevel.selos.model.db.master.OpenAccountProduct;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,6 +17,10 @@ public class AccountInfoDetail implements Serializable {
     @SequenceGenerator(name = "SEQ_WRK_ACCOUNT_INFO_DETAIL_ID", sequenceName = "SEQ_WRK_ACCOUNT_INFO_DETAIL_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_ACCOUNT_INFO_DETAIL_ID")
     private long id;
+
+    @OneToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
 
     @ManyToOne
     @JoinColumn(name = "account_info_id")
@@ -38,7 +42,7 @@ public class AccountInfoDetail implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "account_product_id")
-    private OpenAccountProduct productType;
+    private AccountProduct productType;
 
     @Column(name = "term")
     private String term;
@@ -103,11 +107,11 @@ public class AccountInfoDetail implements Serializable {
         this.accountType = accountType;
     }
 
-    public OpenAccountProduct getProductType() {
+    public AccountProduct getProductType() {
         return productType;
     }
 
-    public void setProductType(OpenAccountProduct productType) {
+    public void setProductType(AccountProduct productType) {
         this.productType = productType;
     }
 

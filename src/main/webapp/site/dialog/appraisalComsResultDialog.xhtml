@@ -10,7 +10,9 @@
             <td class="title">Job ID :</td>
             <td>
                 <p:inputText id="jobID" value="#{appraisalResult.newCollateralView.jobIDSearch}"
-                             required="#{not empty param[searchButton.clientId]}"/>
+                             required="#{not empty param[searchButton.clientId]}"
+                             readonly="#{appraisalResult.flagReadOnly}"
+                        />
             </td>
             <td>
                 <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"

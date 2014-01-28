@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 @Entity
 @Table(name="wrk_appraisal_detail")
-public class AppraisalDetail {
+public class AppraisalPurpose {
     @Id
     @SequenceGenerator(name="SEQ_WRK_APPRAISAL_DETAIL_ID", sequenceName="SEQ_WRK_APPRAISAL_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_APPRAISAL_DETAIL_ID")

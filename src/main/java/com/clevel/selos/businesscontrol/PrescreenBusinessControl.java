@@ -1269,7 +1269,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         String bdmMakerName = "";
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         if(workCasePrescreen != null){
-            bdmMakerName = workCasePrescreen.getCreateBy().getUserName();
+            bdmMakerName = ((User)workCasePrescreen.getCreateBy()).getUserName();
         }
 
         return bdmMakerName;

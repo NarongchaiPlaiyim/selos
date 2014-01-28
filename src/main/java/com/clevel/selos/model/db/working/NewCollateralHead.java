@@ -68,12 +68,26 @@ public class NewCollateralHead implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name = "create_user_id")
+    @JoinColumn(name = "create_by")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name = "modify_user_id")
+    @JoinColumn(name = "modify_by")
     private User modifyBy;
+
+    /*** For Appraisal Process ***/
+    @Column (name = "collateral_char")
+    private int collateralChar;
+
+    @Column (name = "number_of_documents")
+    private int numberOfDocuments;
+
+    /*** For Post - Insurance Premium Quote Process ***/
+    @Column(name = "insurance_company_type")
+    private int insuranceComType;
+
+    @Column(name = "existing_insurance_type", columnDefinition = "")
+    private int existingInsuranceType;
 
     public long getId() {
         return id;
@@ -202,6 +216,38 @@ public class NewCollateralHead implements Serializable {
 
     public void setNewCollateralSubList(List<NewCollateralSub> newCollateralSubList) {
         this.newCollateralSubList = newCollateralSubList;
+    }
+
+    public int getCollateralChar() {
+        return collateralChar;
+    }
+
+    public void setCollateralChar(int collateralChar) {
+        this.collateralChar = collateralChar;
+    }
+
+    public int getNumberOfDocuments() {
+        return numberOfDocuments;
+    }
+
+    public void setNumberOfDocuments(int numberOfDocuments) {
+        this.numberOfDocuments = numberOfDocuments;
+    }
+
+    public int getInsuranceComType() {
+        return insuranceComType;
+    }
+
+    public void setInsuranceComType(int insuranceComType) {
+        this.insuranceComType = insuranceComType;
+    }
+
+    public int getExistingInsuranceType() {
+        return existingInsuranceType;
+    }
+
+    public void setExistingInsuranceType(int existingInsuranceType) {
+        this.existingInsuranceType = existingInsuranceType;
     }
 
     @Override
