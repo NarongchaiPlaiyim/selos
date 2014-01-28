@@ -12,7 +12,7 @@ public class WorkCaseMortgageConfirm extends AbstractWorkCase{
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "wrk_case_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
 

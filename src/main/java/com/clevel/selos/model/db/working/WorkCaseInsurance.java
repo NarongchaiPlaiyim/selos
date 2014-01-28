@@ -22,7 +22,7 @@ public class WorkCaseInsurance extends AbstractWorkCase {
     private BigDecimal totalPremiumAmount;
 
     @OneToOne
-    @JoinColumn(name = "wrk_case_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     public WorkCaseInsurance(){}

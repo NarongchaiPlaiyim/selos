@@ -28,7 +28,7 @@ public class BasicInfo implements Serializable {
     private String refAppNumber;
 
     @OneToOne
-    @JoinColumn(name = "requesttype_id")
+    @JoinColumn(name = "request_type_id")
     private RequestType requestType;
 
     @OneToOne
@@ -36,7 +36,7 @@ public class BasicInfo implements Serializable {
     private Reason requestReason;
 
     @OneToOne
-    @JoinColumn(name = "productgroup_id")
+    @JoinColumn(name = "product_group_id")
     private ProductGroup productGroup;
 
     @OneToOne
@@ -71,21 +71,21 @@ public class BasicInfo implements Serializable {
     private int applySpecialProgram;
 
     @OneToOne
-    @JoinColumn(name = "specialprogram_id")
+    @JoinColumn(name = "special_program_id")
     private SpecialProgram specialProgram;
 
     @Column(name = "refinance_in")
     private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name = "refinancein_id")
+    @JoinColumn(name = "refinance_in_id")
     private Bank refinanceInValue;
 
     @Column(name = "refinance_out")
     private int refinanceOUT;
 
     @OneToOne
-    @JoinColumn(name = "refinanceout_id")
+    @JoinColumn(name = "refinance_out_id")
     private Bank refinanceOutValue;
 
     @OneToOne
@@ -121,7 +121,7 @@ public class BasicInfo implements Serializable {
     private int passAnnualReview;
 
     @OneToOne
-    @JoinColumn(name = "borrowingtype_id")
+    @JoinColumn(name = "borrowing_type_id")
     private BorrowingType loanRequestPattern;
 
     @Column(name = "referral_name")
