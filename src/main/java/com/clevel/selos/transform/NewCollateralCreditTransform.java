@@ -49,7 +49,6 @@ public class NewCollateralCreditTransform extends Transform {
             }
 
             newCollateralRelCredit.setNewCollateral(newCollateralDetail);
-            newCollateralRelCredit.setNewCreditFacility(newCollateralDetail.getNewCreditFacility());
             newCollateralCreditList.add(newCollateralRelCredit);
         }
 
