@@ -9,6 +9,9 @@
     <h:head>
         <title>SE-LOS : NCB Record Detail</title>
         <h:outputStylesheet name="css/style.css" />
+        <script type="text/javascript" language="javascript"
+                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <h:outputScript library="js" name="custom.js" />
     </h:head>
 
     <h:body>
@@ -31,8 +34,8 @@
                                 <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
                                 </div>
                                 <div id="content_lastupdate">Last update by
-                                    <!--<h:outputText value="#{ncbSummary.user.userName}"/>,
-                                    <h:outputText value="#{ncbSummary.date}"/>--></div>
+                                    <h:outputText value="#{ncbSummary.user.userName}"/>,
+                                    <h:outputText value="#{ncbSummary.date}"/></div>
                             </div>
                             <div id="content_form">
                                 <!-- start content -->
@@ -115,6 +118,16 @@
                     <h:inputHidden id="subpagename" value="submnuprescreen"/>
                 </div>
             </h:form>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{ncbSummary.messageHeader}" message="#{ncbSummary.message}" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
         </p:panel>
 
     </h:body>
