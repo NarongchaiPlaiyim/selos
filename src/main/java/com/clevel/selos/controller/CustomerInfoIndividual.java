@@ -445,16 +445,17 @@ public class CustomerInfoIndividual implements Serializable {
         } else {
             referenceMainCusId = 0;
         }
-
-        if(customerInfoView.getSpouse().getRelation() != null){
-            relationSpouseCusId = customerInfoView.getSpouse().getRelation().getId();
-        } else {
-            relationSpouseCusId = 0;
-        }
-        if(customerInfoView.getSpouse().getReference() != null){
-            referenceSpouseCusId = customerInfoView.getSpouse().getReference().getId();
-        } else {
-            referenceSpouseCusId = 0;
+        if(customerInfoView.getSpouse() != null){
+            if(customerInfoView.getSpouse().getRelation() != null){
+                relationSpouseCusId = customerInfoView.getSpouse().getRelation().getId();
+            } else {
+                relationSpouseCusId = 0;
+            }
+            if(customerInfoView.getSpouse().getReference() != null){
+                referenceSpouseCusId = customerInfoView.getSpouse().getReference().getId();
+            } else {
+                referenceSpouseCusId = 0;
+            }
         }
 
         onChangeMaritalStatus();

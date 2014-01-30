@@ -45,6 +45,7 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     RequestTypeDAO requestTypeDAO;
 
+
     @Inject
     BasicInfoTransform basicInfoTransform;
     @Inject
@@ -121,43 +122,45 @@ public class BasicInfoControl extends BusinessControl {
 
         for(Customer customer : customerList){
             if(customer.getTmbCustomerId() != null && !"".equals(customer.getTmbCustomerId())){
+                CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+                if(customerOblInfo != null){
+                    if(customer.getReference() != null && Util.isTrue(customer.getReference().getPendingClaimLG()))
+                        totalPendingClaimLG = totalPendingClaimLG.add(customerOblInfo.getPendingClaimLG());
 
-                if(customer.getReference() != null && Util.isTrue(customer.getReference().getPendingClaimLG()))
-                    totalPendingClaimLG = totalPendingClaimLG.add(customer.getPendingClaimLG());
+                    if(customer.getReference() != null && Util.isTrue(customer.getReference().getUnpaidInsurance()))
+                        totalUnpaidFeeInsurance = totalUnpaidFeeInsurance.add(customerOblInfo.getUnpaidFeeInsurance());
 
-                if(customer.getReference() != null && Util.isTrue(customer.getReference().getUnpaidInsurance()))
-                    totalUnpaidFeeInsurance = totalUnpaidFeeInsurance.add(customer.getUnpaidFeeInsurance());
+                    if(customer.getRelation() != null && customer.getRelation().getId() == RelationValue.BORROWER.value()) {
+                        if(customerOblInfo.getLastReviewDate() != null){
+                            if(lastReviewDate == null || customerOblInfo.getLastReviewDate().after(lastReviewDate)){
+                                lastReviewDate = customerOblInfo.getLastReviewDate();
+                            }
+                        }
 
-                if(customer.getRelation() != null && customer.getRelation().getId() == RelationValue.BORROWER.value()) {
-                    if(customer.getLastReviewDate() != null){
-                        if(lastReviewDate == null || customer.getLastReviewDate().after(lastReviewDate)){
-                            lastReviewDate = customer.getLastReviewDate();
+                        if(customerOblInfo.getExtendedReviewDate() != null){
+                            if(extendedReviewDate == null || customerOblInfo.getExtendedReviewDate().before(extendedReviewDate)){
+                                extendedReviewDate = customerOblInfo.getExtendedReviewDate();
+                            }
+                        }
+
+                        //SCFScore, get worst score (Max is the worst) of final rate
+                        if(customerOblInfo.getRatingFinal() != null && customerOblInfo.getRatingFinal().getId() != 0){
+                            if(sbfScore.getScore() < customerOblInfo.getRatingFinal().getScore()){
+                                sbfScore = customerOblInfo.getRatingFinal();
+                            }
+                        }
+
+                        if(customerOblInfo.getServiceSegment() != null && Util.isTrue(customerOblInfo.getServiceSegment().getExistingSME())){
+                            countExistingSME++;
+                            log.debug("plus countExistingSME", countExistingSME);
                         }
                     }
 
-                    if(customer.getExtendedReviewDate() != null){
-                        if(extendedReviewDate == null || customer.getExtendedReviewDate().before(extendedReviewDate)){
-                            extendedReviewDate = customer.getExtendedReviewDate();
+                    if(customer.getReference() != null && Util.isTrue(customer.getReference().getSll())){
+                        if(customerOblInfo.getServiceSegment() != null && Util.isTrue(customerOblInfo.getServiceSegment().getNonExistingSME())){
+                            countNonExistingSME++;
+                            log.debug("plus countNonExistingSME", countNonExistingSME);
                         }
-                    }
-
-                    //SCFScore, get worst score (Max is the worst) of final rate
-                    if(customer.getRatingFinal() != null && customer.getRatingFinal().getId() != 0){
-                        if(sbfScore.getScore() < customer.getRatingFinal().getScore()){
-                            sbfScore = customer.getRatingFinal();
-                        }
-                    }
-
-                    if(customer.getServiceSegment() != null && Util.isTrue(customer.getServiceSegment().getExistingSME())){
-                        countExistingSME++;
-                        log.debug("plus countExistingSME", countExistingSME);
-                    }
-                }
-
-                if(customer.getReference() != null && Util.isTrue(customer.getReference().getSll())){
-                    if(customer.getServiceSegment() != null && Util.isTrue(customer.getServiceSegment().getNonExistingSME())){
-                        countNonExistingSME++;
-                        log.debug("plus countNonExistingSME", countNonExistingSME);
                     }
                 }
             }

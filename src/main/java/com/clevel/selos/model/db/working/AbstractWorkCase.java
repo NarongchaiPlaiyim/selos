@@ -11,7 +11,7 @@ import java.util.Date;
 @MappedSuperclass
 public class AbstractWorkCase implements Serializable{
 
-    @Column(name = "app_number", nullable = false)
+    @Column(name = "app_number", length = 16,nullable = false)
     protected String appNumber;
 
     @Column(name = "wob_number")
