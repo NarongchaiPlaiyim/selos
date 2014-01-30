@@ -1527,33 +1527,6 @@
                                 </tr>
                                 <tr>
                                     <td class="title">
-                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
-                                    </td>
-                                    <td>
-                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
-                                                        yearRange="1950:2100"
-                                                        pattern="dd/MM/yyyy"
-                                                        mindate="01/01/1950"
-                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
-                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"
-                                                        disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">
-                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
-                                    </td>
-                                    <td>
-                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
-                                                        yearRange="1950:2100"
-                                                        pattern="dd/MM/yyyy"
-                                                        mindate="01/01/1950"
-                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"
-                                                        disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                     </td>
                                     <td>
@@ -1583,6 +1556,34 @@
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="title">
+                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
+                                    </td>
+                                    <td>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        maxdate="#{custInfoSumIndi.currentDateDDMMYY}"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}"
+                                                        disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">
+                                        <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
+                                    </td>
+                                    <td>
+                                        <clv:BECalendar showOn="button" showButtonPanel="true" navigator="true" locale="th_TH"
+                                                        yearRange="1950:2100"
+                                                        pattern="dd/MM/yyyy"
+                                                        mindate="01/01/1950"
+                                                        value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}"
+                                                        disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
+                                    </td>
+                                </tr>
+
                                 <tr>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.nameTh')}"/>
@@ -1981,6 +1982,7 @@
                                                 disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.current')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.other')}" itemValue="3"/>
+
                                             <p:ajax update=":frmMain:adForm5"/>
                                         </p:selectOneRadio>
                                     </td>
