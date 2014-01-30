@@ -3,6 +3,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.AccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -169,5 +171,25 @@ public class OpenAccount implements Serializable {
 
     public void setOpenAccountCreditList(List<OpenAccountCredit> openAccountCreditList) {
         this.openAccountCreditList = openAccountCreditList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("requestType", requestType).
+                append("accountNumber", accountNumber).
+                append("bankBranch", bankBranch).
+                append("bankAccountType", bankAccountType).
+                append("accountProduct", accountProduct).
+                append("term", term).
+                append("openAccountNameList", openAccountNameList).
+                append("openAccountPurposeList", openAccountPurposeList).
+                append("numberOfDep", numberOfDep).
+                append("openAccountDepositList", openAccountDepositList).
+                append("confirmOpenAccount", confirmOpenAccount).
+                append("openAccountCreditList", openAccountCreditList).
+                toString();
     }
 }

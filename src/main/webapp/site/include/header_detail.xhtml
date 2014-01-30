@@ -34,8 +34,8 @@
                              process="@this"
                              actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
                              oncomplete="assignCheckerDlg.show()"
-                             update=":assignABDMDlgPanel">
-                <p:resetInput target=":assignABDMDlgPanel"/>
+                             update=":assignCheckerDialog">
+                <p:resetInput target=":assignCheckerDialog"/>
             </p:commandButton>
             <!--Mandate Document-->
             <p:commandButton id="btnMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
