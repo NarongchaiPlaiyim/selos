@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewCollateralTransform extends Transform {
@@ -54,14 +55,13 @@ public class NewCollateralTransform extends Transform {
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
             newCollateral.setProposeType("P");
-//            if (newCollateralView.getId() != 0) {
-//                newCollateral.setId(newCollateralView.getId());
-//                newCollateral.setCreateDate(newCollateralView.getCreateDate());
-//                newCollateral.setCreateBy(newCollateralView.getCreateBy());
-//            } else { // id = 0 create new
-//                newCollateral.setCreateDate(new Date());
-//                newCollateral.setCreateBy(user);
-//            }
+            if (newCollateralView.getId() != 0) {
+                newCollateral.setCreateDate(newCollateralView.getCreateDate());
+                newCollateral.setCreateBy(newCollateralView.getCreateBy());
+            } else { // id = 0 create new
+                newCollateral.setCreateDate(new Date());
+                newCollateral.setCreateBy(user);
+            }
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
             newCollateral.setAadDecisionReason(newCollateralView.getAadDecisionReason());

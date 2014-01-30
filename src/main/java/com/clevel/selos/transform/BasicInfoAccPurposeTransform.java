@@ -1,7 +1,7 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.AccountPurposeDAO;
-import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.dao.master.BankAccountPurposeDAO;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
@@ -13,7 +13,7 @@ import java.util.List;
 public class BasicInfoAccPurposeTransform extends Transform {
 
     @Inject
-    private AccountPurposeDAO accountPurposeDAO;
+    private BankAccountPurposeDAO accountPurposeDAO;
 
     public OpenAccountPurpose transformToModel(BasicInfoAccountPurposeView basicInfoAccountPurposeView, OpenAccount openAccount) {
 
@@ -26,7 +26,7 @@ public class BasicInfoAccPurposeTransform extends Transform {
 
     public BasicInfoAccountPurposeView transformToView(OpenAccountPurpose openAccPurpose) {
         BasicInfoAccountPurposeView basicInfoAccountPurposeView = new BasicInfoAccountPurposeView();
-        AccountPurpose openAccountPurpose = new AccountPurpose();
+        BankAccountPurpose openAccountPurpose = new BankAccountPurpose();
 
         basicInfoAccountPurposeView.setSelected(true);
 

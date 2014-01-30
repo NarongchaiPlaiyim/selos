@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -57,11 +58,13 @@ public class NCBSummary implements Serializable {
     private NCBInfoView ncbView;
     private List<Customer> customerView;
     private NCBInfoView ncbSummaryViewItem;
-    //private User user;
+    private User user;
     private Date date;
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
 
-    public NCBSummary() {
-    }
+    public NCBSummary() {}
 
     @PostConstruct
     public void onCreation() {
@@ -70,11 +73,9 @@ public class NCBSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-//        session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
-
-
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            user = (User) session.getAttribute("user");
         }else{
             log.info("preRender ::: workCaseId is null.");
             try{
@@ -86,33 +87,6 @@ public class NCBSummary implements Serializable {
         }
 
         date = DateTime.now().toDate();
-
-        //Change to use business control - AS
-        /*try {
-            customerView = customerDAO.findByWorkCaseId(workCaseId);
-        } catch (Exception e) {
-            log.error("customerDAO.findAll  error ::: {}", e.getMessage());
-        }
-
-        if (customerView != null) {
-            log.error("customerView.size :: {}", customerView.size());
-            for (int i = 0; i < customerView.size(); i++) {
-
-                if (customerView.get(i).getNcb() != null) {
-                    ncbView = ncbTransform.transformToView(customerView.get(i).getNcb());
-                    log.info("ncbView :: {} ", ncbView.toString());
-
-                    if (ncbSumViewList == null) {
-                        ncbSumViewList = new ArrayList<NCBInfoView>();
-                    }
-
-                    ncbSumViewList.add(i, ncbView);
-
-                }
-            }
-
-            log.info("ncbSumViewList :: {}", ncbSumViewList.size());
-        }*/
         ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
 
         if (customerView == null) {
@@ -123,7 +97,6 @@ public class NCBSummary implements Serializable {
             ncbSumViewList = new ArrayList<NCBInfoView>();
         }
 
-
     }
 
     public void onOpenNCBInfo() {
@@ -133,6 +106,7 @@ public class NCBSummary implements Serializable {
             log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
+            log.info("ncbSummaryViewItem :: {}",ncbSummaryViewItem.toString());
             FacesUtil.redirect("/site/NCBInfo.jsf");
             return;
         }
@@ -171,13 +145,13 @@ public class NCBSummary implements Serializable {
         this.ncbSummaryViewItem = ncbSummaryViewItem;
     }
 
-    /*public User getUser() {
+    public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 
     public Date getDate() {
         return date;
@@ -185,5 +159,29 @@ public class NCBSummary implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isMessageErr() {
+        return messageErr;
+    }
+
+    public void setMessageErr(boolean messageErr) {
+        this.messageErr = messageErr;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

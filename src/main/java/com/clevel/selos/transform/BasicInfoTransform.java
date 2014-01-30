@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -15,6 +16,8 @@ public class BasicInfoTransform extends Transform {
     BasicInfoAccountTransform basicInfoAccountTransform;
     @Inject
     SBFScoreTransform sbfScoreTransform;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     @Inject
     public BasicInfoTransform() {
@@ -26,7 +29,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setWorkCase(workCase);
 
         if(basicInfoView.getId() != 0){
-            basicInfo.setId(basicInfoView.getId());
+            basicInfo = basicInfoDAO.findById(basicInfoView.getId());
             basicInfo.setCreateDate(basicInfoView.getCreateDate());
             basicInfo.setCreateBy(basicInfoView.getCreateBy());
         } else {
