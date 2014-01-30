@@ -226,7 +226,15 @@ public class BasicInfoControl extends BusinessControl {
         basicInfo.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
         workCaseDAO.persist(workCase);
 
-        List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
+        //for new Open Account
+        for (BasicInfoAccountView bav : basicInfoView.getBasicInfoAccountViews()) {
+            for (BasicInfoAccountPurposeView bpv : bav.getBasicInfoAccountPurposeView()){
+                System.out.println("Is Select : "+bpv.isSelected());
+                System.out.println("Propose : " + bpv.getPurpose());
+            }
+        }
+
+        /*List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
         for (OpenAccount oa : openAccountList) {
             List<OpenAccountPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
             openAccPurposeDAO.delete(openAccPurposeList);
@@ -235,7 +243,6 @@ public class BasicInfoControl extends BusinessControl {
 
         if (basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0) {
             for (BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()) {
-//                System.out.println("BasicInfoAccountView [ ID ] : "+ biav.getId() +" [ Account Name ] : " +biav.getAccountName());
                 OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav, basicInfo);
                 openAccountDAO.save(openAccount);
 
@@ -246,7 +253,6 @@ public class BasicInfoControl extends BusinessControl {
                     }
                 }
             }
-        }
-
+        }*/
     }
 }

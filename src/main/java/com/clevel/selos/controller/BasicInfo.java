@@ -505,10 +505,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoAccountView.getBankAccountTypeView().setName("-");
         }
 
-        if(basicInfoAccountView.getProduct().getId() != 0){
-            basicInfoAccountView.setProduct(accountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
+        if(basicInfoAccountView.getAccountProduct().getId() != 0){
+            basicInfoAccountView.setAccountProduct(accountProductDAO.findById(basicInfoAccountView.getAccountProduct().getId()));
         }else{
-            basicInfoAccountView.getProduct().setName("-");
+            basicInfoAccountView.getAccountProduct().setName("-");
         }
 
         StringBuilder stringBuilder = new StringBuilder();

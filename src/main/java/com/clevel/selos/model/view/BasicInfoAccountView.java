@@ -13,7 +13,7 @@ public class BasicInfoAccountView implements Serializable {
     private String accountName;
     private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
-    private AccountProduct product;
+    private AccountProduct accountProduct;
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
     private String purposeForShow;
 
@@ -24,7 +24,7 @@ public class BasicInfoAccountView implements Serializable {
     public void reset() {
         this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.product = new AccountProduct();
+        this.accountProduct = new AccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
     }
 
@@ -60,12 +60,12 @@ public class BasicInfoAccountView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public AccountProduct getProduct() {
-        return product;
+    public AccountProduct getAccountProduct() {
+        return accountProduct;
     }
 
-    public void setProduct(AccountProduct product) {
-        this.product = product;
+    public void setAccountProduct(AccountProduct accountProduct) {
+        this.accountProduct = accountProduct;
     }
 
     public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeView() {
@@ -88,9 +88,10 @@ public class BasicInfoAccountView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
+                append("accountName", accountName).
                 append("accountNameList", accountNameList).
                 append("bankAccountTypeView", bankAccountTypeView).
-                append("product", product).
+                append("accountProduct", accountProduct).
                 append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).
                 append("purposeForShow", purposeForShow).
                 toString();
