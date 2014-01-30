@@ -4,18 +4,18 @@ import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.List;
 
 public class BasicInfoTransform extends Transform {
     @Inject
-    BasicInfoAccountTransform basicInfoAccountTransform;
+    OpenAccountTransform openAccountTransform;
     @Inject
     SBFScoreTransform sbfScoreTransform;
+    @Inject
+    OpenAccountTransform getOpenAccountTransform;
     @Inject
     BasicInfoDAO basicInfoDAO;
 
@@ -189,10 +189,6 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setCreateBy(basicInfo.getCreateBy());
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
-
-        //List<BasicInfoAccountView> basicInfoAccountViewList = basicInfoAccountTransform.transformToViewList(basicInfo.getOpenAccountList());
-
-        //basicInfoView.setBasicInfoAccountViews(basicInfoAccountViewList);
 
         return basicInfoView;
     }

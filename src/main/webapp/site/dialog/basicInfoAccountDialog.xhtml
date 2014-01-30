@@ -68,7 +68,7 @@
                 </td>
                 <td>
                     <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoAccountView.bankAccountTypeView.id}">
+                                     value="#{basicInfo.openAccountView.bankAccountTypeView.id}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{basicInfo.bankAccountTypeList}"
                                        var="oepnAccountType"
@@ -86,8 +86,8 @@
                 </td>
                 <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoAccountView.bankAccountProduct.id}"
-                                     required="#{basicInfo.basicInfoAccountView.bankAccountTypeView.id != 0}">
+                                     value="#{basicInfo.openAccountView.bankAccountProduct.id}"
+                                     required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{basicInfo.accountProductList}"
                                        var="accountProduct"
@@ -102,7 +102,7 @@
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
                 </td>
                 <td>
-                    <p:dataGrid value="#{basicInfo.basicInfoAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
+                    <p:dataGrid value="#{basicInfo.bankAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
                         <p:column>
                             <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
                             <h:outputText value="#{purposeList.purpose.name}"/>
