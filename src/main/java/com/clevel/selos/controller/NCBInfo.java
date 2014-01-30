@@ -195,13 +195,15 @@ public class NCBInfo implements Serializable {
 
         if(customerInfoView != null){
             log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+
             accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
             log.info("accountTypeList :: {}",accountTypeList.size());
+
+            settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
+            log.info("settlementStatusList :: {}",settlementStatusList.size());
         }
 
-        settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
-
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 
     }
