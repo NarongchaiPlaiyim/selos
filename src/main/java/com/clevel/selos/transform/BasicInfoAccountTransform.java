@@ -1,10 +1,9 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.view.BankAccountTypeView;
-import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 
 import javax.inject.Inject;
@@ -53,7 +52,7 @@ public class BasicInfoAccountTransform extends Transform {
 //
 //        basicInfoAccountView.setProduct(openAccount.getAccountProduct());
         if (basicInfoAccountView.getProduct() == null) {
-            basicInfoAccountView.setProduct(new AccountProduct());
+            basicInfoAccountView.setProduct(new BankAccountProduct());
             basicInfoAccountView.getProduct().setName("-"); // for view
         }
 

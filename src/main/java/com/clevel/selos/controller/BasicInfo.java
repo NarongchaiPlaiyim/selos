@@ -62,9 +62,9 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     private BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
-    private AccountProductDAO accountProductDAO;
+    private BankAccountProductDAO accountProductDAO;
     @Inject
-    private AccountPurposeDAO accountPurposeDAO;
+    private BankAccountPurposeDAO accountPurposeDAO;
     @Inject
     private BankDAO bankDAO;
     @Inject
@@ -95,8 +95,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     private List<Bank> bankList;
 
     private List<BankAccountType> bankAccountTypeList;
-    private List<AccountProduct> accountProductList;
-    private List<AccountPurpose> accountPurposeList;
+    private List<BankAccountProduct> accountProductList;
+    private List<BankAccountPurpose> accountPurposeList;
 
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
 
@@ -245,11 +245,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        accountProductList = new ArrayList<AccountProduct>();
+        accountProductList = new ArrayList<BankAccountProduct>();
         accountPurposeList = accountPurposeDAO.findAll();
         accountNameList = new ArrayList<CustomerInfoView>();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(AccountPurpose oap : accountPurposeList){
+        for(BankAccountPurpose oap : accountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -446,11 +446,11 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
 
-        accountProductList = new ArrayList<AccountProduct>();
+        accountProductList = new ArrayList<BankAccountProduct>();
 
         accountPurposeList = accountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(AccountPurpose oap : accountPurposeList){
+        for(BankAccountPurpose oap : accountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -465,7 +465,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         onChangeAccountType();
 
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(AccountPurpose oap : accountPurposeList){
+        for(BankAccountPurpose oap : accountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -957,11 +957,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.bankAccountTypeList = bankAccountTypeList;
     }
 
-    public List<AccountProduct> getAccountProductList() {
+    public List<BankAccountProduct> getAccountProductList() {
         return accountProductList;
     }
 
-    public void setAccountProductList(List<AccountProduct> accountProductList) {
+    public void setAccountProductList(List<BankAccountProduct> accountProductList) {
         this.accountProductList = accountProductList;
     }
 

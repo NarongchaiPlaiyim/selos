@@ -1,6 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -38,7 +38,7 @@ public class OpenAccount implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "open_account_product_id")
-    private AccountProduct accountProduct;
+    private BankAccountProduct accountProduct;
 
     @Column(name = "term")
     private String term;
@@ -109,11 +109,11 @@ public class OpenAccount implements Serializable {
         this.bankAccountType = bankAccountType;
     }
 
-    public AccountProduct getAccountProduct() {
+    public BankAccountProduct getAccountProduct() {
         return accountProduct;
     }
 
-    public void setAccountProduct(AccountProduct accountProduct) {
+    public void setAccountProduct(BankAccountProduct accountProduct) {
         this.accountProduct = accountProduct;
     }
 

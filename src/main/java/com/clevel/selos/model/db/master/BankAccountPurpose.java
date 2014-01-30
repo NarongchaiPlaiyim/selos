@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_account_purpose")
-public class AccountPurpose implements Serializable {
+public class BankAccountPurpose implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
@@ -20,7 +20,7 @@ public class AccountPurpose implements Serializable {
     @Column(name = "active")
     private int active;
 
-    public AccountPurpose() {
+    public BankAccountPurpose() {
     }
 
     public long getId() {
