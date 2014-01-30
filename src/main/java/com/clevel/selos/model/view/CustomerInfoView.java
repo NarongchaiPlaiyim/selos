@@ -124,13 +124,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
     //for new field
     //age , customer entity
     private int ageMonths;
+    private long customerOblInfoID;
     private int existingSMECustomer;
     private Date lastReviewDate;
     private Date extendedReviewDate;
     private int extendedReviewDateFlag;
     private Date nextReviewDate;
     private int nextReviewDateFlag;
-
     private Date lastContractDate;
     private Date numberOfMonthsLastContractDate;
     private String adjustClass;
@@ -206,6 +206,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
         this.unpaidFeeInsurance = BigDecimal.ZERO;
         this.pendingClaimLG = BigDecimal.ZERO;
+        customerOblInfoID = 0;
     }
 
     public long getIndividualId() {
@@ -989,6 +990,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setRatingFinal(SBFScoreView ratingFinal) {
         this.ratingFinal = ratingFinal;
+    }
+
+    public long getCustomerOblInfoID() {
+        return customerOblInfoID;
+    }
+
+    public void setCustomerOblInfoID(long customerOblInfoID) {
+        this.customerOblInfoID = customerOblInfoID;
     }
 
     public String getJurLv() {

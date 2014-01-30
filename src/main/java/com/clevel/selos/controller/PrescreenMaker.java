@@ -1338,7 +1338,17 @@ public class PrescreenMaker implements Serializable {
                         //--- Get old borrower by list index //
                         //CustomerInfoView oldCustomerInfoView = prescreenBusinessControl.cloneCustomer(customerInfoViewList.get(borrowerInfo.getListIndex()));
                         Cloner cloner = new Cloner();
-                        CustomerInfoView oldCustomerInfoView = cloner.deepClone(customerInfoViewList.get(borrowerInfo.getListIndex()));
+                        CustomerInfoView oldCustomerInfoView = null;
+                        try {
+                            oldCustomerInfoView = cloner.deepClone(customerInfoViewList.get(borrowerInfo.getListIndex()));
+                        } catch (Exception e) {
+                            log.error("============= cloning exception begin ================");
+                            log.error("workcasePrescreenId: {}",workCasePreScreenId);
+                            log.error("customerInfoViewList: {}",customerInfoViewList);
+                            log.error("borrowerInfo index: {}",borrowerInfo.getListIndex());
+                            log.error("cloning exception!",e);
+                            log.error("============= cloning exception end ================");
+                        }
                         CustomerInfoView oldSpouse = null;
                         if(oldCustomerInfoView.getSpouse() != null){
                             oldSpouse = oldCustomerInfoView.getSpouse();

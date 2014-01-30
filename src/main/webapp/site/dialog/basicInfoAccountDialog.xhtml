@@ -7,12 +7,59 @@
     <h:form id="basicInfoAccountDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title" style="width: 150px; min-width: 150px; max-width: 150px;">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.accountName')}"/>
                 </td>
-                <td style="width: 200px;">
-                    <p:inputText value="#{basicInfo.basicInfoAccountView.accountName}" styleClass="larger"
-                            required="true"/>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:selectOneMenu styleClass="largest" size="1" style="width: 300px; max-width: 300px; min-width: 300px;"
+                                                 value="#{basicInfo.customerId}" id="customerDropDown">
+                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                    <f:selectItems value="#{basicInfo.customerInfoViewList}"
+                                                   var="customer"
+                                                   itemLabel="#{customer.firstNameTh} #{customer.lastNameTh}"
+                                                   itemValue="#{customer.id}"/>
+                                    <p:ajax event="change" update="basicInfoAccountDlgForm:customerDropDown"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                                 styleClass="smaller"
+                                                 process="@this"
+                                                 actionListener="#{basicInfo.onAddAccountName()}"
+                                                 update=":basicInfoAccountDlgForm:customerTable">
+                                </p:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="width: 350px; min-width: 350px; max-width: 350px;">
+                    <p:dataTable id="customerTable" var="item" value="#{basicInfo.accountNameList}"
+                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+
+                        <p:column headerText="" styleClass="center" style="width:22px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 274px;">
+                            <h:outputText value="#{item.firstNameTh} #{item.lastNameTh}"/>
+                        </p:column>
+
+                        <p:column headerText="" styleClass="center" style="width:24px;">
+                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                                             icon="ui-icon-trash"
+                                             oncomplete="confirmDeleteAccountNameDlg.show()"
+                                             update=":basicInfoAccountDlgForm:customerTable">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{basicInfo.selectAccountName}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -37,15 +84,15 @@
                 <td class="title">
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.product')}"/>
                 </td>
-                <td style="width: 300px;">
+                <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoAccountView.product.id}"
+                                     value="#{basicInfo.basicInfoAccountView.bankAccountProduct.id}"
                                      required="#{basicInfo.basicInfoAccountView.bankAccountTypeView.id != 0}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{basicInfo.openAccountProductList}"
-                                       var="oepnAccountProduct"
-                                       itemLabel="#{oepnAccountProduct.name}"
-                                       itemValue="#{oepnAccountProduct.id}"/>
+                        <f:selectItems value="#{basicInfo.accountProductList}"
+                                       var="accountProduct"
+                                       itemLabel="#{accountProduct.name}"
+                                       itemValue="#{accountProduct.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>

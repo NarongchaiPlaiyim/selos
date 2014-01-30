@@ -23,16 +23,16 @@ public class Address implements Serializable {
     @JoinColumn(name = "address_type_id")
     AddressType addressType;
 
-    @Column(name = "address_no")
+    @Column(name = "address_no", length = 50)
     private String addressNo;
 
-    @Column(name = "moo")
+    @Column(name = "moo", length = 50)
     private String moo;
 
-    @Column(name = "building")
+    @Column(name = "building", length = 100)
     private String building;
 
-    @Column(name = "road")
+    @Column(name = "road", length = 200)
     private String road;
 
     @OneToOne
@@ -47,17 +47,17 @@ public class Address implements Serializable {
     @JoinColumn(name = "subdistrict_id")
     private SubDistrict subDistrict;
 
-    @Column(name = "postal_code")
+    @Column(name = "postal_code", length = 5)
     private String postalCode;
 
     @OneToOne
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 40)
     private String phoneNumber;
 
-    @Column(name = "phone_extension")
+    @Column(name = "phone_extension", length = 10)
     private String extension;
 
     @Column(name = "contact_name")

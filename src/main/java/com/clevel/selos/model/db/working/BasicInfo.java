@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "wrk_basicinfo")
@@ -21,14 +20,14 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "ca_number", length = 30, nullable = false)
+    @Column(name = "ca_number", length = 30)
     private String caNumber;
 
     @Column(name = "ref_app_number")
     private String refAppNumber;
 
     @OneToOne
-    @JoinColumn(name = "requesttype_id")
+    @JoinColumn(name = "request_type_id")
     private RequestType requestType;
 
     @OneToOne
@@ -36,7 +35,7 @@ public class BasicInfo implements Serializable {
     private Reason requestReason;
 
     @OneToOne
-    @JoinColumn(name = "productgroup_id")
+    @JoinColumn(name = "product_group_id")
     private ProductGroup productGroup;
 
     @OneToOne
@@ -71,21 +70,21 @@ public class BasicInfo implements Serializable {
     private int applySpecialProgram;
 
     @OneToOne
-    @JoinColumn(name = "specialprogram_id")
+    @JoinColumn(name = "special_program_id")
     private SpecialProgram specialProgram;
 
     @Column(name = "refinance_in")
     private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name = "refinancein_id")
+    @JoinColumn(name = "refinance_in_id")
     private Bank refinanceInValue;
 
     @Column(name = "refinance_out")
     private int refinanceOUT;
 
     @OneToOne
-    @JoinColumn(name = "refinanceout_id")
+    @JoinColumn(name = "refinance_out_id")
     private Bank refinanceOutValue;
 
     @OneToOne
@@ -121,7 +120,7 @@ public class BasicInfo implements Serializable {
     private int passAnnualReview;
 
     @OneToOne
-    @JoinColumn(name = "borrowingtype_id")
+    @JoinColumn(name = "borrowing_type_id")
     private BorrowingType loanRequestPattern;
 
     @Column(name = "referral_name")
@@ -152,6 +151,9 @@ public class BasicInfo implements Serializable {
     @OneToOne
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+
+    @Column(name = "retrieved_flag")
+    private int retrievedFlag;
 
     public long getId() {
         return id;
@@ -481,50 +483,59 @@ public class BasicInfo implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public int getRetrievedFlag() {
+        return retrievedFlag;
+    }
+
+    public void setRetrievedFlag(int retrievedFlag) {
+        this.retrievedFlag = retrievedFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("caNumber", caNumber)
-                .append("refAppNumber", refAppNumber)
-                .append("requestType", requestType)
-                .append("requestReason", requestReason)
-                .append("productGroup", productGroup)
-                .append("borrowerType", borrowerType)
-                .append("noUnpaidFeeInsurance", noUnpaidFeeInsurance)
-                .append("noPendingClaimLG", noPendingClaimLG)
-                .append("constructionRequestLG", constructionRequestLG)
-                .append("ableToGettingGuarantorJob", ableToGettingGuarantorJob)
-                .append("noClaimLGHistory", noClaimLGHistory)
-                .append("noRevokedLicense", noRevokedLicense)
-                .append("noLateWorkDelivery", noLateWorkDelivery)
-                .append("adequateOfCapitalResource", adequateOfCapitalResource)
-                .append("applySpecialProgram", applySpecialProgram)
-                .append("specialProgram", specialProgram)
-                .append("refinanceIN", refinanceIN)
-                .append("refinanceInValue", refinanceInValue)
-                .append("refinanceOUT", refinanceOUT)
-                .append("refinanceOutValue", refinanceOutValue)
-                .append("riskCustomerType", riskCustomerType)
-                .append("qualitativeType", qualitativeType)
-                .append("existingSMECustomer", existingSMECustomer)
-                .append("existingSMECustomerSince", existingSMECustomerSince)
-                .append("lastReviewDate", lastReviewDate)
-                .append("extendedReviewDate", extendedReviewDate)
-                .append("sbfScore", sbfScore)
-                .append("requestLoanWithSameName", requestLoanWithSameName)
-                .append("haveLoanInOneYear", haveLoanInOneYear)
-                .append("passAnnualReview", passAnnualReview)
-                .append("loanRequestPattern", loanRequestPattern)
-                .append("referralName", referralName)
-                .append("referralID", referralID)
-                .append("applyBA", applyBA)
-                .append("baPaymentMethod", baPaymentMethod)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("caNumber", caNumber).
+                append("refAppNumber", refAppNumber).
+                append("requestType", requestType).
+                append("requestReason", requestReason).
+                append("productGroup", productGroup).
+                append("borrowerType", borrowerType).
+                append("noUnpaidFeeInsurance", noUnpaidFeeInsurance).
+                append("noPendingClaimLG", noPendingClaimLG).
+                append("constructionRequestLG", constructionRequestLG).
+                append("ableToGettingGuarantorJob", ableToGettingGuarantorJob).
+                append("noClaimLGHistory", noClaimLGHistory).
+                append("noRevokedLicense", noRevokedLicense).
+                append("noLateWorkDelivery", noLateWorkDelivery).
+                append("adequateOfCapitalResource", adequateOfCapitalResource).
+                append("applySpecialProgram", applySpecialProgram).
+                append("specialProgram", specialProgram).
+                append("refinanceIN", refinanceIN).
+                append("refinanceInValue", refinanceInValue).
+                append("refinanceOUT", refinanceOUT).
+                append("refinanceOutValue", refinanceOutValue).
+                append("riskCustomerType", riskCustomerType).
+                append("qualitativeType", qualitativeType).
+                append("existingSMECustomer", existingSMECustomer).
+                append("existingSMECustomerSince", existingSMECustomerSince).
+                append("lastReviewDate", lastReviewDate).
+                append("extendedReviewDate", extendedReviewDate).
+                append("sbfScore", sbfScore).
+                append("requestLoanWithSameName", requestLoanWithSameName).
+                append("haveLoanInOneYear", haveLoanInOneYear).
+                append("passAnnualReview", passAnnualReview).
+                append("loanRequestPattern", loanRequestPattern).
+                append("referralName", referralName).
+                append("referralID", referralID).
+                append("applyBA", applyBA).
+                append("baPaymentMethod", baPaymentMethod).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("retrievedFlag", retrievedFlag).
+                toString();
     }
 }

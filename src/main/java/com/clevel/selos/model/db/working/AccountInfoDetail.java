@@ -1,6 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -42,7 +42,7 @@ public class AccountInfoDetail implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "account_product_id")
-    private AccountProduct productType;
+    private BankAccountProduct productType;
 
     @Column(name = "term")
     private String term;
@@ -107,11 +107,11 @@ public class AccountInfoDetail implements Serializable {
         this.accountType = accountType;
     }
 
-    public AccountProduct getProductType() {
+    public BankAccountProduct getProductType() {
         return productType;
     }
 
-    public void setProductType(AccountProduct productType) {
+    public void setProductType(BankAccountProduct productType) {
         this.productType = productType;
     }
 

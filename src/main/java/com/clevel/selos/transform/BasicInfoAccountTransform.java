@@ -1,17 +1,26 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.AccountProduct;
-import com.clevel.selos.model.db.working.BasicInfo;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.view.BankAccountTypeView;
+import com.clevel.selos.dao.master.BankAccountProductDAO;
+import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.db.master.BankAccountProduct;
+import com.clevel.selos.model.db.master.BankAccountType;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
+import com.clevel.selos.model.view.CustomerInfoView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BasicInfoAccountTransform extends Transform {
+    @Inject
+    BankAccountTypeDAO bankAccountTypeDAO;
+    @Inject
+    BankAccountProductDAO bankAccountProductDAO;
+    @Inject
+    CustomerDAO customerDAO;
 
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
@@ -20,26 +29,55 @@ public class BasicInfoAccountTransform extends Transform {
     public BasicInfoAccountTransform() {
     }
 
-    public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo) {
+    public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, WorkCase workCase) {
         OpenAccount openAccount = new OpenAccount();
 
-//        openAccount.setBasicInfo(basicInfo);
-//
-//        if (basicInfoAccountView.getId() != 0) {
-//            openAccount.setId(basicInfoAccountView.getId());
-//        }
-//
-//        openAccount.setAccountName(basicInfoAccountView.getAccountName());
-//
-//        openAccount.setAccountProduct(basicInfoAccountView.getProduct());
-//        if (openAccount.getAccountProduct().getId() == 0) {
-//            openAccount.setAccountProduct(null);
-//        }
-//
-//        openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
-//        if (openAccount.getBankAccountType().getId() == 0) {
-//            openAccount.setBankAccountType(null);
-//        }
+        openAccount.setWorkCase(workCase);
+        BankAccountType bankaccountType = bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId());
+        if(bankaccountType != null){
+            openAccount.setBankAccountType(bankaccountType);
+        } else {
+            openAccount.setBankAccountType(null);
+        }
+
+        BankAccountProduct bankAccountProduct = bankAccountProductDAO.findById(basicInfoAccountView.getBankAccountProduct().getId());
+        if(bankAccountProduct != null){
+            openAccount.setBankAccountProduct(bankAccountProduct);
+        } else {
+            openAccount.setBankAccountProduct(null);
+        }
+
+        if(basicInfoAccountView.getAccountNameList() != null && basicInfoAccountView.getAccountNameList().size() > 0){
+            List<OpenAccountName> openAccountNameList = new ArrayList<OpenAccountName>();
+            for (CustomerInfoView civ : basicInfoAccountView.getAccountNameList()){
+                OpenAccountName openAccountName = new OpenAccountName();
+                Customer customer = customerDAO.findById(civ.getId());
+                openAccountName.setCustomer(customer);
+                openAccountNameList.add(openAccountName);
+            }
+            openAccount.setOpenAccountNameList(openAccountNameList);
+        } else {
+            openAccount.setOpenAccountNameList(null);
+        }
+
+        if(basicInfoAccountView.getBasicInfoAccountPurposeView() != null && basicInfoAccountView.getBasicInfoAccountPurposeView().size() > 0){
+            List<OpenAccountPurpose> openAccountPurposeList = new ArrayList<OpenAccountPurpose>();
+            for (BasicInfoAccountPurposeView bpv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            }
+            openAccount.setOpenAccountPurposeList(openAccountPurposeList);
+        } else {
+            openAccount.setOpenAccountPurposeList(null);
+        }
+
+//        private int requestType;
+//        private String accountNumber;
+//        private BankBranch bankBranch;
+//        private String term;
+//        private int numberOfDep;
+//        private List<OpenAccountDeposit> openAccountDepositList;
+//        private int confirmOpenAccount;
+//        private List<OpenAccountCredit> openAccountCreditList;
+
 
         return openAccount;
     }
@@ -52,7 +90,7 @@ public class BasicInfoAccountTransform extends Transform {
 //        basicInfoAccountView.setAccountName(openAccount.getAccountName());
 //
 //        basicInfoAccountView.setProduct(openAccount.getAccountProduct());
-        if (basicInfoAccountView.getProduct() == null) {
+        /*if (basicInfoAccountView.getProduct() == null) {
             basicInfoAccountView.setProduct(new AccountProduct());
             basicInfoAccountView.getProduct().setName("-"); // for view
         }
@@ -61,7 +99,7 @@ public class BasicInfoAccountTransform extends Transform {
         if (basicInfoAccountView.getBankAccountTypeView() == null) {
             basicInfoAccountView.setBankAccountTypeView(new BankAccountTypeView());
             basicInfoAccountView.getBankAccountTypeView().setName("-"); // for view
-        }
+        }*/
 
         BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();
 //        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());

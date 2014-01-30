@@ -1,22 +1,22 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.AccountProductDAO;
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.dao.master.BankAccountProductDAO;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 
 import javax.inject.Inject;
 
 public class AccountInfoProductTypeTransform extends Transform {
     @Inject
-    private AccountProductDAO productTypeDAO;
-    private AccountProduct productType;
+    private BankAccountProductDAO productTypeDAO;
+    private BankAccountProduct productType;
 
     @Inject
     public AccountInfoProductTypeTransform() {
 
     }
 
-    public AccountProduct transformToModel(final int id){
-        productType = new AccountProduct();
+    public BankAccountProduct transformToModel(final int id){
+        productType = new BankAccountProduct();
         productType = productTypeDAO.findById(id);
         return productType;
     }

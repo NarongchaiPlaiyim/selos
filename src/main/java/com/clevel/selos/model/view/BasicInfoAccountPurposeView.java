@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,21 +8,21 @@ import java.io.Serializable;
 
 public class BasicInfoAccountPurposeView implements Serializable {
     private boolean isSelected;
-    private AccountPurpose purpose;
+    private BankAccountPurpose purpose;
 
     public BasicInfoAccountPurposeView() {
         reset();
     }
 
     public void reset() {
-        this.purpose = new AccountPurpose();
+        this.purpose = new BankAccountPurpose();
     }
 
-    public AccountPurpose getPurpose() {
+    public BankAccountPurpose getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(AccountPurpose purpose) {
+    public void setPurpose(BankAccountPurpose purpose) {
         this.purpose = purpose;
     }
 
