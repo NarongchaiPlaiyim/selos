@@ -14,6 +14,10 @@ public class PledgeInfo {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PLEDGE_INFO_REQ")
     private long id;
 
+    @OneToOne
+    @JoinColumn(name = "new_coll_sub_id")
+    NewCollateralSub newCollateralSub;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "pledge_signing_date")
     private Date pledgeSigningDate;
@@ -26,7 +30,7 @@ public class PledgeInfo {
     private BigDecimal pledgeAmount;
 
     @OneToOne
-    @JoinColumn(name = "open_account_info")
+    @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 
     @Column(name = "total_hold_amount")

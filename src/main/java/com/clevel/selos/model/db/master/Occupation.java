@@ -15,7 +15,7 @@ public class Occupation implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code")
+    @Column(name = "code", length = 5)
     private int code;
     @Column(name = "description", length = 100)
     private String description;

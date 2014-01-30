@@ -6,11 +6,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "ext_coms_app_index")
-public class AgreementAppIndex {
+public class AgreementAppIndex implements Serializable{
     @Id
     @OneToOne
     @JoinColumn(name = "workcase_id")
