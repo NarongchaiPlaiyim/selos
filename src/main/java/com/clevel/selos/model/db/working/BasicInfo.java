@@ -21,7 +21,7 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "ca_number", length = 30, nullable = false)
+    @Column(name = "ca_number", length = 30)
     private String caNumber;
 
     @Column(name = "ref_app_number")
