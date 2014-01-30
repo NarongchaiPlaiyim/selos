@@ -23,7 +23,14 @@ public class NewConditionDetailTransform extends Transform {
 
         for (NewConditionDetailView newConditionDetailView : newConditionDetailViewList) {
             newConditionDetail = new NewConditionDetail();
-            newConditionDetail.setId(newConditionDetailView.getId());
+            if (newConditionDetail.getId() != 0) {
+                newConditionDetail.setId(newConditionDetailView.getId());
+                newConditionDetail.setCreateDate(newConditionDetailView.getCreateDate());
+                newConditionDetail.setCreateBy(newConditionDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newConditionDetail.setCreateDate(new Date());
+                newConditionDetail.setCreateBy(user);
+            }
             newConditionDetail.setModifyDate(newConditionDetailView.getModifyDate());
             newConditionDetail.setModifyBy(newConditionDetailView.getModifyBy());
             newConditionDetail.setCreateDate(new Date());
@@ -45,7 +52,6 @@ public class NewConditionDetailTransform extends Transform {
 
         for (NewConditionDetail newConditionDetail : newConditionDetailList) {
             newConditionDetailView = new NewConditionDetailView();
-//            newConditionDetailView.setId(newConditionDetail.getId());
             newConditionDetailView.setCreateBy(newConditionDetail.getCreateBy());
             newConditionDetailView.setCreateDate(newConditionDetail.getCreateDate());
             newConditionDetailView.setNo(newConditionDetail.getNo());

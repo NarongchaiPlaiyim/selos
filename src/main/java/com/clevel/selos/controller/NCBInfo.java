@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -66,14 +67,6 @@ public class NCBInfo implements Serializable {
 
     private String modeForButton;
     private int rowIndex;
-    private boolean monthRender1;
-    private boolean monthRender2;
-    private boolean monthRender3;
-    private boolean monthRender4;
-    private boolean monthRender5;
-    private boolean monthRender6;
-
-    private boolean genTextBoxFlag;
     private boolean noOfmonthsPaymentFlag;
 
     private NCBDetailView ncbDetailView;
@@ -89,6 +82,7 @@ public class NCBInfo implements Serializable {
     private boolean nplRendered;
     private boolean tdrRendered;
     private List<String> yearList;
+    private Customer customerInfoView;
 
     @Inject
     private AccountStatusDAO accountStatusDAO;
@@ -108,6 +102,7 @@ public class NCBInfo implements Serializable {
     private NCBDAO ncbDAO;
 
 
+
     public NCBInfo() {}
 
     public Month[] getStatMonths(){
@@ -119,7 +114,6 @@ public class NCBInfo implements Serializable {
 
         log.info("onCreation.");
         modeForButton = "add";
-        genTextBoxFlag = false;
         noOfmonthsPaymentFlag = false;
 
         HttpSession session = FacesUtil.getSession(true);
@@ -129,6 +123,7 @@ public class NCBInfo implements Serializable {
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
             log.info("customerId :: {} ", customerId);
 
+            customerInfoView =  customerDAO.findById(customerId);
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
             if (ncbInfoView != null) {
@@ -195,21 +190,17 @@ public class NCBInfo implements Serializable {
             tdrCondition = new TDRCondition();
         }
 
-
         accountStatusList = accountStatusDAO.findAll();
-        accountTypeList = accountTypeDAO.findAll();
+//      accountTypeList = accountTypeDAO.findAll();
+
+        if(customerInfoView != null){
+            log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+            accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
+            log.info("accountTypeList :: {}",accountTypeList.size());
+        }
+
         settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
-
-
-        monthRender1 = false;
-        monthRender2 = false;
-        monthRender3 = false;
-        monthRender4 = false;
-        monthRender5 = false;
-        monthRender6 = false;
-
-        ncbDetailView.reset();
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 
@@ -244,7 +235,6 @@ public class NCBInfo implements Serializable {
         ncbDetailView = new NCBDetailView();
         ncbDetailView.reset();
         modeForButton = "add";
-        genTextBoxFlag = false;
 
     }
 
@@ -266,7 +256,6 @@ public class NCBInfo implements Serializable {
             ncbDetailView.setTMB(selectNcbRecordItem.isTMB());
             ncbDetailView.setRefinance(selectNcbRecordItem.isRefinance());
             ncbDetailView.setWc(selectNcbRecordItem.isWc());
-
             ncbDetailView.setAccountType(accountTypeEdit);
             ncbDetailView.setAccountStatus(accountStatusEdit);
             ncbDetailView.setCurrentPayment(conditionCurrentEdit);
@@ -280,37 +269,28 @@ public class NCBInfo implements Serializable {
             ncbDetailView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
             ncbDetailView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
             ncbDetailView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
-//            ncbDetailView.setMonth1(selectNcbRecordItem.getMonth1());
-//            ncbDetailView.setMonth2(selectNcbRecordItem.getMonth2());
-//            ncbDetailView.setMonth3(selectNcbRecordItem.getMonth3());
-//            ncbDetailView.setMonth4(selectNcbRecordItem.getMonth4());
-//            ncbDetailView.setMonth5(selectNcbRecordItem.getMonth5());
-//            ncbDetailView.setMonth6(selectNcbRecordItem.getMonth6());
 
             if (selectNcbRecordItem.isRefinance() == true) {
-                ncbDetailView.setRefinanceFlag(1);
+                ncbDetailView.setRefinanceFlag(2);
             } else {
-                ncbDetailView.setRefinanceFlag(0);
+                ncbDetailView.setRefinanceFlag(1);
             }
 
             if (selectNcbRecordItem.isTMB() == true) {
-                ncbDetailView.setTMBAccount(1);
+                ncbDetailView.setTMBAccount(2);
             } else {
-                ncbDetailView.setTMBAccount(0);
+                ncbDetailView.setTMBAccount(1);
             }
 
             if (selectNcbRecordItem.isWc() == true) {
-                ncbDetailView.setWcFlag(1);
+                ncbDetailView.setWcFlag(2);
             } else {
-                ncbDetailView.setWcFlag(0);
+                ncbDetailView.setWcFlag(1);
             }
 
 
             if (selectNcbRecordItem.getNoOfmonthsPayment() > 0) {
-                genTextBoxFlag = true;
                 toSetRenderedFlag(selectNcbRecordItem.getNoOfmonthsPayment());
-            } else {
-                genTextBoxFlag = false;
             }
 
         }
@@ -351,12 +331,6 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
                 ncbAdd.setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
-//                ncbAdd.setMonth1(ncbDetailView.getMonth1());
-//                ncbAdd.setMonth2(ncbDetailView.getMonth2());
-//                ncbAdd.setMonth3(ncbDetailView.getMonth3());
-//                ncbAdd.setMonth4(ncbDetailView.getMonth4());
-//                ncbAdd.setMonth5(ncbDetailView.getMonth5());
-//                ncbAdd.setMonth6(ncbDetailView.getMonth6());
                 //checkbox
                 ncbAdd.setTMB(ncbDetailView.isTMB());
                 ncbAdd.setRefinance(ncbDetailView.isRefinance());
@@ -364,45 +338,6 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setTMBAccount(Util.returnNumForFlag(ncbDetailView.isTMB()));
                 ncbAdd.setWcFlag(Util.returnNumForFlag(ncbDetailView.isWc()));
                 ncbAdd.setRefinanceFlag(Util.returnNumForFlag(ncbDetailView.isRefinance()));
-
-               /* if (ncbDetailView.isWc() == true) {
-                    ncbAdd.setWcFlag(1);
-                } else {
-                    ncbAdd.setWcFlag(0);
-                }
-
-                if (ncbDetailView.isRefinance() == true) {
-                    ncbAdd.setRefinanceFlag(1);
-                } else {
-                    ncbAdd.setRefinanceFlag(0);
-                }*/
-
-/*                moneys = new ArrayList<BigDecimal>();
-                moneys.add(ncbDetailView.getMonth1());
-                moneys.add(ncbDetailView.getMonth2());
-                moneys.add(ncbDetailView.getMonth3());
-                moneys.add(ncbDetailView.getMonth4());
-                moneys.add(ncbDetailView.getMonth5());
-                moneys.add(ncbDetailView.getMonth6());*/
-
-//                log.info("ncbDetailView.getNoOfmonthsPayment   >> " + ncbDetailView.getNoOfmonthsPayment());
-
-//                if ((ncbDetailView.getNoOfmonthsPayment() != 0)) {
-//                    ncbAdd.setMonthsPaymentFlag(true);
-//
-//                    for (int i = 0; i < moneys.size(); i++) {
-//                        if (i < ncbDetailView.getNoOfmonthsPayment()) {
-//                            moneyTotal += msg.get("app.ncbDetail.table.monthNo") + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + msg.get("app.ncbDetail.table.bath");
-//                            ncbAdd.setMoneyTotal(moneyTotal);
-//                        }
-//                    }
-//
-//                } else {
-//                    ncbAdd.setMonthsPaymentFlag(false);
-//                    ncbAdd.setMoneyTotal("");
-//                }
-//                log.info("ncbAdd.isMonthsPaymentFlag   {} ", ncbAdd.isMonthsPaymentFlag());
-
                 ncbAdd.setCanToEdit(true);
                 ncbDetailViewList.add(ncbAdd);
 
@@ -429,47 +364,13 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbDetailViewList.get(rowIndex).setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
                 ncbDetailViewList.get(rowIndex).setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
-//                ncbDetailViewList.get(rowIndex).setMonth1(ncbDetailView.getMonth1());
-//                ncbDetailViewList.get(rowIndex).setMonth2(ncbDetailView.getMonth2());
-//                ncbDetailViewList.get(rowIndex).setMonth3(ncbDetailView.getMonth3());
-//                ncbDetailViewList.get(rowIndex).setMonth4(ncbDetailView.getMonth4());
-//                ncbDetailViewList.get(rowIndex).setMonth5(ncbDetailView.getMonth5());
-//                ncbDetailViewList.get(rowIndex).setMonth6(ncbDetailView.getMonth6());
                 //checkbox
                 ncbDetailViewList.get(rowIndex).setTMB(ncbDetailView.isTMB());
                 ncbDetailViewList.get(rowIndex).setRefinance(ncbDetailView.isRefinance());
                 ncbDetailViewList.get(rowIndex).setWc(ncbDetailView.isWc());
-
                 ncbDetailViewList.get(rowIndex).setTMBAccount(ncbDetailView.getTMBAccount());
                 ncbDetailViewList.get(rowIndex).setWcFlag(ncbDetailView.getWcFlag());
                 ncbDetailViewList.get(rowIndex).setRefinanceFlag(ncbDetailView.getRefinanceFlag());
-
-/*                moneys = new ArrayList<BigDecimal>();
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth1());
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth2());
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth3());
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth4());
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth5());
-                moneys.add(ncbDetailViewList.get(rowIndex).getMonth6());*/
-
-/*                if ((ncbDetailView.getNoOfmonthsPayment() != 0)) {
-                    ncbDetailViewList.get(rowIndex).setMonthsPaymentFlag(true);
-
-                    if ((ncbDetailView.getNoOfmonthsPayment() != 0)) {
-                        ncbDetailViewList.get(rowIndex).setMonthsPaymentFlag(true);
-
-                        for (int i = 0; i < moneys.size(); i++) {
-                            if (i < ncbDetailView.getNoOfmonthsPayment()) {
-
-                                moneyTotal += msg.get("app.ncbDetail.table.monthNo") + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + "  " + msg.get("app.ncbDetail.table.bath");
-                                ncbDetailViewList.get(rowIndex).setMoneyTotal(moneyTotal);
-                            }
-                        }
-                    }
-
-                } else {
-                    ncbDetailViewList.get(rowIndex).setMonthsPaymentFlag(false);
-                }*/
                 ncbDetailViewList.get(rowIndex).setCanToEdit(true);
             } else {
                 log.info("onSaveNcbRecord ::: Undefined modeForbutton !!");
@@ -489,18 +390,6 @@ public class NCBInfo implements Serializable {
 
     }
 
-/*    public void onchangeToGenMoneyOfmonthsPayment() {
-
-        log.info("  ncbDetailView.getNoOfmonthsPayment() >>>>  :  {}", ncbDetailView.getNoOfmonthsPayment());
-
-        if (ncbDetailView.getNoOfmonthsPayment() > 0) {
-            genTextBoxFlag = true;
-            toSetRenderedFlag(ncbDetailView.getNoOfmonthsPayment());
-        } else {
-            genTextBoxFlag = false;
-        }
-    }*/
-
     public void toSetRenderedFlag(int noOfMonth) {
 
         ArrayList<Boolean> rendered = new ArrayList<Boolean>();
@@ -515,12 +404,6 @@ public class NCBInfo implements Serializable {
             log.info("rendered.get(i).booleanValue() {} ", rendered.get(i).booleanValue());
         }
 
-        monthRender1 = rendered.get(0).booleanValue();
-        monthRender2 = rendered.get(1).booleanValue();
-        monthRender3 = rendered.get(2).booleanValue();
-        monthRender4 = rendered.get(3).booleanValue();
-        monthRender5 = rendered.get(4).booleanValue();
-        monthRender6 = rendered.get(5).booleanValue();
     }
 
     //for rendered จำนวนเดือนที่หาร
@@ -578,14 +461,6 @@ public class NCBInfo implements Serializable {
     public void onCancelNcbInfo() {
         log.info("onCancelNcbInfo::::  ");
         onCreation();
-    }
-
-    public boolean isGenTextBoxFlag() {
-        return genTextBoxFlag;
-    }
-
-    public void setGenTextBoxFlag(boolean genTextBoxFlag) {
-        this.genTextBoxFlag = genTextBoxFlag;
     }
 
     public List<AccountStatus> getAccountStatusList() {
@@ -706,54 +581,6 @@ public class NCBInfo implements Serializable {
 
     public void setTdrCondition(TDRCondition tdrCondition) {
         this.tdrCondition = tdrCondition;
-    }
-
-    public boolean isMonthRender1() {
-        return monthRender1;
-    }
-
-    public void setMonthRender1(boolean monthRender1) {
-        this.monthRender1 = monthRender1;
-    }
-
-    public boolean isMonthRender2() {
-        return monthRender2;
-    }
-
-    public void setMonthRender2(boolean monthRender2) {
-        this.monthRender2 = monthRender2;
-    }
-
-    public boolean isMonthRender3() {
-        return monthRender3;
-    }
-
-    public void setMonthRender3(boolean monthRender3) {
-        this.monthRender3 = monthRender3;
-    }
-
-    public boolean isMonthRender4() {
-        return monthRender4;
-    }
-
-    public void setMonthRender4(boolean monthRender4) {
-        this.monthRender4 = monthRender4;
-    }
-
-    public boolean isMonthRender5() {
-        return monthRender5;
-    }
-
-    public void setMonthRender5(boolean monthRender5) {
-        this.monthRender5 = monthRender5;
-    }
-
-    public boolean isMonthRender6() {
-        return monthRender6;
-    }
-
-    public void setMonthRender6(boolean monthRender6) {
-        this.monthRender6 = monthRender6;
     }
 
     public boolean isNoOfmonthsPaymentFlag() {
