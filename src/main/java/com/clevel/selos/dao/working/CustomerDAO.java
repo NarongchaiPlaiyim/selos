@@ -144,4 +144,16 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("criteria.list() :: {}",criteria.list());
         return customerList;
     }
+
+    public List<Customer>  findCustomerBorrowerAndGuarantor(long workCaseId) {
+        log.info("findCustomerBorrowerAndGuarantor : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.add(Restrictions.or(Restrictions.eq("relation.id", RelationValue.BORROWER.value()),Restrictions.eq("relation.id", RelationValue.GUARANTOR.value())));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("criteria.list() :: {}",criteria.list());
+        return customerList;
+    }
+
 }

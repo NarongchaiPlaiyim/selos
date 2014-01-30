@@ -11,6 +11,7 @@ import java.util.List;
 public class BasicInfoAccountView implements Serializable {
     private long id;
     private String accountName;
+    private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
     private AccountProduct product;
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
@@ -21,6 +22,7 @@ public class BasicInfoAccountView implements Serializable {
     }
 
     public void reset() {
+        this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
         this.product = new AccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
@@ -40,6 +42,14 @@ public class BasicInfoAccountView implements Serializable {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public List<CustomerInfoView> getAccountNameList() {
+        return accountNameList;
+    }
+
+    public void setAccountNameList(List<CustomerInfoView> accountNameList) {
+        this.accountNameList = accountNameList;
     }
 
     public BankAccountTypeView getBankAccountTypeView() {
@@ -78,7 +88,7 @@ public class BasicInfoAccountView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("accountName", accountName).
+                append("accountNameList", accountNameList).
                 append("bankAccountTypeView", bankAccountTypeView).
                 append("product", product).
                 append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).

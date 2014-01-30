@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,26 +64,16 @@ public class BasicInfoControl extends BusinessControl {
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        if (basicInfo == null) {
+        if(basicInfo == null) {
             basicInfo = initialBasicInfo(workCase);
+        } else if(basicInfo.getRetrievedFlag() == 0) {
+            basicInfo = calBasicInfo(basicInfo);
+            basicInfoDAO.persist(basicInfo);
         }
 
         BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo, workCase);
         log.info("getBasicInfo ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;
-    }
-
-    private BasicInfo initialBasicInfo(WorkCase workCase){
-        BasicInfo basicInfo = new BasicInfo();
-        Date now = Calendar.getInstance().getTime();
-        if(workCase != null){
-            basicInfo.setWorkCase(workCase);
-            basicInfo.setCreateBy(workCase.getCreateBy());
-            basicInfo.setCreateDate(now);
-            basicInfo = calBasicInfo(basicInfo);
-            basicInfoDAO.persist(basicInfo);
-        }
-        return basicInfo;
     }
 
     public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
@@ -101,10 +92,16 @@ public class BasicInfoControl extends BusinessControl {
         return customerEntity;
     }
 
-    public BasicInfo calBasicInfo(long workCaseId){
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        if(basicInfo != null){
+    private BasicInfo initialBasicInfo(WorkCase workCase){
+        log.info("initialBasicInfo");
+        BasicInfo basicInfo = new BasicInfo();
+        Date now = Calendar.getInstance().getTime();
+        if(workCase != null){
+            basicInfo.setWorkCase(workCase);
+            basicInfo.setCreateBy(workCase.getCreateBy());
+            basicInfo.setCreateDate(now);
             basicInfo = calBasicInfo(basicInfo);
+            basicInfoDAO.persist(basicInfo);
         }
         return basicInfo;
     }
@@ -199,6 +196,8 @@ public class BasicInfoControl extends BusinessControl {
 
         basicInfo.setExtendedReviewDate(extendedReviewDate);
 
+        basicInfo.setRetrievedFlag(1);
+
         log.info("calBasicInfo :: basicInfo {}", basicInfo);
 
         return basicInfo;
@@ -233,7 +232,7 @@ public class BasicInfoControl extends BusinessControl {
 
         if (basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0) {
             for (BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()) {
-                System.out.println("BasicInfoAccountView [ ID ] : "+ biav.getId() +" [ Account Name ] : " +biav.getAccountName());
+//                System.out.println("BasicInfoAccountView [ ID ] : "+ biav.getId() +" [ Account Name ] : " +biav.getAccountName());
                 OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav, basicInfo);
                 openAccountDAO.save(openAccount);
 

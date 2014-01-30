@@ -1573,7 +1573,7 @@ public class CustomerInfoIndividual implements Serializable {
         }
         //customerInfoView = individual
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
-        customerInfoView.getRelation().setDescription(relationDAO.findById(customerInfoView.getRelation().getId()).getDescription());
+        customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
 
         //calculate age
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
@@ -1581,7 +1581,7 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
         }
 
-        //        update relation & reference
+        //update relation & reference
         Relation mainRel = new Relation();
         mainRel.setId(relationMainCusId);
         Reference mainRef = new Reference();
@@ -1606,10 +1606,8 @@ public class CustomerInfoIndividual implements Serializable {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("isFromIndividualParam",true);
         map.put("isFromSummaryParam",false);
-        map.put("customerId",new Long(0));
+        map.put("customerId", 0L);
         map.put("customerInfoView", cusInfoJuristic);
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
     }
@@ -1620,7 +1618,7 @@ public class CustomerInfoIndividual implements Serializable {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("isFromIndividualParam",true);
         map.put("isFromSummaryParam",false);
-        map.put("customerId",new Long(0));
+        map.put("customerId", 0L);
         map.put("customerInfoView", cusInfoJuristic);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";
