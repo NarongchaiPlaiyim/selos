@@ -1,6 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,7 +21,7 @@ public class OpenAccountPurpose implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "account_purpose_id")
-    private AccountPurpose AccountPurpose;
+    private BankAccountPurpose AccountPurpose;
 
     public long getId() {
         return id;
@@ -39,11 +39,11 @@ public class OpenAccountPurpose implements Serializable {
         this.openAccount = openAccount;
     }
 
-    public AccountPurpose getAccountPurpose() {
+    public BankAccountPurpose getAccountPurpose() {
         return AccountPurpose;
     }
 
-    public void setAccountPurpose(AccountPurpose accountPurpose) {
+    public void setAccountPurpose(BankAccountPurpose accountPurpose) {
         AccountPurpose = accountPurpose;
     }
 
