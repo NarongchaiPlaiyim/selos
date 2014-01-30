@@ -141,7 +141,7 @@ public class NewCreditDetail implements Serializable {
 
 /*    @ManyToOne
     @JoinColumn(name = "new_guarantor_rel_id")
-    private NewGuarantorRelCredit newGuarantorRelCredit;
+    private NewGuarantorCredit newGuarantorRelCredit;
 
     @ManyToOne
     @JoinColumn(name = "new_collateral_rel_id")
