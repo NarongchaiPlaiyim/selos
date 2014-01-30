@@ -1,13 +1,11 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.AccountProductDAO;
+import com.clevel.selos.dao.master.BankAccountProductDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.model.db.master.AccountProduct;
-import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.BankAccountTypeView;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -20,7 +18,7 @@ public class BasicInfoAccountTransform extends Transform {
     @Inject
     BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
-    AccountProductDAO accountProductDAO;
+    BankAccountProductDAO bankAccountProductDAO;
     @Inject
     CustomerDAO customerDAO;
 
@@ -42,11 +40,11 @@ public class BasicInfoAccountTransform extends Transform {
             openAccount.setBankAccountType(null);
         }
 
-        AccountProduct accountProduct = accountProductDAO.findById(basicInfoAccountView.getAccountProduct().getId());
-        if(accountProduct != null){
-            openAccount.setAccountProduct(accountProduct);
+        BankAccountProduct bankAccountProduct = bankAccountProductDAO.findById(basicInfoAccountView.getBankAccountProduct().getId());
+        if(bankAccountProduct != null){
+            openAccount.setBankAccountProduct(bankAccountProduct);
         } else {
-            openAccount.setAccountProduct(null);
+            openAccount.setBankAccountProduct(null);
         }
 
         if(basicInfoAccountView.getAccountNameList() != null && basicInfoAccountView.getAccountNameList().size() > 0){
