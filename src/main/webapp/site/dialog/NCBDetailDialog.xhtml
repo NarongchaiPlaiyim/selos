@@ -10,13 +10,13 @@
 <h:form id="ncbDlgForm">
 <table class="content_form">
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.loanAccountType')}"/>
     </td>
     <td>
         <p:selectOneMenu id="dlgType"
                          value="#{ncbInfo.ncbDetailView.accountType.id}"
-                         styleClass="largest"
+                         style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -29,7 +29,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.isTMBAccount')}"/>
     </td>
     <td>
@@ -41,13 +41,13 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.loanAccountStatus')}"/>
     </td>
     <td>
         <p:selectOneMenu id="dlgStatus"
                          value="#{ncbInfo.ncbDetailView.accountStatus.id}"
-                         styleClass="largest"
+                         style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -60,7 +60,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.dateOfInfo')}"/>
     </td>
     <td>
@@ -81,7 +81,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.accountOpenDate')}"/>
     </td>
     <td>
@@ -101,7 +101,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.limit')}"/>
     </td>
     <td>
@@ -117,7 +117,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.outstanding')}"/>
     </td>
     <td>
@@ -133,7 +133,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.installment')}"/>
     </td>
     <td>
@@ -149,7 +149,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.dateOfDebtRestructuring')}"/>
     </td>
     <td>
@@ -169,7 +169,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.typeOfCurrentPayment')}"/>
     </td>
     <td>
@@ -188,7 +188,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.typeOfHistoryPayment')}"/>
     </td>
     <td>
@@ -206,7 +206,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.noOfOutstandingPaymentIn12months')}"/>
     </td>
     <td>
@@ -214,13 +214,14 @@
                      style="text-align: right"
                      value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
                      required="#{not empty param[addRowData.clientId]}"
+                     maxlength="2"
                      integerOnly="true">
-            <p:ajax event="blur" update=":ncbDlgForm" process="@this"/>
+            <p:ajax event="blur" update="@this" process="@this"/>
         </p:inputText>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.noOfOverLimit')}"/>
     </td>
     <td>
@@ -228,13 +229,14 @@
                      value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
                      style="text-align: right"
                      required="#{not empty param[addRowData.clientId]}"
+                     maxlength="2"
                      integerOnly="true">
-            <p:ajax event="blur" update=":ncbDlgForm" process="@this"/>
+            <p:ajax event="blur" update="@this" process="@this"/>
         </p:inputText>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.refinanceFlag')}"/>
     </td>
     <td>
@@ -246,7 +248,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 250px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.wcFlag')}"/>
     </td>
     <td>

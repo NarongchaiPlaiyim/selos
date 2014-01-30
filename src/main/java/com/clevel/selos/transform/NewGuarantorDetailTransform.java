@@ -67,14 +67,14 @@ public class NewGuarantorDetailTransform extends Transform {
             newGuarantorDetailView.setTcgLgNo(newGuarantorDetail.getTcgLgNo());
             newGuarantorDetailView.setTotalLimitGuaranteeAmount(newGuarantorDetail.getTotalLimitGuaranteeAmount());
 
-            List<NewGuarantorRelCredit> newGuarantorRelCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
-            log.info("newGuarantorRelCreditList :: {}", newGuarantorRelCreditList.size());
-            if (newGuarantorRelCreditList != null) {
+            List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
+            log.info("newGuarantorCreditList :: {}", newGuarantorCreditList.size());
+            if (newGuarantorCreditList != null) {
                 List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
 
-                for (NewGuarantorRelCredit newGuarantorRelCredit : newGuarantorRelCreditList) {
-                    newCreditDetailList.add(newGuarantorRelCredit.getNewCreditDetail());
-                    log.info("newGuarantorRelCredit.getGuaranteeAmount() ::: {}", newGuarantorRelCredit.getGuaranteeAmount());
+                for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
+                    newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
+                    log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
                 }
                 log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);

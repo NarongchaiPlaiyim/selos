@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -81,6 +82,7 @@ public class NCBInfo implements Serializable {
     private boolean nplRendered;
     private boolean tdrRendered;
     private List<String> yearList;
+    private Customer customerInfoView;
 
     @Inject
     private AccountStatusDAO accountStatusDAO;
@@ -98,6 +100,7 @@ public class NCBInfo implements Serializable {
     private CustomerDAO customerDAO;
     @Inject
     private NCBDAO ncbDAO;
+
 
 
     public NCBInfo() {}
@@ -120,6 +123,7 @@ public class NCBInfo implements Serializable {
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
             log.info("customerId :: {} ", customerId);
 
+            customerInfoView =  customerDAO.findById(customerId);
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
             if (ncbInfoView != null) {
@@ -187,11 +191,16 @@ public class NCBInfo implements Serializable {
         }
 
         accountStatusList = accountStatusDAO.findAll();
-        accountTypeList = accountTypeDAO.findAll();
+//      accountTypeList = accountTypeDAO.findAll();
+
+        if(customerInfoView != null){
+            log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+            accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
+            log.info("accountTypeList :: {}",accountTypeList.size());
+        }
+
         settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
-
-        ncbDetailView.reset();
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 
@@ -247,7 +256,6 @@ public class NCBInfo implements Serializable {
             ncbDetailView.setTMB(selectNcbRecordItem.isTMB());
             ncbDetailView.setRefinance(selectNcbRecordItem.isRefinance());
             ncbDetailView.setWc(selectNcbRecordItem.isWc());
-
             ncbDetailView.setAccountType(accountTypeEdit);
             ncbDetailView.setAccountStatus(accountStatusEdit);
             ncbDetailView.setCurrentPayment(conditionCurrentEdit);

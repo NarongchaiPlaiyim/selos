@@ -63,6 +63,14 @@
                                   style="width:200px;">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:inputText>
+                   <!-- <clv:BECalendar value="#{ncbInfo.ncbInfoView.checkingDate}"
+                                    id="checkingDate"
+                                    pattern="dd/MM/yyyy"
+                                    locale="th_TH"
+                                    showButtonPanel="false"
+                                    navigator="true"
+                                    readonly="true"
+                                    style="width:200px;"/>-->
                 </td>
             </tr>
             <tr>
@@ -308,7 +316,10 @@
                     <h:outputText value="#{msg.get('app.remark')}"/>
                 </td>
                 <td>
-                    <p:inputTextarea cols="60" rows="3" id="remark" value="#{ncbInfo.ncbInfoView.remark}"
+                    <p:inputTextarea cols="60"
+                                     rows="3"
+                                     id="remark"
+                                     value="#{ncbInfo.ncbInfoView.remark}"
                                      disabled="true"/>
                 </td>
             </tr>
@@ -370,7 +381,7 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.accountOpenDate')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:70px;width:70px;max-width: 70px;">
+                            <p:column style="min-width:80px;width:80px;max-width: 80px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.limit')}</f:facet>
                             </p:column>
@@ -394,7 +405,7 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:100px; width:100px; max-width: 100px;">
+                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
                             </p:column>
@@ -402,11 +413,11 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:65px; width:65px; max-width: 65px;">
+                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.refinanceFlag')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:30px; width:30px; max-width: 30px;">
+                            <p:column style="min-width:80px; width:80px; max-width: 80px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
                             </p:column>
@@ -575,7 +586,6 @@
     <ui:param name="action" value="onDeleteNcbDetail"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
-
 
 <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
     LOADING<br/>

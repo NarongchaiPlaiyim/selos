@@ -36,6 +36,7 @@ public class NCBDetailView implements Serializable {
     private boolean TMB;
     private boolean refinance;
     private boolean wc;
+    private long customerId;
 
     private String accountName;
     private LoanAccountTypeView loanAccountTypeView;
@@ -46,7 +47,6 @@ public class NCBDetailView implements Serializable {
     }
 
     public void reset() {
-
         this.dateOfInfo = new Date();
         this.accountOpenDate = new Date();
         this.limit = BigDecimal.ZERO;
@@ -94,9 +94,9 @@ public class NCBDetailView implements Serializable {
 
     public int getTMBAccount() {
         if (TMB == true) {
-            this.isTMBAccount = 1;
+            this.isTMBAccount = 2;
         } else if (TMB == false) {
-            this.isTMBAccount = 0;
+            this.isTMBAccount = 1;
         }
         return isTMBAccount;
     }
@@ -107,7 +107,7 @@ public class NCBDetailView implements Serializable {
 
     public boolean isTMB() {
 
-        if (isTMBAccount == 1) {
+        if (isTMBAccount == 2) {
             this.TMB = true;
         } else {
             this.TMB = false;
@@ -327,6 +327,14 @@ public class NCBDetailView implements Serializable {
 
     public void setDebtForCalculate(BigDecimal debtForCalculate) {
         this.debtForCalculate = debtForCalculate;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     @Override

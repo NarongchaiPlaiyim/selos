@@ -53,7 +53,7 @@ public class NewGuarantorDetail implements Serializable {
     private User modifyBy;
 
     @OneToMany(mappedBy = "newGuarantorDetail", cascade = CascadeType.ALL)
-    private List<NewGuarantorRelCredit> newGuarantorRelCreditList;
+    private List<NewGuarantorCredit> newGuarantorCreditList;
 
     public long getId() {
         return id;
@@ -135,12 +135,12 @@ public class NewGuarantorDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public List<NewGuarantorRelCredit> getNewGuarantorRelCreditList() {
-        return newGuarantorRelCreditList;
+    public List<NewGuarantorCredit> getNewGuarantorCreditList() {
+        return newGuarantorCreditList;
     }
 
-    public void setNewGuarantorRelCreditList(List<NewGuarantorRelCredit> newGuarantorRelCreditList) {
-        this.newGuarantorRelCreditList = newGuarantorRelCreditList;
+    public void setNewGuarantorCreditList(List<NewGuarantorCredit> newGuarantorCreditList) {
+        this.newGuarantorCreditList = newGuarantorCreditList;
     }
 
     @Override
