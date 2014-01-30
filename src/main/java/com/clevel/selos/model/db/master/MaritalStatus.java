@@ -19,7 +19,7 @@ public class MaritalStatus implements Serializable {
     private String name;
     @Column(name = "active")
     private int active;
-    @Column(name = "code")
+    @Column(name = "code", length = 1)
     private String code;
     @Column(name = "spouse_flag")
     private int spouseFlag;

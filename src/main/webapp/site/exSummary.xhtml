@@ -47,7 +47,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.borrower.table.caption')}"/>
@@ -59,52 +59,68 @@
                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column rowspan="2" width="20"/>
-                                                <p:column rowspan="2" width="200">
+                                                <p:column rowspan="2" width="20"
+                                                          style="min-width: 20px; max-width: 20px; width: 20px;"/>
+                                                <p:column rowspan="2" width="200"
+                                                          style="min-width: 200px; max-width: 200px; width: 200px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.cusName')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="1" colspan="2" width="160">
+                                                <p:column rowspan="1" colspan="2" width="260"
+                                                          style="min-width: 260px; max-width: 260px; width: 260px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.id')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="1" colspan="2" width="170">
+                                                <p:column rowspan="1" colspan="2" width="140"
+                                                          style="min-width: 150px; max-width: 150px; width: 150px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.relation')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="1" colspan="2" width="280">
+                                                <p:column rowspan="1" colspan="2" width="280"
+                                                          style="min-width: 280px; max-width: 280px; width: 280px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.reference')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="2" width="30">
+                                                <p:column rowspan="2" width="70"
+                                                          style="min-width: 70px; max-width: 70px; width: 70px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.percentShare')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="2" width="50">
+                                                <p:column rowspan="2" width="30"
+                                                          style="min-width: 30px; max-width: 30px; width: 30px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.age')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="2" width="50">
+                                                <p:column rowspan="2" width="30"
+                                                          style="min-width: 30px; max-width: 30px; width: 30px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.kyc')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="2" width="50">
+                                                <p:column rowspan="2" width="80"
+                                                          style="min-width: 80px; max-width: 80px; width: 80px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.csi')}</f:facet>
                                                 </p:column>
-                                                <p:column rowspan="2" width="50">
+                                                <p:column rowspan="2" width="80"
+                                                          style="min-width: 80px; max-width: 80px; width: 80px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.worthiness')}</f:facet>
                                                 </p:column>
                                             </p:row>
                                             <p:row>
-                                                <p:column colspan="1" width="100">
+                                                <p:column colspan="1" width="130"
+                                                          style="min-width: 130px; max-width: 130px; width: 130px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.personalID')}</f:facet>
                                                 </p:column>
-                                                <p:column colspan="1" width="60">
+                                                <p:column colspan="1" width="130"
+                                                          style="min-width: 130px; max-width: 130px; width: 130px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.tmbCusID')}</f:facet>
                                                 </p:column>
-                                                <p:column colspan="1" width="130">
+                                                <p:column colspan="1" width="110"
+                                                          style="min-width: 110px; max-width: 110px; width: 110px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.relationshipType')}</f:facet>
                                                 </p:column>
-                                                <p:column colspan="1" width="40">
+                                                <p:column colspan="1" width="40"
+                                                          style="min-width: 40px; max-width: 40px; width: 40px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.collateralOwnerFlag')}</f:facet>
                                                 </p:column>
-                                                <p:column colspan="1" width="140">
+                                                <p:column colspan="1" width="140"
+                                                          style="min-width: 140px; max-width: 140px; width: 140px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.referenceIndvLevel')}</f:facet>
                                                 </p:column>
-                                                <p:column colspan="1" width="140">
+                                                <p:column colspan="1" width="140"
+                                                          style="min-width: 140px; max-width: 140px; width: 140px;">
                                                     <f:facet name="header">#{msg.get('app.exSummary.borrower.table.label.referenceJurisLevel')}</f:facet>
                                                 </p:column>
                                             </p:row>
@@ -112,70 +128,72 @@
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{rowIndex+1}"
-                                                          style="min-width: 20px; max-width: 20px;"/>
+                                                          style="min-width: 20px; max-width: 20px; width: 20px;"/>
                                         </p:column>
 
                                         <p:column styleClass="left">
                                             <h:outputText value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"
-                                                          style="min-width: 200px; max-width: 200px;"/>
+                                                          style="min-width: 200px; max-width: 200px; width: 200px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.citizenId}"
-                                                          style="min-width: 100px; max-width: 100px;" rendered="#{item.customerEntity.id == 1}"/>
+                                                          style="min-width: 130px; max-width: 130px; width: 130px;"
+                                                          rendered="#{item.customerEntity.id == 1}"/>
                                             <h:outputText value="#{item.registrationId}"
-                                                          style="min-width: 100px; max-width: 100px;" rendered="#{item.customerEntity.id == 2}"/>
+                                                          style="min-width: 130px; max-width: 130px; width: 130px;"
+                                                          rendered="#{item.customerEntity.id == 2}"/>
                                         </p:column>
 
-                                        <p:column styleClass="left">
+                                        <p:column styleClass="center">
                                             <h:outputText value="#{item.tmbCustomerId}"
-                                                          style="min-width: 60px; max-width: 60px;"/>
+                                                          style="min-width: 130px; max-width: 130px; width: 130px;"/>
                                         </p:column>
 
                                         <p:column styleClass="left">
                                             <h:outputText value="#{item.relation.description}"
-                                                          style="min-width: 130px; max-width: 130px;"/>
+                                                          style="min-width: 110px; max-width: 110px; width: 110px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"
-                                                          style="min-width: 40px; max-width: 40px;"/>
+                                            <h:outputText value="#{item.collateralOwner == 2 ? 'Y' : 'N'}"
+                                                          style="min-width: 40px; max-width: 40px; width: 40px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.indLv}"
-                                                          style="min-width: 140px; max-width: 140px;"/>
+                                                          style="min-width: 140px; max-width: 140px; width: 140px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.jurLv}"
-                                                          style="min-width: 140px; max-width: 140px;"/>
+                                                          style="min-width: 140px; max-width: 140px; width: 140px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.percentShare}"
-                                                          style="min-width: 30px; max-width: 30px;"/>
+                                                          style="min-width: 70px; max-width: 70px; width: 70px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.age}"
-                                                          style="min-width: 50px; max-width: 50px;"/>
+                                                          style="min-width: 30px; max-width: 30px; width: 30px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{item.kycLevel.kycLevel}"
-                                                          style="min-width: 50px; max-width: 50px;"/>
+                                                          style="min-width: 30px; max-width: 30px; width: 30px;"/>
                                         </p:column>
 
-                                        <p:column styleClass="center">
+                                        <p:column styleClass="center" style="min-width: 80px; max-width: 80px; width: 80px; white-space: normal!important;">
                                             <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
-                                                <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5" />
                                             </ui:repeat>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{item.worthiness}"
-                                                          style="min-width: 50px; max-width: 50px;"/>
+                                            <h:outputText value="#{item.worthiness == 3 ? 'Pass' : item.worthiness == 4 ? 'Fail' : item.worthiness == 5 ? 'N/A' : '-'}"
+                                                          style="min-width: 80px; max-width: 80px; width: 80px;"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
@@ -188,7 +206,7 @@
                 <!-- Biz Name -->
                 <tr>
                     <td style="padding-left: 5px; padding-top: 8px;">
-                        <table class="table_content" style="width: 99.7%;">
+                        <table class="table_content" style="width: 100%;">
                             <tr>
                                 <td style="width: 300px;text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.business.location.label.name')}"/>
@@ -229,7 +247,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.trade.table.caption')}"/>
@@ -308,7 +326,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.characteristic.tb.caption')}"/>
@@ -446,7 +464,7 @@
                 <tr>
                     <td style="padding-top: 20px;">
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2">
                                     <p:dataTable id="businessInfoSum" var="itemBusinessInfo"
@@ -602,7 +620,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.ncb.tb.caption')}"/>
@@ -682,7 +700,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.tb.account.caption')}"/>
@@ -805,7 +823,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.tb.collateral.caption')}"/>
@@ -817,22 +835,22 @@
                                                  var="colItem" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
-                                                <p:column colspan="3" style="width:200px;"
+                                                <p:column colspan="3" style="width:990px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.proposeCollateralInfo')}"/>
-                                                <p:column colspan="2" style="width:200px;"
+                                                <p:column colspan="2" style="width:660px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.portion')}"/>
                                             </p:row>
 
                                             <p:row>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:330px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.cashCollateralValue')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:330px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.coreAssetValue')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:330px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.noneCoreAssetValue')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:330px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.limitApprove')}"/>
-                                                <p:column style="width:200px;"
+                                                <p:column style="width:330px;"
                                                           headerText="#{msg.get('app.exSummary.tb.collateral.label.percentLTV')}"/>
                                             </p:row>
 
@@ -885,7 +903,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.tb.creditRiskInfo.caption')}"/>
@@ -966,7 +984,7 @@
                 <tr>
                     <td>
                         <!-- start content -->
-                        <table class="content_table_form">
+                        <table class="content_table_form" style="width: 100%;">
                             <tr>
                                 <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.deviationReasonCaption')}"/>
@@ -1009,15 +1027,15 @@
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:30px;"/>
-                                                <p:column style="width:80px;"
+                                                <p:column style="width:100px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.flag')}"/>
-                                                <p:column style="width:130px;"
+                                                <p:column style="width:150px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.group')}"/>
-                                                <p:column style="width:150px;"
+                                                <p:column style="width:200px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.ruleName')}"/>
-                                                <p:column style="width:150px;"
+                                                <p:column style="width:200px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.cusName')}"/>
-                                                <p:column style="width:700px;"
+                                                <p:column style="width:750px;"
                                                           headerText="#{msg.get('app.exSummary.tb.decision.label.deviationReason')}"/>
                                                 <p:column style="width:50px;"/>
                                             </p:row>
@@ -1085,9 +1103,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="150"
-                                                     rows="5"
-                                                     value="#{executiveSummary.exSummaryView.natureOfBusiness}" />
+                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.natureOfBusiness}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
@@ -1099,9 +1117,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="150"
-                                                     rows="5"
-                                                     value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}"/>
+                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
@@ -1113,9 +1131,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="150"
-                                                     rows="5"
-                                                     value="#{executiveSummary.exSummaryView.tmbCreditHistory}"/>
+                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.tmbCreditHistory}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
@@ -1127,9 +1145,9 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="150"
-                                                     rows="5"
-                                                     value="#{executiveSummary.exSummaryView.supportReason}"/>
+                                    <h:inputTextarea cols="170" rows="5" value="#{executiveSummary.exSummaryView.supportReason}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
@@ -1140,7 +1158,7 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left">
+                                <td style="text-align: left; width: 350px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM008Code')}"/>
                                 </td>
                                 <td>
@@ -1153,14 +1171,14 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="160"
-                                                     rows="2"
-                                                     value="#{executiveSummary.exSummaryView.rm008Remark}" />
+                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm008Remark}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td style="text-align: left">
+                                <td style="text-align: left; width: 350px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM204Code')}"/>
                                 </td>
                                 <td>
@@ -1173,14 +1191,14 @@
 
                             <tr>
                                 <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="160"
-                                                     rows="2"
-                                                     value="#{executiveSummary.exSummaryView.rm204Remark}"/>
+                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm204Remark}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td style="text-align: left">
+                                <td style="text-align: left; width: 350px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM020Code')}"/>
                                 </td>
                                 <td>
@@ -1192,10 +1210,10 @@
                             </tr>
 
                             <tr>
-                                <td colspan="2" style="text-align: left">
-                                    <h:inputTextarea cols="160"
-                                                     rows="2"
-                                                     value="#{executiveSummary.exSummaryView.rm020Remark}"/>
+                                <td colspan="4" style="text-align: left; width: 100%">
+                                    <h:inputTextarea cols="170" rows="3" value="#{executiveSummary.exSummaryView.rm020Remark}"
+                                                     onblur="checkLengthText(this)" onkeydown="checkLengthText(this)"
+                                                     onkeyup="checkLengthText(this)" onkeypress="checkLengthText(this)"/>
                                 </td>
                             </tr>
 
@@ -1223,8 +1241,9 @@
                                 <td style="text-align: left;width:200px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.approveAuthority')}"/>
                                 </td>
-                                <td style="text-align: left;width:200px;">
+                                <td style="text-align: left; width:200px;">
                                     <p:selectOneMenu styleClass="largest" size="1"
+                                                     style="width: 200px; max-width: 200px; min-width: 200px"
                                                      value="#{executiveSummary.exSummaryView.approveAuthority.id}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{executiveSummary.authorizationDOAList}"
@@ -1233,34 +1252,35 @@
                                                        itemValue="#{authoriz.id}"/>
                                     </p:selectOneMenu>
                                 </td>
-                                <td style="text-align: right;width:100px;" class="title">
+                                <td style="text-align: right; width: 150px; padding-right: 30px;" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.uwCode')}"/>
                                 </td>
-                                <td>
+                                <td style="width: 150px;">
                                     <p:inputText value="#{executiveSummary.exSummaryView.uwCode}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4" style="text-align: left" class="title">
                                     <h:selectOneRadio id="decision"  value="#{executiveSummary.exSummaryView.decision}">
-                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}     " itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}     " itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.reject')}" itemValue="3"/>
                                     </h:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: left;" colspan="2">
-                                    <p:selectOneMenu styleClass="largest" size="1" style="width: 400px;"
-                                                     value="#{executiveSummary.reason.code}" >
-                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{executiveSummary.reasonList}"
-                                                       var="reason"
-                                                       itemLabel="#{reason.code} - #{reason.description}"
-                                                       itemValue="#{reason.code}"/>
+                                <td style="text-align: left; padding-top: 4px;" colspan="4">
+                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                     style="width: 900px; min-width: 900px; max-width: 900px;"
+                                                     value="#{executiveSummary.reason.id}" >
+                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                        <f:selectItems value="#{executiveSummary.reasonList}" var="reasonItem"
+                                                       itemDescription="#{reasonItem.description}"
+                                                       itemLabel="#{reasonItem.code} - #{reasonItem.description}"
+                                                       itemValue="#{reasonItem.id}"/>
                                     </p:selectOneMenu>
                                 </td>
-                                <td colspan="2" style="text-align: left">
+                                <td style="text-align: left">
                                     <p:commandButton value="#{msg.get('app.addButton')}" styleClass="small" process="@form"
                                                      action="#{executiveSummary.onAddReason()}" update=":frmMain"/>
                                 </td>
@@ -1268,7 +1288,7 @@
 
                             <!-- //Flag -->
                             <tr>
-                                <td colspan="4">
+                                <td colspan="4" style="padding-top: 10px;">
                                     <p:dataTable id="deviateTable" value="#{executiveSummary.exSummaryView.deviateCode}"
                                                  var="itemUWDecision" style="width: 100%"
                                                  paginator="false" rowKey="#{itemUWDecision}"
