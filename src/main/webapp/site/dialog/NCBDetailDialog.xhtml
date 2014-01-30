@@ -3,19 +3,20 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <p:panel id="ncbDlgPanel" styleClass="panel-dialog">
 <h:form id="ncbDlgForm">
 <table class="content_form">
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.loanAccountType')}"/>
     </td>
     <td>
         <p:selectOneMenu id="dlgType"
                          value="#{ncbInfo.ncbDetailView.accountType.id}"
-                         styleClass="largest"
+                         style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -28,25 +29,25 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.isTMBAccount')}"/>
     </td>
     <td>
-        <p:selectOneRadio  id="radioTmbAccount" value="#{ncbInfo.ncbDetailView.TMBAccount}"
-                          required="#{not empty param[addRowData.clientId]}" >
-            <f:selectItem itemLabel="Yes" itemValue="2" />
+        <p:selectOneRadio id="radioTmbAccount" value="#{ncbInfo.ncbDetailView.TMBAccount}"
+                          required="#{not empty param[addRowData.clientId]}">
+            <f:selectItem itemLabel="Yes" itemValue="2"/>
             <f:selectItem itemLabel="No" itemValue="1"/>
         </p:selectOneRadio>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.loanAccountStatus')}"/>
     </td>
     <td>
         <p:selectOneMenu id="dlgStatus"
                          value="#{ncbInfo.ncbDetailView.accountStatus.id}"
-                         styleClass="largest"
+                         style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -59,11 +60,11 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.dateOfInfo')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfInfo}"
+        <!--<p:calendar value="#{ncbInfo.ncbDetailView.dateOfInfo}"
                     id="dateOfInfo"
                     pattern="dd/MM/yyyy"
                     showOn="button"
@@ -72,29 +73,35 @@
                     timeZone="Asia/Bangkok"
                     yearRange="2440:3000">
             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-        </p:calendar>
+        </p:calendar>-->
+
+        <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfInfo}" id="dateOfInfo" showOn="button" pattern="dd/MM/yyyy"
+                        navigator="true" locale="th_TH" showButtonPanel="true"/>
 
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.accountOpenDate')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.accountOpenDate}"
-                    id="accountOpenDate"
-                    pattern="dd/MM/yyyy"
-                    showOn="button"
-                    required="#{not empty param[addRowData.clientId]}"
-                    locale="th_TH"
-                    timeZone="Asia/Bangkok"
-                    yearRange="2440:3000">
-            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-        </p:calendar>
+        <!-- <p:calendar value="#{ncbInfo.ncbDetailView.accountOpenDate}"
+                     id="accountOpenDate"
+                     pattern="dd/MM/yyyy"
+                     showOn="button"
+                     required="#{not empty param[addRowData.clientId]}"
+                     locale="th_TH"
+                     timeZone="Asia/Bangkok"
+                     yearRange="2440:3000">
+             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+         </p:calendar>-->
+        <clv:BECalendar value="#{ncbInfo.ncbDetailView.accountOpenDate}" id="accountOpenDate" showOn="button"
+                        pattern="dd/MM/yyyy"
+                        navigator="true" locale="th_TH" showButtonPanel="true"/>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.limit')}"/>
     </td>
     <td>
@@ -110,7 +117,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.outstanding')}"/>
     </td>
     <td>
@@ -126,7 +133,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.installment')}"/>
     </td>
     <td>
@@ -142,25 +149,27 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.dateOfDebtRestructuring')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}"
-                    pattern="dd/MM/yyyy"
-                    id="dateOfDebtRestructuring"
-                    showOn="button"
-                    required="#{not empty param[addRowData.clientId]}"
-                    locale="th_TH"
-                    timeZone="Asia/Bangkok"
-                    yearRange="2440:3000">
-            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-        </p:calendar>
-
+        <!-- <p:calendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}"
+                     pattern="dd/MM/yyyy"
+                     id="dateOfDebtRestructuring"
+                     showOn="button"
+                     required="#{not empty param[addRowData.clientId]}"
+                     locale="th_TH"
+                     timeZone="Asia/Bangkok"
+                     yearRange="2440:3000">
+             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+         </p:calendar>-->
+        <clv:BECalendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}" id="dateOfDebtRestructuring"
+                        showOn="button" pattern="dd/MM/yyyy"
+                        navigator="true" locale="th_TH" showButtonPanel="true"/>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.typeOfCurrentPayment')}"/>
     </td>
     <td>
@@ -179,7 +188,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.typeOfHistoryPayment')}"/>
     </td>
     <td>
@@ -197,138 +206,37 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.noOfOutstandingPaymentIn12months')}"/>
     </td>
     <td>
         <p:inputText name="noOfOutstandingPaymentIn12months"
                      style="text-align: right"
                      value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
-                     required="#{not empty param[addRowData.clientId]}"/>
+                     required="#{not empty param[addRowData.clientId]}"
+                     maxlength="2"
+                     integerOnly="true">
+            <p:ajax event="blur" update="@this" process="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.noOfOverLimit')}"/>
     </td>
     <td>
         <p:inputText name="noOfOverLimit"
                      value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
                      style="text-align: right"
-                     required="#{not empty param[addRowData.clientId]}"/>
+                     required="#{not empty param[addRowData.clientId]}"
+                     maxlength="2"
+                     integerOnly="true">
+            <p:ajax event="blur" update="@this" process="@this"/>
+        </p:inputText>
     </td>
 </tr>
-<!--
-
 <tr>
-    <p:panel style="border-width: 0;"  rendered="#{ncbInfo.ncbDetailView.monthFlagPage}">
-        <td class="title" style="width: 230px;">
-            <h:outputText value="#{msg.get('app.dlg.noOfmonthsPayment')}"/>
-        </td>
-        <td>
-            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: right">
-                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
-                <f:selectItem itemLabel="1" itemValue="1"/>
-                <f:selectItem itemLabel="2" itemValue="2"/>
-                <f:selectItem itemLabel="3" itemValue="3"/>
-                <f:selectItem itemLabel="4" itemValue="4"/>
-                <f:selectItem itemLabel="5" itemValue="5"/>
-                <f:selectItem itemLabel="6" itemValue="6"/>
-                &lt;!&ndash;<p:ajax event="change"
-                        listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment()}"
-                        process="@this"
-                        update=":ncbDlgForm:genTextBoxFlagPanel"/>&ndash;&gt;
-            </h:selectOneMenu>
-        </td>
-    </p:panel>
-</tr>
--->
-
-<!--
-<tr>
-    <td></td>
-    <td class="center">
-        <p:panel style="border-width: 0;" id="genTextBoxFlagPanel">
-            <p:panel style="border-width: 0;" rendered="#{ncbInfo.genTextBoxFlag}">
-                <table class="content_form">
-                    <tr>
-                        <td class="title" style="width: 60px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo1')}" rendered="#{ncbInfo.monthRender1}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month1" value="#{ncbInfo.ncbDetailView.month1}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender1}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                        <td class="title" style="width: 60px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo2')}" rendered="#{ncbInfo.monthRender2}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month2"
-                                         value="#{ncbInfo.ncbDetailView.month2}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender2}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                        <td class="title" style="width: 60px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo3')}" rendered="#{ncbInfo.monthRender3}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month3"
-                                         value="#{ncbInfo.ncbDetailView.month3}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender3}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="width: 60px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo4')}" rendered="#{ncbInfo.monthRender4}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month4"
-                                         value="#{ncbInfo.ncbDetailView.month4}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender4}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                        <td class="title" style="width: 50px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo5')}" rendered="#{ncbInfo.monthRender5}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month5"
-                                         value="#{ncbInfo.ncbDetailView.month5}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender5}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                        <td class="title" style="width: 50px;text-align: left;">
-                            <h:outputText value="#{msg.get('app.dlg.monthNo6')}" rendered="#{ncbInfo.monthRender6}"/>
-                        </td>
-                        <td>
-                            <p:inputText id="month6"
-                                         value="#{ncbInfo.ncbDetailView.month6}" style="text-align: right"
-                                         rendered="#{ncbInfo.monthRender6}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update="@this"/>
-                            </p:inputText>
-                        </td>
-                    </tr>
-                </table>
-            </p:panel>
-        </p:panel>
-    </td>
-</tr>
--->
-
-<tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.refinanceFlag')}"/>
     </td>
     <td>
@@ -340,7 +248,7 @@
     </td>
 </tr>
 <tr>
-    <td class="title" style="width: 230px;">
+    <td class="title" style="width: 280px;">
         <h:outputText value="#{msg.get('app.dlg.wcFlag')}"/>
     </td>
     <td>

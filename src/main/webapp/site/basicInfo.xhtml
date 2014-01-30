@@ -12,6 +12,12 @@
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    <style>
+        .ui-datatable td,.ui-datatable th,.ui-datatable span {
+            white-space: normal!important;
+            word-wrap: break-word;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -45,10 +51,6 @@
                                         <table>
                                             <tr>
                                                 <td style="padding-bottom: 20px;" colspan="4">
-                                                    <p:commandButton value="#{msg.get('app.basicInfo.content.button.refresh')}"
-                                                                     process="@form" styleClass="largest" id="refBtn"
-                                                                     actionListener="#{basicInfo.onRefreshInterfaceInfo()}"
-                                                                     update=":msgBoxSystemMessagePanel,:frmMain"/>
                                                     <p:commandButton value="#{msg.get('app.basicInfo.content.button.duplicate')}"
                                                                      process="@form" styleClass="largest" id="dupBtn"
                                                                      actionListener="#{basicInfo.onDuplicateApplication()}"
@@ -532,19 +534,19 @@
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 130px;">
-                                                            <h:outputText value="#{item.accountName}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 250px; max-width: 250px; min-width: 250px;">
+                                                            <h:outputText value="#{item.accountName}" style="width: 250px; max-width: 250px; min-width: 250px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 110px;">
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 180px;">
                                                             <h:outputText value="#{item.bankAccountTypeView.name}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 110px;">
-                                                            <h:outputText value="#{item.product.name}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 180px;">
+                                                            <h:outputText value="#{item.bankAccountProduct.name}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 300px;">
                                                             <h:outputText value="#{item.purposeForShow}"/>
                                                         </p:column>
 
@@ -650,7 +652,7 @@
                 <!-- End Footer -->
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
+            <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:dupBtn,:frmMain:cancelBtn">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
@@ -658,7 +660,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
-              modal="true" width="550" height="280">
+              modal="true" width="580" height="500">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
@@ -669,6 +671,15 @@
         <ui:param name="controller" value="#{basicInfo}"/>
         <ui:param name="action" value="onDeleteAccount"/>
         <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAccountNameDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountNameDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccountName"/>
+        <ui:param name="controller" value="#{basicInfo}"/>
+        <ui:param name="action" value="onDeleteAccountName"/>
+        <ui:param name="update" value=":basicInfoAccountDlgForm:customerTable"/>
     </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">

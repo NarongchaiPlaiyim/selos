@@ -254,7 +254,7 @@ public class ExSummaryTransform extends Transform {
         if(exSummary.getDeviateCode() != null && exSummary.getDeviateCode().size() > 0){
             for(ExSumDeviate deviate : exSummary.getDeviateCode()){
                 ExSumReasonView exSumReasonView = new ExSumReasonView();
-                exSumReasonView.setId(deviate.getId());
+                exSumReasonView.setId((int)deviate.getId());
                 exSumReasonView.setCode(deviate.getDeviateCode().getCode());
                 exSumReasonView.setDescription(deviate.getDeviateCode().getDescription());
                 exSumReasonViewList.add(exSumReasonView);

@@ -21,6 +21,8 @@ public class DocumentType implements Serializable {
     private int active;
     @Column(name = "document_type_code", length = 5)
     private String documentTypeCode;
+    @Column(name = "coms_name", length = 20)
+    private String comsName;
 
     public DocumentType() {
     }
@@ -65,6 +67,14 @@ public class DocumentType implements Serializable {
         this.documentTypeCode = documentTypeCode;
     }
 
+    public String getComsName() {
+        return comsName;
+    }
+
+    public void setComsName(String comsName) {
+        this.comsName = comsName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -73,6 +83,7 @@ public class DocumentType implements Serializable {
                 .append("customerEntity", customerEntity)
                 .append("active", active)
                 .append("documentTypeCode", documentTypeCode)
+                .append("comsName", comsName)
                 .toString();
     }
 }

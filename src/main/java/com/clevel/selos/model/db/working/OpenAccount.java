@@ -1,8 +1,10 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.BankBranch;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -36,7 +38,7 @@ public class OpenAccount implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "open_account_product_id")
-    private AccountProduct accountProduct;
+    private BankAccountProduct bankAccountProduct;
 
     @Column(name = "term")
     private String term;
@@ -107,12 +109,12 @@ public class OpenAccount implements Serializable {
         this.bankAccountType = bankAccountType;
     }
 
-    public AccountProduct getAccountProduct() {
-        return accountProduct;
+    public BankAccountProduct getBankAccountProduct() {
+        return bankAccountProduct;
     }
 
-    public void setAccountProduct(AccountProduct accountProduct) {
-        this.accountProduct = accountProduct;
+    public void setBankAccountProduct(BankAccountProduct bankAccountProduct) {
+        this.bankAccountProduct = bankAccountProduct;
     }
 
     public String getTerm() {
@@ -169,5 +171,25 @@ public class OpenAccount implements Serializable {
 
     public void setOpenAccountCreditList(List<OpenAccountCredit> openAccountCreditList) {
         this.openAccountCreditList = openAccountCreditList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("requestType", requestType).
+                append("accountNumber", accountNumber).
+                append("bankBranch", bankBranch).
+                append("bankAccountType", bankAccountType).
+                append("bankAccountProduct", bankAccountProduct).
+                append("term", term).
+                append("openAccountNameList", openAccountNameList).
+                append("openAccountPurposeList", openAccountPurposeList).
+                append("numberOfDep", numberOfDep).
+                append("openAccountDepositList", openAccountDepositList).
+                append("confirmOpenAccount", confirmOpenAccount).
+                append("openAccountCreditList", openAccountCreditList).
+                toString();
     }
 }

@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class NCBDetailView implements Serializable {
-
     private long id;
     private int isTMBAccount;   // NCBBizTransform use
     private int refinanceFlag;
@@ -32,19 +31,12 @@ public class NCBDetailView implements Serializable {
     private SettlementStatus currentPayment;
     private SettlementStatus historyPayment;
     private int noOfmonthsPayment;
-//    private String moneyTotal;
-//    private BigDecimal month1;
-//    private BigDecimal month2;
-//    private BigDecimal month3;
-//    private BigDecimal month4;
-//    private BigDecimal month5;
-//    private BigDecimal month6;
     private boolean canToEdit;
     private boolean monthFlagPage;
-
     private boolean TMB;
     private boolean refinance;
     private boolean wc;
+    private long customerId;
 
     private String accountName;
     private LoanAccountTypeView loanAccountTypeView;
@@ -55,16 +47,14 @@ public class NCBDetailView implements Serializable {
     }
 
     public void reset() {
-//        this.isTMBAccount = -1;
         this.dateOfInfo = new Date();
-//        this.accountOpenDate = new Date();
+        this.accountOpenDate = new Date();
         this.limit = BigDecimal.ZERO;
         this.outstanding = BigDecimal.ZERO;
         this.installment = BigDecimal.ZERO;
-//        this.dateOfDebtRestructuring = new Date();
+        this.dateOfDebtRestructuring = new Date();
         this.noOfOutstandingPaymentIn12months = BigDecimal.ZERO;
         this.noOfOverLimit = 0;
-//        this.refinanceFlag = -1;
         this.monthsPaymentFlag = false;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
@@ -72,13 +62,6 @@ public class NCBDetailView implements Serializable {
         this.currentPayment = new SettlementStatus();
         this.historyPayment = new SettlementStatus();
         this.noOfmonthsPayment = 0;
-//        this.month1 = BigDecimal.ZERO;
-//        this.month2 = BigDecimal.ZERO;
-//        this.month3 = BigDecimal.ZERO;
-//        this.month4 = BigDecimal.ZERO;
-//        this.month5 = BigDecimal.ZERO;
-//        this.month6 = BigDecimal.ZERO;
-//        this.wcFlag = -1;
         this.canToEdit = false;
         this.monthFlagPage = false;
         this.loanAccountTypeView = new LoanAccountTypeView();
@@ -92,34 +75,6 @@ public class NCBDetailView implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-
-/*    public String getMoneyTotal() {
-        String moneyTotal = "";
-        List<BigDecimal> moneys;
-
-        moneys = new ArrayList<BigDecimal>();
-        moneys.add(this.month1);
-        moneys.add(this.month2);
-        moneys.add(this.month3);
-        moneys.add(this.month4);
-        moneys.add(this.month5);
-        moneys.add(this.month6);
-
-        if ((this.noOfmonthsPayment != 0)) {
-
-            for (int i = 0; i < moneys.size(); i++) {
-                if (i < this.noOfmonthsPayment) {
-                    moneyTotal += " เดือนที่ " + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + " บาท ";
-                }
-            }
-
-        }
-        return moneyTotal;
-    }
-
-    public void setMoneyTotal(String moneyTotal) {
-        this.moneyTotal = moneyTotal;
-    }*/
 
     public int getNoOfmonthsPayment() {
         return noOfmonthsPayment;
@@ -139,9 +94,9 @@ public class NCBDetailView implements Serializable {
 
     public int getTMBAccount() {
         if (TMB == true) {
+            this.isTMBAccount = 2;
+        } else if (TMB == false) {
             this.isTMBAccount = 1;
-        } else  if (TMB == false) {
-            this.isTMBAccount = 0;
         }
         return isTMBAccount;
     }
@@ -152,7 +107,7 @@ public class NCBDetailView implements Serializable {
 
     public boolean isTMB() {
 
-        if (isTMBAccount == 1) {
+        if (isTMBAccount == 2) {
             this.TMB = true;
         } else {
             this.TMB = false;
@@ -261,58 +216,6 @@ public class NCBDetailView implements Serializable {
         this.historyPayment = historyPayment;
     }
 
-/*
-
-    public BigDecimal getMonth1() {
-        return month1;
-    }
-
-    public void setMonth1(BigDecimal month1) {
-        this.month1 = month1;
-    }
-
-    public BigDecimal getMonth2() {
-        return month2;
-    }
-
-    public void setMonth2(BigDecimal month2) {
-        this.month2 = month2;
-    }
-
-    public BigDecimal getMonth3() {
-        return month3;
-    }
-
-    public void setMonth3(BigDecimal month3) {
-        this.month3 = month3;
-    }
-
-    public BigDecimal getMonth4() {
-        return month4;
-    }
-
-    public void setMonth4(BigDecimal month4) {
-        this.month4 = month4;
-    }
-
-    public BigDecimal getMonth5() {
-        return month5;
-    }
-
-    public void setMonth5(BigDecimal month5) {
-        this.month5 = month5;
-    }
-
-    public BigDecimal getMonth6() {
-        return month6;
-    }
-
-    public void setMonth6(BigDecimal month6) {
-        this.month6 = month6;
-    }
-*/
-
-
     public boolean isRefinance() {
         if (refinanceFlag == 2) {
             this.refinance = true;
@@ -343,7 +246,7 @@ public class NCBDetailView implements Serializable {
     public int getRefinanceFlag() {
         if (refinance == true) {
             refinanceFlag = 2;
-        } else  if (refinance == false) {
+        } else if (refinance == false) {
             refinanceFlag = 1;
         }
         return refinanceFlag;
@@ -424,6 +327,14 @@ public class NCBDetailView implements Serializable {
 
     public void setDebtForCalculate(BigDecimal debtForCalculate) {
         this.debtForCalculate = debtForCalculate;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     @Override

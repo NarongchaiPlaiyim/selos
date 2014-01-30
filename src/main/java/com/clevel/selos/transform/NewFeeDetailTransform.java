@@ -7,6 +7,7 @@ import com.clevel.selos.model.view.NewFeeDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewFeeDetailTransform extends Transform {
@@ -22,10 +23,13 @@ public class NewFeeDetailTransform extends Transform {
 
         for (NewFeeDetailView newFeeDetailView : newFeeDetailViewList) {
             newFeeDetail = new NewFeeDetail();
-            newFeeDetail.setCreateDate(newFeeDetailView.getCreateDate());
-            newFeeDetail.setCreateBy(newFeeDetailView.getCreateBy());
-            newFeeDetail.setModifyDate(newFeeDetailView.getModifyDate());
-            newFeeDetail.setModifyBy(user);
+            if (newFeeDetail.getId() != 0) {
+                newFeeDetail.setCreateDate(newFeeDetailView.getCreateDate());
+                newFeeDetail.setCreateBy(newFeeDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newFeeDetail.setCreateDate(new Date());
+                newFeeDetail.setCreateBy(user);
+            }
             newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
             newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
             newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());
