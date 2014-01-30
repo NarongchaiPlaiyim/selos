@@ -48,6 +48,8 @@ public class InboxControl extends BusinessControl {
     PrescreenFacilityDAO prescreenFacilityDAO;
     @Inject
     StepLandingPageDAO stepLandingPageDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     @Inject
     InboxBizTransform inboxBizTransform;
@@ -134,6 +136,7 @@ public class InboxControl extends BusinessControl {
         return landingPage;
     }
 
+    //TODO:: To review Application Header.
     public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId) {
         log.info("getHeaderInformation ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
         AppHeaderView appHeaderView = new AppHeaderView();
@@ -145,10 +148,11 @@ public class InboxControl extends BusinessControl {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
 
         if (Long.toString(workCaseId) != null && workCaseId != 0) {
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             bdmUserId = workCase.getCreateBy().getId();
 
-            appHeaderView.setCaNo(workCase.getCaNumber());
+            appHeaderView.setCaNo(basicInfo.getCaNumber());
             appHeaderView.setAppNo(workCase.getAppNumber());
             appHeaderView.setCaseStatus(workCase.getStatus().getDescription());
 
@@ -158,7 +162,7 @@ public class InboxControl extends BusinessControl {
         } else {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
-            bdmUserId = workCasePrescreen.getCreateBy().getId();
+            bdmUserId = ((User)workCasePrescreen.getCreateBy()).getId();
 
             appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
             appHeaderView.setAppNo(workCasePrescreen.getAppNumber());

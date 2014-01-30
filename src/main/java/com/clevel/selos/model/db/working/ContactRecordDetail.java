@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,15 +17,9 @@ public class ContactRecordDetail {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CONTACT_REC_ID")
     private long id;
 
-    @Column(name="no")
-    private int no;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="calling_date")
     private Date callingDate;
-
-    @Column(name="calling_time")
-    private String callingTime;
 
     @Column(name="calling_result")
     private int callingResult;
@@ -34,17 +31,18 @@ public class ContactRecordDetail {
     @Column(name="next_calling_date")
     private Date nextCallingDate ;
 
-    @Column(name="next_calling_time")
-    private String nextCallingTime;
-
-    @Column(name="reason")
-    private int reason;
+    @OneToOne
+    @JoinColumn(name="reason")
+    private Reason reason;
 
     @Column(name="remark")
     private String remark;
 
+    @Column(name="step")
+    private Step step;
+
     @Column(name="status")
-    private String status;
+    private Status status;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -67,13 +65,8 @@ public class ContactRecordDetail {
     private CustomerAcceptance customerAcceptance;
 
     @ManyToOne
-    @JoinColumn(name = "appraisal_id")
-    private Appraisal appraisal;
-
-    @ManyToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
-
 
     public long getId() {
         return id;
@@ -83,28 +76,12 @@ public class ContactRecordDetail {
         this.id = id;
     }
 
-    public int getNo() {
-        return no;
-    }
-
-    public void setNo(int no) {
-        this.no = no;
-    }
-
     public Date getCallingDate() {
         return callingDate;
     }
 
     public void setCallingDate(Date callingDate) {
         this.callingDate = callingDate;
-    }
-
-    public String getCallingTime() {
-        return callingTime;
-    }
-
-    public void setCallingTime(String callingTime) {
-        this.callingTime = callingTime;
     }
 
     public int getCallingResult() {
@@ -131,19 +108,11 @@ public class ContactRecordDetail {
         this.nextCallingDate = nextCallingDate;
     }
 
-    public String getNextCallingTime() {
-        return nextCallingTime;
-    }
-
-    public void setNextCallingTime(String nextCallingTime) {
-        this.nextCallingTime = nextCallingTime;
-    }
-
-    public int getReason() {
+    public Reason getReason() {
         return reason;
     }
 
-    public void setReason(int reason) {
+    public void setReason(Reason reason) {
         this.reason = reason;
     }
 
@@ -155,11 +124,19 @@ public class ContactRecordDetail {
         this.remark = remark;
     }
 
-    public String getStatus() {
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
+    }
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -203,14 +180,6 @@ public class ContactRecordDetail {
         this.customerAcceptance = customerAcceptance;
     }
 
-    public Appraisal getAppraisal() {
-        return appraisal;
-    }
-
-    public void setAppraisal(Appraisal appraisal) {
-        this.appraisal = appraisal;
-    }
-
     public WorkCase getWorkCase() {
         return workCase;
     }
@@ -223,22 +192,19 @@ public class ContactRecordDetail {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("no", no)
                 .append("callingDate", callingDate)
-                .append("callingTime", callingTime)
                 .append("callingResult", callingResult)
                 .append("acceptResult", acceptResult)
                 .append("nextCallingDate", nextCallingDate)
-                .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
                 .append("remark", remark)
-                .append("remark", status)
+                .append("step", step)
+                .append("status", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("customerAcceptance", customerAcceptance)
-                .append("appraisal", appraisal)
                 .append("workCase", workCase)
                 .toString();
     }

@@ -10,72 +10,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "wrk_case")
-public class WorkCase implements Serializable {
+public class WorkCase extends AbstractWorkCase{
     @Id
     @SequenceGenerator(name = "SEQ_WRK_CASE_ID", sequenceName = "SEQ_WRK_CASE_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_ID")
     @Column(name = "id", nullable = false)
     private long id;
-
-    @Column(name = "ca_number", length = 30, nullable = false)
-    private String caNumber;
-
-    @Column(name = "app_number", nullable = false)
-    private String appNumber;
-
-    @Column(name = "ref_app_number")
-    private String refAppNumber;
-
-    @OneToOne
-    @JoinColumn(name = "requesttype_id")
-    private RequestType requestType;
-
-    @OneToOne
-    @JoinColumn(name = "productgroup_id")
-    private ProductGroup productGroup;
-
-    @Column(name = "wob_number")
-    private String wobNumber;
-
-    @Column(name = "case_lock")
-    private int lock;
-
-    @Column(name = "lock_user")
-    private String lockUser;
-
-    @OneToOne
-    @JoinColumn(name = "step_id")
-    private Step step;
-
-    @OneToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
-
-    @OneToOne
-    @JoinColumn(name = "borrower_type_id")
-    private CustomerEntity borrowerType;
-
-    @Column(name = "approve_type", length = 1, columnDefinition="int default 0")
-    private int approvedType;
-
-    @Column(name = "approve_result", length = 1, columnDefinition="int default 0")
-    private int approvedResult;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
-    private Date createDate;
-
-    @OneToOne
-    @JoinColumn(name = "create_by")
-    private User createBy;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modify_date")
-    private Date modifyDate;
-
-    @OneToOne
-    @JoinColumn(name = "modify_by")
-    private User modifyBy;
 
     @OneToOne
     @JoinColumn(name = "step_owner")
@@ -85,10 +25,6 @@ public class WorkCase implements Serializable {
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-
-    public WorkCase() {
-    }
-
     public long getId() {
         return id;
     }
@@ -97,140 +33,12 @@ public class WorkCase implements Serializable {
         this.id = id;
     }
 
-    public String getCaNumber() {
-        return caNumber;
-    }
-
-    public void setCaNumber(String caNumber) {
-        this.caNumber = caNumber;
-    }
-
-    public String getAppNumber() {
-        return appNumber;
-    }
-
-    public void setAppNumber(String appNumber) {
-        this.appNumber = appNumber;
-    }
-
-    public String getRefAppNumber() {
-        return refAppNumber;
-    }
-
-    public void setRefAppNumber(String refAppNumber) {
-        this.refAppNumber = refAppNumber;
-    }
-
-    public RequestType getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
-    }
-
-    public ProductGroup getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(ProductGroup productGroup) {
-        this.productGroup = productGroup;
-    }
-
     public String getWobNumber() {
         return wobNumber;
     }
 
     public void setWobNumber(String wobNumber) {
         this.wobNumber = wobNumber;
-    }
-
-    public int getLock() {
-        return lock;
-    }
-
-    public void setLock(int lock) {
-        this.lock = lock;
-    }
-
-    public String getLockUser() {
-        return lockUser;
-    }
-
-    public void setLockUser(String lockUser) {
-        this.lockUser = lockUser;
-    }
-
-    public Step getStep() {
-        return step;
-    }
-
-    public void setStep(Step step) {
-        this.step = step;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public CustomerEntity getBorrowerType() {
-        return borrowerType;
-    }
-
-    public void setBorrowerType(CustomerEntity borrowerType) {
-        this.borrowerType = borrowerType;
-    }
-
-    public int getApprovedType() {
-        return approvedType;
-    }
-
-    public void setApprovedType(int approvedType) {
-        this.approvedType = approvedType;
-    }
-
-    public int getApprovedResult() {
-        return approvedResult;
-    }
-
-    public void setApprovedResult(int approvedResult) {
-        this.approvedResult = approvedResult;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public User getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(User createBy) {
-        this.createBy = createBy;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public User getModifyBy() {
-        return modifyBy;
-    }
-
-    public void setModifyBy(User modifyBy) {
-        this.modifyBy = modifyBy;
     }
 
     public User getStepOwner() {
@@ -253,25 +61,9 @@ public class WorkCase implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("caNumber", caNumber)
-                .append("appNumber", appNumber)
-                .append("refAppNumber", refAppNumber)
-                .append("requestType", requestType != null?requestType.getName():"")
-                .append("productGroup", productGroup != null?productGroup.getName():"")
                 .append("wobNumber", wobNumber)
-                .append("lock", lock)
-                .append("lockUser", lockUser)
-                .append("step", step)
-                .append("status", status)
-                .append("borrowerType", borrowerType != null?borrowerType.getId():"")
-                .append("approvedType", approvedType)
-                .append("approvedResult", approvedResult)
-                .append("createDate", createDate)
-                .append("createBy", createBy != null ? createBy.getUserName(): "")
-                .append("modifyDate", modifyDate)
-                .append("modifyBy", modifyBy != null? modifyBy.getUserName():"")
                 .append("stepOwner", stepOwner)
-                .append("workCasePrescreen", workCasePrescreen != null?workCasePrescreen.getId(): "")
+                .append("workCasePrescreen", workCasePrescreen)
                 .toString();
     }
 }

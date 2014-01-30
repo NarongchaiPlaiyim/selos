@@ -79,7 +79,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setApproved(newCreditDetailView.getApproved());
             newCreditDetail.setNoFlag(Util.returnNumForFlag(newCreditDetailView.isNoFlag()));
             newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
-            newCreditDetail.setDisbursement(newCreditDetailView.getDisbursement());
+            newCreditDetail.setDisbursementType(newCreditDetailView.getDisbursement());
             newCreditDetail.setFinalPrice(newCreditDetailView.getFinalPrice());
             newCreditDetail.setCreditType(newCreditDetailView.getCreditType());
             newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
@@ -134,7 +134,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setApproved(newCreditDetail.getApproved());
             newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
             newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
-            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursement());
+            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursementType());
             newCreditDetailView.setFinalPrice(newCreditDetail.getFinalPrice());
             newCreditDetailView.setCreditType(newCreditDetail.getCreditType());
             newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());

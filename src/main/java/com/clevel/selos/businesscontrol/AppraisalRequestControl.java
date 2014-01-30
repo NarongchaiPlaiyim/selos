@@ -8,7 +8,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalContactDetail;
-import com.clevel.selos.model.db.working.AppraisalDetail;
+import com.clevel.selos.model.db.working.AppraisalPurpose;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
@@ -53,7 +53,7 @@ public class AppraisalRequestControl extends BusinessControl {
 
         Appraisal appraisal;
         AppraisalView appraisalView;
-        List<AppraisalDetail> appraisalDetailList;
+        List<AppraisalPurpose> appraisalDetailList;
         List<AppraisalDetailView> appraisalDetailViewList;
         List<AppraisalContactDetail> appraisalContactDetailList;
         List<AppraisalContactDetailView> appraisalContactDetailViewList;
@@ -88,7 +88,7 @@ public class AppraisalRequestControl extends BusinessControl {
         log.info("onSaveAppraisalRequest ");
         Appraisal appraisal;
         List<AppraisalDetailView> appraisalDetailViewList;
-        List<AppraisalDetail> appraisalDetailList;
+        List<AppraisalPurpose> appraisalDetailList;
         List<AppraisalContactDetailView> appraisalContactDetailViewList;
         List<AppraisalContactDetail> appraisalContactDetailList;
 
@@ -104,7 +104,7 @@ public class AppraisalRequestControl extends BusinessControl {
         appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
 
         if(appraisalDetailViewList.size()>0){
-            List<AppraisalDetail>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
+            List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
             appraisalDetailDAO.delete(appraisalDetailListDel);
         }
         appraisalDetailList = appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);

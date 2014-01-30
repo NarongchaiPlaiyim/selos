@@ -22,10 +22,6 @@ public class NewCollateralCredit implements Serializable {
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "new_credit_facility_id")
-    private NewCreditFacility newCreditFacility;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -35,11 +31,11 @@ public class NewCollateralCredit implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name = "create_user_id")
+    @JoinColumn(name = "create_by")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name = "modify_user_id")
+    @JoinColumn(name = "modify_by")
     private User modifyBy;
 
     public long getId() {
@@ -64,14 +60,6 @@ public class NewCollateralCredit implements Serializable {
 
     public void setNewCreditDetail(NewCreditDetail newCreditDetail) {
         this.newCreditDetail = newCreditDetail;
-    }
-
-    public NewCreditFacility getNewCreditFacility() {
-        return newCreditFacility;
-    }
-
-    public void setNewCreditFacility(NewCreditFacility newCreditFacility) {
-        this.newCreditFacility = newCreditFacility;
     }
 
     public Date getCreateDate() {

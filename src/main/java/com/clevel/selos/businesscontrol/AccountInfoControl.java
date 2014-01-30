@@ -26,7 +26,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
     @Inject
     private OpenAccountDAO openAccountDAO;
     @Inject
-    private OpenAccPurposeDAO openAccPurposeDAO;
+    private OpenAccountPurposeDAO openAccPurposeDAO;
     @Inject
     private AccountInfoDAO accountInfoDAO;
     @Inject

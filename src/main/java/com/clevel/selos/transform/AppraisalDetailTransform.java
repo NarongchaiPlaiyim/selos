@@ -1,7 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.Appraisal;
-import com.clevel.selos.model.db.working.AppraisalDetail;
+import com.clevel.selos.model.db.working.AppraisalPurpose;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import org.joda.time.DateTime;
 
@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppraisalDetailTransform extends Transform {
-    public List<AppraisalDetail> transformToModel(List<AppraisalDetailView> appraisalDetailViewList,Appraisal appraisal){
+    public List<AppraisalPurpose> transformToModel(List<AppraisalDetailView> appraisalDetailViewList,Appraisal appraisal){
 
-    List<AppraisalDetail> appraisalDetailList = new ArrayList<AppraisalDetail>();
+    List<AppraisalPurpose> appraisalDetailList = new ArrayList<AppraisalPurpose>();
     for(AppraisalDetailView appraisalDetailView : appraisalDetailViewList){
 
 
-        AppraisalDetail appraisalDetail = new AppraisalDetail();
+        AppraisalPurpose appraisalDetail = new AppraisalPurpose();
 
         appraisalDetail.setAppraisal(appraisal);
         appraisalDetail.setNo(appraisalDetailView.getNo());
@@ -35,10 +35,10 @@ public class AppraisalDetailTransform extends Transform {
     return appraisalDetailList;
 }
 
-    public List<AppraisalDetailView> transformToView(List<AppraisalDetail> appraisalDetailList){
+    public List<AppraisalDetailView> transformToView(List<AppraisalPurpose> appraisalDetailList){
         List<AppraisalDetailView> appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         
-        for(AppraisalDetail appraisalDetail : appraisalDetailList){
+        for(AppraisalPurpose appraisalDetail : appraisalDetailList){
 
             AppraisalDetailView appraisalDetailView = new AppraisalDetailView();
 

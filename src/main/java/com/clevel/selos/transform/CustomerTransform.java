@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.CustomerOblInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
@@ -71,6 +72,8 @@ public class CustomerTransform extends Transform {
     KYCLevelDAO kycLevelDAO;
     @Inject
     RaceDAO raceDAO;
+    @Inject
+    CustomerOblInfoDAO customerOblInfoDAO;
 
     public CustomerInfoView transformToView(Customer customer){
 
@@ -89,7 +92,7 @@ public class CustomerTransform extends Transform {
         }
 
         customerInfoView.setDocumentAuthorizeBy(customer.getDocumentAuthorizeBy());
-        customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(customer.getServiceSegment()));
+
         customerInfoView.setCollateralOwner(customer.getCollateralOwner());
         customerInfoView.setPercentShare(customer.getPercentShare());
         customerInfoView.setApproxIncome(customer.getApproxIncome());
@@ -371,18 +374,24 @@ public class CustomerTransform extends Transform {
 
         //for new field
         customerInfoView.setAgeMonths(customer.getAgeMonths());
-        customerInfoView.setExistingSMECustomer(customer.getExistingSMECustomer());
-        customerInfoView.setLastReviewDate(customer.getLastReviewDate());
-        customerInfoView.setExtendedReviewDate(customer.getExtendedReviewDate());
-        customerInfoView.setExtendedReviewDateFlag(customer.getExtendedReviewDateFlag());
-        customerInfoView.setNextReviewDate(customer.getNextReviewDate());
-        customerInfoView.setNextReviewDateFlag(customer.getNextReviewDateFlag());
-        customerInfoView.setLastContractDate(customer.getLastContractDate());
-        customerInfoView.setNumberOfMonthsLastContractDate(customer.getNumberOfMonthsLastContractDate());
-        customerInfoView.setAdjustClass(customer.getAdjustClass());
-        customerInfoView.setRatingFinal(sbfScoreTransform.transformToView(customer.getRatingFinal()));
-        customerInfoView.setUnpaidFeeInsurance(customer.getUnpaidFeeInsurance());
-        customerInfoView.setPendingClaimLG(customer.getPendingClaimLG());
+        // set customer credit information.
+        if(customer.getCustomerOblInfo() != null){
+            CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+            customerInfoView.setCustomerOblInfoID(customerOblInfo.getId());
+            customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(customerOblInfo.getServiceSegment()));
+            customerInfoView.setExistingSMECustomer(customerOblInfo.getExistingSMECustomer());
+            customerInfoView.setLastReviewDate(customerOblInfo.getLastReviewDate());
+            customerInfoView.setExtendedReviewDate(customerOblInfo.getExtendedReviewDate());
+            customerInfoView.setExtendedReviewDateFlag(customerOblInfo.getExtendedReviewDateFlag());
+            customerInfoView.setNextReviewDate(customerOblInfo.getNextReviewDate());
+            customerInfoView.setNextReviewDateFlag(customerOblInfo.getNextReviewDateFlag());
+            customerInfoView.setLastContractDate(customerOblInfo.getLastContractDate());
+            customerInfoView.setNumberOfMonthsLastContractDate(customerOblInfo.getNumberOfMonthsLastContractDate());
+            customerInfoView.setAdjustClass(customerOblInfo.getAdjustClass());
+            customerInfoView.setRatingFinal(sbfScoreTransform.transformToView(customerOblInfo.getRatingFinal()));
+            customerInfoView.setUnpaidFeeInsurance(customerOblInfo.getUnpaidFeeInsurance());
+            customerInfoView.setPendingClaimLG(customerOblInfo.getPendingClaimLG());
+        }
 
         //for show jurLv
         if(customer.getIsCommittee() == 1){
@@ -437,7 +446,6 @@ public class CustomerTransform extends Transform {
 
         customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
         customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
-        customer.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
         customer.setCollateralOwner(customerInfoView.getCollateralOwner());
         customer.setPercentShare(customerInfoView.getPercentShare());
         customer.setApproxIncome(customerInfoView.getApproxIncome());
@@ -787,22 +795,38 @@ public class CustomerTransform extends Transform {
             customer.setJuristic(juristic);
         }
 
-        //for new field
         customer.setAgeMonths(customerInfoView.getAgeMonths());
-        customer.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());
-        customer.setLastReviewDate(customerInfoView.getLastReviewDate());
-        customer.setExtendedReviewDate(customerInfoView.getExtendedReviewDate());
-        customer.setExtendedReviewDateFlag(customerInfoView.getExtendedReviewDateFlag());
-        customer.setNextReviewDate(customerInfoView.getNextReviewDate());
-        customer.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
-        customer.setLastContractDate(customerInfoView.getLastContractDate());
-        customer.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
-        customer.setAdjustClass(customerInfoView.getAdjustClass());
-        customer.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
-        customer.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
-        customer.setPendingClaimLG(customerInfoView.getPendingClaimLG());
 
+        //set for Customer Obligation Info
+        if(customerInfoView.getTmbCustomerId() != null){
+            CustomerOblInfo customerOblInfo = null;
+            if(customerInfoView.getCustomerOblInfoID() != 0) {
+                try{
+                    customerOblInfo = customerOblInfoDAO.findById(customerInfoView.getCustomerOblInfoID());
+                }catch (Exception ex){
+                    log.debug("cannot find customerOblInfo with id {}", customerInfoView.getCustomerOblInfoID());
+                }
+            }
 
+            if(customerOblInfo == null)
+                customerOblInfo = new CustomerOblInfo();
+
+            customerOblInfo.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
+            customerOblInfo.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());
+            customerOblInfo.setLastReviewDate(customerInfoView.getLastReviewDate());
+            customerOblInfo.setExtendedReviewDate(customerInfoView.getExtendedReviewDate());
+            customerOblInfo.setExtendedReviewDateFlag(customerInfoView.getExtendedReviewDateFlag());
+            customerOblInfo.setNextReviewDate(customerInfoView.getNextReviewDate());
+            customerOblInfo.setNextReviewDateFlag(customerInfoView.getNextReviewDateFlag());
+            customerOblInfo.setLastContractDate(customerInfoView.getLastContractDate());
+            customerOblInfo.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
+            customerOblInfo.setAdjustClass(customerInfoView.getAdjustClass());
+            customerOblInfo.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
+            customerOblInfo.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
+            customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+            customerOblInfo.setCustomer(customer);
+            customer.setCustomerOblInfo(customerOblInfo);
+        }
 
         return customer;
     }

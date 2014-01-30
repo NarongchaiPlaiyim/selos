@@ -2,7 +2,7 @@ package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.OpenAccountPurpose;
+import com.clevel.selos.model.db.master.AccountPurpose;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -10,19 +10,19 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class OpenAccountPurposeDAO extends GenericDAO<OpenAccountPurpose, Integer> {
+public class AccountPurposeDAO extends GenericDAO<AccountPurpose, Integer> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public OpenAccountPurposeDAO() {
+    public AccountPurposeDAO() {
     }
 
     @Override
-    public List<OpenAccountPurpose> findAll() {
+    public List<AccountPurpose> findAll() {
         Criteria criteria = getSession().createCriteria(getEntityClass())
                 .add(Restrictions.eq("active", 1));
-        List<OpenAccountPurpose> list = criteria.list();
+        List<AccountPurpose> list = criteria.list();
         return list;
     }
 }

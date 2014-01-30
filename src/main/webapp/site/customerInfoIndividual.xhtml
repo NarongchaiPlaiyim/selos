@@ -245,6 +245,7 @@
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.documentAuthorizeBy}"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                 </td>
@@ -338,12 +339,14 @@
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.firstNameTh}"
+                                                             onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndStNameTh}"
                                                              disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.lastNameTh}"
+                                                             onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndLastNameTh}"
                                                              disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
@@ -376,12 +379,14 @@
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.firstNameEn}"
+                                                             onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndStNameEn}"
                                                              disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                             </td>
                                             <td>
                                                 <p:inputText value="#{custInfoSumIndi.customerInfoView.lastNameEn}"
+                                                             onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
                                                              required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndLastNameEn}"
                                                              disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
@@ -1513,6 +1518,7 @@
                                     </td>
                                     <td>
                                         <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeBy}"
+                                                     onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                      style="width: 192px; max-width: 192px; min-width: 192px;"
                                                      disabled="#{not custInfoSumIndi.enableAllFieldCusSpouse}"/>
                                     </td>

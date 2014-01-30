@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.InboxView;
@@ -38,7 +39,7 @@ public class InboxBizTransform extends BusinessTransform {
                 if (workCasePrescreen != null) {
                     inboxView.setWorkCasePreScreenId(workCasePrescreen.getId());
                     inboxView.setCaNo(workCasePrescreen.getCaNumber());
-                    inboxView.setBdmId(workCasePrescreen.getCreateBy().getId());
+                    inboxView.setBdmId(((User) workCasePrescreen.getCreateBy()).getId());
                 } else {
                     inboxView.setWorkCasePreScreenId(0);
                     inboxView.setCaNo("");
@@ -47,7 +48,7 @@ public class InboxBizTransform extends BusinessTransform {
                 WorkCase workCase = workCaseDAO.findByWobNumber(inboxView.getFnWobNum());
                 if (workCase != null) {
                     inboxView.setWorkCaseId(workCase.getId());
-                    inboxView.setCaNo(workCase.getCaNumber());
+                    //inboxView.setCaNo(workCase.getCaNumber());
                     inboxView.setBdmId(workCase.getCreateBy().getId());
                 }
 

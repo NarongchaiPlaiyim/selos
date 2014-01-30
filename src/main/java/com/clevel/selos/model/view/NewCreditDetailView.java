@@ -44,7 +44,7 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal holdLimitAmount;
     private BigDecimal finalPrice;
     private BigDecimal tenor;
-    private Disbursement disbursement;
+    private DisbursementType disbursement;
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
     private int isApproved;
@@ -72,7 +72,7 @@ public class NewCreditDetailView implements Serializable {
         this.isRefinance = RadioValue.NO.value();
         this.productProgram = new ProductProgram();
         this.creditType = new CreditType();
-        this.disbursement = new Disbursement();
+        this.disbursement = new DisbursementType();
         this.loanPurpose = new LoanPurpose();
         this.productCode = "";
         this.projectCode = "";
@@ -309,11 +309,11 @@ public class NewCreditDetailView implements Serializable {
         this.tenor = tenor;
     }
 
-    public Disbursement getDisbursement() {
+    public DisbursementType getDisbursement() {
         return disbursement;
     }
 
-    public void setDisbursement(Disbursement disbursement) {
+    public void setDisbursement(DisbursementType disbursement) {
         this.disbursement = disbursement;
     }
 

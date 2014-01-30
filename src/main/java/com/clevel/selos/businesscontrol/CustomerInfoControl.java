@@ -16,10 +16,7 @@ import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.CustomerCSI;
-import com.clevel.selos.model.db.working.NCB;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
@@ -60,6 +57,8 @@ public class CustomerInfoControl extends BusinessControl {
 
     @Inject
     ReferenceDAO referenceDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -114,10 +113,11 @@ public class CustomerInfoControl extends BusinessControl {
     public int getCaseBorrowerTypeIdByWorkCase(long workCaseId){
         log.info("getCaseBorrowerTypeIdByWorkCase ::: workCaseId : {}", workCaseId);
         int caseBorrowerTypeId = 0;
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        if(workCase != null){
-            if(workCase.getBorrowerType() != null){
-                caseBorrowerTypeId = workCase.getBorrowerType().getId();
+
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if(basicInfo != null){
+            if(basicInfo.getBorrowerType() != null){
+                caseBorrowerTypeId = basicInfo.getBorrowerType().getId();
             }
         }
         return caseBorrowerTypeId;

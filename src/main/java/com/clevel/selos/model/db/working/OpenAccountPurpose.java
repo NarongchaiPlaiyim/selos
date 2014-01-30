@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.AccountPurpose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,18 +9,19 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "wrk_open_account_purpose")
-public class OpenAccPurpose implements Serializable {
+public class OpenAccountPurpose implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_PUR_ID", sequenceName = "SEQ_WRK_OPEN_ACC_PUR_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_PUR_ID")
     private long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 
-    @Column(name = "purpose_name")
-    private String purposeName;
+    @OneToOne
+    @JoinColumn(name = "account_purpose_id")
+    private AccountPurpose AccountPurpose;
 
     public long getId() {
         return id;
@@ -37,20 +39,20 @@ public class OpenAccPurpose implements Serializable {
         this.openAccount = openAccount;
     }
 
-    public String getPurposeName() {
-        return purposeName;
+    public AccountPurpose getAccountPurpose() {
+        return AccountPurpose;
     }
 
-    public void setPurposeName(String purposeName) {
-        this.purposeName = purposeName;
+    public void setAccountPurpose(AccountPurpose accountPurpose) {
+        AccountPurpose = accountPurpose;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("openAccount", openAccount).
-                append("purposeName", purposeName).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("openAccount", openAccount)
+                .append("AccountPurpose", AccountPurpose)
+                .toString();
     }
 }
