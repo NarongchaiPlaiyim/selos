@@ -197,27 +197,35 @@ public class Qualitative implements Serializable {
     public void onSaveQualitativeA() {
         log.info(" onSaveQualitativeA :::");
         log.info("modeForButton :: {} ", modeForButton);
-
-        try {
-            onSetQualityToSave();
-            qualitativeControl.saveQualitativeA(qualitativeView, workCaseId);
-            modeForButton = ModeForButton.EDIT;
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.qualitativeA.response.save.success");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-
-            if (ex.getCause() != null) {
-                message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + ex.getCause().toString();
-            } else {
-                message = msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
+        boolean validate = false;
+        if (requiredReason) {
+            if(qualitativeView.getQualityLevel().getId() != 0){
+                validate = true;
             }
-            messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
 
+        if(validate){
+            try {
+                onSetQualityToSave();
+                qualitativeControl.saveQualitativeA(qualitativeView, workCaseId);
+                modeForButton = ModeForButton.EDIT;
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.qualitativeA.response.save.success");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                onCreation();
+            } catch (Exception ex) {
+                log.error("Exception : {}", ex);
+                messageHeader = msg.get("app.header.save.failed");
+
+                if (ex.getCause() != null) {
+                    message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + ex.getCause().toString();
+                } else {
+                    message = msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
+                }
+                messageErr = true;
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+            }
         }
     }
 
@@ -228,7 +236,7 @@ public class Qualitative implements Serializable {
     }
 
     public void onSaveQualitativeB() {
-        log.info(" onSaveQualitativeB :::");
+        log.info("onSaveQualitativeB :::");
         log.info("modeForButton :: {} ", modeForButton);
         boolean validate = false;
         if (requiredReason) {

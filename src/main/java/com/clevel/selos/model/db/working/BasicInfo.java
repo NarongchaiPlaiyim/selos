@@ -152,7 +152,7 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @Column(name = "retrieved_flag")
+    @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
     private int retrievedFlag;
 
     public long getId() {

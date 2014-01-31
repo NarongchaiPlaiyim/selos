@@ -86,6 +86,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     CustomerDAO customerDAO;
     @Inject
+    CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
     IndividualDAO individualDAO;
     @Inject
     JuristicDAO juristicDAO;
@@ -833,6 +835,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
 
             customerDAO.delete(customer);
+            if(customer.getCustomerOblInfo() != null){
+                customerOblInfoDAO.delete(customer.getCustomerOblInfo());
+            }
         }
 
         //Add all Customer from customer list
@@ -841,6 +846,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
             customer.setIsSpouse(0);
             customer.setSpouseId(0);
+            if(customer.getCustomerOblInfo() != null){
+                customerOblInfoDAO.persist(customer.getCustomerOblInfo());
+            }
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
@@ -861,6 +869,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
                     spouse.setIsSpouse(1);
                     spouse.setSpouseId(0);
+                    customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
                     customerDAO.persist(spouse);
                     customer.setSpouseId(spouse.getId());
                     customerDAO.persist(customer);
