@@ -39,7 +39,8 @@ public class NCBInfoView implements Serializable {
     private String remark;
     private TDRCondition tdrCondition;
     private String ncbCusName;
-    private String ncbCusAddress;
+    private AddressView ncbCusAddress;
+    private String ncbFlag;
 
     private boolean active;
     private Date createDate;
@@ -80,8 +81,9 @@ public class NCBInfoView implements Serializable {
         this.remark = "";
         this.tdrCondition = new TDRCondition();
         this.ncbCusName = "";
-        this.ncbCusAddress = "";
+        this.ncbCusAddress = new AddressView();
         this.ncbDetailView = new NCBDetailView();
+        this.ncbFlag = "";
     }
 
     public long getId() {
@@ -301,11 +303,11 @@ public class NCBInfoView implements Serializable {
         this.ncbCusName = ncbCusName;
     }
 
-    public String getNcbCusAddress() {
+    public AddressView getNcbCusAddress() {
         return ncbCusAddress;
     }
 
-    public void setNcbCusAddress(String ncbCusAddress) {
+    public void setNcbCusAddress(AddressView ncbCusAddress) {
         this.ncbCusAddress = ncbCusAddress;
     }
 
@@ -437,10 +439,19 @@ public class NCBInfoView implements Serializable {
         this.loanAccountTypeView = loanAccountTypeView;
     }
 
+    public String getNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(String ncbFlag) {
+        this.ncbFlag = ncbFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("customerId", customerId)
                 .append("ncbCusMarriageStatus", ncbCusMarriageStatus)
                 .append("checkingDate", checkingDate)
                 .append("ncbLastInfoAsOfDate", ncbLastInfoAsOfDate)
@@ -468,15 +479,17 @@ public class NCBInfoView implements Serializable {
                 .append("tdrOtherYear", tdrOtherYear)
                 .append("remark", remark)
                 .append("tdrCondition", tdrCondition)
-                //.append("customer", customer)
                 .append("ncbCusName", ncbCusName)
                 .append("ncbCusAddress", ncbCusAddress)
+                .append("ncbFlag", ncbFlag)
                 .append("active", active)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("ncbDetailView", ncbDetailView)
+                .append("customerInfoView", customerInfoView)
+                .append("loanAccountTypeView", loanAccountTypeView)
                 .toString();
     }
 }

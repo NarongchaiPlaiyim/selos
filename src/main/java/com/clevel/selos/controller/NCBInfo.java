@@ -129,6 +129,9 @@ public class NCBInfo implements Serializable {
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
+                if(ncbDetailViewList.size()>0){
+                    ncbInfoView.setNcbFlag("Y");
+                }
                 toControlNplFlagRendered();
                 toControlTdrFlagRendered();
             }
