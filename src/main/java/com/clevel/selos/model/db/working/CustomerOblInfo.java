@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="wrk_customer_obl_info")
-public class CustomerOblInfo implements Serializable {
+public class CustomerOblInfo implements Serializable{
     @Id
     @SequenceGenerator(name="SEQ_WRK_CUS_OBL_ID", sequenceName="SEQ_WRK_CUS_OBL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUS_OBL_ID")
