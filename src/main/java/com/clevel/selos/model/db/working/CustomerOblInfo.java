@@ -4,12 +4,13 @@ import com.clevel.selos.model.db.master.SBFScore;
 import com.clevel.selos.model.db.master.ServiceSegment;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name="wrk_customer_obl_info")
-public class CustomerOblInfo {
+public class CustomerOblInfo implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_CUS_OBL_ID", sequenceName="SEQ_WRK_CUS_OBL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUS_OBL_ID")
