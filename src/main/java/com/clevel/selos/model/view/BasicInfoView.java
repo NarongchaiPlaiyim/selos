@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -45,7 +46,7 @@ public class BasicInfoView implements Serializable {
     private String refId;
     private List<OpenAccountView> openAccountViews;
     private int applyBA;
-    private BAPaymentMethod baPaymentMethod;
+    private BAPaymentMethodValue baPaymentMethodValue;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -66,7 +67,6 @@ public class BasicInfoView implements Serializable {
         this.sbfScoreView = new SBFScoreView();
         this.loanRequestPattern = new BorrowingType();
         this.openAccountViews = new ArrayList<OpenAccountView>();
-        this.baPaymentMethod = new BAPaymentMethod();
         this.deleteTmpList = new ArrayList<Long>();
     }
 
@@ -350,12 +350,12 @@ public class BasicInfoView implements Serializable {
         this.applyBA = applyBA;
     }
 
-    public BAPaymentMethod getBaPaymentMethod() {
-        return baPaymentMethod;
+    public BAPaymentMethodValue getBaPaymentMethodValue() {
+        return baPaymentMethodValue;
     }
 
-    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
-        this.baPaymentMethod = baPaymentMethod;
+    public void setBaPaymentMethodValue(BAPaymentMethodValue baPaymentMethodValue) {
+        this.baPaymentMethodValue = baPaymentMethodValue;
     }
 
     public Date getCreateDate() {
@@ -436,7 +436,7 @@ public class BasicInfoView implements Serializable {
                 append("refId", refId).
                 append("openAccountViews", openAccountViews).
                 append("applyBA", applyBA).
-                append("baPaymentMethod", baPaymentMethod).
+                append("baPaymentMethodValue", baPaymentMethodValue).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).

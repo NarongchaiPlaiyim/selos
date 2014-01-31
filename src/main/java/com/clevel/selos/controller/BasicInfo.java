@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -70,8 +71,6 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
     @Inject
-    private BAPaymentMethodDAO baPaymentMethodDAO;
-    @Inject
     private CustomerDAO customerDAO;
 
     @Inject
@@ -101,7 +100,6 @@ public class BasicInfo extends MandatoryFieldsControl {
     private List<BankAccountPurposeView> bankAccountPurposeViewList;
 
     private List<BorrowingType> borrowingTypeList;
-    private List<BAPaymentMethod> baPaymentMethodList;
 
     private List<String> yearList;
 
@@ -259,11 +257,11 @@ public class BasicInfo extends MandatoryFieldsControl {
 
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
 
-        baPaymentMethodList = baPaymentMethodDAO.findAll();
-
-        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
-        }
+//        baPaymentMethodList = baPaymentMethodDAO.findAll();
+//
+//        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+//            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
+//        }
 
         basicInfoView.setSpProgram(0);
         basicInfoView.setRefIn(0);
@@ -592,13 +590,9 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
 
         if(basicInfoView.getApplyBA() == 1 || basicInfoView.getApplyBA() == 0){
-            basicInfoView.getBaPaymentMethod().setId(0);
+            basicInfoView.setBaPaymentMethodValue(null);
         }else{
-            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
-            }else{
-                basicInfoView.getBaPaymentMethod().setId(0);
-            }
+            basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.TOPUP);
         }
 
         if(basicInfoView.getApplyBA() == 2){ // yes
@@ -1026,14 +1020,6 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
-    }
-
-    public List<BAPaymentMethod> getBaPaymentMethodList() {
-        return baPaymentMethodList;
-    }
-
-    public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
-        this.baPaymentMethodList = baPaymentMethodList;
     }
 
     public String getMessage() {
