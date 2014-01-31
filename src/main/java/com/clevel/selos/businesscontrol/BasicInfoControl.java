@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.BAPaymentMethodDAO;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.master.ProductGroupDAO;
 import com.clevel.selos.dao.master.RequestTypeDAO;
@@ -49,7 +50,8 @@ public class BasicInfoControl extends BusinessControl {
     ProductGroupDAO productGroupDAO;
     @Inject
     RequestTypeDAO requestTypeDAO;
-
+    @Inject
+    BAPAInfoDAO bapaInfoDAO;
 
     @Inject
     BasicInfoTransform basicInfoTransform;
@@ -228,6 +230,19 @@ public class BasicInfoControl extends BusinessControl {
 
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
+
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
+        if(bapaInfo == null) {
+            bapaInfo = new BAPAInfo();
+        }
+        bapaInfo.setApplyBA(basicInfoView.getApplyBA());
+        if(basicInfoView.getApplyBA() != 2){
+            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod().getId());
+        } else {
+            bapaInfo.setBaPaymentMethod(0);
+        }
+        bapaInfo.setWorkCase(workCase);
+        bapaInfoDAO.persist(bapaInfo);
 
         basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
         basicInfo.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));

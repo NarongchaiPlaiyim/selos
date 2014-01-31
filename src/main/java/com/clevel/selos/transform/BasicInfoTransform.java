@@ -1,7 +1,10 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.BAPaymentMethodDAO;
+import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
@@ -18,6 +21,10 @@ public class BasicInfoTransform extends Transform {
     OpenAccountTransform getOpenAccountTransform;
     @Inject
     BasicInfoDAO basicInfoDAO;
+    @Inject
+    BAPAInfoDAO bapaInfoDAO;
+    @Inject
+    BAPaymentMethodDAO baPaymentMethodDAO;
 
     @Inject
     public BasicInfoTransform() {
@@ -94,12 +101,6 @@ public class BasicInfoTransform extends Transform {
 
         basicInfo.setReferralName(basicInfoView.getRefName());
         basicInfo.setReferralID(basicInfoView.getRefId());
-
-        basicInfo.setApplyBA(basicInfoView.getApplyBA());
-        basicInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod());
-        if(basicInfo.getBaPaymentMethod().getId() == 0){
-            basicInfo.setBaPaymentMethod(null);
-        }
 
         return basicInfo;
     }
@@ -179,10 +180,18 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setRefName(basicInfo.getReferralName());
         basicInfoView.setRefId(basicInfo.getReferralID());
 
-        basicInfoView.setApplyBA(basicInfo.getApplyBA());
-        basicInfoView.setBaPaymentMethod(basicInfo.getBaPaymentMethod());
-        if(basicInfoView.getBaPaymentMethod() == null){
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
+        if (bapaInfo == null){
+            basicInfoView.setApplyBA(0);
             basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+        } else {
+            basicInfoView.setApplyBA(bapaInfo.getApplyBA());
+            if(bapaInfo.getId() != 0){
+                BAPaymentMethod baPaymentMethod = baPaymentMethodDAO.findById(bapaInfo.getBaPaymentMethod());
+                basicInfoView.setBaPaymentMethod(baPaymentMethod);
+            } else {
+                basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+            }
         }
 
         basicInfoView.setCreateDate(basicInfo.getCreateDate());
