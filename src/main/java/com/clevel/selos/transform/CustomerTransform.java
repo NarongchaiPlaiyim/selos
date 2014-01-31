@@ -11,6 +11,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -798,7 +799,7 @@ public class CustomerTransform extends Transform {
         customer.setAgeMonths(customerInfoView.getAgeMonths());
 
         //set for Customer Obligation Info
-        if(customerInfoView.getTmbCustomerId() != null){
+        if(customerInfoView.getTmbCustomerId() != null && !Util.isEmpty(customerInfoView.getTmbCustomerId())){
             CustomerOblInfo customerOblInfo = null;
             if(customerInfoView.getCustomerOblInfoID() != 0) {
                 try{
@@ -825,6 +826,8 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
+        } else {
+            customer.setCustomerOblInfo(null);
         }
 
         return customer;

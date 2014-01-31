@@ -45,7 +45,7 @@
                         <p:inputText value="#{prescreenMaker.facility.requestAmount}"
                                      required="#{not empty param[addFacilityButton.clientId]}"
                                      maxlength="10" styleClass="large right"
-                                     onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
                                              integerOnly="true" maxIntegerDigits="10"/>
