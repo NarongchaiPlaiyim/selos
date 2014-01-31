@@ -64,7 +64,6 @@ public class NCBTransform extends Transform {
         ncb.setNcbCusName(ncbInfoView.getNcbCusName());
         ncb.setEnquiry(ncbInfoView.getEnquiry());
         ncb.setNcbCusMarriageStatus(ncbInfoView.getNcbCusMarriageStatus());
-        ncb.setNcbCusAddress(ncbInfoView.getNcbCusAddress().toString());
 
         if (ncbInfoView.getTdrCondition() != null && ncbInfoView.getTdrCondition().getId() != 0) {
             ncb.setTdrCondition(ncbInfoView.getTdrCondition());
