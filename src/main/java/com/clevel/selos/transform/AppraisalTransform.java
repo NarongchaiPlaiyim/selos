@@ -1,18 +1,21 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.AppraisalDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AppraisalView;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
 
 public class AppraisalTransform extends Transform {
     @Inject
-    private NewCollateralTransform collateralDetailTransform;
+    @SELOS
+    Logger log;
     @Inject
     private AppraisalDAO appraisalDAO;
     private AppraisalView appraisalView;
@@ -24,9 +27,11 @@ public class AppraisalTransform extends Transform {
     }
 
     public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final User user){
+        log.debug("-- transform AppraisalView to Appraisal");
         appraisal = new Appraisal();
-        if(appraisalView.getId()!=0){
-            appraisal = appraisalDAO.findById(appraisalView.getId());
+        long id = appraisalView.getId();
+        if(id != 0){
+            appraisal = appraisalDAO.findById(id);
         }else{
             appraisal.setWorkCase(workCase);
             appraisal.setCreateBy(user);
@@ -55,6 +60,7 @@ public class AppraisalTransform extends Transform {
     }
 
     public AppraisalView transformToView(Appraisal appraisal){
+        log.debug("-- transform Appraisal to AppraisalView");
         appraisalView = new AppraisalView();
 
         appraisalView.setId(appraisal.getId());

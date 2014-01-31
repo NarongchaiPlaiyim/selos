@@ -164,60 +164,12 @@ public class AppraisalResult implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
         log.debug("-- User : {}", ""+user.toString());
-
         workCaseId = 4L;
         log.info("-- workCaseId :: {} ",workCaseId);
 
-        if(workCaseId != 0 ){
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId);
-            if(appraisalView != null){
-                newCollateralViewList = appraisalView.getNewCollateralViewList();
-                if(newCollateralViewList != null){
-                    for(NewCollateralView collateralView : newCollateralViewList){
-                        newCollateralHeadViewList = collateralView.getNewCollateralHeadViewList();
-                        if(newCollateralHeadViewList != null){
-                            for(NewCollateralHeadView collateralHeadView : newCollateralHeadViewList){
-                                newCollateralSubViewList = collateralHeadView.getNewCollateralSubViewList();
-                                if(newCollateralSubViewList == null){
-                                    newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-                                }
-                            }
-                        } else {
-                            newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-                        }
-                        newCollateralViewList.add(collateralView);
-                    }
-                } else {;
-                    newCollateralViewList = new ArrayList<NewCollateralView>();
-                }
-                data();
-            } else {
-                log.debug("-- appraisalView is null");
-
-//                try {
-//                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//                    ec.redirect(ec.getRequestContextPath() + "/site/appraisalRequest.jsf");
-//                    return;
-//                } catch (Exception ex) {
-//                    log.info("Exception :: {}", ex);
-//                }
-
-                appraisalCompany = new AppraisalCompany();
-                appraisalDivision = new AppraisalDivision();
-                locationProperty = new LocationProperty();
-                province = new Province();
-
-                appraisalView = new AppraisalView();
-                appraisalView.setAppraisalCompany(appraisalCompany);
-                appraisalView.setAppraisalDivision(appraisalDivision);
-                appraisalView.setLocationOfProperty(locationProperty);
-                appraisalView.setProvinceOfProperty(province);
-                showNoRequest = true;
-
-                log.info("Click Button .show");
-                RequestContext.getCurrentInstance().execute("btnShowNoRequest.click()");
-                log.info("msgBoxNoRequestMessageDlg.show");
-            }
+        if(workCaseId != 0){
+            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+            newCollateralViewList = appraisalView.getNewCollateralViewList();
         } else {
             log.debug("-- WorkCaseId not found.");
         }
@@ -341,13 +293,17 @@ public class AppraisalResult implements Serializable {
         String jobIDSearch = newCollateralView.getJobIDSearch();
         log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobIDSearch);
         boolean flag = true;
+        messageHeader = "Information";
+        message = "Duplicate Job ID";
         try{
             if(ModeForButton.ADD.equals(modeForButton)){
                 flag = checkJobIdExist(newCollateralViewList, jobIDSearch);
                 if(flag){
-                    newCollateralView = callCOM_S(jobIDSearch);
+                    //todo : call interface COM_S
+                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
                 } else {
-                    log.debug("-- Job id is exist");
+                    log.debug("-- {}", message);
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
                 newCollateralView = callCOM_S(jobIDSearch);
@@ -371,7 +327,7 @@ public class AppraisalResult implements Serializable {
         AppraisalDataResult appraisalDataResult;
         appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
         if(appraisalDataResult != null && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
-            log.debug("-- call com-s is succeed");
+            log.debug("-- succeed");
             newCollateralView = collateralBizTransform.transformCollteral(appraisalDataResult);
             return newCollateralView;
         } else {
@@ -418,26 +374,6 @@ public class AppraisalResult implements Serializable {
         modeForButton = ModeForButton.EDIT;
         newCollateralView = selectCollateralDetailView;
         flagReadOnly = true;
-
-
-//        selectCollateralDetailView
-//        //*** Check list size ***//
-//        rowCollateral =  selectCollateralDetailView.getNo();
-//        log.info( "onEditCollateralDetailView rowCollateral " + rowCollateral);
-//        if( rowIndex < collateralDetailViewList.size() ) {
-//
-//            collateralDetailView.setJobID(selectCollateralDetailView.getJobID());
-//            collateralDetailView.setAppraisalDate(selectCollateralDetailView.getAppraisalDate());
-//            collateralDetailView.setAADDecision(selectCollateralDetailView.getAADDecision());
-//            collateralDetailView.setAADDecisionReason(selectCollateralDetailView.getAADDecisionReason());
-//            collateralDetailView.setAADDecisionReasonDetail(selectCollateralDetailView.getAADDecisionReasonDetail());
-//            collateralDetailView.setUsage(selectCollateralDetailView.getUsage());
-//            collateralDetailView.setTypeOfUsage(selectCollateralDetailView.getTypeOfUsage());
-//            collateralDetailView.setMortgageCondition(selectCollateralDetailView.getMortgageCondition());
-//            collateralDetailView.setMortgageConditionDetail(selectCollateralDetailView.getMortgageConditionDetail());
-//
-//            collateralDetailView.setCollateralHeaderDetailViewList(selectCollateralDetailView.getCollateralHeaderDetailViewList());
-//        }
     }
     public void onDeleteCollateralDetailView(){
         newCollateralViewList.remove(selectCollateralDetailView);
@@ -453,19 +389,12 @@ public class AppraisalResult implements Serializable {
     }
     public void onSaveAppraisalResult() {
         log.info("-- onSaveAppraisalResult");
-//        log.info("collateralDetailViewList.size()        ::: {} ", collateralDetailViewList.size());
         try{
-            if(appraisalView.getId() == 0){
-                appraisalView.setCreateBy(user);
-                appraisalView.setCreateDate(DateTime.now().toDate());
-            }
-            appraisalView.setModifyBy(user);
-//            appraisalView.setCollateralDetailViewList(collateralDetailViewList);
-
-            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId);
+            appraisalView.setNewCollateralViewList(newCollateralViewList);
+            appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, user);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.message.body.save.success");
-            onCreation();
+//            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);

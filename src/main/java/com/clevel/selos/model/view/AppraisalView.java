@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +42,23 @@ public class AppraisalView implements Serializable {
     private User modifyBy;
 
     public AppraisalView(){
+        init();
+    }
 
+    public void reset(){
+        init();
+    }
+
+    private void init(){
+        appraisalCompany = new AppraisalCompany();
+        appraisalDivision = new AppraisalDivision();
+        locationOfProperty = new LocationProperty();
+        provinceOfProperty = new Province();
+        workCase = new WorkCase();
+        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
+        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
     }
 
     public long getId() {

@@ -111,8 +111,6 @@ public class AppraisalRequestControl extends BusinessControl {
         appraisalDetailDAO.persist(appraisalDetailList);
         log.info( "appraisalDetailDAO persist end" );
 
-
-
         if(appraisalContactDetailViewList.size()>0){
             List<AppraisalContactDetail>   appraisalContactDetailListDel = appraisalContactDetailDAO.findByAppraisal(appraisal);
             appraisalContactDetailDAO.delete(appraisalContactDetailListDel);

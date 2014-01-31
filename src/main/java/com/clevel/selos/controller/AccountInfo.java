@@ -254,10 +254,10 @@ public class AccountInfo implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             messageHeader = "Save Account Info Failed.";
-            if(ex.getCause() != null){
+            if(ex.getCause() != null){     // Retrieve Appra
                 message = "Save Account Info data failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+                message = "Save Account Info data failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             onCreation();
