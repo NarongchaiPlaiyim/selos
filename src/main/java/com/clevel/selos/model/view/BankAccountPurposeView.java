@@ -6,11 +6,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class BasicInfoAccountPurposeView implements Serializable {
+public class BankAccountPurposeView implements Serializable {
     private boolean isSelected;
     private BankAccountPurpose purpose;
 
-    public BasicInfoAccountPurposeView() {
+    public BankAccountPurposeView() {
         reset();
     }
 

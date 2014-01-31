@@ -519,6 +519,12 @@ function handleAssignCheckerDialogRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitZMDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitZMDlg.hide();
+    }
+}
+
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDialog.hide();

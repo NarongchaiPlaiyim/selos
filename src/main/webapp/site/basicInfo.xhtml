@@ -527,27 +527,35 @@
 
                                             <tr>
                                                 <td>
-                                                    <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
+                                                    <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.openAccountViews}"
                                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
                                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 250px; max-width: 250px; min-width: 250px;">
-                                                            <h:outputText value="#{item.accountName}" style="width: 250px; max-width: 250px; min-width: 250px;"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}"
+                                                                  style="width: 250px; max-width: 250px; min-width: 250px;">
+                                                            <h:outputText value="#{item.accountName}"
+                                                                          style="width: 250px; max-width: 250px; min-width: 250px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 180px;">
-                                                            <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;">
+                                                            <h:outputText value="#{item.bankAccountTypeView.name}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 180px;">
-                                                            <h:outputText value="#{item.bankAccountProduct.name}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;">
+                                                            <h:outputText value="#{item.bankAccountProduct.name}"
+                                                                          style="width: 180px; max-width: 180px; min-width: 180px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 300px;">
-                                                            <h:outputText value="#{item.purposeForShow}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}"
+                                                                  style="width: 300px; max-width: 300px; min-width: 300px;">
+                                                            <h:outputText value="#{item.purposeForShow}"
+                                                                          style="width: 300px; max-width: 300px; min-width: 300px;"/>
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
