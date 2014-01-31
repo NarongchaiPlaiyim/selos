@@ -572,7 +572,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         //enquirydatefrom must be default value 19000101
-                        new CriteriaModel("19000101"/*Util.createDateString(new Date(), "yyyyMMdd")*/, id, nccrsModel.getRegistId(), memberRef)));
+                        new CriteriaModel(/*Util.createDateString(new Date(), "yyyyMMdd")*/id, nccrsModel.getRegistId(), memberRef)));
 
     }
 
