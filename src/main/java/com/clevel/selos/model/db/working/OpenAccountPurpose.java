@@ -20,7 +20,7 @@ public class OpenAccountPurpose implements Serializable {
     private OpenAccount openAccount;
 
     @OneToOne
-    @JoinColumn(name = "account_purpose_id")
+    @JoinColumn(name = "bank_account_purpose_id")
     private BankAccountPurpose AccountPurpose;
 
     public long getId() {

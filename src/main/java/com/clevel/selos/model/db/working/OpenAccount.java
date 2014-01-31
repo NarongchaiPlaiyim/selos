@@ -37,7 +37,7 @@ public class OpenAccount implements Serializable {
     private BankAccountType bankAccountType;
 
     @OneToOne
-    @JoinColumn(name = "open_account_product_id")
+    @JoinColumn(name = "bank_account_product_id")
     private BankAccountProduct bankAccountProduct;
 
     @Column(name = "term")
