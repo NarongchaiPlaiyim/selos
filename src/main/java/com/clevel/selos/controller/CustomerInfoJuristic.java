@@ -312,7 +312,7 @@ public class CustomerInfoJuristic implements Serializable {
             isEditBorrower = true;
             relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }
     }
 
