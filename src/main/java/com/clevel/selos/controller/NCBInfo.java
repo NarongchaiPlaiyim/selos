@@ -192,6 +192,7 @@ public class NCBInfo implements Serializable {
 
         accountStatusList = accountStatusDAO.findAll();
 //      accountTypeList = accountTypeDAO.findAll();
+        tdrConditionList = tdrConditionDAO.findAll();
 
         if(customerInfoView != null){
             log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
@@ -203,7 +204,6 @@ public class NCBInfo implements Serializable {
             log.info("settlementStatusList :: {}",settlementStatusList.size());
         }
 
-        tdrConditionList = tdrConditionDAO.findAll();
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 
     }

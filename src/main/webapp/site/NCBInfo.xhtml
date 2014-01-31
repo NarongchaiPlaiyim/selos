@@ -121,7 +121,7 @@
                     <table>
                         <tr>
                             <td>
-                                <p:selectOneRadio id="NPLFlag"
+                                <h:selectOneRadio id="NPLFlag"
                                                   value="#{ncbInfo.ncbInfoView.nplFlag}"
                                                   disabled="true">
                                     <f:selectItem itemLabel="Yes" itemValue="2"/>
@@ -130,11 +130,11 @@
                                             listener="#{ncbInfo.toControlNplFlagRendered()}"
                                             process=":frmMain:NPLFlag"
                                             update=":frmMain"/>
-                                </p:selectOneRadio>
+                                </h:selectOneRadio>
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
                                                          rendered="#{ncbInfo.nplRendered}"
                                                          disabled="true"/>
                             </td>
@@ -165,7 +165,7 @@
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
                                                          rendered="#{ncbInfo.nplRendered}"
                                                          disabled="true"/>
                             </td>
@@ -216,7 +216,7 @@
                     <table>
                         <tr>
                             <td>
-                                <p:selectOneRadio id="tdrFlag"
+                                <h:selectOneRadio id="tdrFlag"
                                                   value="#{ncbInfo.ncbInfoView.tdrFlag}"
                                                   disabled="true">
                                     <f:selectItem itemLabel="Yes" itemValue="2"/>
@@ -225,11 +225,11 @@
                                             listener="#{ncbInfo.toControlTdrFlagRendered()}"
                                             process=":frmMain:tdrFlag"
                                             update=":frmMain"/>
-                                </p:selectOneRadio>
+                                </h:selectOneRadio>
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
                                                          rendered="#{ncbInfo.tdrRendered}"
                                                          disabled="true"/>
                             </td>
@@ -260,7 +260,7 @@
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
                                                          rendered="#{ncbInfo.tdrRendered}"
                                                          disabled="true"/>
                             </td>
