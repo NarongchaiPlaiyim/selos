@@ -142,7 +142,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                     if (newCollateralDetailList.size() > 0) {
                         log.info("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
-                        List<NewCollateralView> newCollateralViewList = newCollateralTransform.transformsCollateralToView(newCollateralDetailList);
+                        List<NewCollateralView> newCollateralViewList = null;//newCollateralTransform.transformToModel(newCollateralDetailList, user);
                         newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
@@ -213,7 +213,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         if (newCreditFacilityView.getNewCollateralViewList() != null) {
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user);
+            List<NewCollateral> newCollateralList = null;//newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user);
             newCollateralDetailDAO.persist(newCollateralList);
             log.info("persist newCollateralDetailList...");
 //            onDeleteDetailOfNewCollateral(newCollateralList);
@@ -228,12 +228,12 @@ public class CreditFacProposeControl extends BusinessControl {
                 log.info("persist newCollateralCreditList...");
 
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
-                    NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
+                    NewCollateralHead newCollateralHeadDetail = null;//newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
                     newCollateralHeadDetailDAO.persist(newCollateralHeadDetail);
                     log.info("persist newCollateralHeadDetail...{}", newCollateralHeadDetail.getId());
 
                     for (NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()) {
-                        NewCollateralSub newCollateralSubDetail = newCollateralTransform.transformCollateralSubToModel(newCollateralSubView, newCollateralHeadDetail, user);
+                        NewCollateralSub newCollateralSubDetail = null;//newCollateralTransform.transformCollateralSubToModel(newCollateralSubView, newCollateralHeadDetail, user);
                         newCollateralSubDetailDAO.persist(newCollateralSubDetail);
                         log.info("persist newCollateralSubDetail...{}", newCollateralSubDetail.getId());
                         onDeleteDetailOfNewCollateralSub(newCollateralSubDetail);
