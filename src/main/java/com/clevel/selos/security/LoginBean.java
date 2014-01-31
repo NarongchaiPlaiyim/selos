@@ -112,11 +112,6 @@ public class LoginBean {
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
-
-        log.info("userDAO.findById user.getUserName + " + user.getUserName());
-        log.info("userDAO.findById user.getRole().getSystemName() + " + user.getRole().getSystemName());
-        log.info("userDAO.findById user.getRole().getRoleType().getRoleTypeName().name()+ " + user.getRole().getRoleType().getRoleTypeName().name());
-
         UserDetail userDetail = null;
         if (Util.isTrue(encryptionEnable)) {
             password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));

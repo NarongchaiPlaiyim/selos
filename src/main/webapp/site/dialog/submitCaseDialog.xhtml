@@ -18,17 +18,17 @@
                                      value="#{baseController.zmUserId}"
                                      required="#{not empty param[btnSubmitCaseZM.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{baseController.abdmUserList}"
-                                       var="abdmItem"
-                                       itemLabel="#{abdmItem.id} - #{abdmItem.userName}"
-                                       itemValue="#{abdmItem.id}"/>
+                        <f:selectItems value="#{baseController.zmUserList}"
+                                       var="zmItem"
+                                       itemLabel="#{zmItem.id} - #{zmItem.userName}"
+                                       itemValue="#{zmItem.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title left">Remark :</td>
                 <td>
-                    <p:inputTextarea value="#{baseController.assignRemark}"
+                    <p:inputTextarea value="#{baseController.zmEndorseRemark}"
                                      autoResize="false"
                                      cols="35"
                                      rows="5">
