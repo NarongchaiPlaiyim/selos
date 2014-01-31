@@ -1,24 +1,28 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.BAPaymentMethodDAO;
+import com.clevel.selos.dao.master.CustomerEntityDAO;
+import com.clevel.selos.dao.master.ProductGroupDAO;
+import com.clevel.selos.dao.master.RequestTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.BAPaymentMethod;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.SBFScore;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.BasicInfoAccPurposeTransform;
-import com.clevel.selos.transform.BasicInfoAccountTransform;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.transform.BasicInfoTransform;
+import com.clevel.selos.transform.OpenAccountTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +41,8 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     OpenAccountDAO openAccountDAO;
     @Inject
+    OpenAccountNameDAO openAccountNameDAO;
+    @Inject
     OpenAccountPurposeDAO openAccPurposeDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
@@ -44,14 +50,13 @@ public class BasicInfoControl extends BusinessControl {
     ProductGroupDAO productGroupDAO;
     @Inject
     RequestTypeDAO requestTypeDAO;
-
+    @Inject
+    BAPAInfoDAO bapaInfoDAO;
 
     @Inject
     BasicInfoTransform basicInfoTransform;
     @Inject
-    BasicInfoAccountTransform basicInfoAccountTransform;
-    @Inject
-    BasicInfoAccPurposeTransform basicInfoAccPurposeTransform;
+    OpenAccountTransform openAccountTransform;
     @Inject
     CustomerInfoControl customerInfoControl;
 
@@ -73,6 +78,10 @@ public class BasicInfoControl extends BusinessControl {
         }
 
         BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo, workCase);
+        List<OpenAccount> openAccountList = openAccountDAO.findByWorkCaseId(workCaseId);
+        List<OpenAccountView> openAccountViewList = openAccountTransform.transformToViewList(openAccountList);
+        basicInfoView.setOpenAccountViews(openAccountViewList);
+
         log.info("getBasicInfo ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;
     }
@@ -222,31 +231,70 @@ public class BasicInfoControl extends BusinessControl {
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
 
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
+        if(bapaInfo == null) {
+            bapaInfo = new BAPAInfo();
+        }
+        bapaInfo.setApplyBA(basicInfoView.getApplyBA());
+        if(basicInfoView.getApplyBA() != 2){
+            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod().getId());
+        } else {
+            bapaInfo.setBaPaymentMethod(0);
+        }
+        bapaInfo.setWorkCase(workCase);
+        bapaInfoDAO.persist(bapaInfo);
+
         basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
         basicInfo.setRequestType(requestTypeDAO.findById(basicInfoView.getRequestType().getId()));
         workCaseDAO.persist(workCase);
 
-        List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
-        for (OpenAccount oa : openAccountList) {
-            List<OpenAccountPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
-            openAccPurposeDAO.delete(openAccPurposeList);
-        }
-        openAccountDAO.delete(openAccountList);
+        //for new Open Account
+        //delete
+        for (Long openAccountId : basicInfoView.getDeleteTmpList()){
+            if(openAccountId != 0){
+                System.out.println("Delete Item ( openAccountId ) : "+openAccountId);
+                OpenAccount openAccount = openAccountDAO.findById(openAccountId);
 
-        if (basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0) {
-            for (BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()) {
-//                System.out.println("BasicInfoAccountView [ ID ] : "+ biav.getId() +" [ Account Name ] : " +biav.getAccountName());
-                OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav, basicInfo);
-                openAccountDAO.save(openAccount);
+                List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);
+                openAccountNameDAO.delete(openAccountNameList);
 
-                for (BasicInfoAccountPurposeView biapv : biav.getBasicInfoAccountPurposeView()) {
-                    if (biapv.isSelected()) {
-                        OpenAccountPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv, openAccount);
-                        openAccPurposeDAO.save(openAccPurpose);
-                    }
-                }
+                List<OpenAccountPurpose> openAccountPurposeList = openAccPurposeDAO.findByOpenAccount(openAccount);
+                openAccPurposeDAO.delete(openAccountPurposeList);
+
+                openAccountDAO.delete(openAccount);
             }
         }
 
+        //add new
+        for (OpenAccountView bav : basicInfoView.getOpenAccountViews()) {
+            OpenAccount openAccount = openAccountTransform.transformToModel(bav,workCase);
+            //remove all open account name in open account
+            if(openAccount.getId() != 0){
+                List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);
+                openAccountNameDAO.delete(openAccountNameList);
+
+                List<OpenAccountPurpose> openAccountPurposeList = openAccPurposeDAO.findByOpenAccount(openAccount);
+                openAccPurposeDAO.delete(openAccountPurposeList);
+            }
+            openAccountDAO.persist(openAccount);
+
+            if(openAccount.getOpenAccountNameList() != null){
+                for (OpenAccountName oan : openAccount.getOpenAccountNameList()){
+                    OpenAccountName openAccountName = new OpenAccountName();
+                    openAccountName.setCustomer(oan.getCustomer());
+                    openAccountName.setOpenAccount(openAccount);
+                    openAccountNameDAO.persist(openAccountName);
+                }
+            }
+
+            if(openAccount.getOpenAccountPurposeList() != null){
+                for (OpenAccountPurpose oap : openAccount.getOpenAccountPurposeList()){
+                    OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
+                    openAccountPurpose.setAccountPurpose(oap.getAccountPurpose());
+                    openAccountPurpose.setOpenAccount(openAccount);
+                    openAccPurposeDAO.persist(openAccountPurpose);
+                }
+            }
+        }
     }
 }

@@ -8,24 +8,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicInfoAccountView implements Serializable {
+public class OpenAccountView implements Serializable {
     private long id;
     private String accountName;
     private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
-    private BankAccountProduct product;
-    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
+    private BankAccountProduct bankAccountProduct;
+    private List<BankAccountPurposeView> bankAccountPurposeView;
     private String purposeForShow;
 
-    public BasicInfoAccountView() {
+    public OpenAccountView() {
         reset();
     }
 
     public void reset() {
         this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.product = new BankAccountProduct();
-        this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
+        this.bankAccountProduct = new BankAccountProduct();
+        this.bankAccountPurposeView = new ArrayList<BankAccountPurposeView>();
     }
 
     public long getId() {
@@ -60,20 +60,20 @@ public class BasicInfoAccountView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public BankAccountProduct getProduct() {
-        return product;
+    public BankAccountProduct getBankAccountProduct() {
+        return bankAccountProduct;
     }
 
-    public void setProduct(BankAccountProduct product) {
-        this.product = product;
+    public void setBankAccountProduct(BankAccountProduct bankAccountProduct) {
+        this.bankAccountProduct = bankAccountProduct;
     }
 
-    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeView() {
-        return basicInfoAccountPurposeView;
+    public List<BankAccountPurposeView> getBankAccountPurposeView() {
+        return bankAccountPurposeView;
     }
 
-    public void setBasicInfoAccountPurposeView(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView) {
-        this.basicInfoAccountPurposeView = basicInfoAccountPurposeView;
+    public void setBankAccountPurposeView(List<BankAccountPurposeView> bankAccountPurposeView) {
+        this.bankAccountPurposeView = bankAccountPurposeView;
     }
 
     public String getPurposeForShow() {
@@ -88,10 +88,11 @@ public class BasicInfoAccountView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
+                append("accountName", accountName).
                 append("accountNameList", accountNameList).
                 append("bankAccountTypeView", bankAccountTypeView).
-                append("product", product).
-                append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).
+                append("bankAccountProduct", bankAccountProduct).
+                append("bankAccountPurposeView", bankAccountPurposeView).
                 append("purposeForShow", purposeForShow).
                 toString();
     }

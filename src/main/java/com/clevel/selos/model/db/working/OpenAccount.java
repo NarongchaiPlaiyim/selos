@@ -37,8 +37,8 @@ public class OpenAccount implements Serializable {
     private BankAccountType bankAccountType;
 
     @OneToOne
-    @JoinColumn(name = "open_account_product_id")
-    private BankAccountProduct accountProduct;
+    @JoinColumn(name = "bank_account_product_id")
+    private BankAccountProduct bankAccountProduct;
 
     @Column(name = "term")
     private String term;
@@ -109,12 +109,12 @@ public class OpenAccount implements Serializable {
         this.bankAccountType = bankAccountType;
     }
 
-    public BankAccountProduct getAccountProduct() {
-        return accountProduct;
+    public BankAccountProduct getBankAccountProduct() {
+        return bankAccountProduct;
     }
 
-    public void setAccountProduct(BankAccountProduct accountProduct) {
-        this.accountProduct = accountProduct;
+    public void setBankAccountProduct(BankAccountProduct bankAccountProduct) {
+        this.bankAccountProduct = bankAccountProduct;
     }
 
     public String getTerm() {
@@ -182,7 +182,7 @@ public class OpenAccount implements Serializable {
                 append("accountNumber", accountNumber).
                 append("bankBranch", bankBranch).
                 append("bankAccountType", bankAccountType).
-                append("accountProduct", accountProduct).
+                append("bankAccountProduct", bankAccountProduct).
                 append("term", term).
                 append("openAccountNameList", openAccountNameList).
                 append("openAccountPurposeList", openAccountPurposeList).

@@ -43,7 +43,7 @@
                             <!-- start content -->
                             <table class="content_table_form">
                                 <tr>
-                                    <td>
+                                    <td style="width: 250px; max-width: 250px; min-width: 250px;">
                                         <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
                                                          value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
@@ -54,7 +54,7 @@
                                             <p:ajax event="change" update="frmMain"/>
                                         </p:selectOneMenu>
                                     </td>
-                                    <td style="width: 950px; max-width: 950px; min-width: 950px;">
+                                    <td>
                                         <p:commandButton id="btnIndividual" value="Add" styleClass="small" process="@form"
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
                                                          action="#{custInfoSummary.onLinkToAddIndividual()}" onclick="blockUI.show()"/>

@@ -43,13 +43,14 @@ public class BasicInfoView implements Serializable {
     private BorrowingType loanRequestPattern;
     private String refName;
     private String refId;
-    private List<BasicInfoAccountView> basicInfoAccountViews;
+    private List<OpenAccountView> openAccountViews;
     private int applyBA;
     private BAPaymentMethod baPaymentMethod;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private List<Long> deleteTmpList;
 
     public BasicInfoView() {
         reset();
@@ -64,8 +65,9 @@ public class BasicInfoView implements Serializable {
         this.riskType = new RiskType();
         this.sbfScoreView = new SBFScoreView();
         this.loanRequestPattern = new BorrowingType();
-        this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
+        this.openAccountViews = new ArrayList<OpenAccountView>();
         this.baPaymentMethod = new BAPaymentMethod();
+        this.deleteTmpList = new ArrayList<Long>();
     }
 
     public long getId() {
@@ -332,12 +334,12 @@ public class BasicInfoView implements Serializable {
         this.refId = refId;
     }
 
-    public List<BasicInfoAccountView> getBasicInfoAccountViews() {
-        return basicInfoAccountViews;
+    public List<OpenAccountView> getOpenAccountViews() {
+        return openAccountViews;
     }
 
-    public void setBasicInfoAccountViews(List<BasicInfoAccountView> basicInfoAccountViews) {
-        this.basicInfoAccountViews = basicInfoAccountViews;
+    public void setOpenAccountViews(List<OpenAccountView> openAccountViews) {
+        this.openAccountViews = openAccountViews;
     }
 
     public int getApplyBA() {
@@ -388,49 +390,58 @@ public class BasicInfoView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public List<Long> getDeleteTmpList() {
+        return deleteTmpList;
+    }
+
+    public void setDeleteTmpList(List<Long> deleteTmpList) {
+        this.deleteTmpList = deleteTmpList;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("appNo", appNo)
-                .append("refAppNo", refAppNo)
-                .append("caNo", caNo)
-                .append("requestType", requestType)
-                .append("productGroup", productGroup)
-                .append("charNoUnPaid", charNoUnPaid)
-                .append("charNoPending", charNoPending)
-                .append("charFCLG", charFCLG)
-                .append("charFCIns", charFCIns)
-                .append("charFCCom", charFCCom)
-                .append("charFCAba", charFCAba)
-                .append("charFCLate", charFCLate)
-                .append("charFCFund", charFCFund)
-                .append("spProgram", spProgram)
-                .append("specialProgram", specialProgram)
-                .append("refIn", refIn)
-                .append("refinanceIn", refinanceIn)
-                .append("refOut", refOut)
-                .append("refinanceOut", refinanceOut)
-                .append("riskType", riskType)
-                .append("qualitative", qualitative)
-                .append("existingSME", existingSME)
-                .append("since", since)
-                .append("lastReviewDate", lastReviewDate)
-                .append("extReviewDate", extReviewDate)
-                .append("sbfScoreView", sbfScoreView)
-                .append("loan", loan)
-                .append("moreOneYear", moreOneYear)
-                .append("annual", annual)
-                .append("loanRequestPattern", loanRequestPattern)
-                .append("refName", refName)
-                .append("refId", refId)
-                .append("basicInfoAccountViews", basicInfoAccountViews)
-                .append("applyBA", applyBA)
-                .append("baPaymentMethod", baPaymentMethod)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("appNo", appNo).
+                append("refAppNo", refAppNo).
+                append("caNo", caNo).
+                append("requestType", requestType).
+                append("productGroup", productGroup).
+                append("charNoUnPaid", charNoUnPaid).
+                append("charNoPending", charNoPending).
+                append("charFCLG", charFCLG).
+                append("charFCIns", charFCIns).
+                append("charFCCom", charFCCom).
+                append("charFCAba", charFCAba).
+                append("charFCLate", charFCLate).
+                append("charFCFund", charFCFund).
+                append("spProgram", spProgram).
+                append("specialProgram", specialProgram).
+                append("refIn", refIn).
+                append("refinanceIn", refinanceIn).
+                append("refOut", refOut).
+                append("refinanceOut", refinanceOut).
+                append("riskType", riskType).
+                append("qualitative", qualitative).
+                append("existingSME", existingSME).
+                append("since", since).
+                append("lastReviewDate", lastReviewDate).
+                append("extReviewDate", extReviewDate).
+                append("sbfScoreView", sbfScoreView).
+                append("loan", loan).
+                append("moreOneYear", moreOneYear).
+                append("annual", annual).
+                append("loanRequestPattern", loanRequestPattern).
+                append("refName", refName).
+                append("refId", refId).
+                append("openAccountViews", openAccountViews).
+                append("applyBA", applyBA).
+                append("baPaymentMethod", baPaymentMethod).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("deleteTmpList", deleteTmpList).
+                toString();
     }
 }
