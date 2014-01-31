@@ -31,6 +31,8 @@ public class NewCollateralTransform extends Transform {
     @Inject
     public NewCollateralTransform() {
 
+    }
+
 
     public List<NewCollateral> transformsCollateralToModel(List<NewCollateralView> newCollateralViewList, NewCreditFacility newCreditFacility, User user) {
         List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
