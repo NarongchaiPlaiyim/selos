@@ -128,7 +128,7 @@ public class NCBInfo implements Serializable {
 
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
-                log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
+                log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
                 toControlNplFlagRendered();
                 toControlTdrFlagRendered();
             }
@@ -202,6 +202,8 @@ public class NCBInfo implements Serializable {
 
             settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
             log.info("settlementStatusList :: {}",settlementStatusList.size());
+
+            log.info("customerInfoView : {}",customerInfoView.toString());
         }
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();

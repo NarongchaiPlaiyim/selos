@@ -38,7 +38,6 @@ public class NCBInfoView implements Serializable {
     private int tdrOtherYear;
     private String remark;
     private TDRCondition tdrCondition;
-    //private Customer customer;
     private String ncbCusName;
     private String ncbCusAddress;
 
@@ -80,7 +79,6 @@ public class NCBInfoView implements Serializable {
         this.tdrOtherYear = 0;
         this.remark = "";
         this.tdrCondition = new TDRCondition();
-        //this.customer = new Customer();
         this.ncbCusName = "";
         this.ncbCusAddress = "";
         this.ncbDetailView = new NCBDetailView();
@@ -271,14 +269,6 @@ public class NCBInfoView implements Serializable {
         this.tdrCondition = tdrCondition;
     }
 
-    /*public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }*/
-
     public String getNcbCusMarriageStatus() {
         return ncbCusMarriageStatus;
     }
@@ -408,7 +398,7 @@ public class NCBInfoView implements Serializable {
     }
 
     public String getNplFlagText() {
-        return (this.nplFlag == 1) ? "Y" : "N";
+        return (this.nplFlag == 2) ? "Y" : "N";
     }
 
     public void setNplFlagText(String nplFlagText) {
@@ -416,7 +406,7 @@ public class NCBInfoView implements Serializable {
     }
 
     public String getTdrFlagText() {
-        return (this.tdrFlag == 1) ? "Y" : "N";
+        return (this.tdrFlag == 2) ? "Y" : "N";
     }
 
     public void setTdrFlagText(String tdrFlagText) {
