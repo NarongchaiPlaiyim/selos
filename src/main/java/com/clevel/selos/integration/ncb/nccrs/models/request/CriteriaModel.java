@@ -6,16 +6,15 @@ import java.io.Serializable;
 
 @XStreamAlias("criteria")
 public class CriteriaModel implements Serializable {
-    private String enquirydatefrom;
+    private final String enquirydatefrom = "19000101";
     private String enquirydateto ="";
     private String enquiryuser;
-    private String enquirystatus = "IQ";
+    private final String enquirystatus = "IQ";
     private String registid;
-    private String mediacode = "BB";
+    private final String mediacode = "BB";
     private String memberreference;
 
-    public CriteriaModel(String enquirydatefrom, String enquiryuser, String registid, String memberreference) {
-        this.enquirydatefrom = enquirydatefrom;
+    public CriteriaModel(String enquiryuser, String registid, String memberreference) {
         this.enquiryuser = enquiryuser;
         this.registid = registid;
         this.memberreference = memberreference;
