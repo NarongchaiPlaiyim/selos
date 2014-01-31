@@ -54,6 +54,8 @@ public class CustomerInfoControl extends BusinessControl {
     CustomerCSIDAO customerCSIDAO;
     @Inject
     NCBDAO ncbDAO;
+    @Inject
+    CustomerOblInfoDAO customerOblInfoDAO;
 
     @Inject
     ReferenceDAO referenceDAO;
@@ -130,6 +132,8 @@ public class CustomerInfoControl extends BusinessControl {
         customerInfoView.getCustomerEntity().setId(1);
 
         Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase);
+        CustomerOblInfo customerOblInfo = (customer.getCustomerOblInfo());
+        customerOblInfoDAO.persist(customerOblInfo);
         customerDAO.persist(customer);
         individualDAO.persist(customer.getIndividual());
         addressDAO.persist(customer.getAddressesList());
@@ -184,11 +188,13 @@ public class CustomerInfoControl extends BusinessControl {
             for(Customer customer : cusList){
                 if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
                     addressDAO.delete(customer.getAddressesList());
+
                 }
                 if(customer.getIndividual() != null){
                     individualDAO.delete(customer.getIndividual());
                 }
                 customerDAO.delete(customer);
+
             }
         }
 
@@ -345,7 +351,7 @@ public class CustomerInfoControl extends BusinessControl {
             ncbDAO.delete(ncb);
         }
 
-        customerDAO.delete(customer);
+
     }
 
     public void deleteCustomerJuristic(long customerId){

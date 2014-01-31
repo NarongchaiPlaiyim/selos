@@ -128,7 +128,10 @@ public class NCBInfo implements Serializable {
 
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
-                log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
+                log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
+                if(ncbDetailViewList.size()>0){
+                    ncbInfoView.setNcbFlag("Y");
+                }
                 toControlNplFlagRendered();
                 toControlTdrFlagRendered();
             }
@@ -192,15 +195,19 @@ public class NCBInfo implements Serializable {
 
         accountStatusList = accountStatusDAO.findAll();
 //      accountTypeList = accountTypeDAO.findAll();
+        tdrConditionList = tdrConditionDAO.findAll();
 
         if(customerInfoView != null){
             log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+
             accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
             log.info("accountTypeList :: {}",accountTypeList.size());
-        }
 
-        settlementStatusList = settlementStatusDAO.findAll();
-        tdrConditionList = tdrConditionDAO.findAll();
+            settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
+            log.info("settlementStatusList :: {}",settlementStatusList.size());
+
+            log.info("customerInfoView : {}",customerInfoView.toString());
+        }
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 

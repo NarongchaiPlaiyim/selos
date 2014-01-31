@@ -8,16 +8,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicInfoAccountView implements Serializable {
+public class OpenAccountView implements Serializable {
     private long id;
     private String accountName;
     private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
     private BankAccountProduct bankAccountProduct;
-    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
+    private List<BankAccountPurposeView> bankAccountPurposeView;
     private String purposeForShow;
 
-    public BasicInfoAccountView() {
+    public OpenAccountView() {
         reset();
     }
 
@@ -25,7 +25,7 @@ public class BasicInfoAccountView implements Serializable {
         this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
         this.bankAccountProduct = new BankAccountProduct();
-        this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
+        this.bankAccountPurposeView = new ArrayList<BankAccountPurposeView>();
     }
 
     public long getId() {
@@ -68,12 +68,12 @@ public class BasicInfoAccountView implements Serializable {
         this.bankAccountProduct = bankAccountProduct;
     }
 
-    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeView() {
-        return basicInfoAccountPurposeView;
+    public List<BankAccountPurposeView> getBankAccountPurposeView() {
+        return bankAccountPurposeView;
     }
 
-    public void setBasicInfoAccountPurposeView(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView) {
-        this.basicInfoAccountPurposeView = basicInfoAccountPurposeView;
+    public void setBankAccountPurposeView(List<BankAccountPurposeView> bankAccountPurposeView) {
+        this.bankAccountPurposeView = bankAccountPurposeView;
     }
 
     public String getPurposeForShow() {
@@ -92,7 +92,7 @@ public class BasicInfoAccountView implements Serializable {
                 append("accountNameList", accountNameList).
                 append("bankAccountTypeView", bankAccountTypeView).
                 append("bankAccountProduct", bankAccountProduct).
-                append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).
+                append("bankAccountPurposeView", bankAccountPurposeView).
                 append("purposeForShow", purposeForShow).
                 toString();
     }

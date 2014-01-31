@@ -809,8 +809,7 @@ public class CustomerTransform extends Transform {
                 }
             }
 
-            if(customerOblInfo == null)
-                customerOblInfo = new CustomerOblInfo();
+            if(customerOblInfo == null) customerOblInfo = new CustomerOblInfo();
 
             customerOblInfo.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
             customerOblInfo.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());

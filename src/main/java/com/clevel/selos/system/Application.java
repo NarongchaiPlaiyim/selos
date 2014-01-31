@@ -1,6 +1,7 @@
 package com.clevel.selos.system;
 
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserStatus;
@@ -55,6 +56,22 @@ public class Application {
                 if (aCreditCustomerType.name().equalsIgnoreCase(str[i])) {
                     log.debug("assign value: {}", aCreditCustomerType);
                     result[i] = aCreditCustomerType;
+                }
+            }
+        }
+        return result;
+    }
+
+    public BAPaymentMethodValue[] getBAPaymentMethodValues(String values) {
+        String[] str = values.split("\\|");
+        BAPaymentMethodValue[] result = new BAPaymentMethodValue[str.length];
+        BAPaymentMethodValue[] paymentMethodValue = BAPaymentMethodValue.values();
+        log.debug("paymentMethodValue length: {}",paymentMethodValue.length);
+        for (int i=0;i<str.length;i++) {
+            for (BAPaymentMethodValue aPaymentMethodValue : paymentMethodValue) {
+                if (aPaymentMethodValue.name().equalsIgnoreCase(str[i])) {
+                    log.debug("assign value: {}", aPaymentMethodValue);
+                    result[i] = aPaymentMethodValue;
                 }
             }
         }
