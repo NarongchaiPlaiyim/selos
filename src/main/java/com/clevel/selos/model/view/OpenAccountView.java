@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountProduct;
+import com.clevel.selos.model.db.master.BankAccountProduct;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,22 +8,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicInfoAccountView implements Serializable {
+public class OpenAccountView implements Serializable {
     private long id;
     private String accountName;
+    private List<CustomerInfoView> accountNameList;
     private BankAccountTypeView bankAccountTypeView;
-    private AccountProduct product;
-    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
+    private BankAccountProduct bankAccountProduct;
+    private List<BankAccountPurposeView> bankAccountPurposeView;
     private String purposeForShow;
 
-    public BasicInfoAccountView() {
+    public OpenAccountView() {
         reset();
     }
 
     public void reset() {
+        this.accountNameList = new ArrayList<CustomerInfoView>();
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.product = new AccountProduct();
-        this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
+        this.bankAccountProduct = new BankAccountProduct();
+        this.bankAccountPurposeView = new ArrayList<BankAccountPurposeView>();
     }
 
     public long getId() {
@@ -42,6 +44,14 @@ public class BasicInfoAccountView implements Serializable {
         this.accountName = accountName;
     }
 
+    public List<CustomerInfoView> getAccountNameList() {
+        return accountNameList;
+    }
+
+    public void setAccountNameList(List<CustomerInfoView> accountNameList) {
+        this.accountNameList = accountNameList;
+    }
+
     public BankAccountTypeView getBankAccountTypeView() {
         return bankAccountTypeView;
     }
@@ -50,20 +60,20 @@ public class BasicInfoAccountView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public AccountProduct getProduct() {
-        return product;
+    public BankAccountProduct getBankAccountProduct() {
+        return bankAccountProduct;
     }
 
-    public void setProduct(AccountProduct product) {
-        this.product = product;
+    public void setBankAccountProduct(BankAccountProduct bankAccountProduct) {
+        this.bankAccountProduct = bankAccountProduct;
     }
 
-    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeView() {
-        return basicInfoAccountPurposeView;
+    public List<BankAccountPurposeView> getBankAccountPurposeView() {
+        return bankAccountPurposeView;
     }
 
-    public void setBasicInfoAccountPurposeView(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView) {
-        this.basicInfoAccountPurposeView = basicInfoAccountPurposeView;
+    public void setBankAccountPurposeView(List<BankAccountPurposeView> bankAccountPurposeView) {
+        this.bankAccountPurposeView = bankAccountPurposeView;
     }
 
     public String getPurposeForShow() {
@@ -79,9 +89,10 @@ public class BasicInfoAccountView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("accountName", accountName).
+                append("accountNameList", accountNameList).
                 append("bankAccountTypeView", bankAccountTypeView).
-                append("product", product).
-                append("basicInfoAccountPurposeView", basicInfoAccountPurposeView).
+                append("bankAccountProduct", bankAccountProduct).
+                append("bankAccountPurposeView", bankAccountPurposeView).
                 append("purposeForShow", purposeForShow).
                 toString();
     }

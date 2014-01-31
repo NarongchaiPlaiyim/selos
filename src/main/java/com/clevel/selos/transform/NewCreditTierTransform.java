@@ -7,6 +7,7 @@ import com.clevel.selos.model.view.NewCreditTierDetailView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewCreditTierTransform extends Transform {
@@ -22,10 +23,15 @@ public class NewCreditTierTransform extends Transform {
 
         for (NewCreditTierDetailView newCreditTierDetailView : newCreditTierDetailViewList) {
             newCreditTierDetail = new NewCreditTierDetail();
-            newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
-            newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
-            newCreditTierDetail.setModifyDate(newCreditTierDetailView.getModifyDate());
-            newCreditTierDetail.setModifyBy(user);
+
+            if (newCreditTierDetail.getId() != 0) {
+                newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
+                newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newCreditTierDetail.setCreateDate(new Date());
+                newCreditTierDetail.setCreateBy(user);
+            }
+
             newCreditTierDetail.setNo(newCreditTierDetailView.getNo());
             newCreditTierDetail.setFinalPriceRate(newCreditTierDetailView.getFinalPriceRate());
             newCreditTierDetail.setSuggestBasePrice(newCreditTierDetailView.getSuggestBasePrice());

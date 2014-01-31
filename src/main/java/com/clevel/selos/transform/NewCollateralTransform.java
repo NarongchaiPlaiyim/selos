@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewCollateralTransform extends Transform {
@@ -30,6 +31,37 @@ public class NewCollateralTransform extends Transform {
     @Inject
     public NewCollateralTransform() {
 
+
+    public List<NewCollateral> transformsCollateralToModel(List<NewCollateralView> newCollateralViewList, NewCreditFacility newCreditFacility, User user) {
+        List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
+        NewCollateral newCollateral;
+
+        for (NewCollateralView newCollateralView : newCollateralViewList) {
+            newCollateral = new NewCollateral();
+            newCollateral.setProposeType("P");
+            if (newCollateralView.getId() != 0) {
+                newCollateral.setCreateDate(newCollateralView.getCreateDate());
+                newCollateral.setCreateBy(newCollateralView.getCreateBy());
+            } else { // id = 0 create new
+                newCollateral.setCreateDate(new Date());
+                newCollateral.setCreateBy(user);
+            }
+            newCollateral.setJobID(newCollateralView.getJobID());
+            newCollateral.setAadDecision(newCollateralView.getAadDecision());
+            newCollateral.setAadDecisionReason(newCollateralView.getAadDecisionReason());
+            newCollateral.setAadDecisionReasonDetail(newCollateralView.getAadDecisionReasonDetail());
+            newCollateral.setAppraisalDate(newCollateralView.getAppraisalDate());
+            newCollateral.setBdmComments(newCollateralView.getBdmComments());
+            newCollateral.setMortgageCondition(newCollateralView.getMortgageCondition());
+            newCollateral.setMortgageConditionDetail(newCollateralView.getMortgageConditionDetail());
+            newCollateral.setTypeOfUsage(newCollateralView.getTypeOfUsage());
+            newCollateral.setUsage(newCollateralView.getUsage());
+            newCollateral.setUwDecision(newCollateralView.getUwDecision());
+            newCollateral.setUwRemark(newCollateralView.getUwRemark());
+            newCollateral.setNewCreditFacility(newCreditFacility);
+            newCollateralList.add(newCollateral);
+        }
+        return newCollateralList;
     }
 
     public List<NewCollateral> transformToModel(final List<NewCollateralView> newCollateralViewList, final User user, final NewCreditFacility newCreditFacility){

@@ -34,8 +34,8 @@
                              process="@this"
                              actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
                              oncomplete="assignCheckerDlg.show()"
-                             update=":assignABDMDlgPanel">
-                <p:resetInput target=":assignABDMDlgPanel"/>
+                             update=":assignCheckerDlg">
+                <p:resetInput target=":assignCheckerDlg"/>
             </p:commandButton>
             <!--Mandate Document-->
             <p:commandButton id="btnMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
@@ -244,6 +244,14 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="400" height="160">
             <ui:include src="/site/dialog/assignABDMDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="submitZMPanel" styleClass="panel">
+        <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="400" height="160">
+            <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

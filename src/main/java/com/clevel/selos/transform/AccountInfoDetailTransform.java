@@ -1,7 +1,7 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.AccountPurposeDAO;
-import com.clevel.selos.model.db.master.AccountPurpose;
+import com.clevel.selos.dao.master.BankAccountPurposeDAO;
+import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
@@ -21,8 +21,8 @@ public class AccountInfoDetailTransform extends Transform {
     private AccountInfoProductTypeTransform productTypeTransform;
 
     @Inject
-    private AccountPurposeDAO purposeDAO;
-    private List<AccountPurpose> openAccountPurposeList;
+    private BankAccountPurposeDAO purposeDAO;
+    private List<BankAccountPurpose> openAccountPurposeList;
 
     private AccountInfoDetail accountInfoDetail;
     private List<AccountInfoDetailView> accountInfoDetailViewList;
@@ -292,7 +292,7 @@ public class AccountInfoDetailTransform extends Transform {
         accountInfoPurposeViewList = new ArrayList<AccountInfoPurposeView>();
         long id;
         AccountInfoPurposeView purposeView;
-        for(AccountPurpose purposeMST : openAccountPurposeList){
+        for(BankAccountPurpose purposeMST : openAccountPurposeList){
             purposeView = new AccountInfoPurposeView();
             id = purposeMST.getId();
             purposeView.setId(id);

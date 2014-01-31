@@ -19,10 +19,10 @@ public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
     public OpenAccountDAO() {
     }
 
-    public List<OpenAccount> findByBasicInfoId(long basicInfoId) {
-        log.info("findByBasicInfoId : {}", basicInfoId);
+    public List<OpenAccount> findByWorkCaseId(long workCaseId) {
+        log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("basicInfo.id", basicInfoId));
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.addOrder(Order.asc("id"));
         List<OpenAccount> openAccountList = criteria.list();
 

@@ -4,18 +4,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ExSumReasonView {
-    private long id;
+    private int id;
     private String description;
     private String code;
 
     public ExSumReasonView() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

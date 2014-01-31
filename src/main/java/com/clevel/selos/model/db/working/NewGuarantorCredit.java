@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "wrk_new_grt_relation")
-public class NewGuarantorRelCredit implements Serializable {
+public class NewGuarantorCredit implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_NEW_GRT_CREDIT_ID", sequenceName = "SEQ_WRK_NEW_GRT_CREDIT_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_GRT_CREDIT_ID")

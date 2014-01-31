@@ -16,7 +16,7 @@ public class SubCollateralType {
     @Column(name = "code", length = 2)
     private String code;
 
-    @Column(name = "description", length = 6)
+    @Column(name = "description", length = 255)
     private String description;
 
     @OneToOne

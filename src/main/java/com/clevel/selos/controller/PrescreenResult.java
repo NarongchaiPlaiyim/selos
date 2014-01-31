@@ -135,9 +135,7 @@ public class PrescreenResult implements Serializable {
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse = item.getSpouse();
                     if(spouse != null){
-                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
-                            customerInfoList.add(spouse);
-                        }
+                        customerInfoList.add(spouse);
                     }
                 }
             }

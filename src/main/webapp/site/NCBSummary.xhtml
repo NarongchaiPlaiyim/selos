@@ -4,11 +4,15 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        >
 
     <h:head>
         <title>SE-LOS : NCB Record Detail</title>
-        <h:outputStylesheet name="css/style.css" />
+        <h:outputStylesheet name="css/style.css"/>
+        <script type="text/javascript" language="javascript"
+                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <h:outputScript library="js" name="custom.js"/>
     </h:head>
 
     <h:body>
@@ -31,8 +35,8 @@
                                 <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
                                 </div>
                                 <div id="content_lastupdate">Last update by
-                                    <!--<h:outputText value="#{ncbSummary.user.userName}"/>,
-                                    <h:outputText value="#{ncbSummary.date}"/>--></div>
+                                    <h:outputText value="#{ncbSummary.user.userName}"/>,
+                                    <h:outputText value="#{ncbSummary.date}"/></div>
                             </div>
                             <div id="content_form">
                                 <!-- start content -->
@@ -47,45 +51,53 @@
                                                     <h:outputText value="#{rowIndex+1}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.cusName')}" styleClass="center"
+                                                <p:column headerText="#{msg.get('app.ncbDetail.table.label.cusName')}"
+                                                          styleClass="center"
                                                           style="width: 150px;text-align: left">
                                                     <h:outputText
                                                             value="#{item.ncbCusName}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.personalId')}" styleClass="center"
-                                                          style="width: 70px;">
+                                                <p:column
+                                                        headerText="#{msg.get('app.ncbDetail.table.label.personalId')}"
+                                                        styleClass="center"
+                                                        style="width: 70px;">
                                                     <h:outputText value="#{item.personalId}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.noOfNCBCheckIn6months')}"
-                                                          styleClass="center" style="width: 100px;">
-                                                    <h:outputText value="#{item.checkIn6Month}" />
+                                                <p:column
+                                                        headerText="#{msg.get('app.ncbDetail.table.label.noOfNCBCheckIn6months')}"
+                                                        styleClass="center" style="width: 100px;">
+                                                    <h:outputText value="#{item.checkIn6Month}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}"
-                                                          styleClass="center" style="width: 50px;">
+                                                <p:column
+                                                        headerText="#{msg.get('app.ncbDetail.table.label.typeOfCurrentPay')}"
+                                                        styleClass="center" style="width: 50px;">
                                                     <h:outputText value="#{item.currentPaymentType}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}"
-                                                          styleClass="center" style="width: 50px;">
+                                                <p:column
+                                                        headerText="#{msg.get('app.ncbDetail.table.label.typeOfHistoryPay')}"
+                                                        styleClass="center" style="width: 50px;">
                                                     <h:outputText value="#{item.historyPaymentType}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.NPLFlag')}" styleClass="center"
+                                                <p:column headerText="#{msg.get('app.ncbDetail.table.label.NPLFlag')}"
+                                                          styleClass="center"
                                                           style="width: 50px;">
                                                     <h:outputText value="#{item.nplFlagText}"/>
                                                 </p:column>
 
-                                                <p:column headerText="#{msg.get('app.TDRStatusFromNCB')}"
+                                                <p:column headerText="#{msg.get('app.ncbDetail.table.label.TDRFlag')}"
                                                           styleClass="center" style="width: 50px;">
                                                     <h:outputText value="#{item.tdrFlagText}"/>
                                                 </p:column>
 
 
-                                                <p:column headerText="#{msg.get('app.TDRPaymentCondition')}"
-                                                          styleClass="center" style="width: 100px;">
+                                                <p:column
+                                                        headerText="#{msg.get('app.ncbDetail.table.label.TDRPaymentCondition')}"
+                                                        styleClass="center" style="width: 100px;">
                                                     <h:outputText value="#{item.tdrCondition.description}"/>
                                                 </p:column>
 
@@ -115,6 +127,16 @@
                     <h:inputHidden id="subpagename" value="submnuprescreen"/>
                 </div>
             </h:form>
+        </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{ncbSummary.messageHeader}" message="#{ncbSummary.message}">
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
         </p:panel>
 
     </h:body>

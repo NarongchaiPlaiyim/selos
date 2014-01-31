@@ -57,12 +57,20 @@
                     <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
                 </td>
                 <td>
-                    <h:outputText value="#{ncbInfo.ncbInfoView.checkingDate}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}"
                                   id="checkingDate"
                                   readonly="true"
                                   style="width:200px;">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                    </h:outputText>
+                    </p:inputText>
+                   <!-- <clv:BECalendar value="#{ncbInfo.ncbInfoView.checkingDate}"
+                                    id="checkingDate"
+                                    pattern="dd/MM/yyyy"
+                                    locale="th_TH"
+                                    showButtonPanel="false"
+                                    navigator="true"
+                                    readonly="true"
+                                    style="width:200px;"/>-->
                 </td>
             </tr>
             <tr>
@@ -70,7 +78,7 @@
                     <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
                 </td>
                 <td>
-                    <h:outputText value="#{ncbInfo.ncbInfoView.checkIn6Month}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}"
                                   readonly="true"
                                   style="width:200px;text-align: left"/>
                 </td>
@@ -80,7 +88,7 @@
                     <h:outputText value="#{msg.get('app.paymentClass')}"/>
                 </td>
                 <td>
-                    <h:outputText value="#{ncbInfo.ncbInfoView.paymentClass}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}"
                                   readonly="true"
                                   style="width:200px;text-align: left"/>
                 </td>
@@ -90,7 +98,7 @@
                     <h:outputText value="#{msg.get('app.typeOfCurrentPayment')}"/>
                 </td>
                 <td>
-                    <h:outputText value="#{ncbInfo.ncbInfoView.currentPaymentType}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.currentPaymentType}"
                                   readonly="true"
                                   style="width:200px;"/>
                 </td>
@@ -100,7 +108,7 @@
                     <h:outputText value="#{msg.get('app.typeOfHistoryPayment')}"/>
                 </td>
                 <td>
-                    <h:outputText value="#{ncbInfo.ncbInfoView.historyPaymentType}"
+                    <p:inputText value="#{ncbInfo.ncbInfoView.historyPaymentType}"
                                   readonly="true"
                                   style="width:200px;"/>
                 </td>
@@ -113,7 +121,7 @@
                     <table>
                         <tr>
                             <td>
-                                <p:selectOneRadio id="NPLFlag"
+                                <h:selectOneRadio id="NPLFlag"
                                                   value="#{ncbInfo.ncbInfoView.nplFlag}"
                                                   disabled="true">
                                     <f:selectItem itemLabel="Yes" itemValue="2"/>
@@ -122,11 +130,11 @@
                                             listener="#{ncbInfo.toControlNplFlagRendered()}"
                                             process=":frmMain:NPLFlag"
                                             update=":frmMain"/>
-                                </p:selectOneRadio>
+                                </h:selectOneRadio>
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"
                                                          rendered="#{ncbInfo.nplRendered}"
                                                          disabled="true"/>
                             </td>
@@ -157,7 +165,7 @@
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"
                                                          rendered="#{ncbInfo.nplRendered}"
                                                          disabled="true"/>
                             </td>
@@ -195,6 +203,7 @@
                                 <h:outputText value="#{ncbInfo.ncbInfoView.ncbLastInfoAsOfDate}"/>
                                 <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusName}"/>
                                 <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusAddress}"/>
+                                <h:outputText value="#{ncbInfo.ncbInfoView.ncbFlag}"/>
                             </td>
                         </tr>
                     </table>
@@ -208,7 +217,7 @@
                     <table>
                         <tr>
                             <td>
-                                <p:selectOneRadio id="tdrFlag"
+                                <h:selectOneRadio id="tdrFlag"
                                                   value="#{ncbInfo.ncbInfoView.tdrFlag}"
                                                   disabled="true">
                                     <f:selectItem itemLabel="Yes" itemValue="2"/>
@@ -217,11 +226,11 @@
                                             listener="#{ncbInfo.toControlTdrFlagRendered()}"
                                             process=":frmMain:tdrFlag"
                                             update=":frmMain"/>
-                                </p:selectOneRadio>
+                                </h:selectOneRadio>
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"
                                                          rendered="#{ncbInfo.tdrRendered}"
                                                          disabled="true"/>
                             </td>
@@ -252,7 +261,7 @@
                             </td>
                             <td>
                                 <p:spacer width="10px;" height="20px;"/>
-                                <p:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
+                                <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"
                                                          rendered="#{ncbInfo.tdrRendered}"
                                                          disabled="true"/>
                             </td>
@@ -308,8 +317,11 @@
                     <h:outputText value="#{msg.get('app.remark')}"/>
                 </td>
                 <td>
-                    <h:outputText cols="60" rows="3" id="remark" value="#{ncbInfo.ncbInfoView.remark}"
-                                  disabled="true"/>
+                    <p:inputTextarea cols="60"
+                                     rows="3"
+                                     id="remark"
+                                     value="#{ncbInfo.ncbInfoView.remark}"
+                                     disabled="true"/>
                 </td>
             </tr>
         </table>
@@ -370,7 +382,7 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.accountOpenDate')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:70px;width:70px;max-width: 70px;">
+                            <p:column style="min-width:80px;width:80px;max-width: 80px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.limit')}</f:facet>
                             </p:column>
@@ -394,7 +406,7 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:100px; width:100px; max-width: 100px;">
+                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
                             </p:column>
@@ -402,11 +414,11 @@
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:65px; width:65px; max-width: 65px;">
+                            <p:column style="min-width:150px; width:150px; max-width: 150px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.refinanceFlag')}</f:facet>
                             </p:column>
-                            <p:column style="min-width:30px; width:30px; max-width: 30px;">
+                            <p:column style="min-width:80px; width:80px; max-width: 80px;">
                                 <f:facet
                                         name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
                             </p:column>
@@ -431,7 +443,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.TMB}"/>
+                            <h:selectBooleanCheckbox value="#{item.TMB}" disabled="true"/>
                         </p:column>
 
                         <p:column styleClass="left">
@@ -519,15 +531,6 @@
                             </p:commandButton>
                         </p:column>
 
-                        <!--                            <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
-                                                        <p:row>
-                                                            <p:column colspan="4" style="text-align: center"
-                                                                      footerText="#{msg.get('app.ncbDetail.table.label.noOfmonthsPayment')}  #{item.noOfmonthsPayment}"/>
-                                                            <p:column colspan="13" style="text-align: left"
-                                                                      footerText="#{item.moneyTotal}"></p:column>
-                                                        </p:row>
-                                                    </p:columnGroup>-->
-
                     </p:subTable>
                 </p:dataTable>
                 <!--</div>-->
@@ -584,7 +587,6 @@
     <ui:param name="action" value="onDeleteNcbDetail"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
-
 
 <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
     LOADING<br/>

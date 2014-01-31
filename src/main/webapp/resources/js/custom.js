@@ -519,6 +519,12 @@ function handleAssignCheckerDialogRequest(xhr, status, args) {
     }
 }
 
+function handleSubmitZMDialogRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        submitZMDlg.hide();
+    }
+}
+
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDialog.hide();
@@ -787,6 +793,11 @@ function onKeyDownAccountName(evt){
     }
 
     return true;
+}
+function checkLengthText(obj){
+    var str = obj.value;
+    var maxLength = 490;
+    obj.value = str.substring(0,maxLength);
 }
 
 function onKeyPressName(evt){

@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_account_product")
-public class AccountProduct implements Serializable {
+@Table(name = "mst_bank_account_product")
+public class BankAccountProduct implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
@@ -20,7 +20,15 @@ public class AccountProduct implements Serializable {
     @JoinColumn(name = "bankaccounttype_id")
     private BankAccountType bankAccountType;
 
-    public AccountProduct() {
+    @OneToOne
+    @JoinColumn(name = "collateral_type_id", nullable = true)
+    private CollateralType collateralType;
+
+    @OneToOne
+    @JoinColumn(name = "sub_collateral_type_id", nullable = true)
+    private SubCollateralType subCollateralType;
+
+    public BankAccountProduct() {
     }
 
     public int getId() {
@@ -53,6 +61,22 @@ public class AccountProduct implements Serializable {
 
     public void setBankAccountType(BankAccountType bankAccountType) {
         this.bankAccountType = bankAccountType;
+    }
+
+    public CollateralType getCollateralType() {
+        return collateralType;
+    }
+
+    public void setCollateralType(CollateralType collateralType) {
+        this.collateralType = collateralType;
+    }
+
+    public SubCollateralType getSubCollateralType() {
+        return subCollateralType;
+    }
+
+    public void setSubCollateralType(SubCollateralType subCollateralType) {
+        this.subCollateralType = subCollateralType;
     }
 
     @Override
