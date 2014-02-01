@@ -97,7 +97,7 @@ public class BaseController implements Serializable {
             manageButton.setCheckMandateDocButton(true);
             manageButton.setCheckCriteriaButton(true);
             manageButton.setAssignToABDMButton(true);
-            manageButton.setCancelCAButton(true);
+//            manageButton.setCancelCAButton(true);
             manageButton.setSubmitCAButton(true);
         }
 
