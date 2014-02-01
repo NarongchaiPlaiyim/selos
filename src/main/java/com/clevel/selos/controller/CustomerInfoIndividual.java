@@ -1285,6 +1285,7 @@ public class CustomerInfoIndividual implements Serializable {
                     severity = "info";
                 }
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
@@ -1292,6 +1293,7 @@ public class CustomerInfoIndividual implements Serializable {
                 message = ex.getMessage();
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
@@ -1305,10 +1307,10 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setId(cusSpoId);
                         Relation relationSpouse = new Relation();
                         relationSpouse.setId(relSpoId);
-                        customerInfoView.setRelation(relationSpouse);
+                        customerInfoView.getSpouse().setRelation(relationSpouse);
                         Reference referenceSpouse = new Reference();
                         referenceSpouse.setId(refSpoId);
-                        customerInfoView.setReference(referenceSpouse);
+                        customerInfoView.getSpouse().setReference(referenceSpouse);
 
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1325,6 +1327,7 @@ public class CustomerInfoIndividual implements Serializable {
                     severity = "info";
                 }
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.getSpouse().setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
@@ -1332,6 +1335,7 @@ public class CustomerInfoIndividual implements Serializable {
                 message = ex.getMessage();
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.getSpouse().setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
