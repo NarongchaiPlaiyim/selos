@@ -2292,7 +2292,7 @@ public class PrescreenMaker implements Serializable {
             messageHeader = "Information.";
             message = "Cancel CA Complete.";
 
-            RequestContext.getCurrentInstance().execute("msgBoxRedirect.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
         } catch (Exception ex){
             messageHeader = "Exception.";
             message = "Cancel CA Failed, cause : " + Util.getMessageException(ex);
