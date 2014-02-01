@@ -321,4 +321,24 @@ public class Util implements Serializable {
 
         return message;
     }
+
+    public static<T> boolean isNull(T object){
+        return object == null ? true : false;
+    }
+
+    public static boolean isZero(int id){
+        try {
+            return id == 0 ? true : false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
+    public static boolean equals(String string, String string2){
+        try{
+            return string.equals(string2);
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
 }

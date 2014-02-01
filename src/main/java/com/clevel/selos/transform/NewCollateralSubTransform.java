@@ -1,10 +1,12 @@
 package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.NewCollateralSubDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateralHead;
 import com.clevel.selos.model.db.working.NewCollateralSub;
 import com.clevel.selos.model.view.NewCollateralSubView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -26,7 +28,7 @@ public class NewCollateralSubTransform extends Transform {
     }
 
     public List<NewCollateralSub> transformToModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
-        log.debug("-- transformToModel(Size of list is {})", ""+newCollateralSubViewList.size());
+        log.debug("-- transform List<NewCollateralSubView> to List<NewCollateralSub>(Size of list is {})", ""+newCollateralSubViewList.size());
         newCollateralSubList = new ArrayList<NewCollateralSub>();
         NewCollateralSub model = null;
         long id = 0;
@@ -34,21 +36,54 @@ public class NewCollateralSubTransform extends Transform {
             id = view.getId();
             if(id != 0){
                 model = newCollateralSubDAO.findById(id);
-                model.setModifyBy(user);
-                model.setModifyDate(DateTime.now().toDate());
             } else {
                 model = new NewCollateralSub();
+                log.debug("-- NewCollateralSub created");
                 model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
-                model.setModifyBy(user);
-                model.setModifyDate(DateTime.now().toDate());
-                model.setNewCollateralHead(new NewCollateralHead());
             }
-            try{
-                model.getSubCollateralType().setDescription(view.getSubCollateralType().getDescription());
-            } catch (NullPointerException e){
-                model.getSubCollateralType().setDescription("");
+
+            if(checkNullObject(model.getSubCollateralType()) && checkId0(model.getSubCollateralType().getId())){
+                try{
+                    model.getSubCollateralType().setDescription(view.getSubCollateralType().getDescription());
+                } catch (NullPointerException e){
+                    model.getSubCollateralType().setDescription("");
+                }
+            } else {
+                model.setSubCollateralType(null);
             }
+
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            model.setAddress(view.getAddress());
+            model.setLandOffice(view.getLandOffice());
+            model.setCollateralOwner(view.getCollateralOwner());
+            model.setAppraisalValue(view.getAppraisalValue());
+            newCollateralSubList.add(model);
+        }
+        return newCollateralSubList;
+    }
+
+    public List<NewCollateralSub> transformToNewModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
+        log.debug("-- transform List<NewCollateralSubView> to new List<NewCollateralSub>(Size of list is {})", ""+newCollateralSubViewList.size());
+        newCollateralSubList = new ArrayList<NewCollateralSub>();
+        NewCollateralSub model = null;
+        for(NewCollateralSubView view : newCollateralSubViewList){
+            model = new NewCollateralSub();
+            log.debug("-- NewCollateralSub created");
+            model.setCreateBy(user);
+            model.setCreateDate(DateTime.now().toDate());
+            if(checkNullObject(model.getSubCollateralType()) && checkId0(model.getSubCollateralType().getId())){
+                try{
+                    model.getSubCollateralType().setDescription(view.getSubCollateralType().getDescription());
+                } catch (NullPointerException e){
+                    model.getSubCollateralType().setDescription("");
+                }
+            } else {
+                model.setSubCollateralType(null);
+            }
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
             model.setAddress(view.getAddress());
             model.setLandOffice(view.getLandOffice());
             model.setCollateralOwner(view.getCollateralOwner());
@@ -66,11 +101,18 @@ public class NewCollateralSubTransform extends Transform {
             view = new NewCollateralSubView();
             view.setId(model.getId());
             view.setNo(0);//todo : No. ?
-            try{
-                view.getSubCollateralType().setDescription(model.getSubCollateralType().getDescription());
-            } catch (NullPointerException e){
-                view.getSubCollateralType().setDescription("");
+
+            if(checkNullObject(view.getSubCollateralType()) && checkId0(view.getSubCollateralType().getId())){
+                try{
+                    view.getSubCollateralType().setDescription(model.getSubCollateralType().getDescription());
+                } catch (NullPointerException e){
+                    view.getSubCollateralType().setDescription("");
+                }
+            } else {
+                view.setSubCollateralType(new SubCollateralType());
             }
+            view.setCreateBy(model.getCreateBy());
+            view.setCreateDate(model.getCreateDate());
             view.setAddress(model.getAddress());
             view.setLandOffice(model.getLandOffice());
             view.setCollateralOwner(model.getCollateralOwner());
@@ -78,5 +120,13 @@ public class NewCollateralSubTransform extends Transform {
             newCollateralSubViewList.add(view);
         }
         return newCollateralSubViewList;
+    }
+
+    private<T> boolean checkNullObject(T object){
+        return !Util.isNull(object);
+    }
+
+    private boolean checkId0(int id){
+        return !Util.isZero(id);
     }
 }

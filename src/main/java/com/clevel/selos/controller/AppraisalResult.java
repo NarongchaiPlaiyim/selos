@@ -169,6 +169,9 @@ public class AppraisalResult implements Serializable {
 
         if(workCaseId != 0){
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+            if(appraisalView == null){
+                appraisalView = new AppraisalView();
+            }
             newCollateralViewList = appraisalView.getNewCollateralViewList();
         } else {
             log.debug("-- WorkCaseId not found.");
@@ -301,6 +304,9 @@ public class AppraisalResult implements Serializable {
                 if(flag){
                     //todo : call interface COM_S
                     newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
+                    if(Util.isNull(newCollateralView)){
+                        newCollateralView = new NewCollateralView();
+                    }
                 } else {
                     log.debug("-- {}", message);
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -315,7 +321,7 @@ public class AppraisalResult implements Serializable {
     }
     private boolean checkJobIdExist(final List<NewCollateralView> viewList, String jobIDSearch){
         for(NewCollateralView view : viewList){
-            if(view.getJobID().equals(jobIDSearch)){
+            if(Util.equals(view.getJobID(), jobIDSearch)){
                 return false;
             }
         }
@@ -356,9 +362,13 @@ public class AppraisalResult implements Serializable {
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- Flag {}", ModeForButton.ADD);
             complete=true;
-            log.info("onSaveCollateralDetailView add >>> begin ");
-            newCollateralViewList.add(newCollateralView);
-            log.info("onSaveCollateralDetailView add >>> end ");
+            log.info("-- onSaveCollateralDetailView add >>> begin ");
+            String jobID = newCollateralView.getJobID();
+            if(!Util.isNull(jobID) && !Util.equals(jobID, "")){
+                log.debug("-- JobID( id = {}) Added to list", jobID);
+                newCollateralViewList.add(newCollateralView);
+            }
+            log.info("-- onSaveCollateralDetailView add >>> end ");
         }else if(ModeForButton.EDIT.equals(modeForButton)){
             complete=true;
             log.debug("-- Flag {}", ModeForButton.EDIT);
@@ -391,15 +401,15 @@ public class AppraisalResult implements Serializable {
         log.info("-- onSaveAppraisalResult");
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
+
             appraisalResultControl.onSaveAppraisalResult(appraisalView, workCaseId, user);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
-            message = msg.get("app.appraisal.result.message.body.save.success");
-//            onCreation();
+            message = msg.get("app.appraisal.result.body.message.save.success");
+            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
-
             if(ex.getCause() != null){
                 message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
@@ -909,7 +919,6 @@ public class AppraisalResult implements Serializable {
     private NewCollateralView newCollateralViewForTest(){
         newCollateralView = new NewCollateralView();
 
-        newCollateralView.setId(999L);
         newCollateralView.setJobID("111");
         newCollateralView.setJobIDSearch("111");
         newCollateralView.setAadDecision("AADDecision");
@@ -922,7 +931,6 @@ public class AppraisalResult implements Serializable {
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
         newCollateralHeadView = new NewCollateralHeadView();
-        newCollateralHeadView.setId(999);
         newCollateralHeadView.setAppraisalValue(BigDecimal.valueOf(55555));
         newCollateralHeadView.setExistingCredit(BigDecimal.valueOf(66666));
 
@@ -940,7 +948,6 @@ public class AppraisalResult implements Serializable {
     private NewCollateralView newCollateralViewForTest2(){
         newCollateralView = new NewCollateralView();
 
-        newCollateralView.setId(999L);
         newCollateralView.setJobID("222");
         newCollateralView.setJobIDSearch("222");
         newCollateralView.setAadDecision("AADDecision");
@@ -953,7 +960,6 @@ public class AppraisalResult implements Serializable {
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
 
         newCollateralHeadView = new NewCollateralHeadView();
-        newCollateralHeadView.setId(999);
         newCollateralHeadView.setAppraisalValue(BigDecimal.valueOf(999999999));
         newCollateralHeadView.setExistingCredit(BigDecimal.valueOf(555555555));
 
