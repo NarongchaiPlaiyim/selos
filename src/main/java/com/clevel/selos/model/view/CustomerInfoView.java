@@ -140,6 +140,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     private BigDecimal shares;
 
+    private boolean isRefreshInterface;
+
     public CustomerInfoView(){
         //reset();
     }
@@ -203,10 +205,10 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
 //        this.percentShareSummary = BigDecimal.ZERO;
-
         this.unpaidFeeInsurance = BigDecimal.ZERO;
         this.pendingClaimLG = BigDecimal.ZERO;
-        customerOblInfoID = 0;
+        this.customerOblInfoID = 0;
+        this.isRefreshInterface = false;
     }
 
     public long getIndividualId() {
@@ -1030,6 +1032,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setShares(BigDecimal shares) {
         this.shares = shares;
+    }
+
+    public boolean isRefreshInterface() {
+        return isRefreshInterface;
+    }
+
+    public void setRefreshInterface(boolean refreshInterface) {
+        isRefreshInterface = refreshInterface;
     }
 
     @Override

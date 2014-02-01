@@ -348,6 +348,7 @@ public class CustomerInfoIndividual implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
+        customerInfoView.setRefreshInterface(true);
         customerInfoView.getSpouse().reset();
 
         customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1145,6 +1146,7 @@ public class CustomerInfoIndividual implements Serializable {
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            customerInfoView.setRefreshInterface(true);
 
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
@@ -1155,6 +1157,7 @@ public class CustomerInfoIndividual implements Serializable {
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            customerInfoView.setRefreshInterface(true);
             log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -1284,12 +1287,14 @@ public class CustomerInfoIndividual implements Serializable {
                     message = customerInfoResultView.getReason();
                     severity = "info";
                 }
+                customerInfoView.setRefreshInterface(true);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
+                customerInfoView.setRefreshInterface(true);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
@@ -1322,12 +1327,14 @@ public class CustomerInfoIndividual implements Serializable {
                     message = cusSpouseResultView.getReason();
                     severity = "info";
                 }
+                customerInfoView.setRefreshInterface(true);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.debug("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
+                customerInfoView.setRefreshInterface(true);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {

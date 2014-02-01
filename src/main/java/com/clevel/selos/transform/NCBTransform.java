@@ -127,7 +127,7 @@ public class NCBTransform extends Transform {
                 }
             }
 
-            ncbInfoView.setNcbCusAddress(customerInfoView.getCurrentAddress());
+//            ncbInfoView.setNcbCusAddress(customerInfoView.getCurrentAddress());
         }
 
         ncbInfoView.setEnquiry(ncb.getEnquiry());

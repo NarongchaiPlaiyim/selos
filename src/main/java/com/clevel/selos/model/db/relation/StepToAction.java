@@ -29,6 +29,10 @@ public class StepToAction implements Serializable {
     private Status nextStatus;
     @Column(name = "active")
     private int active;
+    @Column(name = "cadecisionflag", length = 10)
+    private String caDecisionFlag;
+    @Column(name = "pricingrequestflag", length = 10)
+    private String pricingRequestFlag;
 
     public StepToAction() {
     }
