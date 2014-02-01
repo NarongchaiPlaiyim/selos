@@ -513,6 +513,8 @@ public class CustomerInfoIndividual implements Serializable {
     public void onChangeRelation(){
         referenceIndividualList = referenceDAO.findReferenceByFlag(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, relationMainCusId, 1, 0);
 
+        relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+
         if(customerInfoView.getMaritalStatus().getSpouseFlag() != 0){
             onChangeRelationSpouse();
         }
@@ -521,13 +523,11 @@ public class CustomerInfoIndividual implements Serializable {
 //        int relationId = customerInfoView.getRelation().getId();
         Relation tmp1 = new Relation();
         Relation tmp2 = new Relation();
-//        if(relationId == 3 || relationId == 4) {
         if(relationMainCusId == 3 || relationMainCusId == 4) {
             for(Relation relationSpouse : relationSpouseList){
                 if(relationSpouse.getId() == 2){ // if main cus = 3 , 4 remove 2 only
                     tmp1 = relationSpouse;
                 }
-//                if(relationId == 4){ // if main cus = 4 remove 3
                 if(relationMainCusId == 4){ // if main cus = 4 remove 3
                     if(relationSpouse.getId() == 3){
                         tmp2 = relationSpouse;
@@ -535,12 +535,9 @@ public class CustomerInfoIndividual implements Serializable {
                 }
             }
             relationSpouseList.remove(tmp1);
-//            if(relationId == 4){
             if(relationMainCusId == 4){
                 relationSpouseList.remove(tmp2);
             }
-        } else {
-            relationSpouseList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         }
     }
 
@@ -1529,7 +1526,8 @@ public class CustomerInfoIndividual implements Serializable {
             message = "Save individual data success.";
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
+        } catch (Exception ex){
+            log.debug("onSave Exception : {}", ex);
             messageHeader = "Error.";
             if(ex.getCause() != null){
                 message = "Save individual failed. Cause : " + ex.getCause().toString();

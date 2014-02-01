@@ -12,10 +12,7 @@ import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualR
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Reference;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -148,6 +145,8 @@ public class CustomerInfoControl extends BusinessControl {
 
             customerInfoView.getSpouse().getCustomerEntity().setId(1);
 
+            //set marital status for spouse
+            customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
             Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase);
 
             if(customerInfoView.isRefreshInterface()){
