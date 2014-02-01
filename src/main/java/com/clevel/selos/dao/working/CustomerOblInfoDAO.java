@@ -22,10 +22,9 @@ public class CustomerOblInfoDAO extends GenericDAO<CustomerOblInfo, Long> {
     public CustomerOblInfo findByCustomerID(long cusID){
         log.debug("findByCustomerID ::: cusID : {}", cusID);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customer_id", cusID));
+        criteria.add(Restrictions.eq("customer.id", cusID));
         CustomerOblInfo customerOblInfo = (CustomerOblInfo) criteria.uniqueResult();
         log.debug("return customer obl info {}::", customerOblInfo);
         return customerOblInfo;
     }
-
 }
