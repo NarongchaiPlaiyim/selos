@@ -339,9 +339,11 @@ public class CustomerInfoControl extends BusinessControl {
                 }
 
                 //for check customer obl
-                CustomerOblInfo customerOblInfo = customerOblInfoDAO.findByCustomerID(spouseCustomer.getId());
-                if(customerOblInfo != null && customerOblInfo.getId() != 0){
-                    customerOblInfoDAO.delete(customerOblInfo);
+                if(spouseCustomer.getCustomerOblInfo() != null && spouseCustomer.getCustomerOblInfo().getId() != 0){
+                    CustomerOblInfo customerOblInfo = customerOblInfoDAO.findById(spouseCustomer.getCustomerOblInfo().getId());
+                    if(customerOblInfo != null && customerOblInfo.getId() != 0){
+                        customerOblInfoDAO.delete(customerOblInfo);
+                    }
                 }
 
                 customerDAO.delete(spouseCustomer);
@@ -374,9 +376,11 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         //for check customer obl
-        CustomerOblInfo customerOblInfo = customerOblInfoDAO.findByCustomerID(mainCustomer.getId());
-        if(customerOblInfo != null && customerOblInfo.getId() != 0){
-            customerOblInfoDAO.delete(customerOblInfo);
+        if(mainCustomer.getCustomerOblInfo() != null && mainCustomer.getCustomerOblInfo().getId() != 0){
+            CustomerOblInfo customerOblInfo = customerOblInfoDAO.findById(mainCustomer.getCustomerOblInfo().getId());
+            if(customerOblInfo != null && customerOblInfo.getId() != 0){
+                customerOblInfoDAO.delete(customerOblInfo);
+            }
         }
 
         customerDAO.delete(mainCustomer);
@@ -412,9 +416,11 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         //for check customer obl
-        CustomerOblInfo customerOblInfo = customerOblInfoDAO.findByCustomerID(customer.getId());
-        if(customerOblInfo != null && customerOblInfo.getId() != 0){
-            customerOblInfoDAO.delete(customerOblInfo);
+        if(customer.getCustomerOblInfo() != null && customer.getCustomerOblInfo().getId() != 0){
+            CustomerOblInfo customerOblInfo = customerOblInfoDAO.findById(customer.getCustomerOblInfo().getId());
+            if(customerOblInfo != null && customerOblInfo.getId() != 0){
+                customerOblInfoDAO.delete(customerOblInfo);
+            }
         }
 
         customerDAO.delete(customer);
