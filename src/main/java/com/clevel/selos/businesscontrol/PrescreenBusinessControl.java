@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
@@ -115,6 +116,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerAccountDAO customerAccountDAO;
     @Inject
     CustomerAccountNameDAO customerAccountNameDAO;
+    @Inject
+    RelationCustomerDAO relationCustomerDAO;
 
 
     @Inject
@@ -1283,27 +1286,29 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     // *** Function for Drop Down *** //
-    public List<Relation> getRelationByStepId(long stepId){
+    public List<Relation> getRelationByStepId(long stepId, int customerEntityId, int borrowerTypeId, int spouse){
+        log.debug("getRelationByStepId : stepId : {}, customerEntityId : {}, borrowerTypeId : {}, spouse : {}", stepId, customerEntityId, borrowerTypeId, spouse);
         List<Relation> relationList = new ArrayList<Relation>();
-        List<Relation> borrowerRelationList = new ArrayList<Relation>();
-        List<Relation> otherRelationList = new ArrayList<Relation>();
-        List<Relation> tempList = relationDAO.findAll();
 
-        for(Relation relation : tempList){
-            if(relation.getId() != 1){
-                otherRelationList.add(relation);
-            } else {
-                borrowerRelationList.add(relation);
-            }
-        }
-
-        if(stepId == 1001){
-            relationList = borrowerRelationList;
-        } else if (stepId == 1003){
-            relationList = otherRelationList;
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
+            relationList = relationDAO.getRelationOnlyBorrower();
+        } else if(stepId == StepValue.PRESCREEN_MAKER.value()){
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(customerEntityId, borrowerTypeId, spouse);
         }
 
         return relationList;
     }
 
+    public List<Relation> getRelationByStepAndBorrowerRelationId(long stepId, int customerEntityId, int borrowerTypeId, int borrowerPiority){
+        log.debug("getRelationByStepId : stepId : {}, customerEntityId : {}, borrowerTypeId : {}, borrowerPiority : {}", stepId, customerEntityId, borrowerTypeId, borrowerPiority);
+        List<Relation> relationList = new ArrayList<Relation>();
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
+            relationList = relationDAO.getRelationOnlyBorrower();
+        } else if(stepId == StepValue.PRESCREEN_MAKER.value()){
+            relationList = relationCustomerDAO.getListRelationForSpouse(customerEntityId, borrowerTypeId, borrowerPiority);
+        }
+
+        return relationList;
+    }
 }
