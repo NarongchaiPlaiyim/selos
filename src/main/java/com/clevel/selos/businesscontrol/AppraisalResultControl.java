@@ -50,7 +50,6 @@ public class AppraisalResultControl extends BusinessControl {
     private Appraisal appraisal;
 
     private WorkCase workCase;
-    private User user;
     private NewCreditFacility newCreditFacility;
 
     private List<NewCollateral> newCollateralList;
@@ -74,7 +73,6 @@ public class AppraisalResultControl extends BusinessControl {
         newCollateralViewList = new ArrayList<NewCollateralView>();
         if(appraisal != null){
             appraisalView = appraisalTransform.transformToView(appraisal);
-
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
             newCollateralViewList = newCollateralTransform.transformToView(newCollateralList);
@@ -92,27 +90,50 @@ public class AppraisalResultControl extends BusinessControl {
         log.info("-- onSaveAppraisalResult begin");
         workCase = workCaseDAO.findById(workCaseId);
 
-//        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
-//        appraisalDAO.persist(appraisal);
-//        log.info( "appraisalDAO persist end" );
-
+        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
+        appraisalDAO.persist(appraisal);
+        log.info( "appraisalDAO persist end" );
 
         newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
 
         newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility));
 
         if(newCollateralList.size() > 0){
             clearDB(newCollateralList);
+            newCollateralDAO.delete(newCollateralList);
+            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
+            insertToDB(newCollateralViewList, user);
+            updateWRKNewColl(newCollateralViewList, user);
         } else {
-
+            newCollateralDAO.delete(newCollateralList);
+            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
+            insertToDB(newCollateralViewList, user);
+            updateWRKNewColl(newCollateralViewList, user);
         }
 
         log.info("onSaveAppraisalResult end");
     }
 
-    private void insertToDB(){
+    private void updateWRKNewColl(final List<NewCollateralView> newCollateralViewList, final User user){
+        newCollateralList = safetyList(newCollateralTransform.transformToModel(newCollateralViewList, user, newCreditFacility));
+        newCollateralDAO.updateAppraisalRequest(newCollateralList);
+    }
 
+    private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user){
+        newCollateralList = safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
+        newCollateralDAO.persistProposeTypeA(newCollateralList);
+        for(NewCollateral newCollateral : newCollateralList){
+            newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
+            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+                newCollateralHead.setNewCollateral(newCollateral);
+                newCollateralSubList = safetyList(newCollateralHead.getNewCollateralSubList());
+                for(NewCollateralSub newCollateralSub : newCollateralSubList){
+                    newCollateralSub.setNewCollateralHead(newCollateralHead);
+                }
+                newCollateralSubDAO.persist(newCollateralSubList);
+            }
+            newCollateralHeadDAO.persist(newCollateralHeadList);
+        }
     }
     private void clearDB(final List<NewCollateral> newCollateralList){
         long id;
@@ -126,7 +147,6 @@ public class AppraisalResultControl extends BusinessControl {
             }
             newCollateralHeadDAO.delete(newCollateralHeadList);
         }
-        newCollateralDAO.delete(newCollateralList);
     }
 
     private <T> List<T> safetyList(List<T> list) {
