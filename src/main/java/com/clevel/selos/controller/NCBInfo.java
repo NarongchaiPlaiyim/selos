@@ -120,7 +120,7 @@ public class NCBInfo implements Serializable {
         user = (User) session.getAttribute("user");
 
         if (session.getAttribute("customerId") != null) {
-            customerId = Long.parseLong(session.getAttribute("customerId").toString());
+//            customerId = Long.parseLong(session.getAttribute("customerId").toString());
             log.info("customerId :: {} ", customerId);
 
             customerInfoView =  customerDAO.findById(customerId);
