@@ -231,6 +231,7 @@ public class CustomerInfoJuristic implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
+        customerInfoView.setRefreshInterface(true);
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
         customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
@@ -288,7 +289,7 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView = customerInfoControl.getCustomerJuristicById(customerId);
         }
 
-        if(customerInfoView.getId() != 0){
+        if(customerInfoView.getId() != 0 || isFromIndividualParam){
             isEditForm = true;
         } else {
             isEditForm = false;
@@ -494,6 +495,7 @@ public class CustomerInfoJuristic implements Serializable {
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
+            customerInfoView.setRefreshInterface(true);
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -502,6 +504,7 @@ public class CustomerInfoJuristic implements Serializable {
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
+            customerInfoView.setRefreshInterface(true);
             log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -512,6 +515,7 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onRefreshInterfaceInfo(){
         if(customerInfoView.getSearchFromRM() == 1){
+            customerInfoView.setRefreshInterface(true);
             long cusId = customerInfoView.getId();
             int relId = 0;
             int refId = 0;
