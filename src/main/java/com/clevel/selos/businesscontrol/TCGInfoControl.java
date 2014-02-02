@@ -149,8 +149,7 @@ public class TCGInfoControl extends BusinessControl {
         log.info("Calculate LTV Value   tcg ::  " );
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
-        BigDecimal ltvPercentBig = null;
-        BigDecimal ltvValueBig = BigDecimal.ZERO;
+
         BigDecimal collateralRuleResult = BigDecimal.ZERO;
         BigDecimal requestTCGAmount = BigDecimal.ZERO;
 
@@ -158,8 +157,10 @@ public class TCGInfoControl extends BusinessControl {
 //        List<TCGDetailView> tcgDetailViewList = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailDAO.findTCGDetailByTcgId(tcg.getId()));
 
         for (TCGDetailView tcgDetailView : tcgDetailViewList) {
-            if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
 
+            BigDecimal ltvValueBig = BigDecimal.ZERO;
+            if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
+                BigDecimal ltvPercentBig = null;
                 PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
 
@@ -168,19 +169,23 @@ public class TCGInfoControl extends BusinessControl {
 
                 BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
+
                 if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
                     ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
                 }
 
                 if (ltvPercentBig == null) {
+
                     if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
                             Util.isTrue(basicInfo.getPassAnnualReview()) &&
                             Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
                             Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
                             (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
                         ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                        log.info("getTenPercentLTV :::::::");
                     } else {
                         ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                        log.info("getPercentLTV ::::::: ");
                     }
                 }
 
