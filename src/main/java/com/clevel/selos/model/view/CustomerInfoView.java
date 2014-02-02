@@ -1118,6 +1118,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
 //                .append("documentAuthorizeDate", documentAuthorizeDate)
 //                .append("kycReason", kycReason)
 //                .append("worthiness", worthiness)
+                .append("customerOblInfoID", customerOblInfoID)
                 .toString();
     }
 }

@@ -53,6 +53,8 @@ public class CustomerInfoControl extends BusinessControl {
     NCBDAO ncbDAO;
     @Inject
     CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
+    OpenAccountNameDAO openAccountNameDAO;
 
     @Inject
     ReferenceDAO referenceDAO;
@@ -706,5 +708,20 @@ public class CustomerInfoControl extends BusinessControl {
 
         currentAddress = 1;
         return currentAddress;
+    }
+
+    public boolean checkExistingOpenAccountCustomer(long customerId){
+        boolean isExist = false;
+        if(customerId != 0){
+            List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);
+            if(openAccountNameList != null && openAccountNameList.size() > 0){
+                isExist = true;
+                return isExist;
+            } else {
+                return isExist;
+            }
+        } else {
+            return isExist;
+        }
     }
 }

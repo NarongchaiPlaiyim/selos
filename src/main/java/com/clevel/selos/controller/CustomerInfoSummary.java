@@ -67,6 +67,7 @@ public class CustomerInfoSummary implements Serializable {
 
     private String messageHeader;
     private String message;
+    private String severity;
 
     public CustomerInfoSummary(){
     }
@@ -83,7 +84,7 @@ public class CustomerInfoSummary implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
         }
 
@@ -157,8 +158,6 @@ public class CustomerInfoSummary implements Serializable {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
-        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
@@ -172,8 +171,6 @@ public class CustomerInfoSummary implements Serializable {
         CustomerInfoView cusView = new CustomerInfoView();
         cusView.reset();
         map.put("customerInfoView", cusView);
-        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
@@ -189,17 +186,27 @@ public class CustomerInfoSummary implements Serializable {
 
     public void onDeleteGuarantor(){
         try{
+            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectedItemCustomerGuarantor.getId());
+            if(isExist){
+                messageHeader = "Information.";
+                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : This customer is using on Open Account in Basic Info page";
+                severity = "info";
+            } else {
             onDelete(selectedItemCustomerGuarantor);
-            messageHeader = "Delete Customer Info Guarantor Success.";
-            message = "Delete Customer Info Guarantor Success.";
+                messageHeader = "Information.";
+                message = "Delete Customer Info Guarantor Success.";
+                severity = "info";
+            }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Delete Customer Info Guarantor Failed.";
+            log.error("Exception :: {}",ex);
+            messageHeader = "Information.";
             if(ex.getCause() != null){
-                message = "Delete Customer Info Guarantor failed. Cause : " + ex.getCause().toString();
+                message = "Delete Customer Info Guarantor failed. <br/><br/> Cause : " + ex.getCause().toString();
             } else {
-                message = "Delete Customer Info Guarantor failed. Cause : " + ex.getMessage();
+                message = "Delete Customer Info Guarantor failed. <br/><br/> Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
         onCreation();
@@ -208,16 +215,19 @@ public class CustomerInfoSummary implements Serializable {
     public void onDeleteRelated(){
         try{
             onDelete(selectedItemCustomerRelated);
-            messageHeader = "Delete Customer Info Related Success.";
+            messageHeader = "Information.";
             message = "Delete Customer Info Related Success.";
+            severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Delete Customer Info Related Failed.";
+            log.error("Exception :: {}",ex);
+            messageHeader = "Information.";
             if(ex.getCause() != null){
-                message = "Delete Customer Info Related failed. Cause : " + ex.getCause().toString();
+                message = "Delete Customer Info Related failed. <br/><br/> Cause : " + ex.getCause().toString();
             } else {
-                message = "Delete Customer Info Related failed. Cause : " + ex.getMessage();
+                message = "Delete Customer Info Related failed. <br/><br/> Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
         onCreation();
@@ -285,5 +295,13 @@ public class CustomerInfoSummary implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }
