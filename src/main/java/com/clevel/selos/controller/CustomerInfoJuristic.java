@@ -199,7 +199,7 @@ public class CustomerInfoJuristic implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.error("Exception :: {}",ex);
+                log.error("Exception :: {}", ex);
             }
         }
 
@@ -315,6 +315,10 @@ public class CustomerInfoJuristic implements Serializable {
         }else{
             relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }
+
+        if(customerInfoView.getRemoveIndividualIdList() == null){
+            customerInfoView.setRemoveIndividualIdList(new ArrayList<Long>());
+        }
     }
 
     public String onAddIndividual(){
@@ -322,7 +326,7 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
         map.put("isEditFromJuristic", false);
-        map.put("customerId", new Long(-1));
+        map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
 //        HttpSession session = FacesUtil.getSession(false);
 //        session.setAttribute("cusInfoParams", map);
@@ -335,7 +339,7 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
         map.put("isEditFromJuristic", true);
-        map.put("customerId", new Long(-1));
+        map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
         map.put("rowIndex",rowIndex);
         map.put("individualView", selectEditIndividual);
@@ -643,7 +647,39 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onDeleteIndividual(){
-        customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+        try{
+            //check individual using on basic info
+            if(selectEditIndividual.getId() != 0){
+                boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectEditIndividual.getId());
+                if(isExist){
+                    messageHeader = "Information.";
+                    message = "Delete Customer Info Individual Failed. <br/><br/> Cause : This customer is using on Open Account in Basic Info page.";
+                    severity = "info";
+                } else {
+                    customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                    customerInfoView.getRemoveIndividualIdList().add(selectEditIndividual.getId());
+                    messageHeader = "Information.";
+                    message = "Delete Customer Info Individual Success.";
+                    severity = "info";
+                }
+            } else {
+                customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                messageHeader = "Information.";
+                message = "Delete Customer Info Individual Success.";
+                severity = "info";
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.error("Exception :: {}",ex);
+            messageHeader = "Error.";
+            if(ex.getCause() != null){
+                message = "Delete Customer Info Individual Failed. <br/><br/> Cause : " + ex.getCause().toString();
+            } else {
+                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getMessage();
+            }
+            severity = "alert";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     public Date getCurrentDate() {

@@ -62,7 +62,7 @@ public class TCGView implements Serializable {
     }
 
     public void setTCG(int TCG) {
-        TCG = TCG;
+        this.TCG = TCG;
     }
 
     public BigDecimal getCollateralRuleResult() {

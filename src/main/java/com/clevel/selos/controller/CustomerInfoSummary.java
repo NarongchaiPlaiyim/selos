@@ -200,11 +200,11 @@ public class CustomerInfoSummary implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: {}",ex);
-            messageHeader = "Information.";
+            messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Delete Customer Info Guarantor failed. <br/><br/> Cause : " + ex.getCause().toString();
+                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getCause().toString();
             } else {
-                message = "Delete Customer Info Guarantor failed. <br/><br/> Cause : " + ex.getMessage();
+                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getMessage();
             }
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -221,7 +221,7 @@ public class CustomerInfoSummary implements Serializable {
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: {}",ex);
-            messageHeader = "Information.";
+            messageHeader = "Error.";
             if(ex.getCause() != null){
                 message = "Delete Customer Info Related failed. <br/><br/> Cause : " + ex.getCause().toString();
             } else {
