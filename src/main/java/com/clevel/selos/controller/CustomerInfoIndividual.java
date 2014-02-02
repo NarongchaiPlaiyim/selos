@@ -297,7 +297,7 @@ public class CustomerInfoIndividual implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
         }
 
@@ -1116,7 +1116,7 @@ public class CustomerInfoIndividual implements Serializable {
                         } catch (Exception ex) {
                             enableSpouseDocumentType = true;
                             enableSpouseCitizenId = true;
-                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
+                            log.error("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
                         }
                     }
 
@@ -1155,7 +1155,7 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
             customerInfoView.setRefreshInterface(true);
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
             severity = "alert";
@@ -1285,13 +1285,15 @@ public class CustomerInfoIndividual implements Serializable {
                     severity = "info";
                 }
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
-                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
@@ -1305,10 +1307,10 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setId(cusSpoId);
                         Relation relationSpouse = new Relation();
                         relationSpouse.setId(relSpoId);
-                        customerInfoView.setRelation(relationSpouse);
+                        customerInfoView.getSpouse().setRelation(relationSpouse);
                         Reference referenceSpouse = new Reference();
                         referenceSpouse.setId(refSpoId);
-                        customerInfoView.setReference(referenceSpouse);
+                        customerInfoView.getSpouse().setReference(referenceSpouse);
 
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1325,13 +1327,15 @@ public class CustomerInfoIndividual implements Serializable {
                     severity = "info";
                 }
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.getSpouse().setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
-                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
+                customerInfoView.getSpouse().setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
@@ -1412,7 +1416,7 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.setSpouse(cus);
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
             customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
-            log.debug("onSearchSpouseCustomerInfo Exception : {}", ex);
+            log.error("onSearchSpouseCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
             severity = "alert";
@@ -1451,6 +1455,46 @@ public class CustomerInfoIndividual implements Serializable {
                 severity = "info";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
+            }
+        }
+
+//        update relation & reference
+        Relation mainRel = new Relation();
+        mainRel.setId(relationMainCusId);
+        Reference mainRef = new Reference();
+        mainRef.setId(referenceMainCusId);
+        customerInfoView.setRelation(mainRel);
+        customerInfoView.setReference(mainRef);
+
+        if(customerInfoView.getId() != 0){
+            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            if(isExist){
+                if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                        || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                    messageHeader = "Information.";
+                    message = "Save Customer Individual Data Failed. " +
+                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                            "<br/>Affect on Basic Info Page.";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            } else {
+                if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
+                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    if(isExistSpouse){
+                        if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                                || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                            messageHeader = "Information.";
+                            message = "Save Customer Individual Data Failed. " +
+                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                                    "<br/>Affect on Basic Info Page.";
+                            severity = "info";
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            return;
+                        }
+                    }
+                }
             }
         }
 
@@ -1500,14 +1544,6 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
         }
 
-//        update relation & reference
-        Relation mainRel = new Relation();
-        mainRel.setId(relationMainCusId);
-        Reference mainRef = new Reference();
-        mainRef.setId(referenceMainCusId);
-        customerInfoView.setRelation(mainRel);
-        customerInfoView.setReference(mainRef);
-
         if(customerInfoView.getSpouse() != null){
             Relation spouseRel = new Relation();
             spouseRel.setId(relationSpouseCusId);
@@ -1527,12 +1563,12 @@ public class CustomerInfoIndividual implements Serializable {
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex){
-            log.debug("onSave Exception : {}", ex);
+            log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save individual failed. Cause : " + ex.getCause().toString();
+                message = "Save individual failed. Cause : <br/><br/>" + ex.getCause().toString();
             } else {
-                message = "Save individual failed. Cause : " + ex.getMessage();
+                message = "Save individual failed. Cause : <br/><br/>" + ex.getMessage();
             }
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -1577,6 +1613,47 @@ public class CustomerInfoIndividual implements Serializable {
                 indexList++;
             }
         }
+
+//        update relation & reference
+        Relation mainRel = new Relation();
+        mainRel.setId(relationMainCusId);
+        Reference mainRef = new Reference();
+        mainRef.setId(referenceMainCusId);
+        customerInfoView.setRelation(mainRel);
+        customerInfoView.setReference(mainRef);
+
+        if(customerInfoView.getId() != 0){
+            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            if(isExist){
+                if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                        || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                    messageHeader = "Information.";
+                    message = "Save Customer Individual Data Failed. " +
+                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                            "<br/>Affect on Basic Info Page.";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return "";
+                }
+            } else {
+                if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
+                    boolean isExistSpouse = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getSpouse().getId());
+                    if(isExistSpouse){
+                        if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                                || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                            messageHeader = "Information.";
+                            message = "Save Customer Individual Data Failed. " +
+                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                                    "<br/>Affect on Basic Info Page.";
+                            severity = "info";
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            return "";
+                        }
+                    }
+                }
+            }
+        }
+
         //customerInfoView = individual
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationDAO.findById(relationMainCusId).getDescription());
@@ -1586,14 +1663,6 @@ public class CustomerInfoIndividual implements Serializable {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getDateOfBirth() != null){
             customerInfoView.getSpouse().setAge(Util.calAge(customerInfoView.getSpouse().getDateOfBirth()));
         }
-
-        //update relation & reference
-        Relation mainRel = new Relation();
-        mainRel.setId(relationMainCusId);
-        Reference mainRef = new Reference();
-        mainRef.setId(referenceMainCusId);
-        customerInfoView.setRelation(mainRel);
-        customerInfoView.setReference(mainRef);
 
         if(customerInfoView.getSpouse() != null){
             Relation spouseRel = new Relation();

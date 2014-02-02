@@ -53,6 +53,8 @@ public class CustomerInfoControl extends BusinessControl {
     NCBDAO ncbDAO;
     @Inject
     CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
+    OpenAccountNameDAO openAccountNameDAO;
 
     @Inject
     ReferenceDAO referenceDAO;
@@ -193,15 +195,16 @@ public class CustomerInfoControl extends BusinessControl {
 
         //for delete customer where is committee & committee id = juristic id
         //delete all old customer individual
-        if(customerInfoView.getId() != 0){
-            List<Customer> cusList = customerDAO.findCustomerByCommitteeId(customerInfoView.getId());
-            for(Customer customer : cusList){
-                deleteCustomerIndividual(customer.getId());
+        if(customerInfoView.getId() != 0){ // check this juristic is not new
+            if(customerInfoView.getRemoveIndividualIdList() != null && customerInfoView.getRemoveIndividualIdList().size() > 0){
+                for(long customerIndividualId : customerInfoView.getRemoveIndividualIdList()){
+                    deleteCustomerIndividual(customerIndividualId);
+                }
             }
         }
 
         //for add new - set all id = 0
-        if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
+        /*if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
             for(CustomerInfoView cus : customerInfoView.getIndividualViewList()){
                 cus.getCurrentAddress().setId(0);
                 cus.getRegisterAddress().setId(0);
@@ -213,19 +216,8 @@ public class CustomerInfoControl extends BusinessControl {
                     cus.getSpouse().getWorkAddress().setId(0);
                     cus.getSpouse().setId(0);
                 }
-//                //for check delete spouse
-//                if(cus.getSpouseId() != 0){
-//                    Customer spouse = customerDAO.findById(cus.getSpouseId());
-//                    if(spouse.getAddressesList() != null && spouse.getAddressesList().size() > 0){
-//                        addressDAO.delete(spouse.getAddressesList());
-//                    }
-//                    if(spouse.getIndividual() != null){
-//                        individualDAO.delete(spouse.getIndividual());
-//                    }
-//                    customerDAO.delete(spouse);
-//                }
             }
-        }
+        }*/
 
         //calculation age for juristic
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
@@ -257,7 +249,7 @@ public class CustomerInfoControl extends BusinessControl {
                 if(cusIndividual.getReference() != null){
                     if(cusIndividual.getReference().getId() != 0){
                         Reference reference = referenceDAO.findById(cusIndividual.getReference().getId());
-                        if(!reference.getPercentShare().equalsIgnoreCase("-")){
+                        if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
                             if(customerJuristic.getShares() != null && cusIndividual.getShares() != null){
                                 cusIndividual.setPercentShare(Util.divide(cusIndividual.getShares(),customerJuristic.getJuristic().getTotalShare()));
                             }
@@ -270,7 +262,7 @@ public class CustomerInfoControl extends BusinessControl {
                     if(cusIndividual.getSpouse().getReference() != null){
                         if(cusIndividual.getSpouse().getReference().getId() != 0){
                             Reference reference = referenceDAO.findById(cusIndividual.getSpouse().getReference().getId());
-                            if(reference != null && reference.getId() != 0 && !reference.getPercentShare().equalsIgnoreCase("-")){
+                            if(reference != null && reference.getId() != 0 && reference.getPercentShare() != null && !reference.getPercentShare().equalsIgnoreCase("-")){
                                 if(customerJuristic.getShares() != null && cusIndividual.getSpouse().getShares() != null){
                                     cusIndividual.getSpouse().setPercentShare(Util.divide(cusIndividual.getSpouse().getShares(),customerJuristic.getJuristic().getTotalShare()));
                                 }
@@ -302,12 +294,20 @@ public class CustomerInfoControl extends BusinessControl {
         Customer customer = customerDAO.findById(id);
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
 
-        List<Customer> cusList = customerDAO.findCustomerByCommitteeId(customer.getId());
-        List<CustomerInfoView> cusViewList = new ArrayList<CustomerInfoView>();
-        if(cusList != null && cusList.size() > 0){
-            cusViewList = customerTransform.transformToViewList(cusList);
+        List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId());
+        List<CustomerInfoView> cusIndViewList = new ArrayList<CustomerInfoView>();
+        if(cusIndList != null && cusIndList.size() > 0){
+            for (Customer cusInd : cusIndList){
+                CustomerInfoView cusIndView = customerTransform.transformToView(cusInd);
+                if(cusInd.getSpouseId() != 0){
+                    Customer spouse = customerDAO.findById(cusInd.getSpouseId());
+                    CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
+                    cusIndView.setSpouse(spouseInfoView);
+                }
+                cusIndViewList.add(cusIndView);
+            }
         }
-        customerInfoView.setIndividualViewList(cusViewList);
+        customerInfoView.setIndividualViewList(cusIndViewList);
         return customerInfoView;
     }
 
@@ -706,5 +706,20 @@ public class CustomerInfoControl extends BusinessControl {
 
         currentAddress = 1;
         return currentAddress;
+    }
+
+    public boolean checkExistingOpenAccountCustomer(long customerId){
+        boolean isExist = false;
+        if(customerId != 0){
+            List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);
+            if(openAccountNameList != null && openAccountNameList.size() > 0){
+                isExist = true;
+                return isExist;
+            } else {
+                return isExist;
+            }
+        } else {
+            return isExist;
+        }
     }
 }

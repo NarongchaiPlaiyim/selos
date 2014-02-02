@@ -88,7 +88,7 @@ public class NCBSummary implements Serializable {
 
         date = DateTime.now().toDate();
         ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
-
+        log.info("ncbSumViewList :: {}",ncbSumViewList.toString());
         if (customerView == null) {
             customerView = new ArrayList<Customer>();
         }

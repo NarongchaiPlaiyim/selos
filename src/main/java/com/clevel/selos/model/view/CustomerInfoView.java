@@ -142,6 +142,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     private boolean isRefreshInterface;
 
+    List<Long> removeIndividualIdList;
+
     public CustomerInfoView(){
         //reset();
     }
@@ -209,6 +211,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.pendingClaimLG = BigDecimal.ZERO;
         this.customerOblInfoID = 0;
         this.isRefreshInterface = false;
+        this.removeIndividualIdList = new ArrayList<Long>();
     }
 
     public long getIndividualId() {
@@ -1042,6 +1045,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
         isRefreshInterface = refreshInterface;
     }
 
+    public List<Long> getRemoveIndividualIdList() {
+        return removeIndividualIdList;
+    }
+
+    public void setRemoveIndividualIdList(List<Long> removeIndividualIdList) {
+        this.removeIndividualIdList = removeIndividualIdList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -1118,6 +1129,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
 //                .append("documentAuthorizeDate", documentAuthorizeDate)
 //                .append("kycReason", kycReason)
 //                .append("worthiness", worthiness)
+                .append("customerOblInfoID", customerOblInfoID)
                 .toString();
     }
 }

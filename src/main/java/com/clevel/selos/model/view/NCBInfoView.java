@@ -41,7 +41,6 @@ public class NCBInfoView implements Serializable {
     private String ncbCusName;
     private AddressView ncbCusAddress;
     private String ncbFlag;
-
     private boolean active;
     private Date createDate;
     private Date modifyDate;

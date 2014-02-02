@@ -29,4 +29,14 @@ public class OpenAccountNameDAO extends GenericDAO<OpenAccountName, Long> {
 
         return openAccountNameList;
     }
+
+    public List<OpenAccountName> findByCustomerId(long customerId) {
+        log.info("findByCustomerId : {}", customerId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customer.id", customerId));
+        criteria.addOrder(Order.asc("id"));
+        List<OpenAccountName> openAccountNameList = criteria.list();
+
+        return openAccountNameList;
+    }
 }
