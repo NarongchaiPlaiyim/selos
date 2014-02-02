@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 
@@ -64,7 +65,6 @@ public class NCBTransform extends Transform {
         ncb.setNcbCusName(ncbInfoView.getNcbCusName());
         ncb.setEnquiry(ncbInfoView.getEnquiry());
         ncb.setNcbCusMarriageStatus(ncbInfoView.getNcbCusMarriageStatus());
-//        ncb.setNcbCusAddress(ncbInfoView.getNcbCusAddress().toString());
 
         if (ncbInfoView.getTdrCondition() != null && ncbInfoView.getTdrCondition().getId() != 0) {
             ncb.setTdrCondition(ncbInfoView.getTdrCondition());
@@ -110,11 +110,12 @@ public class NCBTransform extends Transform {
             Customer customer = customerDAO.findById(ncb.getCustomer().getId());
             CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
 
-            String customerName = customerInfoView.getFirstNameTh();
-            if(ncb.getCustomer().getLastNameTh() != null){
-                customerName = customerName.concat(" ").concat(customerInfoView.getLastNameTh());
-            }
-            ncbInfoView.setNcbCusName(customerName);
+            StringBuilder customerName = new StringBuilder();
+            customerName.append(customer.getTitle().getTitleTh())
+                    .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                    .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
+            ncbInfoView.setNcbCusName(customerName.toString());
+
             if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(ncb.getCustomer().getIndividual() != null){
                     ncbInfoView.setPersonalId(customer.getIndividual().getCitizenId());

@@ -111,7 +111,7 @@
                      maxlength="18"
                      value="#{ncbInfo.ncbDetailView.limit}"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  integerOnly="true"/>
             <p:ajax event="blur" update=":ncbDlgForm:limit"/>
         </p:inputText>
     </td>
@@ -127,7 +127,7 @@
                      maxlength="18"
                      value="#{ncbInfo.ncbDetailView.outstanding}"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  integerOnly="true"/>
             <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
         </p:inputText>
     </td>
@@ -143,7 +143,7 @@
                      maxlength="18"
                      value="#{ncbInfo.ncbDetailView.installment}"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  integerOnly="true"/>
             <p:ajax event="blur" update=":ncbDlgForm:installment"/>
         </p:inputText>
     </td>

@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
@@ -61,19 +62,33 @@ public class TCGInfoControl extends BusinessControl {
     }
 
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
-
-        log.info("onSaveTCGToDB begin");
+        log.info("onEditTCGToDB begin");
         log.info("workCaseId {} ", workCaseId);
-        log.info("tcgView  {} ", tcgView.toString());
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
+
+        toCalculateLtvValue(workCaseId,tcgView,tcgDetailViewList);
+
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
-        log.info("transform comeback {} ", tcg.toString());
         TCGDAO.persist(tcg);
         log.info("persist tcg");
+
+
+        List<TCGDetail> tcgDetailListToDelete = TCGDetailDAO.findTCGDetailByTcgId(tcg.getId());
+        log.info("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
+
+        if (tcgDetailListToDelete.size() > 0) {
+            TCGDetailDAO.delete(tcgDetailListToDelete);
+            log.info("delete tcgDetailListToDelete");
+        }
+
         List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
         TCGDetailDAO.persist(tcgDetailList);
+        log.info("persist tcgDetailList");
+
+
     }
+/*
 
     public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
@@ -94,7 +109,9 @@ public class TCGInfoControl extends BusinessControl {
         TCGDetailDAO.persist(tcgDetailList);
         log.info("persist tcgDetailList");
 
+
     }
+*/
 
     public TCGView getTcgView(long workCaseId) {
         log.info("getTcgView :: workCaseId  :: {}", workCaseId);
@@ -127,47 +144,133 @@ public class TCGInfoControl extends BusinessControl {
         return tcgDetailViewList;
     }
 
+    public void toCalculateLtvValue(long workCaseId, TCGView tcgView , List<TCGDetailView> tcgDetailViewList ) {
 
-    public BigDecimal toCalculateLtvValue(TCGDetailView tcgDetailView, Long workCaseId) {
-
-        log.info("Calculate LTV Value tcgDetailView{}, workCaseId{}", tcgDetailView, workCaseId);
+        log.info("Calculate LTV Value   tcg ::  " );
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = getCurrentUser();
         BigDecimal ltvPercentBig = null;
         BigDecimal ltvValueBig = BigDecimal.ZERO;
+        BigDecimal collateralRuleResult = BigDecimal.ZERO;
+        BigDecimal requestTCGAmount = BigDecimal.ZERO;
 
-        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
+//        TCGView tcgView = tcgTransform.transformTCGToTcgView(tcg);
+//        List<TCGDetailView> tcgDetailViewList = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailDAO.findTCGDetailByTcgId(tcg.getId()));
 
-            PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
-            TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
+        for (TCGDetailView tcgDetailView : tcgDetailViewList) {
+            if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
 
-            PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
-            log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
+                PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
+                TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
 
-            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
+                log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
 
-            if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
-                ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
-            }
+                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
-            if (ltvPercentBig == null) {
-                if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
-                        Util.isTrue(basicInfo.getPassAnnualReview()) &&
-                        Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
-                        Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
-                        (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-                    ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
-                } else {
-                    ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+                }
+
+                if (ltvPercentBig == null) {
+                    if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
+                            Util.isTrue(basicInfo.getPassAnnualReview()) &&
+                            Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
+                            Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
+                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                    } else {
+                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                    }
+                }
+
+                if (ltvPercentBig != null && tcgDetailView != null) {
+                    log.info("ltvPercent :: {} ", ltvPercentBig);
+                    ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
                 }
             }
 
-            if (ltvPercentBig != null && tcgDetailView != null) {
-                log.info("ltvPercent :: {} ", ltvPercentBig);
-                ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
-            }
+            tcgDetailView.setLtvValue(ltvValueBig);
+
         }
 
-        return ltvValueBig;
+        tcgView.setSumAppraisalAmount(toCalculateSumAppraisalValue(tcgDetailViewList));
+        tcgView.setSumLtvValue(toCalculateSumLtvValue(tcgDetailViewList));
+        tcgView.setSumInThisAppraisalAmount(toCalculateSumAppraisalInThis(tcgDetailViewList));
+        tcgView.setSumInThisLtvValue(toCalculateSumLtvInThis(tcgDetailViewList));
+
+        collateralRuleResult = toCalCollateralRuleResult(tcgView);
+        log.info("collateralRuleResult :: {} ", collateralRuleResult);
+        tcgView.setCollateralRuleResult(collateralRuleResult);
+
+        requestTCGAmount = toCalRequestTCGAmount(tcgView);
+        log.info("requestTCGAmount :: {} ", requestTCGAmount);
+        tcgView.setRequestTCGAmount(requestTCGAmount);
+
+//        TCG tcgSave = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
+//        TCGDAO.persist(tcgSave);
+//        log.info("persist tcg");
+//
+//        List<TCGDetail> tcgDetailListToDelete = TCGDetailDAO.findTCGDetailByTcgId(tcgSave.getId());
+//        log.info("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
+//
+//        if (tcgDetailListToDelete.size() > 0) {
+//            TCGDetailDAO.delete(tcgDetailListToDelete);
+//            log.info("delete tcgDetailListToDelete");
+//        }
+//
+//        List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcgSave);
+//        TCGDetailDAO.persist(tcgDetailList);
+//        log.info("persist tcgDetailList");
+
+
     }
+
+
+//    public void toCalculateLtvValue(List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
+//
+//        log.info("Calculate LTV Value tcgDetailViewList{}, workCaseId{}", tcgDetailViewList.size(), workCaseId);
+//        BigDecimal ltvPercentBig = null;
+//        BigDecimal ltvValueBig = BigDecimal.ZERO;
+//
+//        for (TCGDetailView tcgDetailView : tcgDetailViewList) {
+//            if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
+//
+//                PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
+//                TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
+//
+//                PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
+//                log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
+//
+//                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+//
+//                if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+//                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+//                }
+//
+//                if (ltvPercentBig == null) {
+//                    if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
+//                            Util.isTrue(basicInfo.getPassAnnualReview()) &&
+//                            Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
+//                            Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
+//                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+//                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+//                    } else {
+//                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+//                    }
+//                }
+//
+//                if (ltvPercentBig != null && tcgDetailView != null) {
+//                    log.info("ltvPercent :: {} ", ltvPercentBig);
+//                    ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
+//                }
+//            }
+//
+//            tcgDetailView.setLtvValue(ltvValueBig);
+//        }
+//
+////        return ltvValueBig;
+//    }
 
 
     public BigDecimal toCalculateSumAppraisalValue(List<TCGDetailView> TCGDetailViewList) {
@@ -201,8 +304,9 @@ public class TCGInfoControl extends BusinessControl {
         BigDecimal sum = new BigDecimal(0);
 
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
+            log.info("tcgDetailView.getProposeInThisRequest() :: {}", tcgDetailView.getProposeInThisRequest());
             if (tcgDetailView != null) {
-                if (tcgDetailView.getProposeInThisRequest() == 2) {
+                if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
                     sum = sum.add(tcgDetailView.getAppraisalAmount());
                 }
             }
@@ -217,7 +321,7 @@ public class TCGInfoControl extends BusinessControl {
 
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
             if (tcgDetailView != null) {
-                if (tcgDetailView.getProposeInThisRequest() == 2) {
+                if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
                     sum = sum.add(tcgDetailView.getLtvValue());
                 }
             }
