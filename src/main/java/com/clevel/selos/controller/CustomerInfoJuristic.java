@@ -616,22 +616,39 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView.setWorkAddress(addressView);
         }
 
+        //check using customer in basic info
+        if(customerInfoView.getId() != 0){
+            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            if(isExist){
+                if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
+                        || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
+                    messageHeader = "Information.";
+                    message = "Save Customer Juristic Data Failed. " +
+                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                            "<br/>Affect on Basic Info Page";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            }
+        }
+
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
             isFromSummaryParam = true;
             onAddNewJuristic();
             onEditJuristic();
             messageHeader = "Information.";
-            message = "Save juristic data success.";
+            message = "Save Customer Juristic Data Success.";
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: {}",ex);
             messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save juristic failed. Cause : " + ex.getCause().toString();
+                message = "Save Juristic Failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save juristic failed. Cause : " + ex.getMessage();
+                message = "Save Juristic Failed. Cause : " + ex.getMessage();
             }
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
