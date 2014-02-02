@@ -16,6 +16,7 @@ public class AppraisalView implements Serializable {
     private long id;
     private String zoneLocation;
     private String bdmRemark;
+
     private int appraisalType;
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -32,7 +33,6 @@ public class AppraisalView implements Serializable {
     private String cancelAppointment;
     private String appointmentRemark;
     private List<AppraisalDetailView> appraisalDetailViewList;
-    private List<AppraisalContactDetailView> appraisalContactDetailViewList;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<NewCollateralView> newCollateralViewList;
     private WorkCase workCase;
@@ -56,7 +56,6 @@ public class AppraisalView implements Serializable {
         provinceOfProperty = new Province();
         workCase = new WorkCase();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-        appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
     }
@@ -213,14 +212,6 @@ public class AppraisalView implements Serializable {
         this.appraisalDetailViewList = appraisalDetailViewList;
     }
 
-    public List<AppraisalContactDetailView> getAppraisalContactDetailViewList() {
-        return appraisalContactDetailViewList;
-    }
-
-    public void setAppraisalContactDetailViewList(List<AppraisalContactDetailView> appraisalContactDetailViewList) {
-        this.appraisalContactDetailViewList = appraisalContactDetailViewList;
-    }
-
     public List<ContactRecordDetailView> getContactRecordDetailViewList() {
         return contactRecordDetailViewList;
     }
@@ -301,7 +292,6 @@ public class AppraisalView implements Serializable {
                 .append("cancelAppointment", cancelAppointment)
                 .append("appointmentRemark", appointmentRemark)
                 .append("appraisalDetailViewList", appraisalDetailViewList)
-                .append("appraisalContactDetailViewList", appraisalContactDetailViewList)
                 .append("contactRecordDetailViewList", contactRecordDetailViewList)
                 .append("newCollateralViewList", newCollateralViewList)
                 .append("workCase", workCase)
