@@ -294,12 +294,20 @@ public class CustomerInfoControl extends BusinessControl {
         Customer customer = customerDAO.findById(id);
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
 
-        List<Customer> cusList = customerDAO.findCustomerByCommitteeId(customer.getId());
-        List<CustomerInfoView> cusViewList = new ArrayList<CustomerInfoView>();
-        if(cusList != null && cusList.size() > 0){
-            cusViewList = customerTransform.transformToViewList(cusList);
+        List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId());
+        List<CustomerInfoView> cusIndViewList = new ArrayList<CustomerInfoView>();
+        if(cusIndList != null && cusIndList.size() > 0){
+            for (Customer cusInd : cusIndList){
+                CustomerInfoView cusIndView = customerTransform.transformToView(cusInd);
+                if(cusInd.getSpouseId() != 0){
+                    Customer spouse = customerDAO.findById(cusInd.getSpouseId());
+                    CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
+                    cusIndView.setSpouse(spouseInfoView);
+                }
+                cusIndViewList.add(cusIndView);
+            }
         }
-        customerInfoView.setIndividualViewList(cusViewList);
+        customerInfoView.setIndividualViewList(cusIndViewList);
         return customerInfoView;
     }
 
