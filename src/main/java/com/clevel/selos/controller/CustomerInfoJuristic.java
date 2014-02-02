@@ -231,7 +231,7 @@ public class CustomerInfoJuristic implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
-        customerInfoView.setRefreshInterface(true);
+        customerInfoView.setRefreshInterface(false);
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
         customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
