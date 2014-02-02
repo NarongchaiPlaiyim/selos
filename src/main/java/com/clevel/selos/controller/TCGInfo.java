@@ -268,8 +268,6 @@ public class TCGInfo implements Serializable {
 
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
-        BigDecimal collateralRuleResult = BigDecimal.ZERO;
-        BigDecimal requestTCGAmount     = BigDecimal.ZERO;
         try {
             if (TCGDetailViewList.size() > 0) {
                 if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
@@ -277,14 +275,6 @@ public class TCGInfo implements Serializable {
                 } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                     tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
                 }
-//                calculate();
-//                collateralRuleResult = tcgInfoControl.toCalCollateralRuleResult(TCGView);
-//                log.info("collateralRuleResult :: {} ",collateralRuleResult);
-//                TCGView.setCollateralRuleResult(collateralRuleResult);
-//
-//                requestTCGAmount = tcgInfoControl.toCalRequestTCGAmount(TCGView);
-//                log.info("requestTCGAmount :: {} ",requestTCGAmount);
-//                TCGView.setRequestTCGAmount(requestTCGAmount);
 
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.tcg.response.save.success");
