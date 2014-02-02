@@ -1,9 +1,12 @@
 package com.clevel.selos.model.view;
 
+import org.terracotta.modules.ehcache.transaction.SerializedReadCommittedClusteredSoftLock;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ExSumCharacteristicView {
+public class ExSumCharacteristicView implements Serializable {
 
     private String customer;
     private BigDecimal currentDBR;

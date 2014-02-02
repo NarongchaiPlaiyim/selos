@@ -1,10 +1,12 @@
 package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.NewCollateralHeadDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCollateralHead;
 import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -28,7 +30,7 @@ public class NewCollateralHeadTransform extends Transform {
     }
 
     public List<NewCollateralHead> transformToModel(final List<NewCollateralHeadView> newCollateralHeadViewList, final User user){
-        log.debug("-- transformToModel(Size of list is {})", ""+newCollateralHeadViewList.size());
+        log.debug("-- transform List<NewCollateralHeadView> to List<NewCollateralHead>(Size of list is {})", ""+newCollateralHeadViewList.size());
         newCollateralHeadList = new ArrayList<NewCollateralHead>();
         NewCollateralHead model = null;
         long id = 0;
@@ -36,20 +38,57 @@ public class NewCollateralHeadTransform extends Transform {
             id = view.getId();
             if(id != 0){
                 model = newCollateralHeadDAO.findById(id);
-                model.setModifyBy(user);
-                model.setModifyDate(DateTime.now().toDate());
             } else {
                 model = new NewCollateralHead();
+                log.debug("-- NewCollateralHead created");
                 model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
-                model.setModifyBy(user);
-                model.setModifyDate(DateTime.now().toDate());
-                model.setNewCollateral(new NewCollateral());
             }
+
+            if(checkNullObject(model.getHeadCollType()) && checkId0(model.getHeadCollType().getId())){
+                try {
+                    model.getHeadCollType().setDescription(view.getHeadCollType().getDescription());
+                } catch (NullPointerException e) {
+                    model.getHeadCollType().setDescription("");
+                }
+            } else {
+                view.setHeadCollType(new CollateralType());
+            }
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
             model.setTitleDeed(view.getTitleDeed());
             model.setCollateralLocation(view.getCollateralLocation());
             model.setAppraisalValue(view.getAppraisalValue());
-            model.setNewCollateralSubList(newCollateralSubTransform.transformToModel(view.getNewCollateralSubViewList(), user));
+            model.setNewCollateralSubList(newCollateralSubTransform.transformToModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
+            newCollateralHeadList.add(model);
+        }
+        return newCollateralHeadList;
+    }
+
+    public List<NewCollateralHead> transformToNewModel(final List<NewCollateralHeadView> newCollateralHeadViewList, final User user){
+        log.debug("-- transform List<NewCollateralHeadView> to new List<NewCollateralHead>(Size of list is {})", ""+newCollateralHeadViewList.size());
+        newCollateralHeadList = new ArrayList<NewCollateralHead>();
+        NewCollateralHead model = null;
+        for(NewCollateralHeadView view : newCollateralHeadViewList){
+            model = new NewCollateralHead();
+            log.debug("-- NewCollateralHead created");
+            model.setCreateBy(user);
+            model.setCreateDate(DateTime.now().toDate());
+            if(checkNullObject(model.getHeadCollType()) && checkId0(model.getHeadCollType().getId())){
+                try {
+                    model.getHeadCollType().setDescription(view.getHeadCollType().getDescription());
+                } catch (NullPointerException e) {
+                    model.getHeadCollType().setDescription("");
+                }
+            } else {
+                view.setHeadCollType(new CollateralType());
+            }
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            model.setTitleDeed(view.getTitleDeed());
+            model.setCollateralLocation(view.getCollateralLocation());
+            model.setAppraisalValue(view.getAppraisalValue());
+            model.setNewCollateralSubList(newCollateralSubTransform.transformToNewModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
             newCollateralHeadList.add(model);
         }
         return newCollateralHeadList;
@@ -66,14 +105,30 @@ public class NewCollateralHeadTransform extends Transform {
             view.setNo(0);
             view.setCollateralLocation(model.getCollateralLocation());
             view.setAppraisalValue(model.getAppraisalValue());
-            try {
-                view.getHeadCollType().setDescription(model.getHeadCollType().getDescription());
-            } catch (NullPointerException e) {
-                view.getHeadCollType().setDescription("");
+
+            if(checkNullObject(view.getHeadCollType()) && checkId0(view.getHeadCollType().getId())){
+                try {
+                    view.getHeadCollType().setDescription(model.getHeadCollType().getDescription());
+                } catch (NullPointerException e) {
+                    view.getHeadCollType().setDescription("");
+                }
+            } else {
+                view.setHeadCollType(new CollateralType());
             }
-            view.setNewCollateralSubViewList(newCollateralSubTransform.transformToView(model.getNewCollateralSubList()));
+
+            view.setCreateBy(model.getCreateBy());
+            view.setCreateDate(model.getCreateDate());
+            view.setNewCollateralSubViewList(newCollateralSubTransform.transformToView(Util.safetyList(model.getNewCollateralSubList())));
             newCollateralHeadViewList.add(view);
         }
         return newCollateralHeadViewList;
+    }
+
+    private<T> boolean checkNullObject(T object){
+        return !Util.isNull(object);
+    }
+
+    private boolean checkId0(int id){
+        return !Util.isZero(id);
     }
 }

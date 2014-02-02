@@ -1,20 +1,26 @@
 package com.clevel.selos.model;
 
 public enum RadioValue {
-    NOT_SELECTED(0),
-    NO(1),
-    YES(2),
-    PASS(3),
-    FAIL(4),
-    NA(5);
+    NOT_SELECTED(0, "NOT SELECT"),
+    NO(1, "No"),
+    YES(2, "Yes"),
+    PASS(3, "Pass"),
+    FAIL(4, "Fail"),
+    NA(5, "N/A");
 
     int value;
+    String shortName;
 
-    RadioValue(int value) {
+    RadioValue(int value, String shortName) {
         this.value = value;
+        this.shortName = shortName;
     }
 
     public int value() {
         return this.value;
+    }
+
+    public String shortName() {
+        return this.shortName;
     }
 }
