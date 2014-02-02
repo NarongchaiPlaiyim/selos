@@ -199,7 +199,7 @@ public class CustomerInfoJuristic implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
         }
 
@@ -505,7 +505,7 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
             customerInfoView.setRefreshInterface(true);
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
             severity = "alert";
@@ -515,7 +515,6 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void onRefreshInterfaceInfo(){
         if(customerInfoView.getSearchFromRM() == 1){
-            customerInfoView.setRefreshInterface(true);
             long cusId = customerInfoView.getId();
             int relId = 0;
             int refId = 0;
@@ -564,12 +563,16 @@ public class CustomerInfoJuristic implements Serializable {
                     message = "Refresh interface info failed.";
                     severity = "info";
                 }
+                customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
-                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
+                customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
@@ -619,6 +622,7 @@ public class CustomerInfoJuristic implements Serializable {
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
+            log.error("Exception :: {}",ex);
             messageHeader = "Error.";
             if(ex.getCause() != null){
                 message = "Save juristic failed. Cause : " + ex.getCause().toString();

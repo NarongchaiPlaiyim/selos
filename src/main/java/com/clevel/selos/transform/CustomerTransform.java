@@ -77,7 +77,7 @@ public class CustomerTransform extends Transform {
     CustomerOblInfoDAO customerOblInfoDAO;
 
     public CustomerInfoView transformToView(Customer customer){
-
+        log.info("Start - transformToView ::: customer : {}", customer);
         CustomerInfoView customerInfoView = new CustomerInfoView();
 
         customerInfoView.setId(customer.getId());
@@ -416,12 +416,12 @@ public class CustomerTransform extends Transform {
             customerInfoView.setIndLv("-");
         }
 
-        log.info("Return Customer {}", customerInfoView);
+        log.info("Return - transformToView ::: customerInfoView : {}", customerInfoView);
         return customerInfoView;
     }
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
-        log.info("transformToModel ::: customerInfoView : {}", customerInfoView);
+        log.info("Start - transformToModel ::: customerInfoView : {}", customerInfoView);
         Customer customer = new Customer();
         if(customerInfoView.getId() != 0){
             customer = customerDAO.findById(customerInfoView.getId());
@@ -825,7 +825,7 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setCustomerOblInfo(null);
         }
-
+        log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
     }
 
