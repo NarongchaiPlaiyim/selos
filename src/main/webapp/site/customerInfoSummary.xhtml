@@ -588,34 +588,36 @@
         </p:blockUI>
         </h:form>
 
-    <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteGuarantorDialog"/>
-        <ui:param name="name" value="confirmDeleteGuarantorDlg"/>
-        <ui:param name="formId" value="frmConfirmGuarantorAccount"/>
-        <ui:param name="controller" value="#{custInfoSummary}"/>
-        <ui:param name="action" value="onDeleteGuarantor"/>
-        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
-    </ui:include>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteGuarantorDialog"/>
+            <ui:param name="name" value="confirmDeleteGuarantorDlg"/>
+            <ui:param name="formId" value="frmConfirmGuarantorAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteGuarantor"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
-    <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteRelatedDialog"/>
-        <ui:param name="name" value="confirmDeleteRelatedDlg"/>
-        <ui:param name="formId" value="frmConfirmRelatedAccount"/>
-        <ui:param name="controller" value="#{custInfoSummary}"/>
-        <ui:param name="action" value="onDeleteRelated"/>
-        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
-    </ui:include>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteRelatedDialog"/>
+            <ui:param name="name" value="confirmDeleteRelatedDlg"/>
+            <ui:param name="formId" value="frmConfirmRelatedAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteRelated"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
-    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{custInfoSummary.messageHeader}" message="#{custInfoSummary.message}" >
-            <p:commandButton value="OK"
-                             process="@this"
-                             update="frmMain"
-                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
-        </p:confirmDialog>
-    </p:panel>
-
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{custInfoSummary.messageHeader}">
+                <f:facet name="message">
+                    <h:outputText value="#{custInfoSummary.message}" escape="false"/>
+                </f:facet>
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
     </p:panel>
 </h:body>
 </f:view>
