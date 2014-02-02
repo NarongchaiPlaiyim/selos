@@ -97,7 +97,7 @@ public class NCBInfoControl extends BusinessControl {
 
     public List<NCBDetailView> getNcbDetailListView(NCBInfoView ncbInfoView) {
         log.info("getNcbDetailListView :: ncbId  :: {}", ncbInfoView.getId());
-        List<NCBDetailView> ncbDetailViewList = null;
+        List<NCBDetailView> ncbDetailViewList = new ArrayList<NCBDetailView>();
 
         try {
             List<NCBDetail> NCBDetailList = ncbDetailDAO.findNCBDetailByNcbId(ncbInfoView.getId());

@@ -806,6 +806,7 @@ public class PrescreenMaker implements Serializable {
             log.debug("onEditCustomer ::: select spouse to edit ...");
             borrowerInfo = cloner.deepClone(customerInfoViewList.get(selectCustomerInfoItem.getListIndex()));
             borrowerRelation = cloner.deepClone(borrowerInfo.getRelation());
+            onChangeRelation();
             borrowerReference = cloner.deepClone(borrowerInfo.getReference());
             log.debug("onEditCustomer ::: get borrower from list to edit : {}", borrowerInfo);
             if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
@@ -821,6 +822,7 @@ public class PrescreenMaker implements Serializable {
         } else {
             borrowerInfo = cloner.deepClone(selectCustomerInfoItem);
             borrowerRelation = cloner.deepClone(borrowerInfo.getRelation());
+            onChangeRelation();
             borrowerReference = cloner.deepClone(borrowerInfo.getReference());
             if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(borrowerInfo.getSpouse() == null){
@@ -871,7 +873,6 @@ public class PrescreenMaker implements Serializable {
         titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
-        onChangeRelation();
 
         if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
             onChangeSpouseRelation();
