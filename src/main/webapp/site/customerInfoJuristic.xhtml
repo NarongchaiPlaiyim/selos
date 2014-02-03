@@ -1183,7 +1183,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,frmMain:btnCancel">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,frmMain:btnCancel,frmMain:btnRefresh">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
@@ -1192,8 +1192,11 @@
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{custInfoSumJuris.severity}"
-                         header="#{custInfoSumJuris.messageHeader}" message="#{custInfoSumJuris.message}">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         severity="#{custInfoSumJuris.severity}" header="#{custInfoSumJuris.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{custInfoSumJuris.message}" escape="false"/>
+            </f:facet>
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"
@@ -1207,7 +1210,7 @@
         <ui:param name="formId" value="frmConfirmDeleteIndividual"/>
         <ui:param name="controller" value="#{custInfoSumJuris}"/>
         <ui:param name="action" value="onDeleteIndividual"/>
-        <ui:param name="update" value=":frmMain"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessageDialog"/>
     </ui:include>
 
 </h:body>

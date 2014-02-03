@@ -66,9 +66,12 @@
                                              maxFractionDigits="2"
                                              maxIntegerDigits="18"/>
                             <p:ajax event="blur"
-                                    process=":tcgDlgForm"
-                                    listener="#{tcgInfo.calculateLtvValue}"
-                                    update=":tcgDlgForm" />
+                                process="@this"
+                                update="@this" />
+                            <!--<p:ajax event="blur"-->
+                                    <!--process=":tcgDlgForm"-->
+                                    <!--listener="#{tcgInfo.calculateLtvValue}"-->
+                                    <!--update=":tcgDlgForm" />-->
                         </p:inputText>
                     </td>
                 </tr>

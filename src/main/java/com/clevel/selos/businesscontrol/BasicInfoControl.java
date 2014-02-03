@@ -1,14 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.master.BAPaymentMethodDAO;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.dao.master.ProductGroupDAO;
 import com.clevel.selos.dao.master.RequestTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.db.master.BAPaymentMethod;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.SBFScore;
 import com.clevel.selos.model.db.master.User;
@@ -224,10 +223,6 @@ public class BasicInfoControl extends BusinessControl {
             basicInfoView.setQualitative(2);
         }
 
-        if (basicInfoView.getApplyBA() == 0) {
-            basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
-        }
-
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
 
@@ -236,8 +231,8 @@ public class BasicInfoControl extends BusinessControl {
             bapaInfo = new BAPAInfo();
         }
         bapaInfo.setApplyBA(basicInfoView.getApplyBA());
-        if(basicInfoView.getApplyBA() != 2){
-            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod().getId());
+        if(basicInfoView.getApplyBA() == 2){ // apply ba = yes
+            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethodValue().value());
         } else {
             bapaInfo.setBaPaymentMethod(0);
         }

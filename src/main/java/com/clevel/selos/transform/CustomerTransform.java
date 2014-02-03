@@ -11,6 +11,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerCSIView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -76,7 +77,7 @@ public class CustomerTransform extends Transform {
     CustomerOblInfoDAO customerOblInfoDAO;
 
     public CustomerInfoView transformToView(Customer customer){
-
+        log.info("Start - transformToView ::: customer : {}", customer);
         CustomerInfoView customerInfoView = new CustomerInfoView();
 
         customerInfoView.setId(customer.getId());
@@ -246,39 +247,35 @@ public class CustomerTransform extends Transform {
                 addressView.setAddress(address.getAddress());
                 addressView.setAddressTypeFlag(address.getAddressTypeFlag());
 
-                if(customer.getCustomerEntity().getId() == 1){
-                    if(address.getAddressType().getId() == 1){
-                        // Current address
-                        customerInfoView.setCurrentAddress(addressView);
-                        if(customerInfoView.getCurrentAddress() == null){
-                            customerInfoView.setCurrentAddress(new AddressView());
-                        }
-                    } else if(address.getAddressType().getId() == 2){
-                        // Register Address
-                        customerInfoView.setRegisterAddress(addressView);
-                        if(customerInfoView.getRegisterAddress() == null){
-                            customerInfoView.setRegisterAddress(new AddressView());
-                        }
-                    } else if(address.getAddressType().getId() == 3){
-                        // Work Address
-                        customerInfoView.setWorkAddress(addressView);
-                        if(customerInfoView.getWorkAddress() == null){
-                            customerInfoView.setWorkAddress(new AddressView());
-                        }
+                if(address.getAddressType().getId() == 1){
+                    // Current address
+                    customerInfoView.setCurrentAddress(addressView);
+                    if(customerInfoView.getCurrentAddress() == null){
+                        customerInfoView.setCurrentAddress(new AddressView());
                     }
-                } else {
-                    if(address.getAddressType().getId() == 4){
-                        // Register Address
-                        customerInfoView.setRegisterAddress(addressView);
-                        if(customerInfoView.getRegisterAddress() == null){
-                            customerInfoView.setRegisterAddress(new AddressView());
-                        }
-                    } else if(address.getAddressType().getId() == 5){
-                        // Work Address
-                        customerInfoView.setWorkAddress(addressView);
-                        if(customerInfoView.getWorkAddress() == null){
-                            customerInfoView.setWorkAddress(new AddressView());
-                        }
+                } else if(address.getAddressType().getId() == 2){
+                    // Register Address
+                    customerInfoView.setRegisterAddress(addressView);
+                    if(customerInfoView.getRegisterAddress() == null){
+                        customerInfoView.setRegisterAddress(new AddressView());
+                    }
+                } else if(address.getAddressType().getId() == 3){
+                    // Work Address
+                    customerInfoView.setWorkAddress(addressView);
+                    if(customerInfoView.getWorkAddress() == null){
+                        customerInfoView.setWorkAddress(new AddressView());
+                    }
+                } else if(address.getAddressType().getId() == 4){
+                    // Register Address
+                    customerInfoView.setRegisterAddress(addressView);
+                    if(customerInfoView.getRegisterAddress() == null){
+                        customerInfoView.setRegisterAddress(new AddressView());
+                    }
+                } else if(address.getAddressType().getId() == 5){
+                    // Work Address
+                    customerInfoView.setWorkAddress(addressView);
+                    if(customerInfoView.getWorkAddress() == null){
+                        customerInfoView.setWorkAddress(new AddressView());
                     }
                 }
             }
@@ -419,12 +416,12 @@ public class CustomerTransform extends Transform {
             customerInfoView.setIndLv("-");
         }
 
-        log.info("Return Customer {}", customerInfoView);
+        log.info("Return - transformToView ::: customerInfoView : {}", customerInfoView);
         return customerInfoView;
     }
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
-        log.info("transformToModel ::: customerInfoView : {}", customerInfoView);
+        log.info("Start - transformToModel ::: customerInfoView : {}", customerInfoView);
         Customer customer = new Customer();
         if(customerInfoView.getId() != 0){
             customer = customerDAO.findById(customerInfoView.getId());
@@ -798,7 +795,7 @@ public class CustomerTransform extends Transform {
         customer.setAgeMonths(customerInfoView.getAgeMonths());
 
         //set for Customer Obligation Info
-        if(customerInfoView.getTmbCustomerId() != null){
+        if(customerInfoView.getTmbCustomerId() != null && !Util.isEmpty(customerInfoView.getTmbCustomerId())){
             CustomerOblInfo customerOblInfo = null;
             if(customerInfoView.getCustomerOblInfoID() != 0) {
                 try{
@@ -825,8 +822,10 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
+        } else {
+            customer.setCustomerOblInfo(null);
         }
-
+        log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
     }
 

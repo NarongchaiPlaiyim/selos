@@ -1,8 +1,8 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.BAPaymentMethodDAO;
 import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
@@ -23,8 +23,6 @@ public class BasicInfoTransform extends Transform {
     BasicInfoDAO basicInfoDAO;
     @Inject
     BAPAInfoDAO bapaInfoDAO;
-    @Inject
-    BAPaymentMethodDAO baPaymentMethodDAO;
 
     @Inject
     public BasicInfoTransform() {
@@ -183,14 +181,17 @@ public class BasicInfoTransform extends Transform {
         BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
         if (bapaInfo == null){
             basicInfoView.setApplyBA(0);
-            basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+            basicInfoView.setBaPaymentMethodValue(null);
         } else {
             basicInfoView.setApplyBA(bapaInfo.getApplyBA());
-            if(bapaInfo.getId() != 0){
-                BAPaymentMethod baPaymentMethod = baPaymentMethodDAO.findById(bapaInfo.getBaPaymentMethod());
-                basicInfoView.setBaPaymentMethod(baPaymentMethod);
+            if(bapaInfo.getApplyBA() == 2){
+                if(bapaInfo.getBaPaymentMethod() == BAPaymentMethodValue.TOPUP.value()){
+                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.TOPUP);
+                } else {
+                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.DIRECT);
+                }
             } else {
-                basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+                basicInfoView.setBaPaymentMethodValue(null);
             }
         }
 

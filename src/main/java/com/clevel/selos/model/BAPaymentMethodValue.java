@@ -1,17 +1,13 @@
 package com.clevel.selos.model;
 
-public enum RadioValue {
-    NOT_SELECTED(0, "NOT SELECT"),
-    NO(1, "No"),
-    YES(2, "Yes"),
-    PASS(3, "Pass"),
-    FAIL(4, "Fail"),
-    NA(5, "N/A");
+public enum BAPaymentMethodValue {
+    TOPUP(1,"Top Up BA"),
+    DIRECT(2,"Directly Pay by Customer");
 
     int value;
     String shortName;
 
-    RadioValue(int value, String shortName) {
+    private BAPaymentMethodValue(int value, String shortName) {
         this.value = value;
         this.shortName = shortName;
     }

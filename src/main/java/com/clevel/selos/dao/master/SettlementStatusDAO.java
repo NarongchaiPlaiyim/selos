@@ -5,10 +5,12 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class SettlementStatusDAO extends GenericDAO<SettlementStatus, Integer> {
     @Inject
@@ -47,4 +49,16 @@ public class SettlementStatusDAO extends GenericDAO<SettlementStatus, Integer> {
         }
         return settlementStatus;
     }
+
+
+    public List<SettlementStatus> getListSettlementStatusByCusEntity(int customerEntityId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("active", 1));
+        criteria.addOrder(Order.asc("id"));
+        List<SettlementStatus> settlementStatusList = criteria.list();
+        log.debug("getListSettlementStatusByCusEntity. (AccountType size:{} )", settlementStatusList.size());
+        return settlementStatusList;
+    }
+
 }

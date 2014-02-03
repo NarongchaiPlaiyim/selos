@@ -76,7 +76,6 @@ public class AppraisalRequestControl extends BusinessControl {
             appraisalContactDetailList= appraisalContactDetailDAO.findByAppraisal(appraisal);
             if(appraisalContactDetailList.size()>0){
                 appraisalContactDetailViewList = appraisalContactDetailTransform.transformToView(appraisalContactDetailList);
-                appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
             }
         }else{
             appraisalView = null;
@@ -101,7 +100,6 @@ public class AppraisalRequestControl extends BusinessControl {
         log.info( "appraisalDAO persist end" );
 
         appraisalDetailViewList = appraisalView.getAppraisalDetailViewList();
-        appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
 
         if(appraisalDetailViewList.size()>0){
             List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
@@ -111,13 +109,7 @@ public class AppraisalRequestControl extends BusinessControl {
         appraisalDetailDAO.persist(appraisalDetailList);
         log.info( "appraisalDetailDAO persist end" );
 
-
-
-        if(appraisalContactDetailViewList.size()>0){
-            List<AppraisalContactDetail>   appraisalContactDetailListDel = appraisalContactDetailDAO.findByAppraisal(appraisal);
-            appraisalContactDetailDAO.delete(appraisalContactDetailListDel);
-        }
-        appraisalContactDetailList = appraisalContactDetailTransform.transformToModel(appraisalContactDetailViewList, appraisal);
+        appraisalContactDetailList = null;//appraisalContactDetailTransform.transformToModel(appraisalContactDetailViewList, appraisal);
         appraisalContactDetailDAO.persist(appraisalContactDetailList);
         log.info( "appraisalContactDetailDAO persist end" );
 
