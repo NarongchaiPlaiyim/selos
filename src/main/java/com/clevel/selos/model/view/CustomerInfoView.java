@@ -124,13 +124,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
     //for new field
     //age , customer entity
     private int ageMonths;
+    private long customerOblInfoID;
     private int existingSMECustomer;
     private Date lastReviewDate;
     private Date extendedReviewDate;
     private int extendedReviewDateFlag;
     private Date nextReviewDate;
     private int nextReviewDateFlag;
-
     private Date lastContractDate;
     private Date numberOfMonthsLastContractDate;
     private String adjustClass;
@@ -139,6 +139,10 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private BigDecimal pendingClaimLG;
 
     private BigDecimal shares;
+
+    private boolean isRefreshInterface;
+
+    List<Long> removeIndividualIdList;
 
     public CustomerInfoView(){
         //reset();
@@ -203,9 +207,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.countryIncome = new Country();
         this.individualViewList = new ArrayList<CustomerInfoView>();
 //        this.percentShareSummary = BigDecimal.ZERO;
-
         this.unpaidFeeInsurance = BigDecimal.ZERO;
         this.pendingClaimLG = BigDecimal.ZERO;
+        this.customerOblInfoID = 0;
+        this.isRefreshInterface = false;
+        this.removeIndividualIdList = new ArrayList<Long>();
     }
 
     public long getIndividualId() {
@@ -991,6 +997,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.ratingFinal = ratingFinal;
     }
 
+    public long getCustomerOblInfoID() {
+        return customerOblInfoID;
+    }
+
+    public void setCustomerOblInfoID(long customerOblInfoID) {
+        this.customerOblInfoID = customerOblInfoID;
+    }
+
     public String getJurLv() {
         return jurLv;
     }
@@ -1021,6 +1035,22 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setShares(BigDecimal shares) {
         this.shares = shares;
+    }
+
+    public boolean isRefreshInterface() {
+        return isRefreshInterface;
+    }
+
+    public void setRefreshInterface(boolean refreshInterface) {
+        isRefreshInterface = refreshInterface;
+    }
+
+    public List<Long> getRemoveIndividualIdList() {
+        return removeIndividualIdList;
+    }
+
+    public void setRemoveIndividualIdList(List<Long> removeIndividualIdList) {
+        this.removeIndividualIdList = removeIndividualIdList;
     }
 
     @Override
@@ -1099,6 +1129,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
 //                .append("documentAuthorizeDate", documentAuthorizeDate)
 //                .append("kycReason", kycReason)
 //                .append("worthiness", worthiness)
+                .append("customerOblInfoID", customerOblInfoID)
                 .toString();
     }
 }

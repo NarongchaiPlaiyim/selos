@@ -26,34 +26,6 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     NewCreditTierDetailDAO newCreditTierDetailDAO;
 
-/*    public List<NewCreditDetail> getNewCreditDetailForGuarantor(List<NewCreditDetailView> newCreditGrtViews, List<NewCreditDetail> newCreditDetailAll) {
-        List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
-        for (NewCreditDetailView newCreditDetailView : newCreditGrtViews) {
-            for (NewCreditDetail newCreditDetail : newCreditDetailAll) {
-                if (newCreditDetailView.getSeq() == newCreditDetail.getSeq()) {
-                    newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
-                    newCreditListReturn.add(newCreditDetail);
-                }
-            }
-        }
-
-        return newCreditListReturn;
-    }
-
-    public List<NewCreditDetail> getNewCreditDetailForCollateral(List<NewCreditDetailView> newCreditCollViews, List<NewCreditDetail> newCreditDetailAll) {
-        List<NewCreditDetail> newCreditListReturn = new ArrayList<NewCreditDetail>();
-        for (NewCreditDetailView newCreditDetailView : newCreditCollViews) {
-            for (NewCreditDetail newCreditDetail : newCreditDetailAll) {
-                if (newCreditDetailView.getSeq() == newCreditDetail.getSeq()) {
-                    newCreditListReturn.add(newCreditDetail);
-                }
-            }
-        }
-
-        return newCreditListReturn;
-    }*/
-
-
     public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
@@ -79,7 +51,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setApproved(newCreditDetailView.getApproved());
             newCreditDetail.setNoFlag(Util.returnNumForFlag(newCreditDetailView.isNoFlag()));
             newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
-            newCreditDetail.setDisbursement(newCreditDetailView.getDisbursement());
+            newCreditDetail.setDisbursementType(newCreditDetailView.getDisbursement());
             newCreditDetail.setFinalPrice(newCreditDetailView.getFinalPrice());
             newCreditDetail.setCreditType(newCreditDetailView.getCreditType());
             newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
@@ -134,7 +106,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setApproved(newCreditDetail.getApproved());
             newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
             newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
-            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursement());
+            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursementType());
             newCreditDetailView.setFinalPrice(newCreditDetail.getFinalPrice());
             newCreditDetailView.setCreditType(newCreditDetail.getCreditType());
             newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());

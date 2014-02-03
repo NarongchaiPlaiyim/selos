@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,12 @@ public class NewCollateral implements Serializable {
     @SequenceGenerator(name = "SEQ_WRK_NEW_COLL_ID", sequenceName = "SEQ_WRK_NEW_COLL_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_ID")
     private long id;
+
+    @Column(name = "propose_type")
+    private String proposeType;
+
+    @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
+    private int appraisalRequest;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "appraisal_date")
@@ -80,12 +87,32 @@ public class NewCollateral implements Serializable {
     @OneToMany(mappedBy = "newCollateral", cascade = CascadeType.ALL)
     private List<NewCollateralCredit> newCollateralCreditList;
 
+    /*** For Post - Insurance Premium Quote Process ***/
+    @Column(name = "premium_amount", length = 14, scale = 2)
+    private BigDecimal premiumAmount;
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public int getAppraisalRequest() {
+        return appraisalRequest;
+    }
+
+    public void setAppraisalRequest(int appraisalRequest) {
+        this.appraisalRequest = appraisalRequest;
     }
 
     public Date getAppraisalDate() {
@@ -240,11 +267,12 @@ public class NewCollateral implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("proposeType", proposeType)
+                .append("appraisalRequest", appraisalRequest)
                 .append("appraisalDate", appraisalDate)
                 .append("jobID", jobID)
                 .append("aadDecision", aadDecision)
@@ -257,11 +285,15 @@ public class NewCollateral implements Serializable {
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
                 .append("bdmComments", bdmComments)
-                .append("newCreditFacility", newCreditFacility)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("newCreditFacility", newCreditFacility)
+                .append("newCollateralHeadList", newCollateralHeadList)
+                .append("newCollateralCreditList", newCollateralCreditList)
                 .toString();
     }
+
+
 }

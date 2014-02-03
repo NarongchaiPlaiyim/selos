@@ -2,9 +2,11 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
+import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -12,6 +14,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -60,21 +63,27 @@ public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     private BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
-    private OpenAccountProductDAO openAccountProductDAO;
+    private BankAccountProductDAO accountProductDAO;
     @Inject
-    private OpenAccountPurposeDAO openAccountPurposeDAO;
+    private BankAccountPurposeDAO accountPurposeDAO;
     @Inject
     private BankDAO bankDAO;
     @Inject
-    private BasicInfoControl basicInfoControl;
-    @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
     @Inject
-    private BAPaymentMethodDAO baPaymentMethodDAO;
+    private CustomerDAO customerDAO;
+
     @Inject
     private BankAccountTypeTransform bankAccountTypeTransform;
     @Inject
     private SBFScoreTransform sbfScoreTransform;
+    @Inject
+    private CustomerTransform customerTransform;
+
+    @Inject
+    private BasicInfoControl basicInfoControl;
+    @Inject
+    private OpenAccountControl openAccountControl;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -85,13 +94,12 @@ public class BasicInfo extends MandatoryFieldsControl {
     private List<Bank> bankList;
 
     private List<BankAccountType> bankAccountTypeList;
-    private List<OpenAccountProduct> openAccountProductList;
-    private List<OpenAccountPurpose> openAccountPurposeList;
+    private List<BankAccountProduct> accountProductList;
+    private List<BankAccountPurpose> accountPurposeList;
 
-    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
+    private List<BankAccountPurposeView> bankAccountPurposeViewList;
 
     private List<BorrowingType> borrowingTypeList;
-    private List<BAPaymentMethod> baPaymentMethodList;
 
     private List<String> yearList;
 
@@ -99,10 +107,10 @@ public class BasicInfo extends MandatoryFieldsControl {
     private BasicInfoView basicInfoView;
 
     //Dialog
-    private BasicInfoAccountView basicInfoAccountView;
+    private OpenAccountView openAccountView;
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
-    private BasicInfoAccountView selectAccount;
+    private OpenAccountView selectAccount;
     private int rowIndex;
 
     private String messageHeader;
@@ -194,6 +202,11 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     private String currentDateDDMMYY;
 
+    private List<CustomerInfoView> customerInfoViewList;
+    private long customerId;
+    private List<CustomerInfoView> accountNameList;
+    private CustomerInfoView selectAccountName;
+
     public BasicInfo(){
     }
 
@@ -227,26 +240,28 @@ public class BasicInfo extends MandatoryFieldsControl {
         sbfScoreViewList =  sbfScoreTransform.transformToView(sbfScoreDAO.findAll());
         bankList = bankDAO.getListRefinance();
 
-        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        openAccountProductList = new ArrayList<OpenAccountProduct>();
+        customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
 
-        openAccountPurposeList = openAccountPurposeDAO.findAll();
-        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
-            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+        accountProductList = new ArrayList<BankAccountProduct>();
+        accountPurposeList = accountPurposeDAO.findAll();
+        accountNameList = new ArrayList<CustomerInfoView>();
+        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+        for(BankAccountPurpose oap : accountPurposeList){
+            BankAccountPurposeView purposeView = new BankAccountPurposeView();
             purposeView.setPurpose(oap);
-            basicInfoAccountPurposeViewList.add(purposeView);
+            bankAccountPurposeViewList.add(purposeView);
         }
 
         CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
 
-        baPaymentMethodList = baPaymentMethodDAO.findAll();
-
-        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
-        }
+//        baPaymentMethodList = baPaymentMethodDAO.findAll();
+//
+//        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+//            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
+//        }
 
         basicInfoView.setSpProgram(0);
         basicInfoView.setRefIn(0);
@@ -269,7 +284,7 @@ public class BasicInfo extends MandatoryFieldsControl {
             disQualitativeType = true;
         }
 
-        basicInfoAccountView = new BasicInfoAccountView();
+        openAccountView = new OpenAccountView();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
 
@@ -425,18 +440,22 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onInitAddAccount(){
-        basicInfoAccountView = new BasicInfoAccountView();
+        openAccountView = new OpenAccountView();
+
+        customerId = 0;
+
+        accountNameList = new ArrayList<CustomerInfoView>();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
 
-        openAccountProductList = new ArrayList<OpenAccountProduct>();
+        accountProductList = new ArrayList<BankAccountProduct>();
 
-        openAccountPurposeList = openAccountPurposeDAO.findAll();
-        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
-            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+        accountPurposeList = accountPurposeDAO.findAll();
+        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+        for(BankAccountPurpose oap : accountPurposeList){
+            BankAccountPurposeView purposeView = new BankAccountPurposeView();
             purposeView.setPurpose(oap);
-            basicInfoAccountPurposeViewList.add(purposeView);
+            bankAccountPurposeViewList.add(purposeView);
         }
 
         modeForButton = ModeForButton.ADD;
@@ -444,19 +463,21 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onSelectEditAccount(){
         Cloner cloner = new Cloner();
-        basicInfoAccountView = cloner.deepClone(selectAccount);
+        openAccountView = cloner.deepClone(selectAccount);
         onChangeAccountType();
 
-        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
-            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+        accountNameList = cloner.deepClone(openAccountView.getAccountNameList());
+
+        bankAccountPurposeViewList = new ArrayList<BankAccountPurposeView>();
+        for(BankAccountPurpose oap : accountPurposeList){
+            BankAccountPurposeView purposeView = new BankAccountPurposeView();
             purposeView.setPurpose(oap);
-            basicInfoAccountPurposeViewList.add(purposeView);
+            bankAccountPurposeViewList.add(purposeView);
         }
 
-        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+        for(BankAccountPurposeView biapv : openAccountView.getBankAccountPurposeView()){
             if(biapv.isSelected()){
-                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
+                for(BankAccountPurposeView purposeView : bankAccountPurposeViewList){
                     if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
                         purposeView.setSelected(true);
                     }
@@ -464,231 +485,10 @@ public class BasicInfo extends MandatoryFieldsControl {
             }
         }
         modeForButton = ModeForButton.EDIT;
-    }
-
-    public void onAddAccount(){
-        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
-            basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
-        }else{
-            basicInfoAccountView.getBankAccountTypeView().setName("-");
-        }
-
-        if(basicInfoAccountView.getProduct().getId() != 0){
-            basicInfoAccountView.setProduct(openAccountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
-        }else{
-            basicInfoAccountView.getProduct().setName("-");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
-        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
-            if(bia.isSelected()){
-                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
-                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(bia.getPurpose().getName());
-                }else{
-                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(", "+bia.getPurpose().getName());
-                }
-            }
-        }
-
-        if(!stringBuilder.toString().isEmpty()){
-            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
-            basicInfoAccountView.setPurposeForShow("-");
-        }
-
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-            basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
-        }else{
-            basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
-        }
-
-        boolean complete = true;        //Change only failed to save
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.addCallbackParam("functionComplete", complete);
-    }
-
-    /*public void onSelectEditAccount(){
-        accDlg = "";
-        basicInfoAccountView = new BasicInfoAccountView();
-        Cloner cloner = new Cloner();
-        basicInfoAccountView = cloner.deepClone(selectAccount);
-        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getByShortName(basicInfoAccountView.getBankAccountTypeView().getShortName())));
-        onChangeAccountType();
-
-        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
-            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
-            purposeView.setPurpose(oap);
-            basicInfoAccountPurposeViewList.add(purposeView);
-        }
-
-        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
-            if(biapv.isSelected()){
-                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
-                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
-                        purposeView.setSelected(true);
-                    }
-                }
-            }
-        }
-        modeForButton = ModeForButton.EDIT;
-    }*/
-
-    /*public void onAddAccount(){
-        accDlg = "";
-
-        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
-            basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
-        }else{
-            basicInfoAccountView.getBankAccountTypeView().setName("-");
-        }
-
-        if(basicInfoAccountView.getProduct().getId() != 0){
-            basicInfoAccountView.setProduct(openAccountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
-        }else{
-            basicInfoAccountView.getProduct().setName("-");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        List<BasicInfoAccountPurposeView> purposeViewTmp = new ArrayList<BasicInfoAccountPurposeView>();
-        for(BasicInfoAccountPurposeView ba : basicInfoAccountView.getBasicInfoAccountPurposeView()){
-            purposeViewTmp.add(ba);
-        }
-
-        basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
-        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
-            if(bia.isSelected()){
-                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
-                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(bia.getPurpose().getName());
-                }else{
-                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(", "+bia.getPurpose().getName());
-                }
-            }
-        }
-
-        //check existing
-        if(basicInfoView.getBasicInfoAccountViews() != null && basicInfoView.getBasicInfoAccountViews().size() > 0){
-            int listIndex = 0;
-            for(BasicInfoAccountView basicAccView : basicInfoView.getBasicInfoAccountViews()){
-                if(modeForButton.equals(ModeForButton.EDIT)){ // edit
-                    if(rowIndex != listIndex){
-                        if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
-                            if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
-                                if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
-                                    if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
-                                        accDlg = "ui-state-error";
-                                        boolean complete = false;
-                                        RequestContext context = RequestContext.getCurrentInstance();
-                                        context.addCallbackParam("functionComplete", complete);
-                                        basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
-                                        return;
-                                    } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
-                                        boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
-                                        int arrayIndex = 0;
-                                        for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
-                                            for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
-                                                if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
-                                                    arrayBoolean[arrayIndex] = true;
-                                                    break;
-                                                } else {
-                                                    arrayBoolean[arrayIndex] = false;
-                                                }
-                                            }
-                                            arrayIndex++;
-                                        }
-                                        for(boolean b : arrayBoolean){
-                                            if(!b){
-                                                break;
-                                            } else {
-                                                accDlg = "ui-state-error";
-                                                boolean complete = false;
-                                                RequestContext context = RequestContext.getCurrentInstance();
-                                                context.addCallbackParam("functionComplete", complete);
-                                                basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
-                                                return;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else { // add new
-                    if(basicInfoAccountView.getAccountName().equalsIgnoreCase(basicAccView.getAccountName())){
-                        if(basicInfoAccountView.getBankAccountTypeView().getName().equalsIgnoreCase(basicAccView.getBankAccountTypeView().getName())){
-                            if(basicInfoAccountView.getProduct().getName().equalsIgnoreCase(basicAccView.getProduct().getName())){
-                                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0 && basicAccView.getBasicInfoAccountPurposeView().size() == 0){ // check size
-                                    accDlg = "ui-state-error";
-                                    boolean complete = false;
-                                    RequestContext context = RequestContext.getCurrentInstance();
-                                    context.addCallbackParam("functionComplete", complete);
-                                    basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
-                                    return;
-                                } else if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == basicAccView.getBasicInfoAccountPurposeView().size()){ // check size
-                                    boolean[] arrayBoolean = new boolean[basicInfoAccountView.getBasicInfoAccountPurposeView().size()];
-                                    int arrayIndex = 0;
-                                    for(BasicInfoAccountPurposeView baPurposeNow : basicInfoAccountView.getBasicInfoAccountPurposeView()){
-                                        for(BasicInfoAccountPurposeView baPurposeList : basicAccView.getBasicInfoAccountPurposeView()){
-                                            if(baPurposeNow.getPurpose().getName().equalsIgnoreCase(baPurposeList.getPurpose().getName())){
-                                                arrayBoolean[arrayIndex] = true;
-                                                break;
-                                            } else {
-                                                arrayBoolean[arrayIndex] = false;
-                                            }
-                                        }
-                                        arrayIndex++;
-                                    }
-                                    for(boolean b : arrayBoolean){
-                                        if(!b){
-                                            break;
-                                        } else {
-                                            accDlg = "ui-state-error";
-                                            boolean complete = false;
-                                            RequestContext context = RequestContext.getCurrentInstance();
-                                            context.addCallbackParam("functionComplete", complete);
-                                            basicInfoAccountView.setBasicInfoAccountPurposeView(purposeViewTmp);
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                listIndex++;
-            }
-        }
-
-        if(!stringBuilder.toString().isEmpty()){
-            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
-            basicInfoAccountView.setPurposeForShow("-");
-        }
-
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-            basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
-        }else{
-            basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
-        }
-
-        boolean complete = true;        //Change only failed to save
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.addCallbackParam("functionComplete", complete);
-    }*/
-
-    public void onDeleteAccount() {
-        basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
     public void onChangeAccountType(){
-        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
+        accountProductList = accountProductDAO.findByBankAccountTypeId(openAccountView.getBankAccountTypeView().getId());
     }
 
     public void onSave(){
@@ -790,13 +590,9 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
 
         if(basicInfoView.getApplyBA() == 1 || basicInfoView.getApplyBA() == 0){
-            basicInfoView.getBaPaymentMethod().setId(0);
+            basicInfoView.setBaPaymentMethodValue(null);
         }else{
-            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
-            }else{
-                basicInfoView.getBaPaymentMethod().setId(0);
-            }
+            basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.TOPUP);
         }
 
         if(basicInfoView.getApplyBA() == 2){ // yes
@@ -930,21 +726,6 @@ public class BasicInfo extends MandatoryFieldsControl {
         }
     }
 
-    public void onRefreshInterfaceInfo(){
-        try{
-            messageHeader = "Information.";
-            message = "Waiting for this function.";
-            severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex){
-            log.debug("refreshInterfaceInfo Exception : {}", ex);
-            messageHeader = "Error.";
-            message = ex.getMessage();
-            severity = "alert";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
-    }
-
     public void onDuplicateApplication(){
         try{
             messageHeader = "Information.";
@@ -1036,6 +817,90 @@ public class BasicInfo extends MandatoryFieldsControl {
         disBaPaymentMethod = false;
     }
 
+    public void onAddAccountName(){
+        if(customerId == 0){
+            return;
+        }
+        if(accountNameList.size() > 0){
+            for (CustomerInfoView c : accountNameList) {
+                if(customerId == c.getId()){
+                    return;
+                }
+            }
+        }
+        CustomerInfoView customerInfoView = customerTransform.transformToView(customerDAO.findById(customerId));
+        accountNameList.add(customerInfoView);
+    }
+
+    public void onDeleteAccountName(){
+        accountNameList.remove(selectAccountName);
+    }
+
+    public void onAddAccount(){
+        if(accountNameList.size() == 0){
+            return;
+        }
+
+        StringBuilder accName = new StringBuilder();
+        for (int i=0; i<accountNameList.size(); i++){
+            if(accountNameList.size()-1 == i){
+                accName.append(accountNameList.get(i).getFirstNameTh()+" "+accountNameList.get(i).getLastNameTh());
+            } else {
+                accName.append(accountNameList.get(i).getFirstNameTh()+" "+accountNameList.get(i).getLastNameTh()+", ");
+            }
+        }
+        openAccountView.setAccountName(accName.toString());
+        openAccountView.setAccountNameList(accountNameList);
+
+        if(openAccountView.getBankAccountTypeView().getId() != 0){
+            openAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(openAccountView.getBankAccountTypeView().getId())));
+        }else{
+            openAccountView.getBankAccountTypeView().setName("-");
+        }
+
+        if(openAccountView.getBankAccountProduct().getId() != 0){
+            openAccountView.setBankAccountProduct(accountProductDAO.findById(openAccountView.getBankAccountProduct().getId()));
+        }else{
+            openAccountView.getBankAccountProduct().setName("-");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        openAccountView.setBankAccountPurposeView(new ArrayList<BankAccountPurposeView>());
+        for(BankAccountPurposeView bia : bankAccountPurposeViewList){
+            if(bia.isSelected()){
+                if(openAccountView.getBankAccountPurposeView().size() == 0){
+                    openAccountView.getBankAccountPurposeView().add(bia);
+                    stringBuilder.append(bia.getPurpose().getName());
+                }else{
+                    openAccountView.getBankAccountPurposeView().add(bia);
+                    stringBuilder.append(", "+bia.getPurpose().getName());
+                }
+            }
+        }
+
+        if(!stringBuilder.toString().isEmpty()){
+            openAccountView.setPurposeForShow(stringBuilder.toString());
+        }else{
+            openAccountView.setPurposeForShow("-");
+        }
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            basicInfoView.getOpenAccountViews().add(openAccountView);
+        }else{
+            basicInfoView.getOpenAccountViews().set(rowIndex, openAccountView);
+        }
+
+        boolean complete = true;        //Change only failed to save
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onDeleteAccount() {
+        basicInfoView.getDeleteTmpList().add(selectAccount.getId());
+        basicInfoView.getOpenAccountViews().remove(selectAccount);
+    }
+
     // Get Set
     public BasicInfoView getBasicInfoView() {
         return basicInfoView;
@@ -1077,12 +942,12 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.riskTypeList = riskTypeList;
     }
 
-    public BasicInfoAccountView getBasicInfoAccountView() {
-        return basicInfoAccountView;
+    public OpenAccountView getOpenAccountView() {
+        return openAccountView;
     }
 
-    public void setBasicInfoAccountView(BasicInfoAccountView basicInfoAccountView) {
-        this.basicInfoAccountView = basicInfoAccountView;
+    public void setOpenAccountView(OpenAccountView openAccountView) {
+        this.openAccountView = openAccountView;
     }
 
     public List<BankAccountType> getBankAccountTypeList() {
@@ -1093,20 +958,20 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.bankAccountTypeList = bankAccountTypeList;
     }
 
-    public List<OpenAccountProduct> getOpenAccountProductList() {
-        return openAccountProductList;
+    public List<BankAccountProduct> getAccountProductList() {
+        return accountProductList;
     }
 
-    public void setOpenAccountProductList(List<OpenAccountProduct> openAccountProductList) {
-        this.openAccountProductList = openAccountProductList;
+    public void setAccountProductList(List<BankAccountProduct> accountProductList) {
+        this.accountProductList = accountProductList;
     }
 
-    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeViewList() {
-        return basicInfoAccountPurposeViewList;
+    public List<BankAccountPurposeView> getBankAccountPurposeViewList() {
+        return bankAccountPurposeViewList;
     }
 
-    public void setBasicInfoAccountPurposeViewList(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList) {
-        this.basicInfoAccountPurposeViewList = basicInfoAccountPurposeViewList;
+    public void setBankAccountPurposeViewList(List<BankAccountPurposeView> bankAccountPurposeViewList) {
+        this.bankAccountPurposeViewList = bankAccountPurposeViewList;
     }
 
     public List<SBFScoreView> getSbfScoreViewList() {
@@ -1125,11 +990,11 @@ public class BasicInfo extends MandatoryFieldsControl {
         this.bankList = bankList;
     }
 
-    public BasicInfoAccountView getSelectAccount() {
+    public OpenAccountView getSelectAccount() {
         return selectAccount;
     }
 
-    public void setSelectAccount(BasicInfoAccountView selectAccount) {
+    public void setSelectAccount(OpenAccountView selectAccount) {
         this.selectAccount = selectAccount;
     }
 
@@ -1155,14 +1020,6 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
-    }
-
-    public List<BAPaymentMethod> getBaPaymentMethodList() {
-        return baPaymentMethodList;
-    }
-
-    public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
-        this.baPaymentMethodList = baPaymentMethodList;
     }
 
     public String getMessage() {
@@ -1756,5 +1613,37 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public List<CustomerInfoView> getCustomerInfoViewList() {
+        return customerInfoViewList;
+    }
+
+    public void setCustomerInfoViewList(List<CustomerInfoView> customerInfoViewList) {
+        this.customerInfoViewList = customerInfoViewList;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    public List<CustomerInfoView> getAccountNameList() {
+        return accountNameList;
+    }
+
+    public void setAccountNameList(List<CustomerInfoView> accountNameList) {
+        this.accountNameList = accountNameList;
+    }
+
+    public CustomerInfoView getSelectAccountName() {
+        return selectAccountName;
+    }
+
+    public void setSelectAccountName(CustomerInfoView selectAccountName) {
+        this.selectAccountName = selectAccountName;
     }
 }

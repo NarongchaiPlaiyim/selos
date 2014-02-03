@@ -275,9 +275,12 @@ public class BankStatementSummary implements Serializable {
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
 
+            onCreation();
+
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         } catch (Exception e) {
             messageHeader = "Save Bank Statement Summary Failed.";
             if (e.getCause() != null) {
@@ -422,6 +425,9 @@ public class BankStatementSummary implements Serializable {
 //        map.put("numberOfMonths", numberOfMonths);
 //        map.put("selectedBankStmtView", selectedBankStmtView);
 //        FacesUtil.getFlash().put("bankStmtSumParams", map);
+
+        summaryView.setSeasonal(seasonalFlag);
+        summaryView.setExpectedSubmitDate(expectedSubmitDate);
 
         FacesUtil.setSessionMapValue("bankStmtSumView", summaryView);
         FacesUtil.setSessionMapValue("isTmbBank", isTMB);

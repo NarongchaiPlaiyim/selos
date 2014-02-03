@@ -18,9 +18,8 @@ public class AppraisalContactDetailTransform extends Transform {
         AppraisalContactDetail appraisalContactDetail = new AppraisalContactDetail();
 
         appraisalContactDetail.setAppraisal(appraisal);
-        appraisalContactDetail.setNo(appraisalContactDetailView.getNo());
-        appraisalContactDetail.setCustomerName(appraisalContactDetailView.getCustomerName());
-        appraisalContactDetail.setContactNo(appraisalContactDetailView.getContactNo());
+//        appraisalContactDetail.setCustomerName(appraisalContactDetailView.getCustomerName());
+//        appraisalContactDetail.setContactNo(appraisalContactDetailView.getContactNo());
 
         appraisalContactDetail.setCreateBy(appraisalContactDetailView.getCreateBy());
         appraisalContactDetail.setCreateDate(DateTime.now().toDate());
@@ -39,9 +38,8 @@ public class AppraisalContactDetailTransform extends Transform {
 
             AppraisalContactDetailView appraisalContactDetailView = new AppraisalContactDetailView();
 
-            appraisalContactDetailView.setNo(appraisalContactDetail.getNo());
-            appraisalContactDetailView.setCustomerName(appraisalContactDetail.getCustomerName());
-            appraisalContactDetailView.setContactNo(appraisalContactDetail.getContactNo());
+//            appraisalContactDetailView.setCustomerName(appraisalContactDetail.getCustomerName());
+//            appraisalContactDetailView.setContactNo(appraisalContactDetail.getContactNo());
 
             appraisalContactDetailView.setCreateBy(appraisalContactDetail.getCreateBy());
             appraisalContactDetailView.setCreateDate(appraisalContactDetail.getCreateDate());

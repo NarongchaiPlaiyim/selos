@@ -159,9 +159,15 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     }
 
     public void onAddReason() {
-        ExSumReasonView exSumReasonView = new ExSumReasonView();
-        exSumReasonView.setCode(reason.getCode());
-        exSummaryView.getDeviateCode().add(exSumReasonView);
+        if(reason.getId() != 0){
+            Reason findReason = reasonDAO.findById(reason.getId());
+            if(findReason != null){
+                ExSumReasonView exSumReasonView = new ExSumReasonView();
+                exSumReasonView.setCode(findReason.getCode());
+                exSumReasonView.setDescription(findReason.getDescription());
+                exSummaryView.getDeviateCode().add(exSumReasonView);
+            }
+        }
     }
 
     public void onDeleteDeviate(){

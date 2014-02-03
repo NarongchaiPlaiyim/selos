@@ -97,7 +97,7 @@ public class BaseController implements Serializable {
             manageButton.setCheckMandateDocButton(true);
             manageButton.setCheckCriteriaButton(true);
             manageButton.setAssignToABDMButton(true);
-            manageButton.setCancelCAButton(true);
+            //manageButton.setCancelCAButton(true);
             manageButton.setSubmitCAButton(true);
         }
 
@@ -169,12 +169,33 @@ public class BaseController implements Serializable {
         log.debug("onOpenSubmitZM ::: starting...");
         zmEndorseUserId = "";
         zmEndorseRemark = "";
-        zmUserList = fullApplicationControl.getABDMUserList();
-        log.debug("onOpenSubmitZM ::: zmUserList size : {}", abdmUserList.size());
+        zmUserList = fullApplicationControl.getZMUserList();
+        log.debug("onOpenSubmitZM ::: zmUserList size : {}", zmUserList.size());
     }
 
     public void onSubmitZM(){
-
+        log.debug("onSubmitZM ::: starting...");
+        boolean complete = false;
+        if(zmEndorseUserId != null && !zmEndorseUserId.equals("")){
+            try{
+                HttpSession session = FacesUtil.getSession(true);
+                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                String queueName = session.getAttribute("queueName").toString();
+                fullApplicationControl.submitToZM(zmEndorseUserId, queueName, workCaseId);
+                messageHeader = "Information.";
+                message = "Submit to Zone Manager success.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+                complete = true;
+                log.debug("onAssignToABDM ::: success.");
+            } catch (Exception ex){
+                messageHeader = "Exception.";
+                message = "Submit to Zone Manager failed, cause : " + Util.getMessageException(ex);
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+                complete = false;
+                log.error("onSubmitZM ::: exception occurred : ", ex);
+            }
+        }
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
     public void onCancelCA(){
@@ -291,5 +312,13 @@ public class BaseController implements Serializable {
 
     public void setZmEndorseRemark(String zmEndorseRemark) {
         this.zmEndorseRemark = zmEndorseRemark;
+    }
+
+    public List<User> getZmUserList() {
+        return zmUserList;
+    }
+
+    public void setZmUserList(List<User> zmUserList) {
+        this.zmUserList = zmUserList;
     }
 }

@@ -534,8 +534,9 @@ public class PrescreenMaker implements Serializable {
         customerEntityList = customerEntityDAO.findAll();
         log.debug("onLoadSelectList ::: borrowerTypeList size : {}", customerEntityList.size());
 
-        relationList = prescreenBusinessControl.getRelationByStepId(stepId);
-        log.debug("onLoadSelectList ::: relationList size : {}", relationList.size());
+        /*relationList = prescreenBusinessControl.getRelationByStepId(stepId);
+        log.debug("onLoadSelectList ::: relationList size : {}", relationList.size());*/
+        relationList = new ArrayList<Relation>();
 
         referenceList = new ArrayList<Reference>();
 
@@ -738,7 +739,7 @@ public class PrescreenMaker implements Serializable {
         customerEntity = new CustomerEntity();
 
         if(stepId == StepValue.PRESCREEN_INITIAL.value()){
-            borrowerInfo.getRelation().setId(1);    //Set default relation to borrower
+            borrowerInfo.getRelation().setId(RelationValue.BORROWER.value());    //Set default relation to borrower
             //TODO Check caseBorrowerType;
             if(caseBorrowerTypeId == BorrowerType.INDIVIDUAL.value()){    //case borrower type = individual
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
@@ -784,8 +785,8 @@ public class PrescreenMaker implements Serializable {
 
         log.debug("onAddCustomerInfo : borrower : {}", borrowerInfo);
 
-        relationList = prescreenBusinessControl.getRelationByStepId(stepId);
-        spouseRelationList = prescreenBusinessControl.getRelationByStepId(stepId);
+        relationList = prescreenBusinessControl.getRelationByStepId(stepId, borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, 0);
+        spouseRelationList = prescreenBusinessControl.getRelationByStepId(stepId, borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, 1);
 
         enableCustomerForm = false;
         enableDocumentType = true;
@@ -797,7 +798,7 @@ public class PrescreenMaker implements Serializable {
 
     public void onEditCustomerInfo() {
         log.debug("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
-
+        log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         //Clone object
         Cloner cloner = new Cloner();
         if(selectCustomerInfoItem.getIsSpouse() == 1){
@@ -805,6 +806,7 @@ public class PrescreenMaker implements Serializable {
             log.debug("onEditCustomer ::: select spouse to edit ...");
             borrowerInfo = cloner.deepClone(customerInfoViewList.get(selectCustomerInfoItem.getListIndex()));
             borrowerRelation = cloner.deepClone(borrowerInfo.getRelation());
+            onChangeRelation();
             borrowerReference = cloner.deepClone(borrowerInfo.getReference());
             log.debug("onEditCustomer ::: get borrower from list to edit : {}", borrowerInfo);
             if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
@@ -814,12 +816,16 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setSpouse(spouse);
                 } else {
                     spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                    onChangeSpouseRelation();
                     spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
                 }
             }
         } else {
+            log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
             borrowerInfo = cloner.deepClone(selectCustomerInfoItem);
             borrowerRelation = cloner.deepClone(borrowerInfo.getRelation());
+            onChangeRelation();
+            log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
             borrowerReference = cloner.deepClone(borrowerInfo.getReference());
             if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(borrowerInfo.getSpouse() == null){
@@ -828,53 +834,51 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setSpouse(spouse);
                 } else {
                     spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                    onChangeSpouseRelation();
                     spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
                 }
             }
         }
-
+        log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         if(stepId == StepValue.PRESCREEN_INITIAL.value()){
             spouseDocumentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
         }
 
         modeForButton = ModeForButton.EDIT;
 
-        if(borrowerInfo.getRelation().getId() == 1){
-            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
+        if(borrowerInfo.getRelation().getId() == RelationValue.BORROWER.value()){
+            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value(), borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, 0);
         } else {
-            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
+            relationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value(), borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, 0);
         }
-
+        log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         if(stepId == StepValue.PRESCREEN_INITIAL.value()){
-            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
+            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         } else {
+            int borrowerRelationId = borrowerInfo.getRelation().getId();
+            Relation tmpBorrowerRelation = relationDAO.findById(borrowerRelationId);
             if(borrowerInfo.getSpouse() != null){
                 if(borrowerInfo.getSpouse().getId() != 0){
                     if(borrowerInfo.getSpouse().getRelation() != null){
-                        if(borrowerInfo.getSpouse().getRelation().getId() == 1){
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value());
+                        if(borrowerInfo.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                         } else {
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                         }
                     }
 
                 }else{
-                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
+                    spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                 }
             } else {
-                spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value());
+                spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
             }
         }
-
+        log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         documentTypeList = documentTypeDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
         titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
-        onChangeRelation();
-
-        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-            onChangeSpouseRelation();
-        }
 
         //-- To Get district list, subDistrict
         onChangeProvinceBorrower();
@@ -890,7 +894,7 @@ public class PrescreenMaker implements Serializable {
                 }
             }
         }
-
+        log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         enableCustomerForm = true;
         if(Util.isTrue(borrowerInfo.getSearchFromRM())){
             enableDocumentType = false;
@@ -911,19 +915,28 @@ public class PrescreenMaker implements Serializable {
                 enableTMBCustomerId = true;
             }
         }
-
+        log.debug("customerInfoViewList before save edit : {}", customerInfoViewList);
         enableSearchForm = false;
     }
 
     public void onChangeProvinceBorrower(){
-        if(borrowerInfo.getCurrentAddress().getProvince() != null && borrowerInfo.getCurrentAddress().getProvince().getCode() != 0){
-            districtList = districtDAO.getListByProvince(borrowerInfo.getCurrentAddress().getProvince());
-            subDistrictList = new ArrayList<SubDistrict>();
+        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(borrowerInfo.getCurrentAddress().getProvince() != null && borrowerInfo.getCurrentAddress().getProvince().getCode() != 0){
+                districtList = districtDAO.getListByProvince(borrowerInfo.getCurrentAddress().getProvince());
+                subDistrictList = new ArrayList<SubDistrict>();
+            } else {
+                districtList = new ArrayList<District>();
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
         } else {
-            districtList = new ArrayList<District>();
-            subDistrictList = new ArrayList<SubDistrict>();
+            if(borrowerInfo.getRegisterAddress().getProvince() != null && borrowerInfo.getRegisterAddress().getProvince().getCode() != 0){
+                districtList = districtDAO.getListByProvince(borrowerInfo.getRegisterAddress().getProvince());
+                subDistrictList = new ArrayList<SubDistrict>();
+            } else {
+                districtList = new ArrayList<District>();
+                subDistrictList = new ArrayList<SubDistrict>();
+            }
         }
-
     }
 
     public void onChangeDistrictBorrower(){
@@ -1338,7 +1351,17 @@ public class PrescreenMaker implements Serializable {
                         //--- Get old borrower by list index //
                         //CustomerInfoView oldCustomerInfoView = prescreenBusinessControl.cloneCustomer(customerInfoViewList.get(borrowerInfo.getListIndex()));
                         Cloner cloner = new Cloner();
-                        CustomerInfoView oldCustomerInfoView = cloner.deepClone(customerInfoViewList.get(borrowerInfo.getListIndex()));
+                        CustomerInfoView oldCustomerInfoView = null;
+                        try {
+                            oldCustomerInfoView = cloner.deepClone(customerInfoViewList.get(borrowerInfo.getListIndex()));
+                        } catch (Exception e) {
+                            log.error("============= cloning exception begin ================");
+                            log.error("workcasePrescreenId: {}",workCasePreScreenId);
+                            log.error("customerInfoViewList: {}",customerInfoViewList);
+                            log.error("borrowerInfo index: {}",borrowerInfo.getListIndex());
+                            log.error("cloning exception!",e);
+                            log.error("============= cloning exception end ================");
+                        }
                         CustomerInfoView oldSpouse = null;
                         if(oldCustomerInfoView.getSpouse() != null){
                             oldSpouse = oldCustomerInfoView.getSpouse();
@@ -1428,7 +1451,7 @@ public class PrescreenMaker implements Serializable {
                         }
                         log.debug("onSaveCustomer ::: checkSpouse ------");
                         //--- TODO add spouse to list
-                        if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
+                        if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 1){
                             log.debug("onSaveCustomer ::: borrowerInfo.getMaritalStatus() : {}", borrowerInfo.getMaritalStatus());
                             //TODO check old spouse and new spouse
                             log.debug("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
@@ -1501,7 +1524,7 @@ public class PrescreenMaker implements Serializable {
                                     relatedInfoViewList.add(newSpouse);
                                 }
                             }
-                        } else if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() != 2) {
+                        } else if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 0) {
                             //TODO check old spouse and remove from list
                             log.debug("onSaveCustomer ::: remove spouse from list");
                             log.debug("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
@@ -1642,6 +1665,7 @@ public class PrescreenMaker implements Serializable {
         }
 
         context.addCallbackParam("functionComplete", complete);
+        log.debug("customerInfoViewList after save : {}", customerInfoViewList);
 
         if(!complete){
             log.debug("onSaveCustomerInfo ::: duplicate personal id : {}", complete);
@@ -2008,6 +2032,13 @@ public class PrescreenMaker implements Serializable {
          } else{
             referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, relationId);
         }
+
+        if(relationId != 0 && borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            Relation tmpRelation = relationDAO.findById(relationId);
+            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(stepId, BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpRelation.getPriority());
+            //spouseRelation.setId(0);
+            spouseReferenceList = new ArrayList<Reference>();
+        }
     }
 
     public void onChangeSpouseRelation(){
@@ -2033,6 +2064,7 @@ public class PrescreenMaker implements Serializable {
         for(DocumentType documentType : documentTypeList){
             if(documentType.getId() == borrowerInfo.getDocumentType().getId()){
                 customerEntity.setId(documentType.getCustomerEntity().getId());
+                relationList = prescreenBusinessControl.getRelationByStepId(stepId, documentType.getCustomerEntity().getId(), caseBorrowerTypeId, 0);
                 if(caseBorrowerTypeId == 0){
                     referenceList = referenceDAO.findByCustomerEntityId(documentType.getCustomerEntity().getId(), documentType.getCustomerEntity().getId(), borrowerInfo.getRelation().getId());
                 }else{
@@ -2282,7 +2314,7 @@ public class PrescreenMaker implements Serializable {
             messageHeader = "Information.";
             message = "Cancel CA Complete.";
 
-            RequestContext.getCurrentInstance().execute("msgBoxRedirect.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
         } catch (Exception ex){
             messageHeader = "Exception.";
             message = "Cancel CA Failed, cause : " + Util.getMessageException(ex);

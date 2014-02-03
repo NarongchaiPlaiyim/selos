@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "wrk_basicinfo")
@@ -21,59 +20,81 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name = "is_no_unpaid_fee_insurance", length = 1)
+    @Column(name = "ca_number", length = 30)
+    private String caNumber;
+
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+
+    @OneToOne
+    @JoinColumn(name = "request_type_id")
+    private RequestType requestType;
+
+    @OneToOne
+    @JoinColumn(name = "request_reason_code")
+    private Reason requestReason;
+
+    @OneToOne
+    @JoinColumn(name = "product_group_id")
+    private ProductGroup productGroup;
+
+    @OneToOne
+    @JoinColumn(name = "borrower_type_id")
+    private CustomerEntity borrowerType;
+
+    @Column(name = "is_no_unpaid_fee_insurance", length = 1, nullable = false, columnDefinition = "int default 0")
     private int noUnpaidFeeInsurance;
 
-    @Column(name = "is_no_pending_claim_lg", length = 1)
+    @Column(name = "is_no_pending_claim_lg", length = 1, nullable = false, columnDefinition = "int default 0")
     private int noPendingClaimLG;
 
-    @Column(name = "construct_request_lg")
+    @Column(name = "construct_request_lg", length = 1, nullable = false, columnDefinition = "int default 0")
     private int constructionRequestLG;
 
-    @Column(name = "able_to_get_guarantor")
+    @Column(name = "able_to_get_guarantor", length = 1, nullable = false, columnDefinition = "int default 0")
     private int ableToGettingGuarantorJob;
 
-    @Column(name = "claim_lg_history")
+    @Column(name = "claim_lg_history", length = 1, nullable = false, columnDefinition = "int default 0")
     private int noClaimLGHistory;
 
-    @Column(name = "revoke_license")
+    @Column(name = "revoke_license", length = 1, nullable = false, columnDefinition = "int default 0")
     private int noRevokedLicense;
 
-    @Column(name = "late_work_delivery")
+    @Column(name = "late_work_delivery", length = 1, nullable = false, columnDefinition = "int default 0")
     private int noLateWorkDelivery;
 
-    @Column(name = "adequate_capital_resource")
+    @Column(name = "adequate_capital_resource", length = 1, nullable = false, columnDefinition = "int default 0")
     private int adequateOfCapitalResource;
 
-    @Column(name = "apply_special_program")
+    @Column(name = "apply_special_program", length = 1, nullable = false, columnDefinition = "int default 0")
     private int applySpecialProgram;
 
     @OneToOne
-    @JoinColumn(name = "specialprogram_id")
+    @JoinColumn(name = "special_program_id")
     private SpecialProgram specialProgram;
 
-    @Column(name = "refinance_in")
+    @Column(name = "refinance_in", length = 1, nullable = false, columnDefinition = "int default -1")
     private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name = "refinancein_id")
+    @JoinColumn(name = "refinance_in_id")
     private Bank refinanceInValue;
 
-    @Column(name = "refinance_out")
+    @Column(name = "refinance_out", length = 1, nullable = false, columnDefinition = "int default -1")
     private int refinanceOUT;
 
     @OneToOne
-    @JoinColumn(name = "refinanceout_id")
+    @JoinColumn(name = "refinance_out_id")
     private Bank refinanceOutValue;
 
     @OneToOne
     @JoinColumn(name = "risktype_id")
     private RiskType riskCustomerType;
 
-    @Column(name = "qualitative_type")
+    @Column(name = "qualitative_type", length = 1, nullable = false, columnDefinition = "int default -1")
     private int qualitativeType;
 
-    @Column(name = "existing_sme_customer")
+    @Column(name = "existing_sme_customer", length = 1, nullable = false, columnDefinition = "int default -1")
     private int existingSMECustomer;
 
     @Column(name = "existing_since")
@@ -89,17 +110,17 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "sbfscore_id")
     private SBFScore sbfScore;
 
-    @Column(name = "request_loan_same_name")
+    @Column(name = "request_loan_same_name", length = 1, nullable = false, columnDefinition = "int default 0")
     private int requestLoanWithSameName;
 
-    @Column(name = "loan_in_one_year")
+    @Column(name = "loan_in_one_year", length = 1, nullable = false, columnDefinition = "int default 0")
     private int haveLoanInOneYear;
 
-    @Column(name = "pass_annual_review")
+    @Column(name = "pass_annual_review", length = 1, nullable = false, columnDefinition = "int default 0")
     private int passAnnualReview;
 
     @OneToOne
-    @JoinColumn(name = "borrowingtype_id")
+    @JoinColumn(name = "borrowing_type_id")
     private BorrowingType loanRequestPattern;
 
     @Column(name = "referral_name")
@@ -108,12 +129,6 @@ public class BasicInfo implements Serializable {
     @Column(name = "referral_id")
     private String referralID;
 
-    @Column(name = "apply_ba")
-    private int applyBA;
-
-    @OneToOne
-    @JoinColumn(name = "bapaymentmethod_id")
-    private BAPaymentMethod baPaymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -131,8 +146,8 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy = "basicInfo")
-    private List<OpenAccount> openAccountList;
+    @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
+    private int retrievedFlag;
 
     public long getId() {
         return id;
@@ -148,6 +163,54 @@ public class BasicInfo implements Serializable {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
+    }
+
+    public String getCaNumber() {
+        return caNumber;
+    }
+
+    public void setCaNumber(String caNumber) {
+        this.caNumber = caNumber;
+    }
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
+    public Reason getRequestReason() {
+        return requestReason;
+    }
+
+    public void setRequestReason(Reason requestReason) {
+        this.requestReason = requestReason;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public CustomerEntity getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(CustomerEntity borrowerType) {
+        this.borrowerType = borrowerType;
     }
 
     public int getNoUnpaidFeeInsurance() {
@@ -366,22 +429,6 @@ public class BasicInfo implements Serializable {
         this.referralID = referralID;
     }
 
-    public int getApplyBA() {
-        return applyBA;
-    }
-
-    public void setApplyBA(int applyBA) {
-        this.applyBA = applyBA;
-    }
-
-    public BAPaymentMethod getBaPaymentMethod() {
-        return baPaymentMethod;
-    }
-
-    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
-        this.baPaymentMethod = baPaymentMethod;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -414,13 +461,12 @@ public class BasicInfo implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    @OrderBy("id ASC")
-    public List<OpenAccount> getOpenAccountList() {
-        return openAccountList;
+    public int getRetrievedFlag() {
+        return retrievedFlag;
     }
 
-    public void setOpenAccountList(List<OpenAccount> openAccountList) {
-        this.openAccountList = openAccountList;
+    public void setRetrievedFlag(int retrievedFlag) {
+        this.retrievedFlag = retrievedFlag;
     }
 
     @Override
@@ -428,6 +474,12 @@ public class BasicInfo implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("workCase", workCase).
+                append("caNumber", caNumber).
+                append("refAppNumber", refAppNumber).
+                append("requestType", requestType).
+                append("requestReason", requestReason).
+                append("productGroup", productGroup).
+                append("borrowerType", borrowerType).
                 append("noUnpaidFeeInsurance", noUnpaidFeeInsurance).
                 append("noPendingClaimLG", noPendingClaimLG).
                 append("constructionRequestLG", constructionRequestLG).
@@ -455,13 +507,11 @@ public class BasicInfo implements Serializable {
                 append("loanRequestPattern", loanRequestPattern).
                 append("referralName", referralName).
                 append("referralID", referralID).
-                append("applyBA", applyBA).
-                append("baPaymentMethod", baPaymentMethod).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).
                 append("modifyBy", modifyBy).
-                append("openAccountList", openAccountList).
+                append("retrievedFlag", retrievedFlag).
                 toString();
     }
 }

@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -36,6 +33,14 @@ public class BankAccountType implements Serializable {
 
     @Column(name = "oth_bank_statement_flag")
     private int othBankStatementFlag;
+
+    @OneToOne
+    @JoinColumn(name = "collateral_type_id", nullable = true)
+    private CollateralType collateralType;
+
+    @OneToOne
+    @JoinColumn(name = "sub_collateral_type_id", nullable = true)
+    private SubCollateralType subCollateralType;
 
     public BankAccountType() {
     }
@@ -102,6 +107,22 @@ public class BankAccountType implements Serializable {
 
     public void setOthBankStatementFlag(int othBankStatementFlag) {
         this.othBankStatementFlag = othBankStatementFlag;
+    }
+
+    public CollateralType getCollateralType() {
+        return collateralType;
+    }
+
+    public void setCollateralType(CollateralType collateralType) {
+        this.collateralType = collateralType;
+    }
+
+    public SubCollateralType getSubCollateralType() {
+        return subCollateralType;
+    }
+
+    public void setSubCollateralType(SubCollateralType subCollateralType) {
+        this.subCollateralType = subCollateralType;
     }
 
     @Override

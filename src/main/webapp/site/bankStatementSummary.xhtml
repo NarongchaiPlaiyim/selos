@@ -38,18 +38,6 @@
             <!-- Start Menu -->
             <ui:include src="include/menubar.xhtml"/>
             <!-- End Menu -->
-            <!--<style scoped="scoped">-->
-                <!--.ui-datatable thead th {-->
-                    <!--white-space: normal !important;-->
-                <!--}-->
-                <!--/*input[readonly="readonly"], input[readonly] {*/-->
-                    <!--/*background: #ffffff !important;*/-->
-                <!--/*}*/-->
-                <!--.calendar_right input {-->
-                    <!--background: #ffffff !important;-->
-                    <!--border: 1px solid #868686;-->
-                <!--}-->
-            <!--</style>-->
             <div id="content_container">
                 <div id="content_name">#{msg.get('app.bankStmtSum.header')}</div>
                 <div id="content">
@@ -279,8 +267,8 @@
                                 <p:column headerText="" styleClass="option">
                                     <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
                                                      action="#{bankStatementSummary.onEditTmbBankStmt()}"
-                                                     onclick="blockUI.show()"
-                                                     onsuccess="blockUI.hide()">
+                                                     onclick="blockTmbBankStmt.show()"
+                                                     onsuccess="blockTmbBankStmt.hide()">
                                         <f:setPropertyActionListener value="#{item}"
                                                                      target="#{bankStatementSummary.selectedBankStmtView}"/>
                                     </p:commandButton>
@@ -329,6 +317,11 @@
                                 </p:columnGroup>
 
                             </p:dataTable>
+
+                            <p:blockUI widgetVar="blockTmbBankStmt" block="dtTmbBankStmt" trigger="dtTmbBankStmt">
+                                LOADING<br/>
+                                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                            </p:blockUI>
                         </td>
                     </tr>
                     <tr>
@@ -508,8 +501,8 @@
                         <p:column headerText="" styleClass="option" style="width:54px;">
                             <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
                                              action="#{bankStatementSummary.onEditOthBankStmt()}"
-                                             onclick="blockUI.show()"
-                                             onsuccess="blockUI.hide()">
+                                             onclick="blockOthBankStmt.show()"
+                                             onsuccess="blockOthBankStmt.hide()">
                                 <f:setPropertyActionListener value="#{item}"
                                                              target="#{bankStatementSummary.selectedBankStmtView}"/>
                             </p:commandButton>
@@ -617,6 +610,11 @@
                         </p:columnGroup>
 
                         </p:dataTable>
+
+                        <p:blockUI widgetVar="blockOthBankStmt" block="dtOtherBankStmtSum" trigger="dtOtherBankStmtSum">
+                            LOADING<br/>
+                            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                        </p:blockUI>
                     </td>
                     </tr>
                     <tr>

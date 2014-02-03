@@ -3,8 +3,8 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
+import com.clevel.selos.model.db.working.NewGuarantorCredit;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
-import com.clevel.selos.model.db.working.NewGuarantorRelCredit;
 import com.clevel.selos.model.view.NewCreditDetailView;
 
 import javax.inject.Inject;
@@ -15,43 +15,43 @@ import java.util.List;
 public class NewGuarantorCreditTransform extends Transform {
 
     @Inject
-    public NewGuarantorCreditTransform() {}
+    public NewGuarantorCreditTransform() {
+    }
 
 
-    public List<NewGuarantorRelCredit> transformsToModelForGuarantor(List<NewCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, User user) {
+    public List<NewGuarantorCredit> transformsToModelForGuarantor(List<NewCreditDetailView> newCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewGuarantorDetail newGuarantorDetail, User user) {
 
-        List<NewGuarantorRelCredit> newGuarantorRelCreditList = new ArrayList<NewGuarantorRelCredit>();
-        NewGuarantorRelCredit newGuarantorRelCredit;
+        List<NewGuarantorCredit> newGuarantorCreditList = new ArrayList<NewGuarantorCredit>();
+        NewGuarantorCredit newGuarantorCredit;
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViewList) {
-            newGuarantorRelCredit = new NewGuarantorRelCredit();
-//            if (newGuarantorRelCredit.getId() != 0) {
-//                newGuarantorRelCredit.setId(newCreditDetailView.getId());
-//                newGuarantorRelCredit.setCreateDate(newCreditDetailView.getCreateDate());
-//                newGuarantorRelCredit.setCreateBy(newCreditDetailView.getCreateBy());
-//            } else { // id = 0 create new
-//                newGuarantorRelCredit.setCreateDate(new Date());
-//                newGuarantorRelCredit.setCreateBy(user);
-//            }
-
-            newGuarantorRelCredit.setModifyDate(new Date());
-            newGuarantorRelCredit.setModifyBy(user);
+            newGuarantorCredit = new NewGuarantorCredit();
+            if (newGuarantorCredit.getId() != 0) {
+                newGuarantorCredit.setCreateDate(newCreditDetailView.getCreateDate());
+                newGuarantorCredit.setCreateBy(newCreditDetailView.getCreateBy());
+            } else { // id = 0 create new
+                newGuarantorCredit.setCreateDate(new Date());
+                newGuarantorCredit.setCreateBy(user);
+            }
+            newGuarantorCredit.setModifyDate(new Date());
+            newGuarantorCredit.setModifyBy(user);
             for (int i = 0; i < newCreditDetailList.size(); i++) {
                 NewCreditDetail newCreditDetailAdd = newCreditDetailList.get(i);
                 log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
                 log.info("guarantor choose seq  is " + newCreditDetailView.getSeq());
 
                 if (newCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
-                    newGuarantorRelCredit.setNewCreditDetail(newCreditDetailAdd);
-                    log.info("newGuarantorRelCredit id is " + newGuarantorRelCredit.getNewCreditDetail().getId());
+                    newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
+                    log.info("newGuarantorCredit id is " + newGuarantorCredit.getNewCreditDetail().getId());
+                    newGuarantorCredit.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
                 }
             }
 
-            newGuarantorRelCredit.setNewGuarantorDetail(newGuarantorDetail);
-            newGuarantorRelCreditList.add(newGuarantorRelCredit);
+            newGuarantorCredit.setNewGuarantorDetail(newGuarantorDetail);
+            newGuarantorCreditList.add(newGuarantorCredit);
         }
 
-        return newGuarantorRelCreditList;
+        return newGuarantorCreditList;
     }
 
 

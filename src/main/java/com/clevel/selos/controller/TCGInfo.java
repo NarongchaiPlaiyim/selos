@@ -185,15 +185,15 @@ public class TCGInfo implements Serializable {
         }
     }
 
-    public void calculateLtvValue(){
-        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
-            BigDecimal ltvValueBig ;
-            log.info("TCGDetailView AppraisalAmount :: {}" , tcgDetailView.getAppraisalAmount());
-
-            ltvValueBig = tcgInfoControl.toCalculateLtvValue(tcgDetailView, this.workCaseId);
-            tcgDetailView.setLtvValue(ltvValueBig);
-        }
-    }
+//    public void calculateLtvValue(){
+//        if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
+//            BigDecimal ltvValueBig ;
+//            log.info("TCGDetailView AppraisalAmount :: {}" , tcgDetailView.getAppraisalAmount());
+//
+//            ltvValueBig = tcgInfoControl.toCalculateLtvValue(tcgDetailView, this.workCaseId);
+//            tcgDetailView.setLtvValue(ltvValueBig);
+//        }
+//    }
 
     public void onSaveCollateralDetail() {
         log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
@@ -231,6 +231,7 @@ public class TCGInfo implements Serializable {
             } else {
                 log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
             }
+
             complete = true;
             calculate();
         } else {
@@ -267,34 +268,12 @@ public class TCGInfo implements Serializable {
 
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
-        BigDecimal collateralRuleResult = BigDecimal.ZERO;
-        BigDecimal requestTCGAmount     = BigDecimal.ZERO;
         try {
             if (TCGDetailViewList.size() > 0) {
                 if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-
-                    collateralRuleResult = tcgInfoControl.toCalCollateralRuleResult(TCGView);
-                    log.info("collateralRuleResult :: {} ",collateralRuleResult);
-                    TCGView.setCollateralRuleResult(collateralRuleResult);
-
-                    requestTCGAmount = tcgInfoControl.toCalRequestTCGAmount(TCGView);
-                    log.info("requestTCGAmount :: {} ",requestTCGAmount);
-                    TCGView.setRequestTCGAmount(requestTCGAmount);
-
                     tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
-
-
                 } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-
-                    collateralRuleResult = tcgInfoControl.toCalCollateralRuleResult(TCGView);
-                    log.info("collateralRuleResult :: {} ",collateralRuleResult);
-                    TCGView.setCollateralRuleResult(collateralRuleResult);
-
-                    requestTCGAmount = tcgInfoControl.toCalRequestTCGAmount(TCGView);
-                    log.info("requestTCGAmount :: {} ",requestTCGAmount);
-                    TCGView.setRequestTCGAmount(requestTCGAmount);
-
-                    tcgInfoControl.onEditTCGToDB(TCGView, TCGDetailViewList, workCaseId);
+                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
                 }
 
                 messageHeader = msg.get("app.header.save.success");

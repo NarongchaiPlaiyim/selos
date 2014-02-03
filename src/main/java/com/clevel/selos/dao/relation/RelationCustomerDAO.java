@@ -57,4 +57,47 @@ public class RelationCustomerDAO extends GenericDAO<RelationCustomer, Integer> {
 
         return listRelation;
     }
+
+    public List<Relation> getListRelationOnlyBorrower(int customerEntityId, int borrowerTypeId, int spouse) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("borrowerType.id", borrowerTypeId));
+        criteria.add(Restrictions.eq("spouse", spouse));
+        criteria.addOrder(Order.asc("id"));
+
+        List<RelationCustomer> list = criteria.list();
+        List<Relation> listRelation = new ArrayList<Relation>();
+        for(RelationCustomer rc : list){
+            if(rc.getRelation().getId() != 1){
+                listRelation.add(rc.getRelation());
+            }
+        }
+        log.info("getList. (result size: {})", listRelation.size());
+
+        return listRelation;
+    }
+
+    public List<Relation> getListRelationForSpouse(int customerEntityId, int borrowerTypeId, int borrowerPriority) {
+        /*Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("borrowerType.id", borrowerTypeId));
+        criteria.add(Restrictions.ge("relation.priority", borrowerPriority));
+        criteria.add(Restrictions.eq("spouse", 1));
+        criteria.addOrder(Order.asc("id"));
+
+        List<RelationCustomer> list = criteria.list();
+        List<Relation> listRelation = new ArrayList<Relation>();
+        for(RelationCustomer rc : list){
+            if(rc.getRelation().getId() != 1){
+                listRelation.add(rc.getRelation());
+            }
+        }*/
+
+
+        String query = "SELECT relation FROM RelationCustomer relationCustomer WHERE relationCustomer.customerEntity.id = " + customerEntityId + " AND relationCustomer.borrowerType.id = " + borrowerTypeId + " AND relationCustomer.relation.priority >= " + borrowerPriority + " AND relationCustomer.spouse = 1";
+        List<Relation> listRelation = (List<Relation>) getSession().createQuery(query).list();
+
+        log.debug("getList. (result size: {})", listRelation.size());
+        return listRelation;
+    }
 }

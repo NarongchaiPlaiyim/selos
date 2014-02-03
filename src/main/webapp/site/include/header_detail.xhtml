@@ -34,8 +34,8 @@
                              process="@this"
                              actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
                              oncomplete="assignCheckerDlg.show()"
-                             update=":assignABDMDlgPanel">
-                <p:resetInput target=":assignABDMDlgPanel"/>
+                             update=":assignCheckerDlgForm">
+                <p:resetInput target=":assignCheckerDlgForm"/>
             </p:commandButton>
             <!--Mandate Document-->
             <p:commandButton id="btnMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
@@ -70,7 +70,7 @@
                                  widgetVar="confirmCancelCA" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.cancelCAButton}">
                     <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                     update=":msgBoxSystemMessagePanel"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                      actionListener="#{prescreenMaker.onCancelCA}"
                                      process="@this" oncomplete="confirmCancelCA.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
@@ -91,7 +91,7 @@
                                  widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.closeSaleButton}">
                     <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                     update=":msgBoxSystemMessagePanel"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                      actionListener="#{prescreenMaker.onCloseSale()}"
                                      process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"
@@ -244,6 +244,14 @@
                   onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                   modal="true" width="400" height="160">
             <ui:include src="/site/dialog/assignABDMDialog.xhtml"/>
+        </p:dialog>
+    </p:panel>
+
+    <p:panel id="submitZMPanel" styleClass="panel">
+        <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
+                  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                  modal="true" width="400" height="160">
+            <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
         </p:dialog>
     </p:panel>
 

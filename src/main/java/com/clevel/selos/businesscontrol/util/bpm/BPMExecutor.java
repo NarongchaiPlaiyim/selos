@@ -35,7 +35,7 @@ public class BPMExecutor implements Serializable {
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
-            fields.put("Action_Name", action.getName());
+            fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
 
             log.debug("dispatch case for [Assign to Checker]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), checkerId);
@@ -57,7 +57,7 @@ public class BPMExecutor implements Serializable {
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
-            fields.put("Action_Name", action.getName());
+            fields.put("Action_Name", action.getDescription());
             fields.put("ABDMUserName", abdmUserId);
 
             log.debug("dispatch case for [Assign to ABDM]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), abdmUserId);
@@ -76,7 +76,7 @@ public class BPMExecutor implements Serializable {
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
-            fields.put("Action_Name", action.getName());
+            fields.put("Action_Name", action.getDescription());
 
             log.debug("dispatch case for [Close Sales]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -113,7 +113,7 @@ public class BPMExecutor implements Serializable {
             if(action != null){
                 HashMap<String,String> fields = new HashMap<String, String>();
                 fields.put("Action_Code", Long.toString(action.getId()));
-                fields.put("Action_Name", action.getName());
+                fields.put("Action_Name", action.getDescription());
 
                 log.debug("dispatch case for [Cancel Case]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -132,7 +132,7 @@ public class BPMExecutor implements Serializable {
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
-            fields.put("Action_Name", action.getName());
+            fields.put("Action_Name", action.getDescription());
 
             log.debug("dispatch case for [Return BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -152,7 +152,7 @@ public class BPMExecutor implements Serializable {
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
-            fields.put("Action_Name", action.getName());
+            fields.put("Action_Name", action.getDescription());
 
             log.debug("dispatch case for [Submit BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -163,6 +163,25 @@ public class BPMExecutor implements Serializable {
             }
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
+        }
+    }
+
+    public void submitZM(long workCaseId, String queueName, String zmUserId, long actionCode) throws Exception{
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMUserName", zmUserId);
+
+            log.debug("dispatch case for [Submit ZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            if (workCase != null) {
+                execute(queueName, workCase.getWobNumber(), fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
         }
     }
 

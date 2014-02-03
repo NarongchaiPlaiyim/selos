@@ -32,6 +32,9 @@ public class NewCollateralView implements Serializable {
     private List<NewCollateralHeadView> newCollateralHeadViewList;
     private List<NewCreditDetailView> newCreditDetailViewList;
 
+    //Added by Chai
+    private String jobIDSearch;
+
     public NewCollateralView(){
         reset();
     }
@@ -214,6 +217,14 @@ public class NewCollateralView implements Serializable {
         this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
+    public String getJobIDSearch() {
+        return jobIDSearch;
+    }
+
+    public void setJobIDSearch(String jobIDSearch) {
+        this.jobIDSearch = jobIDSearch;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -237,6 +248,7 @@ public class NewCollateralView implements Serializable {
                 .append("isApproved", isApproved)
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("jobIDSearch", jobIDSearch)
                 .toString();
     }
 }

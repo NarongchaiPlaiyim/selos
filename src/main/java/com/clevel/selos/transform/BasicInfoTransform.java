@@ -1,20 +1,28 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.BAPAInfoDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
+import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.List;
 
 public class BasicInfoTransform extends Transform {
     @Inject
-    BasicInfoAccountTransform basicInfoAccountTransform;
+    OpenAccountTransform openAccountTransform;
     @Inject
     SBFScoreTransform sbfScoreTransform;
+    @Inject
+    OpenAccountTransform getOpenAccountTransform;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
+    @Inject
+    BAPAInfoDAO bapaInfoDAO;
 
     @Inject
     public BasicInfoTransform() {
@@ -26,7 +34,7 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setWorkCase(workCase);
 
         if(basicInfoView.getId() != 0){
-            basicInfo.setId(basicInfoView.getId());
+            basicInfo = basicInfoDAO.findById(basicInfoView.getId());
             basicInfo.setCreateDate(basicInfoView.getCreateDate());
             basicInfo.setCreateBy(basicInfoView.getCreateBy());
         } else {
@@ -92,12 +100,6 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setReferralName(basicInfoView.getRefName());
         basicInfo.setReferralID(basicInfoView.getRefId());
 
-        basicInfo.setApplyBA(basicInfoView.getApplyBA());
-        basicInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod());
-        if(basicInfo.getBaPaymentMethod().getId() == 0){
-            basicInfo.setBaPaymentMethod(null);
-        }
-
         return basicInfo;
     }
 
@@ -107,17 +109,17 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setId(basicInfo.getId());
 
         basicInfoView.setAppNo(workCase.getAppNumber());
-        basicInfoView.setRefAppNo(workCase.getRefAppNumber());
-        basicInfoView.setCaNo(workCase.getCaNumber());
+        basicInfoView.setRefAppNo(basicInfo.getRefAppNumber());
+        basicInfoView.setCaNo(basicInfo.getCaNumber());
 
         basicInfoView.setId(basicInfo.getId());
 
-        basicInfoView.setRequestType(workCase.getRequestType());
+        basicInfoView.setRequestType(basicInfo.getRequestType());
         if(basicInfoView.getRequestType() == null){
             basicInfoView.setRequestType(new RequestType());
         }
 
-        basicInfoView.setProductGroup(workCase.getProductGroup());
+        basicInfoView.setProductGroup(basicInfo.getProductGroup());
         if(basicInfoView.getProductGroup() == null){
             basicInfoView.setProductGroup(new ProductGroup());
         }
@@ -176,20 +178,27 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setRefName(basicInfo.getReferralName());
         basicInfoView.setRefId(basicInfo.getReferralID());
 
-        basicInfoView.setApplyBA(basicInfo.getApplyBA());
-        basicInfoView.setBaPaymentMethod(basicInfo.getBaPaymentMethod());
-        if(basicInfoView.getBaPaymentMethod() == null){
-            basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+        BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
+        if (bapaInfo == null){
+            basicInfoView.setApplyBA(0);
+            basicInfoView.setBaPaymentMethodValue(null);
+        } else {
+            basicInfoView.setApplyBA(bapaInfo.getApplyBA());
+            if(bapaInfo.getApplyBA() == 2){
+                if(bapaInfo.getBaPaymentMethod() == BAPaymentMethodValue.TOPUP.value()){
+                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.TOPUP);
+                } else {
+                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.DIRECT);
+                }
+            } else {
+                basicInfoView.setBaPaymentMethodValue(null);
+            }
         }
 
         basicInfoView.setCreateDate(basicInfo.getCreateDate());
         basicInfoView.setCreateBy(basicInfo.getCreateBy());
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
-
-        List<BasicInfoAccountView> basicInfoAccountViewList = basicInfoAccountTransform.transformToViewList(basicInfo.getOpenAccountList());
-
-        basicInfoView.setBasicInfoAccountViews(basicInfoAccountViewList);
 
         return basicInfoView;
     }

@@ -10,13 +10,29 @@ import java.util.Date;
 
 public class AppraisalContactDetailView implements Serializable {
     private long id;
-    private int no;
-    private String customerName;
-    private String contactNo;
+    private int no1;
+    private String customerName1;
+    private String contactNo1;
+    private int no2;
+    private String customerName2;
+    private String contactNo2;
+    private int no3;
+    private String customerName3;
+    private String contactNo3;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+
+    public AppraisalContactDetailView() {
+        init();
+    }
+
+    private void init(){
+        no1 = 1;
+        no2 = 2;
+        no3 = 3;
+    }
 
     public long getId() {
         return id;
@@ -26,28 +42,76 @@ public class AppraisalContactDetailView implements Serializable {
         this.id = id;
     }
 
-    public int getNo() {
-        return no;
+    public int getNo1() {
+        return no1;
     }
 
-    public void setNo(int no) {
-        this.no = no;
+    public void setNo1(int no1) {
+        this.no1 = no1;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getCustomerName1() {
+        return customerName1;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomerName1(String customerName1) {
+        this.customerName1 = customerName1;
     }
 
-    public String getContactNo() {
-        return contactNo;
+    public String getContactNo1() {
+        return contactNo1;
     }
 
-    public void setContactNo(String contactNo) {
-        this.contactNo = contactNo;
+    public void setContactNo1(String contactNo1) {
+        this.contactNo1 = contactNo1;
+    }
+
+    public int getNo2() {
+        return no2;
+    }
+
+    public void setNo2(int no2) {
+        this.no2 = no2;
+    }
+
+    public String getCustomerName2() {
+        return customerName2;
+    }
+
+    public void setCustomerName2(String customerName2) {
+        this.customerName2 = customerName2;
+    }
+
+    public String getContactNo2() {
+        return contactNo2;
+    }
+
+    public void setContactNo2(String contactNo2) {
+        this.contactNo2 = contactNo2;
+    }
+
+    public int getNo3() {
+        return no3;
+    }
+
+    public void setNo3(int no3) {
+        this.no3 = no3;
+    }
+
+    public String getCustomerName3() {
+        return customerName3;
+    }
+
+    public void setCustomerName3(String customerName3) {
+        this.customerName3 = customerName3;
+    }
+
+    public String getContactNo3() {
+        return contactNo3;
+    }
+
+    public void setContactNo3(String contactNo3) {
+        this.contactNo3 = contactNo3;
     }
 
     public Date getCreateDate() {
@@ -86,9 +150,15 @@ public class AppraisalContactDetailView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("no", no)
-                .append("customerName", customerName)
-                .append("contactNo", contactNo)
+                .append("no1", no1)
+                .append("customerName1", customerName1)
+                .append("contactNo1", contactNo1)
+                .append("no2", no2)
+                .append("customerName2", customerName2)
+                .append("contactNo2", contactNo2)
+                .append("no3", no3)
+                .append("customerName3", customerName3)
+                .append("contactNo3", contactNo3)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
@@ -86,6 +87,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     CustomerDAO customerDAO;
     @Inject
+    CustomerOblInfoDAO customerOblInfoDAO;
+    @Inject
     IndividualDAO individualDAO;
     @Inject
     JuristicDAO juristicDAO;
@@ -113,6 +116,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerAccountDAO customerAccountDAO;
     @Inject
     CustomerAccountNameDAO customerAccountNameDAO;
+    @Inject
+    RelationCustomerDAO relationCustomerDAO;
 
 
     @Inject
@@ -780,38 +785,55 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenCollateralViewList;
     }
 
-    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, long workCasePreScreenId, int caseBorrowerTypeId, User user){
-        log.debug("savePreScreenInitial ::: Starting ... ");
-        log.debug("savePreScreenInitial ::: caseBorrowerType : {}", caseBorrowerTypeId);
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        CustomerEntity customerEntity = null;
-        if(caseBorrowerTypeId != 0){
-            customerEntity = customerEntityDAO.findById(caseBorrowerTypeId);
-            log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
-        }
-        workCasePrescreen.setBorrowerType(customerEntity);
-        workCasePrescreenDAO.persist(workCasePrescreen);
-
-        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
-        log.debug("savePreScreenInitial ::: saving prescreen : {}", prescreen);
+    public void savePreScreenData(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, WorkCasePrescreen workCasePrescreen){
+        log.debug("save PreScreen ::: preScreenView : {}", prescreenView);
+        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, getCurrentUser());
         prescreenDAO.persist(prescreen);
-        log.debug("savePreScreenInitial ::: after saving prescreen : {}", prescreen);
 
-        //Remove all Facility before add new
-        List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
-            log.debug("savePreScreenInitial ::: delete PreScreenFacility : {}", prescreenFacilitieListDelete);
-            prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
+        if(facilityViewList != null){
+            //Remove all Facility before add new
+            List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
+            if(prescreenFacilitieListDelete != null){
+                log.debug("save PreScreen data ::: delete PreScreenFacility size : {}", prescreenFacilitieListDelete.size());
+                prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
+            }
+
+            log.debug("save PreScreen data ::: facilityViewList : {}", facilityViewList);
+            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
+            prescreenFacilityDAO.persist(prescreenFacilityList);
         }
 
-        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
-        log.debug("savePreScreenInitial ::: save PrescreenFacility : {}", prescreenFacilityList);
-        prescreenFacilityDAO.persist(prescreenFacilityList);
+        if(bizInfoViewList != null){
+            //Remove all Business before add new
+            List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
+            if(prescreenBusinessDelete != null){
+                log.debug("save PreScreen data ::: delete prescreenBusinessDelete size : {}", prescreenBusinessDelete.size());
+                prescreenBusinessDAO.delete(prescreenBusinessDelete);
+            }
 
+            log.debug("save PreScreen data ::: bizInfoViewList size : {}", bizInfoViewList.size());
+            List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessTransform.transformToModelList(bizInfoViewList, prescreen);
+            prescreenBusinessDAO.persist(prescreenBusinessList);
+        }
 
+        if(prescreenCollateralViewList != null){
+            //Remove all Collateral before add new
+            List<PrescreenCollateral> prescreenCollateralDelete = prescreenCollateralDAO.findByPreScreen(prescreen);
+            if(prescreenCollateralDelete != null){
+                log.debug("save PreScreen data ::: delete prescreenCollateralDelete size : {}", prescreenCollateralDelete.size());
+                prescreenCollateralDAO.delete(prescreenCollateralDelete);
+            }
+
+            log.debug("save PreScreen data ::: prescreenCollateralViewList size : {}", prescreenCollateralViewList.size());
+            List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
+            prescreenCollateralDAO.persist(prescreenCollateralList);
+        }
+    }
+
+    public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
         List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
-        log.info("savePreScreenInitial ::: customerDeleteList : {}", customerDeleteList);
+        log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
@@ -833,6 +855,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
 
             customerDAO.delete(customer);
+            if(customer.getCustomerOblInfo() != null){
+                customerOblInfoDAO.delete(customer.getCustomerOblInfo());
+            }
         }
 
         //Add all Customer from customer list
@@ -841,6 +866,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
             customer.setIsSpouse(0);
             customer.setSpouseId(0);
+            if(customer.getCustomerOblInfo() != null){
+                customerOblInfoDAO.persist(customer.getCustomerOblInfo());
+            }
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
@@ -856,11 +884,14 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
 
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2){
-                    Customer spouse = new Customer();
+                if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getSpouseFlag() == 1){
+                    Customer spouse;
                     spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
                     spouse.setIsSpouse(1);
                     spouse.setSpouseId(0);
+                    if(spouse.getCustomerOblInfo() != null){
+                        customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
+                    }
                     customerDAO.persist(spouse);
                     customer.setSpouseId(spouse.getId());
                     customerDAO.persist(customer);
@@ -875,6 +906,27 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, long workCasePreScreenId, int caseBorrowerTypeId, User user){
+        log.debug("savePreScreenInitial ::: Starting ... ");
+        log.debug("savePreScreenInitial ::: caseBorrowerType : {}", caseBorrowerTypeId);
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        CustomerEntity customerEntity = null;
+        if(caseBorrowerTypeId != 0){
+            customerEntity = customerEntityDAO.findById(caseBorrowerTypeId);
+            log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
+        }
+        workCasePrescreen.setBorrowerType(customerEntity);
+        workCasePrescreenDAO.persist(workCasePrescreen);
+
+        log.debug("savePreScreenInitial ::: saving prescreen data...");
+        savePreScreenData(prescreenView, facilityViewList, null, null, workCasePrescreen);
+        log.debug("savePreScreenInitial ::: saving prescreen data success...");
+
+        log.debug("savePreScreenInitial ::: saving customer data...");
+        saveCustomerData(customerInfoDeleteList, customerInfoViewList, workCasePrescreen);
+        log.debug("savePreScreenInitial ::: saving customer data success...");
     }
 
     public int checkModifyValue(PrescreenView currentPrescreenView, long workCasePrescreenId){
@@ -928,114 +980,20 @@ public class PrescreenBusinessControl extends BusinessControl {
         boolean modifyFlag = false;
 
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-
-        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
-
         if(customerModifyFlag > 0){
-            prescreen.setModifyFlag(1);
+            prescreenView.setModifyFlag(1);
             modifyFlag = true;
         }else{
-            prescreen.setModifyFlag(0);
+            prescreenView.setModifyFlag(0);
             modifyFlag = false;
         }
-        prescreenDAO.persist(prescreen);
+        log.debug("savePreScreen ::: saving prescreen data...");
+        savePreScreenData(prescreenView, facilityViewList, bizInfoViewList, prescreenCollateralViewList, workCasePrescreen);
+        log.debug("savePreScreen ::: saving prescreen data success...");
 
-        //Remove all Facility before add new
-        List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
-            prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
-        }
-
-        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
-        prescreenFacilityDAO.persist(prescreenFacilityList);
-
-        //Remove all Customer before add new
-        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
-        log.info("savePreScreenInitial ::: customerDeleteList : {}", customerDeleteList);
-        for(Customer customer : customerDeleteList){
-            addressDAO.delete(customer.getAddressesList());
-
-            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
-            if(customerAccountList != null){
-                customerAccountDAO.delete(customerAccountList);
-            }
-
-            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
-            if(customerAccountNameList != null){
-                customerAccountNameDAO.delete(customerAccountNameList);
-            }
-
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
-                //Individual
-                individualDAO.delete(customer.getIndividual());
-            } else {
-                juristicDAO.delete(customer.getJuristic());
-            }
-
-            customerDAO.delete(customer);
-        }
-
-        //Add all Customer from customer list
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
-            Customer customer = new Customer();
-            customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
-            customer.setIsSpouse(0);
-            customer.setSpouseId(0);
-            customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
-                addressDAO.persist(customer.getAddressesList());
-            }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
-                //Individual
-                Individual individual = customer.getIndividual();
-                individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
-                //Juristic
-                Juristic juristic = customer.getJuristic();
-                juristicDAO.persist(juristic);
-            }
-
-            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2){
-                    if(customerInfoView.getSpouse() != null){
-                        if(customerInfoView.getSpouse().getDocumentType() != null && customerInfoView.getSpouse().getDocumentType().getId() != 0){
-                            Customer spouse = new Customer();
-                            spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
-                            spouse.setIsSpouse(1);
-                            spouse.setSpouseId(0);
-                            customerDAO.persist(spouse);
-                            customer.setSpouseId(spouse.getId());
-                            customerDAO.persist(customer);
-
-                            if(spouse.getAddressesList() != null){
-                                addressDAO.persist(spouse.getAddressesList());
-                            }
-
-                            Individual individual = spouse.getIndividual();
-                            individualDAO.persist(individual);
-                        }
-                    }
-                }
-            }
-        }
-
-        //Remove all Business before add new
-        List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
-        if(prescreenBusinessDelete != null){
-            prescreenBusinessDAO.delete(prescreenBusinessDelete);
-        }
-
-        List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessTransform.transformToModelList(bizInfoViewList, prescreen);
-        prescreenBusinessDAO.persist(prescreenBusinessList);
-
-        //Remove all Collateral before add new
-        List<PrescreenCollateral> prescreenCollateralDelete = prescreenCollateralDAO.findByPreScreen(prescreen);
-        if(prescreenCollateralDelete != null){
-            prescreenCollateralDAO.delete(prescreenCollateralDelete);
-        }
-
-        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
-        prescreenCollateralDAO.persist(prescreenCollateralList);
+        log.debug("savePreScreen ::: saving customer data...");
+        saveCustomerData(customerInfoDeleteList, customerInfoViewList, workCasePrescreen);
+        log.debug("savePreScreen ::: saving customer data success...");
 
         return modifyFlag;
     }
@@ -1044,17 +1002,17 @@ public class PrescreenBusinessControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
 
-        log.info("saveCustomer ::: customerList : {}", customerList);
+        log.info("saveCustomer ::: customerList size : {}", customerList.size());
         for(Customer customer : customerList){
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
                 //addressDAO.persist(customer.getAddressesList());
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
                 //Individual
                 Individual individual = customer.getIndividual();
                 individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
                 //Juristic
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
@@ -1142,20 +1100,12 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
+    /*public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
-        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
-        prescreenDAO.persist(prescreen);
-
-        //Remove all Facility before add new
-        List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
-            prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
-        }
-
-        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
-        prescreenFacilityDAO.persist(prescreenFacilityList);
+        log.debug("savePreScreenMaker ::: save preScreen data...");
+        savePreScreenData(prescreenView, facilityViewList, bizInfoDetailViewList, prescreenCollateralViewList, workCasePrescreen);
+        log.debug("savePreScreenMaker ::: save preScreen data success...");
 
         //Remove all Customer before add new
         List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
@@ -1201,26 +1151,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 juristicDAO.persist(juristic);
             }
         }
-
-        //Save PreScreen Business
-        List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
-        if(prescreenBusinessDelete != null){
-            prescreenBusinessDAO.delete(prescreenBusinessDelete);
-        }
-
-        List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessTransform.transformToModelList(bizInfoDetailViewList, prescreen);
-        prescreenBusinessDAO.persist(prescreenBusinessList);
-
-        //Save PreScreen Collateral
-        List<PrescreenCollateral> prescreenCollateralDelete = prescreenCollateralDAO.findByPreScreen(prescreen);
-        if(prescreenCollateralDelete != null){
-            prescreenCollateralDAO.delete(prescreenCollateralDelete);
-        }
-
-        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
-        prescreenCollateralDAO.persist(prescreenCollateralList);
-
-    }
+    }*/
 
     public void duplicateData(long workCasePreScreenId) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
@@ -1269,7 +1200,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         String bdmMakerName = "";
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         if(workCasePrescreen != null){
-            bdmMakerName = workCasePrescreen.getCreateBy().getUserName();
+            bdmMakerName = ((User)workCasePrescreen.getCreateBy()).getUserName();
         }
 
         return bdmMakerName;
@@ -1355,27 +1286,29 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     // *** Function for Drop Down *** //
-    public List<Relation> getRelationByStepId(long stepId){
+    public List<Relation> getRelationByStepId(long stepId, int customerEntityId, int borrowerTypeId, int spouse){
+        log.debug("getRelationByStepId : stepId : {}, customerEntityId : {}, borrowerTypeId : {}, spouse : {}", stepId, customerEntityId, borrowerTypeId, spouse);
         List<Relation> relationList = new ArrayList<Relation>();
-        List<Relation> borrowerRelationList = new ArrayList<Relation>();
-        List<Relation> otherRelationList = new ArrayList<Relation>();
-        List<Relation> tempList = relationDAO.findAll();
 
-        for(Relation relation : tempList){
-            if(relation.getId() != 1){
-                otherRelationList.add(relation);
-            } else {
-                borrowerRelationList.add(relation);
-            }
-        }
-
-        if(stepId == 1001){
-            relationList = borrowerRelationList;
-        } else if (stepId == 1003){
-            relationList = otherRelationList;
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
+            relationList = relationDAO.getRelationOnlyBorrower();
+        } else if(stepId == StepValue.PRESCREEN_MAKER.value()){
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(customerEntityId, borrowerTypeId, spouse);
         }
 
         return relationList;
     }
 
+    public List<Relation> getRelationByStepAndBorrowerRelationId(long stepId, int customerEntityId, int borrowerTypeId, int borrowerPiority){
+        log.debug("getRelationByStepId : stepId : {}, customerEntityId : {}, borrowerTypeId : {}, borrowerPiority : {}", stepId, customerEntityId, borrowerTypeId, borrowerPiority);
+        List<Relation> relationList = new ArrayList<Relation>();
+
+        if(stepId == StepValue.PRESCREEN_INITIAL.value()){
+            relationList = relationDAO.getRelationOnlyBorrower();
+        } else if(stepId == StepValue.PRESCREEN_MAKER.value()){
+            relationList = relationCustomerDAO.getListRelationForSpouse(customerEntityId, borrowerTypeId, borrowerPiority);
+        }
+
+        return relationList;
+    }
 }

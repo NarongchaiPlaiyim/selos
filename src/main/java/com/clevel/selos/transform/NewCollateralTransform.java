@@ -9,6 +9,9 @@ import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -21,31 +24,15 @@ public class NewCollateralTransform extends Transform {
     @SELOS
     Logger log;
     @Inject
-    CustomerTransform customerTransform;
+    private NewCollateralHeadTransform newCollateralHeadTransform;
     @Inject
-    CustomerDAO customerDAO;
+    private NewCollateralDAO newCollateralDAO;
+    private List<NewCollateral> newCollateralList;
+    private List<NewCollateralView> newCollateralViewList;
     @Inject
-    SubCollateralTypeDAO subCollateralTypeDAO;
-    @Inject
-    CollateralTypeDAO collateralTypeDAO;
-    @Inject
-    BasicInfoDAO basicInfoDAO;
-    @Inject
-    NewCollateralCreditDAO newCollateralCreditDAO;
-    @Inject
-    NewCreditDetailTransform newCreditDetailTransform;
-    @Inject
-    NewCollateralHeadDAO newCollateralHeadDAO;
-    @Inject
-    NewCollateralSubDAO newCollateralSubDAO;
-    @Inject
-    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
-    @Inject
-    NewCollateralSubMortgageDAO newCollateralSubMortgageDAO;
-    @Inject
-    MortgageTypeDAO mortgageTypeDAO;
-    @Inject
-    NewCollateralSubRelatedDAO newCollateralSubRelatedDAO;
+    public NewCollateralTransform() {
+
+    }
 
 
     public List<NewCollateral> transformsCollateralToModel(List<NewCollateralView> newCollateralViewList, NewCreditFacility newCreditFacility, User user) {
@@ -54,15 +41,14 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-//              newCollateral.setType(); 'P'
-//            if (newCollateralView.getId() != 0) {
-//                newCollateral.setId(newCollateralView.getId());
-//                newCollateral.setCreateDate(newCollateralView.getCreateDate());
-//                newCollateral.setCreateBy(newCollateralView.getCreateBy());
-//            } else { // id = 0 create new
-//                newCollateral.setCreateDate(new Date());
-//                newCollateral.setCreateBy(user);
-//            }
+            newCollateral.setProposeType("P");
+            if (newCollateralView.getId() != 0) {
+                newCollateral.setCreateDate(newCollateralView.getCreateDate());
+                newCollateral.setCreateBy(newCollateralView.getCreateBy());
+            } else { // id = 0 create new
+                newCollateral.setCreateDate(new Date());
+                newCollateral.setCreateBy(user);
+            }
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
             newCollateral.setAadDecisionReason(newCollateralView.getAadDecisionReason());
@@ -81,190 +67,88 @@ public class NewCollateralTransform extends Transform {
         return newCollateralList;
     }
 
-    public List<NewCollateralView> transformsCollateralToView(List<NewCollateral> newCollateralList) {
-        List<NewCollateralView> newCollateralViewList = new ArrayList<NewCollateralView>();
-        NewCollateralView newCollateralView;
-
-        for (NewCollateral newCollateralDetail1 : newCollateralList) {
-            newCollateralView = new NewCollateralView();
-//            newCollateralView.setId(newCollateralDetail1.getId());
-            newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
-            newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
-            newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
-            newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
-            newCollateralView.setJobID(newCollateralDetail1.getJobID());
-            newCollateralView.setAadDecision(newCollateralDetail1.getAadDecision());
-            newCollateralView.setAadDecisionReason(newCollateralDetail1.getAadDecisionReason());
-            newCollateralView.setAadDecisionReasonDetail(newCollateralDetail1.getAadDecisionReasonDetail());
-            newCollateralView.setAppraisalDate(newCollateralDetail1.getAppraisalDate());
-            newCollateralView.setBdmComments(newCollateralDetail1.getBdmComments());
-            newCollateralView.setMortgageCondition(newCollateralDetail1.getMortgageCondition());
-            newCollateralView.setMortgageConditionDetail(newCollateralDetail1.getMortgageConditionDetail());
-            newCollateralView.setTypeOfUsage(newCollateralDetail1.getTypeOfUsage());
-            newCollateralView.setUsage(newCollateralDetail1.getUsage());
-            newCollateralView.setUwDecision(newCollateralDetail1.getUwDecision());
-            newCollateralView.setUwRemark(newCollateralDetail1.getUwRemark());
-
-            List<NewCollateralCredit> newCollateralRelCredits = newCollateralCreditDAO.getListCollRelationByNewCollateral(newCollateralDetail1);
-            if (newCollateralRelCredits != null) {
-                List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
-
-                for (NewCollateralCredit newCollateralCredit : newCollateralRelCredits) {
-                    newCreditDetailList.add(newCollateralCredit.getNewCreditDetail());
-                }
-
-                List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
-                newCollateralView.setNewCreditDetailViewList(newCreditDetailViewList);
-
+    public List<NewCollateral> transformToModel(final List<NewCollateralView> newCollateralViewList, final User user, final NewCreditFacility newCreditFacility){
+        log.debug("-- transform List<NewCollateralView> to List<NewCollateral>(Size of list is {})", ""+newCollateralViewList.size());
+        newCollateralList = new ArrayList<NewCollateral>();
+        NewCollateral model = null;
+        long id = 0;
+        for(NewCollateralView view : newCollateralViewList){
+            id = view.getId();
+            if(id != 0){
+                model = newCollateralDAO.findById(id);
+            } else {
+                model = new NewCollateral();
+                log.debug("-- NewCollateral created");
+                model.setCreateBy(user);
+                model.setCreateDate(DateTime.now().toDate());
+                model.setNewCreditFacility(newCreditFacility);
             }
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            model.setJobID(view.getJobID());
+            model.setAppraisalDate(view.getAppraisalDate());
+            model.setAadDecision(view.getAadDecision());
+            model.setAadDecisionReason(view.getAadDecisionReason());
+            model.setAadDecisionReasonDetail(view.getAadDecisionReasonDetail());
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
+            model.setMortgageCondition(view.getMortgageCondition());
+            model.setMortgageConditionDetail(view.getMortgageConditionDetail());
+            model.setNewCollateralHeadList(newCollateralHeadTransform.transformToModel(Util.safetyList(view.getNewCollateralHeadViewList()), user));
+            newCollateralList.add(model);
+        }
+        return newCollateralList;
+    }
 
-            List<NewCollateralHead> newCollateralHeadDetails = newCollateralHeadDAO.findByNewCollateralDetail(newCollateralDetail1);
-            if (newCollateralDetail1.getNewCollateralHeadList() != null) {
-                List<NewCollateralHeadView> newCollateralHeadViews = transformCollateralHeadToView(newCollateralHeadDetails);
-                newCollateralView.setNewCollateralHeadViewList(newCollateralHeadViews);
-            }
+    public List<NewCollateral> transformToNewModel(final List<NewCollateralView> newCollateralViewList, final User user, final NewCreditFacility newCreditFacility){
+        log.debug("-- transform List<NewCollateralView> to new List<NewCollateral>(Size of list is {})", ""+newCollateralViewList.size());
+        newCollateralList = new ArrayList<NewCollateral>();
+        NewCollateral model = null;
+        for(NewCollateralView view : newCollateralViewList){
+            model = new NewCollateral();
+            log.debug("-- NewCollateral created");
+            model.setCreateBy(user);
+            model.setCreateDate(DateTime.now().toDate());
+            model.setNewCreditFacility(newCreditFacility);
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            model.setJobID(view.getJobID());
+            model.setAppraisalDate(view.getAppraisalDate());
+            model.setAadDecision(view.getAadDecision());
+            model.setAadDecisionReason(view.getAadDecisionReason());
+            model.setAadDecisionReasonDetail(view.getAadDecisionReasonDetail());
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
+            model.setMortgageCondition(view.getMortgageCondition());
+            model.setMortgageConditionDetail(view.getMortgageConditionDetail());
+            model.setNewCollateralHeadList(newCollateralHeadTransform.transformToNewModel(Util.safetyList(view.getNewCollateralHeadViewList()), user));
+            newCollateralList.add(model);
+        }
+        return newCollateralList;
+    }
 
-            newCollateralViewList.add(newCollateralView);
+    public List<NewCollateralView> transformToView(final List<NewCollateral> newCollateralList){
+        log.debug("-- transform List<NewCollateral> to List<NewCollateralView>(Size of list is {})", ""+newCollateralList.size());
+        newCollateralViewList = new ArrayList<NewCollateralView>();
+        NewCollateralView view = null;
+        for(NewCollateral model : newCollateralList){
+            view = new NewCollateralView();
+            view.setId(model.getId());
+            view.setJobID(model.getJobID());
+            view.setJobIDSearch(model.getJobID());
+            view.setAppraisalDate(model.getAppraisalDate());
+            view.setAadDecision(model.getAadDecision());
+            view.setAadDecisionReason(model.getAadDecisionReason());
+            view.setAadDecisionReasonDetail(model.getAadDecisionReasonDetail());
+            view.setUsage(model.getUsage());
+            view.setTypeOfUsage(model.getTypeOfUsage());
+            view.setMortgageCondition(model.getMortgageCondition());
+            view.setMortgageConditionDetail(model.getMortgageConditionDetail());
+            view.setCreateBy(model.getCreateBy());
+            view.setCreateDate(model.getCreateDate());
+            view.setNewCollateralHeadViewList(newCollateralHeadTransform.transformToView(Util.safetyList(model.getNewCollateralHeadList())));
+            newCollateralViewList.add(view);
         }
         return newCollateralViewList;
-    }
-
-
-    public NewCollateralHead transformCollateralHeadToModel(NewCollateralHeadView newCollateralHeadView, NewCollateral collateralDetail, User user) {
-
-        NewCollateralHead collateralHeaderDetail = new NewCollateralHead();
-        collateralHeaderDetail.setCreateDate(newCollateralHeadView.getCreateDate());
-        collateralHeaderDetail.setCreateBy(newCollateralHeadView.getCreateBy());
-        collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
-        collateralHeaderDetail.setModifyBy(user);
-        collateralHeaderDetail.setHeadCollType(newCollateralHeadView.getHeadCollType());
-        collateralHeaderDetail.setPotential(newCollateralHeadView.getPotentialCollateral());
-        collateralHeaderDetail.setCollateralLocation(newCollateralHeadView.getCollateralLocation());
-        collateralHeaderDetail.setTitleDeed(newCollateralHeadView.getTitleDeed());
-        collateralHeaderDetail.setCollTypePercentLTV(newCollateralHeadView.getCollTypePercentLTV());
-        collateralHeaderDetail.setExistingCredit(newCollateralHeadView.getExistingCredit());
-        collateralHeaderDetail.setInsuranceCompany(newCollateralHeadView.getInsuranceCompany());
-        collateralHeaderDetail.setAppraisalValue(newCollateralHeadView.getAppraisalValue());
-        collateralHeaderDetail.setModifyBy(newCollateralHeadView.getModifyBy());
-        collateralHeaderDetail.setModifyDate(newCollateralHeadView.getModifyDate());
-        collateralHeaderDetail.setNewCollateral(collateralDetail);
-
-        return collateralHeaderDetail;
-    }
-
-    public List<NewCollateralHeadView> transformCollateralHeadToView(List<NewCollateralHead> collateralHeaderDetailList) {
-        log.info("transformCollateralHeadToView ::collateralHeaderDetailList.size :: {}", collateralHeaderDetailList.size());
-        List<NewCollateralHeadView> newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-        NewCollateralHeadView newCollateralHeadView;
-
-        for (NewCollateralHead collateralHeaderDetail : collateralHeaderDetailList) {
-            newCollateralHeadView = new NewCollateralHeadView();
-            newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
-            newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
-            newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
-            newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
-            newCollateralHeadView.setHeadCollType(collateralHeaderDetail.getHeadCollType());
-            newCollateralHeadView.setPotentialCollateral(collateralHeaderDetail.getPotential());
-            newCollateralHeadView.setCollateralLocation(collateralHeaderDetail.getCollateralLocation());
-            newCollateralHeadView.setTitleDeed(collateralHeaderDetail.getTitleDeed());
-            newCollateralHeadView.setCollTypePercentLTV(collateralHeaderDetail.getCollTypePercentLTV());
-            newCollateralHeadView.setExistingCredit(collateralHeaderDetail.getExistingCredit());
-            newCollateralHeadView.setInsuranceCompany(collateralHeaderDetail.getInsuranceCompany());
-            newCollateralHeadView.setAppraisalValue(collateralHeaderDetail.getAppraisalValue());
-            newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
-            newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
-            newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
-            newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
-            newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
-            newCollateralHeadView.setModifyDate(collateralHeaderDetail.getModifyDate());
-
-            List<NewCollateralSub> newCollateralSubDetails = newCollateralSubDAO.getAllNewSubCollateral(collateralHeaderDetail);
-            if (newCollateralSubDetails.size() > 0) {
-                List<NewCollateralSubView> newCollateralSubViews = transformCollateralSubToView(newCollateralSubDetails);
-                newCollateralHeadView.setNewCollateralSubViewList(newCollateralSubViews);
-            }
-
-            newCollateralHeadViewList.add(newCollateralHeadView);
-        }
-
-        return newCollateralHeadViewList;
-    }
-
-    public List<NewCollateralSubView> transformCollateralSubToView(List<NewCollateralSub> subCollateralDetailList) {
-        log.info(" transformCollateralSubToView ::subCollateralDetailList.size :: {} ", subCollateralDetailList.size());
-        List<NewCollateralSubView> newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-        NewCollateralSubView newCollateralSubView;
-
-        for (NewCollateralSub subCollateralDetail : subCollateralDetailList) {
-            newCollateralSubView = new NewCollateralSubView();
-            newCollateralSubView.setId(subCollateralDetail.getId());
-            newCollateralSubView.setTitleDeed(subCollateralDetail.getTitleDeed());
-            newCollateralSubView.setAppraisalValue(subCollateralDetail.getAppraisalValue());
-            newCollateralSubView.setAddress(subCollateralDetail.getAddress());
-            newCollateralSubView.setCollateralOwner(subCollateralDetail.getCollateralOwner());
-            newCollateralSubView.setSubCollateralType(subCollateralDetail.getSubCollateralType());
-            newCollateralSubView.setCreateBy(subCollateralDetail.getCreateBy());
-            newCollateralSubView.setCreateDate(subCollateralDetail.getCreateDate());
-            newCollateralSubView.setModifyBy(subCollateralDetail.getModifyBy());
-            newCollateralSubView.setModifyDate(subCollateralDetail.getModifyDate());
-
-            List<NewCollateralSubOwner> newCollateralSubCustomerList = newCollateralSubOwnerDAO.getListNewCollateralSubCustomer(subCollateralDetail);
-            List<CustomerInfoView> collateralOwnerUWList = new ArrayList<CustomerInfoView>();
-            if (newCollateralSubCustomerList != null) {
-                for (NewCollateralSubOwner newCollateralSubCustomer : newCollateralSubCustomerList) {
-                    CustomerInfoView customer = customerTransform.transformToView(newCollateralSubCustomer.getCustomer());
-                    collateralOwnerUWList.add(customer);
-                }
-                newCollateralSubView.setCollateralOwnerUWList(collateralOwnerUWList);
-            }
-
-            List<NewCollateralSubMortgage> newCollateralSubMortgages = newCollateralSubMortgageDAO.getListNewCollateralSubMortgage(subCollateralDetail);
-            List<MortgageType> mortgageTypes = new ArrayList<MortgageType>();
-            if (newCollateralSubMortgages != null) {
-                for (NewCollateralSubMortgage newCollateralSubMortgage : newCollateralSubMortgages) {
-                    MortgageType mortgageType = mortgageTypeDAO.findById(newCollateralSubMortgage.getMortgageType().getId());
-                    mortgageTypes.add(mortgageType);
-                }
-                newCollateralSubView.setMortgageList(mortgageTypes);
-            }
-
-            List<NewCollateralSubRelated> newCollateralSubRelateList = newCollateralSubRelatedDAO.getListNewCollateralSubRelate(subCollateralDetail);
-            List<NewCollateralSubView> relateList = new ArrayList<NewCollateralSubView>();
-            if (newCollateralSubRelateList != null) {
-                for (NewCollateralSubRelated newCollateralSubRelate : newCollateralSubRelateList) {
-                    // transform to view???
-                }
-                newCollateralSubView.setRelatedWithList(relateList);
-            }
-
-
-            newCollateralSubViewList.add(newCollateralSubView);
-        }
-
-        return newCollateralSubViewList;
-    }
-
-    public NewCollateralSub transformCollateralSubToModel(NewCollateralSubView newCollateralSubView, NewCollateralHead collateralHeaderDetail, User user) {
-
-        NewCollateralSub subCollateralDetail = new NewCollateralSub();
-
-        if (newCollateralSubView.getId() != 0) {
-            subCollateralDetail.setId(newCollateralSubView.getId());
-            subCollateralDetail.setCreateDate(newCollateralSubView.getCreateDate());
-            subCollateralDetail.setCreateBy(newCollateralSubView.getCreateBy());
-        } else { // id = 0 create new
-            subCollateralDetail.setCreateDate(new Date());
-            subCollateralDetail.setCreateBy(user);
-        }
-
-        subCollateralDetail.setTitleDeed(newCollateralSubView.getTitleDeed());
-        subCollateralDetail.setAppraisalValue(newCollateralSubView.getAppraisalValue());
-        subCollateralDetail.setAddress(newCollateralSubView.getAddress());
-        subCollateralDetail.setCollateralOwner(newCollateralSubView.getCollateralOwner());
-        subCollateralDetail.setSubCollateralType(newCollateralSubView.getSubCollateralType());
-        subCollateralDetail.setNewCollateralHead(collateralHeaderDetail);
-
-
-        return subCollateralDetail;
     }
 }

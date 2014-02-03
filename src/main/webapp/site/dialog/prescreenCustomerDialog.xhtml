@@ -57,7 +57,7 @@
                         <!-- only passport allow free text -->
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
@@ -106,12 +106,12 @@
                     <td colspan="3">
                         <p:inputText id="dlgInputBrCitizenText" value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyPressNumber(event);" onkeypress="return onKeyDownNumber(event);" onblur="checkBorrowerThaiID(this)"
+                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onblur="checkBorrowerThaiID(this)"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id != 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      rendered="#{prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                     </td>
@@ -143,7 +143,7 @@
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeRelation()}"
                                     process="@this"
-                                    update=":customerDlgForm:dlgSelBrReference"/>
+                                    update=":customerDlgForm:dlgSelBrReference, :customerDlgForm:dlgSelSpRelation :customerDlgForm:dlgSelSpReference"/>
                         </p:selectOneMenu>
                     </td>
                     <td class="title right">Collateral Owner :</td>
@@ -343,7 +343,7 @@
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small right"
                                      maxlength="10" readonly="#{not prescreenMaker.enableCustomerForm}"
-                                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)">
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
                             <p:ajax event="blur" update="customerDlgForm" process="@form"/>
                         </p:inputText>

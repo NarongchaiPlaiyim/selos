@@ -12,13 +12,17 @@ public class Reason implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @OneToOne
     @JoinColumn(name = "reasontype_id")
     private ReasonType reasonType;
+
     @Column(name = "code")
     private String code;
+
     @Column(name = "description", length = 400)
     private String description;
+
     @Column(name = "active")
     private int active;
 
