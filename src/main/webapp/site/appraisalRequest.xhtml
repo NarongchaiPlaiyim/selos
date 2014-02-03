@@ -89,7 +89,7 @@
                                             </p:row>
                                         </p:columnGroup>
                                         <p:column  styleClass="center" >
-                                            <p:outputLabel value="#{appraisalDetailView.no}"/>
+                                            <p:outputLabel value="#{rowIndex+1}"/>
                                         </p:column>
                                         <p:column styleClass="left" >
                                             <p:outputLabel value="#{appraisalDetailView.titleDeed}" />
@@ -100,8 +100,8 @@
                                             <p:outputLabel value="#{appraisalDetailView.purposeReviewBuildingLabel}"/>
                                         </p:column>
                                         <p:column styleClass="left">
-                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailView.characteristic}" disabled="true">
-                                                <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                                            <p:selectOneRadio id="characteristicRadio" value="#{appraisalDetailView.characteristic}" disabled="false">
+                                                <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" itemDisabled="true"  />
                                                 <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                                             </p:selectOneRadio>
                                         </p:column>

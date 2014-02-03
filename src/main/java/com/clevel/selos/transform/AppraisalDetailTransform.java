@@ -1,14 +1,34 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalPurpose;
+import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.view.AppraisalDetailView;
+import com.clevel.selos.model.view.NewCollateralHeadView;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppraisalDetailTransform extends Transform {
+    @Inject
+    @SELOS
+    Logger log;
+    @Inject
+    private NewCollateralHeadTransform newCollateralHeadTransform;
+    private List<NewCollateral> newCollateralList;
+    private List<AppraisalDetailView> appraisalDetailViewList;
+    private List<NewCollateralHeadView> newCollateralHeadViewList;
+    @Inject
+    public AppraisalDetailTransform() {
+
+    }
+
     public List<AppraisalPurpose> transformToModel(List<AppraisalDetailView> appraisalDetailViewList,Appraisal appraisal){
 
     List<AppraisalPurpose> appraisalDetailList = new ArrayList<AppraisalPurpose>();
@@ -35,26 +55,33 @@ public class AppraisalDetailTransform extends Transform {
     return appraisalDetailList;
 }
 
-    public List<AppraisalDetailView> transformToView(List<AppraisalPurpose> appraisalDetailList){
-        List<AppraisalDetailView> appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-        
-        for(AppraisalPurpose appraisalDetail : appraisalDetailList){
 
-            AppraisalDetailView appraisalDetailView = new AppraisalDetailView();
 
-            appraisalDetailView.setNo(appraisalDetail.getNo());
-            appraisalDetailView.setTitleDeed(appraisalDetail.getTitleDeed());
-            appraisalDetailView.setPurposeReviewAppraisal(appraisalDetail.getPurposeReviewAppraisal());
-            appraisalDetailView.setPurposeNewAppraisal(appraisalDetail.getPurposeNewAppraisal());
-            appraisalDetailView.setPurposeReviewBuilding(appraisalDetail.getPurposeReviewBuilding());
-            appraisalDetailView.setCharacteristic(appraisalDetail.getCharacteristic());
-            appraisalDetailView.setNumberOfDocuments(appraisalDetail.getNumberOfDocuments());
-            appraisalDetailView.setCreateBy(appraisalDetail.getCreateBy());
-            appraisalDetailView.setCreateDate(appraisalDetail.getCreateDate());
-            appraisalDetailView.setModifyBy(appraisalDetail.getModifyBy());
-            appraisalDetailView.setModifyDate(appraisalDetail.getModifyDate());
 
-            appraisalDetailViewList.add(appraisalDetailView);
+
+
+
+
+
+
+
+    public List<AppraisalDetailView> transformToView(final List<NewCollateral> newCollateralList, final User user){
+        log.debug("-- transform List<NewCollateral> to List<AppraisalDetailView>(Size of list is {})", ""+newCollateralList.size());
+        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        AppraisalDetailView view = null;
+        for(NewCollateral newCollateral : newCollateralList) {
+            newCollateralHeadViewList = newCollateralHeadTransform.transformToView(Util.safetyList(newCollateral.getNewCollateralHeadList()));
+            for (NewCollateralHeadView model : newCollateralHeadViewList) {
+                view = new AppraisalDetailView();
+                view.setId(newCollateral.getId());
+                view.setTitleDeed(model.getTitleDeed());
+//                view.set
+//                view.setCharacteristic(model.get);
+//                view.setNumberOfDocuments(model.get);
+                view.setModifyBy(user);
+                view.setModifyDate(model.getModifyDate());
+                appraisalDetailViewList.add(view);
+            }
         }
         return appraisalDetailViewList;
 

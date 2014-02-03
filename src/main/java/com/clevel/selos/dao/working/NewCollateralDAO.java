@@ -34,12 +34,12 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
     }
 
     public List<NewCollateral> findNewCollateralByNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("findNewCollateralByNewCreditFacility ::: {}", newCreditFacility);
+        log.info("-- findNewCollateralByNewCreditFacility ::: {}", newCreditFacility.toString());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
-        log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
+        log.info("-- newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
         return newCollateralDetailList;
     }
 
