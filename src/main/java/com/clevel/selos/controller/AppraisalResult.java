@@ -160,21 +160,32 @@ public class AppraisalResult implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        init();
         HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
-        log.debug("-- User : {}", ""+user.toString());
-        workCaseId = 4L;
-        log.info("-- workCaseId :: {} ",workCaseId);
-
-        if(workCaseId != 0){
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
-            if(appraisalView == null){
-                appraisalView = new AppraisalView();
+        if(false){//session.getAttribute("workCaseId") == null){
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
             }
-            newCollateralViewList = appraisalView.getNewCollateralViewList();
         } else {
-            log.debug("-- WorkCaseId not found.");
+            user = (User)session.getAttribute("user");
+            log.debug("-- User : {}", ""+user.toString());
+            init();
+//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            workCaseId = 4L;
+            log.info("workCaseId :: {} ",workCaseId);
+            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+            if(appraisalView != null){
+                newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+                if(newCollateralViewList.size() == 0){
+                    newCollateralViewList = new ArrayList<NewCollateralView>();
+                }
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] has created");
+            }
         }
     }
 

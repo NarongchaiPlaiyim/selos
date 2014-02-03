@@ -72,8 +72,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             appraisalDetailList = appraisalDetailDAO.findByAppraisal(appraisal);
             if(appraisalDetailList.size()>0){
-                appraisalDetailViewList = appraisalDetailTransform.transformToView(appraisalDetailList);
-                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+//                appraisalDetailViewList = appraisalDetailTransform.transformToView(appraisalDetailList);
+//                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
             }
 
             appraisalContactDetailList= appraisalContactDetailDAO.findByAppraisal(appraisal);

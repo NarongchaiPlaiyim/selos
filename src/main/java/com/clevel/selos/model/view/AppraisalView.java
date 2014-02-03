@@ -16,7 +16,7 @@ public class AppraisalView implements Serializable {
     private long id;
     private String zoneLocation;
     private String bdmRemark;
-
+    private final int isRequestAppraisal = 1;
     private int appraisalType;
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -270,12 +270,17 @@ public class AppraisalView implements Serializable {
         this.newCollateralViewList = newCollateralViewList;
     }
 
+    public int getRequestAppraisal() {
+        return isRequestAppraisal;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("zoneLocation", zoneLocation)
                 .append("bdmRemark", bdmRemark)
+                .append("isRequestAppraisal", isRequestAppraisal)
                 .append("appraisalType", appraisalType)
                 .append("appraisalCompany", appraisalCompany)
                 .append("appraisalDivision", appraisalDivision)
