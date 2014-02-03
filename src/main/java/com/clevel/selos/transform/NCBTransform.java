@@ -2,10 +2,8 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
-import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
@@ -108,26 +106,25 @@ public class NCBTransform extends Transform {
         if(ncb.getCustomer() != null){
             ncbInfoView.setCustomerId(ncb.getCustomer().getId());
             Customer customer = customerDAO.findById(ncb.getCustomer().getId());
-            CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
 
-            StringBuilder customerName = new StringBuilder();
-            customerName.append(customer.getTitle().getTitleTh())
-                    .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
-                    .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
-            ncbInfoView.setNcbCusName(customerName.toString());
+            if(customer != null){
+                StringBuilder customerName = new StringBuilder();
+                customerName.append(customer.getTitle().getTitleTh())
+                        .append(" ").append(StringUtils.defaultString(customer.getNameTh()))
+                        .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
+                ncbInfoView.setNcbCusName(customerName.toString());
 
-            if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(ncb.getCustomer().getIndividual() != null){
-                    ncbInfoView.setPersonalId(customer.getIndividual().getCitizenId());
-                    ncbInfoView.setNcbCusMarriageStatus(customer.getIndividual().getMaritalStatus().getName());
-                }
-            } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
-                if(ncb.getCustomer().getJuristic() != null){
-                    ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
-                }
+//                if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+//                    if(ncb.getCustomer().getIndividual() != null){
+//                        ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
+//                        ncbInfoView.setNcbCusMarriageStatus(ncb.getCustomer().getIndividual().getMaritalStatus().getName());
+//                    }
+//                } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
+//                    if(ncb.getCustomer().getJuristic() != null){
+//                        ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
+//                    }
+//                }
             }
-
-//            ncbInfoView.setNcbCusAddress(customerInfoView.getCurrentAddress());
         }
 
         ncbInfoView.setEnquiry(ncb.getEnquiry());
