@@ -24,7 +24,7 @@
                                            itemLabel="#{potentialCollateralList.description}"
                                            itemValue="#{potentialCollateralList.id}"/>
                             <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
-                                    update=":tcgDlgForm"/>
+                                    process="@this" update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -57,12 +57,13 @@
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     maxlength="17"
-                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                     maxlength="17" >
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="18"/>
+                                             maxIntegerDigits="18"
+                                             type="number"/>
+                            <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -81,7 +82,8 @@
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="18"/>
+                                             maxIntegerDigits="18"
+                                             type="number"/>
                         </p:inputText>
                     </td>
                 </tr>
