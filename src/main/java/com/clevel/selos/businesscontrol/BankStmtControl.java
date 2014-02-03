@@ -957,7 +957,7 @@ public class BankStmtControl extends BusinessControl {
          */
         // if source of collateral proof is already exist
         // re-calculate & replace the old data
-        if (srcOfCollateralProofViewList != null && srcOfCollateralProofViewList.size() > 0) {
+        if ((srcOfCollateralProofViewList != null && srcOfCollateralProofViewList.size() > 0) && lastThreeMonthBankStmtDetail.size() == 3) {
             for (int i=0; i < srcOfCollateralProofViewList.size(); i++) {
                 BankStmtDetailView detailView = lastThreeMonthBankStmtDetail.get(i);
 
