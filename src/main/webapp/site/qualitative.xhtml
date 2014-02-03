@@ -7,12 +7,12 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>SE-LOS : Qualitative A </title>
+    <title>SE-LOS : Qualitative</title>
     <h:outputStylesheet name="css/style.css" />
 </h:head>
 
 <h:body>
-
+<f:event type="preRenderView" listener="#{qualitative.preRender()}" />
 <p:panel id="pnl_maincontainer" styleClass="panel">
 <h:form id="frmMain">
 <div id="main_container">

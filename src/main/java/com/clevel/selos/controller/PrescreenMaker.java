@@ -507,7 +507,7 @@ public class PrescreenMaker implements Serializable {
             log.debug("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
         }*/
 
-        if(stepId == 1003){
+        if(stepId == StepValue.PRESCREEN_MAKER.value()){
             businessGroupList = businessGroupDAO.findAll();
             log.debug("onLoadSelectList ::: businessGroupList size : {}", businessGroupList.size());
 
@@ -520,7 +520,8 @@ public class PrescreenMaker implements Serializable {
             referredExperienceList = referredExperienceDAO.findAll();
             log.debug("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
 
-            borrowingTypeList = borrowingTypeDAO.findAll();
+            //borrowingTypeList = borrowingTypeDAO.findAll();
+            borrowingTypeList = borrowingTypeDAO.findByCustomerEntityId(caseBorrowerTypeId);
             log.debug("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
         }
 
