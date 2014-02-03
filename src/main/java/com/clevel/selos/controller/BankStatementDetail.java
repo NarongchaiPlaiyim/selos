@@ -332,7 +332,7 @@ public class BankStatementDetail implements Serializable {
         int otherAccType = bankStmtView.getOtherAccountType();
 
         bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
-        log.debug("checkRequiredBankAccTypeSelected() bankAccTypeSelectRequired = ", bankAccTypeSelectRequired);
+        log.debug("checkRequiredBankAccTypeSelected() bankAccTypeSelectRequired = {}", bankAccTypeSelectRequired);
     }
 
     public void onChangeBankAccTypeSelected() {
