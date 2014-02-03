@@ -28,4 +28,14 @@ public class BorrowingTypeDAO extends GenericDAO<BorrowingType, Integer> {
 
         return borrowingTypeList;
     }
+
+    public List<BorrowingType> findByCustomerEntityId(int customerEntityId) {
+        log.info("findByCustomerEntityId : {}", customerEntityId);
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        List<BorrowingType> borrowingTypeList = criteria.list();
+
+        return borrowingTypeList;
+    }
 }
