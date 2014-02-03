@@ -44,8 +44,6 @@
                                            var="dlgPotentialColToTCGColList"
                                            itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                            itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
-                            <p:ajax event="change" listener="#{tcgInfo.calculateLtvValue}"
-                                    update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -65,13 +63,6 @@
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
                                              maxIntegerDigits="18"/>
-                            <p:ajax event="blur"
-                                process="@this"
-                                update="@this" />
-                            <!--<p:ajax event="blur"-->
-                                    <!--process=":tcgDlgForm"-->
-                                    <!--listener="#{tcgInfo.calculateLtvValue}"-->
-                                    <!--update=":tcgDlgForm" />-->
                         </p:inputText>
                     </td>
                 </tr>

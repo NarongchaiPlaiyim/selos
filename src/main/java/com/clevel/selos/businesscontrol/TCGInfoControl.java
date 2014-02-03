@@ -132,34 +132,39 @@ public class TCGInfoControl extends BusinessControl {
                 PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
 
-                PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
-                log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
+                if ((potentialCollateral != null) && (tcgCollateralType != null)) {
+                    PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
+                    if (potentialColToTCGCol != null) {
+                        log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
 
-                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
+                        if (basicInfo != null) {
+                            if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                                ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
+                            }
 
-                if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
-                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
-                }
+                            if (ltvPercentBig == null) {
 
-                if (ltvPercentBig == null) {
+                                if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
+                                        Util.isTrue(basicInfo.getPassAnnualReview()) &&
+                                        Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                        Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                        (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
+                                    ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                                    log.info("getTenPercentLTV :::::::");
+                                } else {
+                                    ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                                    log.info("getPercentLTV ::::::: ");
+                                }
+                            }
 
-                    if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
-                            Util.isTrue(basicInfo.getPassAnnualReview()) &&
-                            Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
-                            Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
-                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
-                        log.info("getTenPercentLTV :::::::");
-                    } else {
-                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
-                        log.info("getPercentLTV ::::::: ");
+                            if (ltvPercentBig != null && tcgDetailView != null) {
+                                log.info("ltvPercent :: {} ", ltvPercentBig);
+                                ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
+                            }
+                        }
                     }
-                }
-
-                if (ltvPercentBig != null && tcgDetailView != null) {
-                    log.info("ltvPercent :: {} ", ltvPercentBig);
-                    ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
                 }
             }
 

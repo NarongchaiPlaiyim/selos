@@ -520,6 +520,8 @@ public class CustomerInfoJuristic implements Serializable {
     public void onRefreshInterfaceInfo(){
         if(customerInfoView.getSearchFromRM() == 1){
             long cusId = customerInfoView.getId();
+            int searchBy = customerInfoView.getSearchBy();
+            String searchId = customerInfoView.getSearchId();
             int relId = 0;
             int refId = 0;
             if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
@@ -569,6 +571,8 @@ public class CustomerInfoJuristic implements Serializable {
                 }
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -577,6 +581,8 @@ public class CustomerInfoJuristic implements Serializable {
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
