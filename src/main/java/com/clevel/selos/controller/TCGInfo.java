@@ -174,19 +174,21 @@ public class TCGInfo implements Serializable {
         modeForButton = ModeForButton.EDIT;
         log.info("onEditCollateralDetail ::: selectCollateralItem  : {}", selectCollateralItem.toString());
         Cloner cloner = new Cloner();
-        if (rowIndex < TCGDetailViewList.size()) {
+        tcgDetailView = new TCGDetailView();
+        tcgDetailView = cloner.deepClone(selectCollateralItem);
+        potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral());
+        /*if (rowIndex < TCGDetailViewList.size()) {
+            TCGDetailView detailView = cloner.deepClone(selectCollateralItem);
+            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(detailView.getPotentialCollateral());
+            TCGCollateralType tcgCollateralTypeEdit = detailView.getTcgCollateralType();
 
-            PotentialCollateral potentialCollateralEdit = cloner.deepClone(selectCollateralItem.getPotentialCollateral());
-            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(potentialCollateralEdit);
-            TCGCollateralType tcgCollateralTypeEdit = cloner.deepClone(selectCollateralItem.getTcgCollateralType());
-
-            tcgDetailView.setPotentialCollateral(potentialCollateralEdit);
+            tcgDetailView.setPotentialCollateral(detailView.getPotentialCollateral());
             tcgDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-            tcgDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
-            tcgDetailView.setLtvValue(selectCollateralItem.getLtvValue());
-            tcgDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
+            tcgDetailView.setProposeInThisRequest(detailView.getProposeInThisRequest());
+            tcgDetailView.setLtvValue(detailView.getLtvValue());
+            tcgDetailView.setAppraisalAmount(detailView.getAppraisalAmount());
 
-        }
+        }*/
     }
 
 //    public void calculateLtvValue(){
