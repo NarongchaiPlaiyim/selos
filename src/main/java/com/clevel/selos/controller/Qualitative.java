@@ -157,7 +157,7 @@ public class Qualitative implements Serializable {
             }
 
             requiredReason = false;
-            if(!qualitativeView.getQualityResult().equals("P")) {
+            if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().equals("P")) {
                 requiredReason = true;
             }
 
