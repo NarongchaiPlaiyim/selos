@@ -1166,6 +1166,8 @@ public class CustomerInfoIndividual implements Serializable {
     public void onRefreshInterfaceInfo(){
         log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
         long cusId = customerInfoView.getId();
+        int searchBy = customerInfoView.getSearchBy();
+        String searchId = customerInfoView.getSearchId();
         long cusSpoId = 0;
 
         int relId = 0;
@@ -1176,20 +1178,14 @@ public class CustomerInfoIndividual implements Serializable {
 
         if(customerInfoView.getSpouse() != null){
             cusSpoId = customerInfoView.getSpouse().getId();
-//            if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
             if(relationSpouseCusId == RelationValue.BORROWER.value()){
-//                relSpoId = customerInfoView.getSpouse().getRelation().getId();
                 relSpoId = relationSpouseCusId;
-//                refSpoId = customerInfoView.getSpouse().getReference().getId();
                 refSpoId = referenceSpouseCusId;
             }
         }
 
-//        if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
         if(relationMainCusId == RelationValue.BORROWER.value()){
-//            relId = customerInfoView.getRelation().getId();
             relId = relationMainCusId;
-//            refId = customerInfoView.getReference().getId();
             refId = referenceMainCusId;
         }
 
@@ -1286,6 +1282,8 @@ public class CustomerInfoIndividual implements Serializable {
                 }
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1294,9 +1292,13 @@ public class CustomerInfoIndividual implements Serializable {
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
+            int searchBySpouse = customerInfoView.getSpouse().getSearchBy();
+            String searchIdSpouse = customerInfoView.getSpouse().getSearchId();
             try {
                 CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse());
                 if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -1328,6 +1330,8 @@ public class CustomerInfoIndividual implements Serializable {
                 }
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
+                customerInfoView.getSpouse().setSearchBy(searchBySpouse);
+                customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1336,6 +1340,8 @@ public class CustomerInfoIndividual implements Serializable {
                 severity = "alert";
                 customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
+                customerInfoView.getSpouse().setSearchBy(searchBySpouse);
+                customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
