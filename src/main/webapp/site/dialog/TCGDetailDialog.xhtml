@@ -56,7 +56,9 @@
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     maxlength="17" >
+                                     maxlength="17"
+                                     onkeydown="return onKeyDownMoney(event);"
+                                     onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
