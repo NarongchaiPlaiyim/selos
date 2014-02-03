@@ -1166,8 +1166,6 @@ public class CustomerInfoIndividual implements Serializable {
     public void onRefreshInterfaceInfo(){
         log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
         long cusId = customerInfoView.getId();
-        int searchBy = customerInfoView.getSearchBy();
-        String searchId = customerInfoView.getSearchId();
         long cusSpoId = 0;
 
         int relId = 0;
@@ -1189,7 +1187,9 @@ public class CustomerInfoIndividual implements Serializable {
             refId = referenceMainCusId;
         }
 
-        if(customerInfoView.getSearchFromRM() == 1) { // for individual && check spouse
+        if(customerInfoView.getSearchFromRM() == 1) { // for main customer
+            int searchBy = customerInfoView.getSearchBy();
+            String searchId = customerInfoView.getSearchId();
             CustomerInfoResultView customerInfoResultView;
             try{
                 customerInfoResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView);
@@ -1227,52 +1227,13 @@ public class CustomerInfoIndividual implements Serializable {
                                 customerInfoView.getWorkAddress().setAddressTypeFlag(3);
                             }
                         }
-
-                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
-                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.retrieveInterfaceInfo(customerInfoView.getSpouse());
-                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
-                                if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
-                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
-                                    customerInfoView.getSpouse().setId(cusSpoId);
-                                    Relation relationSpouse = new Relation();
-                                    relationSpouse.setId(relSpoId);
-                                    customerInfoView.setRelation(relationSpouse);
-                                    Reference referenceSpouse = new Reference();
-                                    referenceSpouse.setId(refSpoId);
-                                    customerInfoView.setReference(referenceSpouse);
-
-                                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
-                                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
-                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
-                                        } else {
-                                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
-                                        }
-                                    }
-                                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
-                                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
-                                        } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
-                                            if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
-                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
-                                            } else {
-                                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
-                                            }
-                                        } else {
-                                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
                         severity = "info";
                     } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
                         messageHeader = "Information.";
-                        message = "Refresh interface info failed.";
+                        message = "Refresh interface info failed. ( Customer not found. )";
                         severity = "info";
                     }
                 } else {
@@ -1284,6 +1245,10 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+                onChangeDOB();
+                onChangeProvinceEditForm1();
+                onChangeProvinceEditForm2();
+                onChangeProvinceEditForm3();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1296,7 +1261,9 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-        } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
+        }
+
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for spouse
             int searchBySpouse = customerInfoView.getSpouse().getSearchBy();
             String searchIdSpouse = customerInfoView.getSpouse().getSearchId();
             try {
@@ -1332,6 +1299,9 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                 customerInfoView.getSpouse().setSearchId(searchIdSpouse);
+                onChangeDOBSpouse();
+                onChangeProvinceEditForm4();
+                onChangeProvinceEditForm5();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
