@@ -2454,13 +2454,11 @@
                                                      disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" id="btnCancel" styleClass="small" process="@form" update=":frmMain"
                                                      actionListener="#{custInfoSumIndi.onCreation}"
-                                                     rendered="#{not custInfoSumIndi.fromJuristic}"
-                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                     rendered="#{not custInfoSumIndi.fromJuristic}"/>
                                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" id="btnCancel2"
                                                      process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                      action="#{custInfoSumIndi.onCancelFromJuristic()}"
-                                                     rendered="#{custInfoSumIndi.fromJuristic}"
-                                                     disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                     rendered="#{custInfoSumIndi.fromJuristic}"/>
                                 </td>
                             </tr>
                             </table>

@@ -163,8 +163,7 @@ public class BankStmtTransform extends Transform {
             return bankStmtView;
         }
         bankStmtView.setId(bankStatement.getId());
-        //todo: bankStmtView.setNotCountIncome();
-        //bankStmtView.setNotCountIncome();
+        bankStmtView.setNotCountIncome(bankStatement.getNotCountIncome());
         bankStmtView.setBankView(bankTransform.getBankView(bankStatement.getBank()));
         bankStmtView.setBranchName(bankStatement.getBranch());
         bankStmtView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankStatement.getBankAccountType()));
@@ -315,7 +314,7 @@ public class BankStmtTransform extends Transform {
             }
             bankStatement.setModifyBy(user);
             bankStatement.setModifyDate(now);
-
+            bankStatement.setNotCountIncome(bankStmtView.getNotCountIncome());
             bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
                     bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
             bankStatement.setBranch(bankStmtView.getBranchName());
@@ -368,6 +367,74 @@ public class BankStmtTransform extends Transform {
             bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);
             //set parent
             bankStatement.setBankStatementSummary(bankStatementSummary);
+        }
+        return bankStatement;
+    }
+
+    public BankStatement getBankStmtForPersist(BankStmtView bankStmtView, User user) {
+        BankStatement bankStatement = null;
+        if (bankStmtView != null) {
+            Date now = new Date();
+            if (bankStmtView.getId() != 0) {
+                bankStatement = bankStatementDAO.findById(bankStmtView.getId());
+            } else {
+                bankStatement = new BankStatement();
+                bankStatement.setCreateBy(user);
+                bankStatement.setCreateDate(now);
+            }
+            bankStatement.setModifyBy(user);
+            bankStatement.setModifyDate(now);
+            bankStatement.setNotCountIncome(bankStmtView.getNotCountIncome());
+            bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
+                    bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
+            bankStatement.setBranch(bankStmtView.getBranchName());
+            if(bankStmtView.getBankAccountTypeView() != null
+                    && !Util.isNull(Integer.toString(bankStmtView.getBankAccountTypeView().getId()))
+                    && bankStmtView.getBankAccountTypeView().getId() != 0){
+                bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
+            } else {
+                bankStatement.setBankAccountType(null);
+            }
+            bankStatement.setAccountNo(Util.removeNonDigit(bankStmtView.getAccountNumber()));
+            bankStatement.setAccountName(bankStmtView.getAccountName());
+            bankStatement.setOtherAccountType(bankStmtView.getOtherAccountType());
+            if(bankStmtView.getAccountStatusView() != null
+                    && !Util.isEmpty(bankStmtView.getAccountStatusView().getId())){
+                bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
+            } else {
+                bankStatement.setAccountStatus(null);
+            }
+            bankStatement.setMainAccount(bankStmtView.getMainAccount());
+            bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
+            bankStatement.setTMB(bankStmtView.getTMB());
+            bankStatement.setHighestInflow(bankStmtView.getHighestInflow());
+            bankStatement.setAvgLimit(bankStmtView.getAvgLimit());
+            bankStatement.setAvgIncomeGross(bankStmtView.getAvgIncomeGross());
+            bankStatement.setAvgIncomeNetBDM(bankStmtView.getAvgIncomeNetBDM());
+            bankStatement.setAvgIncomeNetUW(bankStmtView.getAvgIncomeNetUW());
+            bankStatement.setAvgDrawAmount(bankStmtView.getAvgWithDrawAmount());
+            bankStatement.setAvgSwingPercent(bankStmtView.getAvgSwingPercent());
+            bankStatement.setAvgUtilizationPercent(bankStmtView.getAvgUtilizationPercent());
+            bankStatement.setAvgGrossInflowPerLimit(bankStmtView.getAvgGrossInflowPerLimit());
+            bankStatement.setChequeReturn(bankStmtView.getChequeReturn());
+            bankStatement.setTdChequeReturnAmount(bankStmtView.getTrdChequeReturnAmount());
+            bankStatement.setTdChequeReturnPercent(bankStmtView.getTrdChequeReturnPercent());
+            bankStatement.setOverLimitTimes(bankStmtView.getOverLimitTimes());
+            bankStatement.setOverLimitDays(bankStmtView.getOverLimitDays());
+            bankStatement.setRemark(bankStmtView.getRemark());
+            bankStatement.setAvgOSBalanceAmount(bankStmtView.getAvgOSBalanceAmount());
+            //set bank statement detail list
+            List<BankStatementDetail> bankStatementDetailList = new ArrayList<BankStatementDetail>();
+            for (BankStmtDetailView detailView : Util.safetyList(bankStmtView.getBankStmtDetailViewList())) {
+                bankStatementDetailList.add(getBankStatementDetail(detailView, bankStatement));
+            }
+            bankStatement.setBankStatementDetailList(bankStatementDetailList);
+            //set new source of collateral proof from view to model
+            List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList = new ArrayList<BankStmtSrcOfCollateralProof>();
+            for (BankStmtSrcOfCollateralProofView srcOfCollateralProofView : Util.safetyList(bankStmtView.getSrcOfCollateralProofViewList())) {
+                srcOfCollateralProofList.add(getSrcOfCollateralProof(srcOfCollateralProofView, bankStatement));
+            }
+            bankStatement.setSrcOfCollateralProofList(srcOfCollateralProofList);
         }
         return bankStatement;
     }

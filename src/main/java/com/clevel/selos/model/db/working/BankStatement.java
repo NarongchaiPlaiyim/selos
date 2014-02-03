@@ -21,6 +21,9 @@ public class BankStatement implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BANKSTMT_ID")
     private long id;
 
+    @Column(name = "is_not_count_income", length = 1, nullable = false, columnDefinition = "int default 0")
+    private int isNotCountIncome;
+
     @OneToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
@@ -134,6 +137,14 @@ public class BankStatement implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNotCountIncome() {
+        return isNotCountIncome;
+    }
+
+    public void setNotCountIncome(int notCountIncome) {
+        isNotCountIncome = notCountIncome;
     }
 
     public Bank getBank() {
