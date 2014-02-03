@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.master;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -52,5 +55,15 @@ public class TCGCollateralType implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("active", active)
+                .toString();
     }
 }
