@@ -321,8 +321,9 @@ public class CustomerInfoControl extends BusinessControl {
                 if(ncbSpouse != null && ncbSpouse.getId() != 0){
                     ncbDAO.delete(ncbSpouse);
                 }
-
+                CustomerOblInfo customerOblInfo = cus.getCustomerOblInfo();
                 customerDAO.delete(cus);
+                if(customerOblInfo != null) customerOblInfoDAO.delete(customerOblInfo);
             }
         }
 
@@ -350,7 +351,9 @@ public class CustomerInfoControl extends BusinessControl {
         if(ncb != null && ncb.getId() != 0){
             ncbDAO.delete(ncb);
         }
-
+        CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+        customerDAO.delete(customer);
+        if(customerOblInfo != null) customerOblInfoDAO.delete(customerOblInfo);
 
     }
 
@@ -358,11 +361,9 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("deleteCustomerJuristic ::: customerId : {}", customerId);
         Customer customer = customerDAO.findById(customerId);
         List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId()); // find committee
-        if(cusIndList != null && cusIndList.size() > 0){
-            for(Customer cusInd : cusIndList){
+            for(Customer cusInd : Util.safetyList(cusIndList)){
                 deleteCustomerIndividual(cusInd.getId());
             }
-        }
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
             addressDAO.delete(customer.getAddressesList());
@@ -382,8 +383,9 @@ public class CustomerInfoControl extends BusinessControl {
         if(ncb != null && ncb.getId() != 0){
             ncbDAO.delete(ncb);
         }
-
+        CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
         customerDAO.delete(customer);
+        if(customerOblInfo != null && customerOblInfo.getId() != 0)  customerOblInfoDAO.delete(customerOblInfo);
     }
 
     public List<CustomerInfoView> getAllCustomerByWorkCase(long workCaseId){
