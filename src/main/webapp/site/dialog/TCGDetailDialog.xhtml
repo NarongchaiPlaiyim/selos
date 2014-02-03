@@ -24,7 +24,7 @@
                                            itemLabel="#{potentialCollateralList.description}"
                                            itemValue="#{potentialCollateralList.id}"/>
                             <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
-                                    update=":tcgDlgForm"/>
+                                    process="@this" update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -44,8 +44,6 @@
                                            var="dlgPotentialColToTCGColList"
                                            itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                            itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
-                            <p:ajax event="change" listener="#{tcgInfo.calculateLtvValue}"
-                                    update=":tcgDlgForm"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
@@ -59,19 +57,13 @@
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
-                                     maxlength="17"
-                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                     maxlength="17" >
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="18"/>
-                            <p:ajax event="blur"
-                                process="@this"
-                                update="@this" />
-                            <!--<p:ajax event="blur"-->
-                                    <!--process=":tcgDlgForm"-->
-                                    <!--listener="#{tcgInfo.calculateLtvValue}"-->
-                                    <!--update=":tcgDlgForm" />-->
+                                             maxIntegerDigits="18"
+                                             type="number"/>
+                            <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -90,7 +82,8 @@
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="18"/>
+                                             maxIntegerDigits="18"
+                                             type="number"/>
                         </p:inputText>
                     </td>
                 </tr>

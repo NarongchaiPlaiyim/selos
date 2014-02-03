@@ -44,12 +44,7 @@
                     <ul>
                         <li id="submnucustomerinfo"><a href="customerInfoSummary.jsf" title="#{msg.get('app.menu.customerInfo')}">#{msg.get('app.menu.customerInfo')}</a></li>
                         <li id="submnucredithistory"><a href="NCBSummary.jsf" title="#{msg.get('app.menu.creditHistory')}">#{msg.get('app.menu.creditHistory')}</a></li>
-                        <h:panelGroup id="pnl_mnu_qualitative_a" rendered="#{baseController.qualitativeType == 1}" styleClass="panel">
-                            <li id="submnuqualitativea"><a href="qualitativeA.jsf" title="#{msg.get('app.menu.qualitativeA')}">#{msg.get('app.menu.qualitativeA')}</a></li>
-                        </h:panelGroup>
-                        <h:panelGroup id="pnl_mnu_qualitative_b" rendered="#{baseController.qualitativeType == 2}" styleClass="panel">
-                            <li id="submnuqualitativeb"><a href="qualitativeB.jsf" title="#{msg.get('app.menu.qualitativeB')}">#{msg.get('app.menu.qualitativeB')}</a></li>
-                        </h:panelGroup>
+                        <li id="submnuqualitativea"><a href="qualitative.jsf" title="#{msg.get('app.menu.qualitative')}">#{msg.get('app.menu.qualitative')}</a></li>
                         <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="#{msg.get('app.menu.tcgCalculation')}">#{msg.get('app.menu.tcgCalculation')}</a></li>
                     </ul>
                 </li>

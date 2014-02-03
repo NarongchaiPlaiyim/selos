@@ -507,7 +507,7 @@ public class PrescreenMaker implements Serializable {
             log.debug("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
         }*/
 
-        if(stepId == 1003){
+        if(stepId == StepValue.PRESCREEN_MAKER.value()){
             businessGroupList = businessGroupDAO.findAll();
             log.debug("onLoadSelectList ::: businessGroupList size : {}", businessGroupList.size());
 
@@ -520,7 +520,8 @@ public class PrescreenMaker implements Serializable {
             referredExperienceList = referredExperienceDAO.findAll();
             log.debug("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
 
-            borrowingTypeList = borrowingTypeDAO.findAll();
+            //borrowingTypeList = borrowingTypeDAO.findAll();
+            borrowingTypeList = borrowingTypeDAO.findByCustomerEntityId(caseBorrowerTypeId);
             log.debug("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
         }
 
@@ -816,6 +817,7 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setSpouse(spouse);
                 } else {
                     spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                    onChangeSpouseRelation();
                     spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
                 }
             }
@@ -833,6 +835,7 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setSpouse(spouse);
                 } else {
                     spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                    onChangeSpouseRelation();
                     spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
                 }
             }
@@ -851,23 +854,25 @@ public class PrescreenMaker implements Serializable {
         }
         log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         if(stepId == StepValue.PRESCREEN_INITIAL.value()){
-            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
         } else {
+            int borrowerRelationId = borrowerInfo.getRelation().getId();
+            Relation tmpBorrowerRelation = relationDAO.findById(borrowerRelationId);
             if(borrowerInfo.getSpouse() != null){
                 if(borrowerInfo.getSpouse().getId() != 0){
                     if(borrowerInfo.getSpouse().getRelation() != null){
                         if(borrowerInfo.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()){
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_INITIAL.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                         } else {
-                            spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+                            spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                         }
                     }
 
                 }else{
-                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+                    spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
                 }
             } else {
-                spouseRelationList = prescreenBusinessControl.getRelationByStepId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, 1);
+                spouseRelationList = prescreenBusinessControl.getRelationByStepAndBorrowerRelationId(StepValue.PRESCREEN_MAKER.value(), BorrowerType.INDIVIDUAL.value(), caseBorrowerTypeId, tmpBorrowerRelation.getPriority());
             }
         }
         log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
@@ -875,10 +880,6 @@ public class PrescreenMaker implements Serializable {
         titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
-
-        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-            onChangeSpouseRelation();
-        }
 
         //-- To Get district list, subDistrict
         onChangeProvinceBorrower();
