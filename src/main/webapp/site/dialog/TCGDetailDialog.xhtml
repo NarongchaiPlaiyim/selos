@@ -52,18 +52,14 @@
                         <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :"/>
                     </td>
                     <td>
-                        <p:inputText styleClass="large"
-                                     id="appraisalAmount"
+                        <p:inputText id="appraisalAmount"
                                      value="#{tcgInfo.tcgDetailView.appraisalAmount}"
                                      required="#{not empty param[addDlgData.clientId]}"
                                      style="width:200px;text-align: right"
                                      maxlength="17" >
-                            <f:convertNumber pattern="#,##0"
-                                             minFractionDigits="2"
-                                             maxFractionDigits="2"
-                                             maxIntegerDigits="18"
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
-                            <p:ajax event="blur" update="@this"/>
+                            <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -72,8 +68,7 @@
                         <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :"/>
                     </td>
                     <td>
-                        <p:inputText styleClass="large"
-                                     id="LTVvalue"
+                        <p:inputText id="LTVvalue"
                                      value="#{tcgInfo.tcgDetailView.ltvValue}"
                                      maxlength="17"
                                      required="#{not empty param[addDlgData.clientId]}"
@@ -82,7 +77,6 @@
                             <f:convertNumber pattern="#,##0"
                                              minFractionDigits="2"
                                              maxFractionDigits="2"
-                                             maxIntegerDigits="18"
                                              type="number"/>
                         </p:inputText>
                     </td>
@@ -114,7 +108,9 @@
                                 value="#{msg.get('app.tcg.dlg.button.cancel')}"
                                 styleClass="small"
                                 onclick="PF('tcgDlg').hide()"
-                                update=":tcgDlgForm"/>
+                                update=":tcgDlgForm">
+                            <p:resetInput target=":tcgDlgForm"/>
+                        </p:commandButton>
                     </td>
                 </tr>
             </table>
