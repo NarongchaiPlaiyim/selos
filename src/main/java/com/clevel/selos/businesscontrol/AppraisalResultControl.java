@@ -31,13 +31,13 @@ public class AppraisalResultControl extends BusinessControl {
     @Inject
     private AppraisalDAO appraisalDAO;
     @Inject
+    private NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
     private NewCollateralDAO newCollateralDAO;
     @Inject
     private NewCollateralHeadDAO newCollateralHeadDAO;
     @Inject
     private NewCollateralSubDAO newCollateralSubDAO;
-    @Inject
-    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     private AppraisalTransform appraisalTransform;
     @Inject
@@ -48,6 +48,7 @@ public class AppraisalResultControl extends BusinessControl {
     private NewCollateralSubTransform newCollateralSubTransform;
 
     private Appraisal appraisal;
+    private AppraisalView appraisalView;
 
     private WorkCase workCase;
     private NewCreditFacility newCreditFacility;
@@ -74,14 +75,17 @@ public class AppraisalResultControl extends BusinessControl {
         if(appraisal != null){
             appraisalView = appraisalTransform.transformToView(appraisal);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-            newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
-            newCollateralViewList = newCollateralTransform.transformToView(newCollateralList);
-            appraisalView.setNewCollateralViewList(newCollateralViewList);
+            if(newCreditFacility != null){
+                newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
+                newCollateralViewList = newCollateralTransform.transformToView(newCollateralList);
+                appraisalView.setNewCollateralViewList(newCollateralViewList);
+            } else {
+                log.debug("-- newCreditFacility = null");
+            }
             log.info("-- getAppraisalResult ::: AppraisalView : {}", appraisalView.toString());
             return appraisalView;
         } else {
-            log.debug("-- Appraisal = null find by work case id = {}", workCaseId);
-            appraisalView = new AppraisalView();
+            log.debug("-- When find by work case id = {}, Appraisal is null, ", workCaseId);
             return appraisalView;
         }
     }
