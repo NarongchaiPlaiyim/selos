@@ -573,12 +573,12 @@ public class NCBInfo implements Serializable {
         this.ncbDetailView = ncbDetailView;
     }
 
-    public NCBInfoView getNcbInfoView() {
-        return ncbInfoView;
+    public NCBInfoControl getNcbInfoControl() {
+        return ncbInfoControl;
     }
 
-    public void setNcbInfoView(NCBInfoView ncbInfoView) {
-        this.ncbInfoView = ncbInfoView;
+    public void setNcbInfoControl(NCBInfoControl ncbInfoControl) {
+        this.ncbInfoControl = ncbInfoControl;
     }
 
     public TDRCondition getTdrCondition() {
@@ -643,5 +643,13 @@ public class NCBInfo implements Serializable {
 
     public void setTdrRendered(boolean tdrRendered) {
         this.tdrRendered = tdrRendered;
+    }
+
+    public NCBInfoView getNcbInfoView() {
+        return ncbInfoView;
+    }
+
+    public void setNcbInfoView(NCBInfoView ncbInfoView) {
+        this.ncbInfoView = ncbInfoView;
     }
 }
