@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
@@ -100,7 +101,12 @@ public class NCBTransform extends Transform {
         ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
         ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
         ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
-        ncbInfoView.setTdrCondition(ncb.getTdrCondition());
+
+       if (ncb.getTdrCondition() != null && ncb.getTdrCondition().getId() != 0) {
+            ncbInfoView.setTdrCondition(ncb.getTdrCondition());
+        } else {
+            ncbInfoView.setTdrCondition(null);
+        }
 
         if(ncb.getCustomer() != null){
             ncbInfoView.setCustomerId(ncb.getCustomer().getId());
@@ -113,16 +119,16 @@ public class NCBTransform extends Transform {
                         .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
                 ncbInfoView.setNcbCusName(customerName.toString());
 
-//                if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-//                    if(ncb.getCustomer().getIndividual() != null){
-//                        ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
-//                        ncbInfoView.setNcbCusMarriageStatus(ncb.getCustomer().getIndividual().getMaritalStatus().getName());
-//                    }
-//                } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
-//                    if(ncb.getCustomer().getJuristic() != null){
-//                        ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
-//                    }
-//                }
+                if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    if(ncb.getCustomer().getIndividual() != null){
+                        ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
+                        ncbInfoView.setNcbCusMarriageStatus(ncb.getCustomer().getIndividual().getMaritalStatus().getName());
+                    }
+                } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
+                    if(ncb.getCustomer().getJuristic() != null){
+                        ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
+                    }
+                }
             }
         }
 
