@@ -11,6 +11,11 @@ import java.util.Date;
 public class AppraisalDetailView implements Serializable {
     private long id;
     private int no;
+
+    // Added by Chai
+    private long newCollateralId;
+    private long newCollateralHeadId;
+
     private String titleDeed;
     private int purposeReviewAppraisal;
     private int purposeNewAppraisal;
@@ -23,13 +28,15 @@ public class AppraisalDetailView implements Serializable {
     private String purposeNewAppraisalLabel;
     private String purposeReviewBuildingLabel;
     private String characteristicLabel;
-    private BigDecimal numberOfDocuments;
+    private int numberOfDocuments;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
 
+    public AppraisalDetailView() {
 
+    }
 
     public long getId() {
         return id;
@@ -144,11 +151,11 @@ public class AppraisalDetailView implements Serializable {
         this.characteristic = characteristic;
     }
 
-    public BigDecimal getNumberOfDocuments() {
+    public int getNumberOfDocuments() {
         return numberOfDocuments;
     }
 
-    public void setNumberOfDocuments(BigDecimal numberOfDocuments) {
+    public void setNumberOfDocuments(int numberOfDocuments) {
         this.numberOfDocuments = numberOfDocuments;
     }
 
@@ -184,11 +191,29 @@ public class AppraisalDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public long getNewCollateralId() {
+        return newCollateralId;
+    }
+
+    public void setNewCollateralId(long newCollateralId) {
+        this.newCollateralId = newCollateralId;
+    }
+
+    public long getNewCollateralHeadId() {
+        return newCollateralHeadId;
+    }
+
+    public void setNewCollateralHeadId(long newCollateralHeadId) {
+        this.newCollateralHeadId = newCollateralHeadId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("newCollateralId", newCollateralId)
+                .append("newCollateralHeadId", newCollateralHeadId)
                 .append("titleDeed", titleDeed)
                 .append("purposeReviewAppraisal", purposeReviewAppraisal)
                 .append("purposeNewAppraisal", purposeNewAppraisal)

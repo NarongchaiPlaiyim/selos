@@ -208,36 +208,43 @@ public class AppraisalRequest implements Serializable {
         log.info("onSaveAppraisalRequest::::");
         log.info("appraisalDetailViewList.size() ::: {} ", appraisalDetailViewList.size());
 
-        if(appraisalContactDetailViewMandate()){
-            try{
-                if(appraisalView.getId() == 0){
-                    appraisalView.setCreateBy(user);
-                    appraisalView.setCreateDate(DateTime.now().toDate());
-                }
-                appraisalView.setModifyBy(user);
-                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+        if(appraisalDetailViewListMandate()){
+            if(appraisalContactDetailViewMandate()){
+                try{
+                    if(appraisalView.getId() == 0){
+                        appraisalView.setCreateBy(user);
+                        appraisalView.setCreateDate(DateTime.now().toDate());
+                    }
+                    appraisalView.setModifyBy(user);
+                    appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
 
-                appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
-                messageHeader = msg.get("app.appraisal.request.message.header.save.success");
-                message = msg.get("app.appraisal.request.message.body.save.success");
-                onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } catch(Exception ex){
-                log.error("Exception : {}", ex);
+                    appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
+                    messageHeader = msg.get("app.appraisal.request.message.header.save.success");
+                    message = msg.get("app.appraisal.request.message.body.save.success");
+                    onCreation();
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                } catch(Exception ex){
+                    log.error("Exception : {}", ex);
+                    messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+
+                    if(ex.getCause() != null){
+                        message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                    } else {
+                        message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
+                    }
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                }
+            } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-
-                if(ex.getCause() != null){
-                    message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-                } else {
-                    message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
-                }
+                message = "Please add a customer contact information";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-            message = msg.get("app.appraisal.request.message.body.save.fail");
+            message = "Please add a detail of karn pra mern song raka na ja jub jub";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+
     }
 
     public void onCancelAppraisalRequest(){
@@ -260,7 +267,7 @@ public class AppraisalRequest implements Serializable {
         } else {
             purposeFlag = false;
         }
-        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == BigDecimal.ZERO){
+        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() < 0){
             numberOfDocumentsFlag = true;
             result = false;
         } else {
@@ -284,6 +291,15 @@ public class AppraisalRequest implements Serializable {
             contactFlag = false;
         }
         log.debug("-- contactFlag = {}", contactFlag);
+        log.debug("-- result = {}", result);
+        return result;
+    }
+    private boolean appraisalDetailViewListMandate(){
+        log.debug("-- appraisalDetailViewListMandate()");
+        boolean result = true;
+        if(appraisalDetailViewList.size() == 0){
+            result = false;
+        }
         log.debug("-- result = {}", result);
         return result;
     }
