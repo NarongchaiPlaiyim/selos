@@ -112,7 +112,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.relation.id}"
+                                                     value="#{custInfoSumJuris.relationId}"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRelation}"
                                                      disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -147,7 +147,7 @@
                                 </td>
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 350px; max-width: 350px; min-width: 350px;"
-                                                     value="#{custInfoSumJuris.customerInfoView.reference.id}" id="reference"
+                                                     value="#{custInfoSumJuris.referenceId}" id="reference"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqReference}"
                                                      disabled="#{custInfoSumJuris.editBorrower || not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>

@@ -111,7 +111,6 @@ public class NCBInfo implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-
         log.info("onCreation.");
         modeForButton = "add";
         noOfmonthsPaymentFlag = false;
@@ -120,7 +119,7 @@ public class NCBInfo implements Serializable {
         user = (User) session.getAttribute("user");
 
         if (session.getAttribute("customerId") != null) {
-//            customerId = Long.parseLong(session.getAttribute("customerId").toString());
+            customerId = Long.parseLong(session.getAttribute("customerId").toString());
             log.info("customerId :: {} ", customerId);
 
             customerInfoView =  customerDAO.findById(customerId);
@@ -486,22 +485,6 @@ public class NCBInfo implements Serializable {
         this.accountTypeList = accountTypeList;
     }
 
-    public NCBDetailView getNcbDetailView() {
-        return ncbDetailView;
-    }
-
-    public void setNcbDetailView(NCBDetailView ncbDetailView) {
-        this.ncbDetailView = ncbDetailView;
-    }
-
-    public List<NCBDetailView> getNcbDetailViewList() {
-        return ncbDetailViewList;
-    }
-
-    public void setNcbDetailViewList(List<NCBDetailView> ncbDetailViewList) {
-        this.ncbDetailViewList = ncbDetailViewList;
-    }
-
     public int getRowIndex() {
         return rowIndex;
     }
@@ -574,12 +557,28 @@ public class NCBInfo implements Serializable {
         this.selectNcbRecordItem = selectNcbRecordItem;
     }
 
-    public NCBInfoView getNcbInfoView() {
-        return ncbInfoView;
+    public List<NCBDetailView> getNcbDetailViewList() {
+        return ncbDetailViewList;
     }
 
-    public void setNcbInfoView(NCBInfoView ncbInfoView) {
-        this.ncbInfoView = ncbInfoView;
+    public void setNcbDetailViewList(List<NCBDetailView> ncbDetailViewList) {
+        this.ncbDetailViewList = ncbDetailViewList;
+    }
+
+    public NCBDetailView getNcbDetailView() {
+        return ncbDetailView;
+    }
+
+    public void setNcbDetailView(NCBDetailView ncbDetailView) {
+        this.ncbDetailView = ncbDetailView;
+    }
+
+    public NCBInfoControl getNcbInfoControl() {
+        return ncbInfoControl;
+    }
+
+    public void setNcbInfoControl(NCBInfoControl ncbInfoControl) {
+        this.ncbInfoControl = ncbInfoControl;
     }
 
     public TDRCondition getTdrCondition() {
@@ -644,5 +643,13 @@ public class NCBInfo implements Serializable {
 
     public void setTdrRendered(boolean tdrRendered) {
         this.tdrRendered = tdrRendered;
+    }
+
+    public NCBInfoView getNcbInfoView() {
+        return ncbInfoView;
+    }
+
+    public void setNcbInfoView(NCBInfoView ncbInfoView) {
+        this.ncbInfoView = ncbInfoView;
     }
 }
