@@ -4,8 +4,8 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class NCBInfoControl extends BusinessControl {
 
 
     public NCBInfoView getNCBInfoView(long customerId) {
-        log.info("getNcbInfoView :: customer id  :: {}", customerId);
+        log.info("getNCBInfoView :: customer id  :: {}", customerId);
         NCBInfoView ncbInfoView = null;
 
         try {

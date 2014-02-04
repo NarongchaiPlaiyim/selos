@@ -105,6 +105,7 @@ public class NCBSummary implements Serializable {
         if (ncbSummaryViewItem != null) {
             log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
             HttpSession session = FacesUtil.getSession(true);
+            log.info("ncbSummaryViewItem.getCustomerId() :: {}",ncbSummaryViewItem.getCustomerId());
             session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
             log.info("ncbSummaryViewItem :: {}",ncbSummaryViewItem.toString());
             FacesUtil.redirect("/site/NCBInfo.jsf");

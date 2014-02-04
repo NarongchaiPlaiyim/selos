@@ -36,7 +36,6 @@ public class NCBTransform extends Transform {
         ncb.setModifyBy(ncbInfoView.getModifyBy());
         ncb.setCreateDate(ncbInfoView.getCreateDate());
         ncb.setModifyDate(ncbInfoView.getModifyDate());
-        //ncb.setCustomer(NCBInfoView.getCustomer());
         Customer customer = customerDAO.findById(ncbInfoView.getCustomerId());
         ncb.setCustomer(customer);
         ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
