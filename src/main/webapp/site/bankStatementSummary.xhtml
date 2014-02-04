@@ -165,7 +165,7 @@
                                 </p:column>
 
                                 <p:column styleClass="center">
-                                    <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                                    <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                                 </p:column>
 
                                 <p:column styleClass="right">
@@ -399,7 +399,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                            <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                         </p:column>
 
                         <p:column styleClass="right">
