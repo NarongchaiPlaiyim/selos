@@ -22,7 +22,7 @@ public class NCBDetailDAO extends GenericDAO<NCBDetail, Long> {
 
 
     public List<NCBDetail> findNCBDetailByNcbId(long ncbId) {
-        log.info("findNCBDetailByTcgId ::: {}", ncbId);
+        log.info("findNCBDetailByNcbId ::: {}", ncbId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("ncb.id", ncbId));
         criteria.addOrder(Order.asc("id"));
