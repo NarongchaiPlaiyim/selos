@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
@@ -30,13 +31,16 @@ public class NCBTransform extends Transform {
 
         if (ncbInfoView.getId() != 0) {
             ncb.setId(ncbInfoView.getId());
+            ncb.setCreateDate(ncbInfoView.getCreateDate());
+            ncb.setCreateBy(ncbInfoView.getCreateBy());
+        }else{
+            ncb.setCreateDate(new DateTime().now().toDate());
+            ncb.setCreateBy(ncbInfoView.getCreateBy());
         }
 
         ncb.setActive(true);
-        ncb.setCreateBy(ncbInfoView.getCreateBy());
         ncb.setModifyBy(ncbInfoView.getModifyBy());
-        ncb.setCreateDate(ncbInfoView.getCreateDate());
-        ncb.setModifyDate(ncbInfoView.getModifyDate());
+        ncb.setModifyDate(new DateTime().now().toDate());
         Customer customer = customerDAO.findById(ncbInfoView.getCustomerId());
         ncb.setCustomer(customer);
         ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());

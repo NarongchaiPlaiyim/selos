@@ -50,9 +50,7 @@ public class NCBInfoControl extends BusinessControl {
     private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
-    public NCBInfoControl() {
-
-    }
+    public NCBInfoControl() {}
 
     private final BigDecimal plusMRR = BigDecimal.valueOf(6);
 
