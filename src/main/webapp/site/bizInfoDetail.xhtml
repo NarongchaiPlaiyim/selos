@@ -34,7 +34,7 @@
                         <div id="content_lastupdate">Last update by <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyBy.userName}"/>, <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyDate}"/></div>
                     </div>
                     <div id="content_form">
-                        <table class="content_table_form">
+                        <table class="content_table_form" border="1">
                         <tr>
                             <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
                             <td colspan="3">
@@ -116,9 +116,11 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.adjustedIncomeFactor')}"/>
                             </td>
                             <td>
-                                <p:inputText styleClass="right large" id="adjustedIncomeFactor" readonly="#{bizInfoDetail.readonlyIsBDM}"
-                                             value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                <p:inputText style="text-align: right" id="adjustedIncomeFactor"
+                                             value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}"
+                                             onkeydown="return onKeyDownMoney(event);"
+                                             onkeypress="return onKeyPressMoney(event)">
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:adjustedIncomeFactor"/>
                                 </p:inputText>
@@ -138,8 +140,8 @@
                                 <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}"
                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                              required="#{not empty param[saveButton.clientId]}">
-                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
-                                    <f:validateDoubleRange maximum="100"/>
+                                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                    <!--<f:validateDoubleRange maximum="100"/>-->
                                     <p:ajax event="blur" update=":frmMain:percentBiz"/>
                                 </p:inputText>
                                 <h:inputHidden id="sumBizPercent" value="#{bizInfoDetail.sumBizPercent}"/>
@@ -148,22 +150,23 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
                             <td colspan="3" class="title">
-                                <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}" layout="custom" >
+                                <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}">
                                     <f:selectItem itemLabel="NO"  itemValue="N" />
                                     <f:selectItem itemLabel="Yes" itemValue="Y" />
                                     <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
                                 </p:selectOneRadio>
-                                <p:radioButton id="Peropt1" for="bizPermissionRadio" itemIndex="0" onchange="" /> <p:spacer width="8px" />
-                                <h:outputLabel for="Peropt1" value="No" />
+                                <!--<p:radioButton id="Peropt1" for="bizPermissionRadio" itemIndex="0" onchange="" /> <p:spacer width="8px" />-->
+                                <!--<h:outputLabel for="Peropt1" value="No" />-->
                             </td>
                         </tr>
                         <tr>
                             <td class="title"></td>
-                            <td class="title">
-                                <p:radioButton id="Peropt2" for="bizPermissionRadio" itemIndex="1" onchange="" /> <p:spacer width="8px" />
+                            <!--<td class="title">
+                                <p:radioButton id="Peropt2" for="bizPermissionRadio" itemIndex="1" onchange="" />
+                                <p:spacer width="8px" />
                                 <h:outputLabel for="Peropt2" value="Yes" />
-                            </td>
-                            <td class="title right">
+                            </td>-->
+                            <td class="title right" colspan="2">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
                             </td>
                             <td>
@@ -714,9 +717,10 @@
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/></td>
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="stockDurationBDM"
-                                                         readonly="#{bizInfoDetail.readonlyIsBDM}"
+                                                         readonly="true"
                                                          onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}">
+                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationBDM,:frmMain:stockValueBDM" />
                                             </p:inputText>
@@ -745,7 +749,8 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationUW')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}" readonly="#{bizInfoDetail.readonlyIsUW}">
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockDurationUW" value="#{bizInfoDetail.bizInfoDetailView.stockDurationUW}" readonly="true">
+                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationUW,:frmMain:stockValueUW" />
                                             </p:inputText>
@@ -768,9 +773,10 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM" readonly="#{bizInfoDetail.readonlyIsBDM}"
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM" readonly="true"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}">
+                                                <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueBDM"/>
                                             </p:inputText>
@@ -799,9 +805,10 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueUW')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueUW" readonly="#{bizInfoDetail.readonlyIsUW}"
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueUW" readonly="true"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueUW}" >
+                                                <!--readonly="#{bizInfoDetail.readonlyIsUW}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueUW"/>
                                             </p:inputText>

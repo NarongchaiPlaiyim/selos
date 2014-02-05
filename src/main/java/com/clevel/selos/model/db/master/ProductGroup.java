@@ -83,12 +83,15 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("name", name)
-                .append("description", description)
-                .append("brmsCode", brmsCode)
-                .append("active", active)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("name", name).
+                append("description", description).
+                append("brmsCode", brmsCode).
+                append("addExistingCredit", addExistingCredit).
+                append("addProposeCredit", addProposeCredit).
+                append("specialLTV", specialLTV).
+                append("active", active).
+                toString();
     }
 }

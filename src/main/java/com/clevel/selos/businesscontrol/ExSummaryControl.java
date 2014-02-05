@@ -59,8 +59,6 @@ public class ExSummaryControl extends BusinessControl {
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
 
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
@@ -266,7 +264,7 @@ public class ExSummaryControl extends BusinessControl {
         ExSummary exSummary = exSummaryTransform.transformToModel(exSummaryView, workCase, user);
         exSummaryDAO.persist(exSummary);
 
-        //Delete Deviate
+        //Delete All Deviate
         List<ExSumDeviate> esdList = exSumDeviateDAO.findByExSumId(exSummary.getId());
         exSumDeviateDAO.delete(esdList);
         //Save Deviate
@@ -328,7 +326,6 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         BigDecimal income = Util.divide((totalWCTMB.add(odLimit).add(loanCoreWC)),(adjusted.multiply(new BigDecimal(12))));
-//        BigDecimal income = (totalWCTMB.add(odLimit).add(loanCoreWC)).divide((adjusted.multiply(new BigDecimal(12))));
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -408,14 +405,8 @@ public class ExSummaryControl extends BusinessControl {
 //    Sum( วงเงินสินเชื่อหมุนเวียนที่อนุมัต)
     public void calActualWCBorrowerCharacteristic(long workCaseId){ //TODO : Decision , Pls Call me !!
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        BigDecimal actualWC = BigDecimal.ZERO;
-        if(newCreditFacility != null && newCreditFacility.getId() != 0 && newCreditFacility.getNewCreditDetailList() != null) {
-            for(NewCreditDetail n : newCreditFacility.getNewCreditDetailList()){
-                if(n.getType() == 1){ // 0 = propose , 1 = approve // TODO: enum or not
-    //                actualWC = actualWC.add(n.get);
-                }
-            }
-        }
+        BigDecimal actualWC = newCreditFacility.getTotalApproveCredit();
+
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
             exSummary = new ExSummary();
@@ -423,9 +414,11 @@ public class ExSummaryControl extends BusinessControl {
             workCase.setId(workCaseId);
             exSummary.setWorkCase(workCase);
         }
-        exSummary.setActualWC(actualWC);
 
-        exSummaryDAO.persist(exSummary);
+        if(actualWC != null){
+            exSummary.setActualWC(actualWC);
+            exSummaryDAO.persist(exSummary);
+        }
     }
 
     //Borrower Characteristic - salePerYearBDM , salePerYearUW ( Line 52-53 )
@@ -464,12 +457,14 @@ public class ExSummaryControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
+        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         User user = getCurrentUser();
-        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
-        if(exSummary == null){
-            exSummary = new ExSummary();
-            exSummary.setWorkCase(workCase);
-        }
+
+        BigDecimal groupSaleBDM = BigDecimal.ZERO;
+        BigDecimal groupSaleUW = BigDecimal.ZERO;
+
+        bankStatementSummary.getGrdTotalIncomeGross();
+
         if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
             if(user.getRole().getId() != RoleValue.UW.id()){//Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
@@ -496,6 +491,17 @@ public class ExSummaryControl extends BusinessControl {
 //    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
 //            exSumCharacteristicView.setGroupSaleUW();
         }
+
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            exSummary.setWorkCase(workCase);
+        }
+        exSummary.setGroupSaleBDM(groupSaleBDM);
+        exSummary.setGroupSaleUW(groupSaleUW);
+
+        exSummaryDAO.persist(exSummary);
     }
 
     //Borrower Characteristic - groupExposureBDM , groupExposureUW ( Line 58-59 )
