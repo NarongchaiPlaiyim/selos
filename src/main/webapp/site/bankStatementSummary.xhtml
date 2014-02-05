@@ -165,7 +165,7 @@
                                 </p:column>
 
                                 <p:column styleClass="center">
-                                    <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                                    <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                                 </p:column>
 
                                 <p:column styleClass="right">
@@ -177,7 +177,7 @@
 
                                 <p:column styleClass="right">
                                     <h:outputText value="#{item.avgIncomeGross}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' : item.avgIncomeGross eq 0 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorIncomeGross ? item.colorIncomeGross : ''}"
                                                   rendered="#{not empty item.avgIncomeGross}">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -199,7 +199,7 @@
 
                                 <p:column styleClass="right">
                                     <h:outputText value="#{item.avgUtilizationPercent}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.avgUtilizationPercent le 90 ? 'green' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? '#FFCC00' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorUtilPercent ? item.colorUtilPercent : ''}"
                                                   rendered="#{not empty item.avgUtilizationPercent}">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -208,7 +208,7 @@
 
                                 <p:column styleClass="right">
                                     <h:outputText value="#{item.avgSwingPercent}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.avgUtilizationPercent le 90 ? 'green' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? '#FFCC00' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorSwingPercent ? item.colorSwingPercent : ''}"
                                                   rendered="#{not empty item.avgSwingPercent}">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -217,7 +217,7 @@
 
                                 <p:column styleClass="center">
                                     <h:outputText value="#{item.overLimitTimes}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.overLimitTimes lt 1 ? 'green' : item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? '#FFCC00' : item.overLimitTimes gt 2 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorOvrLimitTime ? item.colorOvrLimitTime : ''}"
                                                   rendered="#{not empty item.overLimitTimes}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -225,7 +225,7 @@
 
                                 <p:column styleClass="center">
                                     <h:outputText value="#{item.overLimitDays}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.overLimitDays le 3 ? 'green' : item.overLimitDays gt 3 or item.overLimitDays le 7 ? '#FFCC00' : item.overLimitDays gt 7 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorOvrLimitDays ? item.colorOvrLimitDays : ''}"
                                                   rendered="#{not empty item.overLimitDays}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -233,7 +233,7 @@
 
                                 <p:column styleClass="center">
                                     <h:outputText value="#{item.chequeReturn}"
-                                                  style="color:#{item.mainAccount != 2 ? '' : item.chequeReturn lt 1 ? 'green' : item.chequeReturn ge 1 or item.chequeReturn le 2 ? '#FFCC00' : item.chequeReturn gt 2 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorChequeReturn ? item.colorChequeReturn : ''}"
                                                   rendered="#{not empty item.chequeReturn}">
                                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -256,7 +256,7 @@
 
                                 <p:column styleClass="right">
                                     <h:outputText value="#{item.trdChequeReturnPercent}"
-                                                  style="color:#{item.trdChequeReturnPercent le 3 ? 'green' : item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? '#FFCC00' : item.trdChequeReturnPercent gt 5 ? 'red' : ''}"
+                                                  style="color:#{not empty item.colorTrdChqRetPercent ? item.colorTrdChqRetPercent : ''}"
                                                   rendered="#{not empty item.trdChequeReturnPercent}">
                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                     </h:outputText>
@@ -399,7 +399,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                            <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                         </p:column>
 
                         <p:column styleClass="right">
@@ -411,7 +411,6 @@
 
                         <p:column styleClass="right">
                             <h:outputText value="#{item.avgIncomeGross}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' : item.avgIncomeGross eq 0 ? 'red' : ''}"
                                           rendered="#{not empty item.avgIncomeGross}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -433,7 +432,6 @@
 
                         <p:column styleClass="right">
                             <h:outputText value="#{item.avgUtilizationPercent}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.avgUtilizationPercent le 90 ? 'green' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? '#FFCC00' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}"
                                           rendered="#{not empty item.avgUtilizationPercent}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -442,7 +440,6 @@
 
                         <p:column styleClass="right">
                             <h:outputText value="#{item.avgSwingPercent}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.avgUtilizationPercent le 90 ? 'green' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? '#FFCC00' : item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}"
                                           rendered="#{not empty item.avgSwingPercent}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -451,7 +448,6 @@
 
                         <p:column styleClass="center">
                             <h:outputText value="#{item.overLimitTimes}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.overLimitTimes lt 1 ? 'green' : item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? '#FFCC00' : item.overLimitTimes gt 2 ? 'red' : ''}"
                                           rendered="#{not empty item.overLimitTimes}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -459,7 +455,6 @@
 
                         <p:column styleClass="center">
                             <h:outputText value="#{item.overLimitDays}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.overLimitDays le 3 ? 'green' : item.overLimitDays gt 3 or item.overLimitDays le 7 ? '#FFCC00' : item.overLimitDays gt 7 ? 'red' : ''}"
                                           rendered="#{not empty item.overLimitDays}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -467,7 +462,6 @@
 
                         <p:column styleClass="center">
                             <h:outputText value="#{item.chequeReturn}"
-                                          style="color:#{item.mainAccount != 2 ? '' : item.chequeReturn lt 1 ? 'green' : item.chequeReturn ge 1 or item.chequeReturn le 2 ? '#FFCC00' : item.chequeReturn gt 2 ? 'red' : ''}"
                                           rendered="#{not empty item.chequeReturn}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -490,7 +484,6 @@
 
                         <p:column styleClass="right">
                             <h:outputText value="#{item.trdChequeReturnPercent}"
-                                          style="color:#{item.trdChequeReturnPercent le 3 ? 'green' : item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? '#FFCC00' : item.trdChequeReturnPercent gt 5 ? 'red' : ''}"
                                           rendered="#{not empty item.trdChequeReturnPercent}">
                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                             </h:outputText>
@@ -823,7 +816,7 @@
         <ui:param name="controller" value="#{bankStatementSummary}"/>
         <ui:param name="action" value="onRedirectToBankStmtDetail"/>
         <ui:param name="update" value=":frmMain"/>
-        <ui:param name="width" value="430"/>
+        <ui:param name="width" value="450"/>
     </ui:include>
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

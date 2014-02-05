@@ -173,17 +173,15 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setProvince(province);
             bizInfoSummaryView.setDistrict(district);
             bizInfoSummaryView.setSubDistrict(subDistrict);
-            bizInfoSummaryView.setDistrict(district);
-            bizInfoSummaryView.setProvince(province);
             bizInfoSummaryView.setReferredExperience(referredExperience);
             bizInfoSummaryView.setCountry(country);
 
-            bizInfoSummaryView.setSumIncomeAmount(new BigDecimal(0));
-            bizInfoSummaryView.setSumIncomePercent(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightAR(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightAP(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightINV(new BigDecimal(0));
-            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
+            bizInfoSummaryView.setSumIncomeAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumIncomePercent(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightAR(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
+            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
 
         } else {
             fromDB = true;
@@ -209,6 +207,7 @@ public class BizInfoSummary implements Serializable {
         Province proSelect = bizInfoSummaryView.getProvince();
         log.info("onChangeProvince :::: Province  : {} ", proSelect);
         districtList = districtDAO.getListByProvince(proSelect);
+
         if(!fromDB){
             bizInfoSummaryView.setDistrict(new District());
         }
@@ -220,6 +219,8 @@ public class BizInfoSummary implements Serializable {
         District districtSelect = bizInfoSummaryView.getDistrict();
         log.debug("onChangeDistrict :::: district : {}", districtSelect);
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
+//        fromDB = false;
+
         if(!fromDB){
             bizInfoSummaryView.setSubDistrict(new SubDistrict());
         }
@@ -366,7 +367,9 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSaveBizInfoSummary() {
-
+        System.out.println("Province:" + bizInfoSummaryView.getProvince().toString());
+        System.out.println("District:" + bizInfoSummaryView.getDistrict().toString());
+        System.out.println("SubDistrict:" + bizInfoSummaryView.getSubDistrict().toString());
         try {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);

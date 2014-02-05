@@ -10,8 +10,7 @@
 <h:head>
     <title>SE-LOS : NCB Record Detail</title>
     <h:outputStylesheet name="css/style.css"/>
-    <script type="text/javascript" language="javascript"
-            src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     <h:outputScript library="js" name="custom.js"/>
     <style>
         .ui-datatable td, .ui-datatable th, .ui-datatable span {
@@ -63,14 +62,15 @@
                                   style="width:200px;">
                         <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:inputText>
-                   <!-- <clv:BECalendar value="#{ncbInfo.ncbInfoView.checkingDate}"
-                                    id="checkingDate"
-                                    pattern="dd/MM/yyyy"
-                                    locale="th_TH"
+                   <!-- <clv:BECalendar id="checkingDate"
                                     showButtonPanel="false"
-                                    navigator="true"
-                                    readonly="true"
-                                    style="width:200px;"/>-->
+                                    yearRange="1950:2100"
+                                    defaultdate="#{ncbInfo.currentDateDDMMYY}"
+                                    mindate="#{ncbInfo.currentDateDDMMYY}"
+                                    pattern="dd/MM/yyyy"
+                                    value="#{ncbInfo.ncbInfoView.checkingDate}"
+                                    locale="th_TH" >
+                    </clv:BECalendar>-->
                 </td>
             </tr>
             <tr>
@@ -521,6 +521,7 @@
                                                              target="#{ncbInfo.selectNcbRecordItem}"/>
                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                              target="#{ncbInfo.rowIndex}"/>
+                                <p:resetInput target=":ncbDlgForm" />
                             </p:commandButton>
                             <p:commandButton title="Remove"
                                              icon="ui-icon-trash"
@@ -571,11 +572,18 @@
 <h:inputHidden id="pagename" value="mnuprescreen"/>
 <h:inputHidden id="subpagename" value="submnuprescreen"/>
 </div>
+
+<p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
 </h:form>
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+          closable="false"  closeOnEscape="false" modal="true"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 
@@ -588,10 +596,7 @@
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
-<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
+
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"

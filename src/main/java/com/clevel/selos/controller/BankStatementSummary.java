@@ -82,6 +82,7 @@ public class BankStatementSummary implements Serializable {
     private Date lastThreeMonth3;
     private Date currentDate;
     private String currentDateDDMMYY;
+    private int yesValue;
 
     //Session
     private long workCaseId;
@@ -138,13 +139,15 @@ public class BankStatementSummary implements Serializable {
     public void onCreation() {
         preRender();
 
+        yesValue = RadioValue.YES.value();
+
         //retrieveBankStmtFromDWH();
         summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         if (summaryView != null && summaryView.getId() != 0) {
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-
+            bankStmtControl.setSummaryColor(summaryView, workCaseId);
             provideSOCPAndCalSummary();
         }
         else {// Create new Bank statement summary
@@ -341,9 +344,11 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
+        selectedBankStmtView = null;
+        isTMB = true;
+
         if (!checkConfirmToAddBankStmt()) return;
 
-        isTMB = true;
         onRedirectToBankStmtDetail();
     }
 
@@ -355,9 +360,11 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
+        selectedBankStmtView = null;
+        isTMB = false;
+
         if (!checkConfirmToAddBankStmt()) return;
 
-        isTMB = false;
         onRedirectToBankStmtDetail();
     }
 
@@ -418,13 +425,6 @@ public class BankStatementSummary implements Serializable {
     private void passParamsToBankStmtDetail() {
         log.debug("passParamsToBankStmtDetail() summaryView.id: {}, seasonalFlag: {}, expectedSubmitDate: {}, isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView: {}",
                 summaryView.getId(), seasonalFlag, expectedSubmitDate, isTMB, lastMonthDate, numberOfMonths, selectedBankStmtView);
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("bankStmtSumView", summaryView);
-//        map.put("isTmbBank", isTMB);
-//        map.put("lastMonthDate", lastMonthDate);
-//        map.put("numberOfMonths", numberOfMonths);
-//        map.put("selectedBankStmtView", selectedBankStmtView);
-//        FacesUtil.getFlash().put("bankStmtSumParams", map);
 
         summaryView.setSeasonal(seasonalFlag);
         summaryView.setExpectedSubmitDate(expectedSubmitDate);
@@ -562,5 +562,13 @@ public class BankStatementSummary implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public int getYesValue() {
+        return yesValue;
+    }
+
+    public void setYesValue(int yesValue) {
+        this.yesValue = yesValue;
     }
 }

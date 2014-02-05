@@ -348,7 +348,6 @@ public class CustomerInfoIndividual implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
-        customerInfoView.setRefreshInterface(true);
         customerInfoView.getSpouse().reset();
 
         customerInfoView.getRegisterAddress().setAddressTypeFlag(1);
@@ -1131,7 +1130,6 @@ public class CustomerInfoIndividual implements Serializable {
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
 
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
@@ -1142,7 +1140,6 @@ public class CustomerInfoIndividual implements Serializable {
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -1262,7 +1259,6 @@ public class CustomerInfoIndividual implements Serializable {
                                     }
                                 }
                             }
-                            customerInfoView.getSpouse().setRefreshInterface(true);
                             customerInfoView.getSpouse().setSearchFromRM(1);
                             customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                             customerInfoView.getSpouse().setSearchId(searchIdSpouse);
@@ -1284,7 +1280,6 @@ public class CustomerInfoIndividual implements Serializable {
                     message = customerInfoResultView.getReason();
                     severity = "info";
                 }
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
@@ -1298,7 +1293,6 @@ public class CustomerInfoIndividual implements Serializable {
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
@@ -1334,7 +1328,6 @@ public class CustomerInfoIndividual implements Serializable {
                     message = cusSpouseResultView.getReason();
                     severity = "info";
                 }
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                 customerInfoView.getSpouse().setSearchId(searchIdSpouse);
@@ -1347,7 +1340,6 @@ public class CustomerInfoIndividual implements Serializable {
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchBy(searchBySpouse);
                 customerInfoView.getSpouse().setSearchId(searchIdSpouse);

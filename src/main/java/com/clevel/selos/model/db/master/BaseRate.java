@@ -19,7 +19,7 @@ public class BaseRate implements Serializable {
     private int id;
     @Column(name = "name", length = 10)
     private String name;
-    @Column(name = "value", length = 6, scale = 3)
+    @Column(name = "value", length = 7, scale = 3)
     private BigDecimal value;
     @Column(name = "active")
     private int active;
