@@ -305,11 +305,12 @@ public class BizInfoDetail implements Serializable {
 
     public void onChangeBizPermission(){
         log.info("onChangeBizPermission ");
-        isDisable = true;
+//        isDisable = true;
         if(bizInfoDetailView.getBizPermission() != null ){
             if( bizInfoDetailView.getBizPermission().equals("Y")){
                 isDisable = false;
-            }/*else{
+            }
+            /*else{
                 bizInfoDetailView.setBizDocExpiryDate(null);
                 bizInfoDetailView.setBizDocPermission("");
             }

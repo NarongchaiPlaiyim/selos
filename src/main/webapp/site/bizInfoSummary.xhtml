@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table style="border-spacing: 0;">
+                                <table style="border-spacing: 0;" border="1">
                                     <tr>
                                         <td class="title" style="min-width: 210px; width: 210px; max-width: 210px;">
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}" for="bizLocationName"/> :
@@ -62,7 +62,7 @@
                                             <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt1" value="No" />
                                         </td>
-                                        <td class="title right" style="min-width: 157px; width: 157px; max-width: 157px;">
+                                        <td class="title left" style="min-width: 157px; width: 157px; max-width: 157px;">
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :
                                         </td>
                                         <td>
@@ -75,7 +75,7 @@
                                             <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt2" value="Yes" />
                                         </td>
-                                        <td class="title right">
+                                        <td class="title left">
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
                                         <td class="title">
@@ -128,7 +128,7 @@
                                                                            itemLabel="#{province.name}"
                                                                            itemValue="#{province.code}"/>
                                                             <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
-                                                                    update=":frmMain:districtCode,:frmMain:subDistrictCode"/>
+                                                                    update=":frmMain:districtCode,:frmMain:subDistrictCode,:frmMain:provinceCode"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
@@ -140,18 +140,19 @@
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
+                                                            <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode,:frmMain:districtCode"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
                                                         <p:selectOneMenu  id="subDistrictCode" size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                                                           value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
-                                                                          required="#{not empty param[addBizInfoSummary.clientId]}" >
+                                                                          required="#{not empty param[addBizInfoSummary.clientId]}" onchange="event">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
                                                                            var="subDistrict"
                                                                            itemLabel="#{subDistrict.name}"
                                                                            itemValue="#{subDistrict.code}"/>
+                                                            <p:ajax event="change" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -211,6 +212,7 @@
                                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
                                                             yearRange="1950:2100"
                                                             pattern="dd/MM/yyyy"
+                                                            mindate="01/01/1950"
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
@@ -228,10 +230,11 @@
                                                             pattern="dd/MM/yyyy"
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
                                             </clv:BECalendar>
                                         </td>
-                                        <td class="title right">
+                                        <td class="title left">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/> :
                                         </td>
                                         <td>
@@ -295,18 +298,21 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.productionCosts')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}" readonly="true">
+                                            <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:productionCostsAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="productionCostsPercentage" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
+                                            <p:inputText id="productionCostsPercentage" styleClass="right"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}">
-                                                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                                                <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":frmMain:productionCostsPercentage,:msgBoxSystemMessagePanel" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -315,14 +321,18 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.profitMargin')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}" readonly="true">
+                                            <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:profitMarginAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="profitMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="profitMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginPercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:profitMarginPercentage"/>
                                             </p:inputText>
                                         </td>
@@ -332,16 +342,20 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="operatingExpenseAmount" styleClass="right"  readonly="#{bizInfoSummary.readonlyInterview}"
-                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
+                                            <p:inputText id="operatingExpenseAmount" styleClass="right"
+                                                         onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
+                                                <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="operatingExpensePercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpensePercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="operatingExpensePercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpensePercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:operatingExpensePercentage"/>
                                             </p:inputText>
                                         </td>
@@ -352,14 +366,19 @@
                                         </td>
                                         <td>
                                             <p:inputText id="earningsBeforeTaxAmount" styleClass="right"
-                                                         value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}" readonly="true">
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="earningsBeforeTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="earningsBeforeTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxPercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:earningsBeforeTaxPercentage"/>
                                             </p:inputText>
                                         </td>
@@ -369,16 +388,20 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceInterestAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
+                                            <p:inputText id="reduceInterestAmount" styleClass="right"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
+                                                <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceInterestPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="reduceInterestPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestPercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:reduceInterestPercentage"/>
                                             </p:inputText>
                                         </td>
@@ -388,16 +411,20 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceTaxAmount" styleClass="right" readonly="#{bizInfoSummary.readonlyInterview}"
+                                            <p:inputText id="reduceTaxAmount" styleClass="right"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
+                                                <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="reduceTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="reduceTaxPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxPercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:reduceTaxPercentage" />
                                             </p:inputText>
                                         </td>
@@ -407,14 +434,19 @@
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netMargin')}"/>
                                         </td>
                                         <td>
-                                            <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}" readonly="true">
+                                            <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:netMarginAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
-                                            <p:inputText id="netMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginPercentage}" readonly="true">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                            <p:inputText id="netMarginPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginPercentage}"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event)">
+                                                <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
+                                                <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:netMarginPercentage"/>
                                             </p:inputText>
                                         </td>
