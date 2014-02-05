@@ -34,8 +34,6 @@ public class AppraisalRequestControl extends BusinessControl {
     @Inject
     private NewCollateralSubDAO newCollateralSubDAO;
     @Inject
-    private AppraisalContactDetailDAO appraisalContactDetailDAO;
-    @Inject
     private AppraisalDetailDAO appraisalDetailDAO;
     @Inject
     private AppraisalTransform appraisalTransform;
@@ -44,13 +42,11 @@ public class AppraisalRequestControl extends BusinessControl {
     @Inject
     private NewCollateralTransform newCollateralTransform;
 
-    @Inject
-    private AppraisalContactDetailTransform appraisalContactDetailTransform;
-
 
     private Appraisal appraisal;
     private AppraisalView appraisalView;
     private List<AppraisalDetailView> appraisalDetailViewList;
+    private AppraisalContactDetailView appraisalContactDetailView;
 
     private WorkCase workCase;
     private NewCreditFacility newCreditFacility;
@@ -69,54 +65,35 @@ public class AppraisalRequestControl extends BusinessControl {
 	public AppraisalView getAppraisalRequest(final long workCaseId, final User user){
         log.info("-- getAppraisalRequest WorkCaseId : {}, UserId : {}", workCaseId, user.getId());
         appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
-        if(appraisal == null){
-            appraisalView = appraisalTransform.transformToView(appraisal);
+        if(appraisal != null){
+            appraisalView = appraisalTransform.transformToView(appraisal, user);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
-
-                appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList, user);
-
+                appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
+                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                appraisalView.setAppraisalContactDetailView(null);
             } else {
                 log.debug("-- newCreditFacility = null");
             }
             log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
             return appraisalView;
         } else {
-            log.debug("-- When find by work case id = {}, Appraisal is null, ", workCaseId);
+            log.debug("-- Find by work case id = {} appraisal is null. ", workCaseId);
             return appraisalView;
         }
     }
 
     public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final User user){
-        log.info("onSaveAppraisalRequest ");
-        Appraisal appraisal;
-        List<AppraisalDetailView> appraisalDetailViewList;
-        List<AppraisalPurpose> appraisalDetailList;
-        List<AppraisalContactDetailView> appraisalContactDetailViewList;
-        List<AppraisalContactDetail> appraisalContactDetailList;
-
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-
+        log.info("-- onSaveAppraisalRequest");
+        workCase = workCaseDAO.findById(workCaseId);
         appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
-        appraisal.setWorkCase(workCase);
-
-        appraisalDAO.persist(appraisal);
+//        appraisalDAO.persist(appraisal);
         log.info( "appraisalDAO persist end" );
+        newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
-        appraisalDetailViewList = appraisalView.getAppraisalDetailViewList();
-
-        if(appraisalDetailViewList.size()>0){
-            List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
-            appraisalDetailDAO.delete(appraisalDetailListDel);
-        }
-        appraisalDetailList = appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);
-        appraisalDetailDAO.persist(appraisalDetailList);
-        log.info( "appraisalDetailDAO persist end" );
-
-        appraisalContactDetailList = null;//appraisalContactDetailTransform.transformToModel(appraisalContactDetailViewList, appraisal);
-        appraisalContactDetailDAO.persist(appraisalContactDetailList);
-        log.info( "appraisalContactDetailDAO persist end" );
+        appraisalDetailViewList = safetyList(appraisalView.getAppraisalDetailViewList());
+        newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility,user));
 
     }
 
