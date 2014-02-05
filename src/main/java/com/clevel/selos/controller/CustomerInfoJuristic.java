@@ -688,7 +688,7 @@ public class CustomerInfoJuristic implements Serializable {
                 boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectEditIndividual.getId());
                 if(isExist){
                     messageHeader = "Information.";
-                    message = "Delete Customer Info Individual Failed. <br/><br/> Cause : This customer is using on Open Account in Basic Info page.";
+                    message = "Cannot delete Customer Info Individual. <br/><br/>Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                 } else {
                     customerInfoView.getIndividualViewList().remove(selectEditIndividual);

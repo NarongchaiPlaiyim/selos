@@ -139,16 +139,16 @@ public class TCGInfoControl extends BusinessControl {
                         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
 
                         if (basicInfo != null) {
-                            if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                            if (Util.isRadioTrue(basicInfo.getProductGroup().getSpecialLTV())) {
                                 ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
                             }
 
                             if (ltvPercentBig == null) {
 
-                                if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
-                                        Util.isTrue(basicInfo.getPassAnnualReview()) &&
-                                        Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
-                                        Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                        Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                        Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                        Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
                                         (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
                                     ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
                                     log.info("getTenPercentLTV :::::::");
