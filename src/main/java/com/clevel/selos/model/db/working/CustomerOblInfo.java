@@ -2,6 +2,8 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.SBFScore;
 import com.clevel.selos.model.db.master.ServiceSegment;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -178,5 +180,26 @@ public class CustomerOblInfo implements Serializable{
 
     public void setServiceSegment(ServiceSegment serviceSegment) {
         this.serviceSegment = serviceSegment;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customerId", customer.getId())
+                .append("existingSMECustomer", existingSMECustomer)
+                .append("lastReviewDate", lastReviewDate)
+                .append("extendedReviewDate", extendedReviewDate)
+                .append("extendedReviewDateFlag", extendedReviewDateFlag)
+                .append("nextReviewDate", nextReviewDate)
+                .append("nextReviewDateFlag", nextReviewDateFlag)
+                .append("lastContractDate", lastContractDate)
+                .append("numberOfMonthsLastContractDate", numberOfMonthsLastContractDate)
+                .append("adjustClass", adjustClass)
+                .append("ratingFinal", ratingFinal)
+                .append("unpaidFeeInsurance", unpaidFeeInsurance)
+                .append("pendingClaimLG", pendingClaimLG)
+                .append("serviceSegment", serviceSegment)
+                .toString();
     }
 }
