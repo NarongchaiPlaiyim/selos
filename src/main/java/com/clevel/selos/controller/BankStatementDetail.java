@@ -262,6 +262,8 @@ public class BankStatementDetail implements Serializable {
 
         } else {
             // Edit exist Bank statement
+            bankStmtView = bankStmtControl.saveBankStmt(bankStmtView);
+
             boolean foundBankStmt = false;
             // TMB
             if (summaryView.getTmbBankStmtViewList() != null) {
@@ -332,7 +334,7 @@ public class BankStatementDetail implements Serializable {
         int otherAccType = bankStmtView.getOtherAccountType();
 
         bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
-        log.debug("checkRequiredBankAccTypeSelected() bankAccTypeSelectRequired = ", bankAccTypeSelectRequired);
+        log.debug("checkRequiredBankAccTypeSelected() bankAccTypeSelectRequired = {}", bankAccTypeSelectRequired);
     }
 
     public void onChangeBankAccTypeSelected() {

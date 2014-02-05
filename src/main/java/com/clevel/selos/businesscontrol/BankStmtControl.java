@@ -844,6 +844,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal othTotalIncomeNetUW = BigDecimal.ZERO;
 
         BigDecimal grdTotalTrdChqRetAmount = BigDecimal.ZERO;
+        BigDecimal grdTotalTrdChqRetPercent = BigDecimal.ZERO;
         BigDecimal grdTotalAvgOSBalance = BigDecimal.ZERO;
 
         boolean useNetUWToCal = false;
@@ -853,6 +854,7 @@ public class BankStmtControl extends BusinessControl {
             tmbTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, tmbBankStmtView.getAvgIncomeNetBDM());
             tmbTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, tmbBankStmtView.getAvgIncomeNetUW());
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, tmbBankStmtView.getTrdChequeReturnAmount());
+            grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, tmbBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, tmbBankStmtView.getAvgOSBalanceAmount());
 
             if (tmbBankStmtView.getAvgIncomeNetUW() != null) {
@@ -865,6 +867,7 @@ public class BankStmtControl extends BusinessControl {
             othTotalIncomeNetBDM = Util.add(othTotalIncomeNetBDM, othBankStmtView.getAvgIncomeNetBDM());
             othTotalIncomeNetUW = Util.add(othTotalIncomeNetUW, othBankStmtView.getAvgIncomeNetUW());
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, othBankStmtView.getTrdChequeReturnAmount());
+            grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, othBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, othBankStmtView.getAvgOSBalanceAmount());
 
             if (othBankStmtView.getAvgIncomeNetUW() != null) {
@@ -884,11 +887,11 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
-        BigDecimal grdTotalTrdChqRetPercent;
-        if (useNetUWToCal)
-            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
-        else
-            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
+//        BigDecimal grdTotalTrdChqRetPercent;
+//        if (useNetUWToCal)
+//            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
+//        else
+//            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
 
         bankStmtSummaryView.setGrdTotalIncomeGross(grdTotalIncomeGross);
         bankStmtSummaryView.setGrdTotalIncomeNetBDM(grdTotalIncomeNetBDM);
@@ -957,7 +960,7 @@ public class BankStmtControl extends BusinessControl {
          */
         // if source of collateral proof is already exist
         // re-calculate & replace the old data
-        if (srcOfCollateralProofViewList != null && srcOfCollateralProofViewList.size() > 0) {
+        if ((srcOfCollateralProofViewList != null && srcOfCollateralProofViewList.size() > 0) && lastThreeMonthBankStmtDetail.size() == 3) {
             for (int i=0; i < srcOfCollateralProofViewList.size(); i++) {
                 BankStmtDetailView detailView = lastThreeMonthBankStmtDetail.get(i);
 

@@ -16,18 +16,11 @@ public class PledgeInfo {
 
     @OneToOne
     @JoinColumn(name = "new_coll_sub_id")
-    NewCollateralSub newCollateralSub;
+    private NewCollateralSub newCollateralSub;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "pledge_signing_date")
     private Date pledgeSigningDate;
-
-    @OneToOne
-    @JoinColumn(name = "pledge_type_id")
-    private MortgageType pledgeType;
-
-    @Column(name = "pledge_amount")
-    private BigDecimal pledgeAmount;
 
     @OneToOne
     @JoinColumn(name = "open_account_id")

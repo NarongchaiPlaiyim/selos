@@ -18,6 +18,9 @@ public class NewCreditDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_CREDIT_DET_ID")
     private long id;
 
+    @Column(name = "line_no", length = 5)
+    private int lineNo;
+
     @Column(name = "no_flag")
     private int noFlag;
 
@@ -136,6 +139,10 @@ public class NewCreditDetail implements Serializable {
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
     @Column(name = "type", nullable = false, columnDefinition = "int default 0")
     private int type;
 
@@ -170,6 +177,14 @@ public class NewCreditDetail implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
     }
 
     public Date getCreateDate() {
@@ -510,13 +525,23 @@ public class NewCreditDetail implements Serializable {
         this.type = type;
     }
 
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("lineNo", lineNo)
                 .append("noFlag", noFlag)
                 .append("guaranteeAmount", guaranteeAmount)
                 .append("accountNumber", accountNumber)
+                .append("accountName", accountName)
                 .append("accountSuf", accountSuf)
                 .append("requestType", requestType)
                 .append("isRefinance", isRefinance)

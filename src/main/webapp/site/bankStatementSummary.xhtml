@@ -165,7 +165,7 @@
                                 </p:column>
 
                                 <p:column styleClass="center">
-                                    <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                                    <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                                 </p:column>
 
                                 <p:column styleClass="right">
@@ -267,8 +267,8 @@
                                 <p:column headerText="" styleClass="option">
                                     <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
                                                      action="#{bankStatementSummary.onEditTmbBankStmt()}"
-                                                     onclick="blockUI.show()"
-                                                     onsuccess="blockUI.hide()">
+                                                     onclick="blockTmbBankStmt.show()"
+                                                     onsuccess="blockTmbBankStmt.hide()">
                                         <f:setPropertyActionListener value="#{item}"
                                                                      target="#{bankStatementSummary.selectedBankStmtView}"/>
                                     </p:commandButton>
@@ -317,6 +317,11 @@
                                 </p:columnGroup>
 
                             </p:dataTable>
+
+                            <p:blockUI widgetVar="blockTmbBankStmt" block="dtTmbBankStmt" trigger="dtTmbBankStmt">
+                                LOADING<br/>
+                                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                            </p:blockUI>
                         </td>
                     </tr>
                     <tr>
@@ -394,7 +399,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value="#{item.mainAccount eq 2 ? 'Y' : ''}"/>
+                            <h:outputText value="#{item.mainAccount eq bankStatementSummary.yesValue ? 'Y' : ''}"/>
                         </p:column>
 
                         <p:column styleClass="right">
@@ -496,8 +501,8 @@
                         <p:column headerText="" styleClass="option" style="width:54px;">
                             <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
                                              action="#{bankStatementSummary.onEditOthBankStmt()}"
-                                             onclick="blockUI.show()"
-                                             onsuccess="blockUI.hide()">
+                                             onclick="blockOthBankStmt.show()"
+                                             onsuccess="blockOthBankStmt.hide()">
                                 <f:setPropertyActionListener value="#{item}"
                                                              target="#{bankStatementSummary.selectedBankStmtView}"/>
                             </p:commandButton>
@@ -605,6 +610,11 @@
                         </p:columnGroup>
 
                         </p:dataTable>
+
+                        <p:blockUI widgetVar="blockOthBankStmt" block="dtOtherBankStmtSum" trigger="dtOtherBankStmtSum">
+                            LOADING<br/>
+                            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+                        </p:blockUI>
                     </td>
                     </tr>
                     <tr>

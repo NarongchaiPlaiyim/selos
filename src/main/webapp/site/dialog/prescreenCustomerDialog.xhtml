@@ -198,14 +198,14 @@
                     <td class="title">First Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="large"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      readonly="#{not prescreenMaker.enableCustomerForm}"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.lastNameTh}" styleClass="large"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      readonly="#{not prescreenMaker.enableCustomerForm}"/>
                     </td>
@@ -258,19 +258,19 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                             </tr>
@@ -278,7 +278,7 @@
                                 <td class="title left">Soi/Road</td>
                                 <td colspan="5" class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.road}" styleClass="largest_m"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                             </tr>
@@ -398,7 +398,7 @@
                                      rendered="#{prescreenMaker.borrowerInfo.spouse.documentType.id != 2}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"/>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.citizenId}" styleClass="large" maxlength="13"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      rendered="#{prescreenMaker.borrowerInfo.spouse.documentType.id == 2}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"/>
                     </td>
@@ -482,13 +482,13 @@
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.firstNameTh}" styleClass="large"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.lastNameTh}" styleClass="large"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                     </td>
                 </tr>
                 <tr>
@@ -537,24 +537,24 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddress(event);" onkeypress="return onKeyAddressMoo(event);" />
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);" />
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.building}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title left">Soi/Road</td>
                                 <td colspan="5" class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.road}" styleClass="largest_m"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                                 </td>
                             </tr>
                             <tr>
@@ -719,7 +719,7 @@
                     <td class="title">Company Name (TH):</td>
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="largest_m"
-                                     onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event)"
+                                     onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event)"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      readonly="#{not prescreenMaker.enableCustomerForm}"/>
                     </td>
@@ -758,19 +758,19 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
-                                                 onkeydown="return onKeyAddressMoo(event);" onkeypress="return onKeyAddressMoo(event);"
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Building</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="large"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event)"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event)"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                             </tr>
@@ -778,7 +778,7 @@
                                 <td class="title left">Soi/Road</td>
                                 <td colspan="5" class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.road}" styleClass="largest_m"
-                                                 onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event)"
+                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event)"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                             </tr>

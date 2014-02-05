@@ -2,7 +2,6 @@ package com.clevel.selos.model;
 
 public enum Month {
 
-    //    January(1), February(2), March(3), April(4), May(5), June(6), July(7), August(8), September(9), October(10), November(11), December(12);
     January(1,"มกราคม"),
     February(2,"กุมภาพันธ์"),
     March(3,"มีนาคม"),
@@ -24,11 +23,12 @@ public enum Month {
         this.nameTH = nameTH;
     }
 
-    public int value() {
-        return this.value;
+    public String getNameTH() {
+        return nameTH;
     }
 
-    public String nameTH() {
-        return this.nameTH;
+    public int getValue() {
+        return value;
     }
+
 }

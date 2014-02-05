@@ -1,21 +1,15 @@
 package com.clevel.selos.businesscontrol;
 
-import com.clevel.selos.dao.working.AppraisalContactDetailDAO;
-import com.clevel.selos.dao.working.AppraisalDAO;
-import com.clevel.selos.dao.working.AppraisalDetailDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Appraisal;
-import com.clevel.selos.model.db.working.AppraisalContactDetail;
-import com.clevel.selos.model.db.working.AppraisalPurpose;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.AppraisalContactDetailView;
-import com.clevel.selos.model.view.AppraisalDetailView;
-import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.AppraisalContactDetailTransform;
 import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.AppraisalTransform;
+import com.clevel.selos.transform.NewCollateralTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -28,59 +22,70 @@ public class AppraisalRequestControl extends BusinessControl {
     private Logger log;
 
     @Inject
-    AppraisalDAO appraisalDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    AppraisalContactDetailDAO appraisalContactDetailDAO;
+    private AppraisalDAO appraisalDAO;
     @Inject
-    AppraisalDetailDAO appraisalDetailDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private NewCollateralDAO newCollateralDAO;
+    @Inject
+    private NewCollateralHeadDAO newCollateralHeadDAO;
+    @Inject
+    private NewCollateralSubDAO newCollateralSubDAO;
+    @Inject
+    private AppraisalContactDetailDAO appraisalContactDetailDAO;
+    @Inject
+    private AppraisalDetailDAO appraisalDetailDAO;
+    @Inject
+    private AppraisalTransform appraisalTransform;
+    @Inject
+    private AppraisalDetailTransform appraisalDetailTransform;
+    @Inject
+    private NewCollateralTransform newCollateralTransform;
 
     @Inject
-    AppraisalTransform appraisalTransform;
-    @Inject
-    AppraisalDetailTransform appraisalDetailTransform;
-    @Inject
-    AppraisalContactDetailTransform appraisalContactDetailTransform;
+    private AppraisalContactDetailTransform appraisalContactDetailTransform;
+
+
+    private Appraisal appraisal;
+    private AppraisalView appraisalView;
+    private List<AppraisalDetailView> appraisalDetailViewList;
+
+    private WorkCase workCase;
+    private NewCreditFacility newCreditFacility;
+
+    private List<NewCollateral> newCollateralList;
+    private List<NewCollateralHead> newCollateralHeadList;
+
+    private List<NewCollateralView> newCollateralViewList;
+    private List<NewCollateralHeadView> newCollateralHeadViewList;
 
     @Inject
     public AppraisalRequestControl(){
 
     }
 	
-	public AppraisalView getAppraisalRequestByWorkCase(long workCaseId){
-        log.info("getAppraisalByWorkCase ");
-
-        Appraisal appraisal;
-        AppraisalView appraisalView;
-        List<AppraisalPurpose> appraisalDetailList;
-        List<AppraisalDetailView> appraisalDetailViewList;
-        List<AppraisalContactDetail> appraisalContactDetailList;
-        List<AppraisalContactDetailView> appraisalContactDetailViewList;
-
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.info("workCase after findById " + workCase );
-
-        appraisal  = appraisalDAO.onSearchByWorkCase(workCase);
-
-
-        if( appraisal != null){
+	public AppraisalView getAppraisalRequest(final long workCaseId, final User user){
+        log.info("-- getAppraisalRequest WorkCaseId : {}, UserId : {}", workCaseId, user.getId());
+        appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+        if(appraisal == null){
             appraisalView = appraisalTransform.transformToView(appraisal);
+            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            if(newCreditFacility != null){
+                newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
 
-            appraisalDetailList = appraisalDetailDAO.findByAppraisal(appraisal);
-            if(appraisalDetailList.size()>0){
-                appraisalDetailViewList = appraisalDetailTransform.transformToView(appraisalDetailList);
-                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            }
+                appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList, user);
 
-            appraisalContactDetailList= appraisalContactDetailDAO.findByAppraisal(appraisal);
-            if(appraisalContactDetailList.size()>0){
-                appraisalContactDetailViewList = appraisalContactDetailTransform.transformToView(appraisalContactDetailList);
+            } else {
+                log.debug("-- newCreditFacility = null");
             }
-        }else{
-            appraisalView = null;
+            log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
+            return appraisalView;
+        } else {
+            log.debug("-- When find by work case id = {}, Appraisal is null, ", workCaseId);
+            return appraisalView;
         }
-        return appraisalView;
     }
 
     public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final User user){
@@ -113,5 +118,9 @@ public class AppraisalRequestControl extends BusinessControl {
         appraisalContactDetailDAO.persist(appraisalContactDetailList);
         log.info( "appraisalContactDetailDAO persist end" );
 
+    }
+
+    private <T> List<T> safetyList(List<T> list) {
+        return Util.safetyList(list);
     }
 }

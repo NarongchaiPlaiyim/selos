@@ -132,10 +132,8 @@ public class CustomerInfoControl extends BusinessControl {
 
         Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase);
 
-        if(customerInfoView.isRefreshInterface()){
-            if(customer.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(customer.getCustomerOblInfo());
-            }
+        if(customer.getCustomerOblInfo() != null){
+            customerOblInfoDAO.persist(customer.getCustomerOblInfo());
         }
 
         customerDAO.persist(customer);
@@ -151,10 +149,8 @@ public class CustomerInfoControl extends BusinessControl {
             customerInfoView.getSpouse().setMaritalStatus(customerInfoView.getMaritalStatus());
             Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase);
 
-            if(customerInfoView.isRefreshInterface()){
-                if(spouse.getCustomerOblInfo() != null){
-                    customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
-                }
+            if(spouse.getCustomerOblInfo() != null){
+                customerOblInfoDAO.persist(spouse.getCustomerOblInfo());
             }
 
             spouse.setIsSpouse(1);
@@ -172,16 +168,7 @@ public class CustomerInfoControl extends BusinessControl {
                 Customer cus = customerDAO.findById(customer.getSpouseId());
                 if(cus != null){
                     deleteCustomerIndividual(cus.getId());
-//                    if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
-//                        addressDAO.delete(cus.getAddressesList());
-//                    }
-//                    if(cus.getIndividual() != null){
-//                        individualDAO.delete(cus.getIndividual());
-//                    }
-//                    customerDAO.delete(cus);
                 }
-//                customer.setSpouseId(0);
-//                customerDAO.persist(customer);
             }
         }
         return customer.getId();
@@ -203,22 +190,6 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
-        //for add new - set all id = 0
-        /*if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
-            for(CustomerInfoView cus : customerInfoView.getIndividualViewList()){
-                cus.getCurrentAddress().setId(0);
-                cus.getRegisterAddress().setId(0);
-                cus.getWorkAddress().setId(0);
-                cus.setId(0);
-                if(cus.getSpouse() != null){
-                    cus.getSpouse().getCurrentAddress().setId(0);
-                    cus.getSpouse().getRegisterAddress().setId(0);
-                    cus.getSpouse().getWorkAddress().setId(0);
-                    cus.getSpouse().setId(0);
-                }
-            }
-        }*/
-
         //calculation age for juristic
         customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfRegister()));
 
@@ -234,10 +205,8 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
-        if(customerInfoView.isRefreshInterface()){
-            if(customerJuristic.getCustomerOblInfo() != null){
-                customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
-            }
+        if(customerJuristic.getCustomerOblInfo() != null){
+            customerOblInfoDAO.persist(customerJuristic.getCustomerOblInfo());
         }
 
         customerDAO.persist(customerJuristic);
