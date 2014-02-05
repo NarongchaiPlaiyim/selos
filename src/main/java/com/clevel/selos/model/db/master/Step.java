@@ -21,7 +21,7 @@ public class Step implements Serializable {
     private Stage stage;
     @Column(name = "doc_check", columnDefinition = "int default 0")
     private int docCheck;
-    @Column(name = "check_brms", columnDefinition = "int defualt 0")
+    @Column(name = "check_brms", columnDefinition = "int default 0")
     private int checkBRMS;
     @Column(name = "active")
     private int active;
