@@ -1159,7 +1159,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     // *** Function for BPM *** //
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception {
-        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+        bpmExecutor.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode, "");
     }
 
     public void cancelCase(long workCasePreScreenId, String queueName, long actionCode) throws Exception {

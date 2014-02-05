@@ -629,9 +629,8 @@ public class CustomerInfoJuristic implements Serializable {
                 if(relationId == RelationValue.DIRECTLY_RELATED.value()
                         || relationId == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Save Customer Juristic Data Failed. " +
-                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                            "<br/>Affect on Basic Info Page";
+                    message = "Cannot change customer type from Guarantor to Related. " +
+                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;

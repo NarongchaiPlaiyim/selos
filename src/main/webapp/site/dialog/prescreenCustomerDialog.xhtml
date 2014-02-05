@@ -258,12 +258,12 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest" maxlength="5"
                                                  onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
@@ -537,11 +537,11 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.moo}" styleClass="smallest"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.currentAddress.moo}" styleClass="smallest" maxlength="5"
                                                  onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);" />
                                 </td>
                                 <td class="title right">Building</td>
@@ -758,12 +758,12 @@
                                 <td class="title left">Addr. No.</td>
                                 <td class="left">
                                     <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="large"
-                                                 onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
+                                                 onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
                                 <td class="title right">Moo.</td>
                                 <td class="left">
-                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest" maxlength="5"
                                                  onkeydown="return onKeyDownAddress(event);" onkeypress="return onKeyPressAddress(event);"
                                                  readonly="#{not prescreenMaker.enableCustomerForm}"/>
                                 </td>
