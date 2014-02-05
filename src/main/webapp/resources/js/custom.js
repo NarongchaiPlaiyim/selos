@@ -342,6 +342,56 @@ function onKeyPressAddress(evt){
      * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
      *  33=!       34="    35=#        36=$
      *  37=%       38=&    39='        40=(
+     *  41=)       42=*                47=/
+     *  58=:       59=;    60=<        62=<
+     *  63=?       64=@    91=[        93=]
+     *  94=^       95=_    123={       125=}
+     */
+
+    if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
+        keyCode == 41 || keyCode == 42 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
+        keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
+        return false;
+    }
+
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9)
+     *  44=comma    45=(dash, minus)  188=comma
+     *  46=period   190=period
+     */
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 45 || keyCode == 47 || keyCode == 188 || keyCode == 189 || keyCode == 46 || keyCode == 190 ) {
+        return true;
+    } else {
+        return checkAllowKeyMoney(keyCode);
+    }
+}
+
+function onKeyDownAddress(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 109 || keyCode == 110 || keyCode == 144 || keyCode == 189){
+        return true;
+    }
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9)
+     *  44=comma    109=minus(num pad)  188=comma   189=dash
+     *  46=period   190=period          111=slash(num)  191=slash
+     */
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 109 || keyCode == 188 || keyCode == 189 || keyCode == 190 || keyCode == 111 || keyCode == 191 ) {
+        return true;
+    } else {
+        return checkAllowKeyMoney(keyCode);
+    }
+}
+
+function onKeyPressAddressMoo(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     *  33=!       34="    35=#        36=$
+     *  37=%       38=&    39='        40=(
      *  41=)       42=*
      *  58=:       59=;    60=<        62=<
      *  63=?       64=@    91=[        93=]
@@ -357,7 +407,7 @@ function onKeyPressAddress(evt){
     return true;
 }
 
-function onKeyDownAddress(evt){
+function onKeyDownAddressMoo(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){

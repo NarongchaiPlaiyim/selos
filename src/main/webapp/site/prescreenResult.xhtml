@@ -468,9 +468,9 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
-                     header="#{prescreenResult.messageHeader}">
+                     header="#{prescreenMaker.messageHeader}">
         <f:facet name="message">
-            <h:outputText value="#{prescreenResult.message}" escape="false"/>
+            <h:outputText value="#{prescreenMaker.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          action="#{baseController.onGoToInbox}"
