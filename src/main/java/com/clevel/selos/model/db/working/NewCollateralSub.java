@@ -20,6 +20,15 @@ public class NewCollateralSub implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_SUB_ID")
     private long id;
 
+    @Column(name = "coll_id")
+    private String collID;
+
+    @Column(name = "head_coll_id")
+    private String headCollID;
+
+    @Column(name = "line_no")
+    private int lineNo;
+
     @OneToOne
     @JoinColumn(name = "collateral_type_id")
     private CollateralType collateralTypeType;
@@ -86,7 +95,29 @@ public class NewCollateralSub implements Serializable {
         this.id = id;
     }
 
+    public String getCollID() {
+        return collID;
+    }
 
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
+    public String getHeadCollID() {
+        return headCollID;
+    }
+
+    public void setHeadCollID(String headCollID) {
+        this.headCollID = headCollID;
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
+    }
 
     public String getAddress() {
         return address;
