@@ -805,7 +805,10 @@ public class CustomerTransform extends Transform {
                 }
             }
 
-            if(customerOblInfo == null) customerOblInfo = new CustomerOblInfo();
+            log.debug("customerOblInfo :: {}",customerOblInfo);
+            if(customerOblInfo == null) {
+                customerOblInfo = new CustomerOblInfo();
+            }
 
             customerOblInfo.setServiceSegment(serviceSegmentTransform.transformToModel(customerInfoView.getServiceSegmentView()));
             customerOblInfo.setExistingSMECustomer(customerInfoView.getExistingSMECustomer());
@@ -825,6 +828,7 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setCustomerOblInfo(null);
         }
+        log.info("############# - transformToModel ::: customer.getCustomerOblInfo : {}", customer.getCustomerOblInfo());
         log.info("Return - transformToModel ::: customer : {}", customer);
         return customer;
     }

@@ -230,7 +230,6 @@ public class CustomerInfoJuristic implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
-        customerInfoView.setRefreshInterface(false);
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
         customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
@@ -504,7 +503,6 @@ public class CustomerInfoJuristic implements Serializable {
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -513,7 +511,6 @@ public class CustomerInfoJuristic implements Serializable {
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
-            customerInfoView.setRefreshInterface(true);
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -574,7 +571,6 @@ public class CustomerInfoJuristic implements Serializable {
                     message = "Refresh interface info failed.";
                     severity = "info";
                 }
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
@@ -584,7 +580,6 @@ public class CustomerInfoJuristic implements Serializable {
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
-                customerInfoView.setRefreshInterface(true);
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
