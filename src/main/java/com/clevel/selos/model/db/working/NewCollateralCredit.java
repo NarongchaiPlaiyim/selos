@@ -19,11 +19,11 @@ public class NewCollateralCredit implements Serializable {
     private NewCollateral newCollateral;
 
     @OneToOne
-    @JoinColumn(name = "new_credit_detail_id", nullable = true)
+    @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 
     @OneToOne
-    @JoinColumn(name = "existing_credit_detail_id", nullable = true)
+    @JoinColumn(name = "existing_credit_detail_id")
     private ExistingCreditDetail existingCreditDetail;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,14 +66,6 @@ public class NewCollateralCredit implements Serializable {
         this.newCreditDetail = newCreditDetail;
     }
 
-    public ExistingCreditDetail getExistingCreditDetail() {
-        return existingCreditDetail;
-    }
-
-    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
-        this.existingCreditDetail = existingCreditDetail;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -104,5 +96,13 @@ public class NewCollateralCredit implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public ExistingCreditDetail getExistingCreditDetail() {
+        return existingCreditDetail;
+    }
+
+    public void setExistingCreditDetail(ExistingCreditDetail existingCreditDetail) {
+        this.existingCreditDetail = existingCreditDetail;
     }
 }

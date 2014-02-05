@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.db.working.OpenAccountPurpose;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -18,10 +19,10 @@ public class OpenAccountPurposeDAO extends GenericDAO<OpenAccountPurpose, Long> 
     public OpenAccountPurposeDAO() {
     }
 
-    public List<OpenAccountPurpose> findByOpenAccountId(long openAccountId) {
-        log.info("findByOpenAccountId : {}", openAccountId);
+    public List<OpenAccountPurpose> findByOpenAccount(OpenAccount openAccount) {
+        log.info("findByOpenAccount : {}", openAccount);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("openAccount.id", openAccountId));
+        criteria.add(Restrictions.eq("openAccount", openAccount));
         List<OpenAccountPurpose> openAccPurposeList = criteria.list();
 
         return openAccPurposeList;

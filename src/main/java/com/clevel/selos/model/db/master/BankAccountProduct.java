@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_account_product")
+@Table(name = "mst_bank_account_product")
 public class BankAccountProduct implements Serializable {
     @Id
     @Column(name = "id")

@@ -182,14 +182,28 @@ public class BankStatementDetail implements Serializable {
             // add new Bank statement
             bankStmtView = new BankStmtView();
             bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+            bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
             modeForButton = ModeForButton.ADD;
         } else {
             // edit Bank statement
             numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
+
+//            bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
+//            Date lastMonth = bankStmtView.getBankStmtDetailViewList().get(bankStmtView.getBankStmtDetailViewList().size() - 1).getAsOfDate();
+//            int monthsDetail = bankStmtView.getBankStmtDetailViewList().size();
+//            int monthsDiff = numberOfMonths - monthsDetail;
+//            if (monthsDetail < numberOfMonths) {
+//                // add 6 new details
+//                Date date;
+//                for (int i=1; i <= monthsDiff; i++) {
+//                    BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
+//                    date = DateTimeUtil.getOnlyDatePlusMonth(lastMonth, i);
+//                    bankStmtDetailView.setAsOfDate(date);
+//                    bankStmtView.getBankStmtDetailViewList().add(bankStmtDetailView);
+//                }
+//            }
             modeForButton = ModeForButton.EDIT;
         }
-
-        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
 
         // select items
         bankViewList = new ArrayList<BankView>();
@@ -206,7 +220,7 @@ public class BankStatementDetail implements Serializable {
 
     private List<BankStmtDetailView> generateBankStmtDetail() {
         List<BankStmtDetailView> bankStmtDetailViewList;
-        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
+        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
         Date date;
         for (int i = 0; i < numberOfMonths; i++) {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
@@ -218,12 +232,16 @@ public class BankStatementDetail implements Serializable {
     }
 
     public void onSave() {
-        log.debug("onSave() bankStmtView: {}", bankStmtView);
+        log.debug("onSave()");
+        log.debug("-> summaryView: {}", summaryView);
+        log.debug("-> bankStmtView: {}", bankStmtView);
         // calculate Bank statement and detail
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
 
         if (bankStmtView.getId() == 0) {
             // Add New Bank statement
+            bankStmtView = bankStmtControl.saveBankStmt(bankStmtView);
+
             if (isTmbBank) {
                 if (summaryView.getTmbBankStmtViewList() != null) {
                     summaryView.getTmbBankStmtViewList().add(bankStmtView);
@@ -241,9 +259,11 @@ public class BankStatementDetail implements Serializable {
                     summaryView.setOthBankStmtViewList(othBankStmtViewList);
                 }
             }
-        }
-        else {
+
+        } else {
             // Edit exist Bank statement
+            bankStmtView = bankStmtControl.saveBankStmt(bankStmtView);
+
             boolean foundBankStmt = false;
             // TMB
             if (summaryView.getTmbBankStmtViewList() != null) {
@@ -277,9 +297,14 @@ public class BankStatementDetail implements Serializable {
             bankStmtControl.updateMainAccAndHighestInflow(summaryView);
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+
+            summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
+
+            //set to init
+            initViewFormAndSelectItems();
+            checkRequiredBankAccTypeSelected();
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
@@ -309,6 +334,7 @@ public class BankStatementDetail implements Serializable {
         int otherAccType = bankStmtView.getOtherAccountType();
 
         bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
+        log.debug("checkRequiredBankAccTypeSelected() bankAccTypeSelectRequired = {}", bankAccTypeSelectRequired);
     }
 
     public void onChangeBankAccTypeSelected() {

@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.BAPaymentMethod;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

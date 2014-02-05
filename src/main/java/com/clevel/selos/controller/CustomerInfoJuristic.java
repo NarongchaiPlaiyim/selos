@@ -126,9 +126,6 @@ public class CustomerInfoJuristic implements Serializable {
     private String message;
     private String severity;
 
-//    private int addressFlagForm2;
-//    private int addressFlagForm3;
-
     //session
     private long workCaseId;
 
@@ -184,6 +181,9 @@ public class CustomerInfoJuristic implements Serializable {
 
     private boolean enableAllFieldCus;
 
+    private int relationId;
+    private int referenceId;
+
     public CustomerInfoJuristic(){
     }
 
@@ -199,7 +199,7 @@ public class CustomerInfoJuristic implements Serializable {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}", ex);
             }
         }
 
@@ -209,7 +209,6 @@ public class CustomerInfoJuristic implements Serializable {
 
         Flash flash = FacesUtil.getFlash();
         Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
-//        Map<String, Object> cusInfoParams = (Map<String, Object>) session.getAttribute("cusInfoParams");
         if (cusInfoParams != null) {
             isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
             isFromIndividualParam = (Boolean) cusInfoParams.get("isFromIndividualParam");
@@ -231,6 +230,7 @@ public class CustomerInfoJuristic implements Serializable {
         isEditForm = false;
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
+        customerInfoView.setRefreshInterface(false);
         customerInfoView.setIndividualViewList(new ArrayList<CustomerInfoView>());
         customerInfoView.setCurrentAddress(null);
         customerInfoView.getRegisterAddress().setAddressTypeFlag(3);
@@ -254,8 +254,6 @@ public class CustomerInfoJuristic implements Serializable {
         countryList = countryDAO.findAll();
 
         referenceList = new ArrayList<Reference>();
-
-//        addressFlagForm2 = 3;
 
         addressTypeList = addressTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
         kycLevelList = kycLevelDAO.findAll();
@@ -288,13 +286,25 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView = customerInfoControl.getCustomerJuristicById(customerId);
         }
 
-        if(customerInfoView.getId() != 0){
+        if(customerInfoView.getId() != 0 || isFromIndividualParam){
             isEditForm = true;
         } else {
             isEditForm = false;
         }
 
         enableAllFieldCus = true;
+
+        if(customerInfoView.getRelation() != null){
+            relationId = customerInfoView.getRelation().getId();
+        } else {
+            relationId = 0;
+        }
+
+        if(customerInfoView.getReference() != null){
+            referenceId = customerInfoView.getReference().getId();
+        } else {
+            referenceId = 0;
+        }
 
         onChangeRelation();
         onChangeReference();
@@ -308,11 +318,15 @@ public class CustomerInfoJuristic implements Serializable {
             enableCitizenId = false;
         }
 
-        if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
+        if(relationId == RelationValue.BORROWER.value()){
             isEditBorrower = true;
             relationList = relationCustomerDAO.getListRelation(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
         }else{
-            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(),caseBorrowerTypeId,0);
+            relationList = relationCustomerDAO.getListRelationWithOutBorrower(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, 0);
+        }
+
+        if(customerInfoView.getRemoveIndividualIdList() == null){
+            customerInfoView.setRemoveIndividualIdList(new ArrayList<Long>());
         }
     }
 
@@ -321,10 +335,8 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
         map.put("isEditFromJuristic", false);
-        map.put("customerId", new Long(-1));
+        map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
@@ -334,18 +346,16 @@ public class CustomerInfoJuristic implements Serializable {
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
         map.put("isEditFromJuristic", true);
-        map.put("customerId", new Long(-1));
+        map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
         map.put("rowIndex",rowIndex);
         map.put("individualView", selectEditIndividual);
-//        HttpSession session = FacesUtil.getSession(false);
-//        session.setAttribute("cusInfoParams", map);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoIndividual?faces-redirect=true";
     }
 
     public void onChangeRelation(){
-        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, customerInfoView.getRelation().getId(), 1, 0);
+        referenceList = referenceDAO.findReferenceByFlag(BorrowerType.JURISTIC.value(), caseBorrowerTypeId, relationId, 1, 0);
     }
 
     public void onChangeProvinceForm1() {
@@ -494,6 +504,7 @@ public class CustomerInfoJuristic implements Serializable {
             }
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
+            customerInfoView.setRefreshInterface(true);
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -502,7 +513,8 @@ public class CustomerInfoJuristic implements Serializable {
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            customerInfoView.setRefreshInterface(true);
+            log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
             severity = "alert";
@@ -513,11 +525,13 @@ public class CustomerInfoJuristic implements Serializable {
     public void onRefreshInterfaceInfo(){
         if(customerInfoView.getSearchFromRM() == 1){
             long cusId = customerInfoView.getId();
+            int searchBy = customerInfoView.getSearchBy();
+            String searchId = customerInfoView.getSearchId();
             int relId = 0;
             int refId = 0;
-            if(customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()){
-                relId = customerInfoView.getRelation().getId();
-                refId = customerInfoView.getReference().getId();
+            if(relationId == RelationValue.BORROWER.value()){
+                relId = relationId;
+                refId = referenceId;
             }
 
             log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
@@ -560,12 +574,20 @@ public class CustomerInfoJuristic implements Serializable {
                     message = "Refresh interface info failed.";
                     severity = "info";
                 }
+                customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
-                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
                 severity = "alert";
+                customerInfoView.setRefreshInterface(true);
+                customerInfoView.setSearchFromRM(1);
+                customerInfoView.setSearchBy(searchBy);
+                customerInfoView.setSearchId(searchId);
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
@@ -605,21 +627,46 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView.setWorkAddress(addressView);
         }
 
+        //check using customer in basic info
+        if(customerInfoView.getId() != 0){
+            boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(customerInfoView.getId());
+            if(isExist){
+                if(relationId == RelationValue.DIRECTLY_RELATED.value()
+                        || relationId == RelationValue.INDIRECTLY_RELATED.value()){
+                    messageHeader = "Information.";
+                    message = "Save Customer Juristic Data Failed. " +
+                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
+                            "<br/>Affect on Basic Info Page";
+                    severity = "info";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return;
+                }
+            }
+        }
+
+        Relation relation = new Relation();
+        relation.setId(relationId);
+        Reference reference = new Reference();
+        reference.setId(referenceId);
+        customerInfoView.setRelation(relation);
+        customerInfoView.setReference(reference);
+
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
             isFromSummaryParam = true;
             onAddNewJuristic();
             onEditJuristic();
             messageHeader = "Information.";
-            message = "Save juristic data success.";
+            message = "Save Customer Juristic Data Success.";
             severity = "info";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
+            log.error("Exception :: {}",ex);
             messageHeader = "Error.";
             if(ex.getCause() != null){
-                message = "Save juristic failed. Cause : " + ex.getCause().toString();
+                message = "Save Juristic Failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save juristic failed. Cause : " + ex.getMessage();
+                message = "Save Juristic Failed. Cause : " + ex.getMessage();
             }
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -635,7 +682,39 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onDeleteIndividual(){
-        customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+        try{
+            //check individual using on basic info
+            if(selectEditIndividual.getId() != 0){
+                boolean isExist = customerInfoControl.checkExistingOpenAccountCustomer(selectEditIndividual.getId());
+                if(isExist){
+                    messageHeader = "Information.";
+                    message = "Delete Customer Info Individual Failed. <br/><br/> Cause : This customer is using on Open Account in Basic Info page.";
+                    severity = "info";
+                } else {
+                    customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                    customerInfoView.getRemoveIndividualIdList().add(selectEditIndividual.getId());
+                    messageHeader = "Information.";
+                    message = "Delete Customer Info Individual Success.";
+                    severity = "info";
+                }
+            } else {
+                customerInfoView.getIndividualViewList().remove(selectEditIndividual);
+                messageHeader = "Information.";
+                message = "Delete Customer Info Individual Success.";
+                severity = "info";
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.error("Exception :: {}",ex);
+            messageHeader = "Error.";
+            if(ex.getCause() != null){
+                message = "Delete Customer Info Individual Failed. <br/><br/> Cause : " + ex.getCause().toString();
+            } else {
+                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getMessage();
+            }
+            severity = "alert";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     public Date getCurrentDate() {
@@ -1125,5 +1204,21 @@ public class CustomerInfoJuristic implements Serializable {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public int getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(int referenceId) {
+        this.referenceId = referenceId;
+    }
+
+    public int getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(int relationId) {
+        this.relationId = relationId;
     }
 }

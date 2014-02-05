@@ -20,7 +20,7 @@ public class RelationCustomer implements Serializable {
     private CustomerEntity borrowerType;
     @Column(name = "spouse")
     private int spouse;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "relation_id")
     private Relation relation;
 

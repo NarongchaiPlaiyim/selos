@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
@@ -23,6 +24,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +55,8 @@ public class AppraisalRequest implements Serializable {
     @Inject
     private AppraisalRequestControl appraisalRequestControl;
 
-
-    private String modeForButton;
+    private enum ModeForButton{ ADD, EDIT }
+    private ModeForButton modeForButton;
     private int rowIndex;
     private String messageHeader;
     private String message;
@@ -68,77 +70,58 @@ public class AppraisalRequest implements Serializable {
     private AppraisalDetailView selectAppraisalDetailView;
 
     private AppraisalContactDetailView appraisalContactDetailView;
-    private List<AppraisalContactDetailView> appraisalContactDetailViewList;
     private AppraisalContactDetailView selectAppraisalContactDetailView;
 
-
+    private boolean titleDeedFlag;
+    private boolean purposeFlag;
+    private boolean numberOfDocumentsFlag;
+    private boolean contactFlag;
 
     public AppraisalRequest() {
 
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("onCreation.");
-        modeForButton = "add";
-
-        HttpSession session = FacesUtil.getSession(true);
-        //session.setAttribute("workCaseId", 10001);
-        user = (User)session.getAttribute("user");
+    private void init(){
+        log.debug("-- init()");
+        modeForButton = ModeForButton.ADD;
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-        appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
-
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ",workCaseId);
-            appraisalView = appraisalRequestControl.getAppraisalRequestByWorkCase(workCaseId);
-            if(appraisalView != null){
-                appraisalDetailViewList = appraisalView.getAppraisalDetailViewList();
-                log.info("appraisalDetailViewList  :::::::::::: {} ", appraisalDetailViewList);
-                if(appraisalDetailViewList == null){
-                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-                }
-                appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
-                log.info("appraisalDetailViewList  :::::::::::: {} ", appraisalContactDetailViewList);
-                if(appraisalContactDetailViewList == null){
-                    appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
-                }
-                setStringOnAppraisalTable();
-            }else{
-                appraisalView = new AppraisalView();
-            }
-        }
+        titleDeedFlag = false;
+        purposeFlag = false;
+        numberOfDocumentsFlag = false;
+        contactFlag = false;
     }
 
-    private void setStringOnAppraisalTable(){
-        AppraisalDetailView appraisalDetailViewS;
-        for(int i=0;i<appraisalDetailViewList.size();i++){
-
-            appraisalDetailViewS =  appraisalDetailViewList.get(i);
-
-            if(appraisalDetailViewS.getPurposeReviewAppraisal()==1){
-                appraisalDetailViewS.setPurposeReviewAppraisalLabel(msg.get("app.appraisal.appraisalDetail.label.purposeReviewAppraisal"));
+    @PostConstruct
+    public void onCreation() {
+        log.info("onCreation.");
+        HttpSession session = FacesUtil.getSession(true);
+        if(false){//session.getAttribute("workCaseId") == null){
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
             }
-
-            if(appraisalDetailViewS.getPurposeNewAppraisal()==1){
-                appraisalDetailViewS.setPurposeNewAppraisalLabel(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal"));
+        } else {
+            user = (User)session.getAttribute("user");
+            log.debug("-- User : {}", ""+user.toString());
+            init();
+//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            workCaseId = 4L;
+            log.info("workCaseId :: {} ",workCaseId);
+            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
+            if(appraisalView != null){
+                appraisalDetailViewList = Util.safetyList(appraisalView.getAppraisalDetailViewList());
+                if(appraisalDetailViewList.size() == 0){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
+            } else {
+                appraisalView = new AppraisalView();
+                log.debug("-- AppraisalView[New] has created");
             }
-
-            if(appraisalDetailViewS.getPurposeReviewBuilding()==1){
-                appraisalDetailViewS.setPurposeReviewBuildingLabel(msg.get("app.appraisal.appraisalDetail.label.purposeReviewBuilding"));
-            }
-
-            if(appraisalDetailViewS.getCharacteristic()==0){
-                appraisalDetailViewS.setCharacteristicLabel(msg.get("app.appraisal.appraisalDetail.label.noBuilding"));
-            }else if(appraisalDetailViewS.getCharacteristic()==1){
-                appraisalDetailViewS.setCharacteristicLabel(msg.get("app.appraisal.appraisalDetail.label.haveBuilding"));
-            }
-            /// Transform value to boolean
-              appraisalDetailViewS.setPurposeNewAppraisalB(isTrue(appraisalDetailViewS.getPurposeNewAppraisal()));
-              appraisalDetailViewS.setPurposeReviewBuildingB(isTrue(appraisalDetailViewS.getPurposeReviewBuilding()));
-              appraisalDetailViewS.setPurposeReviewAppraisalB(isTrue(appraisalDetailViewS.getPurposeReviewAppraisal()));
         }
     }
 
@@ -146,9 +129,9 @@ public class AppraisalRequest implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if(true){
+        if(appraisalDetailViewMandate()){
             complete = true;
-            if(modeForButton.equalsIgnoreCase("add")){
+            if(ModeForButton.ADD.equals(modeForButton)){
                 log.info("onSaveAppraisalDetailView add >>> begin ");
                 log.info("appraisalDetailViewList size >>> is " + appraisalDetailViewList.size());
                 appraisalDetailView.setNo(appraisalDetailViewList.size()+1);
@@ -158,7 +141,7 @@ public class AppraisalRequest implements Serializable {
                 log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + appraisalDetailView);
                 appraisalDetailViewList.add(appraisalDetailView);
                 log.info("onSaveContactRecordDetailView add >>> end ");
-            }else if(modeForButton.equalsIgnoreCase("edit")){
+            }else if(ModeForButton.EDIT.equals(modeForButton)){
                 log.info("onSaveAppraisalDetailView edit >>> begin ");
                 AppraisalDetailView appraisalDetailViewRow;
                 appraisalDetailViewRow = appraisalDetailViewList.get(rowIndex);
@@ -174,43 +157,16 @@ public class AppraisalRequest implements Serializable {
                 appraisalDetailView = new AppraisalDetailView();
                 log.info("onSaveContactRecordDetailView edit >>> end ");
             }
+            context.addCallbackParam("functionComplete", complete);
+        }else {
+            context.addCallbackParam("functionComplete", complete);
         }
-        setStringOnAppraisalTable();
-        context.addCallbackParam("functionComplete", complete);
-    }
 
-    public void onSaveAppraisalContactDetailView(){
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-
-        if(true){
-            complete = true;
-            if(modeForButton.equalsIgnoreCase("add")){
-                log.info("onSaveAppraisalContactDetailView add >>> begin ");
-                log.info("appraisalContactDetailViewList size >>> is " + appraisalContactDetailViewList.size());
-                appraisalContactDetailView.setNo(appraisalContactDetailViewList.size()+1);
-                log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + appraisalContactDetailView);
-                appraisalContactDetailViewList.add(appraisalContactDetailView);
-                log.info("onSaveAppraisalContactDetailView add >>> end ");
-
-            }else if(modeForButton.equalsIgnoreCase("edit")){
-                log.info("onSaveAppraisalContactDetailView edit >>> begin ");
-
-                AppraisalContactDetailView appraisalContactDetailViewRow;
-                appraisalContactDetailViewRow = appraisalContactDetailViewList.get(rowIndex);
-                appraisalContactDetailViewRow.setCustomerName(appraisalContactDetailView.getCustomerName());
-                appraisalContactDetailViewRow.setContactNo(appraisalContactDetailView.getContactNo());
-
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.info("onSaveAppraisalContactDetailView edit >>> end ");
-            }
-        }
-        context.addCallbackParam("functionComplete", complete);
     }
     
     public void onEditAppraisalDetailView(){
         log.info( " onEditAppraisalDetailView " + selectAppraisalDetailView);
-        modeForButton = "edit";
+        modeForButton = ModeForButton.EDIT;
         appraisalDetailView = new AppraisalDetailView();
         //*** Check list size ***//
         if( rowIndex < appraisalDetailViewList.size() ) {
@@ -226,29 +182,11 @@ public class AppraisalRequest implements Serializable {
         }
     }
 
-    public void onEditAppraisalContactDetailView(){
-        log.info( " onEditAppraisalContactDetailView " + selectAppraisalContactDetailView);
-        modeForButton = "edit";
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        //*** Check list size ***//
-        if( rowIndex < appraisalContactDetailViewList.size() ) {
-            appraisalContactDetailView.setCustomerName(selectAppraisalContactDetailView.getCustomerName());
-            appraisalContactDetailView.setContactNo(selectAppraisalContactDetailView.getContactNo());
-        }
-    }
-
     public void onAddAppraisalDetailView(){
         log.info("onAddAppraisalDetailView >>> begin ");
         appraisalDetailView = new AppraisalDetailView();
-        modeForButton = "add";
+        modeForButton = ModeForButton.ADD;
     }
-
-    public void onAddAppraisalContactDetailView(){
-        log.info("onAddAppraisalContactDetailView >>> begin ");
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        modeForButton = "add";
-    }
-
 
     public void onDeleteAppraisalDetailView() {
         log.info( " onDeleteAppraisalDetailView " + selectAppraisalDetailView);
@@ -264,49 +202,40 @@ public class AppraisalRequest implements Serializable {
             appraisalDetailViewRow.setNo(i+1);
         }
     }
-    
-    public void onDeleteAppraisalContactDetailView() {
-        log.info( " onDeleteAppraisalContactDetailView " + selectAppraisalContactDetailView);
-        appraisalContactDetailViewList.remove(selectAppraisalContactDetailView);
-        onSetRowNoAppraisalContactDetailView();
-        log.info( " onDeleteAppraisalContactDetailView end ");
-    }
 
-    public void onSetRowNoAppraisalContactDetailView(){
-        AppraisalContactDetailView appraisalContactDetailViewRow;
-        for(int i=0;i< appraisalContactDetailViewList.size();i++){
-            appraisalContactDetailViewRow = appraisalContactDetailViewList.get(i);
-            appraisalContactDetailViewRow.setNo(i+1);
-        }
-    }
 
     public void onSaveAppraisalRequest() {
         log.info("onSaveAppraisalRequest::::");
-        log.info("appraisalDetailViewList.size()        ::: {} ", appraisalDetailViewList.size());
-        log.info("appraisalContactDetailViewList.size() ::: {} ", appraisalContactDetailViewList.size());
-        try{
-            if(appraisalView.getId() == 0){
-                appraisalView.setCreateBy(user);
-                appraisalView.setCreateDate(DateTime.now().toDate());
-            }
-            appraisalView.setModifyBy(user);
-            appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
+        log.info("appraisalDetailViewList.size() ::: {} ", appraisalDetailViewList.size());
 
-            appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
-            messageHeader = msg.get("app.appraisal.request.message.header.save.success");
-            message = msg.get("app.appraisal.request.message.body.save.success");
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
-            log.error("Exception : {}", ex);
+        if(appraisalContactDetailViewMandate()){
+            try{
+                if(appraisalView.getId() == 0){
+                    appraisalView.setCreateBy(user);
+                    appraisalView.setCreateDate(DateTime.now().toDate());
+                }
+                appraisalView.setModifyBy(user);
+                appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+
+                appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
+                messageHeader = msg.get("app.appraisal.request.message.header.save.success");
+                message = msg.get("app.appraisal.request.message.body.save.success");
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } catch(Exception ex){
+                log.error("Exception : {}", ex);
+                messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
+
+                if(ex.getCause() != null){
+                    message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
+                } else {
+                    message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
+                }
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-
-            if(ex.getCause() != null){
-                message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-            } else {
-                message = msg.get("app.appraisal.request.message.body.save.fail") + ex.getMessage();
-            }
+            message = msg.get("app.appraisal.request.message.body.save.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -316,6 +245,81 @@ public class AppraisalRequest implements Serializable {
         onCreation();
     }
 
+    private boolean appraisalDetailViewMandate(){
+        log.debug("-- appraisalDetailViewMandate()");
+        boolean result = true;
+        if(appraisalDetailView.getTitleDeed().length() == 0){
+            titleDeedFlag = true;
+            result = false;
+        } else {
+            titleDeedFlag = false;
+        }
+        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
+            purposeFlag = true;
+            result = false;
+        } else {
+            purposeFlag = false;
+        }
+        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == BigDecimal.ZERO){
+            numberOfDocumentsFlag = true;
+            result = false;
+        } else {
+            numberOfDocumentsFlag = false;
+        }
+
+        log.debug("-- titleDeedFlag = {}", titleDeedFlag);
+        log.debug("-- purposeFlag = {}", purposeFlag);
+        log.debug("-- numberOfDocumentsFlag = {}", numberOfDocumentsFlag);
+        log.debug("-- result = {}", result);
+
+        return result;
+    }
+    private boolean appraisalContactDetailViewMandate(){
+        log.debug("-- AppraisalContactDetailViewMandate()");
+        boolean result = true;
+        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
+            contactFlag = true;
+            result = false;
+        } else {
+            contactFlag = false;
+        }
+        log.debug("-- contactFlag = {}", contactFlag);
+        log.debug("-- result = {}", result);
+        return result;
+    }
+
+
+    public boolean isContactFlag() {
+        return contactFlag;
+    }
+
+    public void setContactFlag(boolean contactFlag) {
+        this.contactFlag = contactFlag;
+    }
+
+    public boolean isTitleDeedFlag() {
+        return titleDeedFlag;
+    }
+
+    public void setTitleDeedFlag(boolean titleDeedFlag) {
+        this.titleDeedFlag = titleDeedFlag;
+    }
+
+    public boolean isPurposeFlag() {
+        return purposeFlag;
+    }
+
+    public void setPurposeFlag(boolean purposeFlag) {
+        this.purposeFlag = purposeFlag;
+    }
+
+    public boolean isNumberOfDocumentsFlag() {
+        return numberOfDocumentsFlag;
+    }
+
+    public void setNumberOfDocumentsFlag(boolean numberOfDocumentsFlag) {
+        this.numberOfDocumentsFlag = numberOfDocumentsFlag;
+    }
 
     public AppraisalContactDetailView getSelectAppraisalContactDetailView() {
         return selectAppraisalContactDetailView;
@@ -323,14 +327,6 @@ public class AppraisalRequest implements Serializable {
 
     public void setSelectAppraisalContactDetailView(AppraisalContactDetailView selectAppraisalContactDetailView) {
         this.selectAppraisalContactDetailView = selectAppraisalContactDetailView;
-    }
-
-    public List<AppraisalContactDetailView> getAppraisalContactDetailViewList() {
-        return appraisalContactDetailViewList;
-    }
-
-    public void setAppraisalContactDetailViewList(List<AppraisalContactDetailView> appraisalContactDetailViewList) {
-        this.appraisalContactDetailViewList = appraisalContactDetailViewList;
     }
 
     public AppraisalContactDetailView getAppraisalContactDetailView() {

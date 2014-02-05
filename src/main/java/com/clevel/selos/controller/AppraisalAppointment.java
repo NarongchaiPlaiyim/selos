@@ -145,11 +145,11 @@ public class AppraisalAppointment implements Serializable {
 
 
 
-                appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
-                log.info("appraisalDetailViewList  :::::::::::: {} ", appraisalContactDetailViewList);
-                if(appraisalContactDetailViewList == null){
-                    appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
-                }
+//                appraisalContactDetailViewList = appraisalView.getAppraisalContactDetailViewList();
+//                log.info("appraisalDetailViewList  :::::::::::: {} ", appraisalContactDetailViewList);
+//                if(appraisalContactDetailViewList == null){
+//                    appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
+//                }
 
                 contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
                 log.info("contactRecordDetailViewList  :::::::::::: {} ", contactRecordDetailViewList);
@@ -427,7 +427,7 @@ public class AppraisalAppointment implements Serializable {
             if(modeForButton.equalsIgnoreCase("add")){
                 log.info("onSaveAppraisalContactDetailView add >>> begin ");
                 log.info("appraisalContactDetailViewList size >>> is " + appraisalContactDetailViewList.size());
-                appraisalContactDetailView.setNo(appraisalContactDetailViewList.size()+1);
+//                appraisalContactDetailView.setNo(appraisalContactDetailViewList.size()+1);
                 log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + appraisalContactDetailView);
                 appraisalContactDetailViewList.add(appraisalContactDetailView);
                 log.info("onSaveAppraisalContactDetailView add >>> end ");
@@ -437,8 +437,8 @@ public class AppraisalAppointment implements Serializable {
 
                 AppraisalContactDetailView appraisalContactDetailViewRow;
                 appraisalContactDetailViewRow = appraisalContactDetailViewList.get(rowIndex);
-                appraisalContactDetailViewRow.setCustomerName(appraisalContactDetailView.getCustomerName());
-                appraisalContactDetailViewRow.setContactNo(appraisalContactDetailView.getContactNo());
+//                appraisalContactDetailViewRow.setCustomerName(appraisalContactDetailView.getCustomerName());
+//                appraisalContactDetailViewRow.setContactNo(appraisalContactDetailView.getContactNo());
 
                 appraisalContactDetailView = new AppraisalContactDetailView();
                 log.info("onSaveAppraisalContactDetailView edit >>> end ");
@@ -471,8 +471,8 @@ public class AppraisalAppointment implements Serializable {
         appraisalContactDetailView = new AppraisalContactDetailView();
         //*** Check list size ***//
         if( rowIndex < appraisalContactDetailViewList.size() ) {
-            appraisalContactDetailView.setCustomerName(selectAppraisalContactDetailView.getCustomerName());
-            appraisalContactDetailView.setContactNo(selectAppraisalContactDetailView.getContactNo());
+//            appraisalContactDetailView.setCustomerName(selectAppraisalContactDetailView.getCustomerName());
+//            appraisalContactDetailView.setContactNo(selectAppraisalContactDetailView.getContactNo());
         }
     }
 
@@ -515,7 +515,7 @@ public class AppraisalAppointment implements Serializable {
         AppraisalContactDetailView appraisalContactDetailViewRow;
         for(int i=0;i< appraisalContactDetailViewList.size();i++){
             appraisalContactDetailViewRow = appraisalContactDetailViewList.get(i);
-            appraisalContactDetailViewRow.setNo(i+1);
+//            appraisalContactDetailViewRow.setNo(i+1);
         }
     }
 
@@ -530,7 +530,7 @@ public class AppraisalAppointment implements Serializable {
             }
             appraisalView.setModifyBy(user);
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-            appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
+//            appraisalView.setAppraisalContactDetailViewList(appraisalContactDetailViewList);
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
 
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId);

@@ -2,9 +2,12 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.db.master.QualityLevel;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -46,6 +49,8 @@ public class Qualitative implements Serializable {
 
     @Inject
     QualityLevelDAO qualityLevelDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     @Inject
     QualitativeControl qualitativeControl;
@@ -69,6 +74,47 @@ public class Qualitative implements Serializable {
 
     }
 
+    public void preRender(){
+        log.info("preRender.");
+        HttpSession session = FacesUtil.getSession(true);
+
+        String page = Util.getCurrentPage();
+        log.info("this page :: {} ", page);
+        if(page.equals("qualitative.jsf")){
+            //Get qualitative form type
+            if(session.getAttribute("workCaseId") != null){
+                int qualitativeType = 0;
+                try{
+                    workCaseId = (Long)session.getAttribute("workCaseId");
+                } catch (ClassCastException ex){
+                    log.error("Exception :", ex);
+                }
+
+                com.clevel.selos.model.db.working.BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                if(basicInfo != null){
+                    qualitativeType = basicInfo.getQualitativeType();
+                }
+                log.debug("Qualitative type : {}", qualitativeType);
+                if(qualitativeType == 1){
+                    //redirect to qualitativeA
+                    FacesUtil.redirect("/site/qualitativeA.jsf");
+                    return;
+                } else if (qualitativeType == 2){
+                    //redirect to qualitativeB
+                    FacesUtil.redirect("/site/qualitativeB.jsf");
+                    return;
+                } else {
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+            } else {
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }
+
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
@@ -77,41 +123,46 @@ public class Qualitative implements Serializable {
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
 
-        qualitativeValueMap = new Hashtable<String, String>();
+        if( page.equals("qualitativeA.jsf") || page.equals("qualitativeB.jsf")) {
+            qualitativeValueMap = new Hashtable<String, String>();
 
-        if (page.equals("qualitativeA.jsf")) {
-            if (session.getAttribute("workCaseId") != null) {
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if (page.equals("qualitativeA.jsf")) {
+                if (session.getAttribute("workCaseId") != null) {
+                    workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                } else {
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+                qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
+            } else if (page.equals("qualitativeB.jsf")) {
+                if (session.getAttribute("workCaseId") != null) {
+                    workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                } else {
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+                qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+            }
+
+            if (qualitativeView == null) {
+                qualitativeView = new QualitativeView();
+                modeForButton = ModeForButton.ADD;
+                result = 0;
             } else {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
+                modeForButton = ModeForButton.EDIT;
+                log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
+                if (qualitativeView.getQualityResult() != null) {
+                    onSetQualityToValue(qualitativeView.getQualityResult());
+                }
             }
-            qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
-        } else if (page.equals("qualitativeB.jsf")) {
-            if (session.getAttribute("workCaseId") != null) {
-                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            } else {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
+
+            requiredReason = false;
+            if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().equals("P")) {
+                requiredReason = true;
             }
-            qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+
+            onLoadSelectList();
         }
-
-        requiredReason = false;
-
-        if (qualitativeView == null) {
-            qualitativeView = new QualitativeView();
-            modeForButton = ModeForButton.ADD;
-            result = 0;
-        } else {
-            modeForButton = ModeForButton.EDIT;
-            log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
-            if (qualitativeView.getQualityResult() != null) {
-                onSetQualityToValue(qualitativeView.getQualityResult());
-            }
-        }
-
-        onLoadSelectList();
     }
 
     public void onLoadSelectList() {
@@ -127,45 +178,53 @@ public class Qualitative implements Serializable {
         }
     }
 
-    public void onClickQuality(long clickResult) {
+    public void onClickQuality() {
         log.debug("qualitativeView : {}", qualitativeView);
         if(qualitativeView != null){
-            if(qualitativeView.isProperties_p1() || qualitativeView.isProperties_p2() || qualitativeView.isProperties_p3()){
-                result = 1;
-                requiredReason = true;
-            } else {
-                result = 0;
-            }
-            if(qualitativeView.isProperties_sm1() || qualitativeView.isProperties_sm2() || qualitativeView.isProperties_sm3() || qualitativeView.isProperties_sm4() || qualitativeView.isProperties_sm5() || qualitativeView.isProperties_sm6() || qualitativeView.isProperties_sm7() || qualitativeView.isProperties_sm8() || qualitativeView.isProperties_sm9() || qualitativeView.isProperties_sm10() ||
-                    qualitativeView.isProperties_sm11() || qualitativeView.isProperties_sm12() || qualitativeView.isProperties_sm13()){
-                result = 2;
-            } else {
-                result = 0;
-            }
-            if(qualitativeView.isProperties_ss1() || qualitativeView.isProperties_ss2() || qualitativeView.isProperties_ss3() || qualitativeView.isProperties_ss4() || qualitativeView.isProperties_ss5() || qualitativeView.isProperties_ss6() || qualitativeView.isProperties_ss7() || qualitativeView.isProperties_ss8() || qualitativeView.isProperties_ss9() || qualitativeView.isProperties_ss10() ||
-                    qualitativeView.isProperties_ss11() || qualitativeView.isProperties_ss12() || qualitativeView.isProperties_ss13() || qualitativeView.isProperties_ss14() || qualitativeView.isProperties_ss15() || qualitativeView.isProperties_ss16() || qualitativeView.isProperties_ss17() || qualitativeView.isProperties_ss18() || qualitativeView.isProperties_ss19() || qualitativeView.isProperties_ss20() ||
-                        qualitativeView.isProperties_ss21() || qualitativeView.isProperties_ss22()){
-                result = 3;
-            } else {
-                result = 0;
-            }
-            if(qualitativeView.isProperties_d1() || qualitativeView.isProperties_d2() || qualitativeView.isProperties_d3() || qualitativeView.isProperties_d4() || qualitativeView.isProperties_d5() || qualitativeView.isProperties_d6() || qualitativeView.isProperties_d7() || qualitativeView.isProperties_d8() || qualitativeView.isProperties_d9() || qualitativeView.isProperties_d10() ||
-                    qualitativeView.isProperties_d11() || qualitativeView.isProperties_d12() || qualitativeView.isProperties_d13() || qualitativeView.isProperties_d14() || qualitativeView.isProperties_d15() || qualitativeView.isProperties_d16() || qualitativeView.isProperties_d17() || qualitativeView.isProperties_d18() || qualitativeView.isProperties_d19() || qualitativeView.isProperties_d20()) {
-                result = 4;
-            } else {
-                result = 0;
-            }
             if(qualitativeView.isProperties_dl1() || qualitativeView.isProperties_dl2() || qualitativeView.isProperties_dl3() || qualitativeView.isProperties_dl4() || qualitativeView.isProperties_dl5() || qualitativeView.isProperties_dl6() || qualitativeView.isProperties_dl7() || qualitativeView.isProperties_dl8() || qualitativeView.isProperties_dl9() || qualitativeView.isProperties_dl10() ||
                     qualitativeView.isProperties_dl11() || qualitativeView.isProperties_dl12() || qualitativeView.isProperties_dl13()){
                 result = 5;
+                requiredReason = true;
             } else {
-                result = 0;
+                if(qualitativeView.isProperties_d1() || qualitativeView.isProperties_d2() || qualitativeView.isProperties_d3() || qualitativeView.isProperties_d4() || qualitativeView.isProperties_d5() || qualitativeView.isProperties_d6() || qualitativeView.isProperties_d7() || qualitativeView.isProperties_d8() || qualitativeView.isProperties_d9() || qualitativeView.isProperties_d10() ||
+                        qualitativeView.isProperties_d11() || qualitativeView.isProperties_d12() || qualitativeView.isProperties_d13() || qualitativeView.isProperties_d14() || qualitativeView.isProperties_d15() || qualitativeView.isProperties_d16() || qualitativeView.isProperties_d17() || qualitativeView.isProperties_d18() || qualitativeView.isProperties_d19() || qualitativeView.isProperties_d20()) {
+                    result = 4;
+                    requiredReason = true;
+                } else {
+                    if(qualitativeView.isProperties_ss1() || qualitativeView.isProperties_ss2() || qualitativeView.isProperties_ss3() || qualitativeView.isProperties_ss4() || qualitativeView.isProperties_ss5() || qualitativeView.isProperties_ss6() || qualitativeView.isProperties_ss7() || qualitativeView.isProperties_ss8() || qualitativeView.isProperties_ss9() || qualitativeView.isProperties_ss10() ||
+                            qualitativeView.isProperties_ss11() || qualitativeView.isProperties_ss12() || qualitativeView.isProperties_ss13() || qualitativeView.isProperties_ss14() || qualitativeView.isProperties_ss15() || qualitativeView.isProperties_ss16() || qualitativeView.isProperties_ss17() || qualitativeView.isProperties_ss18() || qualitativeView.isProperties_ss19() || qualitativeView.isProperties_ss20() ||
+                            qualitativeView.isProperties_ss21() || qualitativeView.isProperties_ss22()){
+                        result = 3;
+                        requiredReason = true;
+                    } else {
+                        if(qualitativeView.isProperties_sm1() || qualitativeView.isProperties_sm2() || qualitativeView.isProperties_sm3() || qualitativeView.isProperties_sm4() || qualitativeView.isProperties_sm5() || qualitativeView.isProperties_sm6() || qualitativeView.isProperties_sm7() || qualitativeView.isProperties_sm8() || qualitativeView.isProperties_sm9() || qualitativeView.isProperties_sm10() ||
+                                qualitativeView.isProperties_sm11() || qualitativeView.isProperties_sm12() || qualitativeView.isProperties_sm13()){
+                            result = 2;
+                            requiredReason = true;
+                        } else {
+                            if(qualitativeView.isProperties_p1() || qualitativeView.isProperties_p2() || qualitativeView.isProperties_p3()){
+                                result = 1;
+                                requiredReason = false;
+                            } else {
+                                result = 0;
+                            }
+                        }
+                    }
+                }
             }
         }
         log.info("result :: {}", result);
+        log.debug("requiredReason : {}", requiredReason);
+    }
+
+    public void onSelectQualityReason(){
+        if(Long.toString(qualitativeView.getQualityLevel().getId()) != null && qualitativeView.getQualityLevel().getId() != 0){
+            requiredReason = true;
+        }
     }
 
     public void onSetQualityToSave() {
+        log.debug("onSetQualityToSave : result : {}", result);
         if(result != 0){
             QualitativeClass[] qualitativeClasses = QualitativeClass.values();
             for (QualitativeClass qualitativeValue : qualitativeClasses) {
@@ -195,29 +254,39 @@ public class Qualitative implements Serializable {
     }
 
     public void onSaveQualitativeA() {
-        log.info(" onSaveQualitativeA :::");
+        log.info("onSaveQualitativeA :::");
         log.info("modeForButton :: {} ", modeForButton);
-
-        try {
-            onSetQualityToSave();
-            qualitativeControl.saveQualitativeA(qualitativeView, workCaseId);
-            modeForButton = ModeForButton.EDIT;
-            messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.qualitativeA.response.save.success");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-
-            if (ex.getCause() != null) {
-                message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + ex.getCause().toString();
+        boolean validate = true;
+        if (requiredReason) {
+            if(qualitativeView.getQualityLevel().getId() != 0){
+                validate = true;
             } else {
-                message = msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
+                validate = false;
             }
-            messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+        log.debug("onSaveQualitativeA ::: validation : {}", validate);
+        if(validate){
+            try {
+                onSetQualityToSave();
+                qualitativeControl.saveQualitativeA(qualitativeView, workCaseId);
+                modeForButton = ModeForButton.EDIT;
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.qualitativeA.response.save.success");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                onCreation();
+            } catch (Exception ex) {
+                log.error("Exception : {}", ex);
+                messageHeader = msg.get("app.header.save.failed");
 
+                if (ex.getCause() != null) {
+                    message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + ex.getCause().toString();
+                } else {
+                    message = msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
+                }
+                messageErr = true;
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+            }
         }
     }
 
@@ -228,12 +297,14 @@ public class Qualitative implements Serializable {
     }
 
     public void onSaveQualitativeB() {
-        log.info(" onSaveQualitativeB :::");
+        log.info("onSaveQualitativeB :::");
         log.info("modeForButton :: {} ", modeForButton);
-        boolean validate = false;
+        boolean validate = true;
         if (requiredReason) {
             if(qualitativeView.getQualityLevel().getId() != 0){
                 validate = true;
+            } else {
+                validate = false;
             }
         }
 

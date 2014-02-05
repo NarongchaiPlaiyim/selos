@@ -527,27 +527,35 @@
 
                                             <tr>
                                                 <td>
-                                                    <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
+                                                    <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.openAccountViews}"
                                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
                                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 250px; max-width: 250px; min-width: 250px;">
-                                                            <h:outputText value="#{item.accountName}" style="width: 250px; max-width: 250px; min-width: 250px;"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}"
+                                                                  style="width: 250px; max-width: 250px; min-width: 250px;">
+                                                            <h:outputText value="#{item.accountName}"
+                                                                          style="width: 250px; max-width: 250px; min-width: 250px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 180px;">
-                                                            <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;">
+                                                            <h:outputText value="#{item.bankAccountTypeView.name}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 180px;">
-                                                            <h:outputText value="#{item.bankAccountProduct.name}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}"
+                                                                  style="width: 180px; max-width: 180px; min-width: 180px;">
+                                                            <h:outputText value="#{item.bankAccountProduct.name}"
+                                                                          style="width: 180px; max-width: 180px; min-width: 180px;"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 300px;">
-                                                            <h:outputText value="#{item.purposeForShow}"/>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}"
+                                                                  style="width: 300px; max-width: 300px; min-width: 300px;">
+                                                            <h:outputText value="#{item.purposeForShow}"
+                                                                          style="width: 300px; max-width: 300px; min-width: 300px;"/>
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -603,7 +611,7 @@
                                                                       required="#{basicInfo.reqIsApplyBA and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="2"/>
-                                                        <p:ajax update="appBA,ba" listener="#{basicInfo.onChangeBA}" event="click"/>
+                                                        <p:ajax update="appBA,baValue" listener="#{basicInfo.onChangeBA}" event="click"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -612,11 +620,11 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <p:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}"
+                                                    <p:selectOneRadio id="baValue" value="#{basicInfo.basicInfoView.baPaymentMethodValue}"
                                                                       disabled="#{basicInfo.disBaPaymentMethod}"
                                                                       required="#{basicInfo.reqBaPaymentMethod and not empty param[saveBtn.clientId]}">
-                                                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment"
-                                                                       itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
+                                                        <f:selectItems value="#{app.getBAPaymentMethodValues('TOPUP|DIRECT')}"
+                                                                       var="bapaymentVar" itemLabel="#{bapaymentVar.shortName()}" itemValue="#{bapaymentVar}"/>
                                                     </p:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -660,7 +668,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
-              modal="true" width="580" height="500">
+              modal="true" width="580" height="320">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 

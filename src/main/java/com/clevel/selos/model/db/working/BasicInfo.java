@@ -129,12 +129,6 @@ public class BasicInfo implements Serializable {
     @Column(name = "referral_id")
     private String referralID;
 
-    @Column(name = "apply_ba", length = 1, nullable = false, columnDefinition = "int default 0")
-    private int applyBA;
-
-    @OneToOne
-    @JoinColumn(name = "bapaymentmethod_id")
-    private BAPaymentMethod baPaymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -152,7 +146,7 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @Column(name = "retrieved_flag")
+    @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
     private int retrievedFlag;
 
     public long getId() {
@@ -435,22 +429,6 @@ public class BasicInfo implements Serializable {
         this.referralID = referralID;
     }
 
-    public int getApplyBA() {
-        return applyBA;
-    }
-
-    public void setApplyBA(int applyBA) {
-        this.applyBA = applyBA;
-    }
-
-    public BAPaymentMethod getBaPaymentMethod() {
-        return baPaymentMethod;
-    }
-
-    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
-        this.baPaymentMethod = baPaymentMethod;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -529,8 +507,6 @@ public class BasicInfo implements Serializable {
                 append("loanRequestPattern", loanRequestPattern).
                 append("referralName", referralName).
                 append("referralID", referralID).
-                append("applyBA", applyBA).
-                append("baPaymentMethod", baPaymentMethod).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).

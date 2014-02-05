@@ -34,8 +34,8 @@
                              process="@this"
                              actionListener="#{prescreenMaker.onOpenAssignCheckerDialog()}"
                              oncomplete="assignCheckerDlg.show()"
-                             update=":assignCheckerDlg">
-                <p:resetInput target=":assignCheckerDlg"/>
+                             update=":assignCheckerDlgForm">
+                <p:resetInput target=":assignCheckerDlgForm"/>
             </p:commandButton>
             <!--Mandate Document-->
             <p:commandButton id="btnMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton" title="#{msg.get('app.header.button.mandateDoc')}"
@@ -70,7 +70,7 @@
                                  widgetVar="confirmCancelCA" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.cancelCAButton}">
                     <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                     update=":msgBoxSystemMessagePanel"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                      actionListener="#{prescreenMaker.onCancelCA}"
                                      process="@this" oncomplete="confirmCancelCA.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()"
@@ -91,7 +91,7 @@
                                  widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
                                  rendered="#{baseController.manageButton.closeSaleButton}">
                     <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-                                     update=":msgBoxSystemMessagePanel"
+                                     update=":msgBoxSystemMessagePanel :msgBoxRedirectPanel"
                                      actionListener="#{prescreenMaker.onCloseSale()}"
                                      process="@this" oncomplete="confirmCloseSaleCA.hide()"/>
                     <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()"

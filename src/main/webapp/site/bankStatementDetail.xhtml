@@ -278,7 +278,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
@@ -294,7 +294,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
@@ -508,7 +508,7 @@
                                                              onclick="this.select()"
                                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                              styleClass="right">
-                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                    <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                                                     <p:ajax event="blur" update="@this"/>
                                                 </p:inputText>
                                             </td>
@@ -727,7 +727,7 @@
                             </tr>
                             <tr>
                                 <td class="title" style="width:250px;">
-                                    <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgCashInflowPerLimit')}"/>
+                                    <h:outputText value="#{msg.get('app.bankStmtDetail.label.avgGrossInflowPerLimit')}"/>
                                 </td>
                                 <td class="left">
                                     <p:inputText id="avgGrossInflowPerLimit"

@@ -29,7 +29,7 @@ public class NewCollateralHeadView {
     private User createBy;
     private User modifyBy;
 
-    List<NewCollateralSubView> newCollateralSubViewList;
+    private List<NewCollateralSubView> newCollateralSubViewList;
 
     public NewCollateralHeadView(){
           reset();

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class AppraisalView implements Serializable {
     private long id;
     private String zoneLocation;
     private String bdmRemark;
+    private final int isRequestAppraisal = 1;
     private int appraisalType;
     private AppraisalCompany appraisalCompany;
     private AppraisalDivision appraisalDivision;
@@ -31,7 +33,6 @@ public class AppraisalView implements Serializable {
     private String cancelAppointment;
     private String appointmentRemark;
     private List<AppraisalDetailView> appraisalDetailViewList;
-    private List<AppraisalContactDetailView> appraisalContactDetailViewList;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<NewCollateralView> newCollateralViewList;
     private WorkCase workCase;
@@ -41,7 +42,22 @@ public class AppraisalView implements Serializable {
     private User modifyBy;
 
     public AppraisalView(){
+        init();
+    }
 
+    public void reset(){
+        init();
+    }
+
+    private void init(){
+        appraisalCompany = new AppraisalCompany();
+        appraisalDivision = new AppraisalDivision();
+        locationOfProperty = new LocationProperty();
+        provinceOfProperty = new Province();
+        workCase = new WorkCase();
+        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
+        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
     }
 
     public long getId() {
@@ -196,14 +212,6 @@ public class AppraisalView implements Serializable {
         this.appraisalDetailViewList = appraisalDetailViewList;
     }
 
-    public List<AppraisalContactDetailView> getAppraisalContactDetailViewList() {
-        return appraisalContactDetailViewList;
-    }
-
-    public void setAppraisalContactDetailViewList(List<AppraisalContactDetailView> appraisalContactDetailViewList) {
-        this.appraisalContactDetailViewList = appraisalContactDetailViewList;
-    }
-
     public List<ContactRecordDetailView> getContactRecordDetailViewList() {
         return contactRecordDetailViewList;
     }
@@ -262,12 +270,17 @@ public class AppraisalView implements Serializable {
         this.newCollateralViewList = newCollateralViewList;
     }
 
+    public int getRequestAppraisal() {
+        return isRequestAppraisal;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("zoneLocation", zoneLocation)
                 .append("bdmRemark", bdmRemark)
+                .append("isRequestAppraisal", isRequestAppraisal)
                 .append("appraisalType", appraisalType)
                 .append("appraisalCompany", appraisalCompany)
                 .append("appraisalDivision", appraisalDivision)
@@ -284,7 +297,6 @@ public class AppraisalView implements Serializable {
                 .append("cancelAppointment", cancelAppointment)
                 .append("appointmentRemark", appointmentRemark)
                 .append("appraisalDetailViewList", appraisalDetailViewList)
-                .append("appraisalContactDetailViewList", appraisalContactDetailViewList)
                 .append("contactRecordDetailViewList", contactRecordDetailViewList)
                 .append("newCollateralViewList", newCollateralViewList)
                 .append("workCase", workCase)

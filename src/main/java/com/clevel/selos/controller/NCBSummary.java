@@ -88,7 +88,7 @@ public class NCBSummary implements Serializable {
 
         date = DateTime.now().toDate();
         ncbSumViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
-
+        log.info("ncbSumViewList :: {}",ncbSumViewList.toString());
         if (customerView == null) {
             customerView = new ArrayList<Customer>();
         }
@@ -105,6 +105,7 @@ public class NCBSummary implements Serializable {
         if (ncbSummaryViewItem != null) {
             log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
             HttpSession session = FacesUtil.getSession(true);
+            log.info("ncbSummaryViewItem.getCustomerId() :: {}",ncbSummaryViewItem.getCustomerId());
             session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
             log.info("ncbSummaryViewItem :: {}",ncbSummaryViewItem.toString());
             FacesUtil.redirect("/site/NCBInfo.jsf");

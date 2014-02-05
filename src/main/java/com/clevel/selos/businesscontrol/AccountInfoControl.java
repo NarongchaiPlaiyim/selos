@@ -110,7 +110,7 @@ public class AccountInfoControl extends BusinessControl implements Serializable 
             }
         }
     }
-    private void clearDB(List<AccountInfoDetail> accountInfoDetailList){
+    private void clearDB(final List<AccountInfoDetail> accountInfoDetailList){
         long id;
         for(AccountInfoDetail infoDetail : accountInfoDetailList ){
             id = infoDetail.getId();

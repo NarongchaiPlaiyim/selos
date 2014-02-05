@@ -82,6 +82,7 @@ public class BankStatementSummary implements Serializable {
     private Date lastThreeMonth3;
     private Date currentDate;
     private String currentDateDDMMYY;
+    private int yesValue;
 
     //Session
     private long workCaseId;
@@ -137,6 +138,8 @@ public class BankStatementSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         preRender();
+
+        yesValue = RadioValue.YES.value();
 
         //retrieveBankStmtFromDWH();
         summaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
@@ -275,9 +278,12 @@ public class BankStatementSummary implements Serializable {
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
 
+            onCreation();
+
             messageHeader = "Save Bank Statement Summary Success.";
             message = "Save Bank Statement Summary data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         } catch (Exception e) {
             messageHeader = "Save Bank Statement Summary Failed.";
             if (e.getCause() != null) {
@@ -340,6 +346,7 @@ public class BankStatementSummary implements Serializable {
 
         if (!checkConfirmToAddBankStmt()) return;
 
+        selectedBankStmtView = null;
         isTMB = true;
         onRedirectToBankStmtDetail();
     }
@@ -354,6 +361,7 @@ public class BankStatementSummary implements Serializable {
 
         if (!checkConfirmToAddBankStmt()) return;
 
+        selectedBankStmtView = null;
         isTMB = false;
         onRedirectToBankStmtDetail();
     }
@@ -422,6 +430,9 @@ public class BankStatementSummary implements Serializable {
 //        map.put("numberOfMonths", numberOfMonths);
 //        map.put("selectedBankStmtView", selectedBankStmtView);
 //        FacesUtil.getFlash().put("bankStmtSumParams", map);
+
+        summaryView.setSeasonal(seasonalFlag);
+        summaryView.setExpectedSubmitDate(expectedSubmitDate);
 
         FacesUtil.setSessionMapValue("bankStmtSumView", summaryView);
         FacesUtil.setSessionMapValue("isTmbBank", isTMB);
@@ -556,5 +567,13 @@ public class BankStatementSummary implements Serializable {
 
     public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
         this.currentDateDDMMYY = currentDateDDMMYY;
+    }
+
+    public int getYesValue() {
+        return yesValue;
+    }
+
+    public void setYesValue(int yesValue) {
+        this.yesValue = yesValue;
     }
 }
