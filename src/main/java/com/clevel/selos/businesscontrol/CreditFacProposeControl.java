@@ -638,4 +638,69 @@ public class CreditFacProposeControl extends BusinessControl {
         returnValues[6] = suggestPriceLabel.toString();
         return returnValues;
     }
+
+    public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId)
+    {
+        log.info("findProposeCreditDetail :: " ,workCaseId);
+        // todo: find credit existing and propose in this workCase
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        ProposeCreditDetailView proposeCreditDetailView;
+        int rowCount = 1;
+
+        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+            for (NewCreditDetailView tmp : newCreditDetailViewList) {
+                proposeCreditDetailView = new ProposeCreditDetailView();
+                proposeCreditDetailView.setSeq(tmp.getSeq());
+                proposeCreditDetailView.setId(rowCount);
+                proposeCreditDetailView.setTypeOfStep("N");
+                proposeCreditDetailView.setAccountName(tmp.getAccountName());
+                proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
+                proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
+                proposeCreditDetailView.setRequestType(tmp.getRequestType());
+                proposeCreditDetailView.setProductProgram(tmp.getProductProgram());
+                proposeCreditDetailView.setCreditFacility(tmp.getCreditType());
+                proposeCreditDetailView.setLimit(tmp.getLimit());
+                proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
+                proposeCreditDetailViewList.add(proposeCreditDetailView);
+                rowCount++;
+            }
+        }
+
+
+//        int seq = 0;
+        rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
+
+        // find existingCreditType >>> Borrower Commercial in this workCase
+//        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
+
+        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
+        List<ExistingCreditDetailView> borrowerComExistingCredits = new ArrayList<ExistingCreditDetailView>();
+        ExistingCreditDetailView existingCreditDetailTest = new ExistingCreditDetailView();
+        existingCreditDetailTest.setAccountName("test existing");
+        existingCreditDetailTest.setAccountNumber("12345");
+        existingCreditDetailTest.setLimit(BigDecimal.valueOf(2000000));
+        borrowerComExistingCredits.add(existingCreditDetailTest);
+        existingCreditFacilityView.setBorrowerComExistingCredit(borrowerComExistingCredits);
+
+        if (existingCreditFacilityView != null) {
+            for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
+                proposeCreditDetailView = new ProposeCreditDetailView();
+                proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());
+                proposeCreditDetailView.setId(rowCount);
+                proposeCreditDetailView.setTypeOfStep("E");
+                proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
+                proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
+                proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
+//                proposeCreditDetailView.setRequestType();
+                proposeCreditDetailView.setProductProgram(existingCreditDetailView.getExistProductProgram());
+                proposeCreditDetailView.setCreditFacility(existingCreditDetailView.getExistCreditType());
+                proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
+//                proposeCreditDetailView.setGuaranteeAmount();
+                proposeCreditDetailViewList.add(proposeCreditDetailView);
+                rowCount++;
+            }
+        }
+
+        return proposeCreditDetailViewList;
+    }
 }

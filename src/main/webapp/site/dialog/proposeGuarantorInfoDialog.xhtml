@@ -46,9 +46,9 @@
                                 <td>
                                     <p:dataTable style="width: 90%"
                                                  id="creditTypeTable"
-                                                 value="#{creditFacPropose.newGuarantorDetailView.newCreditDetailViewList}"
+                                                 value="#{creditFacPropose.newGuarantorDetailView.proposeCreditDetailViewList}"
                                                  var="creditTypeItem"
-                                                 rowKey="#{creditTypeItem.NewCreditDetailView}"
+                                                 rowKey="#{creditTypeItem.ProposeCreditDetailView}"
                                                  rowIndexVar="rowIndex">
 
                                         <p:columnGroup type="header">
@@ -80,7 +80,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
+                                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') : creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -88,7 +88,7 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.creditType.name}"/>
+                                            <h:outputText value="#{creditTypeItem.creditFacility.name}"/>
                                         </p:column>
 
                                         <p:column styleClass="right">
