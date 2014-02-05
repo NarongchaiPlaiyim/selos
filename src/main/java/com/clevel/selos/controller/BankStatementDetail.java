@@ -262,6 +262,8 @@ public class BankStatementDetail implements Serializable {
 
         } else {
             // Edit exist Bank statement
+            bankStmtView = bankStmtControl.saveBankStmt(bankStmtView);
+
             boolean foundBankStmt = false;
             // TMB
             if (summaryView.getTmbBankStmtViewList() != null) {

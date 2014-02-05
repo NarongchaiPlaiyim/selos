@@ -47,11 +47,8 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
-    enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
-    private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
-    private boolean messageErr;
 
     private ExSummaryView exSummaryView;
 
@@ -87,12 +84,12 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.debug("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.error("Exception :: {}",ex);
             }
         }
 
@@ -106,56 +103,27 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
         }
-
-        /*ExSumCharacteristicView ec = new ExSumCharacteristicView();
-        ec.reset();
-        exSummaryView.setExSumCharacteristicView(ec);
-
-        ExSumBusinessInfoView eb = new ExSumBusinessInfoView();
-        eb.reset();
-        exSummaryView.setExSumBusinessInfoView(eb);
-
-        ExSumAccountMovementView ea = new ExSumAccountMovementView();
-        ea.reset();
-        exSummaryView.setExSumAccMovementView(ea);
-
-        ExSumCollateralView ecc = new ExSumCollateralView();
-        ecc.reset();
-        exSummaryView.setExSumCollateralView(ecc);*/
     }
 
     public void onSaveExecutiveSummary() {
-        log.info("onSaveExecutiveSummary ::: ModeForDB  {}", modeForDB);
-
+        log.debug("onSaveExecutiveSummary :::");
         try {
             exSummaryControl.saveExSummary(exSummaryView, workCaseId);
 
-            messageHeader = msg.get("app.header.save.success");
-//            message = msg.get("Save Ex Summary data success.");
+            messageHeader = msg.get("app.header.information");
             message = "Save Ex Summary data success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
-
+            messageHeader = msg.get("app.header.error");
             if (ex.getCause() != null) {
-//                message = msg.get("")+ ex.getCause().toString();
                 message = "Save Ex Summary data failed. Cause : " + ex.getCause().toString();
             } else {
-//                message = msg.get("") + ex.getMessage();
                 message = "Save Ex Summary data failed. Cause : " + ex.getMessage();
             }
-            messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-    }
-
-    public void onCancelExecutiveSummary() {
-        modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelExecutiveSummary ::: ");
-
-        onCreation();
     }
 
     public void onAddReason() {
@@ -172,14 +140,6 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void onDeleteDeviate(){
         exSummaryView.getDeviateCode().remove(selectDeviate);
-    }
-
-    public boolean isMessageErr() {
-        return messageErr;
-    }
-
-    public void setMessageErr(boolean messageErr) {
-        this.messageErr = messageErr;
     }
 
     public String getMessage() {

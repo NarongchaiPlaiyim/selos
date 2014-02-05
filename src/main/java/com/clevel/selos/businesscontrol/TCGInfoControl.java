@@ -62,8 +62,8 @@ public class TCGInfoControl extends BusinessControl {
     }
 
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
-        log.info("onEditTCGToDB begin");
-        log.info("workCaseId {} ", workCaseId);
+        log.debug("onEditTCGToDB begin");
+        log.debug("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
 
@@ -71,36 +71,35 @@ public class TCGInfoControl extends BusinessControl {
 
         TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase, user);
         TCGDAO.persist(tcg);
-        log.info("persist tcg");
-
+        log.debug("persist tcg");
 
         List<TCGDetail> tcgDetailListToDelete = TCGDetailDAO.findTCGDetailByTcgId(tcg.getId());
-        log.info("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
+        log.debug("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
 
         if (tcgDetailListToDelete.size() > 0) {
             TCGDetailDAO.delete(tcgDetailListToDelete);
-            log.info("delete tcgDetailListToDelete");
+            log.debug("delete tcgDetailListToDelete");
         }
 
         List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
         TCGDetailDAO.persist(tcgDetailList);
-        log.info("persist tcgDetailList");
+        log.debug("persist tcgDetailList");
 
 
     }
 
 
     public TCGView getTcgView(long workCaseId) {
-        log.info("getTcgView :: workCaseId  :: {}", workCaseId);
+        log.debug("getTcgView :: workCaseId  :: {}", workCaseId);
         TCGView tcgView = null;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
+        log.debug("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
         if (workCase != null) {
             TCG tcg = TCGDAO.findByWorkCase(workCase);
 
             if (tcg != null) {
-                log.info("tcg :: {} ", tcg.getId());
+                log.debug("tcg :: {} ", tcg.getId());
                 tcgView = tcgTransform.transformTCGToTcgView(tcg);
             }
         }
@@ -109,7 +108,7 @@ public class TCGInfoControl extends BusinessControl {
     }
 
     public List<TCGDetailView> getTcgDetailListView(TCGView tcgView) {
-        log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
+        log.debug("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
         List<TCGDetailView> tcgDetailViewList = null;
 
         List<TCGDetail> TCGDetailList = TCGDetailDAO.findTCGDetailByTcgId(tcgView.getId());
@@ -122,7 +121,7 @@ public class TCGInfoControl extends BusinessControl {
     }
 
     public void toCalculateLtvValue(long workCaseId, TCGView tcgView, List<TCGDetailView> tcgDetailViewList) {
-        log.info("toCalculateLtvValue LTV Value of all collateral ::  ");
+        log.debug("toCalculateLtvValue LTV Value of all collateral ::  ");
 
         for (TCGDetailView tcgDetailView : tcgDetailViewList) {
 
@@ -135,34 +134,47 @@ public class TCGInfoControl extends BusinessControl {
                 if ((potentialCollateral != null) && (tcgCollateralType != null)) {
                     PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
                     if (potentialColToTCGCol != null) {
-                        log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
+                        log.debug("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
 
                         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        log.debug("basicInfo ::: {}", basicInfo);
 
                         if (basicInfo != null) {
-                            if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
-                                ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
-                            }
-
-                            if (ltvPercentBig == null) {
-
-                                if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
-                                        Util.isTrue(basicInfo.getPassAnnualReview()) &&
-                                        Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
-                                        Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
-                                        (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-                                    ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
-                                    log.info("getTenPercentLTV :::::::");
+                            log.debug("basicInfo.getProductGroup ::: {}", basicInfo.getProductGroup());
+                            if (basicInfo.getProductGroup() != null && Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
+                                log.debug("getRetentionLTV :::::::");
+                                if (potentialColToTCGCol.getRetentionLTV() != null) {
+                                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
                                 } else {
-                                    ltvPercentBig = potentialColToTCGCol.getPercentLTV();
-                                    log.info("getPercentLTV ::::::: ");
+                                    if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                            Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                            Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                            Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)){
+                                        log.debug("isSpecialLTV - getTenPercentLTV :::::::");
+                                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                                    } else {
+                                        log.debug("isSpecialLTV - getPercentLTV ::::::: ");
+                                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
+                                    }
                                 }
+                            } else if (Util.isRadioTrue(basicInfo.getExistingSMECustomer()) &&
+                                    Util.isRadioTrue(basicInfo.getPassAnnualReview()) &&
+                                    Util.isRadioTrue(basicInfo.getRequestLoanWithSameName()) &&
+                                    Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()) &&
+                                    (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)){
+                                log.debug("getTenPercentLTV :::::::");
+                                ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
+                            } else {
+                                log.debug("getPercentLTV ::::::: ");
+                                ltvPercentBig = potentialColToTCGCol.getPercentLTV();
                             }
+                        }
 
-                            if (ltvPercentBig != null && tcgDetailView != null) {
-                                log.info("ltvPercent :: {} ", ltvPercentBig);
-                                ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
-                            }
+                        //multi
+                        if (ltvPercentBig != null && tcgDetailView != null) {
+                            log.debug("ltvPercent :: {} ", ltvPercentBig);
+                            ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
                         }
                     }
                 }
@@ -178,59 +190,13 @@ public class TCGInfoControl extends BusinessControl {
         tcgView.setSumInThisLtvValue(toCalculateSumLtvInThis(tcgDetailViewList));
 
         BigDecimal collateralRuleResult = toCalCollateralRuleResult(tcgView);
-        log.info("collateralRuleResult :: {} ", collateralRuleResult);
+        log.debug("collateralRuleResult :: {} ", collateralRuleResult);
         tcgView.setCollateralRuleResult(collateralRuleResult);
 
         BigDecimal requestTCGAmount = toCalRequestTCGAmount(tcgView);
-        log.info("requestTCGAmount :: {} ", requestTCGAmount);
+        log.debug("requestTCGAmount :: {} ", requestTCGAmount);
         tcgView.setRequestTCGAmount(requestTCGAmount);
     }
-
-
-//    public void toCalculateLtvValue(List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
-//
-//        log.info("Calculate LTV Value tcgDetailViewList{}, workCaseId{}", tcgDetailViewList.size(), workCaseId);
-//        BigDecimal ltvPercentBig = null;
-//        BigDecimal ltvValueBig = BigDecimal.ZERO;
-//
-//        for (TCGDetailView tcgDetailView : tcgDetailViewList) {
-//            if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
-//
-//                PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(tcgDetailView.getPotentialCollateral().getId());
-//                TCGCollateralType tcgCollateralType = tcgCollateralTypeDAO.findById(tcgDetailView.getTcgCollateralType().getId());
-//
-//                PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
-//                log.info("potentialColToTCGCol.getId() ::: {}", potentialColToTCGCol.getId());
-//
-//                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-//
-//                if (Util.isTrue(basicInfo.getProductGroup().getSpecialLTV())) {
-//                    ltvPercentBig = potentialColToTCGCol.getRetentionLTV();
-//                }
-//
-//                if (ltvPercentBig == null) {
-//                    if (Util.isTrue(basicInfo.getExistingSMECustomer()) &&
-//                            Util.isTrue(basicInfo.getPassAnnualReview()) &&
-//                            Util.isTrue(basicInfo.getRequestLoanWithSameName()) &&
-//                            Util.isTrue(basicInfo.getHaveLoanInOneYear()) &&
-//                            (basicInfo.getSbfScore() != null && basicInfo.getSbfScore().getScore() <= 15)) {
-//                        ltvPercentBig = potentialColToTCGCol.getTenPercentLTV();
-//                    } else {
-//                        ltvPercentBig = potentialColToTCGCol.getPercentLTV();
-//                    }
-//                }
-//
-//                if (ltvPercentBig != null && tcgDetailView != null) {
-//                    log.info("ltvPercent :: {} ", ltvPercentBig);
-//                    ltvValueBig = tcgDetailView.getAppraisalAmount().multiply(ltvPercentBig);
-//                }
-//            }
-//
-//            tcgDetailView.setLtvValue(ltvValueBig);
-//        }
-//
-////        return ltvValueBig;
-//    }
 
 
     public BigDecimal toCalculateSumAppraisalValue(List<TCGDetailView> TCGDetailViewList) {
@@ -242,7 +208,7 @@ public class TCGInfoControl extends BusinessControl {
             }
         }
 
-        log.info("sum ::: {} ", sum);
+        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
@@ -256,7 +222,7 @@ public class TCGInfoControl extends BusinessControl {
             }
         }
 
-        log.info("sum ::: {} ", sum);
+        log.debug("sum ::: {} ", sum);
         return sum;
     }
 
@@ -264,14 +230,14 @@ public class TCGInfoControl extends BusinessControl {
         BigDecimal sum = new BigDecimal(0);
 
         for (TCGDetailView tcgDetailView : TCGDetailViewList) {
-            log.info("tcgDetailView.getProposeInThisRequest() :: {}", tcgDetailView.getProposeInThisRequest());
+            log.debug("tcgDetailView.getProposeInThisRequest() :: {}", tcgDetailView.getProposeInThisRequest());
             if (tcgDetailView != null) {
                 if (tcgDetailView.getProposeInThisRequest() == RadioValue.YES.value()) {
                     sum = sum.add(tcgDetailView.getAppraisalAmount());
                 }
             }
         }
-        log.info("sum ::: {} ", sum);
+        log.debug("sum ::: {} ", sum);
 
         return sum;
     }
@@ -286,7 +252,7 @@ public class TCGInfoControl extends BusinessControl {
                 }
             }
         }
-        log.info("sum ::: {} ", sum);
+        log.debug("sum ::: {} ", sum);
 
         return sum;
     }
@@ -301,17 +267,17 @@ public class TCGInfoControl extends BusinessControl {
             BigDecimal num2 = tcgView.getRequestLimitNotRequiredTCG();
             BigDecimal num3 = tcgView.getExistingLoanRatioUnderSameCollateral();
             BigDecimal num4 = tcgView.getExistingLoanRatioNotUnderSameCollateral();
-            log.info("tcgView.getRequestLimitRequiredTCG() ::: {} ", tcgView.getRequestLimitRequiredTCG());
-            log.info("tcgView.getRequestLimitNotRequiredTCG() ::: {} ", tcgView.getRequestLimitNotRequiredTCG());
-            log.info("tcgView.getExistingLoanRatioUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioUnderSameCollateral());
-            log.info("tcgView.getExistingLoanRatioNotUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioNotUnderSameCollateral());
+            log.debug("tcgView.getRequestLimitRequiredTCG() ::: {} ", tcgView.getRequestLimitRequiredTCG());
+            log.debug("tcgView.getRequestLimitNotRequiredTCG() ::: {} ", tcgView.getRequestLimitNotRequiredTCG());
+            log.debug("tcgView.getExistingLoanRatioUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioUnderSameCollateral());
+            log.debug("tcgView.getExistingLoanRatioNotUnderSameCollateral() ::: {} ", tcgView.getExistingLoanRatioNotUnderSameCollateral());
             sumAdd = num1.add(num2).add(num3).add(num4);
-            log.info("SUM After add :: {}", sumAdd);
-            log.info("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
+            log.debug("SUM After add :: {}", sumAdd);
+            log.debug("tcgView.getSumAppraisalAmount() :: {}", tcgView.getSumAppraisalAmount());
             sumAppraisalDivide = Util.divide(tcgView.getSumAppraisalAmount(), sumAdd);
             sumAppraisalAmount = Util.divide(sumAppraisalDivide, BigDecimal.valueOf(100));
 
-            log.info("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
+            log.debug("sumAppraisalAmount ::: {} ", sumAppraisalAmount);
 
         }
         return sumAppraisalAmount;
@@ -330,7 +296,7 @@ public class TCGInfoControl extends BusinessControl {
 
             sumAdd = num1.add(num2);
             sumRequestTCGAmount = sumAdd.doubleValue() - num3.doubleValue() - num4.doubleValue();
-            log.info("sumRequestTCGAmount :: {}", sumRequestTCGAmount);
+            log.debug("sumRequestTCGAmount :: {}", sumRequestTCGAmount);
             requestTCGAmount = new BigDecimal(sumRequestTCGAmount);
         }
         return requestTCGAmount;

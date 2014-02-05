@@ -104,6 +104,14 @@ public class Util implements Serializable {
         }
     }
 
+    public static boolean isRadioTrue(int value) {
+        if (value == 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean isNull(String string) {
         if (string == null || "null".equals(string.toLowerCase().trim())) {
             return true;

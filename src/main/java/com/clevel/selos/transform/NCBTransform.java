@@ -2,11 +2,13 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.MaritalStatusDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
@@ -29,13 +31,16 @@ public class NCBTransform extends Transform {
 
         if (ncbInfoView.getId() != 0) {
             ncb.setId(ncbInfoView.getId());
+            ncb.setCreateDate(ncbInfoView.getCreateDate());
+            ncb.setCreateBy(ncbInfoView.getCreateBy());
+        }else{
+            ncb.setCreateDate(new DateTime().now().toDate());
+            ncb.setCreateBy(ncbInfoView.getCreateBy());
         }
 
         ncb.setActive(true);
-        ncb.setCreateBy(ncbInfoView.getCreateBy());
         ncb.setModifyBy(ncbInfoView.getModifyBy());
-        ncb.setCreateDate(ncbInfoView.getCreateDate());
-        ncb.setModifyDate(ncbInfoView.getModifyDate());
+        ncb.setModifyDate(new DateTime().now().toDate());
         Customer customer = customerDAO.findById(ncbInfoView.getCustomerId());
         ncb.setCustomer(customer);
         ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());
@@ -100,7 +105,12 @@ public class NCBTransform extends Transform {
         ncbInfoView.setTdrTMBFlag(transFormBooleanToView(ncb.getTdrTMBFlag()));
         ncbInfoView.setTdrTMBMonth(ncb.getTdrTMBMonth());
         ncbInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
-        ncbInfoView.setTdrCondition(ncb.getTdrCondition());
+
+       if (ncb.getTdrCondition() != null && ncb.getTdrCondition().getId() != 0) {
+            ncbInfoView.setTdrCondition(ncb.getTdrCondition());
+        } else {
+            ncbInfoView.setTdrCondition(null);
+        }
 
         if(ncb.getCustomer() != null){
             ncbInfoView.setCustomerId(ncb.getCustomer().getId());
@@ -113,16 +123,16 @@ public class NCBTransform extends Transform {
                         .append(" ").append(StringUtils.defaultString(customer.getLastNameTh()));
                 ncbInfoView.setNcbCusName(customerName.toString());
 
-//                if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-//                    if(ncb.getCustomer().getIndividual() != null){
-//                        ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
-//                        ncbInfoView.setNcbCusMarriageStatus(ncb.getCustomer().getIndividual().getMaritalStatus().getName());
-//                    }
-//                } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
-//                    if(ncb.getCustomer().getJuristic() != null){
-//                        ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
-//                    }
-//                }
+                if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    if(ncb.getCustomer().getIndividual() != null){
+                        ncbInfoView.setPersonalId(ncb.getCustomer().getIndividual().getCitizenId());
+                        ncbInfoView.setNcbCusMarriageStatus(ncb.getCustomer().getIndividual().getMaritalStatus().getName());
+                    }
+                } else if(ncb.getCustomer().getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) {
+                    if(ncb.getCustomer().getJuristic() != null){
+                        ncbInfoView.setPersonalId(ncb.getCustomer().getJuristic().getRegistrationId());
+                    }
+                }
             }
         }
 

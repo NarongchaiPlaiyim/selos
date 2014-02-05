@@ -14,6 +14,7 @@ import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResu
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -61,6 +62,8 @@ public class BankStmtControl extends BusinessControl {
     BankDAO bankDAO;
     @Inject
     BankAccountTypeDAO bankAccountTypeDAO;
+    @Inject
+    BasicInfoDAO basicInfoDAO;
 
     //Transform
     @Inject
@@ -844,6 +847,7 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal othTotalIncomeNetUW = BigDecimal.ZERO;
 
         BigDecimal grdTotalTrdChqRetAmount = BigDecimal.ZERO;
+        BigDecimal grdTotalTrdChqRetPercent = BigDecimal.ZERO;
         BigDecimal grdTotalAvgOSBalance = BigDecimal.ZERO;
 
         boolean useNetUWToCal = false;
@@ -853,6 +857,7 @@ public class BankStmtControl extends BusinessControl {
             tmbTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, tmbBankStmtView.getAvgIncomeNetBDM());
             tmbTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, tmbBankStmtView.getAvgIncomeNetUW());
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, tmbBankStmtView.getTrdChequeReturnAmount());
+            grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, tmbBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, tmbBankStmtView.getAvgOSBalanceAmount());
 
             if (tmbBankStmtView.getAvgIncomeNetUW() != null) {
@@ -865,6 +870,7 @@ public class BankStmtControl extends BusinessControl {
             othTotalIncomeNetBDM = Util.add(othTotalIncomeNetBDM, othBankStmtView.getAvgIncomeNetBDM());
             othTotalIncomeNetUW = Util.add(othTotalIncomeNetUW, othBankStmtView.getAvgIncomeNetUW());
             grdTotalTrdChqRetAmount = Util.add(grdTotalTrdChqRetAmount, othBankStmtView.getTrdChequeReturnAmount());
+            grdTotalTrdChqRetPercent = Util.add(grdTotalTrdChqRetPercent, othBankStmtView.getTrdChequeReturnPercent());
             grdTotalAvgOSBalance = Util.add(grdTotalAvgOSBalance, othBankStmtView.getAvgOSBalanceAmount());
 
             if (othBankStmtView.getAvgIncomeNetUW() != null) {
@@ -884,11 +890,11 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = Util.add(tmbTotalIncomeNetBDM, othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = Util.add(tmbTotalIncomeNetUW, othTotalIncomeNetUW);
 
-        BigDecimal grdTotalTrdChqRetPercent;
-        if (useNetUWToCal)
-            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
-        else
-            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
+//        BigDecimal grdTotalTrdChqRetPercent;
+//        if (useNetUWToCal)
+//            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
+//        else
+//            grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
 
         bankStmtSummaryView.setGrdTotalIncomeGross(grdTotalIncomeGross);
         bankStmtSummaryView.setGrdTotalIncomeNetBDM(grdTotalIncomeNetBDM);
@@ -902,6 +908,184 @@ public class BankStmtControl extends BusinessControl {
             bankStmtSummaryView.setGrdTotalBorrowerIncomeNetBDM(grdTotalIncomeNetBDM);
             bankStmtSummaryView.setGrdTotalBorrowerIncomeNetUW(grdTotalIncomeNetUW);
         }
+    }
+
+    public void setSummaryColor(BankStmtSummaryView bankStmtSummaryView, long workCaseId) {
+        //ref. CA Web Summary Formula document
+
+        // NOT Doing if non or create new Bank statement summary
+        if (bankStmtSummaryView == null || bankStmtSummaryView.getId() == 0) {
+            return;
+        }
+        // NOT Doing if no any TMB Bank statements
+        if (bankStmtSummaryView.getTmbBankStmtViewList() == null || bankStmtSummaryView.getTmbBankStmtViewList().size() == 0) {
+            return;
+        }
+
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if (basicInfo != null && basicInfo.getProductGroup() != null) {
+            ProductGroup productGroup = basicInfo.getProductGroup();
+
+            // if Product = (TMB SmartBiz | TMB SME O/D No Asset)
+            if (ProductProgramType.TMB_SME_SMARTBIZ.code().equalsIgnoreCase(productGroup.getBrmsCode())
+                || ProductProgramType.OD_NO_ASSET.code().equalsIgnoreCase(productGroup.getBrmsCode())) {
+
+                BigDecimal two = new BigDecimal("2");
+                BigDecimal three = new BigDecimal("3");
+                BigDecimal five = new BigDecimal("5");
+                BigDecimal seven = new BigDecimal("7");
+                BigDecimal fifteen = new BigDecimal("15");
+                BigDecimal ninety = new BigDecimal("90");
+
+                for (BankStmtView bankStmtView : Util.safetyList(bankStmtSummaryView.getTmbBankStmtViewList())) {
+
+                    // Is Main Account
+                    if (RadioValue.YES.value() == bankStmtView.getMainAccount()) {
+                        /*
+                        1. Income Gross
+                            - Income Gross <, > 0   -> Green
+                            - Income Gross = 0      -> Red
+                         */
+                        if (bankStmtView.getAvgIncomeGross() != null) {
+                            if (ValidationUtil.isValueEqualZero(bankStmtView.getAvgIncomeGross())) {
+                                bankStmtView.setColorIncomeGross(ColorStyleType.RED.code());
+                            } else {
+                                bankStmtView.setColorIncomeGross(ColorStyleType.GREEN.code());
+                            }
+                        } else {
+                            bankStmtView.setColorIncomeGross("");
+                        }
+
+                        /*
+                        2. Swing & Utilization (%)
+                            - Utilization <= 90%                 -> Green
+                            - Utilization > 90% & Swing >= 15%   -> Yellow
+                            - Utilization > 90% & Swing < 15%    -> Red
+                         */
+                        if (bankStmtView.getAvgSwingPercent() != null && bankStmtView.getAvgUtilizationPercent() != null) {
+                            if (ValidationUtil.isLessEqual(bankStmtView.getAvgUtilizationPercent(), ninety)) {
+                                bankStmtView.setColorSwingPercent(ColorStyleType.GREEN.code());
+                                bankStmtView.setColorUtilPercent(ColorStyleType.GREEN.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getAvgUtilizationPercent(), ninety)
+                                    && ValidationUtil.isGreaterEqual(bankStmtView.getAvgSwingPercent(), fifteen)) {
+                                bankStmtView.setColorSwingPercent(ColorStyleType.YELLOW.code());
+                                bankStmtView.setColorUtilPercent(ColorStyleType.YELLOW.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getAvgUtilizationPercent(), ninety)
+                                    && ValidationUtil.isLessThan(bankStmtView.getAvgSwingPercent(), fifteen)) {
+                                bankStmtView.setColorSwingPercent(ColorStyleType.RED.code());
+                                bankStmtView.setColorUtilPercent(ColorStyleType.RED.code());
+                            }
+                            else {
+                                bankStmtView.setColorSwingPercent("");
+                                bankStmtView.setColorUtilPercent("");
+                            }
+                        } else {
+                            bankStmtView.setColorSwingPercent("");
+                            bankStmtView.setColorUtilPercent("");
+                        }
+
+                        /*
+                        3. Over Limit (Times)
+                            - Over Limit (Times) < 1            -> Green
+                            - Over Limit (Times) >= 1, <= 2     -> Yellow
+                            - Over Limit (Times) > 2            -> Red
+                         */
+                        if (bankStmtView.getOverLimitTimes() != null) {
+                            if (ValidationUtil.isLessThan(bankStmtView.getOverLimitTimes(), BigDecimal.ONE)) {
+                                bankStmtView.setColorOvrLimitTime(ColorStyleType.GREEN.code());
+                            }
+                            else if (ValidationUtil.isGreaterEqual(bankStmtView.getOverLimitTimes(), BigDecimal.ONE)
+                                    && ValidationUtil.isLessEqual(bankStmtView.getOverLimitTimes(), two)) {
+                                bankStmtView.setColorOvrLimitTime(ColorStyleType.YELLOW.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitTimes(), two)) {
+                                bankStmtView.setColorOvrLimitTime(ColorStyleType.RED.code());
+                            }
+                            else {
+                                bankStmtView.setColorOvrLimitTime("");
+                            }
+                        } else {
+                            bankStmtView.setColorOvrLimitTime("");
+                        }
+
+                        /*
+                        4. Over Limit (Days)
+                            - Over Limit (Days) <= 3        -> Green
+                            - Over Limit (Days) > 3, <= 7   -> Yellow
+                            - Over Limit (Days) > 7         -> Red
+                         */
+                        if (bankStmtView.getOverLimitDays() != null) {
+                            if (ValidationUtil.isLessEqual(bankStmtView.getOverLimitDays(), three)) {
+                                bankStmtView.setColorOvrLimitDays(ColorStyleType.GREEN.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitDays(), three)
+                                    && ValidationUtil.isLessEqual(bankStmtView.getOverLimitDays(), seven)) {
+                                bankStmtView.setColorOvrLimitDays(ColorStyleType.YELLOW.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getOverLimitDays(), seven)) {
+                                bankStmtView.setColorOvrLimitDays(ColorStyleType.RED.code());
+                            }
+                            else {
+                                bankStmtView.setColorOvrLimitDays("");
+                            }
+                        } else {
+                            bankStmtView.setColorOvrLimitDays("");
+                        }
+
+                        /*
+                        5. Cheque Return
+                            - Cheque Return < 1         -> Green
+                            - Cheque Return >= 1, <= 2  -> Yellow
+                            - Cheque Return > 2         -> Red
+                         */
+                        if (bankStmtView.getChequeReturn() != null) {
+                            if (ValidationUtil.isLessThan(bankStmtView.getChequeReturn(), BigDecimal.ONE)) {
+                                bankStmtView.setColorChequeReturn(ColorStyleType.GREEN.code());
+                            }
+                            else if (ValidationUtil.isGreaterEqual(bankStmtView.getChequeReturn(), BigDecimal.ONE)
+                                    && ValidationUtil.isLessEqual(bankStmtView.getChequeReturn(), two)) {
+                                bankStmtView.setColorChequeReturn(ColorStyleType.YELLOW.code());
+                            }
+                            else if (ValidationUtil.isGreaterThan(bankStmtView.getChequeReturn(), two)) {
+                                bankStmtView.setColorChequeReturn(ColorStyleType.RED.code());
+                            }
+                            else {
+                                bankStmtView.setColorChequeReturn("");
+                            }
+                        } else {
+                            bankStmtView.setColorChequeReturn("");
+                        }
+
+                    }
+
+                    // Is count income
+                    // 6.Trade Cheque Return (%)
+                    // - Trade Cheque Return <= 3%          -> Green
+                    // - Trade Cheque Return > 3%, <= 5%    -> Yellow
+                    // - Trade Cheque Return > 5%           -> Red
+                    if ( !(RadioValue.YES.value() == bankStmtView.getNotCountIncome()) && bankStmtView.getTrdChequeReturnPercent() != null) {
+                        if (ValidationUtil.isLessEqual(bankStmtView.getTrdChequeReturnPercent(), three)) {
+                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.GREEN.code());
+                        }
+                        else if (ValidationUtil.isGreaterThan(bankStmtView.getTrdChequeReturnPercent(), three)
+                                && ValidationUtil.isLessEqual(bankStmtView.getTrdChequeReturnPercent(), five)) {
+                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.YELLOW.code());
+                        }
+                        else if (ValidationUtil.isGreaterThan(bankStmtView.getTrdChequeReturnPercent(), five)) {
+                            bankStmtView.setColorTrdChqRetPercent(ColorStyleType.RED.code());
+                        }
+                        else {
+                            bankStmtView.setColorTrdChqRetPercent("");
+                        }
+                    }
+
+                }// End Loop
+
+            }
+        }
+
     }
 
     public BankStmtView saveBankStmt(BankStmtView bankStmtView) {

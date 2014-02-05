@@ -20,9 +20,6 @@ public class WorkCaseFee {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @OneToMany(mappedBy = "workCaseFee")
-    private List<FeeDetail> feeDetailList;
-
     @Column(name = "collect_fee_completed")
     private int collectFeeCompleted;
 
@@ -43,14 +40,6 @@ public class WorkCaseFee {
 
     public void setWorkCase(WorkCase workCase) {
         this.workCase = workCase;
-    }
-
-    public List<FeeDetail> getFeeDetailList() {
-        return feeDetailList;
-    }
-
-    public void setFeeDetailList(List<FeeDetail> feeDetailList) {
-        this.feeDetailList = feeDetailList;
     }
 
     public int getCollectFeeCompleted() {
@@ -74,7 +63,6 @@ public class WorkCaseFee {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
-                .append("feeDetailList", feeDetailList)
                 .append("collectFeeCompleted", collectFeeCompleted)
                 .append("grandTotalFee", grandTotalFee)
                 .toString();
