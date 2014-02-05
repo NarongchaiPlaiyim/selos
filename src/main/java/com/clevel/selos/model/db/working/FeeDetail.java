@@ -34,12 +34,16 @@ public class FeeDetail {
     @Column(name = "fee_year")
     private BigDecimal feeYear;
 
-    @Column(name = "fee_amount")
+    @Column(name = "fee_amount", length = 10, scale = 2)
     private BigDecimal amount;
 
+    @OneToOne
+    @JoinColumn(name = "new_credit_detail_id")
+    private NewCreditDetail newCreditDetail;
+
     @ManyToOne
-    @JoinColumn(name = "wrk_case_fee_id")
-    private WorkCaseFee workCaseFee;
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
 
     public long getId() {
         return id;
@@ -97,14 +101,6 @@ public class FeeDetail {
         this.amount = amount;
     }
 
-    public WorkCaseFee getWorkCaseFee() {
-        return workCaseFee;
-    }
-
-    public void setWorkCaseFee(WorkCaseFee workCaseFee) {
-        this.workCaseFee = workCaseFee;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -115,7 +111,6 @@ public class FeeDetail {
                 .append("percent_fee_after", percent_fee_after)
                 .append("feeYear", feeYear)
                 .append("amount", amount)
-                .append("workCaseFee", workCaseFee)
                 .toString();
     }
 }
