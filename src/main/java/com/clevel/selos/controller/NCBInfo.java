@@ -246,14 +246,11 @@ public class NCBInfo implements Serializable {
     }
 
     public void onEditNcbDetail() {  //copy row that choose to dialog
-        log.info("rowIndex {} ", rowIndex);
         modeForButton = "edit";
         log.info("onEditNcbDetail ::: selectNcbRecordItem  : {}", selectNcbRecordItem.toString());
-        log.info("rowIndex :::   : {}", rowIndex);
-        log.info("ncbDetailViewList.size() :::   : {}", ncbDetailViewList.size());
         Cloner cloner = new Cloner();
 
-        if (rowIndex < ncbDetailViewList.size()) {
+        if (selectNcbRecordItem != null) {
             ncbDetailView = new NCBDetailView();
             ncbDetailView = cloner.deepClone(selectNcbRecordItem);
 //            AccountType accountTypeEdit = selectNcbRecordItem.getAccountType();
@@ -277,7 +274,6 @@ public class NCBInfo implements Serializable {
 //            ncbDetailView.setDateOfDebtRestructuring(selectNcbRecordItem.getDateOfDebtRestructuring());
 //            ncbDetailView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
 //            ncbDetailView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
-//            ncbDetailView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
 
             if (ncbDetailView.isRefinance() == true) {
                 ncbDetailView.setRefinanceFlag(2);
@@ -296,11 +292,6 @@ public class NCBInfo implements Serializable {
             } else {
                 ncbDetailView.setWcFlag(1);
             }
-
-
-//            if (ncbDetailView.getNoOfmonthsPayment() > 0) {
-//                toSetRenderedFlag(ncbDetailView.getNoOfmonthsPayment());
-//            }
 
         }
     }
@@ -339,7 +330,6 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setHistoryPayment(tdrConditionHistory);
                 ncbAdd.setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
-                ncbAdd.setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
                 //checkbox
                 ncbAdd.setTMB(ncbDetailView.isTMB());
                 ncbAdd.setRefinance(ncbDetailView.isRefinance());
@@ -372,7 +362,6 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList.get(rowIndex).setDateOfDebtRestructuring(ncbDetailView.getDateOfDebtRestructuring());
                 ncbDetailViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbDetailViewList.get(rowIndex).setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
-                ncbDetailViewList.get(rowIndex).setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
                 //checkbox
                 ncbDetailViewList.get(rowIndex).setTMB(ncbDetailView.isTMB());
                 ncbDetailViewList.get(rowIndex).setRefinance(ncbDetailView.isRefinance());
@@ -398,6 +387,7 @@ public class NCBInfo implements Serializable {
         context.addCallbackParam("functionComplete", complete);
 
     }
+/*
 
     public void toSetRenderedFlag(int noOfMonth) {
 
@@ -423,6 +413,7 @@ public class NCBInfo implements Serializable {
         log.info("ncbDetailView.monthFlagPage() :: {}", ncbDetailView.isMonthFlagPage());
 
     }
+*/
 
     // *** Function for save NCB To DB ***//
     public void onSaveNcb() {    // call transform  and then call businessControl
@@ -436,9 +427,7 @@ public class NCBInfo implements Serializable {
                 }else{
                     ncbInfoView.setModifyBy(user);
                 }
-
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
-
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");
                 onCreation();
