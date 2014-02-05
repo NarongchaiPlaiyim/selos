@@ -1,18 +1,27 @@
 package com.clevel.selos.businesscontrol.util.bpm;
 
 import com.clevel.selos.dao.master.ActionDAO;
+import com.clevel.selos.dao.master.ProductGroupDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Action;
+import com.clevel.selos.model.db.master.ProductGroup;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BPMExecutor implements Serializable {
     @Inject
@@ -27,16 +36,32 @@ public class BPMExecutor implements Serializable {
     WorkCaseDAO workCaseDAO;
     @Inject
     ActionDAO actionDAO;
+    @Inject
+    ProductGroupDAO productGroupDAO;
+    @Inject
+    PrescreenDAO prescreenDAO;
+    @Inject
+    CustomerDAO customerDAO;
 
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode) throws Exception{
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, long actionCode, String remark) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
+
         log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePrescreen, queueName, checkerId, actionCode);
-        if(action != null){
+        if(action != null && prescreen != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
+            fields.put("ProductGroup", prescreen.getProductGroup().getName());
+            for(Customer item : customerList){
+                fields.put("BorrowerName", item.getNameTh());
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remark", remark);
+            }
 
             log.debug("dispatch case for [Assign to Checker]..., Action_Code : {}, Action_Name : {}, BDMCheckerUserName : {}", action.getId(), action.getName(), checkerId);
 
@@ -73,10 +98,13 @@ public class BPMExecutor implements Serializable {
     public void closeSales(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
-        if(action != null){
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+
+        if(action != null && prescreen != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+            fields.put("ProductGroup", prescreen.getProductGroup().getName());
 
             log.debug("dispatch case for [Close Sales]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
@@ -129,7 +157,9 @@ public class BPMExecutor implements Serializable {
     public void returnMaker(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
-        if(action != null){
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+
+        if(action != null && prescreen != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
@@ -149,10 +179,13 @@ public class BPMExecutor implements Serializable {
     public void submitMaker(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(actionCode);
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+
         if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+            fields.put("ProductGroup", prescreen.getProductGroup().getName());
 
             log.debug("dispatch case for [Submit BDM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
