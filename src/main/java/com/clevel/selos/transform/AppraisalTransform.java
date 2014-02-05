@@ -1,10 +1,13 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.AppraisalContactDetailDAO;
 import com.clevel.selos.dao.working.AppraisalDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Appraisal;
+import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -12,6 +15,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class AppraisalTransform extends Transform {
     @Inject
@@ -21,6 +25,14 @@ public class AppraisalTransform extends Transform {
     private AppraisalDAO appraisalDAO;
     private AppraisalView appraisalView;
     private Appraisal appraisal;
+
+    @Inject
+    private AppraisalContactDetailDAO appraisalContactDetailDAO;
+    private List<AppraisalContactDetail> appraisalContactDetailList;
+    private AppraisalContactDetail appraisalContactDetail;
+    private AppraisalContactDetailView appraisalContactDetailView;
+    @Inject
+    private AppraisalContactDetailTransform appraisalContactDetailTransform;
 
     @Inject
     public AppraisalTransform() {
@@ -78,7 +90,7 @@ public class AppraisalTransform extends Transform {
         return appraisal;
     }
 
-    public AppraisalView transformToView(Appraisal appraisal){
+    public AppraisalView transformToView(final Appraisal appraisal, final User user){
         log.debug("-- transform Appraisal to AppraisalView");
         appraisalView = new AppraisalView();
 
@@ -122,6 +134,11 @@ public class AppraisalTransform extends Transform {
         appraisalView.setCreateDate(appraisal.getCreateDate());
         appraisalView.setModifyBy(appraisal.getModifyBy());
         appraisalView.setModifyDate(appraisal.getModifyDate());
+
+        appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
+        appraisalContactDetailView = appraisalContactDetailTransform.transformToView(appraisalContactDetailList, appraisal, user);
+        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+
         return appraisalView;
     }
 
@@ -131,5 +148,9 @@ public class AppraisalTransform extends Transform {
 
     private boolean checkId0(int id){
         return !Util.isZero(id);
+    }
+
+    private <T> List<T> safetyList(List<T> list) {
+        return Util.safetyList(list);
     }
 }
