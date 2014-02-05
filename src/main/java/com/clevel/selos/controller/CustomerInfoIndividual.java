@@ -1479,9 +1479,8 @@ public class CustomerInfoIndividual implements Serializable {
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Save Customer Individual Data Failed. " +
-                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                            "<br/>Affect on Basic Info Page.";
+                    message = "Cannot change customer type from Guarantor to Related. " +
+                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
@@ -1493,9 +1492,8 @@ public class CustomerInfoIndividual implements Serializable {
                         if(customerInfoView.getSpouse().getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                                 || customerInfoView.getSpouse().getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                             messageHeader = "Information.";
-                            message = "Save Customer Individual Data Failed. " +
-                                    "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                                    "<br/>Affect on Basic Info Page.";
+                            message = "Cannot change customer type from Guarantor to Related. " +
+                                    "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                             severity = "info";
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
@@ -1635,9 +1633,8 @@ public class CustomerInfoIndividual implements Serializable {
                 if(customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value()
                         || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()){
                     messageHeader = "Information.";
-                    message = "Save Customer Individual Data Failed. " +
-                            "<br/><br/> Cause : This customer is change relation from Guarantor to Related." +
-                            "<br/>Affect on Basic Info Page.";
+                    message = "Cannot change customer type from Guarantor to Related. " +
+                            "<br/><br/> Cause : This customer is using on Opening Account Information in Basic Information menu.";
                     severity = "info";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
