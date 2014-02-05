@@ -104,6 +104,10 @@ public class Util implements Serializable {
         }
     }
 
+    public static int isTrue(boolean value) {
+        return value == true ? 1 : 0 ;
+    }
+
     public static boolean isNull(String string) {
         if (string == null || "null".equals(string.toLowerCase().trim())) {
             return true;
@@ -334,11 +338,27 @@ public class Util implements Serializable {
         }
     }
 
+    public static boolean isZero(long id){
+        try {
+            return id == 0 ? true : false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
     public static boolean equals(String string, String string2){
         try{
             return string.equals(string2);
         } catch (NullPointerException e) {
             return false;
+        }
+    }
+
+    public static boolean isLengthZero(String string){
+        try{
+            return string.length() == 0 ? true : false;
+        } catch (NullPointerException e) {
+            return true;
         }
     }
 }
