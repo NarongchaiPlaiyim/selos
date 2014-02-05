@@ -1559,14 +1559,21 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         try{
+            log.debug("### 1 - onSave : customerInfoView");
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
+            log.debug("### 2 - onSave : customerInfoView");
             isFromSummaryParam = true;
+            log.debug("### 3 - onSave : customerInfoView");
             onAddNewIndividual();
+            log.debug("### 4 - onSave : customerInfoView");
             onEditIndividual();
+            log.debug("### 5 - onSave : customerInfoView");
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
+            log.debug("### 6 - onSave : customerInfoView");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            log.debug("### 7 - onSave : customerInfoView");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";
