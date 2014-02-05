@@ -66,7 +66,7 @@ public class AppraisalRequestControl extends BusinessControl {
         log.info("-- getAppraisalRequest WorkCaseId : {}, UserId : {}", workCaseId, user.getId());
         appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
         if(appraisal != null){
-            appraisalView = appraisalTransform.transformToView(appraisal);
+            appraisalView = appraisalTransform.transformToView(appraisal, user);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));

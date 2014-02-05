@@ -72,7 +72,7 @@ public class AppraisalResultControl extends BusinessControl {
 
         newCollateralViewList = new ArrayList<NewCollateralView>();
         if(appraisal != null){
-            appraisalView = appraisalTransform.transformToView(appraisal);
+            appraisalView = appraisalTransform.transformToView(appraisal, user);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
