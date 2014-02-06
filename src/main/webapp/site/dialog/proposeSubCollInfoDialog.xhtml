@@ -292,11 +292,14 @@
         <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
                      style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
                      maxlength="18"
-                     required="#{not empty param[addSubCollDlg.clientId]}">
+                     required="#{not empty param[addSubCollDlg.clientId]}"
+                     onkeydown="return onKeyDownMoney(event);"
+                     onkeypress="return onKeyPressMoney(event);">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="18"/>
+                             maxIntegerDigits="18"
+                             type="number"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -309,11 +312,14 @@
         <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
                      style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
                      maxlength="18"
-                     required="#{not empty param[addSubCollDlg.clientId]}">
+                     required="#{not empty param[addSubCollDlg.clientId]}"
+                     onkeydown="return onKeyDownMoney(event);"
+                     onkeypress="return onKeyPressMoney(event);">
             <f:convertNumber pattern="#,##0"
                              minFractionDigits="2"
                              maxFractionDigits="2"
-                             maxIntegerDigits="18"/>
+                             maxIntegerDigits="18"
+                             type="number"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>

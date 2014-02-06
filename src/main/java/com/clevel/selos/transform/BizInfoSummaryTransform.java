@@ -29,8 +29,8 @@ public class BizInfoSummaryTransform extends Transform {
     private ReferredExperience referredExperience;
 
     public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView) {
-        log.info("find transformToModel begin");
-        log.info("BizInfoSummaryView : {}", bizInfoSummaryView);
+        log.debug("find transformToModel begin");
+        log.debug("BizInfoSummaryView : {}", bizInfoSummaryView);
         BizInfoSummary bizInfoSummary;
 
         bizInfoSummary = new BizInfoSummary();
@@ -42,54 +42,54 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummary.setCreateDate(DateTime.now().toDate());
         }
 
-        log.info("find transformToModel xxx1");
+        log.debug("find transformToModel xxx1");
 
         bizInfoSummary.setBizLocationName(bizInfoSummaryView.getBizLocationName());
         bizInfoSummary.setRental(bizInfoSummaryView.getRental());
         bizInfoSummary.setOwnerName(bizInfoSummaryView.getOwnerName());
         bizInfoSummary.setExpiryDate(bizInfoSummaryView.getExpiryDate());
 
-        log.info("transformToModel bizInfoSummaryView getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
-        log.info("transformToModel bizInfoSummaryView getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
+        log.debug("transformToModel bizInfoSummaryView getAddressMoo is ---- {}",bizInfoSummaryView.getAddressMoo());
+        log.debug("transformToModel bizInfoSummaryView getAddressNo is ---- {}",bizInfoSummaryView.getAddressNo());
 
         bizInfoSummary.setAddressNo(bizInfoSummaryView.getAddressNo());
         bizInfoSummary.setAddressMoo(bizInfoSummaryView.getAddressMoo());
         bizInfoSummary.setAddressBuilding(bizInfoSummaryView.getAddressBuilding());
         bizInfoSummary.setAddressStreet(bizInfoSummaryView.getAddressStreet());
 
-//        log.info("find transformToModel province" + bizInfoSummaryView.getProvince().getCode());
+//        log.debug("find transformToModel province" + bizInfoSummaryView.getProvince().getCode());
 
         if(bizInfoSummaryView.getProvince()!=null && bizInfoSummaryView.getProvince().getCode() != 0){
             province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
-            log.info("find transformToModel findById  is " + province.toString());
+            log.debug("find transformToModel findById  is {}",province);
             bizInfoSummary.setProvince(province);
         }else{
             bizInfoSummary.setProvince(null);
         }
 
-//        log.info("find transformToModel district" + bizInfoSummaryView.getDistrict().getId());
+//        log.debug("find transformToModel district" + bizInfoSummaryView.getDistrict().getId());
 
         if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
             district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
-            log.info("find transformToModel findById  is " + district.toString());
+            log.debug("find transformToModel findById  is {}",district.toString());
             bizInfoSummary.setDistrict(district);
         }else{
             bizInfoSummary.setDistrict(null);
         }
 
-//        log.info("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
+//        log.debug("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
         if(bizInfoSummaryView.getSubDistrict()!=null && bizInfoSummaryView.getSubDistrict().getCode() != 0){
             subDistrict = subDistrictDAO.findById(bizInfoSummaryView.getSubDistrict().getCode());
-            log.info("find transformToModel findById  is " + subDistrict.toString());
+            log.debug("find transformToModel findById  is {}",subDistrict);
             bizInfoSummary.setSubDistrict(subDistrict);
         }else{
             bizInfoSummary.setSubDistrict(null);
         }
 
-//        log.info("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
+//        log.debug("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
         if(bizInfoSummaryView.getCountry()!=null && bizInfoSummaryView.getCountry().getId() != 0){
             country = countryDAO.findById(bizInfoSummaryView.getCountry().getId());
-            log.info("find transformToModel findById  is " + country.toString());
+            log.debug("find transformToModel findById  is {}",country);
             bizInfoSummary.setCountry(country);
         }else{
             bizInfoSummary.setCountry(null);
@@ -104,7 +104,9 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setRegistrationDate(bizInfoSummaryView.getRegistrationDate());
         bizInfoSummary.setEstablishDate(bizInfoSummaryView.getEstablishDate());
 
-        log.info("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+        // fixed: due to NPE when getReferredExperience is null.
+//        log.debug("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+
         if(bizInfoSummaryView.getReferredExperience()!=null && bizInfoSummaryView.getReferredExperience().getId() != 0){
             referredExperience = referredExperienceDAO.findById(bizInfoSummaryView.getReferredExperience().getId());
             bizInfoSummary.setReferredExperience(referredExperience);
@@ -215,7 +217,7 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
         bizInfoSummary.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
 
-        log.info("find transformToModel xxx4");
+        log.debug("find transformToModel xxx4");
 
         bizInfoSummary.setSumIncomeAmount(bizInfoSummaryView.getSumIncomeAmount());
         bizInfoSummary.setSumIncomePercent(bizInfoSummaryView.getSumIncomePercent());
@@ -229,10 +231,10 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setModifyDate(DateTime.now().toDate());
 
 
-        log.info("transformToModel bizInfoSummary getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
-        log.info("transformToModel bizInfoSummary getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
+        log.debug("transformToModel bizInfoSummary getAddressMoo is ---- {}",bizInfoSummaryView.getAddressMoo());
+        log.debug("transformToModel bizInfoSummary getAddressNo is ---- {}",bizInfoSummaryView.getAddressNo());
 
-        log.info("find transformToModel end");
+        log.debug("find transformToModel end");
 
         return bizInfoSummary;
     }
@@ -260,18 +262,18 @@ public class BizInfoSummaryTransform extends Transform {
             bizInfoSummaryView.setProvince(new Province());
         }
 
-        log.info("find bizInfoSummary.getDistrict");
+        log.debug("find bizInfoSummary.getDistrict");
 
         if(bizInfoSummary.getDistrict() != null){
-            log.info( "bizInfoSummary.getDistrict is " + bizInfoSummary.getDistrict().getId()) ;
+            log.debug( "bizInfoSummary.getDistrict is {}",bizInfoSummary.getDistrict().getId()) ;
             bizInfoSummaryView.setDistrict(bizInfoSummary.getDistrict());
         } else {
             bizInfoSummaryView.setDistrict(new District());
         }
-        log.info("find bizInfoSummary.setSubDistrict");
+        log.debug("find bizInfoSummary.setSubDistrict");
 
         if(bizInfoSummary.getSubDistrict() != null){
-            log.info( "bizInfoSummary.setSubDistrict is " + bizInfoSummary.getSubDistrict().getCode());
+            log.debug( "bizInfoSummary.setSubDistrict is {}",bizInfoSummary.getSubDistrict().getCode());
             bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
         } else {
             bizInfoSummaryView.setSubDistrict(new SubDistrict());

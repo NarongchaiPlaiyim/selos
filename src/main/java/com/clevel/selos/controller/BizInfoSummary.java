@@ -1,7 +1,9 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
@@ -44,6 +46,8 @@ public class BizInfoSummary implements Serializable {
     @NormalMessage
     @Inject
     Message msg;
+    @Inject
+    BankStmtControl bankStmtControl;
 
     private BizInfoSummaryView bizInfoSummaryView;
     private BizInfoDetailView selectBizInfoDetailView;
@@ -111,6 +115,8 @@ public class BizInfoSummary implements Serializable {
     BankStmtTransform bankStmtTransform;
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
 
     @Inject
@@ -142,14 +148,17 @@ public class BizInfoSummary implements Serializable {
         referredExperienceList = referredExperienceDAO.findAll();
         bankStatementAvg = 0;
 
+        bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
         if(bankStmtSummaryView != null ){
-            if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
-                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            if(bankStmtSummaryView.getGrdTotalIncomeGross() != null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross().doubleValue();
+                bizInfoSummaryView.setCirculationAmount(new BigDecimal(bankStatementAvg));
             }else{
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-                }
+//                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
+//                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+//                }
+                bankStatementAvg = 0.0;
             }
         }
         log.debug("bankStatementAvg is " + bankStatementAvg);
@@ -367,9 +376,6 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSaveBizInfoSummary() {
-        System.out.println("Province:" + bizInfoSummaryView.getProvince().toString());
-        System.out.println("District:" + bizInfoSummaryView.getDistrict().toString());
-        System.out.println("SubDistrict:" + bizInfoSummaryView.getSubDistrict().toString());
         try {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);
@@ -379,6 +385,7 @@ public class BizInfoSummary implements Serializable {
             }
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+            exSummaryControl.calForBizInfoSummary(workCaseId);
             if (redirect != null && !redirect.equals("")) {
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
