@@ -728,21 +728,42 @@ public class CreditFacProposeControl extends BusinessControl {
     public NewCreditFacilityView calWC(NewCreditFacilityView newCreditFacilityView,long workCaseId){
         BigDecimal dayOfYear = BigDecimal.valueOf(365);
         BigDecimal monthOfYear = BigDecimal.valueOf(12);
+        BigDecimal onePointTwoFive = BigDecimal.valueOf(1.25);
+        BigDecimal onePointFive = BigDecimal.valueOf(1.50);
+        BigDecimal thirtyFive = BigDecimal.valueOf(35);
+        BigDecimal fifty = BigDecimal.valueOf(50);
 
         BigDecimal adjustDBR = BigDecimal.ZERO;
-        BigDecimal WeightAP = BigDecimal.ZERO;
-        BigDecimal WeightAR = BigDecimal.ZERO;
-        BigDecimal WeightINV = BigDecimal.ZERO;
-        BigDecimal percentIncome = BigDecimal.ZERO;
+        BigDecimal weightAP = BigDecimal.ZERO;
+        BigDecimal weightAR = BigDecimal.ZERO;
+        BigDecimal weightINV = BigDecimal.ZERO;
+        BigDecimal aaaValue = BigDecimal.ZERO;
 
-//      (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
-        BigDecimal wcNeed = BigDecimal.ZERO;
-//      Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
-        BigDecimal totalWcDebit = BigDecimal.ZERO;
-//        วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
-        BigDecimal WCNeedDiffer = BigDecimal.ZERO;
-//      wcNeed - totalWcDebit
-        BigDecimal totalWcTmb = BigDecimal.ZERO;
+        //table 1
+        BigDecimal wcNeed;
+        BigDecimal totalWcDebit;
+        BigDecimal totalWcTmb;
+        BigDecimal wcNeedDiffer;
+
+        //table 2
+        BigDecimal case1WcLimit;
+        BigDecimal case1WcMinLimit;
+        BigDecimal case1Wc50CoreWc;
+        BigDecimal case1WcDebitCoreWc;
+
+        //table 3
+        BigDecimal case2WcLimit;
+        BigDecimal case2WcMinLimit;
+        BigDecimal case2Wc50CoreWc;
+        BigDecimal case2WcDebitCoreWc;
+
+        //table 4
+        BigDecimal case3WcLimit;
+        BigDecimal case3WcMinLimit;
+        BigDecimal case3Wc50CoreWc;
+        BigDecimal case3WcDebitCoreWc;
+
+        ////////////////////////////////////////////////////
 
         DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
         if(dbrView != null){
@@ -764,6 +785,86 @@ public class CreditFacProposeControl extends BusinessControl {
 
         }
 
+        //calculation
+//        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
+        wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(adjustDBR,dayOfYear),weightAR) , Util.multiply(Util.divide(aaaValue,dayOfYear),weightINV))) , (Util.multiply(Util.divide(aaaValue,dayOfYear),weightAP)));
+//        Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
+        totalWcDebit = BigDecimal.ZERO;
+//        วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        totalWcTmb = BigDecimal.ZERO;
+//        wcNeed - totalWcDebit
+        wcNeedDiffer = Util.subtract(wcNeed,totalWcDebit);
+
+        newCreditFacilityView.setWCNeed(wcNeed);
+        newCreditFacilityView.setTotalWcDebit(totalWcDebit);
+        newCreditFacilityView.setTotalWcTmb(totalWcTmb);
+        newCreditFacilityView.setWCNeedDiffer(wcNeedDiffer);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//        1.25 x wcNeed
+        case1WcLimit = Util.multiply(wcNeed,onePointTwoFive);
+//        case1WcLimit - totalWcDebit
+        case1WcMinLimit = Util.subtract(case1WcLimit,totalWcDebit);
+//        ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+        case1Wc50CoreWc = compareToFindLower(Util.subtract(case1WcLimit,fifty),case1WcMinLimit);
+//        case1WcMinLimit - case1Wc50CoreWc
+        case1WcDebitCoreWc = Util.subtract(case1WcMinLimit,case1Wc50CoreWc);
+
+        newCreditFacilityView.setCase1WcLimit(case1WcLimit);
+        newCreditFacilityView.setCase1WcMinLimit(case1WcMinLimit);
+        newCreditFacilityView.setCase1Wc50CoreWc(case1Wc50CoreWc);
+        newCreditFacilityView.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//        1.5 x wcNeed
+        case2WcLimit = Util.multiply(wcNeed,onePointFive);
+//        case2WcLimit - totalWcDebit
+        case2WcMinLimit = Util.subtract(case2WcLimit,totalWcDebit);
+//        ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+//        case2Wc50CoreWc;
+//        case2WcMinLimit - case2Wc50CoreWc
+//        case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
+
+//        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
+//        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
+//        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
+//        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*//        ยอดขาย/รายได้ หาร 12 คูณ 35%
+        case3WcLimit =
+//        case3WcLimit - totalWcDebit
+        case3WcMinLimit;
+//        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+        case3Wc50CoreWc;
+//        case3WcMinLimit - case3Wc50CoreWc
+        case3WcDebitCoreWc;
+
+        newCreditFacilityView.setCase3WcLimit(case3WcLimit);
+        newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
+        newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
+        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         return newCreditFacilityView;
+    }
+
+    public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2){
+        if(b1 == null){
+            b1 = BigDecimal.ZERO;
+        }
+        if(b2 == null){
+            b2 = BigDecimal.ZERO;
+        }
+
+        if(b1.compareTo(b2) > 0){
+            return b2;
+        } else {
+            return b1;
+        }
     }
 }
