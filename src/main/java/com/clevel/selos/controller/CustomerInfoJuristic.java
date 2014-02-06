@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.RelationCustomerDAO;
 import com.clevel.selos.dao.working.JuristicDAO;
@@ -93,6 +94,8 @@ public class CustomerInfoJuristic implements Serializable {
 
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<DocumentType> documentTypeList;
@@ -574,6 +577,8 @@ public class CustomerInfoJuristic implements Serializable {
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+                onChangeProvinceEditForm1();
+                onChangeDistrictEditForm1();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -647,6 +652,7 @@ public class CustomerInfoJuristic implements Serializable {
 
         try{
             customerId = customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
+            exSummaryControl.calForCustomerInfoJuristic(workCaseId);
             isFromSummaryParam = true;
             onAddNewJuristic();
             onEditJuristic();

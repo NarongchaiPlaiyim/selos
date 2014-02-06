@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
@@ -111,6 +112,12 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
+    DBRControl dbrControl;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject
+    NCBInfoControl ncbInfoControl;
+    @Inject
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
@@ -183,8 +190,6 @@ public class CreditFacProposeControl extends BusinessControl {
         User user = getCurrentUser();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
-
-//        calculateTotalProposeAmount(workCaseId);
 
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
         newCreditFacilityDAO.persist(newCreditFacility);
@@ -303,17 +308,12 @@ public class CreditFacProposeControl extends BusinessControl {
             newGuarantorDetailDAO.persist(newGuarantorDetailListPersist);
             log.info("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
             onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);
-//             ExistingCreditFacility existingCreditFacility  = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
-//
-//             if(existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
-//                 List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
-//             }
 
             for (int i = 0; i < newGuarantorDetailListPersist.size(); i++) {
                 log.info("  newGuarantorDetailList  is " + i);
                 NewGuarantorDetail newGuarantorDetail = newGuarantorDetailListPersist.get(i);
                 NewGuarantorDetailView newGuarantorDetailView = newCreditFacilityView.getNewGuarantorDetailViewList().get(i);
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditDetailList , newGuarantorDetail, user);
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditDetailList, newGuarantorDetail, user);
                 newGuarantorRelationDAO.persist(newGuarantorCreditList);
                 log.info("persist newGuarantorCreditList...");
             }
@@ -715,4 +715,178 @@ public class CreditFacProposeControl extends BusinessControl {
         return proposeCreditDetailViewList;
     }
 
+    public NewCreditFacilityView calWC(NewCreditFacilityView newCreditFacilityView,long workCaseId){
+        BigDecimal dayOfYear = BigDecimal.valueOf(365);
+        BigDecimal monthOfYear = BigDecimal.valueOf(12);
+        BigDecimal onePointTwoFive = BigDecimal.valueOf(1.25);
+        BigDecimal onePointFive = BigDecimal.valueOf(1.50);
+        BigDecimal thirtyFive = BigDecimal.valueOf(35);
+        BigDecimal fifty = BigDecimal.valueOf(50);
+        BigDecimal oneHundred = BigDecimal.valueOf(100);
+
+        // ยอดขาย/รายได้
+        BigDecimal adjustDBR = BigDecimal.ZERO;
+        // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
+        BigDecimal revolvingCreditNCB = BigDecimal.ZERO;
+        // ส่วนผู้เกี่ยวข้องในหน้า DBR
+        BigDecimal revolvingCreditDBR = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
+        BigDecimal loanBurdenWCFlag = BigDecimal.ZERO;
+        // วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB
+        BigDecimal revolvingCreditNCBTMBFlag = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        BigDecimal loanBurdenTMBFlag = BigDecimal.ZERO;
+
+        //how to check role and get ap ar inv !?
+        BigDecimal weightAP = BigDecimal.ZERO;
+        BigDecimal weightAR = BigDecimal.ZERO;
+        BigDecimal weightINV = BigDecimal.ZERO;
+        // Sum(weight cost of goods sold * businessProportion)
+        // cost of goods = business desc ( column COG )
+        // business proportion = ??
+        BigDecimal aaaValue = BigDecimal.ZERO;
+
+        //table 1
+        BigDecimal wcNeed;
+        BigDecimal totalWcDebit;
+        BigDecimal totalWcTmb;
+        BigDecimal wcNeedDiffer;
+
+        //table 2
+        BigDecimal case1WcLimit;
+        BigDecimal case1WcMinLimit;
+        BigDecimal case1Wc50CoreWc;
+        BigDecimal case1WcDebitCoreWc;
+
+        //table 3
+        BigDecimal case2WcLimit;
+        BigDecimal case2WcMinLimit;
+        BigDecimal case2Wc50CoreWc;
+        BigDecimal case2WcDebitCoreWc;
+
+        //table 4
+        BigDecimal case3WcLimit;
+        BigDecimal case3WcMinLimit;
+        BigDecimal case3Wc50CoreWc;
+        BigDecimal case3WcDebitCoreWc;
+
+        ////////////////////////////////////////////////////
+
+        DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
+        if(dbrView != null){
+            adjustDBR = dbrView.getMonthlyIncomeAdjust();
+            revolvingCreditDBR = dbrView.getTotalMonthDebtRelatedWc();
+        }
+
+        List<NCBInfoView> ncbInfoViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
+        if(ncbInfoViewList != null && ncbInfoViewList.size() > 0){
+            for (NCBInfoView ncbInfoView : ncbInfoViewList){
+                //todo : for sum
+//                revolvingCreditNCB
+//                loanBurdenWCFlag
+//                revolvingCreditNCBTMBFlag
+//                loanBurdenTMBFlag
+            }
+        }
+
+        if(newCreditFacilityView == null){
+            newCreditFacilityView = new NewCreditFacilityView();
+        }
+
+        //check role
+        User user = getCurrentUser();
+        if(user.getRole().getId() == RoleValue.UW.id()){
+            BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            if(bizInfoSummaryView != null){
+
+            }
+        } else { // bdm or other
+
+        }
+
+//        *** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
+        BigDecimal salesIncome = Util.multiply(adjustDBR,monthOfYear);
+
+        //calculation
+//        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
+        wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(salesIncome,dayOfYear),weightAR) , Util.multiply(Util.divide(aaaValue,dayOfYear),weightINV))) , (Util.multiply(Util.divide(aaaValue,dayOfYear),weightAP)));
+//        Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
+        totalWcDebit = Util.add(Util.add(revolvingCreditNCB,revolvingCreditDBR),loanBurdenWCFlag);
+//        วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        totalWcTmb = Util.add(revolvingCreditNCBTMBFlag,loanBurdenTMBFlag);
+//        wcNeed - totalWcDebit
+        wcNeedDiffer = Util.subtract(wcNeed,totalWcDebit);
+
+        newCreditFacilityView.setWCNeed(wcNeed);
+        newCreditFacilityView.setTotalWcDebit(totalWcDebit);
+        newCreditFacilityView.setTotalWcTmb(totalWcTmb);
+        newCreditFacilityView.setWCNeedDiffer(wcNeedDiffer);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//        1.25 x wcNeed
+        case1WcLimit = Util.multiply(wcNeed,onePointTwoFive);
+//        case1WcLimit - totalWcDebit
+        case1WcMinLimit = Util.subtract(case1WcLimit,totalWcDebit);
+//        ไม่เกิน 50% ของ case1WcLimit และไม่เกิน case1WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+        case1Wc50CoreWc = compareToFindLower(Util.subtract(case1WcLimit,fifty),case1WcMinLimit);
+//        case1WcMinLimit - case1Wc50CoreWc
+        case1WcDebitCoreWc = Util.subtract(case1WcMinLimit,case1Wc50CoreWc);
+
+        newCreditFacilityView.setCase1WcLimit(case1WcLimit);
+        newCreditFacilityView.setCase1WcMinLimit(case1WcMinLimit);
+        newCreditFacilityView.setCase1Wc50CoreWc(case1Wc50CoreWc);
+        newCreditFacilityView.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//        1.5 x wcNeed
+        case2WcLimit = Util.multiply(wcNeed,onePointFive);
+//        case2WcLimit - totalWcDebit
+        case2WcMinLimit = Util.subtract(case2WcLimit,totalWcDebit);
+//        ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+        case2Wc50CoreWc =  compareToFindLower(Util.subtract(case2WcLimit,fifty),case2WcMinLimit);
+//        case2WcMinLimit - case2Wc50CoreWc
+        case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
+
+        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
+        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
+        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
+        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//        ยอดขาย/รายได้ หาร 12 คูณ 35%
+        case3WcLimit = Util.divide(Util.multiply(Util.divide(salesIncome,dayOfYear),thirtyFive),oneHundred);
+//        case3WcLimit - totalWcDebit
+        case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
+//        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
+        case3Wc50CoreWc = compareToFindLower(Util.subtract(case3WcLimit,fifty),case3WcMinLimit);
+//        case3WcMinLimit - case3Wc50CoreWc
+        case3WcDebitCoreWc = Util.subtract(case3WcMinLimit,case3Wc50CoreWc);
+
+        newCreditFacilityView.setCase3WcLimit(case3WcLimit);
+        newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
+        newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
+        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        return newCreditFacilityView;
+    }
+
+    public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2){
+        if(b1 == null){
+            b1 = BigDecimal.ZERO;
+        }
+        if(b2 == null){
+            b2 = BigDecimal.ZERO;
+        }
+
+        if(b1.compareTo(b2) > 0){
+            return b2;
+        } else {
+            return b1;
+        }
+    }
 }

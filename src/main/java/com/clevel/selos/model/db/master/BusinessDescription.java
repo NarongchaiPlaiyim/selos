@@ -2,11 +2,9 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,11 +28,11 @@ public class BusinessDescription implements Serializable {
     @Column(name = "isic_code")
     private String isicCode;
     @Column(name = "ar")
-    private int ar;
+    private BigDecimal ar;
     @Column(name = "ap")
-    private int ap;
+    private BigDecimal ap;
     @Column(name = "inv")
-    private int inv;
+    private BigDecimal inv;
     @Column(name = "deviate")
     private String deviate;
     @Column(name = "esr")
@@ -69,6 +67,8 @@ public class BusinessDescription implements Serializable {
     private String modifyBy;
     @Column(name = "active")
     private int active;
+    @Column(name = "cog")
+    private BigDecimal cog;
 
     public BusinessDescription() {
     }
@@ -113,27 +113,27 @@ public class BusinessDescription implements Serializable {
         this.isicCode = isicCode;
     }
 
-    public int getAr() {
+    public BigDecimal getAr() {
         return ar;
     }
 
-    public void setAr(int ar) {
+    public void setAr(BigDecimal ar) {
         this.ar = ar;
     }
 
-    public int getAp() {
+    public BigDecimal getAp() {
         return ap;
     }
 
-    public void setAp(int ap) {
+    public void setAp(BigDecimal ap) {
         this.ap = ap;
     }
 
-    public int getInv() {
+    public BigDecimal getInv() {
         return inv;
     }
 
-    public void setInv(int inv) {
+    public void setInv(BigDecimal inv) {
         this.inv = inv;
     }
 
@@ -273,10 +273,19 @@ public class BusinessDescription implements Serializable {
         this.active = active;
     }
 
+    public BigDecimal getCog() {
+        return cog;
+    }
+
+    public void setCog(BigDecimal cog) {
+        this.cog = cog;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
+                append("businessGroup", businessGroup).
                 append("name", name).
                 append("tmbCode", tmbCode).
                 append("incomeFactor", incomeFactor).
@@ -284,7 +293,6 @@ public class BusinessDescription implements Serializable {
                 append("ar", ar).
                 append("ap", ap).
                 append("inv", inv).
-                append("businessGroup", businessGroup).
                 append("deviate", deviate).
                 append("esr", esr).
                 append("negative", negative).
@@ -301,6 +309,7 @@ public class BusinessDescription implements Serializable {
                 append("modifyDate", modifyDate).
                 append("modifyBy", modifyBy).
                 append("active", active).
+                append("cog", cog).
                 toString();
     }
 }

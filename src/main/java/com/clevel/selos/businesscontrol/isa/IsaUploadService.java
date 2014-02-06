@@ -85,12 +85,12 @@ public class IsaUploadService extends BusinessControl {
                         line = bufferedReader.readLine();
 
                         while (line != null) {
-                            System.out.println("LINE : = "+line);
+                            log.debug("line: {}",line);
                             try {
                                 List<String> params = getToken(line);
-                                System.out.println("1");
+                                log.debug("1");
                                 String importResult = executeScript(params);
-                                System.out.println("2");
+                                log.debug("2");
                                 log.debug("IMPORT RESULT :: {}", importResult);
                                 if (importResult != null && importResult.length() > 0) {
                                     System.out.println("3");
@@ -180,9 +180,9 @@ public class IsaUploadService extends BusinessControl {
 
 //            params.add(create_by);
             String[] stringParams = params.toArray(new String[params.size()]);
-            System.out.println(stringParams.length);
+            log.debug("length: {}",stringParams.length);
             for(String ssd:stringParams){
-                System.out.println("--- "+ssd);
+                log.debug("--- {}",ssd);
             }
             log.debug("parameters ", stringParams);
 
