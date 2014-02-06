@@ -74,7 +74,7 @@ public class DBR implements Serializable {
     @Column(name = "totalMonthDebtBorrowerFinal")
     private BigDecimal totalMonthDebtBorrowerFinal;
 
-    @Column(name = "totalMonthDebtRelatedWc")
+    @Column(name = "TOTAL_MONTH_DEBT_RELATED_WC")
     private BigDecimal totalMonthDebtRelatedWc;
 
     public DBR() {
