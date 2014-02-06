@@ -44,21 +44,23 @@ public class NewGuarantorCreditTransform extends Transform {
 
             for (int i = 0; i < newCreditDetailList.size(); i++) {
                 NewCreditDetail newCreditDetailAdd = newCreditDetailList.get(i);
-                log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
-                log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
 
-                log.info("proposeCreditDetailView::: {}", proposeCreditDetailView.getTypeOfStep());
-
-
-                if (proposeCreditDetailView.getTypeOfStep() == "E") {
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long)proposeCreditDetailView.getSeq());
-                    log.info("existingCreditDetail :: {}",existingCreditDetail.getId());
-                    newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
-                    newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-                } else if (proposeCreditDetailView.getTypeOfStep() == "N") {
-                    if (proposeCreditDetailView.getId() == newCreditDetailAdd.getId()) {
+                log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
+                if (proposeCreditDetailView.getTypeOfStep() == "N") {
+                    if(proposeCreditDetailView.getSeq()==newCreditDetailAdd.getSeq()){
+                        log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
+                        log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
                         newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
-                        log.info("newGuarantorCredit id is " + newGuarantorCredit.getNewCreditDetail().getId());
+                        log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
+                        newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
+                    }
+                }else if (proposeCreditDetailView.getTypeOfStep() == "E") {
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long)proposeCreditDetailView.getSeq());
+                    if(existingCreditDetail.getId() == (long)proposeCreditDetailView.getSeq()){
+                        log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
+                        log.info("existingCreditDetail id :: {}",existingCreditDetail.getId());
+                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
+                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                     }
                 }

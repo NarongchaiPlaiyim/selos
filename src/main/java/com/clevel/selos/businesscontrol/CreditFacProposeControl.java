@@ -110,6 +110,12 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
+    @Inject
+    ExistingCollateralDetailDAO existingCollateralDetailDAO;
+
+    private ExistingCreditFacilityView existingCreditFacilityView;
+
+
 
     public CreditFacProposeControl() {
     }
@@ -177,6 +183,8 @@ public class CreditFacProposeControl extends BusinessControl {
         User user = getCurrentUser();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
+
+//        calculateTotalProposeAmount(workCaseId);
 
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
         newCreditFacilityDAO.persist(newCreditFacility);
@@ -289,36 +297,24 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-/*
 
         if (newCreditFacilityView.getNewGuarantorDetailViewList() != null) {
             List<NewGuarantorDetail> newGuarantorDetailListPersist = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
             newGuarantorDetailDAO.persist(newGuarantorDetailListPersist);
             log.info("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
-            onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);
+            onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);  //ปิดก่อน
+
+//             ExistingCreditFacility existingCreditFacility  = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+//
+//             if(existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
+//                 List<ExistingCollateralDetail> borrowerCollateralDetailList = existingCollateralDetailDAO.findByExistingCreditFacility(existingCreditFacility,1);
+//             }
 
             for (int i = 0; i < newGuarantorDetailListPersist.size(); i++) {
                 log.info("  newGuarantorDetailList  is " + i);
                 NewGuarantorDetail newGuarantorDetail = newGuarantorDetailListPersist.get(i);
                 NewGuarantorDetailView newGuarantorDetailView = newCreditFacilityView.getNewGuarantorDetailViewList().get(i);
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getNewCreditDetailViewList(), newCreditDetailList, newGuarantorDetail, user);
-                newGuarantorRelationDAO.persist(newGuarantorCreditList);
-                log.info("persist newGuarantorCreditList...");
-            }
-        }
-*/
-
-        if (newCreditFacilityView.getNewGuarantorDetailViewList() != null) {
-            List<NewGuarantorDetail> newGuarantorDetailListPersist = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
-            newGuarantorDetailDAO.persist(newGuarantorDetailListPersist);
-            log.info("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
-            onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);
-
-            for (int i = 0; i < newGuarantorDetailListPersist.size(); i++) {
-                log.info("  newGuarantorDetailList  is " + i);
-                NewGuarantorDetail newGuarantorDetail = newGuarantorDetailListPersist.get(i);
-                NewGuarantorDetailView newGuarantorDetailView = newCreditFacilityView.getNewGuarantorDetailViewList().get(i);
-                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditDetailList, newGuarantorDetail, user);
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditDetailList , newGuarantorDetail, user);
                 newGuarantorRelationDAO.persist(newGuarantorCreditList);
                 log.info("persist newGuarantorCreditList...");
             }
@@ -532,7 +528,7 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeLoanDBR(sumTotalLoanDbr);//sumTotalLoanDbr
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
-                        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+                        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
 
                         if (existingCreditFacilityView != null) {
                             sumTotalCommercial = sumTotalCommercial.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(sumTotalPropose));
@@ -688,7 +684,7 @@ public class CreditFacProposeControl extends BusinessControl {
         rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
-        ExistingCreditFacilityView existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
+        existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
 
 //        ExistingCreditFacilityView existingCreditFacilityView = new ExistingCreditFacilityView();
 //        List<ExistingCreditDetailView> borrowerComExistingCredits = new ArrayList<ExistingCreditDetailView>();

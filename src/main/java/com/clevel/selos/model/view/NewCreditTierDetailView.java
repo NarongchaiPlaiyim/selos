@@ -15,13 +15,16 @@ public class NewCreditTierDetailView implements Serializable {
     private BigDecimal finalInterest;
     private BaseRate finalBasePrice;
     private String finalPriceRate;
+    private BigDecimal finalPriceSum;
     private BigDecimal installment;
     private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
+    private BigDecimal standardPriceSum;
     private BaseRate suggestBasePrice;
     private String suggestPrice;
     private BigDecimal suggestInterest;
+    private BigDecimal suggestPriceSum;
     private int tenor;
     private boolean canEdit;
     private Date createDate;
@@ -189,6 +192,30 @@ public class NewCreditTierDetailView implements Serializable {
 
     public void setSuggestBasePrice(BaseRate suggestBasePrice) {
         this.suggestBasePrice = suggestBasePrice;
+    }
+
+    public BigDecimal getFinalPriceSum() {
+        return finalPriceSum;
+    }
+
+    public void setFinalPriceSum(BigDecimal finalPriceSum) {
+        this.finalPriceSum = finalPriceSum;
+    }
+
+    public BigDecimal getStandardPriceSum() {
+        return standardPriceSum;
+    }
+
+    public void setStandardPriceSum(BigDecimal standardPriceSum) {
+        this.standardPriceSum = standardPriceSum;
+    }
+
+    public BigDecimal getSuggestPriceSum() {
+        return suggestPriceSum;
+    }
+
+    public void setSuggestPriceSum(BigDecimal suggestPriceSum) {
+        this.suggestPriceSum = suggestPriceSum;
     }
 
     @Override

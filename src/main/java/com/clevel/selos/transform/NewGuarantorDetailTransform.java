@@ -16,7 +16,9 @@ import java.util.List;
 public class NewGuarantorDetailTransform extends Transform {
 
     @Inject
-    public NewGuarantorDetailTransform() {}
+    public NewGuarantorDetailTransform() {
+    }
+
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -73,8 +75,13 @@ public class NewGuarantorDetailTransform extends Transform {
                 List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
 
                 for (NewGuarantorCredit newGuarantorCredit : newGuarantorCreditList) {
-                    newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
-                    log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
+                    if (newGuarantorCredit.getExistingCreditDetail() != null) {
+                        log.info("newGuarantorCredit.getExistingCreditDetail :: {}", newGuarantorCredit.getExistingCreditDetail().getId());
+                    } else if (newGuarantorCredit.getNewCreditDetail() != null) {
+                        log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
+                    }
+//                    newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
+//                    log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
                 }
                 log.info("newCreditDetailList Guarantor:: {}", newCreditDetailList.size());
                 List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditDetailList);
