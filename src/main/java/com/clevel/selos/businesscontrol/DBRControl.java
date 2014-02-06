@@ -62,25 +62,7 @@ public class DBRControl extends BusinessControl {
 
     public ActionResult saveDBRInfo(DBRView dbrView, List<NCBDetailView> ncbDetailViews) {
         WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
-        BigDecimal totalMonthDebtBorrowerStart = BigDecimal.ZERO;
-        BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
-        if(dbrView.getId() != 0){
-            totalMonthDebtBorrowerStart = dbrView.getTotalMonthDebtBorrowerStart();
-            totalMonthDebtBorrowerFinal = dbrView.getTotalMonthDebtBorrowerFinal();
-            dbrView.setUpdateTotalDebtBorrower(false);
-        }else{
-            for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-                if(ncbDetailView.getRefinanceFlag() == 2){
-                    totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
-                }
-            }
-            dbrView.setUpdateTotalDebtBorrower(true);
-        }
-        dbrView.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
-        dbrView.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
-
-        DBR dbr = calculateDBR(dbrView, workCase);
+        DBR dbr = calculateDBR(dbrView, workCase, ncbDetailViews);
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
         newDbrDetails = dbr.getDbrDetails();
         dbr.setDbrDetails(null);
@@ -156,17 +138,25 @@ public class DBRControl extends BusinessControl {
         return dbrView;
     }
 
-    private DBR calculateDBR(DBRView dbrView, WorkCase workCase){
+    private DBR calculateDBR(DBRView dbrView, WorkCase workCase, List<NCBDetailView> ncbDetailViews){
         int roleId = getCurrentUser().getRole().getId();
         DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, getCurrentUser());
         List<DBRDetail> dbrDetails = dbrDetailTransform.getDbrDetailModels(dbrView.getDbrDetailViews(), getCurrentUser(), dbr);
 
+        BigDecimal totalMonthDebtBorrowerStart = BigDecimal.ZERO;
+        BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
+
         //**NCB Borrower totalDebtForCalculate
-        BigDecimal totalMonthDebtBorrowerStart = dbrView.getTotalMonthDebtBorrowerStart();
-        BigDecimal totalMonthDebtBorrowerFinal = dbrView.getTotalMonthDebtBorrowerFinal();
+        for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+            totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
+            if(ncbDetailView.getRefinanceFlag() == 2){
+                totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
+            }
+        }
 
         //**Relate DbrDetail Calculate
         BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
+        BigDecimal totalMonthDebtRelatedWc = BigDecimal.ZERO;
         for(DBRDetail dbrDetail : Util.safetyList(dbrDetails)){
             int loanType = dbrDetail.getLoanType().getCalculateType();
             final BigDecimal month = BigDecimal.valueOf(12);
@@ -193,6 +183,10 @@ public class DBRControl extends BusinessControl {
                     break;
             }
             dbrDetail.setDebtForCalculate(debtForCalculate);
+
+            if(dbrDetail.getLoanType() != null && dbrDetail.getLoanType().getWcFlag() == 1){
+                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getDebtForCalculate());
+            }
 
             totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
@@ -221,6 +215,9 @@ public class DBRControl extends BusinessControl {
         dbr.setDbrBeforeRequest(dbrBeforeRequest);
         dbr.setDbrDetails(dbrDetails);
         dbr.setFinalDBR(finalDBR);
+        dbr.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
+        dbr.setTotalMonthDebtRelatedWc(totalMonthDebtRelatedWc);
+        dbr.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
         log.debug("calculateDBR complete");
         return dbr;
     }
@@ -241,18 +238,18 @@ public class DBRControl extends BusinessControl {
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-            BigDecimal totalMonthDebtBorrowerStart = BigDecimal.ZERO;
-            BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
-            for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-                if(ncbDetailView.getRefinanceFlag() == 2){
-                    totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
-                }
-            }
-            dbrView.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
-            dbrView.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
-            dbrView.setUpdateTotalDebtBorrower(true);
-            DBR dbr =  calculateDBR(dbrView, workCase);
+//            BigDecimal totalMonthDebtBorrowerStart = BigDecimal.ZERO;
+//            BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
+//            for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
+//                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
+//                if(ncbDetailView.getRefinanceFlag() == 2){
+//                    totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
+//                }
+//            }
+//            dbrView.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
+//            dbrView.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
+//            dbrView.setUpdateTotalDebtBorrower(true);
+            DBR dbr =  calculateDBR(dbrView, workCase, ncbDetailViews);
             dbrdao.persist(dbr);
         }
         return ActionResult.SUCCESS;

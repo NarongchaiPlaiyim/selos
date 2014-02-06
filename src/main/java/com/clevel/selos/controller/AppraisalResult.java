@@ -161,7 +161,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("-- onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        if(false){//session.getAttribute("workCaseId") == null){
+        if(session.getAttribute("workCaseId") == null){ //false){
             log.info("preRender ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
@@ -173,8 +173,8 @@ public class AppraisalResult implements Serializable {
             user = (User)session.getAttribute("user");
             log.debug("-- User : {}", ""+user.toString());
             init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            workCaseId = 4L;
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+//            workCaseId = 4L;
             log.info("workCaseId :: {} ",workCaseId);
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
             if(appraisalView != null){
@@ -184,7 +184,7 @@ public class AppraisalResult implements Serializable {
                 }
             } else {
                 appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] has created");
+                log.debug("-- AppraisalView[New] created");
             }
         }
     }
@@ -314,7 +314,8 @@ public class AppraisalResult implements Serializable {
                 flag = checkJobIdExist(newCollateralViewList, jobIDSearch);
                 if(flag){
                     //todo : call interface COM_S
-                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
+                    newCollateralView = callCOM_S(jobIDSearch);
+//                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
                     if(Util.isNull(newCollateralView)){
                         newCollateralView = new NewCollateralView();
                     }
@@ -343,9 +344,9 @@ public class AppraisalResult implements Serializable {
         log.info("jobIDSearch is  {}", jobIDSearch);
         AppraisalDataResult appraisalDataResult;
         appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
-        if(appraisalDataResult != null && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
+        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
             log.debug("-- succeed");
-            newCollateralView = collateralBizTransform.transformCollteral(appraisalDataResult);
+            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
             return newCollateralView;
         } else {
             log.error("Exception : {}", "--------------------------------------------------------------------------------------------------");
@@ -520,7 +521,7 @@ public class AppraisalResult implements Serializable {
             appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
             log.info("end coms ");
             searchCOMS = true;
-//            collateralDetailView = collateralBizTransform.transformCollteral(appraisalDataResult);
+//            collateralDetailView = collateralBizTransform.transformCollateral(appraisalDataResult);
 //
 //            for(int i=0;i<collateralDetailView.getCollateralHeaderDetailViewList().size();i++){
 //                onSetRowNoHeaderCollaral(collateralDetailView.getCollateralHeaderDetailViewList());
