@@ -54,7 +54,7 @@ public class AppraisalDetailTransform extends Transform {
             newCollateralHeadId = view.getNewCollateralHeadId();
             log.debug("-- newCollateralId {}", newCollateralId);
             log.debug("-- newCollateralHeadId {}", newCollateralHeadId);
-            if(newCollateralId != 0){
+            if(!Util.isZero(newCollateralId)){
                 for(NewCollateral newCollateral : newCollateralList){
                     if(newCollateral.getId() == newCollateralId){
                         log.debug("-- newCollateral.getId()[{}] == newCollateralId[{}] ",newCollateral.getId(), newCollateralId);
@@ -112,7 +112,6 @@ public class AppraisalDetailTransform extends Transform {
                 log.debug("-- NewCollateral added to newCollateralList[Size {}]", newCollateralList.size());
             }
         }
-
         return newCollateralList;
     }
 

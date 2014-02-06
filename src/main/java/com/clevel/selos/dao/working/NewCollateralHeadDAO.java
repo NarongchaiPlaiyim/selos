@@ -30,12 +30,11 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
     }
 
     public List<NewCollateralHead> findByNewCollateralId(final long newCollateralId) {
-        log.info("findByNewCollateral ::: {}", newCollateralId);
+        log.info("-- findByNewCollateral ::: {}", newCollateralId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
-        log.info("newCollateralHeadDetails ::: size : {}", newCollateralHeadDetails.size());
         return newCollateralHeadDetails;
     }
 
