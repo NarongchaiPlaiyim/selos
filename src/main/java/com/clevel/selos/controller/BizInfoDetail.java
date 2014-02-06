@@ -296,9 +296,9 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBizComment(businessDesc.getComment());
             bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
         }
-        bizInfoDetailView.setStandardAccountPayable(new BigDecimal(businessDesc.getAr()));
-        bizInfoDetailView.setStandardAccountReceivable(new BigDecimal(businessDesc.getAp()));
-        bizInfoDetailView.setStandardStock(new BigDecimal (businessDesc.getInv()));
+        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
+        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
+        bizInfoDetailView.setStandardStock(businessDesc.getInv());
         onChangeBizPermission();
 
     }
