@@ -147,7 +147,7 @@ public class BankStatementSummary implements Serializable {
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
-
+            bankStmtControl.setSummaryColor(summaryView, workCaseId);
             provideSOCPAndCalSummary();
         }
         else {// Create new Bank statement summary
@@ -344,10 +344,11 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
-        if (!checkConfirmToAddBankStmt()) return;
-
         selectedBankStmtView = null;
         isTMB = true;
+
+        if (!checkConfirmToAddBankStmt()) return;
+
         onRedirectToBankStmtDetail();
     }
 
@@ -359,10 +360,11 @@ public class BankStatementSummary implements Serializable {
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
         log.debug("numberOfMonths: {}, lastMonthDate: {}", numberOfMonths, lastMonthDate);
 
-        if (!checkConfirmToAddBankStmt()) return;
-
         selectedBankStmtView = null;
         isTMB = false;
+
+        if (!checkConfirmToAddBankStmt()) return;
+
         onRedirectToBankStmtDetail();
     }
 
@@ -423,13 +425,6 @@ public class BankStatementSummary implements Serializable {
     private void passParamsToBankStmtDetail() {
         log.debug("passParamsToBankStmtDetail() summaryView.id: {}, seasonalFlag: {}, expectedSubmitDate: {}, isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView: {}",
                 summaryView.getId(), seasonalFlag, expectedSubmitDate, isTMB, lastMonthDate, numberOfMonths, selectedBankStmtView);
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("bankStmtSumView", summaryView);
-//        map.put("isTmbBank", isTMB);
-//        map.put("lastMonthDate", lastMonthDate);
-//        map.put("numberOfMonths", numberOfMonths);
-//        map.put("selectedBankStmtView", selectedBankStmtView);
-//        FacesUtil.getFlash().put("bankStmtSumParams", map);
 
         summaryView.setSeasonal(seasonalFlag);
         summaryView.setExpectedSubmitDate(expectedSubmitDate);

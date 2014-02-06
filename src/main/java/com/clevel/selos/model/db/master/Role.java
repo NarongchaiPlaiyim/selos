@@ -22,8 +22,6 @@ public class Role implements Serializable {
     @OneToOne
     @JoinColumn(name = "roletype_id")
     private RoleType roleType;
-    @OneToMany(mappedBy = "role")
-    List<Step> stepList;
     @Column(name = "active")
     private int active;
 
@@ -68,14 +66,6 @@ public class Role implements Serializable {
 
     public void setRoleType(RoleType roleType) {
         this.roleType = roleType;
-    }
-
-    public List<Step> getStepList() {
-        return stepList;
-    }
-
-    public void setStepList(List<Step> stepList) {
-        this.stepList = stepList;
     }
 
     public int getActive() {

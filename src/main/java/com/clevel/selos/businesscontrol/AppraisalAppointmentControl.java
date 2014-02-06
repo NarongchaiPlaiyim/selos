@@ -68,7 +68,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
         if( appraisal != null){
             log.info("appraisal != null ");
-            appraisalView = appraisalTransform.transformToView(appraisal);
+            appraisalView = appraisalTransform.transformToView(appraisal, null);
 
             appraisalDetailList = appraisalDetailDAO.findByAppraisal(appraisal);
             if(appraisalDetailList.size()>0){
@@ -78,7 +78,8 @@ public class AppraisalAppointmentControl extends BusinessControl {
 
             appraisalContactDetailList= appraisalContactDetailDAO.findByAppraisal(appraisal);
             if(appraisalContactDetailList.size()>0){
-                appraisalContactDetailViewList = appraisalContactDetailTransform.transformToView(appraisalContactDetailList);
+                //Chai commented
+//                appraisalContactDetailViewList = appraisalContactDetailTransform.transformToView(appraisalContactDetailList, null, null);
             }
 
             contactRecordDetailList = contactRecordDetailDAO.findByAppraisal(appraisal);
@@ -118,7 +119,7 @@ public class AppraisalAppointmentControl extends BusinessControl {
             List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
             appraisalDetailDAO.delete(appraisalDetailListDel);
         }
-        appraisalDetailList = appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);
+        appraisalDetailList = null;//appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);
         appraisalDetailDAO.persist(appraisalDetailList);
         log.info( "appraisalDetailDAO persist end" );
 

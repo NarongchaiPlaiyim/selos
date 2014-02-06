@@ -31,7 +31,9 @@ public class BizInfoSummaryTransform extends Transform {
     public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView) {
         log.info("find transformToModel begin");
         log.info("BizInfoSummaryView : {}", bizInfoSummaryView);
-        BizInfoSummary bizInfoSummary = new BizInfoSummary();
+        BizInfoSummary bizInfoSummary;
+
+        bizInfoSummary = new BizInfoSummary();
 
         if (bizInfoSummaryView.getId() != 0) {
             bizInfoSummary.setId(bizInfoSummaryView.getId());
@@ -47,8 +49,8 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setOwnerName(bizInfoSummaryView.getOwnerName());
         bizInfoSummary.setExpiryDate(bizInfoSummaryView.getExpiryDate());
 
-        log.info("transformToModel bizInfoSummaryView getAddressMoo is ---- : {}" , bizInfoSummaryView.getAddressMoo());
-        log.info("transformToModel bizInfoSummaryView getAddressNo is ---- : {}" , bizInfoSummaryView.getAddressNo());
+        log.info("transformToModel bizInfoSummaryView getAddressMoo is ---- " + bizInfoSummaryView.getAddressMoo());
+        log.info("transformToModel bizInfoSummaryView getAddressNo is ---- " + bizInfoSummaryView.getAddressNo());
 
         bizInfoSummary.setAddressNo(bizInfoSummaryView.getAddressNo());
         bizInfoSummary.setAddressMoo(bizInfoSummaryView.getAddressMoo());
@@ -59,7 +61,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         if(bizInfoSummaryView.getProvince()!=null && bizInfoSummaryView.getProvince().getCode() != 0){
             province = provinceDAO.findById(bizInfoSummaryView.getProvince().getCode());
-            log.info("find transformToModel findById  is : {}" ,province.toString());
+            log.info("find transformToModel findById  is " + province.toString());
             bizInfoSummary.setProvince(province);
         }else{
             bizInfoSummary.setProvince(null);
@@ -69,7 +71,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         if(bizInfoSummaryView.getDistrict()!=null && bizInfoSummaryView.getDistrict().getId() != 0){
             district = districtDAO.findById(bizInfoSummaryView.getDistrict().getId());
-            log.info("find transformToModel findById  is : {}" , district.toString());
+            log.info("find transformToModel findById  is " + district.toString());
             bizInfoSummary.setDistrict(district);
         }else{
             bizInfoSummary.setDistrict(null);
@@ -78,7 +80,7 @@ public class BizInfoSummaryTransform extends Transform {
 //        log.info("find transformToModel subDistrict" + bizInfoSummaryView.getSubDistrict().getCode());
         if(bizInfoSummaryView.getSubDistrict()!=null && bizInfoSummaryView.getSubDistrict().getCode() != 0){
             subDistrict = subDistrictDAO.findById(bizInfoSummaryView.getSubDistrict().getCode());
-            log.info("find transformToModel findById  is : {}", subDistrict.toString());
+            log.info("find transformToModel findById  is " + subDistrict.toString());
             bizInfoSummary.setSubDistrict(subDistrict);
         }else{
             bizInfoSummary.setSubDistrict(null);
@@ -87,7 +89,7 @@ public class BizInfoSummaryTransform extends Transform {
 //        log.info("find transformToModel getCountry" + bizInfoSummaryView.getCountry().getId());
         if(bizInfoSummaryView.getCountry()!=null && bizInfoSummaryView.getCountry().getId() != 0){
             country = countryDAO.findById(bizInfoSummaryView.getCountry().getId());
-            log.info("find transformToModel findById  is : {}", country.toString());
+            log.info("find transformToModel findById  is " + country.toString());
             bizInfoSummary.setCountry(country);
         }else{
             bizInfoSummary.setCountry(null);
@@ -102,7 +104,9 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setRegistrationDate(bizInfoSummaryView.getRegistrationDate());
         bizInfoSummary.setEstablishDate(bizInfoSummaryView.getEstablishDate());
 
-        log.info("find transformToModel getReferredExperience : {}", bizInfoSummaryView.getReferredExperience().getId());
+        // fixed: due to NPE when getReferredExperience is null.
+//        log.info("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+
         if(bizInfoSummaryView.getReferredExperience()!=null && bizInfoSummaryView.getReferredExperience().getId() != 0){
             referredExperience = referredExperienceDAO.findById(bizInfoSummaryView.getReferredExperience().getId());
             bizInfoSummary.setReferredExperience(referredExperience);

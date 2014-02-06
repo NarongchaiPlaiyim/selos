@@ -127,7 +127,15 @@ public class ValidationUtil implements Serializable {
         return value.compareTo(target) > 0;
     }
 
+    public static boolean isGreaterEqual(BigDecimal value, BigDecimal target) {
+        return value.compareTo(target) >= 0;
+    }
+
     public static boolean isLessThan(BigDecimal value, BigDecimal target) {
         return value.compareTo(target) < 0;
+    }
+
+    public static boolean isLessEqual(BigDecimal value, BigDecimal target) {
+        return value.compareTo(target) <= 0;
     }
 }

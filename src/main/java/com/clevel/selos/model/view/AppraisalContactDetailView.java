@@ -11,12 +11,15 @@ import java.util.Date;
 public class AppraisalContactDetailView implements Serializable {
     private long id;
     private int no1;
+    private long contractId1;
     private String customerName1;
     private String contactNo1;
     private int no2;
+    private long contractId2;
     private String customerName2;
     private String contactNo2;
     private int no3;
+    private long contractId3;
     private String customerName3;
     private String contactNo3;
     private Date createDate;
@@ -146,17 +149,44 @@ public class AppraisalContactDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public long getContractId1() {
+        return contractId1;
+    }
+
+    public void setContractId1(long contractId1) {
+        this.contractId1 = contractId1;
+    }
+
+    public long getContractId2() {
+        return contractId2;
+    }
+
+    public void setContractId2(long contractId2) {
+        this.contractId2 = contractId2;
+    }
+
+    public long getContractId3() {
+        return contractId3;
+    }
+
+    public void setContractId3(long contractId3) {
+        this.contractId3 = contractId3;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no1", no1)
+                .append("contractId1", contractId1)
                 .append("customerName1", customerName1)
                 .append("contactNo1", contactNo1)
                 .append("no2", no2)
+                .append("contractId2", contractId2)
                 .append("customerName2", customerName2)
                 .append("contactNo2", contactNo2)
                 .append("no3", no3)
+                .append("contractId3", contractId3)
                 .append("customerName3", customerName3)
                 .append("contactNo3", contactNo3)
                 .append("createDate", createDate)
