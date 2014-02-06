@@ -33,8 +33,7 @@ public class PrescreenCollateralTransform extends Transform {
         List<PrescreenCollateral> prescreenCollateralList = new ArrayList<PrescreenCollateral>();
 
         for(PrescreenCollateralView prescreenCollateralView : prescreenCollateralViews){
-            PrescreenCollateral prescreenCollateral = new PrescreenCollateral();
-            prescreenCollateral = transformToModel(prescreenCollateralView, prescreen);
+            PrescreenCollateral prescreenCollateral = transformToModel(prescreenCollateralView, prescreen);
             prescreenCollateralList.add(prescreenCollateral);
         }
 
@@ -53,8 +52,7 @@ public class PrescreenCollateralTransform extends Transform {
         List<PrescreenCollateralView> prescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
 
         for(PrescreenCollateral prescreenCollateral : prescreenCollaterals){
-            PrescreenCollateralView prescreenCollateralView = new PrescreenCollateralView();
-            prescreenCollateralView = transformToView(prescreenCollateral);
+            PrescreenCollateralView prescreenCollateralView = transformToView(prescreenCollateral);
             prescreenCollateralViewList.add(prescreenCollateralView);
         }
 

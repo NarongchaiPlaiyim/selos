@@ -27,7 +27,9 @@ public class LoanAccountTypeTransform implements Serializable {
         }
         loanAccountTypeView.setId(loanAccountType.getId());
         loanAccountTypeView.setName(loanAccountType.getName());
+        loanAccountTypeView.setWcFlag(loanAccountType.getWcFlag());
         loanAccountTypeView.setCalculateType(loanAccountType.getCalculateType());
+
         return loanAccountTypeView;
     }
 
@@ -50,6 +52,7 @@ public class LoanAccountTypeTransform implements Serializable {
         loanAccountType.setId(loanAccountTypeView.getId());
         loanAccountType.setName(loanAccountTypeView.getName());
         loanAccountType.setCalculateType(loanAccountTypeView.getCalculateType());
+        loanAccountType.setWcFlag(loanAccountTypeView.getWcFlag());
         return loanAccountType;
 
     }
