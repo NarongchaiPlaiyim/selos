@@ -148,7 +148,7 @@ public class CreditFacPropose implements Serializable {
     private NewGuarantorDetailView newGuarantorDetailViewItem;
     private List<CustomerInfoView> guarantorList;     // case from select database must to transform to view before to use continue
 
-//    private List<NewCreditDetailView> newCreditDetailListTemp;
+    //    private List<NewCreditDetailView> newCreditDetailListTemp;
 //    private List<NewCreditDetailView> newCollateralCreditDetailList;
 //    private List<NewCreditDetailView> newGuarantorCreditDetailList;
 //    private List<NewCreditDetailView> newCreditDetailList;
@@ -270,8 +270,8 @@ public class CreditFacPropose implements Serializable {
 //                    for (int i = 0; i < newCreditDetailList.size(); i++) {
 //                        hashSeqCredit.put(i, newCreditDetailList.get(i).getUseCount());
 //                    }
-                    proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList() , workCaseId);
-                    log.info("proposeCreditDetailViewList :: {}",proposeCreditDetailViewList.size());
+                    proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+                    log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
                 }
 
@@ -421,7 +421,7 @@ public class CreditFacPropose implements Serializable {
         standardPriceLabel = "";
         finalPriceRate = "";
 
-        newCreditFacilityView = creditFacProposeControl.calWC(newCreditFacilityView,workCaseId);
+        newCreditFacilityView = creditFacProposeControl.calWC(newCreditFacilityView, workCaseId);
     }
 
     //Call  BRMS to get data Propose Credit Info
@@ -465,7 +465,7 @@ public class CreditFacPropose implements Serializable {
 
         for (NewCreditDetailView proposeCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
             proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-            log.info("proposeCreditDetail :: {}",proposeCreditDetail.getNewCreditTierDetailViewList());
+            log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
             proposeCreditDetail.setStandardBasePrice(baseRate);
             proposeCreditDetail.setSuggestBasePrice(baseRate);
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
@@ -478,17 +478,17 @@ public class CreditFacPropose implements Serializable {
 
     public void calculateInstallment(NewCreditDetailView proposeCreditDetail) {
 //        Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
-        log.info("proposeCreditDetail : {}",proposeCreditDetail);
+        log.info("proposeCreditDetail : {}", proposeCreditDetail);
 
         for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
             BigDecimal sumFinal = newCreditTierDetailView.getFinalPriceSum();
             int tenor = newCreditTierDetailView.getTenor();
-            BigDecimal limit    = proposeCreditDetail.getLimit();
+            BigDecimal limit = proposeCreditDetail.getLimit();
             BigDecimal installmentSum = BigDecimal.ZERO;
-            log.info("sumFinal : {} , tenor : {} , limit : {} ",sumFinal,tenor,limit);
-            installmentSum = Util.divide( Util.multiply(Util.multiply(sumFinal, limit), Util.add(BigDecimal.ONE, sumFinal).pow(tenor)) ,
-                    Util.subtract(Util.add(BigDecimal.ONE, sumFinal).pow(tenor), BigDecimal.ONE) );
-            log.info("installmentSum : {}",installmentSum);
+            log.info("sumFinal : {} , tenor : {} , limit : {} ", sumFinal, tenor, limit);
+            installmentSum = Util.divide(Util.multiply(Util.multiply(sumFinal, limit), Util.add(BigDecimal.ONE, sumFinal).pow(tenor)),
+                    Util.subtract(Util.add(BigDecimal.ONE, sumFinal).pow(tenor), BigDecimal.ONE));
+            log.info("installmentSum : {}", installmentSum);
             newCreditTierDetailView.setInstallment(installmentSum);
         }
     }
@@ -531,12 +531,12 @@ public class CreditFacPropose implements Serializable {
         log.info("appraisalDataResult :: {}", appraisalDataResult.toString());
 
         if (appraisalDataResult != null && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())) {
-            log.debug("-- call com-s is succeed ::: {}",ActionResult.SUCCEED);
-            log.info("appraisalDataResult :: {}",appraisalDataResult.toString());
+            log.debug("-- call com-s is succeed ::: {}", ActionResult.SUCCEED);
+            log.info("appraisalDataResult :: {}", appraisalDataResult.toString());
             newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
             return newCollateralView;
         } else {
-            log.error("Exception : {}" ,appraisalDataResult.getActionResult());
+            log.error("Exception : {}", appraisalDataResult.getActionResult());
             return null;
         }
     }
@@ -755,8 +755,8 @@ public class CreditFacPropose implements Serializable {
 
             if (modeForDB == ModeForDB.ADD_DB) {
 //                newCreditDetailList = newCreditFacilityView.getNewCreditDetailViewList();
-                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList() , workCaseId);
-                log.info("proposeCreditDetailViewList :: {}",proposeCreditDetailViewList.size());
+                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+                log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
             }
 
         } else {
@@ -785,7 +785,7 @@ public class CreditFacPropose implements Serializable {
 
 //        if (used == 0) {
 //            log.info("used ::: {} ", used);
-            newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
+        newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
 
 //        } else {
 //            log.info("used::: {}", used);
@@ -1089,8 +1089,6 @@ public class CreditFacPropose implements Serializable {
                 }
             }
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
-
-
 
 
         } else {
@@ -1514,35 +1512,27 @@ public class CreditFacPropose implements Serializable {
         log.info("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 
         try {
-            if ((newCreditFacilityView.getInvestedCountry().getId() != 0) && (newCreditFacilityView.getLoanRequestType().getId() != 0)) {
-//                if ((newCreditFacilityView.getNewCreditDetailViewList().size() > 0) && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
-//                        && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-                if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-                    creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
-                    creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-                    log.info("Bean :: onSaveNewCreditFacility ::");
-                    messageHeader = msg.get("app.header.save.success");
-                    message = msg.get("app.propose.response.save.success");
-                } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-                    creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
-                    creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
-                    messageHeader = msg.get("app.header.save.success");
-                    message = msg.get("app.propose.response.save.success");
-                } else {
-                    messageHeader = msg.get("app.propose.response.cannot.save");
-                    message = msg.get("app.propose.response.desc.cannot.save");
+//            if ((newCreditFacilityView.getInvestedCountry().getId() != 0)
+//                && (newCreditFacilityView.getLoanRequestType().getId() != 0)
+//                && (newCreditFacilityView.getNewCreditDetailViewList().size() > 0)
+//                && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
+//                && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
+//                && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
 
-                }
+                creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+                creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.propose.response.save.success");
 
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//                }
-            } else {
-                messageHeader = msg.get("app.propose.response.cannot.save");
-                message = msg.get("app.propose.response.desc.cannot.save");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }
-        } catch (Exception ex) {
+
+//            }else{
+//                messageHeader = msg.get("app.propose.response.cannot.save");
+//                message = msg.get("app.propose.response.desc.cannot.save");
+//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//            }
+        } catch( Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.propose.response.save.failed");
 
@@ -1554,7 +1544,6 @@ public class CreditFacPropose implements Serializable {
 
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
         }
 
     }

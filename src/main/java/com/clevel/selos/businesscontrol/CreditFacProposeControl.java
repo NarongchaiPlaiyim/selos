@@ -706,7 +706,6 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setProductProgram(existingCreditDetailView.getExistProductProgram());
                 proposeCreditDetailView.setCreditFacility(existingCreditDetailView.getExistCreditType());
                 proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
-//                proposeCreditDetailView.setGuaranteeAmount();
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }
