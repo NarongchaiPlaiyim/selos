@@ -87,6 +87,10 @@ public class AppraisalTransform extends Transform {
         appraisal.setZoneLocation(appraisalView.getZoneLocation());
         appraisal.setModifyDate(DateTime.now().toDate());
         appraisal.setModifyBy(user);
+
+        appraisalContactDetailList = safetyList(appraisalContactDetailTransform.transformToModel(appraisalView.getAppraisalContactDetailView(), id, user));
+        appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
+
         return appraisal;
     }
 

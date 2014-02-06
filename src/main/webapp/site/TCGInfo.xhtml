@@ -72,7 +72,7 @@
                                  required="#{not empty param[saveTCG.clientId]}">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
-                        <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                        <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
@@ -89,7 +89,7 @@
                                  onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
-                        <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                        <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
@@ -106,7 +106,7 @@
                                  onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
-                        <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                        <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
@@ -123,7 +123,7 @@
                                  onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
-                        <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                        <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
@@ -140,7 +140,7 @@
                                  onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                          type="number"/>
-                        <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                        <p:ajax event="blur" update="@this"/>
                     </p:inputText>
                 </td>
             </tr>
@@ -239,16 +239,19 @@
                                         <h:outputText id="sumAppraisalAmountId"
                                                       value="#{tcgInfo.TCGView.sumAppraisalAmount}"
                                                       style="text-align:right">
-                                            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                            <f:convertNumber pattern="#,##0"
+                                                             minFractionDigits="2"
                                                              maxFractionDigits="2"/>
                                         </h:outputText>
                                     </f:facet>
                                 </p:column>
                                 <p:column style="text-align:right">
                                     <f:facet name="footer">
-                                        <h:outputText id="sumLtvValueId" value="#{tcgInfo.TCGView.sumLtvValue}"
+                                        <h:outputText id="sumLtvValueId"
+                                                      value="#{tcgInfo.TCGView.sumLtvValue}"
                                                       style="text-align:right">
-                                            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                            <f:convertNumber pattern="#,##0"
+                                                             minFractionDigits="2"
                                                              maxFractionDigits="2"/>
                                         </h:outputText>
                                     </f:facet>

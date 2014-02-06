@@ -51,7 +51,8 @@ public class NewGuarantorCreditTransform extends Transform {
 
 
                 if (proposeCreditDetailView.getTypeOfStep() == "E") {
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long)proposeCreditDetailView.getSeq());
+                    log.info("existingCreditDetail :: {}",existingCreditDetail.getId());
                     newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
                     newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                 } else if (proposeCreditDetailView.getTypeOfStep() == "N") {
