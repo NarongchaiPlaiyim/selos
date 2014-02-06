@@ -15,6 +15,7 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -821,8 +822,17 @@ public class CustomerTransform extends Transform {
             customerOblInfo.setNumberOfMonthsLastContractDate(customerInfoView.getNumberOfMonthsLastContractDate());
             customerOblInfo.setAdjustClass(customerInfoView.getAdjustClass());
             customerOblInfo.setRatingFinal(sbfScoreTransform.transformToModel(customerInfoView.getRatingFinal()));
-            customerOblInfo.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
-            customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+            if(customerInfoView.getUnpaidFeeInsurance() != null){
+                customerOblInfo.setUnpaidFeeInsurance(customerInfoView.getUnpaidFeeInsurance());
+            } else {
+                customerOblInfo.setUnpaidFeeInsurance(BigDecimal.ZERO);
+            }
+            if(customerInfoView.getPendingClaimLG() != null){
+                customerOblInfo.setPendingClaimLG(customerInfoView.getPendingClaimLG());
+            } else {
+                customerOblInfo.setPendingClaimLG(BigDecimal.ZERO);
+            }
+
             customerOblInfo.setCustomer(customer);
             customer.setCustomerOblInfo(customerOblInfo);
         } else {

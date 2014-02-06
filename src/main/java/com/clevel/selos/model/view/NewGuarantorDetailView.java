@@ -17,7 +17,8 @@ public class NewGuarantorDetailView implements Serializable {
     private BigDecimal totalLimitGuaranteeAmount;
     private int isApproved;
 
-    private List<NewCreditDetailView> newCreditDetailViewList;
+    private List<NewCreditDetailView> newCreditDetailViewList;   //no use
+    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
     private Date createDate;
     private Date modifyDate;
@@ -33,6 +34,7 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
+        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
     }
 
     public long getId() {
@@ -115,6 +117,14 @@ public class NewGuarantorDetailView implements Serializable {
         isApproved = approved;
     }
 
+    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
+        return proposeCreditDetailViewList;
+    }
+
+    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
+        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -124,6 +134,7 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("isApproved", isApproved)
                 .append("newCreditDetailViewList", newCreditDetailViewList)
+                .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

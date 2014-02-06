@@ -61,7 +61,7 @@
                                      onkeypress="return onKeyPressMoney(event);">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
-                            <p:ajax event="change" update=":tcgDlgForm:appraisalAmount"/>
+                            <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
                         </p:inputText>
                     </td>
                 </tr>

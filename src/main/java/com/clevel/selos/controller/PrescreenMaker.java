@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
@@ -230,6 +231,8 @@ public class PrescreenMaker implements Serializable {
     private PrescreenBusinessControl prescreenBusinessControl;
     @Inject
     private InboxControl inboxControl;
+    @Inject
+    private CustomerInfoControl customerInfoControl;
 
     public PrescreenMaker() {
     }
@@ -1918,7 +1921,13 @@ public class PrescreenMaker implements Serializable {
                     int searchBy = borrowerInfo.getSearchBy();
                     String searchId = borrowerInfo.getSearchId();
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                    borrowerInfo = customerInfoResultView.getCustomerInfoView();
+                    //TODO get Customer Segment
+                    log.debug("onSearchCustomerInfo ::: getServicement from CustomerInfo");
+                    CustomerInfoView tmpCustomerInfoView = customerInfoResultView.getCustomerInfoView();
+                    tmpCustomerInfoView = customerInfoControl.getCustomerCreditInfo(tmpCustomerInfoView);
+                    log.debug("onSearchCustomerInfo ::: getServicement : {}", tmpCustomerInfoView.getServiceSegmentView());
+                    //borrowerInfo = customerInfoResultView.getCustomerInfoView();
+                    borrowerInfo = tmpCustomerInfoView;
                     borrowerInfo.setSearchBy(searchBy);
                     borrowerInfo.setSearchFromRM(1);
                     borrowerInfo.setSearchId(searchId);

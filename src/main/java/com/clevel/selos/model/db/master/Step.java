@@ -12,16 +12,17 @@ public class Step implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
-    @Column(name = "name", length = 10)
+    @Column(name = "name", length = 100)
     private String name;
     @Column(name = "description", length = 100)
     private String description;
     @OneToOne
     @JoinColumn(name = "stage_id")
     private Stage stage;
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Column(name = "doc_check", columnDefinition = "int default 0")
+    private int docCheck;
+    @Column(name = "check_brms", columnDefinition = "int default 0")
+    private int checkBRMS;
     @Column(name = "active")
     private int active;
 
@@ -60,12 +61,20 @@ public class Step implements Serializable {
         this.stage = stage;
     }
 
-    public Role getRole() {
-        return role;
+    public int getDocCheck() {
+        return docCheck;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setDocCheck(int docCheck) {
+        this.docCheck = docCheck;
+    }
+
+    public int getCheckBRMS() {
+        return checkBRMS;
+    }
+
+    public void setCheckBRMS(int checkBRMS) {
+        this.checkBRMS = checkBRMS;
     }
 
     public int getActive() {
@@ -83,7 +92,6 @@ public class Step implements Serializable {
                 append("name", name).
                 append("description", description).
                 append("stage", stage).
-                append("role", role.getId()).
                 append("active", active).
                 toString();
     }
