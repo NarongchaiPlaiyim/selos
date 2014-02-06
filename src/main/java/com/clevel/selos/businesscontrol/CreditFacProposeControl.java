@@ -732,8 +732,10 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal onePointFive = BigDecimal.valueOf(1.50);
         BigDecimal thirtyFive = BigDecimal.valueOf(35);
         BigDecimal fifty = BigDecimal.valueOf(50);
+        BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         BigDecimal adjustDBR = BigDecimal.ZERO;
+        //todo : this value
         BigDecimal weightAP = BigDecimal.ZERO;
         BigDecimal weightAR = BigDecimal.ZERO;
         BigDecimal weightINV = BigDecimal.ZERO;
@@ -785,6 +787,9 @@ public class CreditFacProposeControl extends BusinessControl {
 
         }
 
+//        *** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
+        BigDecimal salesIncome = Util.multiply(adjustDBR,monthOfYear);
+
         //calculation
 //        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
         wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(adjustDBR,dayOfYear),weightAR) , Util.multiply(Util.divide(aaaValue,dayOfYear),weightINV))) , (Util.multiply(Util.divide(aaaValue,dayOfYear),weightAP)));
@@ -823,30 +828,30 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case2WcLimit - totalWcDebit
         case2WcMinLimit = Util.subtract(case2WcLimit,totalWcDebit);
 //        ไม่เกิน 50% ของ case2WcLimit และไม่เกิน case2WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-//        case2Wc50CoreWc;
+        case2Wc50CoreWc =  compareToFindLower(Util.subtract(case2WcLimit,fifty),case2WcMinLimit);
 //        case2WcMinLimit - case2Wc50CoreWc
-//        case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
+        case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
 
-//        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
-//        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
-//        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
-//        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
+        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
+        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
+        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*//        ยอดขาย/รายได้ หาร 12 คูณ 35%
-        case3WcLimit =
+//        ยอดขาย/รายได้ หาร 12 คูณ 35%
+        case3WcLimit = Util.divide(Util.multiply(Util.divide(salesIncome,dayOfYear),thirtyFive),oneHundred);
 //        case3WcLimit - totalWcDebit
-        case3WcMinLimit;
+        case3WcMinLimit = Util.subtract(case2WcLimit,totalWcDebit);
 //        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
-        case3Wc50CoreWc;
+        case3Wc50CoreWc = compareToFindLower(Util.subtract(case3WcLimit,fifty),case3WcMinLimit);
 //        case3WcMinLimit - case3Wc50CoreWc
-        case3WcDebitCoreWc;
+        case3WcDebitCoreWc = Util.subtract(case3WcMinLimit,case3Wc50CoreWc);
 
         newCreditFacilityView.setCase3WcLimit(case3WcLimit);
         newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
         newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
-        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);*/
+        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

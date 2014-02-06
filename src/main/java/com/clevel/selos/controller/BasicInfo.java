@@ -841,9 +841,9 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onAddAccount(){
         if(accountNameList.size() == 0){
             messageHeader = "Information.";
-            message = "Account name is null ! Can't add Open Account";
+            message = "Please Add Account Name !!";
             severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
             return;
         }
 
