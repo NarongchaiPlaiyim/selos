@@ -35,13 +35,13 @@ public class NCBTransform extends Transform {
             ncb.setCreateDate(ncbInfoView.getCreateDate());
             ncb.setCreateBy(ncbInfoView.getCreateBy());
         }else{
-            ncb.setCreateDate(new DateTime().now().toDate());
+            ncb.setCreateDate(DateTime.now().toDate());
             ncb.setCreateBy(ncbInfoView.getCreateBy());
         }
 
         ncb.setActive(true);
         ncb.setModifyBy(ncbInfoView.getModifyBy());
-        ncb.setModifyDate(new DateTime().now().toDate());
+        ncb.setModifyDate(DateTime.now().toDate());
         Customer customer = customerDAO.findById(ncbInfoView.getCustomerId());
         ncb.setCustomer(customer);
         ncb.setCheckIn6Month(ncbInfoView.getCheckIn6Month());

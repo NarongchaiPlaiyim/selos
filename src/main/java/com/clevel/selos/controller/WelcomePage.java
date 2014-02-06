@@ -229,7 +229,7 @@ public class WelcomePage implements Serializable {
             AppraisalDataResult appraisalDataResult = new AppraisalDataResult();
             appraisalDataResult = coms.getAppraisalData("BDM001","PR5401-036-00001");
             log.debug("appraisalDataResult result : {}", appraisalDataResult);
-            NewCollateralView collateralDetailView = callateralBizTransform.transformCollteral(appraisalDataResult);
+            NewCollateralView collateralDetailView = callateralBizTransform.transformCollateral(appraisalDataResult);
             log.debug("collateralDetailView result : {}", collateralDetailView);
         } catch (Exception e) {
             log.error("", e);
