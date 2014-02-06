@@ -10,7 +10,8 @@
             <table class="content_form">
                 <tr>
                     <td class="title" style="width: 150px;">
-                        <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
+                        <h:outputLabel
+                                value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                     </td>
                     <td style="width: 400px;">
                         <p:selectOneMenu id="guarantorName"
@@ -46,9 +47,9 @@
                                 <td>
                                     <p:dataTable style="width: 90%"
                                                  id="creditTypeTable"
-                                                 value="#{creditFacPropose.newGuarantorDetailView.newCreditDetailViewList}"
+                                                 value="#{creditFacPropose.newGuarantorDetailView.proposeCreditDetailViewList}"
                                                  var="creditTypeItem"
-                                                 rowKey="#{creditTypeItem.NewCreditDetailView}"
+                                                 rowKey="#{creditTypeItem.ProposeCreditDetailView}"
                                                  rowIndexVar="rowIndex">
 
                                         <p:columnGroup type="header">
@@ -76,11 +77,13 @@
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{creditTypeItem.accountName}"/><br/>
-                                            <h:outputText value="#{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}"/>
+                                            <h:outputText
+                                                    value="#{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') : msg.get('app.label.change')}"/>
+                                            <h:outputText
+                                                    value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') : creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -88,18 +91,24 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditTypeItem.creditType.name}"/>
+                                            <h:outputText value="#{creditTypeItem.creditFacility.name}"/>
                                         </p:column>
 
                                         <p:column styleClass="right">
                                             <h:outputText value="#{creditTypeItem.limit}">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                                                 maxFractionDigits="2"/>
                                             </h:outputText>
                                         </p:column>
 
-                                        <p:column styleClass="right">
-                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}" maxlength="18"  style="text-align:right">
-                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <p:column>
+                                            <p:inputText value="#{creditTypeItem.guaranteeAmount}"
+                                                         maxlength="18"
+                                                         style="text-align:right">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2"
+                                                                 maxFractionDigits="2"
+                                                                 type="number"/>
                                                 <p:ajax event="blur" update="@this"/>
                                             </p:inputText>
                                         </p:column>
@@ -121,7 +130,6 @@
                                 process=":guarantorDlgForm"
                                 update=":guarantorDlgForm,:frmMain,:msgBoxSystemMessagePanel"
                                 oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
-
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                                 styleClass="small"

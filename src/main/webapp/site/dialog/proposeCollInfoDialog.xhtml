@@ -103,7 +103,7 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3" style="width:600px;">
-        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralView.newCreditDetailViewList}">
+        <p:dataTable var="creditTypeDetailItem" value="#{creditFacPropose.newCollateralView.proposeCreditDetailViewList}">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column style="width:20px;padding: 5px 10px !important;"/>
@@ -131,7 +131,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? 'New' : 'Change'}"/>
+                <h:outputText value="#{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') : creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -139,7 +139,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
+                <h:outputText value="#{creditTypeDetailItem.creditFacility.name}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -216,7 +216,8 @@
                 <f:convertNumber pattern="#,##0"
                                  minFractionDigits="2"
                                  maxFractionDigits="2"
-                                 maxIntegerDigits="14"/>
+                                 maxIntegerDigits="18"
+                                 type="number"/>
                 <p:ajax event="blur" update="@this"/>
             </p:inputText>
         </td>
@@ -252,7 +253,7 @@
                          style="text-align: right;"
                          maxlength="18"
                          required="#{not empty param[btnSaveCollateral.clientId]}">
-                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" type="number" />
                 <p:ajax event="blur" update="@this"/>
             </p:inputText>
         </td>
@@ -300,6 +301,7 @@
                     oncomplete="subCollateralInfoDlg.show();">
                 <f:setPropertyActionListener value="#{i.index}"
                                              target="#{creditFacPropose.rowCollHeadIndex}"/>
+                <p:resetInput target=":subCollateralDlgForm"/>
             </p:commandButton>
         </td>
     </tr>
@@ -384,6 +386,7 @@
                                                      target="#{creditFacPropose.subCollateralDetailItem}"/>
                         <f:setPropertyActionListener value="#{rowIndex}"
                                                      target="#{creditFacPropose.rowSubIndex}"/>
+                        <p:resetInput target=":subCollateralDlgForm"/>
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-trash"
                                      process="@this"
