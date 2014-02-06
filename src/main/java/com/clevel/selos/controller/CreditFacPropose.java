@@ -525,7 +525,7 @@ public class CreditFacPropose implements Serializable {
         if (appraisalDataResult != null && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())) {
             log.debug("-- call com-s is succeed ::: {}",ActionResult.SUCCEED);
             log.info("appraisalDataResult :: {}",appraisalDataResult.toString());
-            newCollateralView = collateralBizTransform.transformCollteral(appraisalDataResult);
+            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
             return newCollateralView;
         } else {
             log.error("Exception : {}" ,appraisalDataResult.getActionResult());

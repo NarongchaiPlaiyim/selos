@@ -118,12 +118,17 @@ public class AppraisalRequest implements Serializable {
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
             if(appraisalView != null){
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-                if(appraisalDetailViewList.size() == 0){
-                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-                }
+                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+
+
+//                if(appraisalDetailViewList.size() == 0){
+//                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+//                }
             } else {
                 appraisalView = new AppraisalView();
                 log.debug("-- AppraisalView[New] has created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] has created");
             }
         }
     }
@@ -190,7 +195,6 @@ public class AppraisalRequest implements Serializable {
 
     public void onSaveAppraisalRequest() {
         log.info("-- onSaveAppraisalRequest::::");
-        log.info("-- appraisalDetailViewList.size() ::: {} ", appraisalDetailViewList.size());
 
         if(appraisalDetailViewListMandate()){
             if(appraisalContactDetailViewMandate()){
@@ -202,6 +206,9 @@ public class AppraisalRequest implements Serializable {
                     }
                     appraisalView.setModifyBy(user);
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                    appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
+
+                    log.debug("-- AppraisalContactDetailView : {}", appraisalContactDetailView.toString());
 
                     appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
 
@@ -238,6 +245,7 @@ public class AppraisalRequest implements Serializable {
         onCreation();
     }
 
+
     private boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
@@ -269,6 +277,7 @@ public class AppraisalRequest implements Serializable {
     }
     private boolean appraisalContactDetailViewMandate(){
         log.debug("-- appraisalContactDetailViewMandate()");
+        //todo :  2 0 21
         boolean result = true;
         if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
             contactFlag = true;
