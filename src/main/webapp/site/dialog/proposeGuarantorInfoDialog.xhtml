@@ -104,7 +104,9 @@
                                         <p:column>
                                             <p:inputText value="#{creditTypeItem.guaranteeAmount}"
                                                          maxlength="18"
-                                                         style="text-align:right">
+                                                         style="text-align:right"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);">
                                                 <f:convertNumber pattern="#,##0.##"
                                                                  minFractionDigits="2"
                                                                  maxFractionDigits="2"

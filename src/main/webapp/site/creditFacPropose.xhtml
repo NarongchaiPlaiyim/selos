@@ -512,7 +512,9 @@
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
                                  style="text-align: right;"
                                  maxlength="18"
-                                 required="#{not empty param[onsaveNewFacility.clientId]}">
+                                 required="#{not empty param[onsaveNewFacility.clientId]}"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -527,7 +529,9 @@
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.maximumSMELimit}"
                                  required="#{not empty param[onsaveNewFacility.clientId]}"
                                  maxlength="18"
-                                 style="text-align: right;">
+                                 style="text-align: right;"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
@@ -1017,7 +1021,10 @@
                 <td style="width: 70px;text-align: left">
 
                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.guarantorBA}"
-                                 style="text-align: right;">
+                                 style="text-align: right;"
+                                 maxlength="17"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);">
                         <f:convertNumber pattern="#,##0"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
