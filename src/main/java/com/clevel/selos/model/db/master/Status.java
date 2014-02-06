@@ -16,7 +16,7 @@ public class Status implements Serializable {
     @Column(name = "type", length = 20)
     @Enumerated(EnumType.STRING)
     private StepType stepType;
-    @Column(name = "name", length = 20)
+    @Column(name = "name", length = 100)
     private String name;
     @Column(name = "description", length = 100)
     private String description;
