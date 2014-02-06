@@ -6,6 +6,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
@@ -720,4 +721,27 @@ public class CreditFacProposeControl extends BusinessControl {
         return proposeCreditDetailViewList;
     }
 
+    public NewCreditFacilityView calWC(NewCreditFacilityView newCreditFacilityView,long workCaseId){
+        BigDecimal dayOfYear = BigDecimal.valueOf(365);
+        BigDecimal monthOfYear = BigDecimal.valueOf(12);
+
+        BigDecimal WeightAP = BigDecimal.ZERO;
+        BigDecimal WeightAR = BigDecimal.ZERO;
+        BigDecimal WeightINV = BigDecimal.ZERO;
+
+
+        if(newCreditFacilityView == null){
+            newCreditFacilityView = new NewCreditFacilityView();
+        }
+
+        //check role
+        User user = getCurrentUser();
+        if(user.getRole().getId() == RoleValue.UW.id()){
+
+        } else { // bdm or other
+
+        }
+
+        return newCreditFacilityView;
+    }
 }

@@ -87,7 +87,7 @@
                 <td>
                     <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
                                      value="#{basicInfo.openAccountView.bankAccountProduct.id}"
-                                     required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0}">
+                                     required="#{basicInfo.openAccountView.bankAccountTypeView.id != 0 and not empty param[saveBtnDialog.clientId]}">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{basicInfo.accountProductList}"
                                        var="accountProduct"
@@ -113,12 +113,12 @@
 
             <tr>
                 <td class="center" colspan="2" style="margin-top: 20px;">
-                    <p:commandButton id="dlgSaveBasicAccBtn"
+                    <p:commandButton id="dlgSaveBasicAccBtn" binding="#{saveBtnDialog}"
                                      value="#{msg.get('app.button.ok')}"
                                      styleClass="small"
                                      actionListener="#{basicInfo.onAddAccount()}"
                                      process="@form"
-                                     update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount"
+                                     update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount,:frmMain,:msgBoxSystemMessagePanel"
                                      oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":basicInfoAccountDlgForm"

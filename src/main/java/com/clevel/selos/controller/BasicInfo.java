@@ -462,6 +462,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onSelectEditAccount(){
+        customerId = 0;
+
         Cloner cloner = new Cloner();
         openAccountView = cloner.deepClone(selectAccount);
         onChangeAccountType();
@@ -838,6 +840,10 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onAddAccount(){
         if(accountNameList.size() == 0){
+            messageHeader = "Information.";
+            message = "Account name is null ! Can't add Open Account";
+            severity = "info";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
 
