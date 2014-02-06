@@ -22,14 +22,21 @@ public class AppraisalContactDetailDAO extends GenericDAO<AppraisalContactDetail
     }
 
     public List<AppraisalContactDetail> findByAppraisal(Appraisal appraisal ){
-
         log.info("findByAppraisal begin ");
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("appraisal", appraisal));
         criteria.addOrder(Order.asc("no"));
         List<AppraisalContactDetail> appraisalContactDetailList = criteria.list();
         log.info("findByAppraisal. (result size: {})", appraisalContactDetailList.size());
+        return appraisalContactDetailList;
+    }
 
+    public List<AppraisalContactDetail> findByAppraisalId(final long appraisalId ){
+        log.info("-- findByAppraisalId : {}", appraisalId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appraisal.id", appraisalId));
+        criteria.addOrder(Order.asc("id"));
+        List<AppraisalContactDetail> appraisalContactDetailList = (List<AppraisalContactDetail>)criteria.list();
         return appraisalContactDetailList;
     }
 }

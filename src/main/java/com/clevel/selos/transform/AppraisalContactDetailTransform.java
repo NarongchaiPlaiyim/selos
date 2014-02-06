@@ -27,62 +27,72 @@ public class AppraisalContactDetailTransform extends Transform {
 
     }
 
-    public List<AppraisalContactDetail> transformToModel(final AppraisalContactDetailView view, final Appraisal appraisal, final User user){
+    public List<AppraisalContactDetail> transformToModel(final AppraisalContactDetailView view, final long appraisal, final User user){
         log.debug("-- transform AppraisalContactDetailView to List<AppraisalContactDetail> {}", ""+appraisalContactDetailView.toString());
         long contractId = 0;
         AppraisalContactDetail model = null;
         String contractForCheck;
-        appraisalContactDetailList = Util.safetyList(appraisalContactDetailDAO.findByAppraisal(appraisal));
+        appraisalContactDetailList = new ArrayList<AppraisalContactDetail>();
+        log.debug("-- new ArrayList<AppraisalContactDetail>() created");
 
-        if(appraisalContactDetailList.size() == 0){
-            appraisalContactDetailList = new ArrayList<AppraisalContactDetail>();
-        }
         contractForCheck = view.getContactNo1();
+        log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId1();
             if(!Util.isZero(contractId)){
                 model = appraisalContactDetailDAO.findById(contractId);
+                log.debug("-- AppraisalContactDetail[1] findById [{}]", contractId);
             } else {
                 model = new AppraisalContactDetail();
+                log.debug("-- new AppraisalContactDetail[1] created");
                 model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
             }
             model.setContactNo(view.getContactNo1());
             model.setCustomerName(view.getCustomerName1());
-            model.setModifyBy(view.getModifyBy());
-            model.setModifyDate(view.getModifyDate());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
             appraisalContactDetailList.add(model);
+            log.debug("-- AppraisalContactDetail added to appraisalContactDetailList[{}]", appraisalContactDetailList.size());
         }
+
         contractForCheck = view.getContactNo2();
+        log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId2();
             if(!Util.isZero(contractId)){
                 model = appraisalContactDetailDAO.findById(contractId);
+                log.debug("-- AppraisalContactDetail[2] findById [{}]", contractId);
             } else {
                 model = new AppraisalContactDetail();
+                log.debug("-- new AppraisalContactDetail[2] created");
                 model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
             }
             model.setContactNo(view.getContactNo2());
             model.setCustomerName(view.getCustomerName2());
-            model.setModifyBy(view.getModifyBy());
-            model.setModifyDate(view.getModifyDate());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
             appraisalContactDetailList.add(model);
         }
+
         contractForCheck = view.getContactNo3();
+        log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId3();
             if(!Util.isZero(contractId)){
                 model = appraisalContactDetailDAO.findById(contractId);
+                log.debug("-- AppraisalContactDetail[3] findById [{}]", contractId);
             } else {
                 model = new AppraisalContactDetail();
+                log.debug("-- new AppraisalContactDetail[3] created");
                 model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
             }
             model.setContactNo(view.getContactNo3());
             model.setCustomerName(view.getCustomerName3());
-            model.setModifyBy(view.getModifyBy());
-            model.setModifyDate(view.getModifyDate());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
             appraisalContactDetailList.add(model);
         }
         return appraisalContactDetailList;
