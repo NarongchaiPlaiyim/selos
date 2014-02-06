@@ -1235,9 +1235,9 @@
                 value="#{msg.get('app.credit.facility.propose.label.collateral.creditType.caption')}"/>
     </td>
     <td colspan="3">
-        <p:dataTable value="#{newCollateralView.newCreditDetailViewList}"
+        <p:dataTable value="#{newCollateralView.proposeCreditDetailViewList}"
                      var="creditTypeDetailItem"
-                     rowKey="#{creditTypeDetailItem.NewCreditDetailView}"
+                     rowKey="#{creditTypeDetailItem.ProposeCreditDetailView}"
                      rowIndexVar="rowIndex">
             <p:columnGroup type="header">
                 <p:row>
@@ -1274,7 +1274,7 @@
             </p:column>
 
             <p:column styleClass="center">
-                <h:outputText value="#{creditTypeDetailItem.creditType.name}"/>
+                <h:outputText value="#{creditTypeDetailItem.creditFacility.name}"/>
             </p:column>
 
             <p:column styleClass="center">
@@ -1535,7 +1535,7 @@
                         </td>
 
                         <td class="center top" style="width: 500px;#{g.odd ? 'background-color:#e6e6e6' : ''}">
-                            <ui:repeat value="#{newGuarantorDetailView.newCreditDetailViewList}"
+                            <ui:repeat value="#{newGuarantorDetailView.proposeCreditDetailViewList}"
                                        var="newCreditDetail"  varStatus="c">
                                 <table class="table_noborder">
                                      <tr>
@@ -1545,7 +1545,7 @@
                                          </td>
                                          <td  style="width: 100px;" class="center top">
                                              <h:outputText value="#{newCreditDetail.productProgram.name}"/><br/>
-                                             <h:outputText value="#{newCreditDetail.creditType.name}"/>
+                                             <h:outputText value="#{newCreditDetail.creditFacility.name}"/>
                                          </td>
                                          <td  style="width: 150px;" class="center top">
                                              <h:outputText value="#{newCreditDetail.limit}">
