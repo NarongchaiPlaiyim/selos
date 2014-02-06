@@ -161,7 +161,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("-- onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        if(false){//session.getAttribute("workCaseId") == null){
+        if(session.getAttribute("workCaseId") == null){ //false){
             log.info("preRender ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
@@ -173,8 +173,8 @@ public class AppraisalResult implements Serializable {
             user = (User)session.getAttribute("user");
             log.debug("-- User : {}", ""+user.toString());
             init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            workCaseId = 4L;
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+//            workCaseId = 4L;
             log.info("workCaseId :: {} ",workCaseId);
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
             if(appraisalView != null){
@@ -184,7 +184,7 @@ public class AppraisalResult implements Serializable {
                 }
             } else {
                 appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] has created");
+                log.debug("-- AppraisalView[New] created");
             }
         }
     }
@@ -318,8 +318,6 @@ public class AppraisalResult implements Serializable {
 //                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
                     if(Util.isNull(newCollateralView)){
                         newCollateralView = new NewCollateralView();
-                    } else {
-
                     }
                 } else {
                     log.debug("-- {}", message);
