@@ -111,6 +111,10 @@ public class CreditFacProposeControl extends BusinessControl {
     NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
+    @Inject
+    DBRControl dbrControl;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
 
     public CreditFacProposeControl() {
     }
@@ -725,10 +729,25 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal dayOfYear = BigDecimal.valueOf(365);
         BigDecimal monthOfYear = BigDecimal.valueOf(12);
 
+        BigDecimal adjustDBR = BigDecimal.ZERO;
         BigDecimal WeightAP = BigDecimal.ZERO;
         BigDecimal WeightAR = BigDecimal.ZERO;
         BigDecimal WeightINV = BigDecimal.ZERO;
+        BigDecimal percentIncome = BigDecimal.ZERO;
 
+//      (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
+        BigDecimal wcNeed = BigDecimal.ZERO;
+//      Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
+        BigDecimal totalWcDebit = BigDecimal.ZERO;
+//        วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        BigDecimal WCNeedDiffer = BigDecimal.ZERO;
+//      wcNeed - totalWcDebit
+        BigDecimal totalWcTmb = BigDecimal.ZERO;
+
+        DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
+        if(dbrView != null){
+            adjustDBR = dbrView.getMonthlyIncomeAdjust();
+        }
 
         if(newCreditFacilityView == null){
             newCreditFacilityView = new NewCreditFacilityView();
@@ -737,7 +756,10 @@ public class CreditFacProposeControl extends BusinessControl {
         //check role
         User user = getCurrentUser();
         if(user.getRole().getId() == RoleValue.UW.id()){
+            BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            if(bizInfoSummaryView != null){
 
+            }
         } else { // bdm or other
 
         }

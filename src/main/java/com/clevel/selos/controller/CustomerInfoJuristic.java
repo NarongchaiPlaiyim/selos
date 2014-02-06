@@ -577,6 +577,8 @@ public class CustomerInfoJuristic implements Serializable {
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+                onChangeProvinceEditForm1();
+                onChangeDistrictEditForm1();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);

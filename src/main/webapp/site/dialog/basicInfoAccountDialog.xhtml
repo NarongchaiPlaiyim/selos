@@ -118,7 +118,7 @@
                                      styleClass="small"
                                      actionListener="#{basicInfo.onAddAccount()}"
                                      process="@form"
-                                     update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount,:frmMain,:msgBoxSystemMessagePanel"
+                                     update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount,:msgBoxSystemMessagePanel"
                                      oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":basicInfoAccountDlgForm"
