@@ -160,8 +160,7 @@ public class IsaBusinessControl extends BusinessControl {
 
 
     public IsaManageUserView SelectUserById(String id) throws Exception {
-        log.debug("SelectUserById()");
-        System.out.println("SelectUserById : " + id);
+        log.debug("SelectUserById. (id: {})",id);
         User user = userDAO.findById(id);
 
         IsaManageUserView isaManageUserView = new IsaManageUserView();
@@ -247,7 +246,7 @@ public class IsaBusinessControl extends BusinessControl {
 
     public void editUserActive(User[] users, ManageUserActive manageUserActive) throws Exception {
         log.debug("editUserActive()");
-        System.out.println("========================= : " + manageUserActive.getValue());
+        log.debug("========================= : {}",manageUserActive.getValue());
         for (User list : users) {
             User user = userDAO.findById(list.getId());
             user.setActive(manageUserActive.getValue());
@@ -291,7 +290,7 @@ public class IsaBusinessControl extends BusinessControl {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -(day + 1));
 
-        System.out.println(cal.getTime());
+        log.debug("{}",cal.getTime());
         List<User> users = userDAO.findByCriteria(Restrictions.le("lastLogon", cal.getTime()));
         for (User userlist : users) {
             IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
@@ -351,7 +350,7 @@ public class IsaBusinessControl extends BusinessControl {
         role.setId(1);
 
         List<User> users = userDAO.findByCriteria(Restrictions.gt("role", role));
-        System.out.println(users.size());
+        log.debug("{}",users.size());
         for (User userlist : users) {
             IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
             isaUserDetailView.setUserId(userlist.getId());
