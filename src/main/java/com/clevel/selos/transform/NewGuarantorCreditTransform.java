@@ -49,12 +49,13 @@ public class NewGuarantorCreditTransform extends Transform {
 
                 log.info("proposeCreditDetailView::: {}", proposeCreditDetailView.getTypeOfStep());
 
-                if (proposeCreditDetailView.getId() == newCreditDetailAdd.getId()) {
-                    if (proposeCreditDetailView.getTypeOfStep() == "E"){
-                        ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long)proposeCreditDetailView.getSeq());
-                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
-                        newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-                    }else if(proposeCreditDetailView.getTypeOfStep() == "N"){
+
+                if (proposeCreditDetailView.getTypeOfStep() == "E") {
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
+                    newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
+                    newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
+                } else if (proposeCreditDetailView.getTypeOfStep() == "N") {
+                    if (proposeCreditDetailView.getId() == newCreditDetailAdd.getId()) {
                         newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
                         log.info("newGuarantorCredit id is " + newGuarantorCredit.getNewCreditDetail().getId());
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());

@@ -685,8 +685,6 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-
-//        int seq = 0;
         rowCount = newCreditDetailViewList.size() > 0 ? newCreditDetailViewList.size() + 1 : rowCount;
 
         // find existingCreditType >>> Borrower Commercial in this workCase
