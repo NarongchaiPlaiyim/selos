@@ -2,6 +2,7 @@ package com.clevel.selos.transform.business;
 
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
@@ -10,6 +11,8 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -20,7 +23,9 @@ public class CollateralBizTransform extends BusinessTransform {
     CollateralTypeDAO collateralTypeDAO;
     @Inject
     SubCollateralTypeDAO subCollateralTypeDAO;
-
+    @Inject
+    @SELOS
+    private Logger log;
     private NewCollateralView newCollateralView;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
@@ -28,13 +33,36 @@ public class CollateralBizTransform extends BusinessTransform {
 
     private List<NewCollateralSubView> newCollateralSubViewList;
     private NewCollateralSubView newCollateralSubView;
+
+    @Inject
+    private AppraisalData appraisalData;
     @Inject
     public CollateralBizTransform() {
 
     }
 
-    public NewCollateralView transformCollteral(AppraisalDataResult appraisalDataResult) {
-        newCollateralView = new NewCollateralView();
+    public NewCollateralView transformCollateral(AppraisalDataResult appraisalDataResult) {
+//        log.debug("-- transformCollateral");
+//        if(Util.isNull(appraisalDataResult)){
+//            log.debug("-- AppraisalData is null");
+//            return newCollateralView;
+//        }
+//
+//        if(ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
+//
+//        } else {
+//
+//        }
+//
+//        appraisalData = appraisalDataResult.getAppraisalData();
+//        if(!Util.isNull(appraisalData)){
+//
+//            newCollateralView = new NewCollateralView();
+//
+//        }
+
+
+
         if(appraisalDataResult!=null){
             AppraisalData appraisalData = appraisalDataResult.getAppraisalData();
             newCollateralView.setJobID(appraisalData.getJobId());

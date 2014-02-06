@@ -314,9 +314,12 @@ public class AppraisalResult implements Serializable {
                 flag = checkJobIdExist(newCollateralViewList, jobIDSearch);
                 if(flag){
                     //todo : call interface COM_S
-                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
+                    newCollateralView = callCOM_S(jobIDSearch);
+//                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
                     if(Util.isNull(newCollateralView)){
                         newCollateralView = new NewCollateralView();
+                    } else {
+
                     }
                 } else {
                     log.debug("-- {}", message);
@@ -343,9 +346,9 @@ public class AppraisalResult implements Serializable {
         log.info("jobIDSearch is  {}", jobIDSearch);
         AppraisalDataResult appraisalDataResult;
         appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
-        if(appraisalDataResult != null && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
+        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
             log.debug("-- succeed");
-            newCollateralView = collateralBizTransform.transformCollteral(appraisalDataResult);
+            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
             return newCollateralView;
         } else {
             log.error("Exception : {}", "--------------------------------------------------------------------------------------------------");
@@ -520,7 +523,7 @@ public class AppraisalResult implements Serializable {
             appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
             log.info("end coms ");
             searchCOMS = true;
-//            collateralDetailView = collateralBizTransform.transformCollteral(appraisalDataResult);
+//            collateralDetailView = collateralBizTransform.transformCollateral(appraisalDataResult);
 //
 //            for(int i=0;i<collateralDetailView.getCollateralHeaderDetailViewList().size();i++){
 //                onSetRowNoHeaderCollaral(collateralDetailView.getCollateralHeaderDetailViewList());
