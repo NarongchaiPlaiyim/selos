@@ -104,7 +104,9 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setRegistrationDate(bizInfoSummaryView.getRegistrationDate());
         bizInfoSummary.setEstablishDate(bizInfoSummaryView.getEstablishDate());
 
-        log.info("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+        // fixed: due to NPE when getReferredExperience is null.
+//        log.info("find transformToModel getReferredExperience" + bizInfoSummaryView.getReferredExperience().getId());
+
         if(bizInfoSummaryView.getReferredExperience()!=null && bizInfoSummaryView.getReferredExperience().getId() != 0){
             referredExperience = referredExperienceDAO.findById(bizInfoSummaryView.getReferredExperience().getId());
             bizInfoSummary.setReferredExperience(referredExperience);
