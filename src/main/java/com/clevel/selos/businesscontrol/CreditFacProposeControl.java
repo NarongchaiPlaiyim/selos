@@ -115,6 +115,8 @@ public class CreditFacProposeControl extends BusinessControl {
     DBRControl dbrControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject
+    NCBInfoControl ncbInfoControl;
 
     public CreditFacProposeControl() {
     }
@@ -734,11 +736,26 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal fifty = BigDecimal.valueOf(50);
         BigDecimal oneHundred = BigDecimal.valueOf(100);
 
+        // ยอดขาย/รายได้
         BigDecimal adjustDBR = BigDecimal.ZERO;
-        //todo : this value
+        // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
+        BigDecimal revolvingCreditNCB = BigDecimal.ZERO;
+        // ส่วนผู้เกี่ยวข้องในหน้า DBR
+        BigDecimal revolvingCreditDBR = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
+        BigDecimal loanBurdenWCFlag = BigDecimal.ZERO;
+        // วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB
+        BigDecimal revolvingCreditNCBTMBFlag = BigDecimal.ZERO;
+        // ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
+        BigDecimal loanBurdenTMBFlag = BigDecimal.ZERO;
+
+        //how to check role and get ap ar inv !?
         BigDecimal weightAP = BigDecimal.ZERO;
         BigDecimal weightAR = BigDecimal.ZERO;
         BigDecimal weightINV = BigDecimal.ZERO;
+        // Sum(weight cost of goods sold * businessProportion)
+        // cost of goods = business desc ( column COG )
+        // business proportion = ??
         BigDecimal aaaValue = BigDecimal.ZERO;
 
         //table 1
@@ -770,6 +787,18 @@ public class CreditFacProposeControl extends BusinessControl {
         DBRView dbrView = dbrControl.getDBRByWorkCase(workCaseId);
         if(dbrView != null){
             adjustDBR = dbrView.getMonthlyIncomeAdjust();
+            revolvingCreditDBR = dbrView.getTotalMonthDebtRelatedWc();
+        }
+
+        List<NCBInfoView> ncbInfoViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
+        if(ncbInfoViewList != null && ncbInfoViewList.size() > 0){
+            for (NCBInfoView ncbInfoView : ncbInfoViewList){
+                //todo : for sum
+//                revolvingCreditNCB
+//                loanBurdenWCFlag
+//                revolvingCreditNCBTMBFlag
+//                loanBurdenTMBFlag
+            }
         }
 
         if(newCreditFacilityView == null){
@@ -792,11 +821,11 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //calculation
 //        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
-        wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(adjustDBR,dayOfYear),weightAR) , Util.multiply(Util.divide(aaaValue,dayOfYear),weightINV))) , (Util.multiply(Util.divide(aaaValue,dayOfYear),weightAP)));
+        wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(salesIncome,dayOfYear),weightAR) , Util.multiply(Util.divide(aaaValue,dayOfYear),weightINV))) , (Util.multiply(Util.divide(aaaValue,dayOfYear),weightAP)));
 //        Sum (วงเงินสินเชื่อหมุนเวียนจากหน้า NCB และ ส่วนผู้เกี่ยวข้องในหน้า DBR + ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes )
-        totalWcDebit = BigDecimal.ZERO;
+        totalWcDebit = Util.add(Util.add(revolvingCreditNCB,revolvingCreditDBR),loanBurdenWCFlag);
 //        วงเงินสินเชื่อหมุนเวียนใน NCB ที่ flag เป็น TMB + ภาระสินเชื่อประเภทอื่น ที่ flag TMB และ flag W/C
-        totalWcTmb = BigDecimal.ZERO;
+        totalWcTmb = Util.add(revolvingCreditNCBTMBFlag,loanBurdenTMBFlag);
 //        wcNeed - totalWcDebit
         wcNeedDiffer = Util.subtract(wcNeed,totalWcDebit);
 
@@ -842,7 +871,7 @@ public class CreditFacProposeControl extends BusinessControl {
 //        ยอดขาย/รายได้ หาร 12 คูณ 35%
         case3WcLimit = Util.divide(Util.multiply(Util.divide(salesIncome,dayOfYear),thirtyFive),oneHundred);
 //        case3WcLimit - totalWcDebit
-        case3WcMinLimit = Util.subtract(case2WcLimit,totalWcDebit);
+        case3WcMinLimit = Util.subtract(case2WcLimit, totalWcDebit);
 //        ไม่เกิน 50% ของ case3WcLimit และไม่เกิน case3WcMinLimit แล้วแต่ตัวไหนจะต่ำกว่า
         case3Wc50CoreWc = compareToFindLower(Util.subtract(case3WcLimit,fifty),case3WcMinLimit);
 //        case3WcMinLimit - case3Wc50CoreWc
