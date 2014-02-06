@@ -1503,19 +1503,16 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-//        if(addressFlagForm2 == 1){ //dup address 1 to address 2
         if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setRegisterAddress(addressView);
         }
 
-//        if(addressFlagForm3 == 1){
         if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setWorkAddress(addressView);
-//        }else if(addressFlagForm3 == 2){
         }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(2);
@@ -1523,19 +1520,16 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
-//            if(addressFlagForm5 == 1){ //dup address 1 to address 2
             if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setRegisterAddress(addressView);
             }
 
-//            if(addressFlagForm6 == 1){
             if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setWorkAddress(addressView);
-//            }else if(addressFlagForm6 == 2){
             }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(2);
@@ -1559,21 +1553,14 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         try{
-            log.debug("### 1 - onSave : customerInfoView");
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
-            log.debug("### 2 - onSave : customerInfoView");
             isFromSummaryParam = true;
-            log.debug("### 3 - onSave : customerInfoView");
             onAddNewIndividual();
-            log.debug("### 4 - onSave : customerInfoView");
             onEditIndividual();
-            log.debug("### 5 - onSave : customerInfoView");
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
-            log.debug("### 6 - onSave : customerInfoView");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            log.debug("### 7 - onSave : customerInfoView");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";

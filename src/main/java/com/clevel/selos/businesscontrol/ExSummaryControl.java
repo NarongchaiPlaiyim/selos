@@ -297,6 +297,10 @@ public class ExSummaryControl extends BusinessControl {
         calYearInBusinessBorrowerCharacteristic(workCaseId);
     }
 
+    public void calForCustomerInfoJuristic(long workCaseId){
+        calGroupSaleBorrowerCharacteristic(workCaseId);
+    }
+
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
