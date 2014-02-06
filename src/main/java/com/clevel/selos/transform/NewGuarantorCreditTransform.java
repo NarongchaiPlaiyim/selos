@@ -30,13 +30,7 @@ public class NewGuarantorCreditTransform extends Transform {
 
         for (ProposeCreditDetailView proposeCreditDetailView : newCreditDetailViewList) {
             newGuarantorCredit = new NewGuarantorCredit();
-//            if (newGuarantorCredit.getId() != 0) {
-//                newGuarantorCredit.setCreateDate(newCreditDetailView.getCreateDate());
-//                newGuarantorCredit.setCreateBy(newCreditDetailView.getCreateBy());
-//            } else { // id = 0 create new
-//                newGuarantorCredit.setCreateDate(new Date());
-//                newGuarantorCredit.setCreateBy(user);
-//            }
+
             newGuarantorCredit.setCreateDate(DateTime.now().toDate());
             newGuarantorCredit.setCreateBy(user);
             newGuarantorCredit.setModifyDate(DateTime.now().toDate());

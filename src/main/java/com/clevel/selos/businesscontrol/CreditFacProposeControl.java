@@ -302,8 +302,7 @@ public class CreditFacProposeControl extends BusinessControl {
             List<NewGuarantorDetail> newGuarantorDetailListPersist = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
             newGuarantorDetailDAO.persist(newGuarantorDetailListPersist);
             log.info("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
-            onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);  //ปิดก่อน
-
+            onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);
 //             ExistingCreditFacility existingCreditFacility  = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
 //
 //             if(existingCreditFacilityView.getBorrowerComExistingCredit().size()>0){
