@@ -77,7 +77,7 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal SumWeightAR;
     private BigDecimal SumWeightAP;
     private BigDecimal SumWeightINV;
-    double bankStatementAvg = 0;
+    BigDecimal bankStatementAvg = BigDecimal.ZERO;
     private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
@@ -146,19 +146,19 @@ public class BizInfoSummary implements Serializable {
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        bankStatementAvg = 0;
+        bankStatementAvg = BigDecimal.ZERO;
 
         bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
         if(bankStmtSummaryView != null ){
             if(bankStmtSummaryView.getGrdTotalIncomeGross() != null ){
-                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross().doubleValue();
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross();
 
             }else{
 //                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
 //                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
 //                }
-                bankStatementAvg = 0.0;
+                bankStatementAvg = BigDecimal.ZERO;
             }
         }
         log.debug("bankStatementAvg is " + bankStatementAvg);
@@ -199,7 +199,7 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
-            bizInfoSummaryView.setCirculationAmount(new BigDecimal(bankStatementAvg));
+            bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
         }
         onCheckInterview();
     }
@@ -375,6 +375,12 @@ public class BizInfoSummary implements Serializable {
         log.info("have to redirect is " + redirect );
         if (redirect != null && !redirect.equals("")) {
             RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
+        }
+    }
+
+    public void calGrdTotal(long workCaseId, BigDecimal grdTotalIncome ){
+        if(bizInfoSummaryView == null){
+
         }
     }
 
