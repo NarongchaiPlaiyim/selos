@@ -211,7 +211,7 @@ public class CreditFacProposeControl extends BusinessControl {
             log.info("persist :: newConditionDetail ...");
         }
 
-        List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, user);
+        List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, user,workCase);
         newCreditDetailDAO.persist(newCreditDetailList);
         log.info("persist newCreditDetailList...");
         onDeleteDetailOfNewCreditDetail(newCreditDetailList);
@@ -226,7 +226,7 @@ public class CreditFacProposeControl extends BusinessControl {
         }
 
         if (newCreditFacilityView.getNewCollateralViewList() != null) {
-            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user);
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user,workCase);
             newCollateralDetailDAO.persist(newCollateralList);
             log.info("persist newCollateralDetailList...");
 
@@ -237,7 +237,8 @@ public class CreditFacProposeControl extends BusinessControl {
                 NewCollateral newCollateralDetail = newCollateralList.get(i);
                 NewCollateralView newCollateralView = newCreditFacilityView.getNewCollateralViewList().get(i);
 
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+//                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
                 newCollateralRelationDAO.persist(newCollateralCreditList);
                 log.info("persist newCollateralCreditList...");
 
@@ -356,7 +357,6 @@ public class CreditFacProposeControl extends BusinessControl {
                 newCollateralDetailDAO.delete(newCollateralList);
                 log.info("delete newCollateralList :::");
             }
-
 
         }
 
@@ -659,7 +659,7 @@ public class CreditFacProposeControl extends BusinessControl {
         // todo: find credit existing and propose in this workCase
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         ProposeCreditDetailView proposeCreditDetailView;
-        int rowCount = 1;
+        int rowCount = 1;       // seq of Model
 
         if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
@@ -697,7 +697,7 @@ public class CreditFacProposeControl extends BusinessControl {
         if (existingCreditFacilityView != null && existingCreditFacilityView.getBorrowerComExistingCredit().size()>0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
-                proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());
+                proposeCreditDetailView.setSeq((int)existingCreditDetailView.getId());  // id form DB
                 proposeCreditDetailView.setId(rowCount);
                 proposeCreditDetailView.setTypeOfStep("E");
                 proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());

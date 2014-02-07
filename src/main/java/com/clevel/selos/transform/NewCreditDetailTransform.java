@@ -1,16 +1,20 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewCreditTierDetail;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +29,10 @@ public class NewCreditDetailTransform extends Transform {
     NewCreditTierTransform newCreditTierTransform;
     @Inject
     NewCreditTierDetailDAO newCreditTierDetailDAO;
+    @Inject
+    BaseRateDAO baseRateDAO;
 
-    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user) {
+    public List<NewCreditDetail> transformToModel(List<NewCreditDetailView> newCreditDetailViews, NewCreditFacility newCreditFacility ,User user , WorkCase workCase) {
         List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
         NewCreditDetail newCreditDetail;
 
@@ -41,6 +47,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
+            newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
             newCreditDetail.setAccountNumber(newCreditDetailView.getAccountNumber());
@@ -52,7 +59,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setNoFlag(Util.returnNumForFlag(newCreditDetailView.isNoFlag()));
             newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
             newCreditDetail.setDisbursementType(newCreditDetailView.getDisbursement());
-            newCreditDetail.setFinalPrice(newCreditDetailView.getFinalPrice());
             newCreditDetail.setCreditType(newCreditDetailView.getCreditType());
             newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
             newCreditDetail.setFrontEndFee(newCreditDetailView.getFrontEndFee());
@@ -71,11 +77,8 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setStandardInterest(newCreditDetailView.getStandardInterest());
             newCreditDetail.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
-            newCreditDetail.setStandardPrice(newCreditDetailView.getStandardPrice());
             newCreditDetail.setSuggestInterest(newCreditDetailView.getSuggestInterest());
             newCreditDetail.setSuggestBasePrice(newCreditDetailView.getSuggestBasePrice());
-            newCreditDetail.setSuggestPrice(newCreditDetailView.getSuggestPrice());
-            newCreditDetail.setTenor(newCreditDetailView.getTenor());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
             newCreditDetailList.add(newCreditDetail);
@@ -107,7 +110,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
             newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
             newCreditDetailView.setDisbursement(newCreditDetail.getDisbursementType());
-            newCreditDetailView.setFinalPrice(newCreditDetail.getFinalPrice());
             newCreditDetailView.setCreditType(newCreditDetail.getCreditType());
             newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());
             newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
@@ -126,11 +128,10 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setRemark(newCreditDetail.getRemark());
             newCreditDetailView.setStandardInterest(newCreditDetail.getStandardInterest());
             newCreditDetailView.setStandardBasePrice(newCreditDetail.getStandardBasePrice());
-            newCreditDetailView.setStandardPrice(newCreditDetail.getStandardPrice());
+            newCreditDetailView.setStandardPrice(toGetPricing(newCreditDetail.getStandardBasePrice(),newCreditDetail.getStandardInterest()));
             newCreditDetailView.setSuggestInterest(newCreditDetail.getSuggestInterest());
             newCreditDetailView.setSuggestBasePrice(newCreditDetail.getSuggestBasePrice());
-            newCreditDetailView.setSuggestPrice(newCreditDetail.getSuggestPrice());
-            newCreditDetailView.setTenor(newCreditDetail.getTenor());
+            newCreditDetailView.setSuggestPrice(toGetPricing(newCreditDetail.getSuggestBasePrice(),newCreditDetail.getStandardInterest()));
 
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 
@@ -145,5 +146,18 @@ public class NewCreditDetailTransform extends Transform {
 
         return newCreditDetailViewList;
     }
+
+   public String toGetPricing(BaseRate baseRate ,BigDecimal price){
+      String priceToShow = "";
+
+       if (price.doubleValue() < 0)
+       {
+           priceToShow = baseRate.getName() + " " + price;
+       }else{
+           priceToShow = baseRate.getName() + " + " + price;
+       }
+
+       return priceToShow;
+   }
 
 }
