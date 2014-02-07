@@ -264,7 +264,7 @@ public class ExSummaryView  implements Serializable {
     }
 
     public void setExSumDecisionListView(List<ExSumDecisionView> exSumDecisionListView) {
-        exSumDecisionListView = exSumDecisionListView;
+        this.exSumDecisionListView = exSumDecisionListView;
     }
 
     public ExSumCharacteristicView getExSumCharacteristicView() {

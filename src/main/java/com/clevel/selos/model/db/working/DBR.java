@@ -74,6 +74,9 @@ public class DBR implements Serializable {
     @Column(name = "totalMonthDebtBorrowerFinal")
     private BigDecimal totalMonthDebtBorrowerFinal;
 
+    @Column(name = "TOTAL_MONTH_DEBT_RELATED_WC")
+    private BigDecimal totalMonthDebtRelatedWc;
+
     public DBR() {
 
     }
@@ -220,6 +223,14 @@ public class DBR implements Serializable {
 
     public void setTotalMonthDebtBorrowerFinal(BigDecimal totalMonthDebtBorrowerFinal) {
         this.totalMonthDebtBorrowerFinal = totalMonthDebtBorrowerFinal;
+    }
+
+    public BigDecimal getTotalMonthDebtRelatedWc() {
+        return totalMonthDebtRelatedWc;
+    }
+
+    public void setTotalMonthDebtRelatedWc(BigDecimal totalMonthDebtRelatedWc) {
+        this.totalMonthDebtRelatedWc = totalMonthDebtRelatedWc;
     }
 
     @Override

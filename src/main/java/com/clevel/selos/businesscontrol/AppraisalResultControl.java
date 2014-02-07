@@ -114,7 +114,7 @@ public class AppraisalResultControl extends BusinessControl {
             updateWRKNewColl(newCollateralViewList, user);
         }
 
-        log.info("onSaveAppraisalResult end");
+        log.info("-- onSaveAppraisalResult end");
     }
 
     private void updateWRKNewColl(final List<NewCollateralView> newCollateralViewList, final User user){

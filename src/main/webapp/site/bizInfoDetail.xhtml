@@ -31,10 +31,11 @@
                 <div id="content">
                     <div id="content_info">
                         <div id="content_trackchange">[ View Track Change ]</div>
-                        <div id="content_lastupdate">Last update by <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyBy.userName}"/>, <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyDate}"/></div>
+                        <div id="content_lastupdate">Last update by <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyBy.userName}"/>,
+                            <h:outputText value="#{bizInfoDetail.bizInfoDetailView.modifyDate}"/></div>
                     </div>
                     <div id="content_form">
-                        <table class="content_table_form" border="1">
+                        <table class="content_table_form" border="0">
                         <tr>
                             <td class="title" style="min-width: 270px; width: 270px; max-width: 270px;"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.businessInfoDetail')}"/></td>
                             <td colspan="3">
@@ -45,8 +46,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.tradeType')}"/></td>
                             <td colspan="3">
-                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1" value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"  required="#{not empty param[saveButton.clientId]}">
-                                    id="bizActivityId">
+                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizActivity.code}"  required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessActivityList}"
                                                    var="bizActivity"
@@ -58,7 +59,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizType')}"/></td>
                             <td colspan="3">
-                                <p:selectOneMenu id="bizTypeId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1" value="#{bizInfoDetail.bizInfoDetailView.bizType.id}" required="#{not empty param[saveButton.clientId]}">
+                                <p:selectOneMenu id="bizTypeId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizType.id}" required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessTypeList}"
                                                    var="bizType"
@@ -70,7 +72,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizGroup')}"/></td>
                             <td colspan="3">
-                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1" value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="#{not empty param[saveButton.clientId]}"
+                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizGroup.id}" required="#{not empty param[saveButton.clientId]}"
                                                  id="businessGroupId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessGroupList}"
@@ -84,8 +87,8 @@
                         <tr>
                             <td class="title" ><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDesc')}"/></td>
                             <td colspan="3">
-                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"  value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"  required="#{not empty param[saveButton.clientId]}"
-
+                                <p:selectOneMenu style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
+                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDesc.id}"  required="#{not empty param[saveButton.clientId]}"
                                                  id="businessDescriptionId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoDetail.businessDescriptionList}"
@@ -119,7 +122,8 @@
                                 <p:inputText style="text-align: right" id="adjustedIncomeFactor"
                                              value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}"
                                              onkeydown="return onKeyDownMoney(event);"
-                                             onkeypress="return onKeyPressMoney(event)">
+                                             onkeypress="return onKeyPressMoney(event)"
+                                             required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:adjustedIncomeFactor"/>
@@ -141,7 +145,7 @@
                                              onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" maxlength="18"
                                              required="#{not empty param[saveButton.clientId]}">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
-                                    <!--<f:validateDoubleRange maximum="100"/>-->
+                                    <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentBiz"/>
                                 </p:inputText>
                                 <h:inputHidden id="sumBizPercent" value="#{bizInfoDetail.sumBizPercent}"/>
@@ -150,7 +154,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
                             <td colspan="3" class="title">
-                                <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}">
+                                <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
+                                                  required="#{not empty param[saveButton.clientId]}">
                                     <f:selectItem itemLabel="NO"  itemValue="N" />
                                     <f:selectItem itemLabel="Yes" itemValue="Y" />
                                     <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
@@ -717,9 +722,9 @@
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockDurationBDM')}"/></td>
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="stockDurationBDM"
-                                                         readonly="true"
                                                          onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockDurationBDM}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"   />
                                                 <p:ajax event="blur" update=":frmMain:stockDurationBDM,:frmMain:stockValueBDM" />
@@ -731,7 +736,8 @@
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentCash" readonly="true"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentCash}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                 <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentCash,:frmMain:purchasePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentCash')}"/>
@@ -741,7 +747,8 @@
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                 <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:payablePercentCash,:frmMain:payablePercentCredit" listener="#{bizInfoDetail.onCalCashCredit('payablePercentCash')}"/>
@@ -773,9 +780,10 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.stockValueBDM')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM" readonly="true"
+                                            <p:inputText styleClass="right" style="width: 95%;" id="stockValueBDM"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.stockValueBDM}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <!--readonly="#{bizInfoDetail.readonlyIsBDM}"-->
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:stockValueBDM"/>
@@ -787,7 +795,8 @@
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="purchasePercentLocal"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}" >
+                                                         value="#{bizInfoDetail.bizInfoDetailView.purchasePercentLocal}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                 <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:purchasePercentLocal,:frmMain:purchasePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('purchasePercentLocal')}"/>
@@ -797,7 +806,8 @@
                                         <td>
                                             <p:inputText styleClass="right" style="width: 95%;" id="payablePercentLocal"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
-                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}">
+                                                         value="#{bizInfoDetail.bizInfoDetailView.payablePercentLocal}"
+                                                         required="#{not empty param[saveButton.clientId]}">
                                                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                                                 <f:validateDoubleRange maximum="100"/>
                                                 <p:ajax event="blur" update=":frmMain:payablePercentLocal,:frmMain:payablePercentForeign" listener="#{bizInfoDetail.onCalCashCredit('payablePercentLocal')}"/>
@@ -862,12 +872,11 @@
                         <tr><td colspan="4"><p:spacer width="2px"/></td></tr>
                         <tr>
                             <td colspan="4" class="center">
-                                <p:commandButton id="btnAddBizInfoDetailFull" styleClass="small"
-                                                 binding="#{saveButton}"
+                                <p:commandButton id="btnAddBizInfoDetailFull" binding="#{saveButton}" styleClass="small"
                                                  value="#{msg.get('app.button.save')}"
-                                                 process=":frmMain"
-                                                 actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
-                                                 update=":msgBoxSystemMessagePanel"/>
+                                                 process="@form"
+                                                 update=":msgBoxSystemMessagePanel,:frmMain"
+                                                 action="#{bizInfoDetail.onSaveBizInfoView()}"/>
                                 <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                                  oncomplete="confirmChangeScreenSumDlg.show()"/>
                             </td>

@@ -37,7 +37,7 @@ public class PrescreenTransform extends Transform {
             prescreen.setCreateDate(prescreenView.getCreateDate());
             prescreen.setCreateBy(prescreenView.getCreateBy());
         } else {
-            prescreen.setCreateDate(new DateTime().now().toDate());
+            prescreen.setCreateDate(DateTime.now().toDate());
             prescreen.setCreateBy(user);
         }
         prescreen.setWorkCasePrescreen(workCasePrescreen);
@@ -72,7 +72,7 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setBorrowingType(null);
         }
-        prescreen.setModifyDate(new DateTime().now().toDate());
+        prescreen.setModifyDate(DateTime.now().toDate());
         prescreen.setModifyBy(user);
         prescreen.setModifyFlag(prescreenView.getModifyFlag());
         return prescreen;
@@ -136,7 +136,7 @@ public class PrescreenTransform extends Transform {
             prescreen.setGroupExposure(prescreenResultView.getGroupExposure());
             prescreen.setGroupIncome(prescreenResultView.getGroupIncome());
             prescreen.setModifyBy(user);
-            prescreen.setModifyDate(new Date());
+            prescreen.setModifyDate(DateTime.now().toDate());
         }
         return prescreen;
     }

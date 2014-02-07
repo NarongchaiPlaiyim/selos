@@ -306,46 +306,54 @@ public class DateTimeUtil implements Serializable {
     }
 
     public static String calYearMonth(Date date) {
-        String yearMonth = "00Y 00M";
-        Calendar year = Calendar.getInstance();
-        year.setTime(date);
-        Calendar today = Calendar.getInstance();
-        if(year.after(today)){
+        if(date != null){
+            String yearMonth = "00Y 00M";
+            Calendar year = Calendar.getInstance();
+            year.setTime(date);
+            Calendar today = Calendar.getInstance();
+            if(year.after(today)){
+                return yearMonth;
+            }
+            int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
+            int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
+            if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
+                m--;
+            }
+            if(m < 0){
+                y--;
+                m = 12+m;
+            }
+            yearMonth = y+"Y "+m+"M";
             return yearMonth;
+        } else {
+            return "";
         }
-        int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
-        int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
-        if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
-            m--;
-        }
-        if(m < 0){
-            y--;
-            m = 12+m;
-        }
-        yearMonth = y+"Y "+m+"M";
-        return yearMonth;
     }
 
     public static int calMonth(Date date) {
-        int month = 0;
-        Calendar year = Calendar.getInstance();
-        year.setTime(date);
-        Calendar today = Calendar.getInstance();
-        if(year.after(today)){
+        if(date != null){
+            int month = 0;
+            Calendar year = Calendar.getInstance();
+            year.setTime(date);
+            Calendar today = Calendar.getInstance();
+            if(year.after(today)){
+                return month;
+            }
+            int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
+            int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
+            if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
+                m--;
+            }
+            if(m < 0){
+                y--;
+                m = 12+m;
+            }
+            int ym = y*12;
+            int mm = ym+m;
+            month = mm;
             return month;
+        } else {
+            return 0;
         }
-        int y = today.get(Calendar.YEAR) - year.get(Calendar.YEAR);
-        int m = today.get(Calendar.MONTH) - year.get(Calendar.MONTH);
-        if(today.get(Calendar.DAY_OF_MONTH) < year.get(Calendar.DAY_OF_MONTH) || today.get(Calendar.DAY_OF_YEAR) < year.get(Calendar.DAY_OF_YEAR)){
-            m--;
-        }
-        if(m < 0){
-            y--;
-            m = 12+m;
-        }
-        int ym = y*12;
-        int mm = ym+m;
-        month = mm;
-        return month;
     }
 }

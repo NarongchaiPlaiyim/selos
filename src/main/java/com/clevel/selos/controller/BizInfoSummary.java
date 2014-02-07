@@ -1,7 +1,9 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
@@ -44,6 +46,8 @@ public class BizInfoSummary implements Serializable {
     @NormalMessage
     @Inject
     Message msg;
+    @Inject
+    BankStmtControl bankStmtControl;
 
     private BizInfoSummaryView bizInfoSummaryView;
     private BizInfoDetailView selectBizInfoDetailView;
@@ -111,6 +115,8 @@ public class BizInfoSummary implements Serializable {
     BankStmtTransform bankStmtTransform;
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
 
     @Inject
@@ -142,14 +148,17 @@ public class BizInfoSummary implements Serializable {
         referredExperienceList = referredExperienceDAO.findAll();
         bankStatementAvg = 0;
 
+        bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
         if(bankStmtSummaryView != null ){
-            if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
-                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+            if(bankStmtSummaryView.getGrdTotalIncomeGross() != null ){
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross().doubleValue();
+
             }else{
-                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-                }
+//                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
+//                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+//                }
+                bankStatementAvg = 0.0;
             }
         }
         log.debug("bankStatementAvg is " + bankStatementAvg);
@@ -182,6 +191,7 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
+            bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
 
         } else {
             fromDB = true;
@@ -189,6 +199,7 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
+            bizInfoSummaryView.setCirculationAmount(new BigDecimal(bankStatementAvg));
         }
         onCheckInterview();
     }
@@ -254,106 +265,107 @@ public class BizInfoSummary implements Serializable {
     }
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
-        double sumIncomeAmount = 0;
-        double productCostAmount = 0;
-        double productCostPercent = 0;
-        double profitMarginAmount = 0;
-        double profitMarginPercent = 0;
-        double operatingExpenseAmount = 0;
-        double operatingExpensePercent = 0;
-        double earningsBeforeTaxAmount = 0;
-        double earningsBeforeTaxPercent = 0;
-        double reduceInterestAmount = 0;
-        double reduceTaxAmount = 0;
-        double reduceInterestPercent = 0;
-        double reduceTaxPercent = 0;
-        double netMarginAmount = 0;
-        double netMarginPercent = 0;
+        BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
+        BigDecimal productCostAmount = BigDecimal.ZERO ;
+        BigDecimal productCostPercent = BigDecimal.ZERO ;
+        BigDecimal profitMarginAmount = BigDecimal.ZERO ;
+        BigDecimal profitMarginPercent = BigDecimal.ZERO ;
+        BigDecimal operatingExpenseAmount = BigDecimal.ZERO ;
+        BigDecimal operatingExpensePercent = BigDecimal.ZERO ;
+        BigDecimal earningsBeforeTaxAmount = BigDecimal.ZERO ;
+        BigDecimal earningsBeforeTaxPercent = BigDecimal.ZERO ;
+        BigDecimal reduceInterestAmount = BigDecimal.ZERO ;
+        BigDecimal reduceTaxAmount = BigDecimal.ZERO ;
+        BigDecimal reduceInterestPercent = BigDecimal.ZERO ;
+        BigDecimal reduceTaxPercent = BigDecimal.ZERO ;
+        BigDecimal netMarginAmount = BigDecimal.ZERO ;
+        BigDecimal netMarginPercent = BigDecimal.ZERO ;
+        BigDecimal hundred = new BigDecimal(100);
 
         if(bizInfoSummaryView.getCirculationAmount()!= null){
-            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount().doubleValue();
+            sumIncomeAmount = bizInfoSummaryView.getCirculationAmount();
         }
 
         if(bizInfoSummaryView.getProductionCostsPercentage()!= null){
-            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage().doubleValue();
+            productCostPercent = bizInfoSummaryView.getProductionCostsPercentage();
         }
-        
-        productCostAmount = (sumIncomeAmount * productCostPercent)/100;
-        bizInfoSummaryView.setProductionCostsAmount(new BigDecimal(productCostAmount));
-        profitMarginPercent = 100 - productCostPercent;
-        profitMarginAmount = (sumIncomeAmount * profitMarginPercent)/100;
-        bizInfoSummaryView.setProfitMarginPercentage(new BigDecimal(profitMarginPercent));
-        bizInfoSummaryView.setProfitMarginAmount(new BigDecimal(profitMarginAmount));
+
+        productCostAmount = Util.divide(Util.multiply(sumIncomeAmount,productCostPercent),100);
+        bizInfoSummaryView.setProductionCostsAmount(productCostAmount);
+        profitMarginPercent = Util.subtract(hundred,productCostPercent);
+        profitMarginAmount = Util.divide(Util.multiply(sumIncomeAmount,profitMarginPercent),hundred);
+        bizInfoSummaryView.setProfitMarginPercentage(profitMarginPercent);
+        bizInfoSummaryView.setProfitMarginAmount(profitMarginAmount);
 
         if(bizInfoSummaryView.getOperatingExpenseAmount()!= null){
-            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount().doubleValue();
+            operatingExpenseAmount = bizInfoSummaryView.getOperatingExpenseAmount();
         }
 
-        if( operatingExpenseAmount > profitMarginAmount){
-            bizInfoSummaryView.setOperatingExpenseAmount(new BigDecimal(0));
-            operatingExpenseAmount =0;
+        if(operatingExpenseAmount.compareTo(profitMarginAmount) > 0){
+            bizInfoSummaryView.setOperatingExpenseAmount(BigDecimal.ZERO);
+            operatingExpenseAmount = BigDecimal.ZERO;
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overOperatingExpense.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        operatingExpensePercent = (operatingExpenseAmount/sumIncomeAmount)*100;
-        bizInfoSummaryView.setOperatingExpensePercentage(new BigDecimal(operatingExpensePercent));
+        operatingExpensePercent = Util.multiply(Util.divide(operatingExpenseAmount,sumIncomeAmount),hundred);
+        bizInfoSummaryView.setOperatingExpensePercentage(operatingExpensePercent);
 
-        earningsBeforeTaxAmount = profitMarginAmount- operatingExpenseAmount;
-        earningsBeforeTaxPercent = profitMarginPercent - operatingExpensePercent;
+        earningsBeforeTaxAmount = Util.subtract(profitMarginAmount,operatingExpenseAmount);
+        earningsBeforeTaxPercent = Util.subtract(profitMarginPercent,operatingExpensePercent);
 
-        bizInfoSummaryView.setEarningsBeforeTaxAmount(new BigDecimal(earningsBeforeTaxAmount));
-        bizInfoSummaryView.setEarningsBeforeTaxPercentage(new BigDecimal(earningsBeforeTaxPercent));
+        bizInfoSummaryView.setEarningsBeforeTaxAmount(earningsBeforeTaxAmount);
+        bizInfoSummaryView.setEarningsBeforeTaxPercentage(earningsBeforeTaxPercent);
 
         if(bizInfoSummaryView.getReduceInterestAmount()!= null){
-            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
+            reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
         }
 
         if(bizInfoSummaryView.getReduceTaxAmount()!= null){
-            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
+            reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
         }
 
-        if( reduceInterestAmount > earningsBeforeTaxAmount){
+        if(reduceInterestAmount.compareTo(earningsBeforeTaxAmount) > 0){
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = 0;
+            reduceInterestAmount = BigDecimal.ZERO;
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterest.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( reduceTaxAmount > earningsBeforeTaxAmount){
+        if( reduceTaxAmount.compareTo(earningsBeforeTaxAmount) > 0){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
-            reduceTaxAmount = 0;
+            reduceTaxAmount = BigDecimal.ZERO;
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        if( (reduceInterestAmount + reduceTaxAmount) > earningsBeforeTaxAmount){
+        if( ((Util.add(reduceInterestAmount,reduceTaxAmount)).compareTo(earningsBeforeTaxAmount) > 0)){
             bizInfoSummaryView.setReduceTaxAmount(new BigDecimal(0));
             bizInfoSummaryView.setReduceInterestAmount(new BigDecimal(0));
-            reduceInterestAmount = 0;
-            reduceTaxAmount = 0;
+            reduceInterestAmount = BigDecimal.ZERO;
+            reduceTaxAmount = BigDecimal.ZERO;
             messageHeader = msg.get("app.bizInfoSummary.message.validate.header.fail");
             message = msg.get("app.bizInfoSummary.message.validate.overInterestAndTax.fail");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
-        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount().doubleValue();
-        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount().doubleValue();
+        reduceInterestAmount = bizInfoSummaryView.getReduceInterestAmount();
+        reduceTaxAmount = bizInfoSummaryView.getReduceTaxAmount();
 
-        reduceInterestPercent = (reduceInterestAmount/sumIncomeAmount)*100;
-        reduceTaxPercent = (reduceTaxAmount/sumIncomeAmount)*100;
+        reduceInterestPercent = Util.multiply(Util.divide(reduceInterestAmount,sumIncomeAmount),hundred);
+        reduceTaxPercent = Util.multiply(Util.divide(reduceTaxAmount,sumIncomeAmount),hundred);
 
-        bizInfoSummaryView.setReduceInterestPercentage(new BigDecimal(reduceInterestPercent));
-        bizInfoSummaryView.setReduceTaxPercentage(new BigDecimal(reduceTaxPercent));
+        bizInfoSummaryView.setReduceInterestPercentage(reduceInterestPercent);
+        bizInfoSummaryView.setReduceTaxPercentage(reduceTaxPercent);
 
-        netMarginAmount = earningsBeforeTaxAmount- reduceInterestAmount - reduceTaxAmount ;
-        netMarginPercent = earningsBeforeTaxPercent - reduceInterestPercent - reduceTaxPercent;
+        netMarginAmount = Util.subtract(Util.subtract(earningsBeforeTaxAmount,reduceInterestAmount),reduceTaxAmount);
+        netMarginPercent = Util.subtract(Util.subtract(earningsBeforeTaxPercent,reduceInterestPercent),reduceTaxPercent);
 
-        bizInfoSummaryView.setNetMarginAmount(new BigDecimal(netMarginAmount));
-        bizInfoSummaryView.setNetMarginPercentage(new BigDecimal(netMarginPercent));
+        bizInfoSummaryView.setNetMarginAmount(netMarginAmount);
+        bizInfoSummaryView.setNetMarginPercentage(netMarginPercent);
         log.info("onCalSummaryTable 333");
 
         log.info("onCalSummaryTable end");
@@ -367,9 +379,6 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onSaveBizInfoSummary() {
-        System.out.println("Province:" + bizInfoSummaryView.getProvince().toString());
-        System.out.println("District:" + bizInfoSummaryView.getDistrict().toString());
-        System.out.println("SubDistrict:" + bizInfoSummaryView.getSubDistrict().toString());
         try {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);
@@ -379,6 +388,7 @@ public class BizInfoSummary implements Serializable {
             }
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+            exSummaryControl.calForBizInfoSummary(workCaseId);
             if (redirect != null && !redirect.equals("")) {
                 if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");

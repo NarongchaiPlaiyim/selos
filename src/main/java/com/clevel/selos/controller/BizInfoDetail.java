@@ -119,18 +119,18 @@ public class BizInfoDetail implements Serializable {
     @PostConstruct
     public void onCreation(){
         try{
-            log.info("BizInfoDetail onCreation ");
+            log.debug("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
             if(session.getAttribute("workCaseId").toString() != null){
-                log.info("session.getAttribute('workCaseId') " + session.getAttribute("workCaseId"));
+                log.debug("session.getAttribute('workCaseId') {}",session.getAttribute("workCaseId"));
             }
 
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
-            log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
+            log.debug("session.getAttribute('bizInfoDetailViewId') {}",session.getAttribute("bizInfoDetailViewId"));
 
-            if(!session.getAttribute("bizInfoDetailViewId").toString().equals("")){
+            if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
                 bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
             }else{
                 bizInfoDetailViewId = -1;
@@ -155,7 +155,7 @@ public class BizInfoDetail implements Serializable {
                 String url = "bizInfoSummary.jsf";
                 FacesContext fc = FacesContext.getCurrentInstance();
                 ExternalContext ec = fc.getExternalContext();
-                log.info("redirect to new page");
+                log.debug("redirect to new page");
                 ec.redirect(url);
             }
 
@@ -171,7 +171,7 @@ public class BizInfoDetail implements Serializable {
             getBusinessInfoListDB();
             if(bizInfoDetailViewId == -1 ){
 
-                log.info( "bizInfoDetailView NEW RECORD");
+                log.debug( "bizInfoDetailView NEW RECORD");
                 bizInfoDetailView = new BizInfoDetailView();
                 bizStakeHolderDetailView = new BizStakeHolderDetailView();
                 bizProductDetailView = new BizProductDetailView();
@@ -192,7 +192,7 @@ public class BizInfoDetail implements Serializable {
 
             }else{
                 //
-                log.info( "bizInfoDetailView FIND BY ID ");
+                log.debug( "bizInfoDetailView FIND BY ID ");
                 bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
 
                 if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
@@ -235,27 +235,20 @@ public class BizInfoDetail implements Serializable {
             onCheckRole();
 
         }catch (Exception ex){
-            log.info("onCreation Exception ");
+            log.debug("onCreation Exception ");
             if(ex.getCause() != null){
                 message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
             }
         }finally {
-            log.info("onCreation end ");
+            log.debug("onCreation end ");
         }
     }
 
     private void onCheckRole(){
-        readonlyIsUW = true;
-        if( user.getRole().getId() ==  RoleValue.UW.id()){
-            readonlyIsUW = false;
-        }
-
-        readonlyIsBDM = true;
-        if( user.getRole().getId() ==  RoleValue.BDM.id()){
-            readonlyIsBDM = false;
-        }
+        readonlyIsUW = user.getRole().getId() != RoleValue.UW.id();
+        readonlyIsBDM = user.getRole().getId() != RoleValue.BDM.id();
     }
 
     public void getBusinessInfoListDB(){
@@ -264,8 +257,8 @@ public class BizInfoDetail implements Serializable {
         sumBizPercent = 0;
         BizInfoDetailView bizInfoDetailViewTemp;
         if(bizInfoDetailViewList.size()!=0){
-            for(int i=0;i<bizInfoDetailViewList.size();i++){
-                bizInfoDetailViewTemp =    bizInfoDetailViewList.get(i);
+            for (BizInfoDetailView aBizInfoDetailViewList : bizInfoDetailViewList) {
+                bizInfoDetailViewTemp = aBizInfoDetailViewList;
                 sumBizPercent += bizInfoDetailViewTemp.getPercentBiz().doubleValue();
             }
         }
@@ -296,15 +289,15 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBizComment(businessDesc.getComment());
             bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
         }
-        bizInfoDetailView.setStandardAccountPayable(new BigDecimal(businessDesc.getAr()));
-        bizInfoDetailView.setStandardAccountReceivable(new BigDecimal(businessDesc.getAp()));
-        bizInfoDetailView.setStandardStock(new BigDecimal (businessDesc.getInv()));
+        bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
+        bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
+        bizInfoDetailView.setStandardStock(businessDesc.getInv());
         onChangeBizPermission();
 
     }
 
     public void onChangeBizPermission(){
-        log.info("onChangeBizPermission ");
+        log.debug("onChangeBizPermission ");
 //        isDisable = true;
         if(bizInfoDetailView.getBizPermission() != null ){
             if( bizInfoDetailView.getBizPermission().equals("Y")){
@@ -321,7 +314,7 @@ public class BizInfoDetail implements Serializable {
     }
 
     public void onAddBizProductDetailView(){
-        log.info("onAddBizProductDetailView >>> begin ");
+        log.debug("onAddBizProductDetailView >>> begin ");
         bizProductDetailView = new BizProductDetailView();
         modeForButton = "add";
     }
@@ -329,7 +322,7 @@ public class BizInfoDetail implements Serializable {
 
 
     public void onEditBizProductDetailView() {
-        log.info( " onEditBizProductDetailView is " + selectBizProductDetail);
+        log.debug( " onEditBizProductDetailView is {}",selectBizProductDetail);
         modeForButton = "edit";
         bizProductDetailView = new BizProductDetailView();
         //*** Check list size ***//
@@ -347,7 +340,7 @@ public class BizInfoDetail implements Serializable {
 }
 
     public void onDeleteBizProductDetailView() {
-        log.info( " onDeleteBizProductDetailView is " + selectBizProductDetail);
+        log.debug( " onDeleteBizProductDetailView is {}",selectBizProductDetail);
         bizProductDetailViewList.remove(selectBizProductDetail);
         calSumBizProductDetailView();
         onSetRowNoBizProductDetail();
@@ -371,7 +364,7 @@ public class BizInfoDetail implements Serializable {
         if(!bizProductDetailView.getProductType().equals("")&&!bizProductDetailView.getProductDetail().equals("")&&!bizProductDetailView.getPercentSalesVolume().equals("")&&!bizProductDetailView.getPercentEBIT().equals("")){
             complete = true;
             if(modeForButton.equalsIgnoreCase("add")){
-                log.info("onSaveBizProductDetailView add >>> begin ");
+                log.debug("onSaveBizProductDetailView add >>> begin ");
                 bizProductDetailView.setNo(bizProductDetailViewList.size()+1);
                 bizProductDetailViewList.add(bizProductDetailView);
 
@@ -425,7 +418,7 @@ public class BizInfoDetail implements Serializable {
     }
 
     public void onAddBizStakeHolderDetailView(){
-        log.info("onAddBizStakeHolderDetailView >>> label is  " + stakeType );
+        log.debug("onAddBizStakeHolderDetailView >>> label is  {}",stakeType );
         modeForButton = "add";
         onSetLabelStakeHolder();
         bizStakeHolderDetailView = new BizStakeHolderDetailView();
@@ -487,14 +480,14 @@ public class BizInfoDetail implements Serializable {
                          complete = false;
                      }
                 }else if(stakeType.equals("2")){
-                    log.info( " add buyer 1 ");
+                    log.debug( " add buyer 1 ");
                      bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
                      buyerDetailList.add(bizStakeHolderDetailView);
-                    log.info( " add buyer 2 ");
+                    log.debug( " add buyer 2 ");
                      buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                    log.info( " add buyer 3 ");
+                    log.debug( " add buyer 3 ");
                      if(!buyer){
-                         log.info( " add buyer * ");
+                         log.debug( " add buyer * ");
                          buyerDetailList.remove(bizStakeHolderDetailView);
                          calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
                          messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
@@ -502,7 +495,7 @@ public class BizInfoDetail implements Serializable {
                          RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                          complete = false;
                      }
-                    log.info( " buyerlist size " + buyerDetailList.size());
+                    log.debug( " buyerlist size " + buyerDetailList.size());
                 }
             }else if(modeForButton.equalsIgnoreCase("edit")){
                 if(stakeType.equals("1")){
@@ -573,9 +566,9 @@ public class BizInfoDetail implements Serializable {
             creditTermCal = (creditTerm*salePercent)/100;
             sumCreditTerm += creditTermCal;
         }
-        log.info(" sumSalePercent   is " + sumSalePercent);
-        log.info(" sumCreditPercent is " + sumCreditPercent);
-        log.info(" sumCreditTerm    is " + sumCreditTerm);
+        log.debug(" sumSalePercent   is {}",sumSalePercent);
+        log.debug(" sumCreditPercent is {}",sumCreditPercent);
+        log.debug(" sumCreditTerm    is {}",sumCreditTerm);
 
         if(sumSalePercent>100.001 ){
             return false;
@@ -584,30 +577,30 @@ public class BizInfoDetail implements Serializable {
         sumSalePercentB = new BigDecimal(sumSalePercent).setScale(2,RoundingMode.HALF_UP);
         sumCreditPercentB = new BigDecimal(sumCreditPercent).setScale(2,RoundingMode.HALF_UP);
         sumCreditTermB = new BigDecimal(sumCreditTerm).setScale(2,RoundingMode.HALF_UP);
-        log.info(" check stakeType " +stakeType );
-        if(stakeType.equals("1")){
-            log.info(" stakeType ===== 1" );
+        log.debug(" check stakeType {}",stakeType );
+        if("1".equalsIgnoreCase(stakeType)){
+            log.debug(" stakeType ===== 1" );
             bizInfoDetailView.setSupplierTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
-            log.info(" stakeType ===== 1.1" );
+            log.debug(" stakeType ===== 1.1" );
             bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
-            bizInfoDetailView.setPurchasePercentCash(new BigDecimal(100-sumCreditPercentB.doubleValue()));
+            bizInfoDetailView.setPurchasePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPurchasePercentCredit(sumCreditPercentB);
-            log.info(" stakeType ===== 1.5" );
+            log.debug(" stakeType ===== 1.5" );
 
-        }else if(stakeType.equals("2")){
-            log.info(" stakeType ===== 2" );
+        }else if("2".equalsIgnoreCase(stakeType)){
+            log.debug(" stakeType ===== 2" );
             bizInfoDetailView.setBuyerTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
-            log.info(" stakeType ===== 2.1" );
+            log.debug(" stakeType ===== 2.1" );
             bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
             bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
             bizInfoDetailView.setPayablePercentCash(new BigDecimal(100 - sumCreditPercentB.doubleValue()));
             bizInfoDetailView.setPayablePercentCredit(sumCreditPercentB);
-            log.info(" stakeType ===== 2.5" );
+            log.debug(" stakeType ===== 2.5" );
         }
         return true;
     }
@@ -667,15 +660,15 @@ public class BizInfoDetail implements Serializable {
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");
 
-            log.info(" after save to DB BizInfoDetail is "+bizInfoDetailView.getId());
+            log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
             bizInfoDetailViewId =  bizInfoDetailView.getId();
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
-            log.info(" after save to DB BizInfoDetail bizInfoDetailViewId at session is "+session.getAttribute("bizInfoDetailViewId"));
+            log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            log.info("ERROR");
+            log.debug("ERROR");
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
             if(ex.getCause() != null){
                 message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();
@@ -684,13 +677,13 @@ public class BizInfoDetail implements Serializable {
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }finally {
-            log.info("onSaveBizInfoView end");
+            log.debug("onSaveBizInfoView end");
         }
     }
 
     public void onDeleteBizInfoView(){
         try{
-            log.info("onDeleteBizInfoView begin");
+            log.debug("onDeleteBizInfoView begin");
             bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
             messageHeader = msg.get("app.bizInfoDetail.message.header.delete.success");
             message = msg.get("app.bizInfoDetail.message.body.delete.success");
@@ -704,7 +697,7 @@ public class BizInfoDetail implements Serializable {
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }finally {
-            log.info("onDeleteBizInfoView end");
+            log.debug("onDeleteBizInfoView end");
         }
     }
 
@@ -713,12 +706,10 @@ public class BizInfoDetail implements Serializable {
             String url = "bizInfoSummary.jsf";
             FacesContext fc = FacesContext.getCurrentInstance();
             ExternalContext ec = fc.getExternalContext();
-            log.info("redirect to new page");
+            log.debug("redirect to new page");
             ec.redirect(url);
         }catch (Exception ex){
-            ex.getCause().toString();
-        }finally {
-
+            log.error("", ex);
         }
     }
 

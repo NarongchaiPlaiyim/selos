@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
@@ -101,12 +102,15 @@ public class NCBInfo implements Serializable {
     private CustomerDAO customerDAO;
     @Inject
     private NCBDAO ncbDAO;
+    @Inject
+    DBRControl dbrControl;
 
+    private long workCaseId;
 
+    public NCBInfo() {
+    }
 
-    public NCBInfo() {}
-
-    public Month[] getStatMonths(){
+    public Month[] getStatMonths() {
         return Month.values();
     }
 
@@ -123,19 +127,24 @@ public class NCBInfo implements Serializable {
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
             log.info("customerId :: {} ", customerId);
 
-            customerInfoView =  customerDAO.findById(customerId);
+            customerInfoView = customerDAO.findById(customerId);
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
-                if(ncbDetailViewList.size()>0){
+                if (ncbDetailViewList.size() > 0) {
                     ncbInfoView.setNcbFlag("Y");
                 }
                 toControlNplFlagRendered();
                 toControlTdrFlagRendered();
             }
-        }else{
+
+            if (session.getAttribute("workCaseId") != null) {
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                log.info("workCaseId :: {} ", workCaseId);
+            }
+        } else {
             try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/NCBSummary.jsf");
@@ -197,39 +206,39 @@ public class NCBInfo implements Serializable {
 //      accountTypeList = accountTypeDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
 
-        if(customerInfoView != null){
-            log.info("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+        if (customerInfoView != null) {
+            log.info("customerInfoView.getCustomerEntity().getId() :: {}", customerInfoView.getCustomerEntity().getId());
 
             accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.info("accountTypeList :: {}",accountTypeList.size());
+            log.info("accountTypeList :: {}", accountTypeList.size());
 
             settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.info("settlementStatusList :: {}",settlementStatusList.size());
+            log.info("settlementStatusList :: {}", settlementStatusList.size());
 
-            log.info("customerInfoView : {}",customerInfoView.toString());
+            log.info("customerInfoView : {}", customerInfoView.toString());
         }
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
 
     }
 
-    public void toControlNplFlagRendered(){
+    public void toControlNplFlagRendered() {
         log.info("nplFlag :: {}", ncbInfoView.getNplFlag());
 
-        if(ncbInfoView.getNplFlag() == 2){
+        if (ncbInfoView.getNplFlag() == 2) {
             nplRendered = true;
-        }else{
+        } else {
             nplRendered = false;
         }
 
     }
 
-    public void toControlTdrFlagRendered(){
+    public void toControlTdrFlagRendered() {
         log.info("tdrFlag :: {}", ncbInfoView.getTdrFlag());
 
-        if(ncbInfoView.getTdrFlag() == 2){
+        if (ncbInfoView.getTdrFlag() == 2) {
             tdrRendered = true;
-        }else{
+        } else {
             tdrRendered = false;
         }
 
@@ -424,10 +433,11 @@ public class NCBInfo implements Serializable {
                 if (ncbInfoView.getId() == 0) {
                     ncbInfoView.setCreateBy(user);
                     ncbInfoView.setCreateDate(DateTime.now().toDate());
-                }else{
+                } else {
                     ncbInfoView.setModifyBy(user);
                 }
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
+                dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");
                 onCreation();

@@ -1099,6 +1099,11 @@ public class CustomerInfoIndividual implements Serializable {
                                     enableSpouseDocumentType = true;
                                     enableSpouseCitizenId = true;
                                 }
+                                onChangeProvinceEditForm4();
+                                onChangeDistrictEditForm4();
+                                onChangeProvinceEditForm5();
+                                onChangeDistrictEditForm5();
+                                onChangeDOBSpouse();
                             }
                         } catch (Exception ex) {
                             enableSpouseDocumentType = true;
@@ -1133,7 +1138,12 @@ public class CustomerInfoIndividual implements Serializable {
 
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
+            onChangeProvinceEditForm2();
+            onChangeDistrictEditForm2();
+            onChangeProvinceEditForm3();
+            onChangeDistrictEditForm3();
             onChangeMaritalStatus();
+            onChangeDOB();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1264,7 +1274,9 @@ public class CustomerInfoIndividual implements Serializable {
                             customerInfoView.getSpouse().setSearchId(searchIdSpouse);
                             onChangeDOBSpouse();
                             onChangeProvinceEditForm4();
+                            onChangeDistrictEditForm4();
                             onChangeProvinceEditForm5();
+                            onChangeDistrictEditForm5();
                         }
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1285,8 +1297,11 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSearchId(searchId);
                 onChangeDOB();
                 onChangeProvinceEditForm1();
+                onChangeDistrictEditForm1();
                 onChangeProvinceEditForm2();
+                onChangeDistrictEditForm2();
                 onChangeProvinceEditForm3();
+                onChangeDistrictEditForm3();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1383,6 +1398,37 @@ public class CustomerInfoIndividual implements Serializable {
                         customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
                     }
 
+                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress()) == 1){
+                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(1);
+                        } else {
+                            customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                        }
+                    }
+                    if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getWorkAddress() != null){
+                        if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(1);
+                        } else if(customerInfoView.getSpouse().getRegisterAddress() != null){
+                            if(customerInfoControl.checkAddress(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress()) == 1){
+                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(2);
+                            } else {
+                                customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                            }
+                        } else {
+                            customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                        }
+                    }
+
+                    //if address is null
+                    if(customerInfoView.getSpouse().getRegisterAddress() == null){
+                        customerInfoView.getSpouse().setRegisterAddress(new AddressView());
+                        customerInfoView.getSpouse().getRegisterAddress().setAddressTypeFlag(3);
+                    }
+                    if(customerInfoView.getSpouse().getWorkAddress() == null){
+                        customerInfoView.getSpouse().setWorkAddress(new AddressView());
+                        customerInfoView.getSpouse().getWorkAddress().setAddressTypeFlag(3);
+                    }
+
                     enableDocumentType = false;
                     enableCitizenId = false;
 
@@ -1414,6 +1460,8 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDOBSpouse();
             onChangeProvinceEditForm4();
             onChangeDistrictEditForm4();
+            onChangeProvinceEditForm5();
+            onChangeDistrictEditForm5();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1503,19 +1551,16 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
-//        if(addressFlagForm2 == 1){ //dup address 1 to address 2
         if(customerInfoView.getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setRegisterAddress(addressView);
         }
 
-//        if(addressFlagForm3 == 1){
         if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 1){
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(1);
             customerInfoView.setWorkAddress(addressView);
-//        }else if(addressFlagForm3 == 2){
         }else if(customerInfoView.getWorkAddress().getAddressTypeFlag() == 2){
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
             addressView.setAddressTypeFlag(2);
@@ -1523,19 +1568,16 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
-//            if(addressFlagForm5 == 1){ //dup address 1 to address 2
             if(customerInfoView.getSpouse().getRegisterAddress().getAddressTypeFlag() == 1){ //dup address 1 to address 2
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getRegisterAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setRegisterAddress(addressView);
             }
 
-//            if(addressFlagForm6 == 1){
             if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 1){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getCurrentAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(1);
                 customerInfoView.getSpouse().setWorkAddress(addressView);
-//            }else if(addressFlagForm6 == 2){
             }else if(customerInfoView.getSpouse().getWorkAddress().getAddressTypeFlag() == 2){
                 AddressView addressView = new AddressView(customerInfoView.getSpouse().getRegisterAddress(),customerInfoView.getSpouse().getWorkAddress().getId());
                 addressView.setAddressTypeFlag(2);
@@ -1559,21 +1601,14 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         try{
-            log.debug("### 1 - onSave : customerInfoView");
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
-            log.debug("### 2 - onSave : customerInfoView");
             isFromSummaryParam = true;
-            log.debug("### 3 - onSave : customerInfoView");
             onAddNewIndividual();
-            log.debug("### 4 - onSave : customerInfoView");
             onEditIndividual();
-            log.debug("### 5 - onSave : customerInfoView");
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
-            log.debug("### 6 - onSave : customerInfoView");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            log.debug("### 7 - onSave : customerInfoView");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";

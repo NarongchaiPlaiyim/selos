@@ -130,7 +130,7 @@ public class TestService implements Serializable {
 
         CustomerAccountResult customerAccountResult = new CustomerAccountResult();
         //callservice
-        System.out.println("sssssssssssssss " + searchIndividual.getCustNbr());
+        log.debug("custNbr: {}",searchIndividual.getCustNbr());
         customerAccountResult = rmInterfaceImpl.getCustomerAccountInfo("win", searchIndividual.getCustNbr());
 
 
@@ -157,7 +157,7 @@ public class TestService implements Serializable {
         }
 
         printDetail = result.toString();
-        System.out.println(printDetail);
+        log.debug("{}",printDetail);
     }
 
 

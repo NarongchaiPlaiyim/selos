@@ -22,8 +22,7 @@ public class PrescreenBusinessTransform extends Transform {
         List<PrescreenBusiness> prescreenBusinessList = new ArrayList<PrescreenBusiness>();
 
         for (BizInfoDetailView bizInfoDetailView : bizInfoDetailViews) {
-            PrescreenBusiness prescreenBusiness = new PrescreenBusiness();
-            prescreenBusiness = transformToModel(bizInfoDetailView, prescreen);
+            PrescreenBusiness prescreenBusiness = transformToModel(bizInfoDetailView, prescreen);
             prescreenBusinessList.add(prescreenBusiness);
         }
 
@@ -43,8 +42,7 @@ public class PrescreenBusinessTransform extends Transform {
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
 
         for (PrescreenBusiness prescreenBusiness : prescreenBusinesses) {
-            BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
-            bizInfoDetailView = transformToView(prescreenBusiness);
+            BizInfoDetailView bizInfoDetailView = transformToView(prescreenBusiness);
             bizInfoDetailViewList.add(bizInfoDetailView);
         }
 

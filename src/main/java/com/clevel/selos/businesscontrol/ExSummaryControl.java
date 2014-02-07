@@ -297,6 +297,10 @@ public class ExSummaryControl extends BusinessControl {
         calYearInBusinessBorrowerCharacteristic(workCaseId);
     }
 
+    public void calForCustomerInfoJuristic(long workCaseId){
+        calGroupSaleBorrowerCharacteristic(workCaseId);
+    }
+
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ----------------------------------------------------------------------------------------------------------------------------------------------- //
             // ---------------------------------------------------          Calculation Function          ---------------------------------------------------- //
@@ -537,9 +541,13 @@ public class ExSummaryControl extends BusinessControl {
     public void calYearInBusinessBorrowerCharacteristic(long workCaseId){ //TODO: Business Info Summary , Pls Call me !!
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         Date yearInBiz = DateTimeUtil.getMaxOfDate(bizInfoSummaryView.getRegistrationDate(), bizInfoSummaryView.getEstablishDate());
-        String year = DateTimeUtil.calYearMonth(yearInBiz);
-        //todo:yearInBizMonth To send to BRMS
-        int month = DateTimeUtil.calMonth(yearInBiz);
+        String year = "";
+        int month = 0;
+        if(yearInBiz != null){
+            year = DateTimeUtil.calYearMonth(yearInBiz);
+            //todo:yearInBizMonth To send to BRMS
+            month = DateTimeUtil.calMonth(yearInBiz);
+        }
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
