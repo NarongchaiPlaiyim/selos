@@ -18,7 +18,7 @@ public class ExistingCreditDetailTransform extends Transform {
     }
 
     public List<ExistingCreditDetail> transformsToModel(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditFacility existingCreditFacility, User user){
-        log.info(" transformsToModel ");
+        log.debug("transformsToModel");
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         ExistingCreditDetail existingCreditDetail;
 
@@ -37,9 +37,9 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
 
-            log.info(" existingCreditDetailView seq is " + existingCreditDetailView.getSeq());
+            log.debug(" existingCreditDetailView seq is {}",existingCreditDetailView.getSeq());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
-            log.info(" existingCreditDetail seq is " + existingCreditDetail.getSeq());
+            log.debug(" existingCreditDetail seq is {}",existingCreditDetail.getSeq());
 
             existingCreditDetail.setInUsed(existingCreditDetailView.getInUsed());
             existingCreditDetail.setCreateDate(existingCreditDetailView.getCreateDate());

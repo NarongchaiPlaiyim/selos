@@ -247,7 +247,7 @@ public class BasicInfoControl extends BusinessControl {
         //delete
         for (Long openAccountId : basicInfoView.getDeleteTmpList()){
             if(openAccountId != 0){
-                System.out.println("Delete Item ( openAccountId ) : "+openAccountId);
+                log.debug("Delete Item ( openAccountId ) : {}",openAccountId);
                 OpenAccount openAccount = openAccountDAO.findById(openAccountId);
 
                 List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByOpenAccount(openAccount);
