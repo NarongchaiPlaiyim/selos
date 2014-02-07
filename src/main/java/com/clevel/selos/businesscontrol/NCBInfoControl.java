@@ -197,4 +197,20 @@ public class NCBInfoControl extends BusinessControl {
         }
         return ncbInfoViewList;
     }
+
+    public List<NCB> getNCBByWorkCaseId(long workCaseId){
+        log.debug("getNCBByWorkCaseId ::: workCaseId : {}", workCaseId);
+        List<NCB> ncbList = new ArrayList<NCB>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        if (customerList != null && customerList.size() > 0) {
+            log.debug("getNCBByWorkCaseId ::: customerList.size : {}", customerList.size());
+            for(Customer cus : customerList){
+                if(cus.getNcb() != null){
+                    log.debug("getNCBByWorkCaseId ::: ncb : {}", cus.getNcb());
+                    ncbList.add(cus.getNcb());
+                }
+            }
+        }
+        return ncbList;
+    }
 }

@@ -170,10 +170,12 @@ public class BizInfoDetailControl extends BusinessControl {
         BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
+        log.debug("bizInfoDetailList : {}",bizInfoDetailList);
 
         if (bizInfoDetailList.size() != 0) {
 
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
+            log.debug("bankStmtSummaryView : {}",bankStmtSummaryView);
             if(bankStmtSummaryView != null ){
                 if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
                     bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW();
@@ -243,6 +245,13 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal SumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
             BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
 
+            System.out.println("sumIncomeAmount : "+sumIncomeAmount);
+            System.out.println("sumIncomePercent : "+sumIncomePercent);
+            System.out.println("SumWeightAR : "+SumWeightAR);
+            System.out.println("SumWeightAP : "+SumWeightAP);
+            System.out.println("SumWeightINV : "+SumWeightINV);
+            System.out.println("SumWeightIntIncomeFactor : "+SumWeightIntIncomeFactor);
+
             bizInfoSummary.setCirculationAmount(sumIncomeAmount);
             bizInfoSummary.setCirculationPercentage(oneHundred);
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount);
@@ -251,6 +260,8 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary.setSumWeightAP(SumWeightAP);
             bizInfoSummary.setSumWeightINV(SumWeightINV);
             bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntIncomeFactor);
+
+            log.debug("bizInfoSummary : {}",bizInfoSummary);
 
             bizInfoSummaryDAO.persist(bizInfoSummary);
         }
