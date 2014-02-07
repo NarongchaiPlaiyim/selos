@@ -171,6 +171,7 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
         }
+        log.info("end - saveCustomerInfoIndividual ::: customerId : {}", customer.getId());
         return customer.getId();
     }
 
@@ -243,6 +244,7 @@ public class CustomerInfoControl extends BusinessControl {
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
             }
         }
+        log.info("saveCustomerInfoJuristic ::: customerId : {}", customerJuristic.getId());
         return customerJuristic.getId();
     }
 

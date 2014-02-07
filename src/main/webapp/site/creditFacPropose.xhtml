@@ -1043,8 +1043,7 @@
                                  style="text-align: right;"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                         maxIntegerDigits="3" type="number"/>
+                        <f:convertNumber pattern="#0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText>
@@ -1060,11 +1059,7 @@
                                  style="text-align: right;"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);">
-                        <f:convertNumber pattern="##0.00"
-                                         minFractionDigits="2"
-                                         maxFractionDigits="2"
-                                         maxIntegerDigits="3"
-                                         type="number"/>
+                        <f:convertNumber pattern="#0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
                         <f:validateDoubleRange maximum="100"/>
                         <p:ajax event="blur" update=":frmMain" process="@form"/>
                     </p:inputText>

@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.DBRControl;
+import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.integration.SELOS;
@@ -54,6 +55,8 @@ public class DBRInfo implements Serializable {
 
     @Inject
     NCBInfoControl ncbInfoControl;
+    @Inject
+    ExSummaryControl exSummaryControl;
 
     // message //
     private String messageHeader;
@@ -195,6 +198,7 @@ public class DBRInfo implements Serializable {
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
+            exSummaryControl.calForDBR(workCaseId);
         } catch (Exception e) {
 
             if (e.getCause() != null) {

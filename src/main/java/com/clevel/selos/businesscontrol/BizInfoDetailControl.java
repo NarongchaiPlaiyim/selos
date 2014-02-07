@@ -19,6 +19,7 @@ import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -163,7 +164,10 @@ public class BizInfoDetailControl extends BusinessControl {
     public void onSaveSumOnSummary(long bizInfoSummaryId , long workCaseId){
         BankStmtSummaryView bankStmtSummaryView;
         List<BizInfoDetail> bizInfoDetailList;
-        double bankStatementAvg = 0;
+        BigDecimal bankStatementAvg = BigDecimal.ZERO;
+
+        BigDecimal twenty = BigDecimal.valueOf(12);
+        BigDecimal oneHundred = BigDecimal.valueOf(100);
 
         bizInfoDetailList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
 
@@ -172,82 +176,81 @@ public class BizInfoDetailControl extends BusinessControl {
             bankStmtSummaryView = bizInfoSummaryControl.getBankStmtSummary(workCaseId);
             if(bankStmtSummaryView != null ){
                 if(bankStmtSummaryView.getGrdTotalIncomeNetUW() != null ){
-                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW().doubleValue();
+                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetUW();
                 }else{
                     if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-                        bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
+                        bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM();
                     }
                 }
             }
 
-            double incomeAmountCal = 0;
-            double sumIncomeAmountD = 0;
+            BigDecimal incomeAmountCal;
+            BigDecimal sumIncomeAmountD = BigDecimal.ZERO;
 
-            double sumIncomePercentD = 0;
-            double incomePercentD = 0;
+            BigDecimal sumIncomePercentD = BigDecimal.ZERO;
+            BigDecimal incomePercentD;
 
-            double adjustIncome = 0;
-            double adjustIncomeCal = 0;
-            double sumAdjust = 0;
+            BigDecimal adjustIncome;
+            BigDecimal adjustIncomeCal;
+            BigDecimal sumAdjust = BigDecimal.ZERO;
 
-            long ar = 0;
-            double arCal = 0;
-            double sumAR = 0;
+            BigDecimal ar;
+            BigDecimal arCal;
+            BigDecimal sumAR = BigDecimal.ZERO;
 
-            long ap = 0;
-            double apCal = 0;
-            double sumAP = 0;
+            BigDecimal ap;
+            BigDecimal apCal;
+            BigDecimal sumAP = BigDecimal.ZERO;
 
-            long inv = 0;
-            double invCal = 0;
-            double sumINV = 0;
+            BigDecimal inv;
+            BigDecimal invCal;
+            BigDecimal sumINV = BigDecimal.ZERO;
 
             for (BizInfoDetail bizInfoDetail : bizInfoDetailList) {
 
-                incomePercentD = bizInfoDetail.getPercentBiz().doubleValue();
-                sumIncomePercentD += incomePercentD;
-                incomeAmountCal = bankStatementAvg * 12;
-                bizInfoDetail.setIncomeAmount(new BigDecimal(incomeAmountCal).setScale(2, RoundingMode.HALF_UP));
-                sumIncomeAmountD += incomeAmountCal;
+                incomePercentD = bizInfoDetail.getPercentBiz();
+                sumIncomePercentD = Util.add(sumIncomeAmountD,incomePercentD);
+                incomeAmountCal = Util.multiply(bankStatementAvg,twenty);
+                bizInfoDetail.setIncomeAmount(incomeAmountCal.setScale(2, RoundingMode.HALF_UP));
+                sumIncomeAmountD = Util.add(sumIncomeAmountD,incomeAmountCal);
 
-                adjustIncome = bizInfoDetail.getAdjustedIncomeFactor().doubleValue();
-                adjustIncomeCal = (adjustIncome * incomePercentD) / 100;
-                sumAdjust += adjustIncomeCal;
+                adjustIncome = bizInfoDetail.getAdjustedIncomeFactor();
+                adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),100);
+                sumAdjust = Util.add(sumAdjust,adjustIncomeCal);
 
                 ar = bizInfoDetail.getBusinessDescription().getAr();
-                arCal = (ar * incomePercentD) / 100;
-                sumAR += arCal;
+                arCal = Util.divide(Util.multiply(ar,incomePercentD),100);
+                sumAR = Util.add(sumAR,arCal);
 
                 ap = bizInfoDetail.getBusinessDescription().getAp();
-                apCal = (ap * incomePercentD) / 100;
-                sumAP += apCal;
+                apCal = Util.divide(Util.multiply(ap,incomePercentD),100);
+                sumAP = Util.add(sumAP,apCal);
 
                 inv = bizInfoDetail.getBusinessDescription().getInv();
 
-                invCal = (inv * incomePercentD) / 100;
-                sumINV += invCal;
+                invCal = Util.divide(Util.multiply(inv,incomePercentD),100);
+                sumINV = Util.multiply(sumINV,invCal);
 
                 bizInfoDetailDAO.persist(bizInfoDetail);
-
             }
 
             BizInfoSummary  bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryId);
 
-            BigDecimal sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightAR = new BigDecimal(sumAR).setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightAP = new BigDecimal(sumAP).setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightINV = new BigDecimal(sumINV).setScale(2,RoundingMode.HALF_UP);
-            BigDecimal SumWeightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2,RoundingMode.HALF_UP);
+            BigDecimal sumIncomeAmount = sumIncomeAmountD.setScale(2, RoundingMode.HALF_UP);
+            BigDecimal sumIncomePercent = sumIncomePercentD.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightAR = sumAR.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightAP = sumAP.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
 
             bizInfoSummary.setCirculationAmount(sumIncomeAmount);
-            bizInfoSummary.setCirculationPercentage(new BigDecimal(100));
+            bizInfoSummary.setCirculationPercentage(oneHundred);
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount);
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
             bizInfoSummary.setSumWeightAR(SumWeightAR);
             bizInfoSummary.setSumWeightAP(SumWeightAP);
             bizInfoSummary.setSumWeightINV(SumWeightINV);
-            bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntvIncomeFactor);
+            bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntIncomeFactor);
 
             bizInfoSummaryDAO.persist(bizInfoSummary);
         }
