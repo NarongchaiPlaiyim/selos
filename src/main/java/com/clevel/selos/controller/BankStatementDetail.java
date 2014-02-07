@@ -182,7 +182,6 @@ public class BankStatementDetail implements Serializable {
             // add new Bank statement
             bankStmtView = new BankStmtView();
             bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
-            bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
             modeForButton = ModeForButton.ADD;
         } else {
             // edit Bank statement
@@ -204,6 +203,8 @@ public class BankStatementDetail implements Serializable {
 //            }
             modeForButton = ModeForButton.EDIT;
         }
+
+        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtView.getBankStmtDetailViewList(), SortOrder.ASCENDING);
 
         // select items
         bankViewList = new ArrayList<BankView>();
