@@ -209,29 +209,27 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal sumINV = BigDecimal.ZERO;
 
             for (BizInfoDetail bizInfoDetail : bizInfoDetailList) {
-
                 incomePercentD = bizInfoDetail.getPercentBiz();
-                sumIncomePercentD = Util.add(sumIncomeAmountD,incomePercentD);
+                sumIncomePercentD = Util.add(sumIncomePercentD,incomePercentD);
                 incomeAmountCal = Util.multiply(bankStatementAvg,twenty);
-                bizInfoDetail.setIncomeAmount(incomeAmountCal.setScale(2, RoundingMode.HALF_UP));
                 sumIncomeAmountD = Util.add(sumIncomeAmountD,incomeAmountCal);
+                bizInfoDetail.setIncomeAmount(incomeAmountCal.setScale(2, RoundingMode.HALF_UP));
 
                 adjustIncome = bizInfoDetail.getAdjustedIncomeFactor();
-                adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),100);
+                adjustIncomeCal = Util.divide(Util.multiply(adjustIncome,incomePercentD),oneHundred);
                 sumAdjust = Util.add(sumAdjust,adjustIncomeCal);
 
                 ar = bizInfoDetail.getBusinessDescription().getAr();
-                arCal = Util.divide(Util.multiply(ar,incomePercentD),100);
+                arCal = Util.divide(Util.multiply(ar,incomePercentD),oneHundred);
                 sumAR = Util.add(sumAR,arCal);
 
                 ap = bizInfoDetail.getBusinessDescription().getAp();
-                apCal = Util.divide(Util.multiply(ap,incomePercentD),100);
+                apCal = Util.divide(Util.multiply(ap,incomePercentD),oneHundred);
                 sumAP = Util.add(sumAP,apCal);
 
                 inv = bizInfoDetail.getBusinessDescription().getInv();
-
-                invCal = Util.divide(Util.multiply(inv,incomePercentD),100);
-                sumINV = Util.multiply(sumINV,invCal);
+                invCal = Util.divide(Util.multiply(inv,incomePercentD),oneHundred);
+                sumINV = Util.add(sumINV,invCal);
 
                 bizInfoDetailDAO.persist(bizInfoDetail);
             }
@@ -245,16 +243,9 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal SumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
             BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
 
-            System.out.println("sumIncomeAmount : "+sumIncomeAmount);
-            System.out.println("sumIncomePercent : "+sumIncomePercent);
-            System.out.println("SumWeightAR : "+SumWeightAR);
-            System.out.println("SumWeightAP : "+SumWeightAP);
-            System.out.println("SumWeightINV : "+SumWeightINV);
-            System.out.println("SumWeightIntIncomeFactor : "+SumWeightIntIncomeFactor);
-
-            bizInfoSummary.setCirculationAmount(sumIncomeAmount);
+//            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
             bizInfoSummary.setCirculationPercentage(oneHundred);
-            bizInfoSummary.setSumIncomeAmount(sumIncomeAmount);
+            bizInfoSummary.setSumIncomeAmount(sumIncomeAmount); //?????
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
             bizInfoSummary.setSumWeightAR(SumWeightAR);
             bizInfoSummary.setSumWeightAP(SumWeightAP);
