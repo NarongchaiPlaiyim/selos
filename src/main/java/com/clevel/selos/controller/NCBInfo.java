@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Month;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
@@ -79,7 +80,7 @@ public class NCBInfo implements Serializable {
     private String message;
     private boolean messageErr;
     private Long customerId;
-    private User user;
+    //private User user;
 
     private boolean nplRendered;
     private boolean tdrRendered;
@@ -116,23 +117,22 @@ public class NCBInfo implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation.");
+        log.debug("onCreation.");
         modeForButton = "add";
         noOfmonthsPaymentFlag = false;
 
         HttpSession session = FacesUtil.getSession(true);
-        user = (User) session.getAttribute("user");
 
         if (session.getAttribute("customerId") != null) {
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
-            log.info("customerId :: {} ", customerId);
+            log.debug("customerId :: {} ", customerId);
 
             customerInfoView = customerDAO.findById(customerId);
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
-                log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
+                log.debug("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList.size());
                 if (ncbDetailViewList.size() > 0) {
                     ncbInfoView.setNcbFlag("Y");
                 }
@@ -150,7 +150,7 @@ public class NCBInfo implements Serializable {
                 ec.redirect(ec.getRequestContextPath() + "/site/NCBSummary.jsf");
                 return;
             } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+                log.debug("Exception :: {}", ex);
             }
         }
 
@@ -206,16 +206,16 @@ public class NCBInfo implements Serializable {
 //      accountTypeList = accountTypeDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
 
-        if (customerInfoView != null) {
-            log.info("customerInfoView.getCustomerEntity().getId() :: {}", customerInfoView.getCustomerEntity().getId());
+        if(customerInfoView != null){
+            log.debug("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
 
             accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.info("accountTypeList :: {}", accountTypeList.size());
+            log.debug("accountTypeList :: {}",accountTypeList.size());
 
             settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.info("settlementStatusList :: {}", settlementStatusList.size());
+            log.debug("settlementStatusList :: {}",settlementStatusList.size());
 
-            log.info("customerInfoView : {}", customerInfoView.toString());
+            log.debug("customerInfoView : {}",customerInfoView.toString());
         }
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
@@ -223,7 +223,7 @@ public class NCBInfo implements Serializable {
     }
 
     public void toControlNplFlagRendered() {
-        log.info("nplFlag :: {}", ncbInfoView.getNplFlag());
+        log.debug("nplFlag :: {}", ncbInfoView.getNplFlag());
 
         if (ncbInfoView.getNplFlag() == 2) {
             nplRendered = true;
@@ -234,7 +234,7 @@ public class NCBInfo implements Serializable {
     }
 
     public void toControlTdrFlagRendered() {
-        log.info("tdrFlag :: {}", ncbInfoView.getTdrFlag());
+        log.debug("tdrFlag :: {}", ncbInfoView.getTdrFlag());
 
         if (ncbInfoView.getTdrFlag() == 2) {
             tdrRendered = true;
@@ -247,7 +247,7 @@ public class NCBInfo implements Serializable {
     // onclick add button
     public void onAddNcbRecord() {
         //*** Reset form ***//
-        log.info("onAddNcbRecord ::: Reset Form");
+        log.debug("onAddNcbRecord ::: Reset Form");
         ncbDetailView = new NCBDetailView();
         ncbDetailView.reset();
         modeForButton = "add";
@@ -256,62 +256,22 @@ public class NCBInfo implements Serializable {
 
     public void onEditNcbDetail() {  //copy row that choose to dialog
         modeForButton = "edit";
-        log.info("onEditNcbDetail ::: selectNcbRecordItem  : {}", selectNcbRecordItem.toString());
+        log.debug("onEditNcbDetail ::: selectNcbRecordItem  : {}", selectNcbRecordItem.toString());
         Cloner cloner = new Cloner();
 
         if (selectNcbRecordItem != null) {
             ncbDetailView = new NCBDetailView();
             ncbDetailView = cloner.deepClone(selectNcbRecordItem);
-//            AccountType accountTypeEdit = selectNcbRecordItem.getAccountType();
-//            AccountStatus accountStatusEdit = selectNcbRecordItem.getAccountStatus();
-//            SettlementStatus conditionCurrentEdit = selectNcbRecordItem.getCurrentPayment();
-//            SettlementStatus conditionHistoryEdit = selectNcbRecordItem.getHistoryPayment();
-//
-//            //checkbox
-//            ncbDetailView.setTMB(selectNcbRecordItem.isTMB());
-//            ncbDetailView.setRefinance(selectNcbRecordItem.isRefinance());
-//            ncbDetailView.setWc(selectNcbRecordItem.isWc());
-//            ncbDetailView.setAccountType(accountTypeEdit);
-//            ncbDetailView.setAccountStatus(accountStatusEdit);
-//            ncbDetailView.setCurrentPayment(conditionCurrentEdit);
-//            ncbDetailView.setHistoryPayment(conditionHistoryEdit);
-//            ncbDetailView.setDateOfInfo(selectNcbRecordItem.getDateOfInfo());
-//            ncbDetailView.setAccountOpenDate(selectNcbRecordItem.getAccountOpenDate());
-//            ncbDetailView.setLimit(selectNcbRecordItem.getLimit());
-//            ncbDetailView.setOutstanding(selectNcbRecordItem.getOutstanding());
-//            ncbDetailView.setInstallment(selectNcbRecordItem.getInstallment());
-//            ncbDetailView.setDateOfDebtRestructuring(selectNcbRecordItem.getDateOfDebtRestructuring());
-//            ncbDetailView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
-//            ncbDetailView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
-
-            if (ncbDetailView.isRefinance() == true) {
-                ncbDetailView.setRefinanceFlag(2);
-            } else {
-                ncbDetailView.setRefinanceFlag(1);
-            }
-
-            if (ncbDetailView.isTMB() == true) {
-                ncbDetailView.setTMBAccount(2);
-            } else {
-                ncbDetailView.setTMBAccount(1);
-            }
-
-            if (ncbDetailView.isWc() == true) {
-                ncbDetailView.setWcFlag(2);
-            } else {
-                ncbDetailView.setWcFlag(1);
-            }
-
         }
     }
 
     public void onDeleteNcbDetail() {
-        log.info("onDeleteNcbDetail ::: selectNcbRecordItem: {}", selectNcbRecordItem);
+        log.debug("onDeleteNcbDetail ::: selectNcbRecordItem: {}", selectNcbRecordItem);
         ncbDetailViewList.remove(selectNcbRecordItem);
     }
 
     public void onSaveNcbRecord() {
-        log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
+        log.debug("onSaveNcbRecord ::: mode : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
@@ -339,59 +299,69 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setHistoryPayment(tdrConditionHistory);
                 ncbAdd.setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
+
                 //checkbox
-                ncbAdd.setTMB(ncbDetailView.isTMB());
-                ncbAdd.setRefinance(ncbDetailView.isRefinance());
-                ncbAdd.setWc(ncbDetailView.isWc());
-                ncbAdd.setTMBAccount(Util.returnNumForFlag(ncbDetailView.isTMB()));
-                ncbAdd.setWcFlag(Util.returnNumForFlag(ncbDetailView.isWc()));
-                ncbAdd.setRefinanceFlag(Util.returnNumForFlag(ncbDetailView.isRefinance()));
+                if(ncbDetailView.getTMBAccount() == RadioValue.YES.value()){
+                    ncbAdd.setTmbCheck(true);
+                } else {
+                    ncbAdd.setTmbCheck(false);
+                }
+                if(ncbDetailView.getRefinanceFlag() == RadioValue.YES.value()){
+                    ncbAdd.setRefinanceCheck(true);
+                } else {
+                    ncbAdd.setRefinanceCheck(false);
+                }
+                if(ncbDetailView.getWcFlag() == RadioValue.YES.value()){
+                    ncbAdd.setWcCheck(true);
+                } else {
+                    ncbAdd.setWcCheck(false);
+                }
                 ncbAdd.setCanToEdit(true);
                 ncbDetailViewList.add(ncbAdd);
 
-                log.info("add finish");
+                log.debug("add finish");
 
             } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
-                log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
+                log.debug("onSaveNcbRecord ::: mode : {}", modeForButton);
 
                 AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
                 SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
                 SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId());
 
-                ncbDetailViewList.get(rowIndex).setAccountType(accountType);
-                ncbDetailViewList.get(rowIndex).setAccountStatus(accountStatus);
-                ncbDetailViewList.get(rowIndex).setCurrentPayment(tdrConditionCurrent);
-                ncbDetailViewList.get(rowIndex).setHistoryPayment(tdrConditionHistory);
-                ncbDetailViewList.get(rowIndex).setDateOfInfo(ncbDetailView.getDateOfInfo());
-                ncbDetailViewList.get(rowIndex).setAccountOpenDate(ncbDetailView.getAccountOpenDate());
-                ncbDetailViewList.get(rowIndex).setLimit(ncbDetailView.getLimit());
-                ncbDetailViewList.get(rowIndex).setOutstanding(ncbDetailView.getOutstanding());
-                ncbDetailViewList.get(rowIndex).setInstallment(ncbDetailView.getInstallment());
-                ncbDetailViewList.get(rowIndex).setDateOfDebtRestructuring(ncbDetailView.getDateOfDebtRestructuring());
-                ncbDetailViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
-                ncbDetailViewList.get(rowIndex).setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
                 //checkbox
-                ncbDetailViewList.get(rowIndex).setTMB(ncbDetailView.isTMB());
-                ncbDetailViewList.get(rowIndex).setRefinance(ncbDetailView.isRefinance());
-                ncbDetailViewList.get(rowIndex).setWc(ncbDetailView.isWc());
-                ncbDetailViewList.get(rowIndex).setTMBAccount(ncbDetailView.getTMBAccount());
-                ncbDetailViewList.get(rowIndex).setWcFlag(ncbDetailView.getWcFlag());
-                ncbDetailViewList.get(rowIndex).setRefinanceFlag(ncbDetailView.getRefinanceFlag());
-                ncbDetailViewList.get(rowIndex).setCanToEdit(true);
+                if(ncbDetailView.getTMBAccount() == RadioValue.YES.value()){
+                    ncbDetailView.setTmbCheck(true);
+                } else {
+                    ncbDetailView.setTmbCheck(false);
+                }
+                if(ncbDetailView.getRefinanceFlag() == RadioValue.YES.value()){
+                    ncbDetailView.setRefinanceCheck(true);
+                } else {
+                    ncbDetailView.setRefinanceCheck(false);
+                }
+                if(ncbDetailView.getWcFlag() == RadioValue.YES.value()){
+                    ncbDetailView.setWcCheck(true);
+                } else {
+                    ncbDetailView.setWcCheck(false);
+                }
+                ncbDetailView.setCanToEdit(true);
+
+                ncbDetailViewList.set(rowIndex, ncbDetailView);
+
             } else {
-                log.info("onSaveNcbRecord ::: Undefined modeForbutton !!");
+                log.debug("onSaveNcbRecord ::: Undefined modeForbutton !!");
             }
 
             complete = true;
 
         } else {
 
-            log.info("onSaveNcbRecord ::: validation failed.");
+            log.debug("onSaveNcbRecord ::: validation failed.");
             complete = false;
         }
 
-        log.info("  complete >>>>  :  {}", complete);
+        log.debug("  complete >>>>  :  {}", complete);
 
         context.addCallbackParam("functionComplete", complete);
 
@@ -409,33 +379,33 @@ public class NCBInfo implements Serializable {
                 rendered.add(Boolean.FALSE);
             }
 
-            log.info("rendered.get(i).booleanValue() {} ", rendered.get(i).booleanValue());
+            log.debug("rendered.get(i).booleanValue() {} ", rendered.get(i).booleanValue());
         }
 
     }
 
     //for rendered จำนวนเดือนที่หาร
     public void onChangeAccountType() {
-        log.info("onChangeAccountType::");
-        log.info("ncbDetailView.getAccountType().getId :: {}", ncbDetailView.getAccountType().getId());
-        log.info("ncbDetailView.getMonthFlag() :: {}", ncbDetailView.getAccountType().getMonthFlag());
-        log.info("ncbDetailView.monthFlagPage() :: {}", ncbDetailView.isMonthFlagPage());
+        log.debug("onChangeAccountType::");
+        log.debug("ncbDetailView.getAccountType().getId :: {}", ncbDetailView.getAccountType().getId());
+        log.debug("ncbDetailView.getMonthFlag() :: {}", ncbDetailView.getAccountType().getMonthFlag());
+        log.debug("ncbDetailView.monthFlagPage() :: {}", ncbDetailView.isMonthFlagPage());
 
     }
 */
 
     // *** Function for save NCB To DB ***//
     public void onSaveNcb() {    // call transform  and then call businessControl
-        log.info("onSaveNcb::::");
-        log.info("ncbDetailViewList.size() ::: {} ", ncbDetailViewList.size());
+        log.debug("onSaveNcb::::");
+        log.debug("ncbDetailViewList.size() ::: {} ", ncbDetailViewList.size());
         try {
             if (ncbDetailViewList.size() > 0) {
-                if (ncbInfoView.getId() == 0) {
+                /*if (ncbInfoView.getId() == 0) {
                     ncbInfoView.setCreateBy(user);
                     ncbInfoView.setCreateDate(DateTime.now().toDate());
                 } else {
                     ncbInfoView.setModifyBy(user);
-                }
+                }*/
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
@@ -467,7 +437,7 @@ public class NCBInfo implements Serializable {
 
 
     public void onCancelNcbInfo() {
-        log.info("onCancelNcbInfo::::  ");
+        log.debug("onCancelNcbInfo::::  ");
         onCreation();
     }
 

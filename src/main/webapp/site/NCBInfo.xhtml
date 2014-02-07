@@ -443,7 +443,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.TMB}" disabled="true"/>
+                            <h:selectBooleanCheckbox value="#{item.tmbCheck}" disabled="true"/>
                         </p:column>
 
                         <p:column styleClass="left">
@@ -503,11 +503,11 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.refinance}"/>
+                            <h:selectBooleanCheckbox value="#{item.refinanceCheck}" disabled="true"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:selectBooleanCheckbox value="#{item.wc}"/>
+                            <h:selectBooleanCheckbox value="#{item.wcCheck}" disabled="true"/>
                         </p:column>
 
                         <p:column style="width:60px;">
@@ -582,7 +582,7 @@
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          closable="false"  closeOnEscape="false" modal="true"
+          closeOnEscape="false" modal="true"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
