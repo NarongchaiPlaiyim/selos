@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -123,6 +124,19 @@ public class NCB implements Serializable {
     @OneToOne
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
+
+    //Value for calculate WC
+    @Column(name = "loan_credit")
+    private BigDecimal loanCreditNCB;
+
+    @Column(name = "loan_credit_wc")
+    private BigDecimal loanCreditWC;
+
+    @Column(name = "loan_credit_tmb")
+    private BigDecimal loanCreditTMB;
+
+    @Column(name = "loan_credit_wc_tmb")
+    private BigDecimal loanCreditWCTMB;
 
 
     public long getId() {
@@ -398,6 +412,38 @@ public class NCB implements Serializable {
 
     public void setTdrOhterFlag(int tdrOhterFlag) {
         this.tdrOhterFlag = tdrOhterFlag;
+    }
+
+    public BigDecimal getLoanCreditNCB() {
+        return loanCreditNCB;
+    }
+
+    public void setLoanCreditNCB(BigDecimal loanCreditNCB) {
+        this.loanCreditNCB = loanCreditNCB;
+    }
+
+    public BigDecimal getLoanCreditWC() {
+        return loanCreditWC;
+    }
+
+    public void setLoanCreditWC(BigDecimal loanCreditWC) {
+        this.loanCreditWC = loanCreditWC;
+    }
+
+    public BigDecimal getLoanCreditTMB() {
+        return loanCreditTMB;
+    }
+
+    public void setLoanCreditTMB(BigDecimal loanCreditTMB) {
+        this.loanCreditTMB = loanCreditTMB;
+    }
+
+    public BigDecimal getLoanCreditWCTMB() {
+        return loanCreditWCTMB;
+    }
+
+    public void setLoanCreditWCTMB(BigDecimal loanCreditWCTMB) {
+        this.loanCreditWCTMB = loanCreditWCTMB;
     }
 
     @Override

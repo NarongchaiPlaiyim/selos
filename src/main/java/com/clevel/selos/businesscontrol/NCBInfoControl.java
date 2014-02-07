@@ -18,6 +18,7 @@ import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -55,10 +56,17 @@ public class NCBInfoControl extends BusinessControl {
     private final BigDecimal plusMRR = BigDecimal.valueOf(6);
 
 
-    public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList) {
+    public void onSaveNCBToDB(NCBInfoView ncbInfoView, List<NCBDetailView> ncbDetailViewList) {
         log.info("onSaveNCBToDB begin");
 
-        NCB ncb = ncbTransform.transformToModel(NCBInfoView);
+        if(ncbInfoView.getId() == 0){
+            ncbInfoView.setCreateBy(getCurrentUser());
+            ncbInfoView.setCreateDate(DateTime.now().toDate());
+        } else {
+            ncbInfoView.setModifyBy(getCurrentUser());
+            ncbInfoView.setModifyDate(DateTime.now().toDate());
+        }
+        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
         ncbDAO.persist(ncb);
         log.info("persist ncb");
 
@@ -67,7 +75,7 @@ public class NCBInfoControl extends BusinessControl {
         ncbDetailDAO.delete(NCBDetailListToDelete);
         log.info("delete NCBDetailListToDelete");
 
-        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList, ncb);
+        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList, ncb);
         ncbDetailDAO.persist(ncbDetailList);
 
     }

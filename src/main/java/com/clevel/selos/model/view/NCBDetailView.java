@@ -31,9 +31,12 @@ public class NCBDetailView implements Serializable {
     private SettlementStatus historyPayment;
     private boolean canToEdit;
     private boolean monthFlagPage;
-    private boolean TMB;
-    private boolean refinance;
-    private boolean wc;
+
+    //TO SHOW CHECKBOX IN DATA TABLE
+    private boolean tmbCheck;
+    private boolean refinanceCheck;
+    private boolean wcCheck;
+
     private long customerId;
 
     private String accountName;
@@ -72,6 +75,30 @@ public class NCBDetailView implements Serializable {
         this.id = id;
     }
 
+    public int getTMBAccount() {
+        return isTMBAccount;
+    }
+
+    public void setTMBAccount(int TMBAccount) {
+        isTMBAccount = TMBAccount;
+    }
+
+    public int getRefinanceFlag() {
+        return refinanceFlag;
+    }
+
+    public void setRefinanceFlag(int refinanceFlag) {
+        this.refinanceFlag = refinanceFlag;
+    }
+
+    public int getWcFlag() {
+        return wcFlag;
+    }
+
+    public void setWcFlag(int wcFlag) {
+        this.wcFlag = wcFlag;
+    }
+
     public Date getDateOfInfo() {
         return dateOfInfo;
     }
@@ -80,31 +107,12 @@ public class NCBDetailView implements Serializable {
         this.dateOfInfo = dateOfInfo;
     }
 
-    public int getTMBAccount() {
-        if (TMB == true) {
-            this.isTMBAccount = 2;
-        } else if (TMB == false) {
-            this.isTMBAccount = 1;
-        }
-        return isTMBAccount;
+    public Date getAccountOpenDate() {
+        return accountOpenDate;
     }
 
-    public void setTMBAccount(int TMBAccount) {
-        isTMBAccount = TMBAccount;
-    }
-
-    public boolean isTMB() {
-
-        if (isTMBAccount == 2) {
-            this.TMB = true;
-        } else {
-            this.TMB = false;
-        }
-        return TMB;
-    }
-
-    public void setTMB(boolean TMB) {
-        this.TMB = TMB;
+    public void setAccountOpenDate(Date accountOpenDate) {
+        this.accountOpenDate = accountOpenDate;
     }
 
     public BigDecimal getLimit() {
@@ -129,14 +137,6 @@ public class NCBDetailView implements Serializable {
 
     public void setInstallment(BigDecimal installment) {
         this.installment = installment;
-    }
-
-    public Date getAccountOpenDate() {
-        return accountOpenDate;
-    }
-
-    public void setAccountOpenDate(Date accountOpenDate) {
-        this.accountOpenDate = accountOpenDate;
     }
 
     public Date getDateOfDebtRestructuring() {
@@ -179,7 +179,6 @@ public class NCBDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
-
     public TDRCondition getTdrCondition() {
         return tdrCondition;
     }
@@ -204,60 +203,6 @@ public class NCBDetailView implements Serializable {
         this.historyPayment = historyPayment;
     }
 
-    public boolean isRefinance() {
-        if (refinanceFlag == 2) {
-            this.refinance = true;
-        } else {
-            this.refinance = false;
-        }
-        return refinance;
-    }
-
-    public void setRefinance(boolean refinance) {
-        this.refinance = refinance;
-    }
-
-    public boolean isWc() {
-        if (wcFlag == 2) {
-            this.wc = true;
-        } else {
-            this.wc = false;
-        }
-        return wc;
-    }
-
-    public void setWc(boolean wc) {
-        this.wc = wc;
-    }
-
-
-    public int getRefinanceFlag() {
-        if (refinance == true) {
-            refinanceFlag = 2;
-        } else if (refinance == false) {
-            refinanceFlag = 1;
-        }
-        return refinanceFlag;
-    }
-
-    public void setRefinanceFlag(int refinanceFlag) {
-        this.refinanceFlag = refinanceFlag;
-    }
-
-
-    public int getWcFlag() {
-        if (wc == true) {
-            wcFlag = 2;
-        } else if (wc == false) {
-            wcFlag = 1;
-        }
-        return wcFlag;
-    }
-
-    public void setWcFlag(int wcFlag) {
-        this.wcFlag = wcFlag;
-    }
-
     public boolean isCanToEdit() {
         return canToEdit;
     }
@@ -267,17 +212,43 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthFlagPage() {
-        if (accountType.getMonthFlag() == 1) {       // test before this the future 1 > true 0 > false
-            monthFlagPage = false;
-        } else {
-            monthFlagPage = true;
-        }
-
         return monthFlagPage;
     }
 
     public void setMonthFlagPage(boolean monthFlagPage) {
         this.monthFlagPage = monthFlagPage;
+    }
+
+    public boolean getTmbCheck() {
+        return tmbCheck;
+    }
+
+    public void setTmbCheck(boolean tmbCheck) {
+        this.tmbCheck = tmbCheck;
+    }
+
+    public boolean getRefinanceCheck() {
+        return refinanceCheck;
+    }
+
+    public void setRefinanceCheck(boolean refinanceCheck) {
+        this.refinanceCheck = refinanceCheck;
+    }
+
+    public boolean getWcCheck() {
+        return wcCheck;
+    }
+
+    public void setWcCheck(boolean wcCheck) {
+        this.wcCheck = wcCheck;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     public String getAccountName() {
@@ -304,19 +275,13 @@ public class NCBDetailView implements Serializable {
         this.debtForCalculate = debtForCalculate;
     }
 
-    public long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("isTMBAccount", isTMBAccount)
+                .append("refinanceFlag", refinanceFlag)
+                .append("wcFlag", wcFlag)
                 .append("dateOfInfo", dateOfInfo)
                 .append("accountOpenDate", accountOpenDate)
                 .append("limit", limit)
@@ -325,13 +290,20 @@ public class NCBDetailView implements Serializable {
                 .append("dateOfDebtRestructuring", dateOfDebtRestructuring)
                 .append("noOfOutstandingPaymentIn12months", noOfOutstandingPaymentIn12months)
                 .append("noOfOverLimit", noOfOverLimit)
-                .append("refinanceFlag", refinanceFlag)
                 .append("accountType", accountType)
                 .append("accountStatus", accountStatus)
                 .append("tdrCondition", tdrCondition)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
-                .append("wcFlag", wcFlag)
+                .append("canToEdit", canToEdit)
+                .append("monthFlagPage", monthFlagPage)
+                .append("tmbCheck", tmbCheck)
+                .append("refinanceCheck", refinanceCheck)
+                .append("wcCheck", wcCheck)
+                .append("customerId", customerId)
+                .append("accountName", accountName)
+                .append("loanAccountTypeView", loanAccountTypeView)
+                .append("debtForCalculate", debtForCalculate)
                 .toString();
     }
 }
