@@ -329,7 +329,7 @@
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:productionCostsPercentage,:frmMain:" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -684,10 +684,7 @@
                                                 </f:facet>
                                             </p:column>
 
-                                            <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:center;"/>
-
-                                            <p:column style="background-color:#f8d0b6;"/>
+                                            <p:column style="background-color:#f8d0b6;" colspan="2"/>
                                         </p:row>
                                     </p:columnGroup>
 

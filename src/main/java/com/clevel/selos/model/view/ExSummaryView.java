@@ -42,6 +42,9 @@ public class ExSummaryView  implements Serializable {
     //Collateral
     private ExSumCollateralView exSumCollateralView;
 
+    //Credit Risk Type
+    private ExSumCreditRiskInfoView exSumCreditRiskInfoView;
+
     //Deviate
     private String applicationResult;
     private List<ExSumDecisionView> exSumDecisionListView;

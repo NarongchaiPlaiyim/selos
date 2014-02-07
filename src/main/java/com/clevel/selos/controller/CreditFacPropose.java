@@ -421,8 +421,6 @@ public class CreditFacPropose implements Serializable {
         suggestPriceLabel = "";
         standardPriceLabel = "";
         finalPriceRate = "";
-
-        newCreditFacilityView = creditFacProposeControl.calWC(newCreditFacilityView, workCaseId);
     }
 
     //Call  BRMS to get data Propose Credit Info

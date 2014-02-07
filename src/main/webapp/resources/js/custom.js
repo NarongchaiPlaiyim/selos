@@ -577,7 +577,7 @@ function handleSubmitZMDialogRequest(xhr, status, args) {
 
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
-        assignABDMDialog.hide();
+        assignABDMDlg.hide();
     }
 }
 

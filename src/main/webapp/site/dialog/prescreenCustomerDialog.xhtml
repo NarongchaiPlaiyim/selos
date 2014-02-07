@@ -149,8 +149,8 @@
                     <td class="title right">Collateral Owner :</td>
                     <td>
                         <p:selectOneRadio value="#{prescreenMaker.borrowerInfo.collateralOwner}" disabled="#{not prescreenMaker.enableCustomerForm}">
-                            <f:selectItem itemLabel="Yes" itemValue="1"/>
-                            <f:selectItem itemLabel="No" itemValue="0"/>
+                            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                                           var="colOwnerVar" itemLabel="#{colOwnerVar.shortName()}" itemValue="#{colOwnerVar.value()}"/>
                         </p:selectOneRadio>
                     </td>
                 </tr>
@@ -355,7 +355,8 @@
                     <td>
                         <p:selectOneMenu id="dlgSelMarriageStatus" value="#{prescreenMaker.borrowerInfo.maritalStatus.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
-                                         disabled="#{not prescreenMaker.enableCustomerForm}">
+                                         disabled="#{not prescreenMaker.enableCustomerForm}"
+                                         required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.maritalStatusList}"
                                            var="maritalStatusItem"
@@ -435,8 +436,8 @@
                     <td class="title right">Collateral Owner :</td>
                     <td>
                         <p:selectOneRadio value="#{prescreenMaker.borrowerInfo.spouse.collateralOwner}">
-                            <f:selectItem itemLabel="Yes" itemValue="1"/>
-                            <f:selectItem itemLabel="No" itemValue="0"/>
+                            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                                           var="colOwnerSpVar" itemLabel="#{colOwnerSpVar.shortName()}" itemValue="#{colOwnerSpVar.value()}"/>
                         </p:selectOneRadio>
                     </td>
                 </tr>
@@ -616,7 +617,7 @@
                     <td class="title">Approx. Income :</td>
                     <td colspan="3">
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.approxIncome}" styleClass="small right" maxlength="10"
-                                     onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);" onfocus="removeComma(this)">
+                                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)">
                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
                             <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
                         </p:inputText>
