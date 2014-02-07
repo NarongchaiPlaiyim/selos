@@ -1906,8 +1906,10 @@
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
-<p:dialog id="collateralInfoDialog" header="Propose Collateral Information" widgetVar="collateralInfoDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+<p:dialog id="collateralInfoDialog" widgetVar="collateralInfoDlg"
+          header="Propose Collateral Information"
+          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
+          width="900" height="500">
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
 
