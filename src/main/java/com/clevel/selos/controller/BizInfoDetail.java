@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
@@ -111,6 +112,8 @@ public class BizInfoDetail implements Serializable {
     BizInfoDetailControl bizInfoDetailControl;
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     public BizInfoDetail(){
 
@@ -665,6 +668,7 @@ public class BizInfoDetail implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
             log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
+            creditFacProposeControl.calWC(workCaseId);
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){

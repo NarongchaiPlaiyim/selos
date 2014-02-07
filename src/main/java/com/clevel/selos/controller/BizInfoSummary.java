@@ -1,9 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BankStmtControl;
-import com.clevel.selos.businesscontrol.BizInfoDetailControl;
-import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
@@ -117,7 +114,8 @@ public class BizInfoSummary implements Serializable {
     BankStatementSummaryDAO bankStmtSummaryDAO;
     @Inject
     ExSummaryControl exSummaryControl;
-
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     @Inject
     private Util util;
@@ -240,7 +238,6 @@ public class BizInfoSummary implements Serializable {
         log.info("onChangeDistrict :::: subDistrictList.size ::: {}", subDistrictList.size());
     }
 
-
     public void getBusinessInfoListDB() {
 
         long bizInfoSummaryViewId;
@@ -263,6 +260,7 @@ public class BizInfoSummary implements Serializable {
         log.info(" readonlyInterview is " + readonlyInterview);
 
     }
+
     public void onCalSummaryTable(){
         log.info("onCalSummaryTable begin");
         BigDecimal sumIncomeAmount = BigDecimal.ZERO ;
@@ -445,7 +443,6 @@ public class BizInfoSummary implements Serializable {
         session.setAttribute("bizInfoDetailViewId", selectBizInfoDetailView.getId());
         log.info(" onViewDetail end !! {}");
     }
-
 
     public void onDeleteBizInfoToDB() {
 
