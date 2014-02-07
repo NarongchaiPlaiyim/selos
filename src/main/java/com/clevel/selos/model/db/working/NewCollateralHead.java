@@ -21,7 +21,7 @@ public class NewCollateralHead implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_HEAD_ID")
     private long id;
 
-    @Column(name = "COLL_ID")
+    @Column(name = "coll_id")
     private String collID;
 
     @OneToOne
