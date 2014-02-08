@@ -12,7 +12,7 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                 </td>
                 <td class="title" style="width: 200px;">
-                    <p:inputText value="#{appraisalRequest.appraisalDetailView.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
+                    <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                 </td>
             </tr>
             <tr>
@@ -20,13 +20,13 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
                 </td>
                 <td style = "#{appraisalRequest.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
-                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeReviewAppraisalB}" />
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewAppraisalB}" />
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
                      <br/>
-                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeNewAppraisalB}" />
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeNewAppraisalB}" />
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
                     <br/>
-                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeReviewBuildingB}" />
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewBuildingB}" />
                     <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}" />
                 </td>
             </tr>
@@ -35,7 +35,7 @@
                     <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
                 </td>
                 <td style="mid-width: 250px;width: 250px;max-width: 250px;">
-                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalRequest.appraisalDetailView.characteristic}" >
+                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalRequest.appraisalDetailViewDialog.characteristic}" >
                         <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                         <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                     </p:selectOneRadio>
@@ -48,7 +48,7 @@
                 <td class="title" style="width: 200px;">
                     <p:inputText id="numberOfDocuments"  styleClass="right"
                                  onkeypress="return onKeyPressNumber()" onkeydown="return onKeyDownNumber()"
-                                 value="#{appraisalRequest.appraisalDetailView.numberOfDocuments}"
+                                 value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
                                  style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
                         <f:convertNumber pattern="#,##0"  />
                         <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
@@ -58,7 +58,6 @@
             <tr>
                 <td class="center" colspan="2" style="margin-top: 20px;">
                     <p:commandButton id="btnSaveAppraisalDetail"
-                                     binding="#{saveButton}"
                                      value="#{msg.get('app.button.ok')}"
                                      actionListener="#{appraisalRequest.onSaveAppraisalDetailView()}"
                                      process="@form"

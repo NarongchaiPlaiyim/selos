@@ -76,6 +76,10 @@ public class AppraisalRequestControl extends BusinessControl {
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
+                for(NewCollateral newCollateral : newCollateralList){
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                }
+
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
             } else {
@@ -94,142 +98,60 @@ public class AppraisalRequestControl extends BusinessControl {
         workCase = workCaseDAO.findById(workCaseId);
         appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
 
-//        if(!Util.isZero(appraisal.getId())){
-//            log.debug("-- Appraisal id is {}", appraisal.getId());
-//            appraisalContactDetailList = safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
-//            appraisalContactDetailDAO.delete(appraisalContactDetailList);
-//
-//            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
-//            for(AppraisalContactDetail model : appraisalContactDetailList){
-//                model.setAppraisal(appraisal);
-//            }
-//            appraisalContactDetailDAO.persist(appraisalContactDetailList);
-//            appraisalDAO.persist(appraisal);
-//        } else {
-//            log.debug("-- Appraisal id is zero");
-//            appraisalDAO.persist(appraisal);
-//            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
-//            for(AppraisalContactDetail model : appraisalContactDetailList){
-//                model.setAppraisal(appraisal);
-//            }
-//            appraisalContactDetailDAO.persist(appraisalContactDetailList);
-//        }
-//        log.info("-- appraisalDAO persist end" );
-
-
-
+        if(!Util.isZero(appraisal.getId())){
+            log.debug("-- Appraisal id is {}", appraisal.getId());
+            appraisalDAO.persist(appraisal);
+            appraisalContactDetailList = safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
+            appraisalContactDetailDAO.delete(appraisalContactDetailList);
+            appraisalContactDetailList.clear();
+            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
+            for(AppraisalContactDetail model : appraisalContactDetailList){
+                model.setAppraisal(appraisal);
+            }
+            appraisalContactDetailDAO.persist(appraisalContactDetailList);
+        } else {
+            log.debug("-- Appraisal id is zero");
+            appraisalDAO.persist(appraisal);
+            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
+            for(AppraisalContactDetail model : appraisalContactDetailList){
+                model.setAppraisal(appraisal);
+            }
+            appraisalContactDetailDAO.persist(appraisalContactDetailList);
+        }
+        log.info("-- appraisalDAO persist end" );
 
 
         newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         if(!Util.isNull(newCreditFacility)){
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
             appraisalDetailViewList = safetyList(appraisalView.getAppraisalDetailViewList());
-            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, user));
 
-            log.debug("-- Size of {}", newCollateralList.size());
+
+            newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
             for(NewCollateral newCollateral : newCollateralList){
-                log.debug("-- NewCollateral.id[{}]", newCollateral.getId());
-                newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
+                newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    log.debug("---- NewCollateralHead.id[{}]", newCollateralHead.getId());
-                    newCollateralSubList = safetyList(newCollateralHead.getNewCollateralSubList());
-                    for (NewCollateralSub newCollateralSub : newCollateralSubList){
-                        log.debug("------ NewCollateralSub.id[{}]", newCollateralSub.getId());
-                    }
+                    newCollateralHead.setAppraisalRequest(0);
                 }
+                newCollateralHeadDAO.persist(newCollateralHeadList);
             }
 
-            long id;
+            newCollateralList.clear();
+            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, user));
             for(NewCollateral newCollateral : newCollateralList){
-                id = newCollateral.getId();
-                log.debug("-- NewCollateral.id[{}]", id);
-                newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
+                newCollateralDAO.persist(newCollateral);
+                newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                    id = newCollateralHead.getId();
-                    log.debug("---- NewCollateralHead.id[{}]", id);
-                    newCollateralSubList = safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
-                    for (NewCollateralSub newCollateralSub : newCollateralSubList){
-                        log.debug("------ NewCollateralSub.id[{}]", newCollateralSub.getId());
-                    }
-//                    newCollateralSubDAO.delete(newCollateralSubList);
+                    newCollateralHead.setNewCollateral(newCollateral);
+                    newCollateralHeadDAO.persist(newCollateralHead);
                 }
-//                newCollateralHeadDAO.delete(newCollateralHeadList);
             }
 
 
         } else {
             log.debug("-- NewCreditFacility is null");
         }
-
-
-
-
-
-
-
-//        if(newCollateralList.size() != 0){
-//            log.debug("1......................................................................1");
-//            clearDB(newCollateralList);
-//            log.debug("222222222222222222222222222222222222222222222222222222222222222222222222222");
-////            newCollateralDAO.delete(newCollateralList);
-//            log.debug("333333333333333333333333333333333333333333333333333333333333333333333333333");
-////            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
-//            log.debug("44444444444444444444444444444444444444444444444444444444444444444444444444444");
-////            insertToDB(newCollateralViewList, user);
-//        } else {
-//            log.debug("1......................................................................2");
-//            newCollateralDAO.delete(newCollateralList);
-//            log.debug("222222222222222222222222222222222222222222222222222222222222222222222222222");
-//            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
-//            log.debug("333333333333333333333333333333333333333333333333333333333333333333333333333");
-//            insertToDB(newCollateralViewList, user);
-//        }
-
         log.info("-- onSaveAppraisalRequest end");
-    }
-
-    private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user){
-        newCollateralList = safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
-        newCollateralDAO.persistProposeTypeA(newCollateralList);
-        for(NewCollateral newCollateral : newCollateralList){
-            newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
-            for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                newCollateralHead.setNewCollateral(newCollateral);
-                newCollateralSubList = safetyList(newCollateralHead.getNewCollateralSubList());
-                for(NewCollateralSub newCollateralSub : newCollateralSubList){
-                    newCollateralSub.setNewCollateralHead(newCollateralHead);
-                }
-                newCollateralSubDAO.persist(newCollateralSubList);
-            }
-            newCollateralHeadDAO.persist(newCollateralHeadList);
-        }
-    }
-    private void clearDB(final List<NewCollateral> newCollateralList){
-        long id;
-        for(NewCollateral newCollateral : newCollateralList){
-            id = newCollateral.getId();
-            if(!Util.isZero(id)){
-                log.debug("-- NewCollateral.id[{}]", id);
-                newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
-                if(newCollateralHeadList.size() != 0){
-                    for(NewCollateralHead newCollateralHead : newCollateralHeadList){
-                        id = newCollateralHead.getId();
-                        log.debug("---- NewCollateralHead.id[{}]", id);
-                        newCollateralSubList = safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
-                        if(newCollateralSubList.size() != 0){
-                            for (NewCollateralSub newCollateralSub : newCollateralSubList){
-                                log.debug("------ NewCollateralSub.id[{}]", newCollateralSub.getId());
-                            }
-                        }
-                    }
-                }
-
-//                    newCollateralSubList = safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
-//                    newCollateralSubDAO.delete(newCollateralSubList);
-
-//                newCollateralHeadDAO.delete(newCollateralHeadList);
-            }
-        }
     }
 
     private <T> List<T> safetyList(List<T> list) {

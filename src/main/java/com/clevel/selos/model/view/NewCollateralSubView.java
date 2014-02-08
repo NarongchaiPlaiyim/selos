@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
@@ -14,6 +15,8 @@ import java.util.List;
 public class NewCollateralSubView {
     private long id;
     private int no;
+    private String collID;
+    private String headCollID;
     private SubCollateralType subCollateralType;
     private String address;
     private String landOffice;
@@ -32,6 +35,7 @@ public class NewCollateralSubView {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+
 
     public NewCollateralSubView() {
         reset();
@@ -214,11 +218,29 @@ public class NewCollateralSubView {
         this.relatedWithId = relatedWithId;
     }
 
+    public String getCollID() {
+        return collID;
+    }
+
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
+    public String getHeadCollID() {
+        return headCollID;
+    }
+
+    public void setHeadCollID(String headCollID) {
+        this.headCollID = headCollID;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("collID", collID)
+                .append("headCollID", headCollID)
                 .append("subCollateralType", subCollateralType)
                 .append("address", address)
                 .append("landOffice", landOffice)
