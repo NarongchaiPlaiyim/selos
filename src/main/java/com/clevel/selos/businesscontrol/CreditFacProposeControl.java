@@ -742,9 +742,8 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal weightINV = BigDecimal.ZERO;
         // Sum(weight cost of goods sold * businessProportion)
         // cost of goods = business desc ( column COG )
-        // business proportion = ??
+        // business proportion = สัดส่วนธุรกิจ ในแต่ละ business < %Income >
         BigDecimal aaaValue = BigDecimal.ZERO;
-        //todo:aaaValue !
 
         //table 1
         BigDecimal wcNeed;
@@ -801,13 +800,20 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
+//        Sum(weight cost of goods sold * businessProportion)
+            if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+                for(BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()){
+                    BigDecimal cog = BigDecimal.ZERO;
+                    if(bidv.getBizDesc() != null){
+                        cog = bidv.getBizDesc().getCog();
+                    }
+                    aaaValue = Util.add(aaaValue,Util.multiply(cog,bidv.getPercentBiz()));
+                }
+            }
         }
 
 //        *** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
         BigDecimal salesIncome = Util.multiply(adjustDBR,monthOfYear);
-
-//      Sum(weight cost of goods sold * businessProportion)
-//        aaaValue = ?????????????
 
         //calculation
 //        (ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
