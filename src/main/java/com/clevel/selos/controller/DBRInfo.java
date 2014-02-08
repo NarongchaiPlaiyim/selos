@@ -1,11 +1,11 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.DBRControl;
-import com.clevel.selos.businesscontrol.ExSummaryControl;
-import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
-import com.clevel.selos.businesscontrol.NCBInfoControl;
+import com.clevel.selos.businesscontrol.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.DBRDetailView;
+import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.model.view.LoanAccountTypeView;
+import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -23,11 +23,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 @ViewScoped
 @ManagedBean(name = "dbrInfo")
@@ -49,6 +46,8 @@ public class DBRInfo implements Serializable {
 
     @Inject
     DBRControl dbrControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     @Inject
     LoanAccountTypeControl loanAccountTypeControl;
@@ -199,6 +198,7 @@ public class DBRInfo implements Serializable {
                 dbrDetails = dbr.getDbrDetailViews();
             }
             exSummaryControl.calForDBR(workCaseId);
+            creditFacProposeControl.calWC(workCaseId);
         } catch (Exception e) {
 
             if (e.getCause() != null) {

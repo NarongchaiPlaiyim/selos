@@ -2,9 +2,10 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,9 @@ public class ExSummaryView  implements Serializable {
 
     //Collateral
     private ExSumCollateralView exSumCollateralView;
+
+    //Credit Risk Type
+    private ExSumCreditRiskInfoView exSumCreditRiskInfoView;
 
     //Deviate
     private String applicationResult;
@@ -377,5 +381,49 @@ public class ExSummaryView  implements Serializable {
 
     public void setTradeFinance(NewCreditFacilityView tradeFinance) {
         this.tradeFinance = tradeFinance;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("borrowerListView", borrowerListView).
+                append("businessLocationName", businessLocationName).
+                append("businessLocationAddress", businessLocationAddress).
+                append("businessLocationAddressEN", businessLocationAddressEN).
+                append("owner", owner).
+                append("tradeFinance", tradeFinance).
+                append("exSumCharacteristicView", exSumCharacteristicView).
+                append("exSumBusinessInfoView", exSumBusinessInfoView).
+                append("businessOperationActivity", businessOperationActivity).
+                append("businessPermission", businessPermission).
+                append("expiryDate", expiryDate).
+                append("ncbInfoListView", ncbInfoListView).
+                append("exSumAccMovementViewList", exSumAccMovementViewList).
+                append("exSumCollateralView", exSumCollateralView).
+                append("exSumCreditRiskInfoView", exSumCreditRiskInfoView).
+                append("applicationResult", applicationResult).
+                append("exSumDecisionListView", exSumDecisionListView).
+                append("natureOfBusiness", natureOfBusiness).
+                append("historicalAndReasonOfChange", historicalAndReasonOfChange).
+                append("tmbCreditHistory", tmbCreditHistory).
+                append("supportReason", supportReason).
+                append("rm008Code", rm008Code).
+                append("rm008Remark", rm008Remark).
+                append("rm204Code", rm204Code).
+                append("rm204Remark", rm204Remark).
+                append("rm020Code", rm020Code).
+                append("rm020Remark", rm020Remark).
+                append("approveAuthority", approveAuthority).
+                append("uwCode", uwCode).
+                append("decision", decision).
+                append("deviateCode", deviateCode).
+                append("uwComment", uwComment).
+                append("yearInBusinessMonth", yearInBusinessMonth).
+                toString();
     }
 }

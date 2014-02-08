@@ -714,7 +714,7 @@ public class CreditFacProposeControl extends BusinessControl {
         return proposeCreditDetailViewList;
     }
 
-    public NewCreditFacilityView calWC(NewCreditFacilityView newCreditFacilityView,long workCaseId){
+    public void calWC(long workCaseId){ // todo: ncb && dbr && bizInfoSummary pls call me !!!!!!!!
         BigDecimal dayOfYear = BigDecimal.valueOf(365);
         BigDecimal monthOfYear = BigDecimal.valueOf(12);
         BigDecimal onePointTwoFive = BigDecimal.valueOf(1.25);
@@ -727,7 +727,7 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal adjustDBR = BigDecimal.ZERO;
         // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
         BigDecimal revolvingCreditNCB = BigDecimal.ZERO;
-        // ส่วนผู้เกี่ยวข้องในหน้า DBR
+        // วงเงินสินเชื่อหมุนเวียนส่วนผู้เกี่ยวข้องในหน้า DBR
         BigDecimal revolvingCreditDBR = BigDecimal.ZERO;
         // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
         BigDecimal loanBurdenWCFlag = BigDecimal.ZERO;
@@ -742,7 +742,7 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal weightINV = BigDecimal.ZERO;
         // Sum(weight cost of goods sold * businessProportion)
         // cost of goods = business desc ( column COG )
-        // business proportion = ??
+        // business proportion = สัดส่วนธุรกิจ ในแต่ละ business < %Income >
         BigDecimal aaaValue = BigDecimal.ZERO;
 
         //table 1
@@ -777,30 +777,39 @@ public class CreditFacProposeControl extends BusinessControl {
             revolvingCreditDBR = dbrView.getTotalMonthDebtRelatedWc();
         }
 
-        List<NCBInfoView> ncbInfoViewList = ncbInfoControl.getNCBInfoViewByWorkCaseId(workCaseId);
-        if(ncbInfoViewList != null && ncbInfoViewList.size() > 0){
-            for (NCBInfoView ncbInfoView : ncbInfoViewList){
-                //todo : for sum
-//                revolvingCreditNCB
-//                loanBurdenWCFlag
-//                revolvingCreditNCBTMBFlag
-//                loanBurdenTMBFlag
+        List<NCB> ncbList = ncbInfoControl.getNCBByWorkCaseId(workCaseId);
+        if(ncbList != null && ncbList.size() > 0){
+            for (NCB ncb : ncbList){
+                revolvingCreditNCB = Util.add(revolvingCreditNCB,ncb.getLoanCreditNCB());
+                loanBurdenWCFlag = Util.add(loanBurdenWCFlag,ncb.getLoanCreditWC());
+                revolvingCreditNCBTMBFlag = Util.add(revolvingCreditNCBTMBFlag,ncb.getLoanCreditTMB());
+                loanBurdenTMBFlag = Util.add(loanBurdenTMBFlag,ncb.getLoanCreditWCTMB());
             }
         }
 
-        if(newCreditFacilityView == null){
-            newCreditFacilityView = new NewCreditFacilityView();
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(newCreditFacility == null){
+            newCreditFacility = new NewCreditFacility();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            newCreditFacility.setWorkCase(workCase);
         }
 
-        //check role
-        User user = getCurrentUser();
-        if(user.getRole().getId() == RoleValue.UW.id()){
-            BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-            if(bizInfoSummaryView != null){
-
+        BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        if(bizInfoSummaryView != null){
+            weightAR = bizInfoSummaryView.getSumWeightAR();
+            weightAP = bizInfoSummaryView.getSumWeightAP();
+            weightINV = bizInfoSummaryView.getSumWeightINV();
+//        Sum(weight cost of goods sold * businessProportion)
+            if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+                for(BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()){
+                    BigDecimal cog = BigDecimal.ZERO;
+                    if(bidv.getBizDesc() != null){
+                        cog = bidv.getBizDesc().getCog();
+                    }
+                    aaaValue = Util.add(aaaValue,Util.multiply(cog,bidv.getPercentBiz()));
+                }
             }
-        } else { // bdm or other
-
         }
 
 //        *** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
@@ -816,10 +825,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //        wcNeed - totalWcDebit
         wcNeedDiffer = Util.subtract(wcNeed,totalWcDebit);
 
-        newCreditFacilityView.setWCNeed(wcNeed);
-        newCreditFacilityView.setTotalWcDebit(totalWcDebit);
-        newCreditFacilityView.setTotalWcTmb(totalWcTmb);
-        newCreditFacilityView.setWCNeedDiffer(wcNeedDiffer);
+        newCreditFacility.setWcNeed(wcNeed);
+        newCreditFacility.setTotalWcDebit(totalWcDebit);
+        newCreditFacility.setTotalWcTmb(totalWcTmb);
+        newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -832,10 +841,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case1WcMinLimit - case1Wc50CoreWc
         case1WcDebitCoreWc = Util.subtract(case1WcMinLimit,case1Wc50CoreWc);
 
-        newCreditFacilityView.setCase1WcLimit(case1WcLimit);
-        newCreditFacilityView.setCase1WcMinLimit(case1WcMinLimit);
-        newCreditFacilityView.setCase1Wc50CoreWc(case1Wc50CoreWc);
-        newCreditFacilityView.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+        newCreditFacility.setCase1WcLimit(case1WcLimit);
+        newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
+        newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
+        newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -848,10 +857,10 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case2WcMinLimit - case2Wc50CoreWc
         case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
 
-        newCreditFacilityView.setCase2WcLimit(case2WcLimit);
-        newCreditFacilityView.setCase2WcMinLimit(case2WcMinLimit);
-        newCreditFacilityView.setCase2Wc50CoreWc(case2Wc50CoreWc);
-        newCreditFacilityView.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
+        newCreditFacility.setCase2WcLimit(case2WcLimit);
+        newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
+        newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
+        newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -864,14 +873,12 @@ public class CreditFacProposeControl extends BusinessControl {
 //        case3WcMinLimit - case3Wc50CoreWc
         case3WcDebitCoreWc = Util.subtract(case3WcMinLimit,case3Wc50CoreWc);
 
-        newCreditFacilityView.setCase3WcLimit(case3WcLimit);
-        newCreditFacilityView.setCase3WcMinLimit(case3WcMinLimit);
-        newCreditFacilityView.setCase3Wc50CoreWc(case3Wc50CoreWc);
-        newCreditFacilityView.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
+        newCreditFacility.setCase3WcLimit(case3WcLimit);
+        newCreditFacility.setCase3WcMinLimit(case3WcMinLimit);
+        newCreditFacility.setCase3Wc50CoreWc(case3Wc50CoreWc);
+        newCreditFacility.setCase3WcDebitCoreWc(case3WcDebitCoreWc);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        return newCreditFacilityView;
+        newCreditFacilityDAO.persist(newCreditFacility);
     }
 
     public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2){

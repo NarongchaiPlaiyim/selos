@@ -348,6 +348,7 @@ public class BankStmtControl extends BusinessControl {
             log.debug("getLastThreeMonthBankStmtDetails is null! or size is less than 6");
             return new ArrayList<BankStmtDetailView>();
         }
+        sortAsOfDateBankStmtDetails(bankStmtDetailViewList, SortOrder.ASCENDING);
         // if(12 Month)
         if (bankStmtDetailViewList.size() > 6)
             return bankStmtDetailViewList.subList(9, 12);
@@ -1142,12 +1143,35 @@ public class BankStmtControl extends BusinessControl {
         // if source of collateral proof is already exist
         // re-calculate & replace the old data
         if ((srcOfCollateralProofViewList != null && srcOfCollateralProofViewList.size() > 0) && lastThreeMonthBankStmtDetail.size() == 3) {
-            for (int i=0; i < srcOfCollateralProofViewList.size(); i++) {
-                BankStmtDetailView detailView = lastThreeMonthBankStmtDetail.get(i);
+            //Prevent NOT being index at 0 from ArrayList.subList()
+            BankStmtDetailView detail_1 = null;
+            BankStmtDetailView detail_2 = null;
+            BankStmtDetailView detail_3 = null;
+            Iterator<BankStmtDetailView> it = lastThreeMonthBankStmtDetail.iterator();
+            while (it.hasNext()) {
+                if (detail_1 == null) {
+                    detail_1 = it.next();
+                }
+                else if (detail_2 == null) {
+                    detail_2 = it.next();
+                }
+                else if (detail_3 == null) {
+                    detail_3 = it.next();
+                }
+            }
 
+            for (int i=0; i < srcOfCollateralProofViewList.size(); i++) {
                 BankStmtSrcOfCollateralProofView srcOfCollateralProofView = srcOfCollateralProofViewList.get(i);
-                srcOfCollateralProofView.setDateOfMaxBalance(detailView.getDateOfMaxBalance());
-                srcOfCollateralProofView.setMaxBalance( getMaxBalance(detailView, bankAccTypeFromBankStmt) );
+                if (i == 0) {
+                    srcOfCollateralProofView.setDateOfMaxBalance(detail_1.getDateOfMaxBalance());
+                    srcOfCollateralProofView.setMaxBalance( getMaxBalance(detail_1, bankAccTypeFromBankStmt) );
+                } else if (i == 1){
+                    srcOfCollateralProofView.setDateOfMaxBalance(detail_2.getDateOfMaxBalance());
+                    srcOfCollateralProofView.setMaxBalance( getMaxBalance(detail_2, bankAccTypeFromBankStmt) );
+                } else if (i == 2){
+                    srcOfCollateralProofView.setDateOfMaxBalance(detail_3.getDateOfMaxBalance());
+                    srcOfCollateralProofView.setMaxBalance( getMaxBalance(detail_3, bankAccTypeFromBankStmt) );
+                }
             }
         } else {
             // create & add new source of collateral proof list

@@ -48,7 +48,9 @@
                                         <td colspan="3"><p:inputText id="bizLocationName"
                                                                      style="width: 300px"
                                                                      value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}"
-                                                                     required="#{not empty param[addBizInfoSummary.clientId]}"/>
+                                                                     required="#{not empty param[addBizInfoSummary.clientId]}">
+                                            <p:ajax event="blur" update=":frmMain:bizLocationName"/>
+                                                                     </p:inputText>
                                         </td>
                                     </tr>
                                     <tr>
@@ -62,7 +64,12 @@
                                             <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt1" value="No" /><p:spacer width="20px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}" styleClass="title left"/> : <p:spacer width="2"/>
-                                            <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}" disabled="#{bizInfoSummary.disableOwnerName}" required="#{!bizInfoSummary.disableOwnerName and not empty param[addBizInfoSummary.clientId]}"/>
+                                            <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}"
+                                                         disabled="#{bizInfoSummary.disableOwnerName}"
+                                                         required="#{!bizInfoSummary.disableOwnerName
+                                                         and not empty param[addBizInfoSummary.clientId]}">
+                                                <p:ajax event="blur" update=":frmMain:ownerName"/>
+                                                         </p:inputText>
                                         </td>
                                         <!--<td class="title left" style="min-width: 157px; width: 157px; max-width: 157px;">-->
                                             <!--<p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :-->
@@ -85,6 +92,7 @@
                                                             mindate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             showButtonPanel="true"
                                                             pattern="dd/MM/yyyy">
+                                                <p:ajax event="blur" update=":frmMain:expiryDate"/>
                                             </clv:BECalendar>
                                         </td>
                                         <!--<td class="title left">-->
@@ -110,23 +118,31 @@
                                                     <td class="left title" style="min-width: 115px; width: 115px; max-width: 115px;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}" /> : </td>
                                                     <td class="left" colspan="3"><p:inputText styleClass="medium" style="width: 140px;" id="addressNo" onkeydown="return onKeyDownHomeNo(event);"
                                                                                               onkeypress="return onKeyPressHomeNo(event);" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"
-                                                                                              required="#{not empty param[addBizInfoSummary.clientId]}"/>
+                                                                                              required="#{not empty param[addBizInfoSummary.clientId]}">
+                                                                                             <p:ajax event="blur" update=":frmMain:addressMoo"/>
+                                                                                 </p:inputText>
                                                         <p:spacer width="35" height="5" />
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')} :" styleClass="title" for="addressMoo"/>
                                                         <p:spacer width="5" height="5"/>
                                                         <p:inputText styleClass="smaller" id="addressMoo" onkeydown="return onKeyDownHomeNo(event);" onkeypress="return onKeyPressHomeNo(event);"
-                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}">
+                                                            <p:ajax event="blur" update=":frmMain:addressMoo"/>
+                                                                     </p:inputText>
                                                         <p:spacer width="22" height="5"/>
                                                         <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')} :" styleClass="title" for="addressBuilding"/>
                                                         <p:spacer width="5" height="5"/>
-                                                        <p:inputText styleClass="larger" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
+                                                        <p:inputText styleClass="larger" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}">
+                                                            <p:ajax event="blur" update=":frmMain:addressBuilding"/>
+                                                        </p:inputText>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}" for="addressStreet"/> :</td>
                                                     <td class="left" colspan="3">
                                                         <p:inputText style="width: 608px;" id="addressStreet"
-                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" />
+                                                                     value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}">
+                                                            <p:ajax event="blur" update=":frmMain:addressStreet"/>
+                                                                     </p:inputText>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -171,7 +187,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.postCode')}"/> :</td>
-                                                    <td colspan="3"><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" required="#{not empty param[addBizInfoSummary.clientId] }"/></td>
+                                                    <td colspan="3"><p:inputMask mask="99999" styleClass="medium" id="posCode"
+                                                                                 value="#{bizInfoSummary.bizInfoSummaryView.postCode}"
+                                                                                 required="#{not empty param[addBizInfoSummary.clientId] }">
+                                                        <p:ajax event="blur" update=":frmMain:posCode"/>
+                                                                                 </p:inputMask></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
@@ -190,7 +210,9 @@
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
                                                     <td colspan="3"><p:inputText style="width: 608px;" id="addressEng"
-                                                                                 value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
+                                                                                 value="#{bizInfoSummary.bizInfoSummaryView.addressEng}">
+                                                        <p:ajax event="blur" update=":frmMain:addressEng"/>
+                                                                                 </p:inputText></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -200,12 +222,16 @@
                                         <td colspan="3">
                                             <p:inputText styleClass="large" id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}"
                                                          onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
-                                                         required="#{not empty param[addBizInfoSummary.clientId]}" />
+                                                         required="#{not empty param[addBizInfoSummary.clientId]}">
+                                                <p:ajax event="blur" update=":frmMain:phoneNo"/>
+                                                         </p:inputText>
                                             <p:spacer width="20" height="5" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}" styleClass="title" for="extension"/>
                                             <p:spacer width="20" height="5"></p:spacer>
                                             <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
-                                                         value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                                         value="#{bizInfoSummary.bizInfoSummaryView.extension}" >
+                                                <p:ajax event="blur" update=":frmMain:extension"/>
+                                                         </p:inputText>:
                                         </td>
                                     </tr>
                                     <tr>
@@ -229,6 +255,7 @@
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                <p:ajax event="blur" update=":frmMain:registrationDate"/>
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -245,19 +272,21 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                <p:ajax event="blur" update=":frmMain:establishDate"/>
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title left" style="width: 70px">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/> :
                                         </td>
                                         <td>
-                                            <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
+                                            <p:selectOneMenu  idsize="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
                                                               id="referExpId">
                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                 <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
                                                                var="referExp"
                                                                itemLabel="#{referExp.description}"
                                                                itemValue="#{referExp.id}"/>
+                                                <p:ajax event="change" update=":frmMain:referExpId"/>
                                             </p:selectOneMenu>
                                         </td>
                                     </tr>
@@ -297,7 +326,7 @@
                                             <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:circulationAmount"/>
+                                                <p:ajax event="blur" update=":frmMain:circulationAmount,:frmMain:productionCostsPercentage"/>
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -329,7 +358,7 @@
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:productionCostsPercentage,:frmMain:" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -684,10 +713,7 @@
                                                 </f:facet>
                                             </p:column>
 
-                                            <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:center;"/>
-
-                                            <p:column style="background-color:#f8d0b6;"/>
+                                            <p:column style="background-color:#f8d0b6;" colspan="2"/>
                                         </p:row>
                                     </p:columnGroup>
 
