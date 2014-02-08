@@ -44,6 +44,8 @@ public class BizInfoDetail implements Serializable {
     @Inject
     Message msg;
 
+    private long workCaseId;
+
     private String stakeType;
 
     double sumBizPercent = 0;
@@ -52,7 +54,6 @@ public class BizInfoDetail implements Serializable {
     private BigDecimal sumCreditTermB;
     double circulationAmount =0;
     double productionCostsAmount =0;
-    long workCaseId =0;
     private String messageHeader;
     private String message;
 
@@ -125,11 +126,18 @@ public class BizInfoDetail implements Serializable {
             log.debug("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
-            if(session.getAttribute("workCaseId").toString() != null){
-                log.debug("session.getAttribute('workCaseId') {}",session.getAttribute("workCaseId"));
-            }
 
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            }else{
+                log.info("preRender ::: workCaseId is null.");
+                try{
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }catch (Exception ex){
+                    log.info("Exception :: {}",ex);
+                }
+            }
 
             log.debug("session.getAttribute('bizInfoDetailViewId') {}",session.getAttribute("bizInfoDetailViewId"));
 
