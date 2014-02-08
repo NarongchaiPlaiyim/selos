@@ -8,10 +8,10 @@ import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewGuarantorCredit;
 import com.clevel.selos.model.db.working.NewGuarantorDetail;
 import com.clevel.selos.model.view.ProposeCreditDetailView;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class NewGuarantorCreditTransform extends Transform {
@@ -30,35 +30,31 @@ public class NewGuarantorCreditTransform extends Transform {
 
         for (ProposeCreditDetailView proposeCreditDetailView : newCreditDetailViewList) {
             newGuarantorCredit = new NewGuarantorCredit();
-//            if (newGuarantorCredit.getId() != 0) {
-//                newGuarantorCredit.setCreateDate(newCreditDetailView.getCreateDate());
-//                newGuarantorCredit.setCreateBy(newCreditDetailView.getCreateBy());
-//            } else { // id = 0 create new
-//                newGuarantorCredit.setCreateDate(new Date());
-//                newGuarantorCredit.setCreateBy(user);
-//            }
-            newGuarantorCredit.setCreateDate(new Date());
+
+            newGuarantorCredit.setCreateDate(DateTime.now().toDate());
             newGuarantorCredit.setCreateBy(user);
-            newGuarantorCredit.setModifyDate(new Date());
+            newGuarantorCredit.setModifyDate(DateTime.now().toDate());
             newGuarantorCredit.setModifyBy(user);
 
-            for (int i = 0; i < newCreditDetailList.size(); i++) {
-                NewCreditDetail newCreditDetailAdd = newCreditDetailList.get(i);
-                log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
-                log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
+            for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
+                log.info("newCreditDetailAdd id is {} detail seq is {}", newCreditDetailAdd.getId(), newCreditDetailAdd.getSeq());
+                log.info("guarantor choose seq is {}", proposeCreditDetailView.getSeq());
+                log.info("proposeCreditDetailView::: getTypeOfStep :: {}", proposeCreditDetailView.getTypeOfStep());
 
-                log.info("proposeCreditDetailView::: {}", proposeCreditDetailView.getTypeOfStep());
-
-
-                if (proposeCreditDetailView.getTypeOfStep() == "E") {
-                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long)proposeCreditDetailView.getSeq());
-                    log.info("existingCreditDetail :: {}",existingCreditDetail.getId());
-                    newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
-                    newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
-                } else if (proposeCreditDetailView.getTypeOfStep() == "N") {
-                    if (proposeCreditDetailView.getId() == newCreditDetailAdd.getId()) {
+                if ("N".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                    if (proposeCreditDetailView.getSeq() == newCreditDetailAdd.getSeq()) {
+                        log.info("newCreditDetailAdd id is " + newCreditDetailAdd.getId() + " detail seq  is " + newCreditDetailAdd.getSeq());
+                        log.info("guarantor choose seq  is " + proposeCreditDetailView.getSeq());
                         newGuarantorCredit.setNewCreditDetail(newCreditDetailAdd);
-                        log.info("newGuarantorCredit id is " + newGuarantorCredit.getNewCreditDetail().getId());
+                        log.info("newGuarantorCredit newCreditDetailAdd id toSet is " + newGuarantorCredit.getNewCreditDetail().getId());
+                        newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
+                    }
+                } else if ("E".equalsIgnoreCase(proposeCreditDetailView.getTypeOfStep())) {
+                    ExistingCreditDetail existingCreditDetail = existingCreditDetailDAO.findById((long) proposeCreditDetailView.getSeq());
+                    if (existingCreditDetail.getId() == (long)proposeCreditDetailView.getSeq()) {
+                        log.info("guarantor choose seq  is :: {}", proposeCreditDetailView.getSeq());
+                        newGuarantorCredit.setExistingCreditDetail(existingCreditDetail);
+                        log.info("newGuarantorCredit existingCreditDetail id toSet is " + newGuarantorCredit.getExistingCreditDetail().getId());
                         newGuarantorCredit.setGuaranteeAmount(proposeCreditDetailView.getGuaranteeAmount());
                     }
                 }

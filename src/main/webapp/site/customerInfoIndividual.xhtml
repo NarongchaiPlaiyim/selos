@@ -1382,8 +1382,8 @@
                                             <!-- citizen & passport -->
                                             <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
                                                          style="width: 180px; max-width: 180px; min-width: 180px;"
-                                                         onkeydown="return onKeyText(event);"
-                                                         onkeypress="return onKeyText(event);"
+                                                         onkeydown="return onKeyDownText(event);"
+                                                         onkeypress="return onKeyPressText(event);"
                                                          required="#{not empty param[searchSpouseButton.clientId]}"
                                                          disabled="#{custInfoSumIndi.editFormSpouse}"
                                                          rendered="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy == 1 and custInfoSumIndi.customerInfoSearchSpouse.documentType.id == 2}"/>

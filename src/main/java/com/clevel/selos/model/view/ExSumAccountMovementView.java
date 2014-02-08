@@ -1,9 +1,12 @@
 package com.clevel.selos.model.view;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ExSumAccountMovementView {
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+public class ExSumAccountMovementView implements Serializable {
 
     private BigDecimal odLimit;
     private BigDecimal utilization;
@@ -111,5 +114,21 @@ public class ExSumAccountMovementView {
 
     public void setTradeChequeReturnPercent(BigDecimal tradeChequeReturnPercent) {
         this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("odLimit", odLimit).
+                append("utilization", utilization).
+                append("swing", swing).
+                append("overLimitTimes", overLimitTimes).
+                append("overLimitDays", overLimitDays).
+                append("chequeReturn", chequeReturn).
+                append("cashFlow", cashFlow).
+                append("cashFlowLimit", cashFlowLimit).
+                append("tradeChequeReturnAmount", tradeChequeReturnAmount).
+                append("tradeChequeReturnPercent", tradeChequeReturnPercent).
+                toString();
     }
 }

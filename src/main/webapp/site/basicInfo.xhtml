@@ -700,6 +700,16 @@
         </p:confirmDialog>
     </p:panel>
 
+    <p:panel id="msgBoxSystemMessagePanel2" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog2" widgetVar="msgBoxSystemMessageDlg2" severity="#{basicInfo.severity}"
+                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="msgBoxSystemMessagePanel2"
+                             onclick="msgBoxSystemMessageDlg2.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
 </h:body>
 </f:view>
 </html>

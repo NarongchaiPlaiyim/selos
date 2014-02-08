@@ -327,16 +327,20 @@
 
             <p:column styleClass="right">
                 <p:inputText value="#{item.tenor}"
+                             id="tenor"
                              style="text-align: right"
                              onkeydown="return onKeyDownMoney(event);"
-                             onkeypress="return onKeyPressMoney(event);"
-                             readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}" >
+                             onkeypress="return onKeyPressMoney(event);">
                      <f:convertNumber pattern="##" minFractionDigits="0" maxFractionDigits="0"  type="number"/>
+                     <p:ajax event="blur"
+                            listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                            process=":creditInfoDlgForm" update=":creditInfoDlgForm:resultFinal:installment" />
                 </p:inputText>
             </p:column>
 
             <p:column styleClass="right">
                 <p:inputText value="#{item.installment}"
+                             id="installment"
                              style="text-align: right"
                              maxlength="18"
                              onkeydown="return onKeyDownMoney(event);"

@@ -55,13 +55,13 @@ public class STPExecutor implements Serializable {
                 CallableStatement callStmt=connection.prepareCall("call SLOS.PUSERFILEUPLOAD ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
 
                 for(int i =0;i < params.length;i++){
-                    System.out.println("data "+params[i]);
+                    log.debug("data: {}",params[i]);
                     callStmt.setString(i + 1, params[i].toString());
                 }
                     callStmt.registerOutParameter(params.length+1, OracleTypes.VARCHAR);
                     callStmt.executeUpdate();
                      result[0]=(String)callStmt.getObject(params.length+1);
-                System.out.println("result : "+result[0]);
+                log.debug("result: {}",result[0]);
             }
         });
 

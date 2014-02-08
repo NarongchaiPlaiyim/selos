@@ -122,7 +122,7 @@ public class Isa implements Serializable {
         log.debug("onCreateNewUser()");
         RequestContext context = RequestContext.getCurrentInstance();
         complete = true;
-        System.out.println("------------------  :  " + isaManageUserView.toString());
+        log.debug("{}",isaManageUserView);
 
             IsaUserDetailView auditView=getAuditDesc(isaManageUserView);
 
@@ -197,7 +197,7 @@ public class Isa implements Serializable {
             userTitleList = userTitleDAO.findAll();
             userZoneList = userZoneDAO.findAll();
         } catch (Exception e) {
-
+            log.error("",e);
         }
 
     }
@@ -215,7 +215,7 @@ public class Isa implements Serializable {
 
 
     public void onOpenEditForm() {
-        System.out.println("------------------ " + id);
+        log.debug("------------------ {}",id);
 
         RequestContext context = RequestContext.getCurrentInstance();
         try {
@@ -247,7 +247,7 @@ public class Isa implements Serializable {
     }
 
     public void onDelete() {
-        System.out.println("------------------ " + id);
+        log.debug("------------------ ",id);
         complete = true;
 
         try {
@@ -270,7 +270,7 @@ public class Isa implements Serializable {
 
     public void onDeleteUserList() {
         log.debug("onDeleteUserList()");
-        System.out.println("-------------------------------------22 : " + selectUserDetail.length);
+        log.debug("selectUserDetail length: {}",selectUserDetail.length);
         RequestContext context = RequestContext.getCurrentInstance();
         try {
             messageHeader = "Delete User.";
@@ -354,7 +354,7 @@ public class Isa implements Serializable {
         log.debug("onSearchUser()");
         RequestContext context = RequestContext.getCurrentInstance();
         try {
-            System.out.println(isaSearchView.toString());
+            log.debug("{}",isaSearchView);
             userDetail = isaBusinessControl.searchUser(isaSearchView);
             userSize = userDetail.size();
 

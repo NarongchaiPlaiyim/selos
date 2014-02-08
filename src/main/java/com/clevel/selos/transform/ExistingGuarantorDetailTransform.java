@@ -45,7 +45,7 @@ public class ExistingGuarantorDetailTransform extends Transform {
             existingGuarantorDetail.setModifyDate(new Date());
             existingGuarantorDetail.setModifyBy(user);
             existingGuarantorDetail.setNo(existingGuarantorDetailView.getNo());
-            log.info("existingGuarantorDetailView.getGuarantorName().getId() is " + existingGuarantorDetailView.getGuarantorName().getId());
+            log.debug("existingGuarantorDetailView.getGuarantorName().getId() is {}",existingGuarantorDetailView.getGuarantorName().getId());
             Customer guarantor = customerDAO.findById(existingGuarantorDetailView.getGuarantorName().getId());
             existingGuarantorDetail.setGuarantorName(guarantor);
             existingGuarantorDetail.setTcglgNo(existingGuarantorDetailView.getTcgLgNo());

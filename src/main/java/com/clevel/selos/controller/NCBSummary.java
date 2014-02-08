@@ -58,7 +58,7 @@ public class NCBSummary implements Serializable {
     private NCBInfoView ncbView;
     private List<Customer> customerView;
     private NCBInfoView ncbSummaryViewItem;
-    private User user;
+    //private User user;
     private Date date;
     private String messageHeader;
     private String message;
@@ -75,7 +75,7 @@ public class NCBSummary implements Serializable {
 
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            user = (User) session.getAttribute("user");
+            //user = (User) session.getAttribute("user");
         }else{
             log.info("preRender ::: workCaseId is null.");
             try{
@@ -107,6 +107,7 @@ public class NCBSummary implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
             log.info("ncbSummaryViewItem.getCustomerId() :: {}",ncbSummaryViewItem.getCustomerId());
             session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
+            session.setAttribute("workCaseId",workCaseId);
             log.info("ncbSummaryViewItem :: {}",ncbSummaryViewItem.toString());
             FacesUtil.redirect("/site/NCBInfo.jsf");
             return;
@@ -144,14 +145,6 @@ public class NCBSummary implements Serializable {
 
     public void setNcbSummaryViewItem(NCBInfoView ncbSummaryViewItem) {
         this.ncbSummaryViewItem = ncbSummaryViewItem;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Date getDate() {

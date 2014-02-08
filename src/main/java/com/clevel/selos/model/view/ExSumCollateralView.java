@@ -1,8 +1,12 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ExSumCollateralView {
+public class ExSumCollateralView implements Serializable {
 
     private BigDecimal cashCollateralValue;
     private BigDecimal coreAssetValue;
@@ -60,5 +64,16 @@ public class ExSumCollateralView {
 
     public void setPercentLTV(BigDecimal percentLTV) {
         this.percentLTV = percentLTV;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("cashCollateralValue", cashCollateralValue).
+                append("coreAssetValue", coreAssetValue).
+                append("noneCoreAssetValue", noneCoreAssetValue).
+                append("limitApprove", limitApprove).
+                append("percentLTV", percentLTV).
+                toString();
     }
 }

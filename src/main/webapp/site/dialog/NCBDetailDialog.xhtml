@@ -35,8 +35,8 @@
     <td>
         <p:selectOneRadio id="radioTmbAccount" value="#{ncbInfo.ncbDetailView.TMBAccount}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="2"/>
-            <f:selectItem itemLabel="No" itemValue="1"/>
+            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                           var="tmbAccVar" itemLabel="#{tmbAccVar.shortName()}" itemValue="#{tmbAccVar.value()}"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -96,13 +96,11 @@
         <h:outputText value="#{msg.get('app.dlg.limit')}"/>
     </td>
     <td>
-        <p:inputText id="limit"
-                     style="text-align: right"
-                     maxlength="18"
+        <p:inputText id="limit" style="text-align: right" maxlength="18"
                      value="#{ncbInfo.ncbDetailView.limit}"
+                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                             type="number"/>
+            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
             <p:ajax event="blur" update=":ncbDlgForm:limit"/>
         </p:inputText>
     </td>
@@ -112,13 +110,11 @@
         <h:outputText value="#{msg.get('app.dlg.outstanding')}"/>
     </td>
     <td>
-        <p:inputText id="outstanding"
-                     style="text-align: right"
-                     maxlength="18"
+        <p:inputText id="outstanding" style="text-align: right" maxlength="18"
                      value="#{ncbInfo.ncbDetailView.outstanding}"
+                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                             type="number"/>
+            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
             <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
         </p:inputText>
     </td>
@@ -128,13 +124,11 @@
         <h:outputText value="#{msg.get('app.dlg.installment')}"/>
     </td>
     <td>
-        <p:inputText id="installment"
-                     style="text-align: right"
-                     maxlength="18"
+        <p:inputText id="installment" style="text-align: right" maxlength="18"
                      value="#{ncbInfo.ncbDetailView.installment}"
+                     onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);" onfocus="removeComma(this)"
                      required="#{not empty param[addRowData.clientId]}">
-            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
-                             type="number"/>
+            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
             <p:ajax event="blur" update=":ncbDlgForm:installment"/>
         </p:inputText>
     </td>
@@ -196,11 +190,10 @@
         <h:outputText value="#{msg.get('app.dlg.noOfOutstandingPaymentIn12months')}"/>
     </td>
     <td>
-        <p:inputText name="noOfOutstandingPaymentIn12months"
-                     style="text-align: right"
+        <p:inputText name="noOfOutstandingPaymentIn12months" style="text-align: right" maxlength="2"
                      value="#{ncbInfo.ncbDetailView.noOfOutstandingPaymentIn12months}"
                      required="#{not empty param[addRowData.clientId]}"
-                     maxlength="2"
+                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
                      integerOnly="true">
             <p:ajax event="blur" update="@this" process="@this"/>
         </p:inputText>
@@ -211,11 +204,10 @@
         <h:outputText value="#{msg.get('app.dlg.noOfOverLimit')}"/>
     </td>
     <td>
-        <p:inputText name="noOfOverLimit"
+        <p:inputText name="noOfOverLimit" style="text-align: right" maxlength="2"
                      value="#{ncbInfo.ncbDetailView.noOfOverLimit}"
-                     style="text-align: right"
                      required="#{not empty param[addRowData.clientId]}"
-                     maxlength="2"
+                     onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onfocus="removeComma(this)"
                      integerOnly="true">
             <p:ajax event="blur" update="@this" process="@this"/>
         </p:inputText>
@@ -228,8 +220,8 @@
     <td>
         <p:selectOneRadio id="radioRefinanceFlag" value="#{ncbInfo.ncbDetailView.refinanceFlag}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="2"/>
-            <f:selectItem itemLabel="No" itemValue="1"/>
+            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                           var="refinanceVar" itemLabel="#{refinanceVar.shortName()}" itemValue="#{refinanceVar.value()}"/>
         </p:selectOneRadio>
     </td>
 </tr>
@@ -240,18 +232,16 @@
     <td>
         <p:selectOneRadio id="radioWCFlag" value="#{ncbInfo.ncbDetailView.wcFlag}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="2"/>
-            <f:selectItem itemLabel="No" itemValue="1"/>
+            <f:selectItems value="#{app.getRadioValues('YES|NO')}"
+                           var="wcVar" itemLabel="#{wcVar.shortName()}" itemValue="#{wcVar.value()}"/>
         </p:selectOneRadio>
     </td>
 </tr>
 <tr>
     <td colspan="2" class="center">
-        <p:commandButton
-                id="saveBtn"
+        <p:commandButton id="saveBtn" styleClass="small"
                 binding="#{addRowData}"
                 value="#{msg.get('app.okButton')}"
-                styleClass="small"
                 actionListener="#{ncbInfo.onSaveNcbRecord}"
                 process=":ncbDlgForm"
                 update=":ncbDlgForm,:frmMain:resultNcbDetail"
