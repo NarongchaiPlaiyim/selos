@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.businesscontrol.CreditFacProposeControl;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.*;
@@ -106,6 +107,8 @@ public class NCBInfo implements Serializable {
     private NCBDAO ncbDAO;
     @Inject
     DBRControl dbrControl;
+    @Inject
+    CreditFacProposeControl creditFacProposeControl;
 
     private long workCaseId;
 
@@ -208,15 +211,15 @@ public class NCBInfo implements Serializable {
         tdrConditionList = tdrConditionDAO.findAll();
 
         if(customerInfoView != null){
-            log.debug("customerInfoView.getCustomerEntity().getId() :: {}",customerInfoView.getCustomerEntity().getId());
+            log.debug("customerInfoView.getCustomerEntity().getId() :: {}", customerInfoView.getCustomerEntity().getId());
 
             accountTypeList = accountTypeDAO.getListLoanTypeByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.debug("accountTypeList :: {}",accountTypeList.size());
+            log.debug("accountTypeList :: {}", accountTypeList.size());
 
             settlementStatusList = settlementStatusDAO.getListSettlementStatusByCusEntity(customerInfoView.getCustomerEntity().getId());
-            log.debug("settlementStatusList :: {}",settlementStatusList.size());
+            log.debug("settlementStatusList :: {}", settlementStatusList.size());
 
-            log.debug("customerInfoView : {}",customerInfoView.toString());
+            log.debug("customerInfoView : {}", customerInfoView.toString());
         }
 
         yearList = DateTimeUtil.getPreviousHundredYearTH();
@@ -403,6 +406,7 @@ public class NCBInfo implements Serializable {
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");
+                creditFacProposeControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else {
