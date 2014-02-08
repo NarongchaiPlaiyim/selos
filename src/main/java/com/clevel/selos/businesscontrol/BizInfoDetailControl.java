@@ -189,8 +189,8 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal incomeAmountCal;
             BigDecimal sumIncomeAmountD = BigDecimal.ZERO;
 
-            BigDecimal sumIncomePercentD = BigDecimal.ZERO;
             BigDecimal incomePercentD;
+            BigDecimal sumIncomePercentD = BigDecimal.ZERO;
 
             BigDecimal adjustIncome;
             BigDecimal adjustIncomeCal;
@@ -244,7 +244,7 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
 
 //            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
-            bizInfoSummary.setCirculationPercentage(oneHundred);
+//            bizInfoSummary.setCirculationPercentage(oneHundred); //?????
             bizInfoSummary.setSumIncomeAmount(sumIncomeAmount); //?????
             bizInfoSummary.setSumIncomePercent(sumIncomePercent);
             bizInfoSummary.setSumWeightAR(SumWeightAR);
