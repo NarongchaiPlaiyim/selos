@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
@@ -67,17 +68,48 @@ public class NCBInfoControl extends BusinessControl {
             ncbInfoView.setModifyDate(DateTime.now().toDate());
         }
         NCB ncb = ncbTransform.transformToModel(ncbInfoView);
-        ncbDAO.persist(ncb);
-        log.info("persist ncb");
-
+        //ncbDAO.persist(ncb);
         List<NCBDetail> NCBDetailListToDelete = ncbDetailDAO.findNCBDetailByNcbId(ncb.getId());
         log.info("NCBDetailListToDelete :: {}", NCBDetailListToDelete.size());
         ncbDetailDAO.delete(NCBDetailListToDelete);
         log.info("delete NCBDetailListToDelete");
 
+        log.debug("ncbDetailViewList : {}", ncbDetailViewList);
         List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList, ncb);
+        calculateLoanCredit(ncb, ncbDetailList);
+        ncbDAO.persist(ncb);
+        log.info("persist ncb");
         ncbDetailDAO.persist(ncbDetailList);
+        //TODO Call function
 
+    }
+
+    public NCB calculateLoanCredit(NCB ncb, List<NCBDetail> ncbDetailList){
+        BigDecimal loanCredit = new BigDecimal(0);
+        BigDecimal loanCreditWC = new BigDecimal(0);
+        BigDecimal loanCreditTMB = new BigDecimal(0);
+        BigDecimal loanCreditWCTMB = new BigDecimal(0);
+
+        for(NCBDetail item : ncbDetailList){
+            if(item.getAccountType().getWcFlag() == 1){
+                loanCredit = loanCredit.add(item.getLimit());
+            }
+            if(item.getWcFlag() == RadioValue.YES.value()){
+                loanCreditWC = loanCreditWC.add(item.getOutstanding());
+            }
+            if(item.getAccountTMBFlag() == RadioValue.YES.value()){
+                loanCreditTMB = loanCreditTMB.add(item.getOutstanding());
+            }
+            if(item.getAccountTMBFlag() == RadioValue.YES.value() && item.getWcFlag() == RadioValue.YES.value()){
+                loanCreditWCTMB = loanCreditWCTMB.add(item.getLimit());
+            }
+        }
+        ncb.setLoanCreditNCB(loanCredit);
+        ncb.setLoanCreditTMB(loanCreditTMB);
+        ncb.setLoanCreditWC(loanCreditWC);
+        ncb.setLoanCreditWCTMB(loanCreditWCTMB);
+
+        return ncb;
     }
 
 
