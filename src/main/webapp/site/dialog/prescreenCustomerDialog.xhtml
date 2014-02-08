@@ -124,8 +124,8 @@
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
-                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     readonly="true" />-->
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegmentView.code == 0?'': prescreenMaker.borrowerInfo.serviceSegmentView.code}"
+                                     readonly="true" style="width: 192px; max-width: 192px; min-width: 192px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -412,8 +412,8 @@
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
-                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegment}" styleClass="large" maxlength="15"
-                                     readonly="true"/>-->
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegmentView.code == 0?'': prescreenMaker.borrowerInfo.spouse.serviceSegmentView.code}"
+                                     readonly="true" style="width: 192px; max-width: 192px; min-width: 192px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -646,8 +646,8 @@
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
-                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     readonly="true"/>-->
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegmentView.code == 0?'': prescreenMaker.borrowerInfo.serviceSegmentView.code}"
+                                     readonly="true" style="width: 192px; max-width: 192px; min-width: 192px;"/>
                     </td>
                 </tr>
                 <tr>
