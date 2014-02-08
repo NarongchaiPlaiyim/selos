@@ -82,23 +82,6 @@ public class CustomerInfoControl extends BusinessControl {
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
 
-        //update percent share for juristic
-        /*for(CustomerInfoView cV : customerInfoViewList){
-            if(cV.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
-                    if(cV.getTotalShare() != null && cV.getTotalShare().compareTo(BigDecimal.ZERO) > 0){
-                        cV.setPercentShareSummary((cV.getPercentShare().divide(cV.getTotalShare(), RoundingMode.HALF_UP)).multiply(new BigDecimal(100)));
-                    }
-                }
-            } else {
-                if(cV.getPercentShare() != null && cV.getPercentShare().compareTo(BigDecimal.ZERO) > 0){
-                    cV.setPercentShareSummary(cV.getPercentShare());
-                } else {
-                    cV.setPercentShareSummary(BigDecimal.ZERO);
-                }
-            }
-        }*/
-
         List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
         customerInfoSummaryView.setBorrowerCustomerViewList(borrowerCustomerList);
 
@@ -680,6 +663,7 @@ public class CustomerInfoControl extends BusinessControl {
     }
 
     public boolean checkExistingOpenAccountCustomer(long customerId){
+        log.info("checkExistingOpenAccountCustomer ::: customerId : {}", customerId);
         boolean isExist = false;
         if(customerId != 0){
             List<OpenAccountName> openAccountNameList = openAccountNameDAO.findByCustomerId(customerId);

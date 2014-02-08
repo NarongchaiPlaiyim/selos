@@ -86,6 +86,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
+        log.info("getCustomerEntityByWorkCaseId ::: workCaseId : {}", workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         CustomerEntity customerEntity = new CustomerEntity();
         if(basicInfo != null){
@@ -102,7 +103,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     private BasicInfo initialBasicInfo(WorkCase workCase){
-        log.info("initialBasicInfo");
+        log.info("initialBasicInfo ::: workCase : {}", workCase);
         BasicInfo basicInfo = new BasicInfo();
         Date now = Calendar.getInstance().getTime();
         if(workCase != null){
@@ -117,7 +118,6 @@ public class BasicInfoControl extends BusinessControl {
 
     private BasicInfo calBasicInfo(BasicInfo basicInfo){
         log.info("start calBasicInfo for basicInfo {} :: ", basicInfo);
-
         BigDecimal totalUnpaidFeeInsurance = BigDecimal.ZERO;
         BigDecimal totalPendingClaimLG = BigDecimal.ZERO;
         Date lastReviewDate = null;
@@ -215,6 +215,7 @@ public class BasicInfoControl extends BusinessControl {
     }
 
     public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId) {
+        log.info("saveBasicInfo ::: workCaseId : {} , basicInfoView : {}", workCaseId,basicInfoView);
         User user = getCurrentUser();
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
