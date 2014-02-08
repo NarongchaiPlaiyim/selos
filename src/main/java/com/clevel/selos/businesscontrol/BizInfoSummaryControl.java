@@ -49,6 +49,7 @@ public class BizInfoSummaryControl extends BusinessControl {
 
     }
 
+
     public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
 
         log.info("onSaveBizSummaryToDB begin");
@@ -149,6 +150,24 @@ public class BizInfoSummaryControl extends BusinessControl {
         }
 
         return bankStmtSummaryView;
+    }
+
+    public void calGrdTotalIncomeByBankstatement(long workCaseId){
+        BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(workCaseId);
+        if(bizInfoSummary == null){
+            bizInfoSummary = new BizInfoSummary();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            bizInfoSummary.setWorkCase(workCase);
+        }
+
+        if (bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
+            bizInfoSummary.setCirculationAmount(bankStatementSummary.getGrdTotalIncomeGross());
+        } else {
+            bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
+        }
+
+        bizInfoSummaryDAO.persist(bizInfoSummary);
     }
 
 }
