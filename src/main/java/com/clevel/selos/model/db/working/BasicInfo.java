@@ -149,6 +149,10 @@ public class BasicInfo implements Serializable {
     @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
     private int retrievedFlag;
 
+    //Update for Post Approval
+    @Column(name = "approve_result", length = 1)
+    private int approveResult;
+
     public long getId() {
         return id;
     }
@@ -467,6 +471,14 @@ public class BasicInfo implements Serializable {
 
     public void setRetrievedFlag(int retrievedFlag) {
         this.retrievedFlag = retrievedFlag;
+    }
+
+    public int getApproveResult() {
+        return approveResult;
+    }
+
+    public void setApproveResult(int approveResult) {
+        this.approveResult = approveResult;
     }
 
     @Override
