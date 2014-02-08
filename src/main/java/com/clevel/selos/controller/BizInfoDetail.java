@@ -130,7 +130,7 @@ public class BizInfoDetail implements Serializable {
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             }else{
-                log.info("preRender ::: workCaseId is null.");
+                log.info("onCreation ::: workCaseId is null.");
                 try{
                     FacesUtil.redirect("/site/inbox.jsf");
                     return;
