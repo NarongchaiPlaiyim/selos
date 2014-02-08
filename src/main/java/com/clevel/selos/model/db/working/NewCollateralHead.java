@@ -21,7 +21,7 @@ public class NewCollateralHead implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_HEAD_ID")
     private long id;
 
-    @Column(name = "COLL_ID")
+    @Column(name = "coll_id")
     private String collID;
 
     @OneToOne
@@ -94,6 +94,12 @@ public class NewCollateralHead implements Serializable {
     @Column (name = "purpose_review_building", nullable=false, columnDefinition="int default 0")
     private int purposeReviewBuilding;
 
+    @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
+    private int appraisalRequest;
+
+    @Column(name = "propose_type")
+    private String proposeType;
+
 
     /*** For Post - Insurance Premium Quote Process ***/
     @Column(name = "insurance_company_type")
@@ -104,6 +110,22 @@ public class NewCollateralHead implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public int getAppraisalRequest() {
+        return appraisalRequest;
+    }
+
+    public void setAppraisalRequest(int appraisalRequest) {
+        this.appraisalRequest = appraisalRequest;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
     }
 
     public void setId(long id) {
@@ -299,6 +321,7 @@ public class NewCollateralHead implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("collID", collID)
                 .append("headCollType", headCollType)
                 .append("subCollateralType", subCollateralType)
                 .append("potential", potential)
@@ -319,6 +342,8 @@ public class NewCollateralHead implements Serializable {
                 .append("purposeReviewAppraisal", purposeReviewAppraisal)
                 .append("purposeNewAppraisal", purposeNewAppraisal)
                 .append("purposeReviewBuilding", purposeReviewBuilding)
+                .append("appraisalRequest", appraisalRequest)
+                .append("proposeType", proposeType)
                 .append("insuranceComType", insuranceComType)
                 .append("existingInsuranceType", existingInsuranceType)
                 .toString();

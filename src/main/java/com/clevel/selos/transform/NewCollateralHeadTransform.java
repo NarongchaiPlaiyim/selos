@@ -54,6 +54,7 @@ public class NewCollateralHeadTransform extends Transform {
             } else {
                 view.setHeadCollType(new CollateralType());
             }
+            model.setCollID(view.getCollID());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setTitleDeed(view.getTitleDeed());
@@ -83,6 +84,7 @@ public class NewCollateralHeadTransform extends Transform {
             } else {
                 view.setHeadCollType(new CollateralType());
             }
+            model.setCollID(view.getCollID());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setTitleDeed(view.getTitleDeed());
@@ -116,6 +118,7 @@ public class NewCollateralHeadTransform extends Transform {
                 view.setHeadCollType(new CollateralType());
             }
 
+            view.setCollID(model.getCollID());
             view.setCreateBy(model.getCreateBy());
             view.setCreateDate(model.getCreateDate());
             view.setNewCollateralSubViewList(newCollateralSubTransform.transformToView(Util.safetyList(model.getNewCollateralSubList())));

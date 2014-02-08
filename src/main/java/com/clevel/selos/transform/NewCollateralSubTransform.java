@@ -53,6 +53,8 @@ public class NewCollateralSubTransform extends Transform {
                 model.setSubCollateralType(null);
             }
 
+            model.setCollID(view.getCollID());
+            model.setHeadCollID(view.getHeadCollID());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setAddress(view.getAddress());
@@ -82,6 +84,8 @@ public class NewCollateralSubTransform extends Transform {
             } else {
                 model.setSubCollateralType(null);
             }
+            model.setCollID(view.getCollID());
+            model.setHeadCollID(view.getHeadCollID());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setAddress(view.getAddress());
@@ -100,8 +104,6 @@ public class NewCollateralSubTransform extends Transform {
         for(NewCollateralSub model : newCollateralSubList){
             view = new NewCollateralSubView();
             view.setId(model.getId());
-            view.setNo(0);//todo : No. ?
-
             if(checkNullObject(view.getSubCollateralType()) && checkId0(view.getSubCollateralType().getId())){
                 try{
                     view.getSubCollateralType().setDescription(model.getSubCollateralType().getDescription());
@@ -111,6 +113,8 @@ public class NewCollateralSubTransform extends Transform {
             } else {
                 view.setSubCollateralType(new SubCollateralType());
             }
+            view.setCollID(model.getCollID());
+            view.setHeadCollID(model.getHeadCollID());
             view.setCreateBy(model.getCreateBy());
             view.setCreateDate(model.getCreateDate());
             view.setAddress(model.getAddress());
