@@ -6,7 +6,6 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
-import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
@@ -511,13 +510,13 @@ public class CreditFacProposeControl extends BusinessControl {
                                         }
                                         log.info("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
                                         //WC
-                                        if (productFormula.getWcCalculate() == 0) {
-
-                                        } else if (productFormula.getWcCalculate() == 1) {
-
-                                        } else if (productFormula.getWcCalculate() == 2) {
-
-                                        }
+//                                        if (productFormula.getWcCalculate() == 0) {
+//
+//                                        } else if (productFormula.getWcCalculate() == 1) {
+//
+//                                        } else if (productFormula.getWcCalculate() == 2) {
+//
+//                                        }
                                     }
                                 }
                             }
@@ -572,11 +571,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         log.info("calTotalProposeLoanDBRForIntYear end");
         return sumTotalLoanDbr;
-    }
-
-
-    public void wcCalculation(long workCaseId) {
-
     }
 
     /**

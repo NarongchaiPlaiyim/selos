@@ -659,11 +659,11 @@
                         <!-- BEGIN: Credit Tier Detail [0] -->
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                proposeCredit.newCreditTierDetailViewList[0].standardPrice: ''}">
+                                                proposeCredit.standardPrice: ''}">
                             </h:outputText>
                         </td>
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{proposeCredit.newCreditTierDetailViewList[0].suggestPrice}">
+                            <h:outputText value="#{proposeCredit.suggestPrice}">
                             </h:outputText>
                         </td>
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -722,13 +722,13 @@
                                offset="1">
                         <tr>
                             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                <h:outputText value="#{creditTierDetail.standardPrice}">
+                                <h:outputText value="#{proposeCredit.standardPrice}">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="18"/>
                                 </h:outputText>
                             </td>
                             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                <h:outputText value="#{creditTierDetail.suggestPrice}">
+                                <h:outputText value="#{proposeCredit.suggestPrice}">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="18"/>
                                 </h:outputText>

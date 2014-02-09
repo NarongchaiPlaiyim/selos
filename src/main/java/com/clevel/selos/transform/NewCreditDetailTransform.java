@@ -156,7 +156,7 @@ public class NewCreditDetailTransform extends Transform {
        }else{
            priceToShow = baseRate.getName() + " + " + price;
        }
-
+        log.info("priceToShow :: {}",priceToShow);
        return priceToShow;
    }
 
