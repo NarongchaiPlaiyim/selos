@@ -242,10 +242,10 @@
         <p:commandButton id="saveBtn" styleClass="small"
                 binding="#{addRowData}"
                 value="#{msg.get('app.okButton')}"
-                actionListener="#{ncbInfo.onSaveNcbRecord}"
-                process=":ncbDlgForm"
+                actionListener="#{ncbInfo.onSaveNcbRecord()}"
+                process="@form"
                 update=":ncbDlgForm,:frmMain:resultNcbDetail"
-                oncomplete="handlencbInfoRequest(xhr, status, args)"/>
+                oncomplete="handleNCBInfoRequest(xhr, status, args)"/>
 
         <p:commandButton
                 id="cancelBtn"

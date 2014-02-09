@@ -327,9 +327,10 @@ public class NCBInfo implements Serializable {
                 }
 
                 ncbAdd.setCanToEdit(true);
-                ncbDetailViewList.add(ncbAdd);
+                //ncbDetailViewList.add(ncbAdd);
 
-                log.debug("add finish");
+                log.debug("add finish :: ncbAdd : {}", ncbAdd);
+                log.debug("add finish :: ncbDetailViewList : {}", ncbDetailViewList);
 
             } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
                 log.debug("onSaveNcbRecord ::: mode : {}", modeForButton);
@@ -378,6 +379,8 @@ public class NCBInfo implements Serializable {
 
                 ncbDetailViewList.set(rowIndex, tmpNcbDetail);
 
+                log.debug("edit finish :: tmpNcbDetail : {}", tmpNcbDetail);
+                log.debug("edit finish :: ncbDetailViewList : {}", ncbDetailViewList);
             } else {
                 log.debug("onSaveNcbRecord ::: Undefined modeForbutton !!");
             }

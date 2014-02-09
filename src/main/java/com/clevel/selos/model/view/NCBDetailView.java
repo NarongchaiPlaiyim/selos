@@ -26,7 +26,7 @@ public class NCBDetailView implements Serializable {
     private int noOfOverLimit;
     private AccountType accountType;
     private AccountStatus accountStatus;
-    private TDRCondition tdrCondition;
+    //private TDRCondition tdrCondition;
     private SettlementStatus currentPayment;
     private SettlementStatus historyPayment;
     private boolean canToEdit;
@@ -58,7 +58,7 @@ public class NCBDetailView implements Serializable {
         this.noOfOverLimit = 0;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
-        this.tdrCondition = new TDRCondition();
+        //this.tdrCondition = new TDRCondition();
         this.currentPayment = new SettlementStatus();
         this.historyPayment = new SettlementStatus();
         this.canToEdit = false;
@@ -179,13 +179,13 @@ public class NCBDetailView implements Serializable {
         this.accountStatus = accountStatus;
     }
 
-    public TDRCondition getTdrCondition() {
+    /*public TDRCondition getTdrCondition() {
         return tdrCondition;
     }
 
     public void setTdrCondition(TDRCondition tdrCondition) {
         this.tdrCondition = tdrCondition;
-    }
+    }*/
 
     public SettlementStatus getCurrentPayment() {
         return currentPayment;
@@ -292,7 +292,7 @@ public class NCBDetailView implements Serializable {
                 .append("noOfOverLimit", noOfOverLimit)
                 .append("accountType", accountType)
                 .append("accountStatus", accountStatus)
-                .append("tdrCondition", tdrCondition)
+                //.append("tdrCondition", tdrCondition)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
                 .append("canToEdit", canToEdit)
