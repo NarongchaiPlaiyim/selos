@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ExSummaryTransform extends Transform {
     @Inject
-    AuthorizationDOADAO authorizationDOADAO;
+    private AuthorizationDOADAO authorizationDOADAO;
     @Inject
-    ReasonDAO reasonDAO;
+    private ReasonDAO reasonDAO;
 
     @Inject
     public ExSummaryTransform() {

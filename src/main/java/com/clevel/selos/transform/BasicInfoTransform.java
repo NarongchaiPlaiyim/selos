@@ -14,21 +14,22 @@ import java.util.Date;
 
 public class BasicInfoTransform extends Transform {
     @Inject
-    OpenAccountTransform openAccountTransform;
+    private OpenAccountTransform openAccountTransform;
     @Inject
-    SBFScoreTransform sbfScoreTransform;
+    private SBFScoreTransform sbfScoreTransform;
     @Inject
-    OpenAccountTransform getOpenAccountTransform;
+    private OpenAccountTransform getOpenAccountTransform;
     @Inject
-    BasicInfoDAO basicInfoDAO;
+    private BasicInfoDAO basicInfoDAO;
     @Inject
-    BAPAInfoDAO bapaInfoDAO;
+    private BAPAInfoDAO bapaInfoDAO;
 
     @Inject
     public BasicInfoTransform() {
     }
 
     public BasicInfo transformToModel(BasicInfoView basicInfoView, WorkCase workCase, User user){
+        log.info("Start - transformToModel ::: basicInfoView : {}, workCase : {}, user : {}", basicInfoView,workCase,user);
         BasicInfo basicInfo = new BasicInfo();
 
         basicInfo.setWorkCase(workCase);
@@ -100,10 +101,12 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setReferralName(basicInfoView.getRefName());
         basicInfo.setReferralID(basicInfoView.getRefId());
 
+        log.info("End - transformToModel ::: basicInfo : {}", basicInfo);
         return basicInfo;
     }
 
     public BasicInfoView transformToView(BasicInfo basicInfo,WorkCase workCase){
+        log.info("Start - transformToView ::: basicInfo : {}, workCase : {}", basicInfo,workCase);
         BasicInfoView basicInfoView = new BasicInfoView();
 
         basicInfoView.setId(basicInfo.getId());
@@ -200,6 +203,7 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
 
+        log.info("End - transformToView ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;
     }
 }

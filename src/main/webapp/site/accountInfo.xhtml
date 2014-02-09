@@ -180,6 +180,7 @@
                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
                                          process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                          actionListener="#{accountInfo.onSave()}"  binding="#{saveBtn}"/>
+
                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                          process="@form" update=":frmMain"
                                          actionListener="#{accountInfo.onCreation()}"/>

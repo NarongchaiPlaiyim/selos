@@ -49,10 +49,9 @@ public class BizInfoSummaryControl extends BusinessControl {
 
     }
 
-    public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
 
-        log.info("onSaveBizSummaryToDB begin");
-        BizInfoSummary bizInfoSummary;
+    public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
+        log.info("onSaveBizSummaryToDB begin :: bizInfoSummaryView : {} workCaseId : {} ",bizInfoSummaryView ,workCaseId);
 
         log.info("find workCase begin");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -65,7 +64,7 @@ public class BizInfoSummaryControl extends BusinessControl {
         }
         bizInfoSummaryView.setModifyBy(user);
 
-        bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
+        BizInfoSummary bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
         bizInfoSummary.setWorkCase(workCase);
 
         log.info("bizInfoSummaryDAO.persist begin " + bizInfoSummary.toString());
@@ -96,7 +95,7 @@ public class BizInfoSummaryControl extends BusinessControl {
     }
 
     public List<BizInfoDetailView> onGetBizInfoDetailViewByBizInfoSummary(long bizInfoSummaryID) {
-        log.info("onGetBizInfoDetailViewByBizInfoSummary ");
+        log.info("onGetBizInfoDetailViewByBizInfoSummary :: bizInfoSummaryID : {} ",bizInfoSummaryID);
 
         List<BizInfoDetail> bizInfoDetailList;
         List<BizInfoDetailView> bizInfoDetailViewList;
@@ -123,7 +122,7 @@ public class BizInfoSummaryControl extends BusinessControl {
     }
 
     public List<BizInfoDetail> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
-        log.info("onGetBizInfoDetailByBizInfoSummary ");
+        log.info("onGetBizInfoDetailByBizInfoSummary :: bizInfoSummaryID : {}",bizInfoSummaryID);
 
         List<BizInfoDetail> bizInfoDetailList;
 
@@ -137,6 +136,7 @@ public class BizInfoSummaryControl extends BusinessControl {
     }
 
     public BankStmtSummaryView getBankStmtSummary(long workCaseId){
+        log.info("getBankStmtSummary :: workCaseId : {}",workCaseId);
         BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
         BankStatementSummary bankStmtSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
 
@@ -149,6 +149,25 @@ public class BizInfoSummaryControl extends BusinessControl {
         }
 
         return bankStmtSummaryView;
+    }
+
+    public void calGrdTotalIncomeByBankStatement(long workCaseId){
+        log.info("calGrdTotalIncomeByBankStatement :: workCaseId : {}",workCaseId);
+        BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(workCaseId);
+        if(bizInfoSummary == null){
+            bizInfoSummary = new BizInfoSummary();
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            bizInfoSummary.setWorkCase(workCase);
+        }
+
+        if (bankStatementSummary != null && bankStatementSummary.getGrdTotalIncomeGross() != null){
+            bizInfoSummary.setCirculationAmount(bankStatementSummary.getGrdTotalIncomeGross());
+        } else {
+            bizInfoSummary.setCirculationAmount(BigDecimal.ZERO);
+        }
+
+        bizInfoSummaryDAO.persist(bizInfoSummary);
     }
 
 }

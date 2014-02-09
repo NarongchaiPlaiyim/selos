@@ -1,8 +1,12 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ExSumBusinessInfoView {
+public class ExSumBusinessInfoView implements Serializable {
 
     private BigDecimal netFixAsset;
     private BigDecimal noOfEmployee;
@@ -150,5 +154,25 @@ public class ExSumBusinessInfoView {
 
     public void setINV(BigDecimal INV) {
         this.INV = INV;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("netFixAsset", netFixAsset).
+                append("noOfEmployee", noOfEmployee).
+                append("bizProvince", bizProvince).
+                append("bizType", bizType).
+                append("bizGroup", bizGroup).
+                append("bizCode", bizCode).
+                append("bizDesc", bizDesc).
+                append("qualitativeClass", qualitativeClass).
+                append("bizSize", bizSize).
+                append("BDM", BDM).
+                append("UW", UW).
+                append("AR", AR).
+                append("AP", AP).
+                append("INV", INV).
+                toString();
     }
 }

@@ -30,12 +30,52 @@ public class NewCollateralHeadDAO extends GenericDAO<NewCollateralHead, Long> {
     }
 
     public List<NewCollateralHead> findByNewCollateralId(final long newCollateralId) {
-        log.info("-- findByNewCollateral ::: {}", newCollateralId);
+        log.info("-- findByNewCollateral NewCollateralHead.id[{}]", newCollateralId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
         return newCollateralHeadDetails;
+    }
+
+    public List<NewCollateralHead> findByNewCollateralIdAndPurpose(final long newCollateralId) {
+        log.info("-- findByNewCollateral NewCollateralHead.id[{}]", newCollateralId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCollateral.id", newCollateralId));
+        criteria.add(Restrictions.eq("proposeType", "P"));
+        criteria.add(Restrictions.ne("appraisalRequest", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateralHead> newCollateralHeadDetails = (List<NewCollateralHead>) criteria.list();
+        return newCollateralHeadDetails;
+    }
+
+
+    public void updateFlagForAppraisalRequestDeleted(final List<NewCollateralHead> newCollateralHeadList) {
+        log.info("-- updateFlagForAppraisalRequestDeleted ::: size : {}", newCollateralHeadList.size());
+        long id;
+        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+            id = newCollateralHead.getId();
+            if(id != 0){
+                newCollateralHead.setAppraisalRequest(0);
+                newCollateralHead.setProposeType("P");
+                persist(newCollateralHead);
+                log.debug("-- NewCollateralHead.id[{}] updated", id);
+            }
+        }
+    }
+
+    public void updateFlagForAppraisalRequestAdded(final List<NewCollateralHead> newCollateralHeadList) {
+        log.info("-- updateFlagForAppraisalRequestAdded ::: size : {}", newCollateralHeadList.size());
+        long id;
+        for(NewCollateralHead newCollateralHead : newCollateralHeadList){
+            id = newCollateralHead.getId();
+            if(id != 0){
+                newCollateralHead.setAppraisalRequest(1);
+                newCollateralHead.setProposeType("P");
+                persist(newCollateralHead);
+                log.debug("-- NewCollateralHead.id[{}] updated", id);
+            }
+        }
     }
 
 }

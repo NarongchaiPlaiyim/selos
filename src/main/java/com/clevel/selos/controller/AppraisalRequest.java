@@ -14,6 +14,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
@@ -70,7 +71,9 @@ public class AppraisalRequest implements Serializable {
 
     private AppraisalDetailView appraisalDetailView;
     private List<AppraisalDetailView> appraisalDetailViewList;
-    private AppraisalDetailView selectAppraisalDetailView;
+
+    private AppraisalDetailView appraisalDetailViewSelected;
+    private AppraisalDetailView appraisalDetailViewDialog;
 
     private AppraisalContactDetailView appraisalContactDetailView;
     private AppraisalContactDetailView selectAppraisalContactDetailView;
@@ -79,6 +82,8 @@ public class AppraisalRequest implements Serializable {
     private boolean purposeFlag;
     private boolean numberOfDocumentsFlag;
     private boolean contactFlag;
+    private boolean contactFlag2;
+    private boolean contactFlag3;
 
     public AppraisalRequest() {
 
@@ -90,17 +95,21 @@ public class AppraisalRequest implements Serializable {
         appraisalDetailView = new AppraisalDetailView();
         appraisalContactDetailView = new AppraisalContactDetailView();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+        appraisalDetailViewDialog = new AppraisalDetailView();
+        appraisalDetailViewSelected = new AppraisalDetailView();
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
         contactFlag = false;
+        contactFlag2 = false;
+        contactFlag3 = false;
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation.");
+        log.info("-- onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        if(false){//session.getAttribute("workCaseId") == null){
+        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
             log.info("preRender ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
@@ -113,22 +122,28 @@ public class AppraisalRequest implements Serializable {
             log.debug("-- User : {}", ""+user.toString());
             init();
 //            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+
+            //todo : What is zoneLocation?.
+
             workCaseId = 4L;
-            log.info("workCaseId :: {} ",workCaseId);
+            log.info("-- workCaseId :: {} ",workCaseId);
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
-            if(appraisalView != null){
+            if(!Util.isNull(appraisalView)){
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+                if(Util.isZero(appraisalDetailViewList.size())){
+                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+                }
                 appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-
-
-//                if(appraisalDetailViewList.size() == 0){
-//                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-//                }
+                if(Util.isNull(appraisalContactDetailView)){
+                    appraisalContactDetailView = new AppraisalContactDetailView();
+                }
             } else {
                 appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] has created");
+                log.debug("-- AppraisalView[New] created");
                 appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] has created");
+                log.debug("-- AppraisalContactDetailView[New] created");
+                appraisalContactDetailView = new AppraisalContactDetailView();
+                log.debug("-- AppraisalContactDetailView[New] created");
             }
         }
     }
@@ -137,14 +152,14 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
-
         if(appraisalDetailViewMandate()){
             complete = true;
             if(ModeForButton.ADD.equals(modeForButton)){
-                appraisalDetailViewList.add(appraisalDetailView);
+                appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
             }else if(ModeForButton.EDIT.equals(modeForButton)){
-                appraisalDetailViewList.set(rowIndex, appraisalDetailView);
+                log.debug("-- RowIndex[{}]", rowIndex);
+                appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
             }
             context.addCallbackParam("functionComplete", complete);
@@ -154,34 +169,23 @@ public class AppraisalRequest implements Serializable {
     }
     
     public void onEditAppraisalDetailView(){
-        log.info( " onEditAppraisalDetailView " + selectAppraisalDetailView);
         modeForButton = ModeForButton.EDIT;
-        appraisalDetailView = new AppraisalDetailView();
-        //*** Check list size ***//
-        if( rowIndex < appraisalDetailViewList.size() ) {
-            appraisalDetailView.setTitleDeed(selectAppraisalDetailView.getTitleDeed());
-            appraisalDetailView.setPurposeReviewAppraisalB(selectAppraisalDetailView.isPurposeReviewAppraisalB());
-            appraisalDetailView.setPurposeNewAppraisalB(selectAppraisalDetailView.isPurposeNewAppraisalB());
-            appraisalDetailView.setPurposeReviewBuildingB(selectAppraisalDetailView.isPurposeReviewBuildingB());
-            appraisalDetailView.setPurposeReviewAppraisal(isCheck(selectAppraisalDetailView.isPurposeReviewAppraisalB()));
-            appraisalDetailView.setPurposeNewAppraisal(isCheck(selectAppraisalDetailView.isPurposeNewAppraisalB()));
-            appraisalDetailView.setPurposeReviewBuilding(isCheck(selectAppraisalDetailView.isPurposeReviewBuildingB()));
-            appraisalDetailView.setCharacteristic(selectAppraisalDetailView.getCharacteristic());
-            appraisalDetailView.setNumberOfDocuments(selectAppraisalDetailView.getNumberOfDocuments());
-        }
+        log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
+//        Cloner cloner = new Cloner();
+//        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+        appraisalDetailViewDialog = appraisalDetailViewSelected;
     }
 
     public void onAddAppraisalDetailView(){
-        log.info("onAddAppraisalDetailView >>> begin ");
-        appraisalDetailView = new AppraisalDetailView();
+        log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
+        appraisalDetailViewDialog = new AppraisalDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
     public void onDeleteAppraisalDetailView() {
-        log.info( " onDeleteAppraisalDetailView " + selectAppraisalDetailView);
-        appraisalDetailViewList.remove(selectAppraisalDetailView);
-        onSetRowNoAppraisalDetailView();
-        log.info( " onDeleteAppraisalDetailView end ");
+        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
+        appraisalDetailViewList.remove(rowIndex);
+        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
 
     public void onSetRowNoAppraisalDetailView(){
@@ -199,27 +203,17 @@ public class AppraisalRequest implements Serializable {
         if(appraisalDetailViewListMandate()){
             if(appraisalContactDetailViewMandate()){
                 try{
-
-                    if(appraisalView.getId() == 0){
-                        appraisalView.setCreateBy(user);
-                        appraisalView.setCreateDate(DateTime.now().toDate());
-                    }
-                    appraisalView.setModifyBy(user);
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-
-                    log.debug("-- AppraisalContactDetailView : {}", appraisalContactDetailView.toString());
-
                     appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");
-//                    onCreation();
+                    onCreation();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } catch(Exception ex){
                     log.error("Exception : {}", ex);
                     messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-
                     if(ex.getCause() != null){
                         message = msg.get("app.appraisal.request.message.body.save.fail") + " cause : "+ ex.getCause().toString();
                     } else {
@@ -249,19 +243,19 @@ public class AppraisalRequest implements Serializable {
     private boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
-        if(appraisalDetailView.getTitleDeed().length() == 0){
+        if(appraisalDetailViewDialog.getTitleDeed().length() == 0){
             titleDeedFlag = true;
             result = false;
         } else {
             titleDeedFlag = false;
         }
-        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
+        if(!appraisalDetailViewDialog.isPurposeNewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewAppraisalB() && !appraisalDetailViewDialog.isPurposeReviewBuildingB()){
             purposeFlag = true;
             result = false;
         } else {
             purposeFlag = false;
         }
-        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == 0){
+        if(appraisalDetailViewDialog.getCharacteristic() == 1 && appraisalDetailViewDialog.getNumberOfDocuments() == 0){
             numberOfDocumentsFlag = true;
             result = false;
         } else {
@@ -279,12 +273,14 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- appraisalContactDetailViewMandate()");
         //todo :  2 0 21
         boolean result = true;
+
         if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
             contactFlag = true;
             result = false;
         } else {
             contactFlag = false;
         }
+
         log.debug("-- contactFlag = {}", contactFlag);
         log.debug("-- result = {}", result);
         return result;
@@ -356,12 +352,20 @@ public class AppraisalRequest implements Serializable {
         this.appraisalDetailViewList = appraisalDetailViewList;
     }
 
-    public AppraisalDetailView getSelectAppraisalDetailView() {
-        return selectAppraisalDetailView;
+    public AppraisalDetailView getAppraisalDetailViewSelected() {
+        return appraisalDetailViewSelected;
     }
 
-    public void setSelectAppraisalDetailView(AppraisalDetailView selectAppraisalDetailView) {
-        this.selectAppraisalDetailView = selectAppraisalDetailView;
+    public void setAppraisalDetailViewSelected(AppraisalDetailView appraisalDetailViewSelected) {
+        this.appraisalDetailViewSelected = appraisalDetailViewSelected;
+    }
+
+    public AppraisalDetailView getAppraisalDetailViewDialog() {
+        return appraisalDetailViewDialog;
+    }
+
+    public void setAppraisalDetailViewDialog(AppraisalDetailView appraisalDetailViewDialog) {
+        this.appraisalDetailViewDialog = appraisalDetailViewDialog;
     }
 
     public AppraisalView getAppraisalView() {
@@ -402,6 +406,22 @@ public class AppraisalRequest implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public boolean isContactFlag2() {
+        return contactFlag2;
+    }
+
+    public void setContactFlag2(boolean contactFlag2) {
+        this.contactFlag2 = contactFlag2;
+    }
+
+    public boolean isContactFlag3() {
+        return contactFlag3;
+    }
+
+    public void setContactFlag3(boolean contactFlag3) {
+        this.contactFlag3 = contactFlag3;
     }
 
     public int isCheck(boolean value){
