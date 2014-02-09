@@ -71,12 +71,6 @@
                                                 <p:ajax event="blur" update=":frmMain:ownerName"/>
                                                          </p:inputText>
                                         </td>
-                                        <!--<td class="title left" style="min-width: 157px; width: 157px; max-width: 157px;">-->
-                                            <!--<p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :-->
-                                        <!--</td>-->
-                                        <!--<td>-->
-                                            <!--<p:spacer width="2"/><p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}" disabled="#{bizInfoSummary.disableOwnerName}" required="#{!bizInfoSummary.disableOwnerName and not empty param[addBizInfoSummary.clientId]}"/>-->
-                                        <!--</td>-->
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -95,20 +89,6 @@
                                                 <p:ajax event="blur" update=":frmMain:expiryDate"/>
                                             </clv:BECalendar>
                                         </td>
-                                        <!--<td class="title left">-->
-                                            <!--<p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :-->
-                                        <!--</td>-->
-                                        <!--<td class="title">-->
-                                            <!--<clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"-->
-                                                            <!--value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"-->
-                                                            <!--disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"-->
-                                                            <!--yearRange="1950:2100"-->
-                                                            <!--defaultdate="#{bizInfoSummary.currentDateDDMMYY}"-->
-                                                            <!--mindate="#{bizInfoSummary.currentDateDDMMYY}"-->
-                                                            <!--showButtonPanel="true"-->
-                                                            <!--pattern="dd/MM/yyyy">-->
-                                            <!--</clv:BECalendar>-->
-                                        <!--</td>-->
                                     </tr>
                                     <tr>
                                         <td class="title" style="vertical-align: top;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
@@ -255,7 +235,6 @@
                                                             showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="blur" update=":frmMain:registrationDate"/>
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -272,14 +251,14 @@
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
                                                             mindate="01/01/1950"
                                                             maxdate="#{bizInfoSummary.currentDateDDMMYY}">
-                                                <p:ajax event="blur" update=":frmMain:establishDate"/>
                                             </clv:BECalendar>
                                         </td>
                                         <td class="title left" style="width: 70px">
                                             <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/> :
                                         </td>
                                         <td>
-                                            <p:selectOneMenu  idsize="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[addBizInfoSummary.clientId]}"
+                                            <p:selectOneMenu  idsize="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
+                                                              required="#{not empty param[addBizInfoSummary.clientId]}"
                                                               id="referExpId">
                                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                 <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
@@ -326,14 +305,12 @@
                                             <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:circulationAmount,:frmMain:productionCostsPercentage"/>
                                             </p:inputText>
                                         </td>
                                         <td>
                                             <p:inputText id="circulationPercentage" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationPercentage}" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:circulationPercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -347,7 +324,6 @@
                                                          onkeypress="return onKeyPressMoney(event)" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:productionCostsAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -358,7 +334,11 @@
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":frmMain:productionCostsPercentage,:frmMain:productionCostsAmount,
+                                                :frmMain:profitMarginAmount,:frmMain:profitMarginPercentage,frmMain:profitMarginPercentage,:frmMain:operatingExpenseAmount
+                                                :frmMain:operatingExpensePercentage,:frmMain:earningsBeforeTaxAmount,frmMain:earningsBeforeTaxPercentage,:frmMain:reduceInterestAmount
+                                                :frmMain:reduceInterestPercentage,:frmMain:reduceTaxAmount,frmMain:reduceTaxPercentage,:frmMain:netMarginAmount
+                                                ,:frmMain:netMarginPercentage" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -372,7 +352,6 @@
                                                          onkeypress="return onKeyPressMoney(event)" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:profitMarginAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -381,7 +360,6 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:profitMarginPercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -396,7 +374,10 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain:operatingExpenseAmount,:frmMain:operatingExpensePercentage,
+                                                :frmMain:earningsBeforeTaxAmount,frmMain:earningsBeforeTaxPercentage,frmMain:reduceInterestAmount,
+                                                :frmMain:reduceInterestPercentage,frmMain:reduceTaxAmount,frmMain:reduceTaxPercentage,
+                                                :frmMain:netMarginAmount,frmMain:netMarginPercentage" listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -406,7 +387,6 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:operatingExpensePercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -421,7 +401,6 @@
                                                          onkeypress="return onKeyPressMoney(event)" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -430,7 +409,6 @@
                                                          onkeypress="return onKeyPressMoney(event)" readonly="true">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:earningsBeforeTaxPercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -445,7 +423,9 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain:reduceInterestAmount,:frmMain:reduceInterestPercentage,
+                                                :frmMain:reduceTaxAmount,:frmMain:reduceTaxPercentage,:frmMain:netMarginAmount,:frmMain:netMarginPercentage"
+                                                        listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -455,7 +435,6 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:reduceInterestPercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -470,7 +449,8 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <!--readonly="#{bizInfoSummary.readonlyInterview}"-->
                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain" listener="#{bizInfoSummary.onCalSummaryTable}" />
+                                                <p:ajax event="blur" update=":msgBoxSystemMessagePanel,:frmMain:reduceTaxAmount,:frmMain:reduceTaxPercentage,:frmMain:netMarginAmount,:frmMain:netMarginPercentage"
+                                                        listener="#{bizInfoSummary.onCalSummaryTable}" />
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -480,7 +460,6 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:reduceTaxPercentage" />
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -494,7 +473,6 @@
                                                          onkeypress="return onKeyPressMoney(event)" readonly="true"
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
-                                                <p:ajax event="blur" update=":frmMain:netMarginAmount"/>
                                             </p:inputText>
                                         </td>
                                         <td>
@@ -504,7 +482,6 @@
                                                          required="#{not empty param[addBizInfoSummary.clientId] }">
                                                 <f:convertNumber pattern="##0.00"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"  />
                                                 <f:validateDoubleRange maximum="100"/>
-                                                <p:ajax event="blur" update=":frmMain:netMarginPercentage"/>
                                             </p:inputText>
                                         </td>
                                     </tr>
@@ -563,10 +540,10 @@
                             <td class="left">
                                 <p:commandButton id="btnAddBizInfoDetail" styleClass="medium" binding="#{addBizInfoDetail}"
                                                  value="#{msg.get('app.button.add')}"
+                                                 process="@form"
+                                                 actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
                                                  oncomplete="confirmAddBizInfoDetailDlg.show()"
-                                                 process="@this"
-                                                 update="frmMain"
-                                        >
+                                                 update="frmMain">
                                     <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
                                 </p:commandButton>
                             </td>

@@ -399,6 +399,7 @@ public class BizInfoSummary implements Serializable {
             if (redirect != null && !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+            System.out.println("DATE :" + bizInfoSummaryView.getExpiryDate() + ","+bizInfoSummaryView.getRegistrationDate()+","+bizInfoSummaryView.getEstablishDate());
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);

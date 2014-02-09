@@ -494,9 +494,6 @@ public class ExSummaryControl extends BusinessControl {
 
         if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){ // BDM //update groupSaleBDM && groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//                TODO: what is Flag Group Income = Y !?!?!?
-//                TODO: what is Flag Group Income = Y !?!?!?
-//                TODO: what is Flag Group Income = Y !?!?!?
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12 //
                 BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
                 BigDecimal grdTotalIncomeGross = BigDecimal.ZERO;
@@ -508,7 +505,9 @@ public class ExSummaryControl extends BusinessControl {
                     for(CustomerInfoView cus : cusListView){
                         if(cus.getRelation().getId() != RelationValue.BORROWER.value()){
                             if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                                approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
                             }
                         }
                     }
@@ -527,7 +526,9 @@ public class ExSummaryControl extends BusinessControl {
                             }
                         } else {
                             if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                                approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
                             }
                         }
                     }
@@ -548,7 +549,9 @@ public class ExSummaryControl extends BusinessControl {
                     for(CustomerInfoView cus : cusListView){
                         if(cus.getRelation().getId() != RelationValue.BORROWER.value()){
                             if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                                approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
                             }
                         }
                     }
@@ -566,7 +569,9 @@ public class ExSummaryControl extends BusinessControl {
                             }
                         } else {
                             if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                                approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
                             }
                         }
                     }

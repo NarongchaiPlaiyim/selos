@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.AccountStatusDAO;
@@ -64,6 +65,8 @@ public class BankStatementDetail implements Serializable {
     DBRControl dbrControl;
     @Inject
     ExSummaryControl exSummaryControl;
+    @Inject
+    BizInfoSummaryControl bizInfoSummaryControl;
 
     //DAO
     @Inject
@@ -300,8 +303,12 @@ public class BankStatementDetail implements Serializable {
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
 
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
+
             dbrControl.updateValueOfDBR(workCaseId);
+
             exSummaryControl.calForBankStmtSummary(workCaseId);
+
+            bizInfoSummaryControl.calGrdTotalIncomeByBankstatement(workCaseId);
 
             //set to init
             initViewFormAndSelectItems();
