@@ -242,6 +242,7 @@ public class AppraisalAppointment implements Serializable {
 
 
     private void setStrOnDataTable(){
+    	/*
         ContactRecordDetailView contactRecordDetailViewForStr;
         for(int i=0;i<contactRecordDetailViewList.size();i++){
 
@@ -272,12 +273,13 @@ public class AppraisalAppointment implements Serializable {
 //                contactRecordDetailViewForStr.setReasonStr(msg.get("app.contactRecordDetail.radio.label.reason.etc"));
 //            }
         }
+        */
     }
 
     public void onSaveContactRecordDetailView(){
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
-
+        /*
         if(true){
             complete = true;
             if(ModeForButton.ADD.equals(modeForButton)){
@@ -311,6 +313,7 @@ public class AppraisalAppointment implements Serializable {
                 log.info("onSaveContactRecordDetailView edit >>> end ");
             }
         }
+        */
         setStrOnDataTable();
         context.addCallbackParam("functionComplete", complete);
     }
@@ -319,7 +322,9 @@ public class AppraisalAppointment implements Serializable {
         log.info( " onEditContactRecordDetailView " + selectContactRecordDetail.getRemark());
         modeForButton = ModeForButton.EDIT;
         contactRecordDetailView = new ContactRecordDetailView();
+        
         //*** Check list size ***//
+        /*
         if( rowIndex < contactRecordDetailViewList.size() ) {
             contactRecordDetailView.setCallingDate(selectContactRecordDetail.getCallingDate());
             contactRecordDetailView.setCallingTime(selectContactRecordDetail.getCallingTime());
@@ -339,6 +344,7 @@ public class AppraisalAppointment implements Serializable {
         contactRecordDetailViewTemp.setNextCallingTime(selectContactRecordDetail.getNextCallingTime());
         contactRecordDetailViewTemp.setReason(selectContactRecordDetail.getReason());
         contactRecordDetailViewTemp.setRemark(selectContactRecordDetail.getRemark());
+        */
         setStrOnDataTable();
     }
 
@@ -356,11 +362,13 @@ public class AppraisalAppointment implements Serializable {
     }
 
     public void onSetRowNoContactRecordDetailView(){
+    	/*
         ContactRecordDetailView contactRecordDetailViewRow;
         for(int i=0;i< contactRecordDetailViewList.size();i++){
             contactRecordDetailViewRow = contactRecordDetailViewList.get(i);
             contactRecordDetailViewRow.setNo(i+1);
         }
+        */
     }
 
     private void setStringOnAppraisalTable(){

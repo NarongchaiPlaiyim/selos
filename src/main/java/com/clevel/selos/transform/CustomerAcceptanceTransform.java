@@ -1,5 +1,7 @@
 package com.clevel.selos.transform;
 
+import java.util.Date;
+
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
@@ -7,6 +9,7 @@ import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.util.Util;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -24,7 +27,17 @@ public class CustomerAcceptanceTransform extends Transform {
     public CustomerAcceptanceTransform() {
 
     }
-
+	public CustomerAcceptance transformToNewModel(CustomerAcceptanceView view,WorkCase workCase,User user) {
+    	Date now = new Date();
+        CustomerAcceptance model = new CustomerAcceptance();
+        model.setApproveResult(view.getApproveResult());
+        model.setCreateBy(user);
+        model.setCreateDate(now);
+        model.setModifyBy(user);
+        model.setModifyDate(now);
+        model.setWorkCase(workCase);
+        return model;
+    }
     public CustomerAcceptance transformToModel(CustomerAcceptanceView customerAcceptanceView) {
         CustomerAcceptance customerAcceptance = new CustomerAcceptance();
         if (customerAcceptanceView.getId() != 0) {
