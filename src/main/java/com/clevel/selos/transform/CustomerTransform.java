@@ -26,56 +26,54 @@ public class CustomerTransform extends Transform {
     Logger log;
 
     @Inject
-    CustomerCSITransform customerCSITransform;
+    private CustomerCSITransform customerCSITransform;
+    @Inject
+    private SBFScoreTransform sbfScoreTransform;
+    @Inject
+    private ServiceSegmentTransform serviceSegmentTransform;
 
     @Inject
-    SBFScoreTransform sbfScoreTransform;
-
+    private CustomerDAO customerDAO;
     @Inject
-    ServiceSegmentTransform serviceSegmentTransform;
-
+    private CustomerEntityDAO customerEntityDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private DocumentTypeDAO documentTypeDAO;
     @Inject
-    CustomerEntityDAO customerEntityDAO;
+    private TitleDAO titleDAO;
     @Inject
-    DocumentTypeDAO documentTypeDAO;
+    private RelationDAO relationDAO;
     @Inject
-    TitleDAO titleDAO;
+    private ReferenceDAO referenceDAO;
     @Inject
-    RelationDAO relationDAO;
+    private MaritalStatusDAO maritalStatusDAO;
     @Inject
-    ReferenceDAO referenceDAO;
+    private EducationDAO educationDAO;
     @Inject
-    MaritalStatusDAO maritalStatusDAO;
+    private NationalityDAO nationalityDAO;
     @Inject
-    EducationDAO educationDAO;
+    private OccupationDAO occupationDAO;
     @Inject
-    NationalityDAO nationalityDAO;
+    private AddressTypeDAO addressTypeDAO;
     @Inject
-    OccupationDAO occupationDAO;
+    private ProvinceDAO provinceDAO;
     @Inject
-    AddressTypeDAO addressTypeDAO;
+    private DistrictDAO districtDAO;
     @Inject
-    ProvinceDAO provinceDAO;
+    private SubDistrictDAO subDistrictDAO;
     @Inject
-    DistrictDAO districtDAO;
+    private CountryDAO countryDAO;
     @Inject
-    SubDistrictDAO subDistrictDAO;
+    private AddressDAO addressDAO;
     @Inject
-    CountryDAO countryDAO;
+    private BusinessTypeDAO businessTypeDAO;
     @Inject
-    AddressDAO addressDAO;
+    private WarningCodeDAO warningCodeDAO;
     @Inject
-    BusinessTypeDAO businessTypeDAO;
+    private KYCLevelDAO kycLevelDAO;
     @Inject
-    WarningCodeDAO warningCodeDAO;
+    private RaceDAO raceDAO;
     @Inject
-    KYCLevelDAO kycLevelDAO;
-    @Inject
-    RaceDAO raceDAO;
-    @Inject
-    CustomerOblInfoDAO customerOblInfoDAO;
+    private CustomerOblInfoDAO customerOblInfoDAO;
 
     public CustomerInfoView transformToView(Customer customer){
         log.info("Start - transformToView ::: customer : {}", customer);

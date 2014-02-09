@@ -129,12 +129,21 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
-        HttpSession session = FacesUtil.getSession(true);
         disableOwnerName = false;
         disableExpiryDate = true;
 
+        HttpSession session = FacesUtil.getSession(true);
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.info("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
+            }
         }
 
         log.debug("info WorkCaseId is: {}", workCaseId);

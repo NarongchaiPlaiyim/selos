@@ -147,6 +147,14 @@ public class NCBInfo implements Serializable {
             if (session.getAttribute("workCaseId") != null) {
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
                 log.info("workCaseId :: {} ", workCaseId);
+            } else {
+                log.info("onCreation ::: workCaseId is null.");
+                try {
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                } catch (Exception ex) {
+                    log.info("Exception :: {}",ex);
+                }
             }
         } else {
             try {
@@ -409,7 +417,7 @@ public class NCBInfo implements Serializable {
                 dbrControl.updateValueOfDBR(workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.ncb.response.save.success");
-                creditFacProposeControl.calWC(workCaseId);
+//                creditFacProposeControl.calWC(workCaseId);
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else {
