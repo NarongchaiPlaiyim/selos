@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="ehcache.xsd"
          updateCheck="false" monitoring="autodetect"
          dynamicConfig="false"
-         maxBytesLocalHeap="20M" >
+         maxBytesLocalHeap="100M" >
 
     <defaultCache memoryStoreEvictionPolicy="LRU"
                   eternal="false"
