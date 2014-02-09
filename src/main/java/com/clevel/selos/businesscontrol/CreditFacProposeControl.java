@@ -791,14 +791,7 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        log.debug("findByWorkCaseId :: newCreditFacility : {}",newCreditFacility);
-        if(newCreditFacility == null){
-            newCreditFacility = new NewCreditFacility();
-            WorkCase workCase = new WorkCase();
-            workCase.setId(workCaseId);
-            newCreditFacility.setWorkCase(workCase);
-        }
+
 
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView : {}",bizInfoSummaryView);
@@ -834,11 +827,6 @@ public class CreditFacProposeControl extends BusinessControl {
 
         log.debug("Value ::: wcNeed : {}, totalWcDebit : {}, totalWcTmb : {}, wcNeedDiffer : {}",wcNeed,totalWcDebit,totalWcTmb,wcNeedDiffer);
 
-        newCreditFacility.setWcNeed(wcNeed);
-        newCreditFacility.setTotalWcDebit(totalWcDebit);
-        newCreditFacility.setTotalWcTmb(totalWcTmb);
-        newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //        1.25 x wcNeed
@@ -851,10 +839,6 @@ public class CreditFacProposeControl extends BusinessControl {
         case1WcDebitCoreWc = Util.subtract(case1WcMinLimit,case1Wc50CoreWc);
 
         log.debug("Value ::: case1WcLimit : {}, case1WcMinLimit : {}, case1Wc50CoreWc : {}, case1WcDebitCoreWc : {}",case1WcLimit,case1WcMinLimit,case1Wc50CoreWc,case1WcDebitCoreWc);
-        newCreditFacility.setCase1WcLimit(case1WcLimit);
-        newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
-        newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
-        newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -868,10 +852,6 @@ public class CreditFacProposeControl extends BusinessControl {
         case2WcDebitCoreWc = Util.subtract(case2WcMinLimit,case2Wc50CoreWc);
 
         log.debug("Value ::: case2WcLimit : {}, case2WcMinLimit : {}, case2Wc50CoreWc : {}, case2WcDebitCoreWc : {}",case2WcLimit,case2WcMinLimit,case2Wc50CoreWc,case2WcDebitCoreWc);
-        newCreditFacility.setCase2WcLimit(case2WcLimit);
-        newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
-        newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
-        newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -885,6 +865,27 @@ public class CreditFacProposeControl extends BusinessControl {
         case3WcDebitCoreWc = Util.subtract(case3WcMinLimit,case3Wc50CoreWc);
 
         log.debug("Value ::: case3WcLimit : {}, case3WcMinLimit : {}, case3Wc50CoreWc : {}, case3WcDebitCoreWc : {}",case3WcLimit,case3WcMinLimit,case3Wc50CoreWc,case3WcDebitCoreWc);
+
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        log.debug("findByWorkCaseId :: newCreditFacility : {}",newCreditFacility);
+        if(newCreditFacility == null){
+            newCreditFacility = new NewCreditFacility();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            newCreditFacility.setWorkCase(workCase);
+        }
+        newCreditFacility.setWcNeed(wcNeed);
+        newCreditFacility.setTotalWcDebit(totalWcDebit);
+        newCreditFacility.setTotalWcTmb(totalWcTmb);
+        newCreditFacility.setWCNeedDiffer(wcNeedDiffer);
+        newCreditFacility.setCase1WcLimit(case1WcLimit);
+        newCreditFacility.setCase1WcMinLimit(case1WcMinLimit);
+        newCreditFacility.setCase1Wc50CoreWc(case1Wc50CoreWc);
+        newCreditFacility.setCase1WcDebitCoreWc(case1WcDebitCoreWc);
+        newCreditFacility.setCase2WcLimit(case2WcLimit);
+        newCreditFacility.setCase2WcMinLimit(case2WcMinLimit);
+        newCreditFacility.setCase2Wc50CoreWc(case2Wc50CoreWc);
+        newCreditFacility.setCase2WcDebitCoreWc(case2WcDebitCoreWc);
         newCreditFacility.setCase3WcLimit(case3WcLimit);
         newCreditFacility.setCase3WcMinLimit(case3WcMinLimit);
         newCreditFacility.setCase3Wc50CoreWc(case3Wc50CoreWc);
@@ -892,6 +893,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
         log.debug("newCreditFacility : {}",newCreditFacility);
         newCreditFacilityDAO.persist(newCreditFacility);
+        log.debug("after persist newCreditFacility : {}", newCreditFacility);
     }
 
     public BigDecimal compareToFindLower(BigDecimal b1, BigDecimal b2){

@@ -1104,6 +1104,7 @@ public class CustomerInfoIndividual implements Serializable {
                                 onChangeProvinceEditForm5();
                                 onChangeDistrictEditForm5();
                                 onChangeDOBSpouse();
+                                onChangeTitleThSpouse();
                             }
                         } catch (Exception ex) {
                             enableSpouseDocumentType = true;
@@ -1144,6 +1145,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm3();
             onChangeMaritalStatus();
             onChangeDOB();
+            onChangeTitleTh();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
@@ -1277,6 +1279,7 @@ public class CustomerInfoIndividual implements Serializable {
                             onChangeDistrictEditForm4();
                             onChangeProvinceEditForm5();
                             onChangeDistrictEditForm5();
+                            onChangeTitleThSpouse();
                         }
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
@@ -1302,6 +1305,7 @@ public class CustomerInfoIndividual implements Serializable {
                 onChangeDistrictEditForm2();
                 onChangeProvinceEditForm3();
                 onChangeDistrictEditForm3();
+                onChangeTitleTh();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1349,6 +1353,7 @@ public class CustomerInfoIndividual implements Serializable {
                 onChangeDOBSpouse();
                 onChangeProvinceEditForm4();
                 onChangeProvinceEditForm5();
+                onChangeTitleThSpouse();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }catch (Exception ex){
                 log.error("refreshInterfaceInfo Exception : {}", ex);
@@ -1462,6 +1467,7 @@ public class CustomerInfoIndividual implements Serializable {
             onChangeDistrictEditForm4();
             onChangeProvinceEditForm5();
             onChangeDistrictEditForm5();
+            onChangeTitleThSpouse();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;

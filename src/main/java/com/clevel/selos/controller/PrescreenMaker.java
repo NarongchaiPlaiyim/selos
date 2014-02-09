@@ -1922,10 +1922,10 @@ public class PrescreenMaker implements Serializable {
                     String searchId = borrowerInfo.getSearchId();
                     log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                     //TODO get Customer Segment
-                    log.debug("onSearchCustomerInfo ::: getServicement from CustomerInfo");
+                    log.debug("onSearchCustomerInfo ::: getServiceSegment from CustomerInfo");
                     CustomerInfoView tmpCustomerInfoView = customerInfoResultView.getCustomerInfoView();
                     tmpCustomerInfoView = customerInfoControl.getCustomerCreditInfo(tmpCustomerInfoView);
-                    log.debug("onSearchCustomerInfo ::: getServicement : {}", tmpCustomerInfoView.getServiceSegmentView());
+                    log.debug("onSearchCustomerInfo ::: getServiceSegment : {}", tmpCustomerInfoView.getServiceSegmentView());
                     //borrowerInfo = customerInfoResultView.getCustomerInfoView();
                     borrowerInfo = tmpCustomerInfoView;
                     borrowerInfo.setSearchBy(searchBy);
