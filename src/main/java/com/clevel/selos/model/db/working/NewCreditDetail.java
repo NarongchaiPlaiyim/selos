@@ -69,14 +69,8 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name = "standard_price")
-    private String standardPrice;
-
     @Column(name = "standard_interest")
     private BigDecimal standardInterest;
-
-    @Column(name = "suggest_price")
-    private String suggestPrice;
 
     @Column(name = "suggest_interest")
     private BigDecimal suggestInterest;
@@ -92,12 +86,6 @@ public class NewCreditDetail implements Serializable {
 
     @Column(name = "installment")
     private BigDecimal installment;
-
-    @Column(name = "finalPrice")
-    private BigDecimal finalPrice;
-
-    @Column(name = "tenor")
-    private BigDecimal tenor;
 
     @Column(name = "purpose")
     private BigDecimal purpose;
@@ -145,14 +133,6 @@ public class NewCreditDetail implements Serializable {
 
     @Column(name = "type", nullable = false, columnDefinition = "int default 0")
     private int type;
-
-/*    @ManyToOne
-    @JoinColumn(name = "new_guarantor_rel_id")
-    private NewGuarantorCredit newGuarantorRelCredit;
-
-    @ManyToOne
-    @JoinColumn(name = "new_collateral_rel_id")
-    private NewCollateralRelCredit newCollateralRelCredit;*/
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -291,28 +271,12 @@ public class NewCreditDetail implements Serializable {
         this.outstanding = outstanding;
     }
 
-    public String getStandardPrice() {
-        return standardPrice;
-    }
-
-    public void setStandardPrice(String standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
     public BigDecimal getStandardInterest() {
         return standardInterest;
     }
 
     public void setStandardInterest(BigDecimal standardInterest) {
         this.standardInterest = standardInterest;
-    }
-
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
     }
 
     public BigDecimal getSuggestInterest() {
@@ -353,22 +317,6 @@ public class NewCreditDetail implements Serializable {
 
     public void setInstallment(BigDecimal installment) {
         this.installment = installment;
-    }
-
-    public BigDecimal getFinalPrice() {
-        return finalPrice;
-    }
-
-    public void setFinalPrice(BigDecimal finalPrice) {
-        this.finalPrice = finalPrice;
-    }
-
-    public BigDecimal getTenor() {
-        return tenor;
-    }
-
-    public void setTenor(BigDecimal tenor) {
-        this.tenor = tenor;
     }
 
     public BigDecimal getPurpose() {
@@ -554,16 +502,12 @@ public class NewCreditDetail implements Serializable {
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
                 .append("outstanding", outstanding)
-                .append("standardPrice", standardPrice)
                 .append("standardInterest", standardInterest)
-                .append("suggestPrice", suggestPrice)
                 .append("suggestInterest", suggestInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)
                 .append("installment", installment)
-                .append("finalPrice", finalPrice)
-                .append("tenor", tenor)
                 .append("purpose", purpose)
                 .append("seq", seq)
                 .append("isApproved", isApproved)
