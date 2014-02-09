@@ -519,7 +519,7 @@ public class CustomerInfoControl extends BusinessControl {
         //currentAddress = 0 is other address
         int currentAddress = 0;
         if(add1.getAddressNo() != null && add2.getAddressNo() != null){
-            if(!add1.getAddressNo().equalsIgnoreCase(add2.getAddressNo())){
+            if(!add1.getAddressNo().equals(add2.getAddressNo())){
                 return currentAddress;
             }
         } else if(add1.getAddressNo() != null && add2.getAddressNo() == null){
@@ -529,7 +529,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getMoo() != null && add2.getMoo() != null){
-            if(!add1.getMoo().equalsIgnoreCase(add2.getMoo())){
+            if(!add1.getMoo().equals(add2.getMoo())){
                 return currentAddress;
             }
         } else if(add1.getMoo() != null && add2.getMoo() == null){
@@ -539,7 +539,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getBuilding() != null && add2.getBuilding() != null){
-            if(!add1.getBuilding().equalsIgnoreCase(add2.getBuilding())){
+            if(!add1.getBuilding().equals(add2.getBuilding())){
                 return currentAddress;
             }
         } else if(add1.getBuilding() != null && add2.getBuilding() == null){
@@ -549,7 +549,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getRoad() != null && add2.getRoad() != null){
-            if(!add1.getRoad().equalsIgnoreCase(add2.getRoad())){
+            if(!add1.getRoad().equals(add2.getRoad())){
                 return currentAddress;
             }
         } else if(add1.getRoad() != null && add2.getRoad() == null){
@@ -559,7 +559,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getPostalCode() != null && add2.getPostalCode() != null){
-            if(!add1.getPostalCode().equalsIgnoreCase(add2.getPostalCode())){
+            if(!add1.getPostalCode().equals(add2.getPostalCode())){
                 return currentAddress;
             }
         } else if(add1.getPostalCode() != null && add2.getPostalCode() == null){
@@ -569,7 +569,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getPhoneNumber() != null && add2.getPhoneNumber() != null){
-            if(!add1.getPhoneNumber().equalsIgnoreCase(add2.getPhoneNumber())){
+            if(!add1.getPhoneNumber().equals(add2.getPhoneNumber())){
                 return currentAddress;
             }
         } else if(add1.getPhoneNumber() != null && add2.getPhoneNumber() == null){
@@ -579,7 +579,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getExtension() != null && add2.getExtension() != null){
-            if(!add1.getExtension().equalsIgnoreCase(add2.getExtension())){
+            if(!add1.getExtension().equals(add2.getExtension())){
                 return currentAddress;
             }
         } else if(add1.getExtension() != null && add2.getExtension() == null){
@@ -589,7 +589,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getContactName() != null && add2.getContactName() != null){
-            if(!add1.getContactName().equalsIgnoreCase(add2.getContactName())){
+            if(!add1.getContactName().equals(add2.getContactName())){
                 return currentAddress;
             }
         } else if(add1.getContactName() != null && add2.getContactName() == null){
@@ -599,7 +599,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getContactPhone() != null && add2.getContactPhone() != null){
-            if(!add1.getContactPhone().equalsIgnoreCase(add2.getContactPhone())){
+            if(!add1.getContactPhone().equals(add2.getContactPhone())){
                 return currentAddress;
             }
         } else if(add1.getContactPhone() != null && add2.getContactPhone() == null){
@@ -609,7 +609,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getAddress() != null && add2.getAddress() != null){
-            if(!add1.getAddress().equalsIgnoreCase(add2.getAddress())){
+            if(!add1.getAddress().equals(add2.getAddress())){
                 return currentAddress;
             }
         } else if(add1.getAddress() != null && add2.getAddress() == null){
@@ -649,7 +649,7 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         if(add1.getCountry() != null && add2.getCountry() != null){
-            if(add1.getCountry().getCode() != add2.getCountry().getCode()){
+            if(!add1.getCountry().getCode().equals(add2.getCountry().getCode())){
                 return currentAddress;
             }
         } else if(add1.getCountry() != null && add2.getCountry() == null){

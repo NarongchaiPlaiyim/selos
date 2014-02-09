@@ -640,7 +640,7 @@ function handlePrescreenProposeCreditRequest(xhr, status, args) {
     }
 }
 
-function handlencbInfoRequest(xhr, status, args) {
+function handleNCBInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         ncbDlg.hide();
     }

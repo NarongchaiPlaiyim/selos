@@ -217,7 +217,7 @@ public class BasicInfo extends MandatoryFieldsControl {
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         }else{
-            log.info("preRender ::: workCaseId is null.");
+            log.info("onCreation ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
@@ -256,12 +256,6 @@ public class BasicInfo extends MandatoryFieldsControl {
         CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
-
-//        baPaymentMethodList = baPaymentMethodDAO.findAll();
-//
-//        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
-//            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
-//        }
 
         basicInfoView.setSpProgram(0);
         basicInfoView.setRefIn(0);
