@@ -1,16 +1,21 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.InsuranceInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.insurance.InsuranceInfoView;
 import com.clevel.selos.model.view.insurance.InsuranceInfoSectionView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.util.FacesUtil;
+
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,7 +47,11 @@ public class InsuranceInfo implements Serializable {
     private ModeForButton modeForButton;
     private int rowIndex;
 
-
+    //session
+    private long workCaseId;
+    
+    @Inject
+    private InsuranceInfoControl insuranceInfoControl;
 
     @Inject
     public InsuranceInfo() {
@@ -54,7 +63,7 @@ public class InsuranceInfo implements Serializable {
     }
 
     private void init(){
-        insuranceInfoViewList = new ArrayList<InsuranceInfoView>();
+        /*insuranceInfoViewList = new ArrayList<InsuranceInfoView>();
         InsuranceInfoSectionView sectionModel = null;
         List<InsuranceInfoSectionView> sectionModelList = null;
 
@@ -92,7 +101,25 @@ public class InsuranceInfo implements Serializable {
         insuranceInfoView.setSectionList(sectionModelList);
         insuranceInfoView.setSectionList(sectionModelList);
 
-        insuranceInfoViewList.add(insuranceInfoView);
+        insuranceInfoViewList.add(insuranceInfoView);*/
+    	 HttpSession session = FacesUtil.getSession(true);
+
+         if(session.getAttribute("workCaseId") != null){
+        	 
+             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+             log.info("init ::: workCaseId is " + workCaseId);
+         }else{
+             log.info("init ::: workCaseId is null.");
+             try{
+                 FacesUtil.redirect("/site/insuranceInfo.jsf");
+                 return;
+             }catch (Exception ex){
+                 log.info("Exception :: {}",ex);
+             }
+         }
+         
+        this.insuranceInfoViewList = this.insuranceInfoControl.getInsuranceInfo(workCaseId);
+         
         addition();
     }
 
