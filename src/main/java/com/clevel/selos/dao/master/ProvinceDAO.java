@@ -19,6 +19,16 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
     public ProvinceDAO() {
     }
 
+    @Override
+    public List<Province> findAll() {
+        log.debug("findAll.");
+        Criteria criteria = createCriteria();
+        criteria.setCacheable(true);
+        List<Province> provinces = criteria.list();
+        log.debug("findAll. (result: {})",provinces.size());
+        return provinces;
+    }
+
     public List<Province> getListOrderByParameter(String orderField) {
         log.info("getListOrderByParameter. (orderField: {})", orderField);
         Criteria criteria = createCriteria();
