@@ -66,7 +66,6 @@ public class Inbox implements Serializable {
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
         } catch (Exception e) {
             log.error("Exception while getInbox : ", e);
-            e.printStackTrace();
         }
     }
 
