@@ -308,7 +308,7 @@ public class BankStatementDetail implements Serializable {
 
             exSummaryControl.calForBankStmtSummary(workCaseId);
 
-            bizInfoSummaryControl.calGrdTotalIncomeByBankstatement(workCaseId);
+            bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
 
             //set to init
             initViewFormAndSelectItems();
