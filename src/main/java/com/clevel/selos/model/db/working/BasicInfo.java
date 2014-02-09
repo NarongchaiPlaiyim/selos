@@ -150,10 +150,10 @@ public class BasicInfo implements Serializable {
     private int retrievedFlag;
 
     //Update for Post Approval
-    @Column(name = "approved_type", length = 1)
+    @Column(name = "approved_type", length = 1, nullable = false, columnDefinition = "int default 0")
     private int approveType;
 
-    @Column(name = "approved_result", length = 1)
+    @Column(name = "approved_result", length = 1, nullable = false, columnDefinition = "int default 0")
     private int approveResult;
 
     public long getId() {
