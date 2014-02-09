@@ -67,26 +67,26 @@ public class AppraisalRequestControl extends BusinessControl {
     }
 	
 	public AppraisalView getAppraisalRequest(final long workCaseId, final User user){
-        log.info("-- getAppraisalRequest WorkCaseId : {}, UserId : {}", workCaseId, user.getId());
+        log.info("-- getAppraisalRequest WorkCaseId : {}, User.id[{}]", workCaseId, user.getId());
         appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
-        if(appraisal != null){
+        if(!Util.isNull(appraisal)){
             appraisalContactDetailList = Util.safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
             appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
             appraisalView = appraisalTransform.transformToView(appraisal, user);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-            if(newCreditFacility != null){
+            if(!Util.isNull(newCreditFacility)){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
                     newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
                 }
-
                 appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
+                log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
+                return appraisalView;
             } else {
-                log.debug("-- newCreditFacility = null");
+                log.debug("-- NewCreditFacility = null");
+                return appraisalView;
             }
-            log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
-            return appraisalView;
         } else {
             log.debug("-- Find by work case id = {} appraisal is null. ", workCaseId);
             return appraisalView;

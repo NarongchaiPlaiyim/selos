@@ -61,6 +61,8 @@ public class NewCollateralSubTransform extends Transform {
             model.setLandOffice(view.getLandOffice());
             model.setCollateralOwner(view.getCollateralOwner());
             model.setAppraisalValue(view.getAppraisalValue());
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
             newCollateralSubList.add(model);
         }
         return newCollateralSubList;
@@ -92,6 +94,8 @@ public class NewCollateralSubTransform extends Transform {
             model.setLandOffice(view.getLandOffice());
             model.setCollateralOwner(view.getCollateralOwner());
             model.setAppraisalValue(view.getAppraisalValue());
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
             newCollateralSubList.add(model);
         }
         return newCollateralSubList;
@@ -121,6 +125,8 @@ public class NewCollateralSubTransform extends Transform {
             view.setLandOffice(model.getLandOffice());
             view.setCollateralOwner(model.getCollateralOwner());
             view.setAppraisalValue(model.getAppraisalValue());
+            view.setUsage(model.getUsage());
+            view.setTypeOfUsage(model.getTypeOfUsage());
             newCollateralSubViewList.add(view);
         }
         return newCollateralSubViewList;

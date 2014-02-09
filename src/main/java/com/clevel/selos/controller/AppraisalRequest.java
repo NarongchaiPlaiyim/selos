@@ -109,7 +109,7 @@ public class AppraisalRequest implements Serializable {
     public void onCreation() {
         log.info("-- onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        if(false){//session.getAttribute("workCaseId") == null){
+        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
             log.info("preRender ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
@@ -126,9 +126,9 @@ public class AppraisalRequest implements Serializable {
             //todo : What is zoneLocation?.
 
             workCaseId = 4L;
-            log.info("workCaseId :: {} ",workCaseId);
+            log.info("-- workCaseId :: {} ",workCaseId);
             appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
-            if(appraisalView != null){
+            if(!Util.isNull(appraisalView)){
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
                 if(Util.isZero(appraisalDetailViewList.size())){
                     appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
@@ -152,7 +152,6 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
-
         if(appraisalDetailViewMandate()){
             complete = true;
             if(ModeForButton.ADD.equals(modeForButton)){
@@ -172,8 +171,9 @@ public class AppraisalRequest implements Serializable {
     public void onEditAppraisalDetailView(){
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-        Cloner cloner = new Cloner();
-        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+//        Cloner cloner = new Cloner();
+//        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+        appraisalDetailViewDialog = appraisalDetailViewSelected;
     }
 
     public void onAddAppraisalDetailView(){
@@ -203,18 +203,13 @@ public class AppraisalRequest implements Serializable {
         if(appraisalDetailViewListMandate()){
             if(appraisalContactDetailViewMandate()){
                 try{
-                    if(appraisalView.getId() == 0){
-                        appraisalView.setCreateBy(user);
-                        appraisalView.setCreateDate(DateTime.now().toDate());
-                    }
-                    appraisalView.setModifyBy(user);
                     appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                     appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
                     appraisalRequestControl.onSaveAppraisalRequest(appraisalView, workCaseId, user);
 
                     messageHeader = msg.get("app.appraisal.request.message.header.save.success");
                     message = msg.get("app.appraisal.request.message.body.save.success");
-//                    onCreation();
+                    onCreation();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } catch(Exception ex){
                     log.error("Exception : {}", ex);
