@@ -227,9 +227,10 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
 
-        if(bankStmtSummaryView != null && Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() > 1){
+        if(bankStmtSummaryView != null && Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
             ActionStatusView actionStatusView = bankStmtSummaryView.getActionStatusViewList().get(0);
-            if(actionStatusView.getStatusCode() == ActionResult.FAILED){
+            log.debug("getInterfaceInfo : actionStatusView : {}", actionStatusView);
+            if(actionStatusView != null && actionStatusView.getStatusCode() == ActionResult.FAILED){
                 throw new Exception(actionStatusView.getStatusDesc());
             }
         }
