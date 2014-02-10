@@ -22,7 +22,7 @@ import java.util.List;
 public class AppraisalDetailTransform extends Transform {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
     @NormalMessage
     private Message msg;

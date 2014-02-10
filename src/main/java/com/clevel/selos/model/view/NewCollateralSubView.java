@@ -35,6 +35,8 @@ public class NewCollateralSubView {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private String usage;
+    private String typeOfUsage;
 
 
     public NewCollateralSubView() {
@@ -55,6 +57,22 @@ public class NewCollateralSubView {
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
+    }
+
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
     }
 
     public long getId() {

@@ -4,9 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCreditFacility;
-import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -89,6 +87,18 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
             log.debug("-- NewCollateral(id : {}) has Updated", id);
         }
     }
+
+
+    public List<NewCollateral> findNewCollateralByWorkCaseId(long workCaseId) {
+        log.info("-- findNewCollateralByWorkCaseId ::: {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.addOrder(Order.asc("newCollateral.id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("-- newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
+    }
+
 
 
 }

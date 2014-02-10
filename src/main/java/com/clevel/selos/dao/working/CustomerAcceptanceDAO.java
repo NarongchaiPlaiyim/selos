@@ -10,23 +10,29 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CustomerAcceptanceDAO extends GenericDAO<CustomerAcceptance, Integer> {
-    @Inject
+public class CustomerAcceptanceDAO extends GenericDAO<CustomerAcceptance, Long> {
+    private static final long serialVersionUID = -5249297432741235023L;
+	@Inject
     @SELOS
     Logger log;
-    @Inject
+    
     public CustomerAcceptanceDAO() {
     }
 
 
     public CustomerAcceptance findCustomerAcceptanceByWorkCase(WorkCase workCase) {
+        log.info("-- findCustomerAcceptanceByWorkCase : {}", workCase);
         CustomerAcceptance customerAcceptance;
-
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
         customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
-        log.info("getListByDistrict. (result size: {})", customerAcceptance);
-
+        return customerAcceptance;
+    }
+    public CustomerAcceptance findCustomerAcceptanceByWorkCase(long workCaseId) {
+        CustomerAcceptance customerAcceptance;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
         return customerAcceptance;
     }
 }

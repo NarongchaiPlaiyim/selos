@@ -30,4 +30,15 @@ public class BizInfoSummaryDAO extends GenericDAO<BizInfoSummary, Long> {
         return bizInfoSummary;
     }
 
+    public BizInfoSummary findByWorkCaseId(long workCaseId) {
+        BizInfoSummary bizInfoSummary;
+        log.info("findByWorkCaseId. (workCaseId : {})", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+
+        bizInfoSummary = (BizInfoSummary) criteria.uniqueResult();
+
+        log.info("onSearchByWorkCase. (result size: {})", bizInfoSummary);
+        return bizInfoSummary;
+    }
 }

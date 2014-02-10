@@ -24,23 +24,8 @@ public class NewCreditTierDetail implements Serializable {
     @Column(name = "no")
     private int no ;
 
-    @Column(name = "final_price_rate")
-    private String finalPriceRate ;
-
     @Column(name = "installment")
     private BigDecimal installment ;
-
-    @Column(name = "standard_price")
-    private String standardPrice ;
-
-    @Column(name = "standard_interest")
-    private BigDecimal standardInterest;
-
-    @Column(name = "suggest_price")
-    private String suggestPrice ;
-
-    @Column(name = "suggest_interest")
-    private BigDecimal suggestInterest ;
 
     @Column(name = "tenor")
     private int tenor ;
@@ -51,15 +36,6 @@ public class NewCreditTierDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "final_rate_id")
     private BaseRate finalBasePrice ;
-
-    @OneToOne
-    @JoinColumn(name = "standard_rate_id")
-    private BaseRate standardBasePrice ;
-
-    @OneToOne
-    @JoinColumn(name = "suggest_rate_id")
-    private BaseRate suggestBasePrice ;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -113,52 +89,12 @@ public class NewCreditTierDetail implements Serializable {
         this.no = no;
     }
 
-    public String getFinalPriceRate() {
-        return finalPriceRate;
-    }
-
-    public void setFinalPriceRate(String finalPriceRate) {
-        this.finalPriceRate = finalPriceRate;
-    }
-
     public BigDecimal getInstallment() {
         return installment;
     }
 
     public void setInstallment(BigDecimal installment) {
         this.installment = installment;
-    }
-
-    public String getStandardPrice() {
-        return standardPrice;
-    }
-
-    public void setStandardPrice(String standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
-    public BigDecimal getStandardInterest() {
-        return standardInterest;
-    }
-
-    public void setStandardInterest(BigDecimal standardInterest) {
-        this.standardInterest = standardInterest;
-    }
-
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
     }
 
     public int getTenor() {
@@ -183,22 +119,6 @@ public class NewCreditTierDetail implements Serializable {
 
     public void setFinalBasePrice(BaseRate finalBasePrice) {
         this.finalBasePrice = finalBasePrice;
-    }
-
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
     }
 
     public Date getCreateDate() {
@@ -239,17 +159,10 @@ public class NewCreditTierDetail implements Serializable {
                 .append("id", id)
                 .append("finalInterest", finalInterest)
                 .append("no", no)
-                .append("finalPriceRate", finalPriceRate)
                 .append("installment", installment)
-                .append("standardPrice", standardPrice)
-                .append("standardInterest", standardInterest)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestInterest", suggestInterest)
                 .append("tenor", tenor)
                 .append("editFlag", editFlag)
                 .append("finalBasePrice", finalBasePrice)
-                .append("standardBasePrice", standardBasePrice)
-                .append("suggestBasePrice", suggestBasePrice)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

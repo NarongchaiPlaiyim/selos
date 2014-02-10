@@ -37,6 +37,12 @@ public class NewCollateralSub implements Serializable {
     @JoinColumn(name = "sub_collateral_type_id")
     private SubCollateralType  subCollateralType;
 
+    @Column(name = "usage")
+    private String usage;
+
+    @Column(name = "type_of_usage")
+    private String typeOfUsage;
+
     @Column(name = "address")
     private String address;
 
@@ -255,12 +261,33 @@ public class NewCollateralSub implements Serializable {
         this.subCollateralType = subCollateralType;
     }
 
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("collID", collID)
+                .append("headCollID", headCollID)
+                .append("lineNo", lineNo)
                 .append("collateralTypeType", collateralTypeType)
                 .append("subCollateralType", subCollateralType)
+                .append("usage", usage)
+                .append("typeOfUsage", typeOfUsage)
                 .append("address", address)
                 .append("landOffice", landOffice)
                 .append("titleDeed", titleDeed)

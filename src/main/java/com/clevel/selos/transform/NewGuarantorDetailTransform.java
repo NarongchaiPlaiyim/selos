@@ -81,6 +81,7 @@ public class NewGuarantorDetailTransform extends Transform {
                         existingCreditDetailList.add(newGuarantorCredit.getExistingCreditDetail());
                     } else if (newGuarantorCredit.getNewCreditDetail() != null) {
                         log.info("newGuarantorCredit.getNewCreditDetail :: {}", newGuarantorCredit.getNewCreditDetail().getId());
+                        newGuarantorCredit.getNewCreditDetail().setGuaranteeAmount(newGuarantorCredit.getGuaranteeAmount());
                         newCreditDetailList.add(newGuarantorCredit.getNewCreditDetail());
                         log.info("newGuarantorCredit.getGuaranteeAmount() ::: {}", newGuarantorCredit.getGuaranteeAmount());
                     }
