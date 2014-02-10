@@ -295,7 +295,7 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        exSumCreditRiskInfoView.setLastReviewDate(DateTimeUtil.getCurrentDateTH());
+        exSumCreditRiskInfoView.setLastReviewDate(new Date());
         //Todo:nextReviewDate
         exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getOnlyDatePlusYear(DateTimeUtil.getCurrentDateTH(),1)); //(1st day of approve month + 12 Months)
         exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
