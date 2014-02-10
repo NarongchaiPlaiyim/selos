@@ -30,6 +30,9 @@ public class InsuranceInfoTransform extends Transform {
     Logger log;
     
     @Inject
+    private NewCollateralTransform newCollateralTransform;
+    
+    @Inject
     private NewCollateralHeadTransform newCollateralHeadTransform;
     
     private List<InsuranceInfoView> insuranceInfoViewList;
@@ -41,24 +44,33 @@ public class InsuranceInfoTransform extends Transform {
 
         for (NewCollateral newCollateral : newCollateralList) {
         	insuranceInfoView = new InsuranceInfoView();
-        	insuranceInfoView.setJobID(newCollateral.getJobID());
-        	insuranceInfoView.setPremium(newCollateral.getPremiumAmount());
+        	insuranceInfoView.setNewCollateralView(this.newCollateralTransform.transformsCollateralToView(newCollateral));
+        	//insuranceInfoView.setJobID(newCollateral.getJobID());
+        	//insuranceInfoView.setPremium(newCollateral.getPremiumAmount());
+        	log.debug("transformsNewCollateralToView : newCollateral id: " + newCollateral.getId());
         	List<NewCollateralHead> newCollateralHeadList = newCollateral.getNewCollateralHeadList();
-        	List<InsuranceInfoSectionView> InsuranceInfoSectionViewList = new ArrayList<InsuranceInfoSectionView>();
-        	if (newCollateralHeadList != null){
-        		for (NewCollateralHead newCollateralHead : newCollateralHeadList){
+        	List<InsuranceInfoSectionView> insuranceInfoSectionViewList = new ArrayList<InsuranceInfoSectionView>();
+        	List<NewCollateralHeadView> newCollateralHeadViewList = this.newCollateralHeadTransform.transformToView(newCollateralHeadList);
+        	
+        	if (newCollateralHeadViewList != null){
+        		for (NewCollateralHeadView newCollateralHeadView : newCollateralHeadViewList){
+        			log.debug("transformsNewCollateralToView : newCollateralHead id: " + newCollateralHeadView.getId());
+        			log.debug("transformsNewCollateralToView : newCollateralHead title: " + newCollateralHeadView.getTitleDeed());
+        			
         			InsuranceInfoSectionView infoSectionView = new InsuranceInfoSectionView();
-        			infoSectionView.setHeadColl(this.transformNewCollateralHeadViewtoHeadColView(newCollateralHead));
-        			infoSectionView.setInsurance(this.transformNewCollateralHeadViewtoCompanyView(newCollateralHead));
-        			InsuranceInfoSectionViewList.add(infoSectionView);
+        			infoSectionView.setNewCollateralHeadView(newCollateralHeadView);
+        			//infoSectionView.setHeadColl(this.transformNewCollateralHeadViewtoHeadColView(newCollateralHead));
+        			//infoSectionView.setInsurance(this.transformNewCollateralHeadViewtoCompanyView(newCollateralHead));
+        			insuranceInfoSectionViewList.add(infoSectionView);
         		}
         	}
+        	insuranceInfoView.setSectionList(insuranceInfoSectionViewList);
         	insuranceInfoViewList.add(insuranceInfoView);
         }
     	return insuranceInfoViewList;
     }
     
-    private InsuranceCompanyView transformNewCollateralHeadViewtoCompanyView(NewCollateralHead newCollateralHead){
+    /*private InsuranceCompanyView transformNewCollateralHeadViewtoCompanyView(NewCollateralHead newCollateralHead){
     	InsuranceCompanyView insuranceCompanyView = new InsuranceCompanyView();
 		insuranceCompanyView.setCompany(newCollateralHead.getInsuranceCompany());
 		return insuranceCompanyView;
@@ -69,5 +81,5 @@ public class InsuranceInfoTransform extends Transform {
     	infoHeadCollView.setTitleDeed(newCollateralHead.getTitleDeed());
 		infoHeadCollView.setExitingCredit(newCollateralHead.getExistingCredit());
     	return infoHeadCollView;
-    }
+    }*/
 }
