@@ -91,6 +91,11 @@ public class NewCollateral implements Serializable {
     @Column(name = "premium_amount", length = 14, scale = 2)
     private BigDecimal premiumAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
+
     public long getId() {
         return id;
     }
@@ -265,6 +270,22 @@ public class NewCollateral implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
     }
 
     @Override

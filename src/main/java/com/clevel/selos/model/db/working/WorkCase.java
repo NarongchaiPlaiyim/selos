@@ -25,6 +25,9 @@ public class WorkCase extends AbstractWorkCase{
     @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
+
+    @Column(name = "")
+
     public long getId() {
         return id;
     }

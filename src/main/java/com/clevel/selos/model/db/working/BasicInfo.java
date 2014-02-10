@@ -151,10 +151,10 @@ public class BasicInfo implements Serializable {
 
     //Update for Post Approval
     @Column(name = "approved_type", length = 1)
-    private int approveType;
+    private int approvedType;
 
     @Column(name = "approved_result", length = 1)
-    private int approveResult;
+    private int approvedResult;
 
     public long getId() {
         return id;
@@ -476,20 +476,20 @@ public class BasicInfo implements Serializable {
         this.retrievedFlag = retrievedFlag;
     }
 
-    public int getApproveResult() {
-        return approveResult;
+    public int getApprovedResult() {
+        return approvedResult;
     }
 
-    public void setApproveResult(int approveResult) {
-        this.approveResult = approveResult;
+    public void setApprovedResult(int approvedResult) {
+        this.approvedResult = approvedResult;
     }
 
-    public int getApproveType() {
-        return approveType;
+    public int getApprovedType() {
+        return approvedType;
     }
 
-    public void setApproveType(int approveType) {
-        this.approveType = approveType;
+    public void setApprovedType(int approvedType) {
+        this.approvedType = approvedType;
     }
 
     @Override
