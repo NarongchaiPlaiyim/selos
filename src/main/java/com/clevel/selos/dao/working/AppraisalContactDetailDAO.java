@@ -31,7 +31,7 @@ public class AppraisalContactDetailDAO extends GenericDAO<AppraisalContactDetail
         return appraisalContactDetailList;
     }
 
-    public List<AppraisalContactDetail> findByAppraisalId(final long appraisalId ){
+    public List<AppraisalContactDetail> findByAppraisalId(final long appraisalId){
         log.info("-- findByAppraisalId : {}", appraisalId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("appraisal.id", appraisalId));

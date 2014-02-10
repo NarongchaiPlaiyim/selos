@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.RiskTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -27,37 +29,39 @@ public class ExSummaryControl extends BusinessControl {
     Logger log;
 
     @Inject
-    ExSummaryDAO exSummaryDAO;
+    private ExSummaryDAO exSummaryDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    ExSumDeviateDAO exSumDeviateDAO;
+    private ExSumDeviateDAO exSumDeviateDAO;
     @Inject
-    BasicInfoDAO basicInfoDAO;
+    private BasicInfoDAO basicInfoDAO;
     @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
-    DBRDAO dbrDAO;
+    private DBRDAO dbrDAO;
     @Inject
-    DecisionDAO decisionDAO;
+    private DecisionDAO decisionDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    private RiskTypeDAO riskTypeDAO;
 
     @Inject
-    ExSummaryTransform exSummaryTransform;
+    private ExSummaryTransform exSummaryTransform;
 
     @Inject
-    CustomerInfoControl customerInfoControl;
+    private CustomerInfoControl customerInfoControl;
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
+    private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    QualitativeControl qualitativeControl;
+    private QualitativeControl qualitativeControl;
     @Inject
-    CreditFacProposeControl creditFacProposeControl;
+    private CreditFacProposeControl creditFacProposeControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -250,6 +254,54 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Credit Risk Type
+        ExSumCreditRiskInfoView exSumCreditRiskInfoView = new ExSumCreditRiskInfoView();
+        if(basicInfo != null && basicInfo.getRiskCustomerType() != null && basicInfo.getRiskCustomerType().getId() != 0){
+            RiskType riskType = riskTypeDAO.findById(basicInfo.getRiskCustomerType().getId());
+            if(riskType != null){
+                exSumCreditRiskInfoView.setRiskCusType(riskType.getDescription());
+            }
+        }
+
+        if(basicInfo != null && basicInfo.getExistingSMECustomer() != RadioValue.NO.value()){ //new customer
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                //todo: BOT Class
+//                exSumCreditRiskInfoView.setBotClass();
+                if(qualitativeView.getReason() != null){
+                    exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
+                } else {
+                    exSumCreditRiskInfoView.setReason("-");
+                }
+            }
+        }
+
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+            if(bizInfoSummaryView.getBizInfoDetailViewList().size() > 1){
+                int tmpIndex = 0;
+                BigDecimal tmpHighestProportion = BigDecimal.ZERO;
+                for (int i=0 ; i < bizInfoSummaryView.getBizInfoDetailViewList().size(); i++){ // find highest business proportion
+                    BigDecimal currentProportion;
+                    currentProportion = bizInfoSummaryView.getBizInfoDetailViewList().get(i).getPercentBiz();
+                    if(currentProportion.compareTo(tmpHighestProportion) > 0){
+                        tmpHighestProportion = currentProportion;
+                        tmpIndex = i;
+                    }
+                }
+                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getExpIndCountryName());
+                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getPercentExpIndCountryName());
+            } else {
+                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getExpIndCountryName());
+                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getPercentExpIndCountryName());
+            }
+        }
+
+        exSumCreditRiskInfoView.setLastReviewDate(DateTimeUtil.getCurrentDateTH());
+        //Todo:nextReviewDate
+        exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getOnlyDatePlusYear(DateTimeUtil.getCurrentDateTH(),1)); //(1st day of approve month + 12 Months)
+        exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
+
+        exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
 
@@ -322,6 +374,7 @@ public class ExSummaryControl extends BusinessControl {
         BigDecimal odLimit = BigDecimal.ZERO;
         BigDecimal loanCoreWC = BigDecimal.ZERO;
         BigDecimal adjusted = BigDecimal.ZERO;
+        BigDecimal twenty = BigDecimal.valueOf(12);
 
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
             totalWCTMB = newCreditFacility.getTotalWcTmb();
@@ -332,7 +385,7 @@ public class ExSummaryControl extends BusinessControl {
             adjusted = dbr.getMonthlyIncomeAdjust();
         }
 
-        BigDecimal income = Util.divide((totalWCTMB.add(odLimit).add(loanCoreWC)),(adjusted.multiply(new BigDecimal(12))));
+        BigDecimal income = Util.divide(Util.add(Util.add(totalWCTMB,odLimit),loanCoreWC),Util.multiply(adjusted,twenty));
 
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
@@ -436,6 +489,7 @@ public class ExSummaryControl extends BusinessControl {
 //    Grand Total Income Net UW จากหน้า Bank Statement Summary * 12
     public void calSalePerYearBorrowerCharacteristic(long workCaseId){ //TODO: BankStatementSummary , Pls Call me !!
         log.debug("calSalePerYearBorrowerCharacteristic :: workCaseId : {}",workCaseId);
+        BigDecimal twenty = BigDecimal.valueOf(12);
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         if(bankStatementSummary != null && bankStatementSummary.getId() != 0){
             ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -446,10 +500,10 @@ public class ExSummaryControl extends BusinessControl {
                 exSummary.setWorkCase(workCase);
             }
             if(bankStatementSummary.getGrdTotalIncomeNetBDM() != null){
-                exSummary.setSalePerYearBDM(bankStatementSummary.getGrdTotalIncomeNetBDM().multiply(new BigDecimal(12)));
+                exSummary.setSalePerYearBDM(Util.multiply(bankStatementSummary.getGrdTotalIncomeNetBDM(),twenty));
             }
             if(bankStatementSummary.getGrdTotalIncomeNetUW() != null){
-                exSummary.setSalePerYearUW(bankStatementSummary.getGrdTotalIncomeNetUW().multiply(new BigDecimal(12)));
+                exSummary.setSalePerYearUW(Util.multiply(bankStatementSummary.getGrdTotalIncomeNetUW(),twenty));
             }
             exSummaryDAO.persist(exSummary);
 
@@ -468,14 +522,12 @@ public class ExSummaryControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> cusListView = customerInfoControl.getAllCustomerByWorkCase(workCaseId);
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         User user = getCurrentUser();
 
 //    Fix ค่าของ BDM เมื่อส่งมายัง UW และ UW มีการแก้ไขข้อมูล
         BigDecimal groupSaleBDM = BigDecimal.ZERO;
         BigDecimal groupSaleUW = BigDecimal.ZERO;
-
-        bankStatementSummary.getGrdTotalIncomeGross();
+        BigDecimal twenty = BigDecimal.valueOf(12);
 
         long stepId = 0;
 
@@ -486,43 +538,102 @@ public class ExSummaryControl extends BusinessControl {
 
         log.debug("stepId : {}",stepId);
 
-        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){ // BDM //update groupSaleBDM && groupSaleUW
-            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
-
-            } else { // use customer
-//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-                if(cusListView != null && cusListView.size() > 0){
-                    for(CustomerInfoView cus : cusListView){
-                        if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                            cus.getSalesFromFinancialStmt();
-                        }
-                    }
-                }
-            }
-        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value()){ //UW //update only groupSaleUW
-            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
-//    groupSaleUW - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-
-            } else { // use customer
-//    groupSaleUW - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
-                if(cusListView != null && cusListView.size() > 0){
-                    for(CustomerInfoView cus : cusListView){
-                        if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                            if(cus.getRelation().getId() == RelationValue.BORROWER.value()){ // Borrower
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
             exSummary = new ExSummary();
             exSummary.setWorkCase(workCase);
         }
+
+        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){ // BDM //update groupSaleBDM && groupSaleUW
+            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12 //
+                BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+                BigDecimal grdTotalIncomeGross = BigDecimal.ZERO;
+                BigDecimal approxIncome = BigDecimal.ZERO;
+                if(bankStatementSummary != null){
+                    grdTotalIncomeGross = bankStatementSummary.getGrdTotalIncomeGross();
+                }
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
+                        if(cus.getRelation().getId() != RelationValue.BORROWER.value()){
+                            if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
+                            }
+                        }
+                    }
+                }
+                groupSaleBDM = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twenty);
+                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twenty);
+            } else { // use customer
+//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+                BigDecimal saleFromFinStmt = BigDecimal.ZERO;
+                BigDecimal approxIncome = BigDecimal.ZERO;
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
+                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){
+                            if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                                saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
+                            }
+                        } else {
+                            if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
+                            }
+                        }
+                    }
+                }
+                groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
+                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
+            }
+        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value()){ //UW //update only groupSaleUW
+            if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
+//    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
+                BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
+                BigDecimal grdTotalIncomeGross = BigDecimal.ZERO;
+                BigDecimal approxIncome = BigDecimal.ZERO;
+                if(bankStatementSummary != null){
+                    grdTotalIncomeGross = bankStatementSummary.getGrdTotalIncomeGross();
+                }
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
+                        if(cus.getRelation().getId() != RelationValue.BORROWER.value()){
+                            if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
+                            }
+                        }
+                    }
+                }
+                groupSaleUW = Util.multiply(Util.add(grdTotalIncomeGross,approxIncome),twenty);
+            } else { // use customer
+//    groupSaleBDM - กรณีผู้กู้ = Juristic (รายได้ตามงบการเงิน จาก Cust Info Detail (Juristic) + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y) * 12
+                BigDecimal saleFromFinStmt = BigDecimal.ZERO;
+                BigDecimal approxIncome = BigDecimal.ZERO;
+                if(cusListView != null && cusListView.size() > 0){
+                    for(CustomerInfoView cus : cusListView){
+                        if(cus.getRelation().getId() == RelationValue.BORROWER.value()){
+                            if(cus.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
+                                saleFromFinStmt = Util.add(saleFromFinStmt,cus.getSalesFromFinancialStmt());
+                            }
+                        } else {
+                            if(cus.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                                if(cus.getReference() != null && cus.getReference().getGroupIncome() == 1){
+                                    approxIncome = Util.add(approxIncome,cus.getApproxIncome());
+                                }
+                            }
+                        }
+                    }
+                }
+                groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
+            }
+            //for do not update group sale bdm in step uw
+            groupSaleBDM = exSummary.getGroupSaleBDM();
+        }
+
         exSummary.setGroupSaleBDM(groupSaleBDM);
         exSummary.setGroupSaleUW(groupSaleUW);
 

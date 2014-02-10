@@ -18,8 +18,6 @@ public class NewCollateralSubTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
-    @Inject
-    private NewCollateralSubDAO newCollateralSubDAO;
     private List<NewCollateralSub> newCollateralSubList;
     private List<NewCollateralSubView> newCollateralSubViewList;
     @Inject
@@ -28,105 +26,123 @@ public class NewCollateralSubTransform extends Transform {
     }
 
     public List<NewCollateralSub> transformToModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
-        log.debug("-- transform List<NewCollateralSubView> to List<NewCollateralSub>(Size of list is {})", ""+newCollateralSubViewList.size());
-        newCollateralSubList = new ArrayList<NewCollateralSub>();
-        NewCollateralSub model = null;
-        long id = 0;
-        for(NewCollateralSubView view : newCollateralSubViewList){
-            id = view.getId();
-            if(id != 0){
-                model = newCollateralSubDAO.findById(id);
-            } else {
-                model = new NewCollateralSub();
-                log.debug("-- NewCollateralSub created");
-                model.setCreateBy(user);
-                model.setCreateDate(DateTime.now().toDate());
-            }
-
-            if(checkNullObject(model.getSubCollateralType()) && checkId0(model.getSubCollateralType().getId())){
-                try{
-                    model.getSubCollateralType().setDescription(view.getSubCollateralType().getDescription());
-                } catch (NullPointerException e){
-                    model.getSubCollateralType().setDescription("");
-                }
-            } else {
-                model.setSubCollateralType(null);
-            }
-
-            model.setModifyBy(user);
-            model.setModifyDate(DateTime.now().toDate());
-            model.setAddress(view.getAddress());
-            model.setLandOffice(view.getLandOffice());
-            model.setCollateralOwner(view.getCollateralOwner());
-            model.setAppraisalValue(view.getAppraisalValue());
-            newCollateralSubList.add(model);
-        }
-        return newCollateralSubList;
-    }
-
-    public List<NewCollateralSub> transformToNewModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
-        log.debug("-- transform List<NewCollateralSubView> to new List<NewCollateralSub>(Size of list is {})", ""+newCollateralSubViewList.size());
+        log.debug("------ transformToNewModel [NewCollateralSubViewList.size[{}]]", newCollateralSubViewList.size());
         newCollateralSubList = new ArrayList<NewCollateralSub>();
         NewCollateralSub model = null;
         for(NewCollateralSubView view : newCollateralSubViewList){
             model = new NewCollateralSub();
-            log.debug("-- NewCollateralSub created");
-            model.setCreateBy(user);
-            model.setCreateDate(DateTime.now().toDate());
-            if(checkNullObject(model.getSubCollateralType()) && checkId0(model.getSubCollateralType().getId())){
-                try{
-                    model.getSubCollateralType().setDescription(view.getSubCollateralType().getDescription());
-                } catch (NullPointerException e){
-                    model.getSubCollateralType().setDescription("");
-                }
+            log.debug("------ NewCollateralSub created");
+            if(!Util.isZero(view.getId())){
+                model.setId(view.getId());
+                log.debug("------ NewCollateralSubView.id[{}]", view.getId());
+            } else {
+                model.setCreateDate(DateTime.now().toDate());
+                model.setCreateBy(user);
+            }
+            model.setCollID(view.getCollID());
+            model.setHeadCollID(view.getHeadCollID());
+            model.setLineNo(view.getLineNo());
+            if(!Util.isNull(view.getSubCollateralType()) && !Util.isZero(view.getSubCollateralType().getId())){
+                model.setSubCollateralType(view.getSubCollateralType());
             } else {
                 model.setSubCollateralType(null);
             }
-            model.setModifyBy(user);
-            model.setModifyDate(DateTime.now().toDate());
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
             model.setAddress(view.getAddress());
             model.setLandOffice(view.getLandOffice());
+            model.setTitleDeed(view.getTitleDeed());
             model.setCollateralOwner(view.getCollateralOwner());
+            model.setCollateralOwnerAAD(view.getCollateralOwnerAAD());
             model.setAppraisalValue(view.getAppraisalValue());
+            model.setMortgageValue(view.getMortgageValue());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            newCollateralSubViewList.add(view);
             newCollateralSubList.add(model);
         }
+        log.debug("------[RETURNED] NewCollateralSubList.size[{}]", newCollateralSubList.size());
+        return newCollateralSubList;
+    }
+
+    public List<NewCollateralSub> transformToNewModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
+        log.debug("------ transformToNewModel [NewCollateralSubViewList.size[{}]]", newCollateralSubViewList.size());
+        newCollateralSubList = new ArrayList<NewCollateralSub>();
+        NewCollateralSub model = null;
+        for(NewCollateralSubView view : newCollateralSubViewList){
+            model = new NewCollateralSub();
+            log.debug("------ NewCollateralSub created");
+            model.setCreateBy(user);
+            model.setCreateDate(DateTime.now().toDate());
+            model.setCollID(view.getCollID());
+            model.setHeadCollID(view.getHeadCollID());
+            model.setLineNo(view.getLineNo());
+            if(!Util.isNull(view.getSubCollateralType()) && !Util.isZero(view.getSubCollateralType().getId())){
+                model.setSubCollateralType(view.getSubCollateralType());
+                log.debug("-------- NewCollateralSub.SubCollateralType.id[{}]", model.getSubCollateralType().getId());
+            } else {
+                model.setSubCollateralType(null);
+            }
+            model.setUsage(view.getUsage());
+            model.setTypeOfUsage(view.getTypeOfUsage());
+            model.setAddress(view.getAddress());
+            model.setLandOffice(view.getLandOffice());
+            model.setTitleDeed(view.getTitleDeed());
+            model.setCollateralOwner(view.getCollateralOwner());
+            model.setCollateralOwnerAAD(view.getCollateralOwnerAAD());
+            model.setAppraisalValue(view.getAppraisalValue());
+            model.setMortgageValue(view.getMortgageValue());
+            model.setModifyBy(user);
+            model.setModifyDate(DateTime.now().toDate());
+            newCollateralSubViewList.add(view);
+            newCollateralSubList.add(model);
+        }
+        log.debug("------[RETURNED] NewCollateralSubList.size[{}]", newCollateralSubList.size());
         return newCollateralSubList;
     }
 
     public List<NewCollateralSubView> transformToView(final List<NewCollateralSub> newCollateralSubList){
-        log.debug("-- transform List<NewCollateralSub> to List<NewCollateralSubView>(Size of list is {})", ""+newCollateralSubList.size());
+        log.debug("------ transformToView [NewCollateralSubList.size[{}]]", newCollateralSubList.size());
         newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
         NewCollateralSubView view = null;
         for(NewCollateralSub model : newCollateralSubList){
             view = new NewCollateralSubView();
-            view.setId(model.getId());
-            view.setNo(0);//todo : No. ?
-
-            if(checkNullObject(view.getSubCollateralType()) && checkId0(view.getSubCollateralType().getId())){
-                try{
-                    view.getSubCollateralType().setDescription(model.getSubCollateralType().getDescription());
-                } catch (NullPointerException e){
-                    view.getSubCollateralType().setDescription("");
-                }
+            log.debug("------ NewCollateralSubView created");
+            if(!Util.isZero(model.getId())){
+                view.setId(model.getId());
+                log.debug("------ NewCollateralSubView.id[{}]", view.getId());
+            } else {
+                view.setCreateDate(model.getCreateDate());
+                view.setCreateBy(model.getCreateBy());
+            }
+            view.setCollID(model.getCollID());
+            view.setHeadCollID(model.getHeadCollID());
+            view.setLineNo(model.getLineNo());
+            if(!Util.isNull(model.getSubCollateralType()) && !Util.isZero(model.getSubCollateralType().getId())){
+                view.setSubCollateralType(model.getSubCollateralType());
+                log.debug("-------- NewCollateralSubView.SubCollateralType.id[{}]", model.getSubCollateralType().getId());
             } else {
                 view.setSubCollateralType(new SubCollateralType());
             }
-            view.setCreateBy(model.getCreateBy());
-            view.setCreateDate(model.getCreateDate());
+            view.setUsage(model.getUsage());
+            view.setTypeOfUsage(model.getTypeOfUsage());
             view.setAddress(model.getAddress());
             view.setLandOffice(model.getLandOffice());
+            view.setTitleDeed(model.getTitleDeed());
             view.setCollateralOwner(model.getCollateralOwner());
+            view.setCollateralOwnerAAD(model.getCollateralOwnerAAD());
             view.setAppraisalValue(model.getAppraisalValue());
+            view.setMortgageValue(model.getMortgageValue());
+            view.setModifyDate(model.getModifyDate());
+            view.setModifyBy(model.getModifyBy());
             newCollateralSubViewList.add(view);
+            /*view.getCollateralTypeType();
+            view.getNewCollateralHead();
+            view.getNewCollateralSubMortgageList();
+            view.getNewCollateralSubOwnerList();
+            view.getNewCollateralSubRelatedList(); */
         }
+        log.debug("------[RETURNED] NewCollateralSubViewList.size[{}]", newCollateralSubViewList.size());
         return newCollateralSubViewList;
-    }
-
-    private<T> boolean checkNullObject(T object){
-        return !Util.isNull(object);
-    }
-
-    private boolean checkId0(int id){
-        return !Util.isZero(id);
     }
 }

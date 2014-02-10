@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Integer> {
+public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Long> {
     @Inject
     @SELOS
     Logger log;
@@ -55,6 +55,24 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Inte
         log.info("findByAppraisal. (result size: {})", appraisalContactDetailList.size());
 
         return appraisalContactDetailList;
+    }
+
+    public List<ContactRecordDetail> findByAppraisalId(final long appraisalId){
+        log.info("-- findByAppraisalId : {}", appraisalId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appraisal.id", appraisalId));
+        criteria.addOrder(Order.asc("id"));
+        List<ContactRecordDetail> appraisalContactDetailList = criteria.list();
+        return appraisalContactDetailList;
+    }
+
+    public List<ContactRecordDetail> findByWorkCaseId(final long workCaseId){
+        log.info("-- findContactRecordDetailListByAppraisalId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.addOrder(Order.asc("id"));
+        List<ContactRecordDetail> contactRecordDetailList = (List<ContactRecordDetail>) criteria.list();
+        return contactRecordDetailList;
     }
 
 

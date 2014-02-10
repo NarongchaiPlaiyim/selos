@@ -95,7 +95,6 @@ public class NewCollateral implements Serializable {
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-
     public long getId() {
         return id;
     }
@@ -313,6 +312,8 @@ public class NewCollateral implements Serializable {
                 .append("newCreditFacility", newCreditFacility)
                 .append("newCollateralHeadList", newCollateralHeadList)
                 .append("newCollateralCreditList", newCollateralCreditList)
+                .append("premiumAmount", premiumAmount)
+                .append("workCase", workCase)
                 .toString();
     }
 

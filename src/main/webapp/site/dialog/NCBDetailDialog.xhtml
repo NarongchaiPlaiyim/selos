@@ -5,7 +5,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
-
+<h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 <p:panel id="ncbDlgPanel" styleClass="panel-dialog">
 <h:form id="ncbDlgForm">
 <table class="content_form">
@@ -242,10 +242,10 @@
         <p:commandButton id="saveBtn" styleClass="small"
                 binding="#{addRowData}"
                 value="#{msg.get('app.okButton')}"
-                actionListener="#{ncbInfo.onSaveNcbRecord}"
-                process=":ncbDlgForm"
+                actionListener="#{ncbInfo.onSaveNcbRecord()}"
+                process="@form"
                 update=":ncbDlgForm,:frmMain:resultNcbDetail"
-                oncomplete="handlencbInfoRequest(xhr, status, args)"/>
+                oncomplete="handleNCBInfoRequest(xhr, status, args)"/>
 
         <p:commandButton
                 id="cancelBtn"

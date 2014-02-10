@@ -10,15 +10,15 @@ import java.util.Date;
 
 public class AppraisalContactDetailView implements Serializable {
     private long id;
-    private int no1;
+    private long no1;
     private long contractId1;
     private String customerName1;
     private String contactNo1;
-    private int no2;
+    private long no2;
     private long contractId2;
     private String customerName2;
     private String contactNo2;
-    private int no3;
+    private long no3;
     private long contractId3;
     private String customerName3;
     private String contactNo3;
@@ -32,9 +32,7 @@ public class AppraisalContactDetailView implements Serializable {
     }
 
     private void init(){
-        no1 = 1;
-        no2 = 2;
-        no3 = 3;
+
     }
 
     public long getId() {
@@ -45,7 +43,7 @@ public class AppraisalContactDetailView implements Serializable {
         this.id = id;
     }
 
-    public int getNo1() {
+    public long getNo1() {
         return no1;
     }
 
@@ -69,7 +67,7 @@ public class AppraisalContactDetailView implements Serializable {
         this.contactNo1 = contactNo1;
     }
 
-    public int getNo2() {
+    public long getNo2() {
         return no2;
     }
 
@@ -93,8 +91,20 @@ public class AppraisalContactDetailView implements Serializable {
         this.contactNo2 = contactNo2;
     }
 
-    public int getNo3() {
+    public long getNo3() {
         return no3;
+    }
+
+    public void setNo1(long no1) {
+        this.no1 = no1;
+    }
+
+    public void setNo2(long no2) {
+        this.no2 = no2;
+    }
+
+    public void setNo3(long no3) {
+        this.no3 = no3;
     }
 
     public void setNo3(int no3) {

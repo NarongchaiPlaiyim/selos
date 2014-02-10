@@ -125,18 +125,19 @@ public class CustomerAcceptance implements Serializable {
                 contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.etc"));
             }
 
-            if(contactRecordDetailViewForStr.getReason()==1){
-                contactRecordDetailViewForStr.setReasonStr("ÅÙ¡¤éÒá¨é§¹Ñ´¡Ñº BDM áÅéÇ");
-            }else if(contactRecordDetailViewForStr.getReason()==2){
-                contactRecordDetailViewForStr.setReasonStr("äÁèÊÒÁÒÃ¶µÔ´µèÍä´é");
-            }else if(contactRecordDetailViewForStr.getReason()==3){
-                contactRecordDetailViewForStr.setReasonStr("ÅÙ¡¤éÒÂÑ§äÁèÃÑº¹Ñ´");
-            }else if(contactRecordDetailViewForStr.getReason()==4){
-                contactRecordDetailViewForStr.setReasonStr("ÅÙ¡¤éÒäÁèÊÐ´Ç¡");
-            }else if(contactRecordDetailViewForStr.getReason()==5){
-                contactRecordDetailViewForStr.setReasonStr("ÅÙ¡¤éÒ¢ÍµÔ´µèÍ BDM ¡èÍ¹");
-            }else if(contactRecordDetailViewForStr.getReason()==6){
-                contactRecordDetailViewForStr.setReasonStr("ÅÙ¡¤éÒÃÍà§Ô¹·Õè¨Ðà»ç¹ËÅÑ¡»ÃÐ¡Ñ¹");
+            //Edited by Chai
+            if(contactRecordDetailViewForStr.getReason().getId()==1){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½é§¹Ñ´ï¿½Ñº BDM ï¿½ï¿½ï¿½ï¿½");
+            }else if(contactRecordDetailViewForStr.getReason().getId()==2){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½");
+            }else if(contactRecordDetailViewForStr.getReason().getId()==3){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ñºï¿½Ñ´");
+            }else if(contactRecordDetailViewForStr.getReason().getId()==4){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´Ç¡");
+            }else if(contactRecordDetailViewForStr.getReason().getId()==5){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½Ù¡ï¿½ï¿½Ò¢ÍµÔ´ï¿½ï¿½ï¿½ BDM ï¿½ï¿½Í¹");
+            }else if(contactRecordDetailViewForStr.getReason().getId()==6){
+                contactRecordDetailViewForStr.setReasonStr("ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ð¡Ñ¹");
             }
 
         }

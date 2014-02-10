@@ -76,26 +76,29 @@ public class AppraisalResultControl extends BusinessControl {
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
+                for(NewCollateral newCollateral : newCollateralList){
+                    newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                }
                 newCollateralViewList = newCollateralTransform.transformToView(newCollateralList);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
             } else {
-                log.debug("-- newCreditFacility = null");
+                log.debug("-- NewCreditFacility = null");
+                return appraisalView;
             }
             log.info("-- getAppraisalResult ::: AppraisalView : {}", appraisalView.toString());
             return appraisalView;
         } else {
-            log.debug("-- When find by work case id = {}, Appraisal is null, ", workCaseId);
+            log.debug("-- Find by work case id = {} appraisal is null. ", workCaseId);
             return appraisalView;
         }
     }
 
     public void onSaveAppraisalResult(final AppraisalView appraisalView,final long workCaseId, final User user){
         log.info("-- onSaveAppraisalResult begin");
-        workCase = workCaseDAO.findById(workCaseId);
-
-        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
-        appraisalDAO.persist(appraisal);
-        log.info( "appraisalDAO persist end" );
+//        workCase = workCaseDAO.findById(workCaseId);
+//        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
+//        appraisalDAO.persist(appraisal);
+//        log.info( "appraisalDAO persist end" );
 
         newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 

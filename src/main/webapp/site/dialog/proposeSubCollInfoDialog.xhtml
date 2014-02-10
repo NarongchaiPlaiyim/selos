@@ -6,347 +6,363 @@
         xmlns:p="http://primefaces.org/ui">
 
 <p:panel id="subCollateralDlgPanel" styleClass="panel-dialog">
-<h:form id="subCollateralDlgForm">
-
-<table class="content_form">
-<tr>
-    <td class="title" style="width: 180px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
-    </td>
-    <td style="width: 300px;" class="left">
-        <p:selectOneMenu id="dlgSubCollateralType"
-                         value="#{creditFacPropose.newCollateralSubView.subCollateralType.id}"
-                         size="1"
-                         style="min-width: 150px; width: 150px; max-width: 150px;"
-                         required="#{not empty param[addSubCollDlg.clientId]}">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{creditFacPropose.subCollateralTypeList}"
-                           var="subCollateralTypeItem"
-                           itemLabel="#{subCollateralTypeItem.description}"
-                           itemValue="#{subCollateralTypeItem.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.titleDeed}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.address}" style="width:300px;"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.landOffice}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.collateralOwnerAAD}"
-                     required="#{not empty param[addSubCollDlg.clientId]}"/>
-    </td>
-</tr>
-
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
-    </td>
-    <td>
-        <table class="table_noborder">
+    <h:form id="subCollateralDlgForm">
+        <table class="content_form">
             <tr>
-                <td>
-                    <p:selectOneMenu id="dlgCollateralOwnerUW"
-                                     value="#{creditFacPropose.newCollateralSubView.collateralOwnerUW.id}"
-                                     size="1"
-                                     style="min-width: 200px; width: 200px; max-width: 200px;">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
-                                       var="collateralOwnerUWItem"
-                                       itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
-                                       itemValue="#{collateralOwnerUWItem.id}"/>
-                    </p:selectOneMenu>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
                 </td>
-                <td>
-                    <p:commandButton
-                            id="addCollOwnerUWButton"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
-                            styleClass="smaller"
-                            action="#{creditFacPropose.onAddCollateralOwnerUW()}"
-                            process="@form"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
-                    </p:commandButton>
-                </td>
-            </tr>
-        </table>
-
-    </td>
-</tr>
-<tr>
-    <td>
-    </td>
-    <td>
-        <p:dataTable id="CollOwnerUWTb"
-                     value="#{creditFacPropose.newCollateralSubView.collateralOwnerUWList}"
-                     var="collateralOwnerUWItem"
-                     rowKey="#{collateralOwnerUWItem.id}"
-                     rowIndexVar="rowIndex">
-            <p:columnGroup type="header">
-                <p:row>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                    <p:column style="width:150px;padding: 5px 10px !important;"
-                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralName')}"/>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                </p:row>
-            </p:columnGroup>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{rowIndex+1}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <p:commandButton title="Remove"
-                                 icon="ui-icon-trash"
-                                 process="@form"
-                                 actionListener="#{creditFacPropose.onDeleteCollateralOwnerUW(rowIndex)}"
-                                 update=":subCollateralDlgForm">
-                </p:commandButton>
-            </p:column>
-
-        </p:dataTable>
-    </td>
-</tr>
-
-
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
-    </td>
-    <td>
-        <table class="table_noborder">
-            <tr>
-                <td>
-                    <p:selectOneMenu id="dlgMortgageType"
-                                     value="#{creditFacPropose.newCollateralSubView.mortgageType.id}"
-                                     size="1"
+                <td class="left">
+                    <p:selectOneMenu id="dlgSubCollateralType"
+                                     value="#{creditFacPropose.newCollateralSubView.subCollateralType.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[addSubCollDlg.clientId]}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.mortgageTypeList}"
-                                       var="mortgageTypeItem"
-                                       itemLabel="#{mortgageTypeItem.mortgage}"
-                                       itemValue="#{mortgageTypeItem.id}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{creditFacPropose.subCollateralTypeList}"
+                                       var="subCollateralTypeItem"
+                                       itemLabel="#{subCollateralTypeItem.description}"
+                                       itemValue="#{subCollateralTypeItem.id}"/>
                     </p:selectOneMenu>
                 </td>
-                <td>
-                    <p:commandButton
-                            id="addMortgageTypeButton"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
-                            styleClass="smaller"
-                            actionListener="#{creditFacPropose.onAddMortgageType()}"
-                            process="@form"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
-                    </p:commandButton>
-                </td>
             </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td>
-    </td>
-    <td>
-        <p:dataTable id="MortgageTb"
-                     value="#{creditFacPropose.newCollateralSubView.mortgageList}"
-                     var="mortgageItem"
-                     rowKey="#{mortgageItem.MortgageType}"
-                     rowIndexVar="rowIndex">
-            <p:columnGroup type="header">
-                <p:row>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                    <p:column style="width:150px;padding: 5px 10px !important;"
-                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                </p:row>
-            </p:columnGroup>
 
-            <p:column styleClass="center">
-                <h:outputText value="#{rowIndex+1}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{mortgageItem.mortgage}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <p:commandButton title="Remove"
-                                 icon="ui-icon-trash"
-                                 process="@form"
-                                 actionListener="#{creditFacPropose.onDeleteMortgageType(rowIndex)}"
-                                 update=":subCollateralDlgForm">
-                </p:commandButton>
-            </p:column>
-
-        </p:dataTable>
-    </td>
-</tr>
-
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
-    </td>
-    <td>
-        <table class="table_noborder">
             <tr>
-                <td>
-                    <p:selectOneMenu id="dlgRelatedWith"
-                                     value="#{creditFacPropose.relatedWithSelected.relatedWithId}"
-                                     size="1"
-                                     style="min-width: 200px; width: 200px; max-width: 200px;">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.relatedWithAllList}"
-                                       var="relatedWithItem"
-                                       itemLabel="#{relatedWithItem.titleDeed}"
-                                       itemValue="#{relatedWithItem.id}"/>
-                    </p:selectOneMenu>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
                 </td>
-                <td>
-                    <p:commandButton
-                            id="addRelatedWithButton"
-                            value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
-                            styleClass="smaller"
-                            action="#{creditFacPropose.onAddRelatedWith()}"
-                            process="@form"
-                            update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
-                    </p:commandButton>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.titleDeed}"
+                                 required="#{not empty param[addSubCollDlg.clientId]}"/>
                 </td>
             </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
+                </td>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.address}"
+                                 style="width: 300px;"
+                                 required="#{not empty param[addSubCollDlg.clientId]}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
+                </td>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.landOffice}"
+                                 required="#{not empty param[addSubCollDlg.clientId]}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
+                </td>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.collateralOwnerAAD}"
+                                 required="#{not empty param[addSubCollDlg.clientId]}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
+                </td>
+                <td class="left">
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <p:selectOneMenu id="dlgCollateralOwnerUW"
+                                                 value="#{creditFacPropose.newCollateralSubView.collateralOwnerUW.id}"
+                                                 style="min-width: 200px; width: 200px; max-width: 200px;">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <f:selectItems value="#{creditFacPropose.collateralOwnerUwAllList}"
+                                                   var="collateralOwnerUWItem"
+                                                   itemLabel="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"
+                                                   itemValue="#{collateralOwnerUWItem.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:commandButton
+                                        id="addCollOwnerUWButton"
+                                        value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                        styleClass="smaller"
+                                        action="#{creditFacPropose.onAddCollateralOwnerUW()}"
+                                        process="@form"
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                </p:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;"></td>
+                <td class="left">
+                    <p:dataTable id="CollOwnerUWTb"
+                                 value="#{creditFacPropose.newCollateralSubView.collateralOwnerUWList}"
+                                 var="collateralOwnerUWItem"
+                                 rowKey="#{collateralOwnerUWItem.id}"
+                                 rowIndexVar="rowIndex"
+                                 style="width: 100%; font-size: 12px !important;">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                                <p:column style="width: 80%; padding: 5px 10px !important;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralName')}"/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{rowIndex + 1}"/>
+                        </p:column>
+
+                        <p:column styleClass="left">
+                            <h:outputText value="#{collateralOwnerUWItem.firstNameTh} #{collateralOwnerUWItem.lastNameTh}"/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <p:commandButton title="Remove"
+                                             icon="ui-icon-trash"
+                                             process="@form"
+                                             actionListener="#{creditFacPropose.onDeleteCollateralOwnerUW(rowIndex)}"
+                                             update=":subCollateralDlgForm">
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
+                </td>
+                <td class="left">
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <p:selectOneMenu id="dlgMortgageType"
+                                                 value="#{creditFacPropose.newCollateralSubView.mortgageType.id}"
+                                                 style="min-width: 200px; width: 200px; max-width: 200px;"
+                                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <f:selectItems value="#{creditFacPropose.mortgageTypeList}"
+                                                   var="mortgageTypeItem"
+                                                   itemLabel="#{mortgageTypeItem.mortgage}"
+                                                   itemValue="#{mortgageTypeItem.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:commandButton
+                                        id="addMortgageTypeButton"
+                                        value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                        styleClass="smaller"
+                                        actionListener="#{creditFacPropose.onAddMortgageType()}"
+                                        process="@form"
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                </p:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px"></td>
+                <td class="left">
+                    <p:dataTable id="MortgageTb"
+                                 value="#{creditFacPropose.newCollateralSubView.mortgageList}"
+                                 var="mortgageItem"
+                                 rowKey="#{mortgageItem.MortgageType}"
+                                 rowIndexVar="rowIndex"
+                                 style="width: 100%; font-size: 12px !important;">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                                <p:column style="width: 80%; padding: 5px 10px !important;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{rowIndex + 1}"/>
+                        </p:column>
+
+                        <p:column styleClass="left">
+                            <h:outputText value="#{mortgageItem.mortgage}"/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <p:commandButton title="Remove"
+                                             icon="ui-icon-trash"
+                                             process="@form"
+                                             actionListener="#{creditFacPropose.onDeleteMortgageType(rowIndex)}"
+                                             update=":subCollateralDlgForm">
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
+                </td>
+                <td class="left">
+                    <table border="0">
+                        <tr>
+                            <td>
+                                <p:selectOneMenu id="dlgRelatedWith"
+                                                 value="#{creditFacPropose.relatedWithSelected.relatedWithId}"
+                                                 style="min-width: 200px; width: 200px; max-width: 200px;">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                                    <f:selectItems value="#{creditFacPropose.relatedWithAllList}"
+                                                   var="relatedWithItem"
+                                                   itemLabel="#{relatedWithItem.titleDeed}"
+                                                   itemValue="#{relatedWithItem.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:commandButton
+                                        id="addRelatedWithButton"
+                                        value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                                        styleClass="smaller"
+                                        action="#{creditFacPropose.onAddRelatedWith()}"
+                                        process="@form"
+                                        update=":subCollateralDlgForm,:msgBoxSystemMessagePanel">
+                                </p:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px"></td>
+                <td class="left">
+                    <p:dataTable id="RelatedWithTb"
+                                 value="#{creditFacPropose.newCollateralSubView.relatedWithList}"
+                                 var="relatedWithItem"
+                                 rowKey="#{relatedWithItem.NewCollateralSubDetail}"
+                                 rowIndexVar="rowIndex"
+                                 style="width: 100%; font-size: 12px !important;">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                                <p:column style="width: 80%; padding: 5px 10px !important;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"
+                                          headerText=" "/>
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{rowIndex + 1}"/>
+                        </p:column>
+
+                        <p:column styleClass="left">
+                            <h:outputText value="#{relatedWithItem.titleDeed}"/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <p:commandButton title="Remove"
+                                             icon="ui-icon-trash"
+                                             process="@form"
+                                             actionListener="#{creditFacPropose.onDeleteRelatedWith(rowIndex)}"
+                                             update=":subCollateralDlgForm">
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
+                </td>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
+                                 maxlength="18"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
+                                 styleClass="right"
+                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                        <f:convertNumber pattern="#,##0.##"
+                                         minFractionDigits="2"
+                                         maxFractionDigits="2"
+                                         maxIntegerDigits="14"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
+                </td>
+                <td class="left">
+                    <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
+                                 maxlength="18"
+                                 onclick="this.select()"
+                                 onkeydown="return onKeyDownMoney(event);"
+                                 onkeypress="return onKeyPressMoney(event);"
+                                 styleClass="right"
+                                 required="#{not empty param[addSubCollDlg.clientId]}">
+                        <f:convertNumber pattern="#,##0.##"
+                                         minFractionDigits="2"
+                                         maxFractionDigits="2"
+                                         maxIntegerDigits="14"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="height:28px;"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="saveSubColl"
+                            value="#{msg.get('app.credit.facility.propose.okButton')}"
+                            binding="#{addSubCollDlg}"
+                            styleClass="small"
+                            actionListener="#{creditFacPropose.onSaveSubCollateral()}"
+                            process=":subCollateralDlgForm"
+                            update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
+                            oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
+                    <p:spacer width="10" height=""/>
+                    <p:commandButton
+                            value="#{msg.get('app.credit.facility.propose.cancelButton')}"
+                            styleClass="small"
+                            onclick="subCollateralInfoDlg.hide()"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="height:28px;"></td>
+            </tr>
         </table>
-    </td>
-</tr>
-<tr>
-    <td>
-    </td>
-    <td>
-        <p:dataTable id="RelatedWithTb"
-                     value="#{creditFacPropose.newCollateralSubView.relatedWithList}"
-                     var="relatedWithItem"
-                     rowKey="#{relatedWithItem.NewCollateralSubDetail}"
-                     rowIndexVar="rowIndex">
-            <p:columnGroup type="header">
-                <p:row>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                    <p:column style="width:150px;padding: 5px 10px !important;"
-                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
-                    <p:column style="width:20px;padding: 5px 10px !important;"/>
-                </p:row>
-            </p:columnGroup>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{rowIndex+1}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{relatedWithItem.titleDeed}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <p:commandButton title="Remove"
-                                 icon="ui-icon-trash"
-                                 process="@form"
-                                 actionListener="#{creditFacPropose.onDeleteRelatedWith(rowIndex)}"
-                                 update=":subCollateralDlgForm">
-                </p:commandButton>
-            </p:column>
-
-        </p:dataTable>
-    </td>
-</tr>
-
-
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
-                     style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
-                     maxlength="18"
-                     required="#{not empty param[addSubCollDlg.clientId]}"
-                     onkeydown="return onKeyDownMoney(event);"
-                     onkeypress="return onKeyPressMoney(event);">
-            <f:convertNumber pattern="#,##0"
-                             minFractionDigits="2"
-                             maxFractionDigits="2"
-                             maxIntegerDigits="18"
-                             type="number"/>
-            <p:ajax event="blur" update="@this"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 150px;">
-        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
-                     style="text-align: right;min-width: 170px; width: 170px; max-width: 170px;"
-                     maxlength="18"
-                     required="#{not empty param[addSubCollDlg.clientId]}"
-                     onkeydown="return onKeyDownMoney(event);"
-                     onkeypress="return onKeyPressMoney(event);">
-            <f:convertNumber pattern="#,##0"
-                             minFractionDigits="2"
-                             maxFractionDigits="2"
-                             maxIntegerDigits="18"
-                             type="number"/>
-            <p:ajax event="blur" update="@this"/>
-        </p:inputText>
-    </td>
-</tr>
-<tr>
-    <td colspan="2" class="center">
-        <p:commandButton
-                id="saveSubColl"
-                value="#{msg.get('app.credit.facility.propose.okButton')}"
-                binding="#{addSubCollDlg}"
-                styleClass="small"
-                actionListener="#{creditFacPropose.onSaveSubCollateral()}"
-                process=":subCollateralDlgForm"
-                update=":collateralDlgForm,:frmMain"
-                oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
-
-        <p:commandButton
-                value="#{msg.get('app.credit.facility.propose.cancelButton')}"
-                styleClass="small"
-                onclick="PF('subCollateralInfoDlg').hide()"
-                update=":subCollateralDlgForm"/>
-    </td>
-</tr>
-</table>
-
-
-</h:form>
+    </h:form>
 </p:panel>
 
 <p:blockUI widgetVar="blockSubCollateralDlg" block="subCollateralDlgPanel" trigger=":subCollateralDlgForm:saveSubColl">

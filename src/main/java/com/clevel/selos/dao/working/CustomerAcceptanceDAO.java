@@ -20,13 +20,11 @@ public class CustomerAcceptanceDAO extends GenericDAO<CustomerAcceptance, Intege
 
 
     public CustomerAcceptance findCustomerAcceptanceByWorkCase(WorkCase workCase) {
+        log.info("-- findCustomerAcceptanceByWorkCase : {}", workCase);
         CustomerAcceptance customerAcceptance;
-
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
         customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
-        log.info("getListByDistrict. (result size: {})", customerAcceptance);
-
         return customerAcceptance;
     }
 }

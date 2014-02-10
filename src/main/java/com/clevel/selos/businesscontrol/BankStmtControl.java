@@ -1222,5 +1222,4 @@ public class BankStmtControl extends BusinessControl {
             }
         });
     }
-
 }

@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
+import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -33,7 +34,6 @@ public class AppraisalTransform extends Transform {
     private AppraisalContactDetailView appraisalContactDetailView;
     @Inject
     private AppraisalContactDetailTransform appraisalContactDetailTransform;
-
     @Inject
     public AppraisalTransform() {
 
@@ -41,11 +41,12 @@ public class AppraisalTransform extends Transform {
 
     public Appraisal transformToModel(final AppraisalView appraisalView, final WorkCase workCase, final User user){
         log.debug("-- transform AppraisalView to Appraisal");
-        appraisal = new Appraisal();
+
         long id = appraisalView.getId();
-        if(id != 0){
+        if(!Util.isZero(id)){
             appraisal = appraisalDAO.findById(id);
         }else{
+            appraisal = new Appraisal();
             appraisal.setWorkCase(workCase);
             appraisal.setCreateBy(user);
             appraisal.setCreateDate(DateTime.now().toDate());
@@ -105,22 +106,22 @@ public class AppraisalTransform extends Transform {
         appraisalView.setAppointmentTime(appraisal.getAppointmentTime());
 
         if(checkNullObject(appraisal.getAppraisalDivision()) && checkId0(appraisal.getAppraisalDivision().getId())){
-            appraisalView.setAppraisalDivision(appraisalView.getAppraisalDivision());
+            appraisalView.setAppraisalDivision(appraisal.getAppraisalDivision());
         } else {
             appraisalView.setAppraisalDivision(new AppraisalDivision());
         }
         if(checkNullObject(appraisal.getAppraisalCompany()) && checkId0(appraisal.getAppraisalCompany().getId())){
-            appraisalView.setAppraisalCompany(appraisalView.getAppraisalCompany());
+            appraisalView.setAppraisalCompany(appraisal.getAppraisalCompany());
         } else {
             appraisalView.setAppraisalCompany(new AppraisalCompany());
         }
         if(checkNullObject(appraisal.getLocationOfProperty()) && checkId0(appraisal.getLocationOfProperty().getId())){
-            appraisalView.setLocationOfProperty(appraisalView.getLocationOfProperty());
+            appraisalView.setLocationOfProperty(appraisal.getLocationOfProperty());
         } else {
             appraisalView.setLocationOfProperty(new LocationProperty());
         }
         if(checkNullObject(appraisal.getProvinceOfProperty()) && checkId0(appraisal.getProvinceOfProperty().getCode())){
-            appraisalView.setProvinceOfProperty(appraisalView.getProvinceOfProperty());
+            appraisalView.setProvinceOfProperty(appraisal.getProvinceOfProperty());
         } else {
             appraisalView.setProvinceOfProperty(new Province());
         }

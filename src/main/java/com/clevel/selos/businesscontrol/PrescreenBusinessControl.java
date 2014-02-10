@@ -220,12 +220,20 @@ public class PrescreenBusinessControl extends BusinessControl {
      * @param prescreenResultView
      * @return
      */
-    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView){
+    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView) throws Exception{
         log.info("retreive interface for customer list: {}", customerInfoViewList);
 
         ExistingCreditFacilityView existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
         BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+
+        if(bankStmtSummaryView != null && Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
+            ActionStatusView actionStatusView = bankStmtSummaryView.getActionStatusViewList().get(0);
+            log.debug("getInterfaceInfo : actionStatusView : {}", actionStatusView);
+            if(actionStatusView != null && actionStatusView.getStatusCode() == ActionResult.FAILED){
+                throw new Exception(actionStatusView.getStatusDesc());
+            }
+        }
 
         prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
@@ -251,7 +259,6 @@ public class PrescreenBusinessControl extends BusinessControl {
             groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
 
         prescreenResultView.setGroupExposure(groupExposure);
-
 
         return prescreenResultView;
     }

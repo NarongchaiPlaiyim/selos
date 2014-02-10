@@ -20,7 +20,7 @@ public class NewCollateralHeadView {
     private CollateralType headCollType;
     private CollateralType collTypePercentLTV;
     private PotentialCollateral potentialCollateral ;
-
+    private String collID;
     private BigDecimal existingCredit;
     private int insuranceCompany;
 
@@ -167,6 +167,14 @@ public class NewCollateralHeadView {
         this.collTypePercentLTV = collTypePercentLTV;
     }
 
+    public String getCollID() {
+        return collID;
+    }
+
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -178,6 +186,7 @@ public class NewCollateralHeadView {
                 .append("headCollType", headCollType)
                 .append("collTypePercentLTV", collTypePercentLTV)
                 .append("potentialCollateral", potentialCollateral)
+                .append("collID", collID)
                 .append("existingCredit", existingCredit)
                 .append("insuranceCompany", insuranceCompany)
                 .append("createDate", createDate)

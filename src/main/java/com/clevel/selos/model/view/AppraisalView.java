@@ -58,7 +58,6 @@ public class AppraisalView implements Serializable {
         workCase = new WorkCase();
         appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
         appraisalContactDetailView = new AppraisalContactDetailView();
     }
 

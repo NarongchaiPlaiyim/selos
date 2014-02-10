@@ -659,11 +659,11 @@
                         <!-- BEGIN: Credit Tier Detail [0] -->
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                proposeCredit.newCreditTierDetailViewList[0].standardPrice: ''}">
+                                                proposeCredit.standardPrice: ''}">
                             </h:outputText>
                         </td>
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                            <h:outputText value="#{proposeCredit.newCreditTierDetailViewList[0].suggestPrice}">
+                            <h:outputText value="#{proposeCredit.suggestPrice}">
                             </h:outputText>
                         </td>
                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -722,13 +722,13 @@
                                offset="1">
                         <tr>
                             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                <h:outputText value="#{creditTierDetail.standardPrice}">
+                                <h:outputText value="#{proposeCredit.standardPrice}">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="18"/>
                                 </h:outputText>
                             </td>
                             <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                <h:outputText value="#{creditTierDetail.suggestPrice}">
+                                <h:outputText value="#{proposeCredit.suggestPrice}">
                                     <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="18"/>
                                 </h:outputText>
@@ -1727,7 +1727,7 @@
 </tr>
 
 <tr>
-    <td colspan="5">
+    <td colspan="2">
         <p:dataTable
                 id="conditionInfoDetailTable"
                 var="conditionInfoItem"
@@ -1735,29 +1735,28 @@
                 paginator="false"
                 rowKey="#{conditionInfoItem.ConditionInfoDetailView}"
                 rowIndexVar="rowIndex"
-                style="width:100%">
+                style="width: 100%">
 
             <p:columnGroup type="header">
                 <p:row>
-                    <p:column style="width:20px;"/>
-                    <p:column style="width:200px;"
+                    <p:column style="width: 10%;"/>
+                    <p:column style="width: 40%;"
                               headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.loanType')}"/>
-                    <p:column style="width:300px;"
+                    <p:column style="width: 40%;"
                               headerText="#{msg.get('app.credit.facility.propose.label.condition.tb.conditionDesc')}"/>
-                    <p:column style="width:30px;"/>
+                    <p:column style="width: 10;"/>
                 </p:row>
-
             </p:columnGroup>
 
             <p:column styleClass="center">
-                <h:outputText value="#{rowIndex+1}"/>
+                <h:outputText value="#{rowIndex + 1}"/>
             </p:column>
 
-            <p:column styleClass="center">
+            <p:column styleClass="left">
                 <h:outputText value="#{conditionInfoItem.loanType}"/>
             </p:column>
 
-            <p:column styleClass="center">
+            <p:column styleClass="left">
                 <h:outputText value="#{conditionInfoItem.conditionDesc}"/>
             </p:column>
 
@@ -1892,7 +1891,9 @@
 
 <!-- Propose Credit Dialog -->
 <p:dialog id="creditInfoDialog" header="Propose Credit Information" widgetVar="creditInfoDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500" width="900">
+          modal="true"
+          height="500"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeCreditInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1908,8 +1909,8 @@
 <!-- Propose Collateral Dialog -->
 <p:dialog id="collateralInfoDialog" widgetVar="collateralInfoDlg"
           header="Propose Collateral Information"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"
-          width="900" height="500">
+          modal="true" height="500"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1922,9 +1923,28 @@
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
+<!-- Sub-Collateral Dialog  -->
+<p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg"
+          header="Sub Collateral Information"
+          modal="true" height="500"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+    <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
+</p:dialog>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteSubCollateralInfoDialog"/>
+    <ui:param name="name" value="confirmDeleteSubCollateralInfoDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
+    <ui:param name="controller" value="#{creditFacPropose}"/>
+    <ui:param name="action" value="onDeleteSubCollateral"/>
+    <ui:param name="update" value=":collateralDlgForm"/>
+</ui:include>
+
 <!-- Propose Guarantor Dialog -->
-<p:dialog id="guarantorDialog" header="Propose Guarantor Information" widgetVar="guarantorInfoDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="200">
+<p:dialog id="guarantorDialog" widgetVar="guarantorInfoDlg"
+          header="Propose Guarantor Information"
+          modal="true"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeGuarantorInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1950,26 +1970,6 @@
     <ui:param name="controller" value="#{creditFacPropose}"/>
     <ui:param name="action" value="onDeleteConditionInfo"/>
     <ui:param name="update" value=":frmMain"/>
-</ui:include>
-
-<!-- subCollateralInfoDialog  -->
-<p:dialog id="subCollateralInfoDialog"
-          header="Sub Collateral Information"
-          widgetVar="subCollateralInfoDlg"
-          height="500"
-          modal="true"
-          onShow="hideWindowsScrollBar()"
-          onHide="showWindowsScrollBar()">
-    <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
-</p:dialog>
-
-<ui:include src="dialog/confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteSubCollateralInfoDialog"/>
-    <ui:param name="name" value="confirmDeleteSubCollateralInfoDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteSubCollateralInfo"/>
-    <ui:param name="controller" value="#{creditFacPropose}"/>
-    <ui:param name="action" value="onDeleteSubCollateral"/>
-    <ui:param name="update" value=":collateralDlgForm"/>
 </ui:include>
 
 <!-- Control  All Page-->

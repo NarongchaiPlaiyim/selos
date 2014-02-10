@@ -19,12 +19,23 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
     public ProvinceDAO() {
     }
 
+    @Override
+    public List<Province> findAll() {
+        log.debug("findAll.");
+        Criteria criteria = createCriteria();
+        criteria.setCacheable(true);
+        List<Province> provinces = criteria.list();
+        log.debug("findAll. (result: {})",provinces.size());
+        return provinces;
+    }
+
     public List<Province> getListOrderByParameter(String orderField) {
         log.info("getListOrderByParameter. (orderField: {})", orderField);
         Criteria criteria = createCriteria();
         criteria.addOrder(Order.asc(orderField));
+        criteria.setCacheable(true);
         List<Province> provinces = criteria.list();
-        log.info("getListByCustomerType. (result size: {})", provinces.size());
+        log.info("getListOrderByParameter. (result size: {})", provinces.size());
         return provinces;
     }
 
@@ -35,5 +46,10 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
         Province province = (Province) criteria.uniqueResult();
         log.info("getByName . (result : {})", province);
         return province;
+    }
+
+    public void clearCache() {
+        log.debug("clearCache.");
+        clearCache("com.clevel.selos.model.db.master.Province");
     }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 public class ExSumCreditRiskInfoView implements Serializable {
 
     private String riskCusType;
-    private String BOTClass;
+    private String botClass;
     private String reason;
     private Date lastReviewDate;
     private Date nextReviewDate;
@@ -24,7 +24,7 @@ public class ExSumCreditRiskInfoView implements Serializable {
 
     public void reset() {
         this.riskCusType = "";
-        this.BOTClass = "";
+        this.botClass = "";
         this.reason = "";
         this.lastReviewDate = new Date();
         this.nextReviewDate = new Date();
@@ -41,12 +41,12 @@ public class ExSumCreditRiskInfoView implements Serializable {
         this.riskCusType = riskCusType;
     }
 
-    public String getBOTClass() {
-        return BOTClass;
+    public String getBotClass() {
+        return botClass;
     }
 
-    public void setBOTClass(String BOTClass) {
-        this.BOTClass = BOTClass;
+    public void setBotClass(String botClass) {
+        this.botClass = botClass;
     }
 
     public String getReason() {
@@ -101,7 +101,7 @@ public class ExSumCreditRiskInfoView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("riskCusType", riskCusType).
-                append("BOTClass", BOTClass).
+                append("botClass", botClass).
                 append("reason", reason).
                 append("lastReviewDate", lastReviewDate).
                 append("nextReviewDate", nextReviewDate).

@@ -161,7 +161,7 @@ public class AppraisalResult implements Serializable {
     public void onCreation() {
         log.info("-- onCreation.");
         HttpSession session = FacesUtil.getSession(true);
-        if(session.getAttribute("workCaseId") == null){ //false){
+        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
             log.info("preRender ::: workCaseId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
@@ -173,11 +173,11 @@ public class AppraisalResult implements Serializable {
             user = (User)session.getAttribute("user");
             log.debug("-- User : {}", ""+user.toString());
             init();
-            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-//            workCaseId = 4L;
+//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            workCaseId = 4L;
             log.info("workCaseId :: {} ",workCaseId);
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
-            if(appraisalView != null){
+            if(!Util.isNull(appraisalView)){
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
                 if(newCollateralViewList.size() == 0){
                     newCollateralViewList = new ArrayList<NewCollateralView>();
@@ -229,7 +229,7 @@ public class AppraisalResult implements Serializable {
         newCollateralViewList = new ArrayList<NewCollateralView>();
         newCollateralView = new NewCollateralView();
 
-        appraisalData.setSubCollateralDataList(subCollateralDataList);
+//        appraisalData.setSubCollateralDataList(subCollateralDataList);
 
         convertCollateral(appraisalData);
 
@@ -341,15 +341,20 @@ public class AppraisalResult implements Serializable {
     }
 
     private NewCollateralView callCOM_S(final String jobIDSearch){
-        log.info("jobIDSearch is  {}", jobIDSearch);
+        log.info("-- jobIDSearch is  {}", jobIDSearch);
         AppraisalDataResult appraisalDataResult;
-        appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
-        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
-            log.debug("-- succeed");
-            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-            return newCollateralView;
-        } else {
-            log.error("Exception : {}", "--------------------------------------------------------------------------------------------------");
+        try {
+            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
+            if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
+                log.debug("-- SUCCEED");
+                newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                return newCollateralView;
+            } else {
+                log.error("Exception : {}", appraisalDataResult.getReason());
+                return null;
+            }
+        } catch (Exception e){
+            log.error("-- Exception [{}]", e.getMessage());
             return null;
         }
     }
@@ -358,18 +363,7 @@ public class AppraisalResult implements Serializable {
 
     public void onSaveCollateralDetailView(){
         log.debug("-- onSaveCollateralDetailView()");
-        //click save from dialog
         boolean complete = false;
-        Cloner cloner = new Cloner();
-//        if(!searchCOMS){
-//            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
-//            newCollateralView = new NewCollateralView();
-//            newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
-//
-//            message = "ไม่สามารถบันทึกได้ เนื่องจากไม่พบข้อมูล AAD ";
-//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            return;
-//        }
 
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- Flag {}", ModeForButton.ADD);
@@ -567,7 +561,7 @@ public class AppraisalResult implements Serializable {
         subCollateralData.setAppraisalValue(new BigDecimal(1000000));
         subCollateralDataList.add(subCollateralData);
 
-        appraisalData.setSubCollateralDataList(subCollateralDataList);
+//        appraisalData.setSubCollateralDataList(subCollateralDataList);
 
         log.info("getData From COMS end");
 

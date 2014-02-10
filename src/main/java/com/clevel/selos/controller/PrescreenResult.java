@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -122,8 +123,16 @@ public class PrescreenResult implements Serializable {
         if(customerInfoViews != null){
             customerInfoViewList = generateCustomerInfoList(customerInfoViews);
         }
-        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
-
+        try{
+            prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
+            messageHeader = "Information.";
+            message = "Retrieve interface info success.";
+        } catch (Exception ex){
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            log.error("exception while retrieve interface info : ", ex);
+        }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){

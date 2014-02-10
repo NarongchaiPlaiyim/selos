@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
@@ -14,6 +15,8 @@ import java.util.List;
 public class NewCollateralSubView {
     private long id;
     private int no;
+    private String collID;
+    private String headCollID;
     private SubCollateralType subCollateralType;
     private String address;
     private String landOffice;
@@ -32,6 +35,9 @@ public class NewCollateralSubView {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private String usage;
+    private String typeOfUsage;
+    private int lineNo;
 
     public NewCollateralSubView() {
         reset();
@@ -51,6 +57,30 @@ public class NewCollateralSubView {
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
     }
 
     public long getId() {
@@ -214,11 +244,29 @@ public class NewCollateralSubView {
         this.relatedWithId = relatedWithId;
     }
 
+    public String getCollID() {
+        return collID;
+    }
+
+    public void setCollID(String collID) {
+        this.collID = collID;
+    }
+
+    public String getHeadCollID() {
+        return headCollID;
+    }
+
+    public void setHeadCollID(String headCollID) {
+        this.headCollID = headCollID;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("collID", collID)
+                .append("headCollID", headCollID)
                 .append("subCollateralType", subCollateralType)
                 .append("address", address)
                 .append("landOffice", landOffice)
