@@ -1,5 +1,6 @@
 package com.clevel.selos.dao;
 
+import net.sf.ehcache.CacheManager;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -99,6 +100,11 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         Criteria criteria = session.createCriteria(getEntityClass());
         List<T> list = criteria.list();
         return list;
+    }
+
+    public void clearAllCache() {
+        CacheManager cacheManager = CacheManager.getInstance();
+        cacheManager.clearAll();
     }
 
     public boolean isRecordExist(Criterion... criterion) {
