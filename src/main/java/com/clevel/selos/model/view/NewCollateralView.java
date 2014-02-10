@@ -252,6 +252,7 @@ public class NewCollateralView implements Serializable {
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("jobIDSearch", jobIDSearch)
+                .append("premiumAmount", premiumAmount)
                 .toString();
     }
 
