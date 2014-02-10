@@ -105,6 +105,9 @@ public class MortgageSummary implements Serializable {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
 	}
+	public void onSelectSignContract() {
+		
+	}
 	
 	public void onSaveMortgageSummary() {
 		

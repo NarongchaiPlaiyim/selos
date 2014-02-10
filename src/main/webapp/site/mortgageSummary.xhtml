@@ -108,7 +108,7 @@
              			            	required="true" requiredMessage="#{msg.get('app.mortgageSummary.signContract.validate')}"
              			            	>
              			            	<p:ajax update="signcontract_loc" 
-             			            		
+             			            		listener="#{mortgageSummary.onSelectSignContract()}"
              			            		/>
                                        <f:selectItem
                                        	itemLabel="#{msg.get('app.mortgageSummary.agreement.signContract.radio.branch')}" 
