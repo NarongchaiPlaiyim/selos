@@ -1,10 +1,12 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ public class NewCollateralView implements Serializable {
     private User createBy;
     private User modifyBy;
     private int isApproved;
+    private BigDecimal premiumAmount;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
@@ -251,4 +254,12 @@ public class NewCollateralView implements Serializable {
                 .append("jobIDSearch", jobIDSearch)
                 .toString();
     }
+
+	public BigDecimal getPremiumAmount() {
+		return premiumAmount;
+	}
+
+	public void setPremiumAmount(BigDecimal premiumAmount) {
+		this.premiumAmount = premiumAmount;
+	}
 }
