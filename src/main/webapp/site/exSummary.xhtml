@@ -911,8 +911,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p:dataTable id="creditRiskInfo" var="item" style="width: 100%">
-
+                                    <p:dataTable id="creditRiskInfo" value="#{executiveSummary.exSummaryView.exSumCreditRiskInfoView}"
+                                                 var="creditRiskInfo" style="width: 100%">
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:200px;"
@@ -936,35 +936,35 @@
                                         </p:columnGroup>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{rowIndex+1}"/>
+                                            <h:outputText value="#{creditRiskInfo.riskCusType}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.botClass}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.reason}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.lastReviewDate}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.newReviewDate}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.extendedReviewDate}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.indirectCountryName}"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{creditRiskInfo.percentExport}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
