@@ -29,23 +29,31 @@
         <div id="content_container">
             <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}"/></div>
             <div id="content">
-                <table id="table_content" style="width: 100%;" class="content_table_form">
+                <table id="table_content" border="0" style="width: 100%;" class="content_table_form">
                     <tr>
-                        <td colspan="6" class="right" style="padding-right: 1%;">
+                        <td colspan="5" class="right" style="padding-right: 1%;">
                             Last update by <p:outputLabel value="#{appraisalAppointment.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalAppointment.appraisalView.modifyDate}"/>
                             <a style="cursor: pointer;" href="#">[View Track Change]</a>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
+                        <td colspan="4"><div class="separate"><!-- --></div></td>
                     </tr>
+
                     <tr>
-                        <td colspan="6" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
                     </tr>
                     <tr>
                         <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
-                        <td>
-                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}">
+                        <td colspan="3">
+                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalAppointment.appraisalView.appraisalType}" >
                                 <f:selectItem itemLabel="Internal" itemValue="0" />
                                 <f:selectItem itemLabel="External" itemValue="1" />
                             </p:selectOneRadio>
@@ -56,7 +64,8 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"  required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalAppointment.appraisalView.appraisalCompany.id}"
+                                             required="#{not empty param[saveButton.clientId]}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalAppointment.appraisalCompanyList}"
                                                var="appraisalCompany"
@@ -82,7 +91,7 @@
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                         </td>
                         <td>
-                            <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" />
+                            <p:inputText value="#{appraisalAppointment.appraisalView.appraisalName}" required="#{not empty param[saveButton.clientId]}" />
                         </td>
                     </tr>
                     <tr>
@@ -160,8 +169,8 @@
                         <td class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
                         </td>
-                        <td colspan="5">
-                            <p:inputTextarea cols="100" rows="3" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" />
+                        <td colspan="3">
+                            <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.AADAdminRemark}" />
                         </td>
                     </tr>
                     <tr>
@@ -253,7 +262,7 @@
 
                     <tr>
                         <td colspan="6" style="width:100%">
-                            <table>
+                            <table border="0">
                                 <tr>
                                     <td style="width: 30px;"/>
                                     <td style="width: 30px;"/>
@@ -355,8 +364,8 @@
                         <td class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentRemark')}"/>
                         </td>
-                        <td colspan="5">
-                            <p:inputTextarea cols="100" rows="3" value="#{appraisalAppointment.appraisalView.appointmentRemark}" />
+                        <td colspan="3">
+                            <p:inputTextarea cols="69" rows="4" value="#{appraisalAppointment.appraisalView.appointmentRemark}" />
                         </td>
                     </tr>
                     <!--<tr>-->
@@ -478,10 +487,11 @@
                         <td class="center" colspan="6">
                             <p:commandButton id="btnSave"
                                      value="#{msg.get('app.saveButton')}"
+                                     binding="#{saveButton}"
                                      styleClass="medium"
                                      process=":frmMain"
                                      action="#{appraisalAppointment.onSaveAppraisalAppointment()}"
-                                     update=":msgBoxSystemMessagePanel"/>
+                                     update=":frmMain, :msgBoxSystemMessagePanel"/>
 
                             <p:commandButton value="#{msg.get('app.cancelButton')}"
                                      id="btnCancel"
