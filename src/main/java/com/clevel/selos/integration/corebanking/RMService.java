@@ -317,8 +317,19 @@ public class RMService implements Serializable {
                     individualModel.setBizCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusType1());
 
                     individualModel.setTitleEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitleEng());
-                    individualModel.setFirstnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
-                    individualModel.setLastnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
+
+                    //spilt NameEN
+                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng() != null) {
+                        String nameEN[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng().split(" ");
+                        int nameSize = nameEN.length - 1;
+                        if (nameSize >= 0) {
+                            individualModel.setFirstnameEN(nameEN[0]);
+                        }
+                        if (nameSize >= 1) {
+                            individualModel.setLastnameEN(nameEN[1]);
+                        }
+                    }
+
                     //set HomeAddress
                     ContactDetails homeContactDetails = new ContactDetails();
                     if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1() != null) {

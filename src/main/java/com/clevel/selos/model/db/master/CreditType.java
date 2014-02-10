@@ -21,7 +21,7 @@ public class CreditType implements Serializable {
     private String description;
     @Column(name = "brms_code")
     private String brmsCode;
-    @Column(name = "coms_int_type")
+    @Column(name = "coms_int_type", length = 1)
     private String comsIntType;
     @Column(name = "active")
     private int active;

@@ -1,55 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="ehcache.xsd"
-         updateCheck="false"  monitoring="autodetect"
-         dynamicConfig="false">
+         updateCheck="false" monitoring="autodetect"
+         dynamicConfig="false"
+         maxBytesLocalHeap="100M" >
+
+    <defaultCache memoryStoreEvictionPolicy="LRU"
+                  eternal="false" overflowToDisk="false"
+                  diskPersistent="false"
+                  statistics="true">
+    </defaultCache>
+
+    <cache name="org.hibernate.cache.internal.StandardQueryCache"
+           maxBytesLocalHeap="50M"
+           eternal="false"
+           overflowToDisk="false"
+           diskPersistent="false"
+           statistics="true"
+            />
+
+    <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+           maxBytesLocalHeap="100K"
+           eternal="false"
+           overflowToDisk="false"
+           diskPersistent="false"
+           statistics="true"
+            />
 
     <cache name="com.clevel.selos.model.db.master.BusinessGroup"
-           maxEntriesLocalHeap="100"
+           maxBytesLocalHeap="100K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.BusinessDescription"
-           maxEntriesLocalHeap="2000"
+           maxBytesLocalHeap="100K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.Country"
-           maxEntriesLocalHeap="300"
+           maxBytesLocalHeap="200K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.Region"
-           maxEntriesLocalHeap="20"
+           maxBytesLocalHeap="5K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.Province"
-           maxEntriesLocalHeap="100"
+           maxBytesLocalHeap="40K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.District"
-           maxEntriesLocalHeap="1200"
+           maxBytesLocalHeap="420K"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 
     <cache name="com.clevel.selos.model.db.master.SubDistrict"
-           maxEntriesLocalHeap="10000"
+           maxBytesLocalHeap="4M"
            eternal="true"
            overflowToDisk="false"
+           diskPersistent="false"
            statistics="true"
             />
 

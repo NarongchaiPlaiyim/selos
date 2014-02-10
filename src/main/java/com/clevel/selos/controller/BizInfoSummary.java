@@ -74,7 +74,7 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal SumWeightAR;
     private BigDecimal SumWeightAP;
     private BigDecimal SumWeightINV;
-    double bankStatementAvg = 0;
+    BigDecimal bankStatementAvg = BigDecimal.ZERO;
     private BankStmtSummaryView bankStmtSummaryView;
 
     private String messageHeader;
@@ -129,12 +129,21 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation bizInfoSum");
-        HttpSession session = FacesUtil.getSession(true);
         disableOwnerName = false;
         disableExpiryDate = true;
 
+        HttpSession session = FacesUtil.getSession(true);
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }else{
+            log.info("onCreation ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
+            }
         }
 
         log.debug("info WorkCaseId is: {}", workCaseId);
@@ -144,19 +153,17 @@ public class BizInfoSummary implements Serializable {
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
-        bankStatementAvg = 0;
+        bankStatementAvg = BigDecimal.ZERO;
 
         bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
+
         if(bankStmtSummaryView != null ){
             if(bankStmtSummaryView.getGrdTotalIncomeGross() != null ){
-                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross().doubleValue();
+                bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross();
 
             }else{
-//                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-//                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-//                }
-                bankStatementAvg = 0.0;
+                bankStatementAvg = BigDecimal.ZERO;
             }
         }
         log.debug("bankStatementAvg is " + bankStatementAvg);
@@ -189,7 +196,8 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
-            bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
 
         } else {
             fromDB = true;
@@ -197,7 +205,8 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
-            bizInfoSummaryView.setCirculationAmount(new BigDecimal(bankStatementAvg));
+            bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
         }
         onCheckInterview();
     }
@@ -376,14 +385,23 @@ public class BizInfoSummary implements Serializable {
         }
     }
 
+    public void calGrdTotal(long workCaseId, BigDecimal grdTotalIncome ){
+        if(bizInfoSummaryView == null){
+
+        }
+    }
+
     public void onSaveBizInfoSummary() {
         try {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
+
             if (redirect != null && !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+
+            System.out.println("redirect :" + redirect);
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
@@ -461,6 +479,11 @@ public class BizInfoSummary implements Serializable {
             disableOwnerName = true;
             bizInfoSummaryView.setOwnerName("");
         }
+    }
+
+    public void onCheckAdd(){
+        redirect = "addDetail";
+        onSaveBizInfoSummary();
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {

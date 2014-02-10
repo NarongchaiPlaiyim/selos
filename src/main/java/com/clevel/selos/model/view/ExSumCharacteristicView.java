@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
-import org.terracotta.modules.ehcache.transaction.SerializedReadCommittedClusteredSoftLock;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -155,5 +156,25 @@ public class ExSumCharacteristicView implements Serializable {
 
     public void setGroupExposureUW(BigDecimal groupExposureUW) {
         this.groupExposureUW = groupExposureUW;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("customer", customer).
+                append("currentDBR", currentDBR).
+                append("finalDBR", finalDBR).
+                append("income", income).
+                append("recommendedWCNeed", recommendedWCNeed).
+                append("actualWC", actualWC).
+                append("startBusinessDate", startBusinessDate).
+                append("yearInBusiness", yearInBusiness).
+                append("salePerYearBDM", salePerYearBDM).
+                append("salePerYearUW", salePerYearUW).
+                append("groupSaleBDM", groupSaleBDM).
+                append("groupSaleUW", groupSaleUW).
+                append("groupExposureBDM", groupExposureBDM).
+                append("groupExposureUW", groupExposureUW).
+                toString();
     }
 }

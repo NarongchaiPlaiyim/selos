@@ -39,19 +39,21 @@ public class AppraisalContactDetailTransform extends Transform {
         log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId1();
-            if(!Util.isZero(contractId)){
-                model = appraisalContactDetailDAO.findById(contractId);
-                log.debug("-- AppraisalContactDetail[1] findById [{}]", contractId);
-            } else {
-                model = new AppraisalContactDetail();
-                log.debug("-- new AppraisalContactDetail[1] created");
-                model.setCreateBy(user);
-                model.setCreateDate(DateTime.now().toDate());
-            }
+            model = new AppraisalContactDetail();
+//            model.setId(contractId);
+            log.debug("-- new AppraisalContactDetail[1] created");
+            model.setCreateBy(user);
+//            log.debug("---- AppraisalContactDetail.createBy[{}]", model.getCreateBy());
+            model.setCreateDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.createDate[{}]", model.getCreateDate());
             model.setContactNo(view.getContactNo1());
+//            log.debug("---- AppraisalContactDetail.contactNo[{}]", model.getContactNo());
             model.setCustomerName(view.getCustomerName1());
+//            log.debug("---- AppraisalContactDetail.customerName[{}]", model.getCustomerName());
             model.setModifyBy(user);
+//            log.debug("---- AppraisalContactDetail.modifyBy[{}]", model.getModifyBy());
             model.setModifyDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.modifyDate[{}]", model.getModifyDate());
             appraisalContactDetailList.add(model);
             log.debug("-- AppraisalContactDetail added to appraisalContactDetailList[{}]", appraisalContactDetailList.size());
         }
@@ -60,19 +62,21 @@ public class AppraisalContactDetailTransform extends Transform {
         log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId2();
-            if(!Util.isZero(contractId)){
-                model = appraisalContactDetailDAO.findById(contractId);
-                log.debug("-- AppraisalContactDetail[2] findById [{}]", contractId);
-            } else {
-                model = new AppraisalContactDetail();
-                log.debug("-- new AppraisalContactDetail[2] created");
-                model.setCreateBy(user);
-                model.setCreateDate(DateTime.now().toDate());
-            }
+            model = new AppraisalContactDetail();
+//            model.setId(contractId);
+            log.debug("-- new AppraisalContactDetail[2] created");
+            model.setCreateBy(user);
+//            log.debug("---- AppraisalContactDetail.createBy[{}]", model.getCreateBy());
+            model.setCreateDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.createDate[{}]", model.getCreateDate());
             model.setContactNo(view.getContactNo2());
+//            log.debug("---- AppraisalContactDetail.contactNo[{}]", model.getContactNo());
             model.setCustomerName(view.getCustomerName2());
+//            log.debug("---- AppraisalContactDetail.customerName[{}]", model.getCustomerName());
             model.setModifyBy(user);
+//            log.debug("---- AppraisalContactDetail.modifyBy[{}]", model.getModifyBy());
             model.setModifyDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.modifyDate[{}]", model.getModifyDate());
             appraisalContactDetailList.add(model);
         }
 
@@ -80,20 +84,23 @@ public class AppraisalContactDetailTransform extends Transform {
         log.debug("-- Contract = {}", contractForCheck);
         if(!Util.isLengthZero(contractForCheck)){
             contractId =  view.getContractId3();
-            if(!Util.isZero(contractId)){
-                model = appraisalContactDetailDAO.findById(contractId);
-                log.debug("-- AppraisalContactDetail[3] findById [{}]", contractId);
-            } else {
-                model = new AppraisalContactDetail();
-                log.debug("-- new AppraisalContactDetail[3] created");
-                model.setCreateBy(user);
-                model.setCreateDate(DateTime.now().toDate());
-            }
+            model = new AppraisalContactDetail();
+//            model.setId(contractId);
+            log.debug("-- new AppraisalContactDetail[3] created");
+            model.setCreateBy(user);
+//            log.debug("---- AppraisalContactDetail.createBy[{}]", model.getCreateBy());
+            model.setCreateDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.createDate[{}]", model.getCreateDate());
             model.setContactNo(view.getContactNo3());
+//            log.debug("---- AppraisalContactDetail.contactNo[{}]", model.getContactNo());
             model.setCustomerName(view.getCustomerName3());
+//            log.debug("---- AppraisalContactDetail.customerName[{}]", model.getCustomerName());
             model.setModifyBy(user);
+//            log.debug("---- AppraisalContactDetail.modifyBy[{}]", model.getModifyBy());
             model.setModifyDate(DateTime.now().toDate());
+//            log.debug("---- AppraisalContactDetail.modifyDate[{}]", model.getModifyDate());
             appraisalContactDetailList.add(model);
+            log.debug("-- AppraisalContactDetail added to appraisalContactDetailList[{}]", appraisalContactDetailList.size());
         }
         return appraisalContactDetailList;
     }
@@ -107,28 +114,34 @@ public class AppraisalContactDetailTransform extends Transform {
         appraisalContactDetailView.setId(appraisal.getId());
         if(size == 1){
             appraisalContactDetail = appraisalContactDetailList.get(0);
+//            appraisalContactDetailView.setNo1(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId1(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName1(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo1(appraisalContactDetail.getContactNo());
         } else if(size == 2){
             appraisalContactDetail = appraisalContactDetailList.get(0);
+//            appraisalContactDetailView.setNo1(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId1(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName1(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo1(appraisalContactDetail.getContactNo());
             appraisalContactDetail = appraisalContactDetailList.get(1);
+//            appraisalContactDetailView.setNo2(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId2(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName2(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo2(appraisalContactDetail.getContactNo());
         } else if(size == 3){
             appraisalContactDetail = appraisalContactDetailList.get(0);
+//            appraisalContactDetailView.setNo1(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId1(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName1(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo1(appraisalContactDetail.getContactNo());
             appraisalContactDetail = appraisalContactDetailList.get(1);
+//            appraisalContactDetailView.setNo2(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId2(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName2(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo2(appraisalContactDetail.getContactNo());
             appraisalContactDetail = appraisalContactDetailList.get(2);
+//            appraisalContactDetailView.setNo3(appraisalContactDetail.getId());
             appraisalContactDetailView.setContractId3(appraisalContactDetail.getId());
             appraisalContactDetailView.setCustomerName3(appraisalContactDetail.getCustomerName());
             appraisalContactDetailView.setContactNo3(appraisalContactDetail.getContactNo());

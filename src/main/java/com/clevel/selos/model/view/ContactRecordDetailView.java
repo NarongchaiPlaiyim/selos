@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -21,14 +23,15 @@ public class ContactRecordDetailView {
     private String acceptResultStr;
     private Date nextCallingDate;
     private String nextCallingTime;
-    private int reason;
+    private Reason reason;
     private String reasonStr;
     private String remark;
-    private String status;
+    private Status status;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private Step step;
 
     private CustomerAcceptanceView customerAcceptance;
 
@@ -121,11 +124,11 @@ public class ContactRecordDetailView {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public int getReason() {
+    public Reason getReason() {
         return reason;
     }
 
-    public void setReason(int reason) {
+    public void setReason(Reason reason) {
         this.reason = reason;
     }
 
@@ -145,11 +148,11 @@ public class ContactRecordDetailView {
         this.remark = remark;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -193,6 +196,14 @@ public class ContactRecordDetailView {
         this.customerAcceptance = customerAcceptance;
     }
 
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -207,12 +218,14 @@ public class ContactRecordDetailView {
                 .append("nextCallingDate", nextCallingDate)
                 .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
+                .append("reasonStr", reasonStr)
                 .append("remark", remark)
                 .append("status", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("step", step)
                 .append("customerAcceptance", customerAcceptance)
                 .toString();
     }

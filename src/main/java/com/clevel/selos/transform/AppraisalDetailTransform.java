@@ -22,7 +22,7 @@ import java.util.List;
 public class AppraisalDetailTransform extends Transform {
     @Inject
     @SELOS
-    Logger log;
+    private Logger log;
     @Inject
     @NormalMessage
     private Message msg;
@@ -33,6 +33,7 @@ public class AppraisalDetailTransform extends Transform {
     @Inject
     private NewCollateralHeadDAO newCollateralHeadDAO;
     private List<NewCollateral> newCollateralList;
+    private List<NewCollateral> newCollateralListForReturn;
     private List<NewCollateralHead> newCollateralHeadList;
 
     private NewCollateral newCollateral;
@@ -48,30 +49,42 @@ public class AppraisalDetailTransform extends Transform {
         long newCollateralHeadId = 0;
         boolean createNewCollateralFlag = true;
         newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
-
+        newCollateralListForReturn = new ArrayList<NewCollateral>();
         for(AppraisalDetailView view : appraisalDetailViewList){
             newCollateralId = view.getNewCollateralId();
             newCollateralHeadId = view.getNewCollateralHeadId();
             log.debug("-- newCollateralId {}", newCollateralId);
-            log.debug("-- newCollateralHeadId {}", newCollateralHeadId);
+            log.debug("---- newCollateralHeadId {}", newCollateralHeadId);
             if(!Util.isZero(newCollateralId)){
                 for(NewCollateral newCollateral : newCollateralList){
                     if(newCollateral.getId() == newCollateralId){
-                        log.debug("-- newCollateral.getId()[{}] == newCollateralId[{}] ",newCollateral.getId(), newCollateralId);
+                        log.debug("---- newCollateral.getId()[{}] == newCollateralId[{}] ",newCollateral.getId(), newCollateralId);
                         newCollateralHeadList = newCollateral.getNewCollateralHeadList();
                         for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                             if(newCollateralHead.getId() == newCollateralHeadId){
-                                log.debug("-- newCollateral.getId()[{}] == newCollateralId[{}] ",newCollateral.getId(), newCollateralId);
-                                log.debug("-- [BEFORE] NewCollateralHead Model {}", newCollateralHead.toString());
+                                log.debug("------ NewCollateralHead.getId()[{}] == newCollateralHeadId[{}] ",newCollateralHead.getId(), newCollateralHeadId);
                                 newCollateralHead.setPurposeNewAppraisal(Util.isTrue(view.isPurposeNewAppraisalB()));
+//                                log.debug("------ NewCollateralHead.purposeNewAppraisal[{}]", newCollateralHead.getPurposeNewAppraisal());
                                 newCollateralHead.setPurposeReviewAppraisal(Util.isTrue(view.isPurposeReviewAppraisalB()));
+//                                log.debug("------ NewCollateralHead.purposeReviewAppraisal[{}]", newCollateralHead.getPurposeReviewAppraisal());
                                 newCollateralHead.setPurposeReviewBuilding(Util.isTrue(view.isPurposeReviewBuildingB()));
+//                                log.debug("------ NewCollateralHead.purposeReviewBuilding[{}]", newCollateralHead.getPurposeReviewBuilding());
                                 newCollateralHead.setTitleDeed(view.getTitleDeed());
+//                                log.debug("------ NewCollateralHead.titleDeed[{}]", newCollateralHead.getTitleDeed());
                                 newCollateralHead.setCollateralChar(view.getCharacteristic());
+//                                log.debug("------ NewCollateralHead.collateralChar[{}]", newCollateralHead.getCollateralChar());
                                 newCollateralHead.setNumberOfDocuments(view.getNumberOfDocuments());
-                                newCollateralHead.setModifyBy(view.getModifyBy());
-                                newCollateralHead.setModifyDate(view.getModifyDate());
-                                log.debug("-- [AFTER]  NewCollateralHead Model {}", newCollateralHead.toString());
+//                                log.debug("------ NewCollateralHead.numberOfDocuments[{}]", newCollateralHead.getNumberOfDocuments());
+                                newCollateralHead.setModifyBy(user);
+//                                log.debug("------ NewCollateralHead.modifyBy[{}]", newCollateralHead.getModifyBy());
+                                newCollateralHead.setModifyDate(DateTime.now().toDate());
+//                                log.debug("------ NewCollateralHead.modifyDate[{}]", newCollateralHead.getModifyDate());
+                                newCollateralHead.setAppraisalRequest(1);
+//                                log.debug("------ NewCollateralHead.appraisalRequest[{}]", newCollateralHead.getAppraisalRequest());
+                                newCollateralHead.setProposeType("P");
+//                                log.debug("------ NewCollateralHead.proposeType[{}]", newCollateralHead.getProposeType());
+
+                                newCollateralListForReturn.add(newCollateral);
                                 continue;
                             }
                         }
@@ -85,34 +98,57 @@ public class AppraisalDetailTransform extends Transform {
                     newCollateral = new NewCollateral();
                     log.debug("-- NewCollateral[NEW] created. ");
                     newCollateral.setModifyDate(DateTime.now().toDate());
+//                    log.debug("-- NewCollateral.modifyDate[{}]", newCollateral.getModifyDate());
                     newCollateral.setModifyBy(user);
+//                    log.debug("-- NewCollateral.modifyBy[{}]", newCollateral.getModifyBy());
                     newCollateral.setCreateDate(DateTime.now().toDate());
+//                    log.debug("-- NewCollateral.createDate[{}]", newCollateral.getCreateDate());
                     newCollateral.setCreateBy(user);
+//                    log.debug("-- NewCollateral.createBy[{}]", newCollateral.getCreateBy());
                     newCollateral.setNewCreditFacility(newCreditFacility);
+//                    log.debug("-- NewCollateral.newCreditFacility[{}]", newCollateral.getNewCreditFacility());
+                    newCollateral.setAppraisalRequest(1);
+//                    log.debug("-- NewCollateral.appraisalRequest[{}]", newCollateral.getAppraisalRequest());
+                    newCollateral.setProposeType("P");
+//                    log.debug("-- NewCollateral.proposeType[{}]", newCollateral.getProposeType());
                     createNewCollateralFlag = false;
                     log.debug("-- Change createNewCollateralFlag = false");
                 }
                 newCollateralHeadListForNewCollateralHead = new ArrayList<NewCollateralHead>();
                 newCollateralHeadForNewCollateralHead = new NewCollateralHead();
                 newCollateralHeadForNewCollateralHead.setPurposeNewAppraisal(Util.isTrue(view.isPurposeNewAppraisalB()));
+//                log.debug("---- NewCollateralHead.purposeNewAppraisal[{}]", newCollateralHeadForNewCollateralHead.getPurposeNewAppraisal());
                 newCollateralHeadForNewCollateralHead.setPurposeReviewAppraisal(Util.isTrue(view.isPurposeReviewAppraisalB()));
+//                log.debug("---- NewCollateralHead.purposeReviewAppraisal[{}]", newCollateralHeadForNewCollateralHead.getPurposeReviewAppraisal());
                 newCollateralHeadForNewCollateralHead.setPurposeReviewBuilding(Util.isTrue(view.isPurposeReviewBuildingB()));
+//                log.debug("---- NewCollateralHead.purposeReviewBuilding[{}]", newCollateralHeadForNewCollateralHead.getPurposeReviewBuilding());
                 newCollateralHeadForNewCollateralHead.setTitleDeed(view.getTitleDeed());
+//                log.debug("---- NewCollateralHead.titleDeed[{}]", newCollateralHeadForNewCollateralHead.getTitleDeed());
                 newCollateralHeadForNewCollateralHead.setCollateralChar(view.getCharacteristic());
+//                log.debug("---- NewCollateralHead.collateralChar[{}]", newCollateralHeadForNewCollateralHead.getCollateralChar());
                 newCollateralHeadForNewCollateralHead.setNumberOfDocuments(view.getNumberOfDocuments());
-                newCollateralHeadForNewCollateralHead.setModifyBy(view.getModifyBy());
+//                log.debug("---- NewCollateralHead.numberOfDocuments[{}]", newCollateralHeadForNewCollateralHead.getNumberOfDocuments());
+                newCollateralHeadForNewCollateralHead.setModifyBy(user);
+//                log.debug("---- NewCollateralHead.modifyBy[{}]", newCollateralHeadForNewCollateralHead.getModifyBy());
                 newCollateralHeadForNewCollateralHead.setModifyDate(view.getModifyDate());
+//                log.debug("---- NewCollateralHead.modifyDate[{}]", newCollateralHeadForNewCollateralHead.getModifyDate());
                 newCollateralHeadForNewCollateralHead.setCreateDate(DateTime.now().toDate());
+//                log.debug("---- NewCollateralHead.createDate[{}]", newCollateralHeadForNewCollateralHead.getCreateDate());
                 newCollateralHeadForNewCollateralHead.setCreateBy(user);
+//                log.debug("---- NewCollateralHead.createBy[{}]", newCollateralHeadForNewCollateralHead.getCreateBy());
+                newCollateralHeadForNewCollateralHead.setAppraisalRequest(1);
+//                log.debug("------ NewCollateralHead.appraisalRequest[{}]", newCollateralHeadForNewCollateralHead.getAppraisalRequest());
+                newCollateralHeadForNewCollateralHead.setProposeType("P");
+//                log.debug("------ NewCollateralHead.proposeType[{}]", newCollateralHeadForNewCollateralHead.getProposeType());
 
                 newCollateralHeadListForNewCollateralHead.add(newCollateralHeadForNewCollateralHead);
                 newCollateral.setNewCollateralHeadList(newCollateralHeadListForNewCollateralHead);
-                newCollateralList.add(newCollateral);
+                newCollateralListForReturn.add(newCollateral);
                 log.debug("-- NewCollateral {}", newCollateral.toString());
-                log.debug("-- NewCollateral added to newCollateralList[Size {}]", newCollateralList.size());
+                log.debug("-- NewCollateral added to newCollateralList[Size {}]", newCollateralListForReturn.size());
             }
         }
-        return newCollateralList;
+        return newCollateralListForReturn;
     }
 
     public List<AppraisalDetailView> transformToView(final List<NewCollateral> newCollateralList){
@@ -148,16 +184,28 @@ public class AppraisalDetailTransform extends Transform {
     }
 
     public List<AppraisalDetailView> updateLabel(List<AppraisalDetailView> appraisalDetailViewList){
+        StringBuilder stringBuilder = null;
         for(AppraisalDetailView appraisalDetailView : appraisalDetailViewList){
-            if(appraisalDetailView.isPurposeReviewBuildingB()){
-                appraisalDetailView.setPurposeReviewBuildingLabel(msg.get("app.appraisal.appraisalDetail.label.purposeReviewBuilding")+" ");
-            }
+            stringBuilder = new StringBuilder();
             if(appraisalDetailView.isPurposeReviewAppraisalB()){
-                appraisalDetailView.setPurposeReviewAppraisalLabel(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal")+" ");
+                stringBuilder = stringBuilder.append(", ");
+                stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal"));
             }
             if(appraisalDetailView.isPurposeNewAppraisalB()){
-                appraisalDetailView.setPurposeNewAppraisalLabel(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal"));
+                stringBuilder = stringBuilder.append(", ");
+                stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeNewAppraisal"));
             }
+            if(appraisalDetailView.isPurposeReviewBuildingB()){
+                stringBuilder = stringBuilder.append(", ");
+                stringBuilder = stringBuilder.append(msg.get("app.appraisal.appraisalDetail.label.purposeReviewBuilding"));
+            }
+            String result = stringBuilder.toString();
+            if(!Util.isNull(result)){
+                appraisalDetailView.setPurposeReviewAppraisalLabel(result.substring(2, result.length()));
+            } else {
+                appraisalDetailView.setPurposeReviewAppraisalLabel("");
+            }
+
         }
         return appraisalDetailViewList;
     }
