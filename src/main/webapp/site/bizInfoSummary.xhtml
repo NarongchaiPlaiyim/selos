@@ -78,15 +78,26 @@
                                             <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt2" value="Yes" /><p:spacer width="15px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}" styleClass="title left"/> :
+                                            <!--<clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"-->
+                                                            <!--value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"-->
+                                                            <!--disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"-->
+                                                            <!--yearRange="1950:2100"-->
+                                                            <!--defaultdate="#{bizInfoSummary.currentDateDDMMYY}"-->
+                                                            <!--mindate="#{bizInfoSummary.currentDateDDMMYY}"-->
+                                                            <!--showButtonPanel="true"-->
+                                                            <!--pattern="dd/MM/yyyy">-->
+                                                <!--<p:ajax event="blur" update=":frmMain:expiryDate"/>-->
+                                            <!--</clv:BECalendar>-->
                                             <clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
-                                                            disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
+                                                            disabled="#{bizInfoSummary.disableExpiryDate}"
+                                                            required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
                                                             yearRange="1950:2100"
-                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            mindate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            pattern="dd/MM/yyyy"
+                                                            mindate="01/01/1950"
                                                             showButtonPanel="true"
-                                                            pattern="dd/MM/yyyy">
-                                                <p:ajax event="blur" update=":frmMain:expiryDate"/>
+                                                            defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}">
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -206,12 +217,12 @@
                                                 <p:ajax event="blur" update=":frmMain:phoneNo"/>
                                                          </p:inputText>
                                             <p:spacer width="20" height="5" />
-                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}" styleClass="title" for="extension"/>
+                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}" styleClass="title" for="extension"/>:
                                             <p:spacer width="20" height="5"></p:spacer>
                                             <p:inputText styleClass="smaller" id="extension" onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
                                                          value="#{bizInfoSummary.bizInfoSummaryView.extension}" >
                                                 <p:ajax event="blur" update=":frmMain:extension"/>
-                                                         </p:inputText>:
+                                                         </p:inputText>
                                         </td>
                                     </tr>
                                     <tr>
@@ -541,9 +552,8 @@
                                 <p:commandButton id="btnAddBizInfoDetail" styleClass="medium" binding="#{addBizInfoDetail}"
                                                  value="#{msg.get('app.button.add')}"
                                                  process="@form"
-                                                 actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
                                                  oncomplete="confirmAddBizInfoDetailDlg.show()"
-                                                 update="frmMain">
+                                                 update=":frmMain">
                                     <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
                                 </p:commandButton>
                             </td>
@@ -763,7 +773,7 @@
         <ui:param name="name" value="confirmAddBizInfoDetailDlg"/>
         <ui:param name="formId" value="frmConfirmAddBizInfoDetail"/>
         <ui:param name="controller" value="#{bizInfoSummary}"/>
-        <ui:param name="action" value="onSaveBizInfoSummary"/>
+        <ui:param name="action" value="onCheckAdd"/>
         <ui:param name="redirectValue" value="#{bizInfoSummary.redirect}"/>
         <ui:param name="update" value=":msgBoxSystemMessagePanel,:frmMain"/>
     </ui:include>

@@ -13,11 +13,10 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Long> {
-    private static final long serialVersionUID = 7222422253465067781L;
-	@Inject
+    @Inject
     @SELOS
     Logger log;
-    
+    @Inject
     public ContactRecordDetailDAO() {
     }
 

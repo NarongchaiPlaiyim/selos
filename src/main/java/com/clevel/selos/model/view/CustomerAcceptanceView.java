@@ -7,9 +7,8 @@ import java.util.Date;
 
 public class CustomerAcceptanceView implements Serializable {
 
-    private static final long serialVersionUID = 6141918378692217237L;
-	private long id;
-	private int approveResult;
+    private long id;
+    private int approveResult;
     private Date createDate;
     private Date modifyDate;
     private User createBy;

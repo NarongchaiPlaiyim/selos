@@ -91,15 +91,7 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
             getSession().delete(entity);
         }
     }
-    @SuppressWarnings("unchecked")
-    public void deleteById(ID id) {
-    	T ref = (T) getSession().byId(entityClass).getReference(id);
-    	getSession().delete(ref);
-    }
-    @SuppressWarnings("unchecked")
-    public T findRefById(ID id) {
-    	return (T) getSession().byId(entityClass).getReference(id);
-    }
+
     @SuppressWarnings("unchecked")
     public List<T> refresh() {
         Session session = getSession();
