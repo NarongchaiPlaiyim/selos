@@ -1445,7 +1445,7 @@ public class CreditFacPropose implements Serializable {
             creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
-
+            exSummaryControl.calForCreditFacility(workCaseId);
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
