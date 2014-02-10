@@ -5,7 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        >
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : NCB Record Detail</title>
@@ -453,6 +453,7 @@
                         <p:column styleClass="center">
                             <h:outputText value="#{item.dateOfInfo}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+
                             </h:outputText>
                         </p:column>
 
