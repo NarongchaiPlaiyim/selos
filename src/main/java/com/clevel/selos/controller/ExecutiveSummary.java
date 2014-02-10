@@ -55,16 +55,16 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     private ExSumReasonView selectDeviate;
 
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    ReasonDAO reasonDAO;
+    private ReasonDAO reasonDAO;
     @Inject
-    AuthorizationDOADAO authorizationDOADAO;
+    private AuthorizationDOADAO authorizationDOADAO;
 
     @Inject
-    ExSummaryControl exSummaryControl;
+    private ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<AuthorizationDOA> authorizationDOAList;
