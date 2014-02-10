@@ -356,4 +356,20 @@ public class DateTimeUtil implements Serializable {
             return 0;
         }
     }
+
+    public static Date getFirstDayOfMonthDatePlusOneYear(Date date){
+        if(date != null){
+            int month = dateToCalendar(date).get(Calendar.MONTH);
+            int year = dateToCalendar(date).get(Calendar.YEAR);
+            int nextYear = year+1;
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DATE,1);
+            cal.set(Calendar.MONTH,month);
+            cal.set(Calendar.YEAR,nextYear);
+            return cal.getTime();
+        } else {
+            return null;
+        }
+    }
 }

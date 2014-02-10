@@ -948,11 +948,15 @@
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditRiskInfo.lastReviewDate}"/>
+                                            <h:outputText value="#{creditRiskInfo.lastReviewDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
-                                            <h:outputText value="#{creditRiskInfo.nextReviewDate}"/>
+                                            <h:outputText value="#{creditRiskInfo.nextReviewDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                            </h:outputText>
                                         </p:column>
 
                                         <p:column styleClass="center">
