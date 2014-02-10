@@ -26,6 +26,7 @@ public class BankStatementSummaryDAO extends GenericDAO<BankStatementSummary, Lo
         BankStatementSummary bankStatementSummary = new BankStatementSummary();
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCase.getId()));
+        criteria.addOrder(Order.asc("id"));
 //        bankStatementSummary = (BankStatementSummary) criteria.uniqueResult();
         List list = criteria.list();
         if (list != null && list.size() > 0) {

@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class  ProposeCreditDetailView implements Serializable {
-    private long id;
+    private int id;
     private int seq;
     private boolean noFlag;
     private String typeOfStep;
@@ -40,11 +40,11 @@ public class  ProposeCreditDetailView implements Serializable {
         this.noFlag = false;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -117,7 +117,7 @@
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column style="width: 5%; padding: 5px 10px !important;"/>
-                                <p:column style="width: 35%; padding: 5px 10px !important;"
+                                <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
                                 <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
@@ -292,10 +292,10 @@
                                          style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[btnSaveCollateral.clientId]}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                            <f:selectItems value="#{creditFacPropose.collateralTypeList}"
-                                           var="collateralTypeItem"
-                                           itemLabel="#{collateralTypeItem.description}"
-                                           itemValue="#{collateralTypeItem.id}"/>
+                            <f:selectItems value="#{creditFacPropose.headCollateralTypeList}"
+                                           var="headCollateralTypeItem"
+                                           itemLabel="#{headCollateralTypeItem.description}"
+                                           itemValue="#{headCollateralTypeItem.id}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
