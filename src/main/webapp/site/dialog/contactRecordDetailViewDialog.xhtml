@@ -4,99 +4,75 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-<h:form id="contactRecordViewDlgFrm">   
-    <p:panel styleClass="panel-dialog" rendered="#{not empty customerAcceptance.contactRecord}">
-    	<p:messages/>
+    <p:panel id="contactRecordDlgPanel" styleClass="panel-dialog">
+    <h:form id="contactRecordViewDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callDateTime')}"
-                		for='calling_datetime'
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                	<p:inputText id='calling_datetime' readonly="true"
-                	     value="#{customerAcceptance.contactRecord.callingDate}"
-                	     styleClass="readonly"
-                         >
-                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th-TH"/>
-                      </p:inputText>
+                    <p:calendar id="callingDate" showOn="button" navigator="true"
+                                value="#{customerAcceptance.contactRecordDetailView.callingDate}"
+                                pattern="dd/MM/yyyy  HH:mm"
+                                locale="th_TH"
+                                timeZone="Asia/Bangkok"
+                                yearRange="2440:3000">
+                        <f:convertDateTime  pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
+                    </p:calendar>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.callResult')}"
-                		for='calling_result'
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingResult')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:selectOneRadio id="calling_result" value="#{customerAcceptance.contactRecord.callingResult}"
-                    	required="true" requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}"
-                    	>
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
+
+                    <p:selectOneRadio id="callingResultRadio" value="#{customerAcceptance.contactRecordDetailView.callingResult}">
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.callingResult.canContact')}"  itemValue="1" />
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.callingResult.cannotContact')}" itemValue="0" />
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
-             	<td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.acceptResult')}"
-                		for='accept_result'
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.acceptResult')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:selectOneRadio id="accept_result" value="#{customerAcceptance.contactRecord.acceptResult}">
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.accept')}"  itemValue="2" />
-                        <f:selectItem itemLabel="#{msg.get('app.cusaccept.acceptResult.radio.notaccept')}" itemValue="1" />
+
+                    <p:selectOneRadio id="acceptResultRadio" value="#{customerAcceptance.contactRecordDetailView.acceptResult}">
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.accept')}"  itemValue="1" />
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.notAccept')}" itemValue="0" />
+                        <f:selectItem itemLabel="#{msg.get('app.contactRecordDetail.radio.label.acceptResult.etc')}" itemValue="2" />
                     </p:selectOneRadio>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}"
-                		for='nextcalling_datetime'
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.nextCallingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                	 <p:calendar id='nextcalling_datetime' 
-                         pattern="dd/MM/yyyy HH:mm" 
-                         showOn="button" 
-                         value="#{customerAcceptance.contactRecord.nextCallingDate}"
-                         locale='th_TH'
-                         mindate="#{customerAcceptance.minDate}"
-                         autocomplete="false"
-                        	>
-                       </p:calendar>
+                    <p:calendar
+                            id="nextCallingDate" mindate="#{customerAcceptance.currentDate}" showOn="button" navigator="true"
+                                value="#{customerAcceptance.contactRecordDetailView.nextCallingDate}"
+                                pattern="dd/MM/yyyy  HH:mm"
+                                locale="th_TH"
+                                timeZone="Asia/Bangkok"
+                                yearRange="2440:3000">
+                        <f:convertDateTime  pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
+                    </p:calendar>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.reason')}"
-                		for='reason' 
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.reason')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                	<p:selectOneMenu id='reason' value='#{customerAcceptance.contactRecord.updReasonId}'
-                		required="true"  requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
-                		>
-                		<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                		<f:selectItems value="#{customerAcceptance.reasons}" var="contactReason"
-                			itemLabel="#{contactReason.description}" itemValue="#{contactReason.id}" 
-                			/>
-                	</p:selectOneMenu>
+                    <p:selectOneMenu style="width: 100px" value="#{customerAcceptance.contactRecordDetailView.reason}" id="reason">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItem itemLabel="ลูกค้าแจ้งนัดกับ BDM แล้ว" itemValue="1"/>
+                        <f:selectItem itemLabel="ไม่สามารถติดต่อได้" itemValue="2"/>
+                        <f:selectItem itemLabel="ลูกค้ายังไม่รับนัด" itemValue="3"/>
+                        <f:selectItem itemLabel="ลูกค้าไม่สะดวก" itemValue="4"/>
+                        <f:selectItem itemLabel="ลูกค้าขอติดต่อ BDM ก่อน" itemValue="5"/>
+                        <f:selectItem itemLabel="ลูกค้ารอเงินที่จะเป็นหลักประกัน" itemValue="6"/>
+                    </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
-                <td class="title">
-                	<p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.remark')}"
-                		for='remark' 
-                		/>
-                </td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.remark')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputTextarea id='remark' 
-                    	value="#{customerAcceptance.contactRecord.remark}"
-                    	autoResize="false" 
-                    	rows="3" cols="40" />
+                    <p:inputTextarea value="#{customerAcceptance.contactRecordDetailView.remark}" rows="3" cols="30" />
                 </td>
             </tr>
             <tr>
@@ -107,32 +83,22 @@
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                         id="addContactRecordBtn"
-                         value="#{msg.get('app.button.ok')}"
-                         actionListener="#{customerAcceptance.onAddContactRecord()}"
-                         update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
-                         oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
-                         styleClass="small"
-                         rendered="#{customerAcceptance.contactRecord.new}"/>
-                     <p:commandButton
-                         id="updContactRecordBtn"
-                         value="#{msg.get('app.button.ok')}"
-                         actionListener="#{customerAcceptance.onUpdateContactRecord()}"
-                         update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
-                         oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
-                         styleClass="small"
-                         rendered="#{not customerAcceptance.contactRecord.new}"/>
-                    <p:commandButton
-                    	type='button' styleClass="small" 
-                    	value="#{msg.get('app.button.cancel')}" onclick="p_contactRecordDlg.hide()"/>
-                    
+                            id="btnSaveContactRecord"
+                            binding="#{saveContactRecord}"
+                            value="#{msg.get('app.button.ok')}"
+                            action="#{customerAcceptance.onSaveContactRecordDetailView()}"
+                            process=":contactRecordViewDlgForm"
+                            update=":frmMain:contactRecordDetailViewTable"
+                            oncomplete="handleContactRecordRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="contactRecordDetailViewDlg.hide()"/>
                 </td>
             </tr>
         </table>
-	</p:panel>
-	<p:blockUI block="contactRecordViewDlgFrm" trigger="addContactRecordBtn,updContactRecordBtn">
-	    LOADING<br />
-	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-	</p:blockUI>
- </h:form>
+    </h:form>
+</p:panel>
+<p:blockUI widgetVar="blockContactRecordDlg" block="contactRecordDlgPanel" trigger=":contactRecordViewDlgForm:btnSaveContactRecord">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
 </ui:composition>

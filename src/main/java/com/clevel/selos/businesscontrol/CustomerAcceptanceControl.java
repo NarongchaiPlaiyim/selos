@@ -1,159 +1,118 @@
 package com.clevel.selos.businesscontrol;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
-import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
-import com.clevel.selos.dao.working.TCGInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
-import com.clevel.selos.model.db.working.TCGInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
-import com.clevel.selos.model.view.TCGInfoView;
 import com.clevel.selos.transform.ContactRecordDetailTransform;
 import com.clevel.selos.transform.CustomerAcceptanceTransform;
-import com.clevel.selos.transform.TCGInfoTransform;
+import org.slf4j.Logger;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.List;
 
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
-	private static final long serialVersionUID = -1417785938223413196L;
-
-	@Inject @SELOS
+    @Inject
+    @SELOS
     private Logger log;
-	
-	@Inject
-	private WorkCaseDAO workCaseDAO;
-	
-	@Inject
-	private TCGInfoDAO tcgInfoDAO;
-	@Inject
-	private TCGInfoTransform tcgInfoTransform;
-	
-	@Inject
-	private CustomerAcceptanceDAO customerAcceptanceDAO;
-	@Inject
-	private CustomerAcceptanceTransform customerAcceptanceTransform;
-	
-	@Inject
-	private ContactRecordDetailDAO contactRecordDetailDAO;
-	@Inject
-	private ContactRecordDetailTransform contactRecordDetailTransform;
-	
-	@Inject
-	private ReasonDAO reasonDAO;
-	
-	
-	public Status getWorkCaseStatus(long workCaseId) {
-		WorkCase workCase = null;
-		try {
-			if (workCaseId > 0)
-				workCase = workCaseDAO.findById(workCaseId);
-		} catch (Throwable e) {
-			log.debug("Found error getCustomerAcceptanceView "+workCaseId,e);
-		}
 
-		if (workCase == null)
-			return null;
-		else
-			return workCase.getStatus();
-	}
-	public TCGInfoView getTCGInfoView(long workCaseId) {
-		TCGInfo info = null;
-		if (workCaseId > 0) {
-			try {
-				info = tcgInfoDAO.findByWorkCaseId(workCaseId);
-			} catch (Throwable e) {
-				log.debug("Found error getTCGInfoView "+workCaseId,e);
-			}
-		}
-		return tcgInfoTransform.transformToView(info);
-	}
-	public CustomerAcceptanceView getCustomerAcceptanceView(long workCaseId) {
-		CustomerAcceptance result = null;
-		try {
-			if (workCaseId > 0)
-				result = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCaseId);
-		} catch (Throwable e) {
-			log.debug("Found error getCustomerAcceptanceView "+workCaseId,e);
-		}
+    @Inject
+    CustomerAcceptanceDAO customerAcceptanceDAO;
+    @Inject
+    ContactRecordDetailDAO contactRecordDetailDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
-		if (result == null)
-			return new CustomerAcceptanceView();
-		else
-			return customerAcceptanceTransform.transformToView(result);
-	}
-	
-	public List<ContactRecordDetailView> getContactRecordDetails(long customerAcceptanceId) {
-		List<ContactRecordDetail> details = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptanceId);
-		return contactRecordDetailTransform.transformToView(details);
-	}
-	public List<Reason> getContactRecordReasons() {
-		List<Reason> reasons =  reasonDAO.getContactReasonList();
-		if (reasons == null)
-			return Collections.emptyList();
-		else
-			return reasons;
-	}
-	
-	
-	public void saveCustomerContactRecords(long workCaseId,CustomerAcceptanceView cusAcceptView,TCGInfoView tcgInfoView,List<ContactRecordDetailView> details,List<ContactRecordDetailView> delDetails) {
-		User user = getCurrentUser();
-		WorkCase workCase = workCaseDAO.findById(workCaseId);
-		CustomerAcceptance cusAccept = null;
-		if (cusAcceptView.getId() <= 0) { //new
-			cusAccept = customerAcceptanceTransform.transformToNewModel(cusAcceptView, workCase, user);
-			customerAcceptanceDAO.save(cusAccept);
-		} else {
-			cusAccept = customerAcceptanceDAO.findById(cusAcceptView.getId());
-			cusAccept.setModifyBy(user);
-			cusAccept.setModifyDate(new Date());
-			customerAcceptanceDAO.persist(cusAccept);
-		}
-		
-		if (tcgInfoView.getId() <= 0) { //new
-			TCGInfo tcgInfo = tcgInfoTransform.transformToNewModel(tcgInfoView, cusAccept.getWorkCase());
-			tcgInfoDAO.save(tcgInfo);
-		} else {
-			TCGInfo tcgInfo = tcgInfoDAO.findById(tcgInfoView.getId());
-			tcgInfo.setReceiveTCGSlip(tcgInfoView.getReceiveTCGSlip());
-			tcgInfo.setPayinSlipSendDate(tcgInfoView.getPayinSlipSendDate());
-			tcgInfoDAO.persist(tcgInfo);
-		}
-		
-		//Add and update first
-		for (ContactRecordDetailView view : details) {
-			if (view.isNew()) {
-				ContactRecordDetail model = contactRecordDetailTransform.transformToNewModel(view, user, cusAccept);
-				contactRecordDetailDAO.save(model);
-			} else if (view.isNeedUpdate()) {
-				//get from db
-				ContactRecordDetail model = contactRecordDetailDAO.findById(view.getId());
-				contactRecordDetailTransform.updateModelFromView(model, view, user);
-				contactRecordDetailDAO.persist(model);
-			}
-		}
-		
-		//Delete
-		for (ContactRecordDetailView view : delDetails) {
-			if (view.isNew())
-				continue;
-			contactRecordDetailDAO.deleteById(view.getId());
-		}
-	}
+    @Inject
+    CustomerAcceptanceTransform customerAcceptanceTransform;
+    @Inject
+    ContactRecordDetailTransform contactRecordDetailTransform;
+
+    @Inject
+    public CustomerAcceptanceControl(){
+
+    }
+
+    public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList, long workCaseId) {
+
+        log.info("onSaveCustomerAcceptance begin");
+        log.info("onSaveCustomerAcceptance begin workCaseId " + workCaseId);
+        log.info("onSaveCustomerAcceptance begin getApproveResult " + customerAcceptanceView.getApproveResult());
+        log.info("contactRecordDetailViewList size begin  " + contactRecordDetailViewList.size());
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        CustomerAcceptance customerAcceptance = customerAcceptanceTransform.transformToModel(customerAcceptanceView);
+        customerAcceptance.setWorkCase(workCase);
+        log.info("customerAcceptance getWorkCase before persist is " + customerAcceptance.getWorkCase());
+        log.info("customerAcceptance getApproveResult before  persist is " + customerAcceptance.getApproveResult());
+        customerAcceptanceDAO.persist(customerAcceptance);
+        log.info("persist customerAcceptance");
+
+        log.info("persist customerAcceptance after id is " + customerAcceptance.getId());
+        if (contactRecordDetailViewList.size() > 0) {
+            List<ContactRecordDetail> contactRecordDetailListDelete = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptance.getId());
+            log.info("recordCallingDetailViewListDelete :: {}", contactRecordDetailListDelete.size());
+
+            contactRecordDetailDAO.delete(contactRecordDetailListDelete);
+            log.info("delete contactRecordDetailListDelete");
+        }
+
+        List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, customerAcceptance,workCase);
+        log.info("contactRecordDetailTransform contactRecordDetailViewList before add size is " + contactRecordDetailList.size());
+
+        contactRecordDetailDAO.persist(contactRecordDetailList);
+        log.info("persist contactRecordDetailList");
+
+    }
+
+    public CustomerAcceptanceView getCustomerAcceptanceByWorkCase(long workCaseId) {
+        log.info("getCustomerAcceptanceByWorkCase :: customer id  :: {}", workCaseId);
+        CustomerAcceptanceView customerAcceptanceView = null;
+
+        try {
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            CustomerAcceptance customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCase);
+            if (customerAcceptance != null) {
+                log.info("customerAcceptance getId :: {} ", customerAcceptance.getId());
+                log.info("customerAcceptance getApproveResult :: {} ", customerAcceptance.getApproveResult());
+                customerAcceptanceView = customerAcceptanceTransform.transformToView(customerAcceptance);
+            }
+        } catch (Exception e) {
+            log.error("getCustomerAcceptanceView error :: " + e.getMessage());
+        } finally {
+            log.info("getCustomerAcceptanceView end");
+        }
+        log.info("customerAcceptanceView getApproveResult :: {} ", customerAcceptanceView.getApproveResult());
+        return customerAcceptanceView;
+    }
+
+    public List<ContactRecordDetailView> getContactRecordViewList(long workCaseId) {
+        log.info("getRecordCallingViewList :: workCaseId  :: {}", workCaseId);
+        List<ContactRecordDetailView> contactRecordDetailViewList = null;
+
+        try {
+            List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailDAO.findRecordCallingByWorkCase(workCaseId);
+
+            if (contactRecordDetailList.size() > 0) {
+                contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);
+            }
+
+        } catch (Exception e) {
+            log.error("getRecordCallingViewList error :: " + e.getMessage());
+        } finally {
+            log.info("getRecordCallingViewList end");
+        }
+
+        return contactRecordDetailViewList;
+    }
+
 
 }

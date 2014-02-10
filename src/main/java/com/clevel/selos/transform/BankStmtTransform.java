@@ -25,9 +25,7 @@ import com.clevel.selos.util.ValidationUtil;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class BankStmtTransform extends Transform {
     //DAO
@@ -144,13 +142,27 @@ public class BankStmtTransform extends Transform {
 
 //        Bank tmbBank = bankDAO.getTMBBank();
         for (BankStatement bankStmt : Util.safetyList(bankStatementSummary.getBankStmtList())) {
-//            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+            log.info("bankStmt.id = {}", bankStmt.getId());
             if (BankType.TMB.shortName().equalsIgnoreCase(bankStmt.getBank().getShortName())) {
                 tmbBankStmtViewList.add(getBankStmtView(bankStmt));
             } else {
                 othBankStmtViewList.add(getBankStmtView(bankStmt));
             }
         }
+
+        //Order Bank statement By Id ASC
+        Collections.sort(tmbBankStmtViewList, new Comparator<BankStmtView>() {
+            public int compare(BankStmtView o1, BankStmtView o2) {
+                return (int) (o1.getId() - o2.getId());
+            }
+        });
+
+        Collections.sort(othBankStmtViewList, new Comparator<BankStmtView>() {
+            public int compare(BankStmtView o1, BankStmtView o2) {
+                return (int) (o1.getId() - o2.getId());
+            }
+        });
+
         bankStmtSummaryView.setTmbBankStmtViewList(tmbBankStmtViewList);
         bankStmtSummaryView.setOthBankStmtViewList(othBankStmtViewList);
         return bankStmtSummaryView;

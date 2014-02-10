@@ -335,7 +335,7 @@ public class NCBInfo implements Serializable {
                 }
 
                 ncbAdd.setCanToEdit(true);
-                ncbDetailViewList.add(ncbAdd);
+                //ncbDetailViewList.add(ncbAdd);
 
                 log.debug("add finish :: ncbAdd : {}", ncbAdd);
                 log.debug("add finish :: ncbDetailViewList : {}", ncbDetailViewList);

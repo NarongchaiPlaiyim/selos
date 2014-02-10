@@ -15,7 +15,7 @@ PrimeFaces.locales ['th_TH'] = {
     yearSuffix:'',
     timeOnlyTitle: 'เวลา เท่านั้น',
     timeText: 'Time',
-    hourText: 'Hour',
+    hourText: 'Time',
     minuteText: 'Minute',
     secondText: 'Second',
     currentText: 'ปัจจุบัน',

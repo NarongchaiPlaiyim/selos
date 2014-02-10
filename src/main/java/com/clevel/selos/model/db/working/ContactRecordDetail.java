@@ -13,9 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name="wrk_contact_record")
 public class ContactRecordDetail implements Serializable {
-    private static final long serialVersionUID = 7815166861573458864L;
-
-	@Id
+    @Id
     @SequenceGenerator(name="SEQ_WRK_CONTACT_REC_ID", sequenceName="SEQ_WRK_CONTACT_REC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CONTACT_REC_ID")
     private long id;
@@ -41,12 +39,10 @@ public class ContactRecordDetail implements Serializable {
     @Column(name="remark")
     private String remark;
 
-    @ManyToOne
-    @JoinColumn(name="step_id")
+    @Column(name="step")
     private Step step;
 
-    @ManyToOne
-    @JoinColumn(name="status_id")
+    @Column(name="status")
     private Status status;
 
     @Temporal(TemporalType.TIMESTAMP)
