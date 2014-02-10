@@ -125,6 +125,8 @@ public class PrescreenResult implements Serializable {
         }
         try{
             prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
+            messageHeader = "Information.";
+            message = "Retrieve interface info success.";
         } catch (Exception ex){
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
