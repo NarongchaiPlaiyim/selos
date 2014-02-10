@@ -154,7 +154,7 @@ public class BizInfoSummaryControl extends BusinessControl {
     public void calGrdTotalIncomeByBankStatement(long workCaseId){
         log.info("calGrdTotalIncomeByBankStatement :: workCaseId : {}",workCaseId);
         BankStatementSummary bankStatementSummary = bankStmtSummaryDAO.findByWorkCaseId(workCaseId);
-        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(workCaseId);
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findByWorkCaseId(workCaseId);
         if(bizInfoSummary == null){
             bizInfoSummary = new BizInfoSummary();
             WorkCase workCase = workCaseDAO.findById(workCaseId);
