@@ -117,6 +117,7 @@ public class BankStatementDetail implements Serializable {
 
     private boolean bankAccTypeSelectRequired;
     private boolean roleUW;
+    private boolean clickSave;
 
     public BankStatementDetail() {
     }
@@ -126,6 +127,7 @@ public class BankStatementDetail implements Serializable {
         preRender();
         initViewFormAndSelectItems();
         checkRequiredBankAccTypeSelected();
+        clickSave = false;
     }
 
     private void preRender() {
@@ -296,6 +298,8 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
+        clickSave = true;
+
         try {
             // update Main account and Highest inflow
             bankStmtControl.updateMainAccAndHighestInflow(summaryView);
@@ -305,14 +309,8 @@ public class BankStatementDetail implements Serializable {
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             dbrControl.updateValueOfDBR(workCaseId);
-
             exSummaryControl.calForBankStmtSummary(workCaseId);
-
             bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
-
-            //set to init
-            initViewFormAndSelectItems();
-            checkRequiredBankAccTypeSelected();
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
@@ -331,8 +329,12 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        initViewFormAndSelectItems();
-        checkRequiredBankAccTypeSelected();
+        if (clickSave) {
+            initViewFormAndSelectItems();
+            checkRequiredBankAccTypeSelected();
+        } else {
+            onCreation();
+        }
     }
 
     private void checkRequiredBankAccTypeSelected() {
