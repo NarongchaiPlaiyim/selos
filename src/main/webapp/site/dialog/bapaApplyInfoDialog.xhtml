@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="bapaApplyInfoDlgForm">
+	<p:panel styleClass="panel-dialog" rendered="true">
+	<p:messages />
+	<table class="content_form">
+		<tr>
+			<td class="title" style="width:140px">
+				<p:outputLabel
+					for="type"
+					value="#{msg.get('app.baInfo.bapa.dialog.type')}" />
+			</td>
+			<td>
+				<p:selectOneMenu id='type' style="width:160px"
+					>
+					<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+				</p:selectOneMenu>
+			</td>
+		</tr>
+		<tr>
+			<td class="title">
+				<p:outputLabel
+					value="#{msg.get('app.baInfo.bapa.dialog.creditType')}" />
+			</td>
+			<td>
+				<p:dataTable id='credittype_tbl'>
+					<p:column styleClass="center" style="width:30px">
+						<p:selectBooleanCheckbox />
+					</p:column>
+					<p:column styleClass="left" style="width:150px"
+						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.productProgram')}" 
+						>
+					</p:column>
+					<p:column styleClass="left" style="width:130px"
+						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.creditFacility')}"
+						>
+					</p:column>
+					<p:column styleClass="left"
+						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.purpose')}"
+						>
+					</p:column>
+					<p:column styleClass="right" style="width:150px"
+						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.limit')}"
+						>
+						<h:outputText value="0">
+							<f:convertNumber pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</td>
+		</tr>
+		<tr>
+			<td class="title">
+				<p:outputLabel
+					for="premium"
+					value="#{msg.get('app.baInfo.bapa.dialog.premium')}" />
+			</td>
+			<td>
+				<p:inputText id='premium' style="large"
+					converterMessage="#{msg.get('app.baInfo.bapa.premium.validate')}">
+					<f:convertNumber pattern="#,##0.00" />
+				</p:inputText>
+			</td>
+		</tr>
+		<tr>
+			<td class="title">
+				<p:outputLabel
+					for="morepay"
+					value="#{msg.get('app.baInfo.bapa.dialog.morePay')}" />
+			</td>
+			<td>
+				<p:inputText id="morepay" style="large"
+					converterMessage="#{msg.get('app.baInfo.bapa.morepay.validate')}">
+					<f:convertNumber pattern="#,##0.00" />
+				</p:inputText>
+			</td>
+		</tr>
+		 <tr>
+             <td colspan="2">
+                 <p:spacer></p:spacer>
+             </td>
+         </tr>
+		<tr>
+			<td colspan="2" class="center">
+				<p:commandButton
+                        id="addBtn"
+                        value="#{msg.get('app.button.ok')}"
+                        actionListener="#{baInfo.onAddBAPAInformation()}"
+                        update=":frmMain:bapainfo_tbl,:bapaApplyInfoDlgForm"
+                        oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
+                        styleClass="small"
+                        rendered="true"
+                        />
+				 <p:commandButton
+                        id="updateBtn"
+                        value="#{msg.get('app.button.ok')}"
+                        actionListener="#{bapaInfo.onUpdateBAPAInformation()}"
+                        update=":frmMain:bainfo_tbl,:bapaApplyInfoDlgForm"
+                        oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
+                        styleClass="small"
+                        rendered="false"
+                        />
+				<p:commandButton
+                   	type='button' styleClass="small" 
+                   	value="#{msg.get('app.button.cancel')}" onclick="p_bapaApplyInfoDlg.hide()"/>
+			</td>
+		</tr>
+	</table>
+	</p:panel>
+	<p:blockUI block="bapaApplyInfoDlgForm" trigger="addBtn,updateBtn">
+	    LOADING<br />
+	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	</p:blockUI>
+</h:form>
+
+</ui:composition>

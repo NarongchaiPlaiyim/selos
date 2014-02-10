@@ -2,7 +2,10 @@ package com.clevel.selos.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -12,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
@@ -60,6 +64,16 @@ public class BAInfo implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
+	public String getMinCheckDate() {
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(new Date());
+	}
+	public String getMaxCheckDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 90);
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(calendar.getTime());
+	}
 	/*
 	 * Action
 	 */
@@ -100,6 +114,36 @@ public class BAInfo implements Serializable {
 		}
 	}
 	
+	public void onOpenApplyInformationDialog() {
+		
+	}
+	public void onApplyBAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenAddBAPAInformationDialog() {
+		
+	}
+	public void onAddBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenUpdateBAPAInformaionDialog() {
+		
+	}
+	public void onUpdateBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onSaveBAInformation() {
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	/*
 	 * Private method
 	 */
