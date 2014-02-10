@@ -1,8 +1,10 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.RiskTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -27,37 +29,39 @@ public class ExSummaryControl extends BusinessControl {
     Logger log;
 
     @Inject
-    ExSummaryDAO exSummaryDAO;
+    private ExSummaryDAO exSummaryDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    private WorkCaseDAO workCaseDAO;
     @Inject
-    ExSumDeviateDAO exSumDeviateDAO;
+    private ExSumDeviateDAO exSumDeviateDAO;
     @Inject
-    BasicInfoDAO basicInfoDAO;
+    private BasicInfoDAO basicInfoDAO;
     @Inject
-    BankStatementSummaryDAO bankStatementSummaryDAO;
+    private BankStatementSummaryDAO bankStatementSummaryDAO;
     @Inject
-    DBRDAO dbrDAO;
+    private DBRDAO dbrDAO;
     @Inject
-    DecisionDAO decisionDAO;
+    private DecisionDAO decisionDAO;
     @Inject
-    NewCreditFacilityDAO newCreditFacilityDAO;
+    private NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    private RiskTypeDAO riskTypeDAO;
 
     @Inject
-    ExSummaryTransform exSummaryTransform;
+    private ExSummaryTransform exSummaryTransform;
 
     @Inject
-    CustomerInfoControl customerInfoControl;
+    private CustomerInfoControl customerInfoControl;
     @Inject
-    NCBInfoControl ncbInfoControl;
+    private NCBInfoControl ncbInfoControl;
     @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
+    private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    QualitativeControl qualitativeControl;
+    private QualitativeControl qualitativeControl;
     @Inject
-    CreditFacProposeControl creditFacProposeControl;
+    private CreditFacProposeControl creditFacProposeControl;
 
     public ExSummaryView getExSummaryViewByWorkCaseId(long workCaseId) {
         log.info("getExSummaryView ::: workCaseId : {}", workCaseId);
@@ -249,6 +253,54 @@ public class ExSummaryControl extends BusinessControl {
 
         exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Credit Risk Type
+        ExSumCreditRiskInfoView exSumCreditRiskInfoView = new ExSumCreditRiskInfoView();
+        if(basicInfo != null && basicInfo.getRiskCustomerType() != null && basicInfo.getRiskCustomerType().getId() != 0){
+            RiskType riskType = riskTypeDAO.findById(basicInfo.getRiskCustomerType().getId());
+            if(riskType != null){
+                exSumCreditRiskInfoView.setRiskCusType(riskType.getDescription());
+            }
+        }
+
+        if(basicInfo != null && basicInfo.getExistingSMECustomer() != RadioValue.NO.value()){ //new customer
+            if(qualitativeView != null && qualitativeView.getId() != 0){
+                //todo: BOT Class
+//                exSumCreditRiskInfoView.setBotClass();
+                if(qualitativeView.getReason() != null){
+                    exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
+                } else {
+                    exSumCreditRiskInfoView.setReason("-");
+                }
+            }
+        }
+
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
+            if(bizInfoSummaryView.getBizInfoDetailViewList().size() > 1){
+                int tmpIndex = 0;
+                BigDecimal tmpHighestProportion = BigDecimal.ZERO;
+                for (int i=0 ; i < bizInfoSummaryView.getBizInfoDetailViewList().size(); i++){ // find highest business proportion
+                    BigDecimal currentProportion;
+                    currentProportion = bizInfoSummaryView.getBizInfoDetailViewList().get(i).getPercentBiz();
+                    if(currentProportion.compareTo(tmpHighestProportion) > 0){
+                        tmpHighestProportion = currentProportion;
+                        tmpIndex = i;
+                    }
+                }
+                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getExpIndCountryName());
+                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getPercentExpIndCountryName());
+            } else {
+                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getExpIndCountryName());
+                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getPercentExpIndCountryName());
+            }
+        }
+
+        exSumCreditRiskInfoView.setLastReviewDate(DateTimeUtil.getCurrentDateTH());
+        //Todo:nextReviewDate
+        exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getOnlyDatePlusYear(DateTimeUtil.getCurrentDateTH(),1)); //(1st day of approve month + 12 Months)
+        exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
+
+        exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         log.info("getExSummaryView ::: exSummaryView : {}", exSummaryView);
