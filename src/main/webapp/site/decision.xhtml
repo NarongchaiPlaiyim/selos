@@ -1370,12 +1370,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.productProgram.description}
+                                                        #{proposeCredit.productProgram.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.creditType.description}
+                                                        #{proposeCredit.creditType.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1393,12 +1393,12 @@
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].standardPrice : ''}">
+                                                                            proposeCredit.standardPrice : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}">
+                                                                            proposeCredit.suggestPrice : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1431,10 +1431,10 @@
                                                 <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}" var="creditTierDetail" varStatus="j" offset="1">
                                                     <tr>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.standardPrice}"/>
+                                                            <h:outputText value="#{proposeCredit.standardPrice}"/>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <h:outputText value="#{creditTierDetail.suggestPrice}"/>
+                                                            <h:outputText value="#{proposeCredit.suggestPrice}"/>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
@@ -2260,7 +2260,7 @@
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                         <td class="left" colspan="3">
-                                            <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
+                                            <p:dataTable var="collCrdType" value="#{proposeColl.proposeCreditDetailViewList}"
                                                          paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                          style="width: 100%">
 
@@ -2295,8 +2295,8 @@
                                                 </p:column>
 
                                                 <p:column styleClass="left top">
-                                                    <h:outputText value="#{collCrdType.creditType.name}"
-                                                                  rendered="#{not empty collCrdType.creditType}"/>
+                                                    <h:outputText value="#{collCrdType.creditFacility.name}"
+                                                                  rendered="#{not empty collCrdType.creditFacility}"/>
                                                 </p:column>
 
                                                 <p:column styleClass="right top">
@@ -2415,7 +2415,7 @@
 
                                                     <p:column styleClass="left top">
                                                         <ui:repeat value="#{subColl.collateralOwnerUWList}" var="collOwnerUW" varStatus="i">
-                                                            #{collOwnerUW.titleTh}#{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
+                                                            #{collOwnerUW.firstNameTh} #{collOwnerUW.lastNameTh}#{!i.last ? ', ' : ''}
                                                         </ui:repeat>
                                                     </p:column>
 
@@ -2553,7 +2553,7 @@
                                 <tr>
                                     <td class="title left large">#{msg.get('app.decision.label.creditType')}</td>
                                     <td class="left" colspan="3">
-                                        <p:dataTable var="collCrdType" value="#{proposeColl.newCreditDetailViewList}"
+                                        <p:dataTable var="collCrdType" value="#{proposeColl.proposeCreditDetailViewList}"
                                                      paginator="false" rowKey="#{collCrdType}" rowIndexVar="rowIndex"
                                                      style="width: 100%">
 
@@ -2588,8 +2588,8 @@
                                             </p:column>
 
                                             <p:column styleClass="left top">
-                                                <h:outputText value="#{collCrdType.creditType.name}"
-                                                              rendered="#{not empty collCrdType.creditType}"/>
+                                                <h:outputText value="#{collCrdType.creditFacility.name}"
+                                                              rendered="#{not empty collCrdType.creditFacility}"/>
                                             </p:column>
 
                                             <p:column styleClass="right top">
@@ -2792,7 +2792,7 @@
 
                                     <p:column styleClass="left top">
                                         <table border="0" style="margin:-1px 0 -1px -10px;">
-                                            <ui:repeat value="#{guarantor.newCreditDetailViewList}" var="creditType">
+                                            <ui:repeat value="#{guarantor.proposeCreditDetailViewList}" var="creditType">
                                                 <tr>
                                                     <td class="left" style="border-style:none !important;">#{creditType.accountName}</td>
                                                     <td class="left middle" rowspan="2" style="border-style:none !important;">
