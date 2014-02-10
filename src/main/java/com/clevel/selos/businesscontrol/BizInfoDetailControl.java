@@ -102,10 +102,10 @@ public class BizInfoDetailControl extends BusinessControl {
             bizProductDetailViewList = bizInfoDetailView.getBizProductDetailViewList();
             bizProductDetailList = new ArrayList<BizProductDetail>();
 
-            if (bizProductDetailViewList.size() > 0) {
+//            if (bizProductDetailViewList.size() > 0) {
                 List<BizProductDetail> bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
                 bizProductDetailDAO.delete(bizProductDetailLisDelete);
-            }
+//            }
 
             for (BizProductDetailView aBizProductDetailViewList : bizProductDetailViewList) {
                 bizProductDetailViewTemp = aBizProductDetailViewList;
@@ -117,12 +117,12 @@ public class BizInfoDetailControl extends BusinessControl {
             log.info("bizProductDetailDAO persist end");
 
 
-            if (supplierDetailList.size() > 0) {
+//            if (supplierDetailList.size() > 0) {
                 List<BizStakeHolderDetail> bizSupplierListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "1");
 
                 bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
                 log.info("supplierDetailList delete end {}",bizSupplierListDelete.size());
-            }
+//            }
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
             for (BizStakeHolderDetailView aSupplierDetailList : supplierDetailList) {
@@ -134,10 +134,10 @@ public class BizInfoDetailControl extends BusinessControl {
             bizStakeHolderDetailDAO.persist(bizSupplierList);
             log.info("bizSupplierListDetailDAO persist end");
 
-            if (buyerDetailList.size() > 0) {
+//            if (buyerDetailList.size() > 0) {
                 List<BizStakeHolderDetail> bizBuyerListDelete = bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail, "2");
                 bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
-            }
+//            }
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
             for (int i = 0; i < buyerDetailList.size(); i++) {

@@ -117,6 +117,7 @@ public class BankStatementDetail implements Serializable {
 
     private boolean bankAccTypeSelectRequired;
     private boolean roleUW;
+    private boolean clickSave;
 
     public BankStatementDetail() {
     }
@@ -126,6 +127,7 @@ public class BankStatementDetail implements Serializable {
         preRender();
         initViewFormAndSelectItems();
         checkRequiredBankAccTypeSelected();
+        clickSave = false;
     }
 
     private void preRender() {
@@ -296,6 +298,8 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
+        clickSave = true;
+
         try {
             // update Main account and Highest inflow
             bankStmtControl.updateMainAccAndHighestInflow(summaryView);
@@ -305,14 +309,8 @@ public class BankStatementDetail implements Serializable {
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
 
             dbrControl.updateValueOfDBR(workCaseId);
-
             exSummaryControl.calForBankStmtSummary(workCaseId);
-
             bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
-
-            //set to init
-            initViewFormAndSelectItems();
-            checkRequiredBankAccTypeSelected();
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
@@ -331,14 +329,16 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        initViewFormAndSelectItems();
-        checkRequiredBankAccTypeSelected();
+        if (clickSave) {
+            initViewFormAndSelectItems();
+            checkRequiredBankAccTypeSelected();
+        } else {
+            onCreation();
+        }
     }
 
     private void checkRequiredBankAccTypeSelected() {
-        if (bankStmtView.getBankAccountTypeView() == null) bankStmtView.setBankAccountTypeView(new BankAccountTypeView());
-
-        int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
+        int bankAccTypeId = bankStmtView.getBankAccountTypeId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
         bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
@@ -346,7 +346,7 @@ public class BankStatementDetail implements Serializable {
     }
 
     public void onChangeBankAccTypeSelected() {
-        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
+        if (bankStmtView.getBankAccountTypeId() != 0) {
             bankStmtView.setOtherAccountType(0);
         }
         checkRequiredBankAccTypeSelected();
@@ -354,7 +354,7 @@ public class BankStatementDetail implements Serializable {
 
     public void onChangeOthAccTypeSelected() {
         if (bankStmtView.getOtherAccountType() != 0) {
-            bankStmtView.getBankAccountTypeView().setId(0);
+            bankStmtView.setBankAccountTypeId(0);
         }
         checkRequiredBankAccTypeSelected();
     }

@@ -285,10 +285,12 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- result = {}", result);
         return result;
     }
+
+
     private boolean appraisalDetailViewListMandate(){
         log.debug("-- appraisalDetailViewListMandate()");
         boolean result = true;
-        if(appraisalDetailViewList.size() == 0){
+        if(Util.isZero(appraisalDetailViewList.size())){
             result = false;
         }
         log.debug("-- result = {}", result);

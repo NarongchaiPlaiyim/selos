@@ -47,6 +47,7 @@ public class CollateralBizTransform extends BusinessTransform {
             AppraisalData appraisalData = appraisalDataResult.getAppraisalData();
             newCollateralView = new NewCollateralView();
             newCollateralView.setJobID(appraisalData.getJobId());
+            log.debug("-- NewCollateralView.jobId[{}]", newCollateralView.getJobID());
             newCollateralView.setAppraisalDate(appraisalData.getAppraisalDate());
             newCollateralView.setAadDecision(appraisalData.getAadDecision());
             newCollateralView.setAadDecisionReason(appraisalData.getAadDecisionReason());
@@ -66,6 +67,7 @@ public class CollateralBizTransform extends BusinessTransform {
                     newCollateralHeadView.setHeadCollType(collateralType);
                     if(!Util.isNull(collateralType) && !Util.isZero(collateralType.getId())){
                         SubCollateralType subCollateralType = subCollateralTypeDAO.findByHeadAndSubColCode(collateralType,headCollateralData.getSubCollType());
+                        log.debug("-- SubCollateralType.id[{}]", subCollateralType.getId());
                     }
                     //TODO: add field : subCollType  [HEAD]
 
