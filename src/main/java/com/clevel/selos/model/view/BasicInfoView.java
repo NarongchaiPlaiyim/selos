@@ -1,7 +1,10 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ApproveResult;
+import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.BAPaymentMethodValue;
 import com.clevel.selos.model.db.master.*;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,7 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 public class BasicInfoView implements Serializable {
-    private long id;
+    private static final long serialVersionUID = 2879239096807584521L;
+	private long id;
     private String appNo;
     private String refAppNo;
     private String caNo;
@@ -51,6 +55,8 @@ public class BasicInfoView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private ApproveType approveType;
+    private ApproveResult approveResult;
     private List<Long> deleteTmpList;
 
     public BasicInfoView() {
@@ -68,6 +74,8 @@ public class BasicInfoView implements Serializable {
         this.loanRequestPattern = new BorrowingType();
         this.openAccountViews = new ArrayList<OpenAccountView>();
         this.deleteTmpList = new ArrayList<Long>();
+        approveType = ApproveType.NA;
+        approveResult = ApproveResult.NA;
     }
 
     public long getId() {
@@ -397,7 +405,18 @@ public class BasicInfoView implements Serializable {
     public void setDeleteTmpList(List<Long> deleteTmpList) {
         this.deleteTmpList = deleteTmpList;
     }
-
+    public ApproveResult getApproveResult() {
+		return approveResult;
+	}
+    public void setApproveResult(ApproveResult approveResult) {
+		this.approveResult = approveResult;
+	}
+    public ApproveType getApproveType() {
+		return approveType;
+	}
+    public void setApproveType(ApproveType approveType) {
+		this.approveType = approveType;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -442,6 +461,8 @@ public class BasicInfoView implements Serializable {
                 append("createBy", createBy).
                 append("modifyBy", modifyBy).
                 append("deleteTmpList", deleteTmpList).
+                append("approveType",approveType).
+                append("approveResult",approveResult).
                 toString();
     }
 }

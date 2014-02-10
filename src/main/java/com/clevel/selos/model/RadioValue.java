@@ -23,4 +23,12 @@ public enum RadioValue {
     public String shortName() {
         return this.shortName;
     }
+    
+    public static final RadioValue lookup(int value) {
+    	for (RadioValue radio : RadioValue.values()) {
+    		if (radio.value == value)
+    			return radio;
+    	}
+    	return NOT_SELECTED;
+    }
 }
