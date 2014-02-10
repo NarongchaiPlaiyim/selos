@@ -67,6 +67,8 @@ public class Decision implements Serializable {
     TCGInfoControl tcgInfoControl;
     @Inject
     CustomerInfoControl customerInfoControl;
+    @Inject
+    private ExSummaryControl exSummaryControl;
 
     //DAO
     @Inject
@@ -1543,6 +1545,7 @@ public class Decision implements Serializable {
 
     public void onSave() {
         log.debug("onSave()");
+        exSummaryControl.calForDecision(workCaseId);
     }
 
     public void onCancel() {
