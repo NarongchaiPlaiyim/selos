@@ -28,4 +28,16 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
         log.info("newCreditDetailList ::: size : {}", newCreditDetailList.size());
         return newCreditDetailList;
     }
+
+    public List<NewCreditDetail> findNewCreditDetailByWorkCaseId(long workCaseId) {
+        log.info("-- findNewCreditDetailByWorkCaseId ::: {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.addOrder(Order.asc("newCreditDetail.id"));
+        List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
+        log.info("-- newCreditDetailList ::: size : {}", newCreditDetailList.size());
+        return newCreditDetailList;
+    }
+
+
 }

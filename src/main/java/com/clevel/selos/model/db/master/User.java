@@ -195,6 +195,16 @@ public class User implements Serializable {
         this.userStatus = userStatus;
     }
 
+    public String getDisplayName() {
+    	//TODO Confirm with P'Lukkeaw about displaying user name in Last Update
+//		StringBuilder builder = new StringBuilder();
+//		if (title != null && !Util.isEmpty(title.getName())) {
+//			builder.append(title.getName()).append(' ');
+//		}
+//		builder.append(userName);
+//		return builder.toString();
+    	return userName;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).

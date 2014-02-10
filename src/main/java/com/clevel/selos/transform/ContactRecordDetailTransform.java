@@ -1,23 +1,18 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.working.ContactRecordDetailDAO;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Appraisal;
-import com.clevel.selos.model.db.working.ContactRecordDetail;
-import com.clevel.selos.model.db.working.CustomerAcceptance;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.ContactRecordDetailView;
-import com.clevel.selos.model.view.CustomerAcceptanceView;
-import com.clevel.selos.util.Util;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-
-import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.ContactRecordDetail;
+import com.clevel.selos.model.db.working.CustomerAcceptance;
+import com.clevel.selos.model.view.ContactRecordDetailView;
+
 public class ContactRecordDetailTransform extends Transform  {
+	private static final long serialVersionUID = 6103962644039122088L;
+	/*
     @Inject
     @SELOS
     private Logger log;
@@ -27,10 +22,11 @@ public class ContactRecordDetailTransform extends Transform  {
     private ContactRecordDetailDAO contactRecordDetailDAO;
     private List<ContactRecordDetailView> contactRecordDetailViewList;
     private List<ContactRecordDetail> contactRecordDetailList;
+    */
     public ContactRecordDetailTransform() {
 
     }
-
+/*
     public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,CustomerAcceptance customerAcceptance,WorkCase workCase){
         List<ContactRecordDetail> contactRecordDetailList = new ArrayList<ContactRecordDetail>();
         for(ContactRecordDetailView contactRecordDetailView : contactRecordDetailViewList){
@@ -86,33 +82,58 @@ public class ContactRecordDetailTransform extends Transform  {
         }
         return contactRecordDetailList;
     }
-
+*/
     public List<ContactRecordDetailView> transformToView(List<ContactRecordDetail> contactRecordDetailList){
-        log.debug("-- transform List<ContactRecordDetail> to List<ContactRecordDetailView>(Size of list is {})", ""+contactRecordDetailList.size());
-        contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-        ContactRecordDetailView view = null;
-        for(ContactRecordDetail model : contactRecordDetailList){
-            view = new ContactRecordDetailView();
-            view.setId(model.getId());
-            view.setCallingDate(model.getCallingDate());
-            view.setCallingResult(model.getCallingResult());
-            view.setAcceptResult(model.getAcceptResult());
-            view.setNextCallingDate(model.getNextCallingDate());
-            view.setReason(model.getReason());
-            view.setRemark(model.getRemark());
-            view.setStep(model.getStep());
-            view.setStatus(model.getStatus());
-            view.setCreateDate(model.getCreateDate());
-            view.setModifyDate(model.getModifyDate());
-            view.setCreateBy(model.getCreateBy());
-            view.setModifyBy(model.getModifyBy());
-            if(!Util.isNull(model.getCustomerAcceptance())){
-                view.setCustomerAcceptance(customerAcceptanceTransform.transformToView(model.getCustomerAcceptance()));
-            } else {
-                view.setCustomerAcceptance(new CustomerAcceptanceView());
-            }
-            contactRecordDetailViewList.add(view);
+        if (contactRecordDetailList == null || contactRecordDetailList.isEmpty())
+        	return Collections.emptyList();
+        
+        List<ContactRecordDetailView> rtnDatas = new ArrayList<ContactRecordDetailView>();
+        for(ContactRecordDetail detail : contactRecordDetailList){
+        	ContactRecordDetailView view = new ContactRecordDetailView();
+        	view.setId(detail.getId());
+        	view.setCallingDate(detail.getCallingDate());
+        	view.setCallingResult(detail.getCallingResult());
+        	view.setAcceptResult(detail.getAcceptResult());
+        	view.setNextCallingDate(detail.getNextCallingDate());
+        	view.setReason(detail.getReason());
+        	view.setRemark(detail.getRemark());
+        	view.setStatus(detail.getStatus());
+        	view.setCreateBy(detail.getCreateBy());
+        	view.setNeedUpdate(false);
+        	
+        	if (detail.getReason() != null)
+    			view.setUpdReasonId(detail.getReason().getId());
+    		rtnDatas.add(view);
         }
-        return contactRecordDetailViewList;
+        return rtnDatas;
+    }
+    
+    public ContactRecordDetail transformToNewModel(ContactRecordDetailView view,User user,CustomerAcceptance customerAcceptance) {
+    	ContactRecordDetail model = new ContactRecordDetail();
+    	model.setCallingDate(view.getCallingDate());
+    	model.setCallingResult(view.getCallingResult());
+    	model.setAcceptResult(view.getAcceptResult());
+    	model.setNextCallingDate(view.getNextCallingDate());
+    	model.setReason(view.getReason());
+    	model.setRemark(view.getRemark());
+    	model.setStatus(view.getStatus());
+    	model.setCreateDate(new Date());
+    	model.setModifyDate(new Date());
+    	model.setModifyBy(user);
+    	model.setCreateBy(user);
+    	model.setCustomerAcceptance(customerAcceptance);
+    	model.setWorkCase(customerAcceptance.getWorkCase());
+    	return model;
+    }
+    public void updateModelFromView(ContactRecordDetail model,ContactRecordDetailView view,User user) {
+    	model.setCallingDate(view.getCallingDate());
+    	model.setCallingResult(view.getCallingResult());
+    	model.setAcceptResult(view.getAcceptResult());
+    	model.setNextCallingDate(view.getNextCallingDate());
+    	model.setReason(view.getReason());
+    	model.setRemark(view.getRemark());
+    	model.setStatus(view.getStatus());
+    	model.setModifyDate(new Date());
+    	model.setModifyBy(user);
     }
 }

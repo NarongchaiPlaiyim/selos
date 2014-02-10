@@ -91,6 +91,10 @@ public class NewCollateral implements Serializable {
     @Column(name = "premium_amount", length = 14, scale = 2)
     private BigDecimal premiumAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
+
     public long getId() {
         return id;
     }
@@ -235,6 +239,22 @@ public class NewCollateral implements Serializable {
         this.newCollateralCreditList = newCollateralCreditList;
     }
 
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -292,8 +312,8 @@ public class NewCollateral implements Serializable {
                 .append("newCreditFacility", newCreditFacility)
                 .append("newCollateralHeadList", newCollateralHeadList)
                 .append("newCollateralCreditList", newCollateralCreditList)
+                .append("premiumAmount", premiumAmount)
+                .append("workCase", workCase)
                 .toString();
     }
-
-
 }

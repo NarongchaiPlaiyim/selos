@@ -117,6 +117,7 @@ public class BankStatementDetail implements Serializable {
 
     private boolean bankAccTypeSelectRequired;
     private boolean roleUW;
+    private boolean clickSave;
 
     public BankStatementDetail() {
     }
@@ -126,6 +127,7 @@ public class BankStatementDetail implements Serializable {
         preRender();
         initViewFormAndSelectItems();
         checkRequiredBankAccTypeSelected();
+        clickSave = false;
     }
 
     private void preRender() {
@@ -296,28 +298,23 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
+        clickSave = true;
+
         try {
             // update Main account and Highest inflow
             bankStmtControl.updateMainAccAndHighestInflow(summaryView);
             // re-calculate Total & Grand total summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-
+            // save Summary
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-
+            // update other
             dbrControl.updateValueOfDBR(workCaseId);
-
             exSummaryControl.calForBankStmtSummary(workCaseId);
-
             bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
-
-            //set to init
-            initViewFormAndSelectItems();
-            checkRequiredBankAccTypeSelected();
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
         } catch (Exception e) {
             messageHeader = "Save Bank Statement Detail Failed.";
             if (e.getCause() != null) {
@@ -330,9 +327,13 @@ public class BankStatementDetail implements Serializable {
     }
 
     public void onCancel() {
-        log.debug("onCancel()");
-        initViewFormAndSelectItems();
-        checkRequiredBankAccTypeSelected();
+        log.debug("onCancel() clickSave: {}", clickSave);
+        if (clickSave) {
+            initViewFormAndSelectItems();
+            checkRequiredBankAccTypeSelected();
+        } else {
+            onCreation();
+        }
     }
 
     private void checkRequiredBankAccTypeSelected() {
