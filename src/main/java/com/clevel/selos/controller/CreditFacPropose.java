@@ -141,6 +141,7 @@ public class CreditFacPropose implements Serializable {
 
     private List<SubCollateralType> subCollateralTypeList;
     private List<CollateralType> collateralTypeList;
+    private List<CollateralType> headCollateralTypeList;
     private List<PotentialCollateral> potentialCollateralList;
 
     // for  control Guarantor Information Dialog
@@ -372,6 +373,10 @@ public class CreditFacPropose implements Serializable {
             collateralTypeList = new ArrayList<CollateralType>();
         }
 
+        if(headCollateralTypeList == null){
+            headCollateralTypeList = new ArrayList<CollateralType>();
+        }
+
         if (potentialCollateralList == null) {
             potentialCollateralList = new ArrayList<PotentialCollateral>();
         }
@@ -399,8 +404,9 @@ public class CreditFacPropose implements Serializable {
         mortgageTypeList = mortgageTypeDAO.findAll();
         loanPurposeList = loanPurposeDAO.findAll();
         disbursementList = disbursementDAO.findAll();
-        subCollateralTypeList = subCollateralTypeDAO.findAll();
+//        subCollateralTypeList = subCollateralTypeDAO.findAll();
         collateralTypeList = collateralTypeDAO.findAll();
+        headCollateralTypeList  = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
         baseRateList = baseRateDAO.findAll();
         modeEdit = false;
@@ -765,28 +771,28 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteCreditInfo() {
         log.info("delete :: rowIndex :: {}", rowIndex);
-        int used;
-        for (int i = 0; i < hashSeqCredit.size(); i++) {
-            log.info("hashSeqCredit.get(i) in use   :  " + i + " is   " + hashSeqCredit.get(i).toString());
-        }
-        log.info("onDeleteCreditInfo ::: seq is : {} " + proposeCreditDetailSelected.getSeq());
-        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(proposeCreditDetailSelected.getSeq()).toString()));
+//        int used;
+//        for (int i = 0; i < hashSeqCredit.size(); i++) {
+//            log.info("hashSeqCredit.get(i) in use   :  " + i + " is   " + hashSeqCredit.get(i).toString());
+//        }
+//        log.info("onDeleteCreditInfo ::: seq is : {} " + proposeCreditDetailSelected.getSeq());
+//        log.info("onDeleteCreditInfo ::: use is : {} " + Integer.parseInt(hashSeqCredit.get(proposeCreditDetailSelected.getSeq()).toString()));
+//
+//        used = Integer.parseInt(hashSeqCredit.get(proposeCreditDetailSelected.getSeq()).toString());
+//
+//        log.info("before del use is  " + used);
 
-        used = Integer.parseInt(hashSeqCredit.get(proposeCreditDetailSelected.getSeq()).toString());
-
-        log.info("before del use is  " + used);
-
-        if (used == 0) {
-            log.info("used ::: {} ", used);
+//        if (used == 0) {
+//            log.info("used ::: {} ", used);
             newCreditFacilityView.getNewCreditDetailViewList().remove(rowIndex);
 
-        } else {
-            log.info("used::: {}", used);
-            messageHeader = msg.get("app.propose.exception");
-            message = msg.get("app.propose.error.delete.credit");
-            messageErr = true;
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
+//        } else {
+//            log.info("used::: {}", used);
+//            messageHeader = msg.get("app.propose.exception");
+//            message = msg.get("app.propose.error.delete.credit");
+//            messageErr = true;
+//            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        }
 
     }
 
@@ -859,6 +865,10 @@ public class CreditFacPropose implements Serializable {
     }
 
 //  END Tier Dialog //
+
+    public void onChangeHeadCollType(){
+
+    }
 
     //  Start Propose Collateral Information  //
     public void onAddProposeCollInfo() {
@@ -1162,20 +1172,9 @@ public class CreditFacPropose implements Serializable {
         modeForSubColl = ModeForButton.ADD;
         log.info(" newCreditFacilityView.getNewCollateralViewList().size ::{}", newCreditFacilityView.getNewCollateralViewList().size());
         relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
-//        if (newCreditFacilityView.getNewCollateralViewList().size() > 0) {
-//            for (NewCollateralView newCollateralView : newCreditFacilityView.getNewCollateralViewList()) {
-//                for (NewCollateralHeadView newCollateralHeadDetail : newCollateralView.getNewCollateralHeadViewList()) {
-//                    if (newCollateralHeadDetail.getNewCollateralSubViewList().size() > 0) {
-//                        log.info("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
-//                        for (NewCollateralSubView newCollateralSubView : newCollateralHeadDetail.getNewCollateralSubViewList()) {
-//                            log.info("newCollateralSubView :::{}", newCollateralSubView.getId());
-//                            relatedWithAllList.add(newCollateralSubView);
-//                            log.info("relatedWithAllList > size :: {}", relatedWithAllList.size());
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
+        subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
+        log.info("subCollateralTypeList ::: {}",subCollateralTypeList.size());
     }
 
     public void onEditSubCollateral() {
@@ -1917,6 +1916,14 @@ public class CreditFacPropose implements Serializable {
 
     public void setCanAddTier(boolean canAddTier) {
         this.canAddTier = canAddTier;
+    }
+
+    public List<CollateralType> getHeadCollateralTypeList() {
+        return headCollateralTypeList;
+    }
+
+    public void setHeadCollateralTypeList(List<CollateralType> headCollateralTypeList) {
+        this.headCollateralTypeList = headCollateralTypeList;
     }
 }
 

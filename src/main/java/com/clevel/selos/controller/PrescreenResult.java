@@ -130,8 +130,9 @@ public class PrescreenResult implements Serializable {
         } catch (Exception ex){
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
+            log.error("exception while retrieve interface info : ", ex);
         }
-
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
