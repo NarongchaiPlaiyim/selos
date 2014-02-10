@@ -20,8 +20,6 @@ public class NewCollateralHeadTransform extends Transform {
     Logger log;
     @Inject
     private NewCollateralSubTransform newCollateralSubTransform;
-    @Inject
-    private NewCollateralHeadDAO newCollateralHeadDAO;
     private List<NewCollateralHead> newCollateralHeadList;
     private List<NewCollateralHeadView> newCollateralHeadViewList;
     @Inject
@@ -30,108 +28,130 @@ public class NewCollateralHeadTransform extends Transform {
     }
 
     public List<NewCollateralHead> transformToModel(final List<NewCollateralHeadView> newCollateralHeadViewList, final User user){
-        log.debug("-- transform List<NewCollateralHeadView> to List<NewCollateralHead>(Size of list is {})", ""+newCollateralHeadViewList.size());
+        log.debug("---- transformToNewModel [NewCollateralHeadViewList.size[{}]]", newCollateralHeadViewList.size());
         newCollateralHeadList = new ArrayList<NewCollateralHead>();
         NewCollateralHead model = null;
-        long id = 0;
         for(NewCollateralHeadView view : newCollateralHeadViewList){
-            id = view.getId();
-            if(id != 0){
-                model = newCollateralHeadDAO.findById(id);
+            model = new NewCollateralHead();
+            log.debug("---- NewCollateralHead created");
+            if(!Util.isZero(view.getId())){
+                model.setId(view.getId());
+                log.debug("---- NewCollateralHead.id[{}]", model.getId());
             } else {
-                model = new NewCollateralHead();
-                log.debug("-- NewCollateralHead created");
-                model.setCreateBy(user);
                 model.setCreateDate(DateTime.now().toDate());
-            }
-
-            if(checkNullObject(model.getHeadCollType()) && checkId0(model.getHeadCollType().getId())){
-                try {
-                    model.getHeadCollType().setDescription(view.getHeadCollType().getDescription());
-                } catch (NullPointerException e) {
-                    model.getHeadCollType().setDescription("");
-                }
-            } else {
-                view.setHeadCollType(new CollateralType());
+                model.setCreateBy(user);
             }
             model.setCollID(view.getCollID());
+            if(!Util.isNull(view.getHeadCollType()) && !Util.isZero(view.getHeadCollType().getId())){
+                model.setHeadCollType(view.getHeadCollType());
+                log.debug("------ NewCollateralHead.CollateralType.id[{}]", model.getHeadCollType().getId());
+            } else {
+                model.setHeadCollType(null);
+            }
+            if(!Util.isNull(view.getCollTypePercentLTV()) && !Util.isZero(view.getCollTypePercentLTV().getId())){
+                model.setCollTypePercentLTV(view.getCollTypePercentLTV());
+                log.debug("------ NewCollateralHead.CollateralType.id[{}]", model.getCollTypePercentLTV().getId());
+            } else {
+                model.setCollTypePercentLTV(null);
+            }
+            model.setCollateralLocation(view.getCollateralLocation());
+            model.setExistingCredit(view.getExistingCredit());
+            model.setInsuranceCompany(view.getInsuranceCompany());
+            model.setAppraisalValue(view.getAppraisalValue());
+            model.setTitleDeed(view.getTitleDeed());
+            model.setNewCollateralSubList(newCollateralSubTransform.transformToModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
-            model.setTitleDeed(view.getTitleDeed());
-            model.setCollateralLocation(view.getCollateralLocation());
-            model.setAppraisalValue(view.getAppraisalValue());
-            model.setNewCollateralSubList(newCollateralSubTransform.transformToModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
             newCollateralHeadList.add(model);
         }
+        log.debug("----[RETURNED] NewCollateralHeadList.size[{}]", newCollateralHeadList.size());
         return newCollateralHeadList;
     }
 
     public List<NewCollateralHead> transformToNewModel(final List<NewCollateralHeadView> newCollateralHeadViewList, final User user){
-        log.debug("-- transform List<NewCollateralHeadView> to new List<NewCollateralHead>(Size of list is {})", ""+newCollateralHeadViewList.size());
+        log.debug("---- transformToNewModel [NewCollateralHeadViewList.size[{}]]", newCollateralHeadViewList.size());
         newCollateralHeadList = new ArrayList<NewCollateralHead>();
         NewCollateralHead model = null;
         for(NewCollateralHeadView view : newCollateralHeadViewList){
             model = new NewCollateralHead();
             log.debug("-- NewCollateralHead created");
-            model.setCreateBy(user);
             model.setCreateDate(DateTime.now().toDate());
-            if(checkNullObject(model.getHeadCollType()) && checkId0(model.getHeadCollType().getId())){
-                try {
-                    model.getHeadCollType().setDescription(view.getHeadCollType().getDescription());
-                } catch (NullPointerException e) {
-                    model.getHeadCollType().setDescription("");
-                }
-            } else {
-                view.setHeadCollType(new CollateralType());
-            }
+            model.setCreateBy(user);
             model.setCollID(view.getCollID());
+            if(!Util.isNull(view.getHeadCollType()) && !Util.isZero(view.getHeadCollType().getId())){
+                model.setHeadCollType(view.getHeadCollType());
+                log.debug("------ NewCollateralHead.CollateralType.id[{}]", model.getHeadCollType().getId());
+            } else {
+                model.setHeadCollType(null);
+            }
+            if(!Util.isNull(view.getCollTypePercentLTV()) && !Util.isZero(view.getCollTypePercentLTV().getId())){
+                model.setCollTypePercentLTV(view.getCollTypePercentLTV());
+                log.debug("------ NewCollateralHead.CollateralType.id[{}]", model.getCollTypePercentLTV().getId());
+            } else {
+                model.setCollTypePercentLTV(null);
+            }
+            model.setCollateralLocation(view.getCollateralLocation());
+            model.setExistingCredit(view.getExistingCredit());
+            model.setInsuranceCompany(view.getInsuranceCompany());
+            model.setAppraisalValue(view.getAppraisalValue());
+            model.setTitleDeed(view.getTitleDeed());
+            model.setNewCollateralSubList(newCollateralSubTransform.transformToNewModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
-            model.setTitleDeed(view.getTitleDeed());
-            model.setCollateralLocation(view.getCollateralLocation());
-            model.setAppraisalValue(view.getAppraisalValue());
-            model.setNewCollateralSubList(newCollateralSubTransform.transformToNewModel(Util.safetyList(view.getNewCollateralSubViewList()), user));
             newCollateralHeadList.add(model);
         }
+        log.debug("----[RETURNED] NewCollateralHeadList.size[{}]", newCollateralHeadList.size());
         return newCollateralHeadList;
     }
 
     public List<NewCollateralHeadView> transformToView(final List<NewCollateralHead> newCollateralHeadList){
-        log.debug("-- transform List<NewCollateralHead> to List<NewCollateralHeadView>(Size of list is {})", ""+newCollateralHeadList.size());
+        log.debug("---- transformToView [NewCollateralHeadList.size[{}]]", newCollateralHeadList.size());
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         NewCollateralHeadView view = null;
         for(NewCollateralHead model : newCollateralHeadList){
             view = new NewCollateralHeadView();
-            view.setId(model.getId());
-            view.setTitleDeed(model.getTitleDeed());
-            view.setNo(0);
-            view.setCollateralLocation(model.getCollateralLocation());
-            view.setAppraisalValue(model.getAppraisalValue());
-
-            if(checkNullObject(view.getHeadCollType()) && checkId0(view.getHeadCollType().getId())){
-                try {
-                    view.getHeadCollType().setDescription(model.getHeadCollType().getDescription());
-                } catch (NullPointerException e) {
-                    view.getHeadCollType().setDescription("");
-                }
+            log.debug("---- NewCollateralHeadView created");
+            if(!Util.isZero(model.getId())){
+                view.setId(model.getId());
+                log.debug("---- NewCollateralHeadView.id[{}]", view.getId());
+            } else {
+                view.setCreateDate(model.getCreateDate());
+                view.setCreateBy(model.getCreateBy());
+            }
+            view.setCollID(model.getCollID());
+            if(!Util.isNull(model.getHeadCollType()) && !Util.isZero(model.getHeadCollType().getId())){
+                view.setHeadCollType(model.getHeadCollType());
+                log.debug("------ NewCollateralHeadView.CollateralType.id[{}]", view.getHeadCollType().getId());
             } else {
                 view.setHeadCollType(new CollateralType());
             }
-
-            view.setCollID(model.getCollID());
-            view.setCreateBy(model.getCreateBy());
-            view.setCreateDate(model.getCreateDate());
+            if(!Util.isNull(model.getCollTypePercentLTV()) && !Util.isZero(model.getCollTypePercentLTV().getId())){
+                view.setCollTypePercentLTV(model.getCollTypePercentLTV());
+                log.debug("------ NewCollateralHeadView.CollateralType.id[{}]", view.getCollTypePercentLTV().getId());
+            } else {
+                view.setCollTypePercentLTV(new CollateralType());
+            }
+            view.setCollateralLocation(model.getCollateralLocation());
+            view.setExistingCredit(model.getExistingCredit());
+            view.setInsuranceCompany(model.getInsuranceCompany());
+            view.setAppraisalValue(model.getAppraisalValue());
+            view.setTitleDeed(model.getTitleDeed());
             view.setNewCollateralSubViewList(newCollateralSubTransform.transformToView(Util.safetyList(model.getNewCollateralSubList())));
+            view.setModifyBy(model.getModifyBy());
+            view.setModifyDate(model.getModifyDate());
             newCollateralHeadViewList.add(view);
+            /*view.getSubCollateralType();
+            view.getPotential();
+            view.getNewCollateral();
+            view.getNewCollateralSubList();
+            view.getCollateralChar();
+            view.getNumberOfDocuments();
+            view.getPurposeReviewAppraisal();
+            view.getPurposeNewAppraisal();
+            view.getPurposeReviewBuilding();
+            view.getProposeType(); */
         }
+        log.debug("----[RETURNED] NewCollateralHeadViewList.size[{}]", newCollateralHeadViewList.size());
         return newCollateralHeadViewList;
-    }
-
-    private<T> boolean checkNullObject(T object){
-        return !Util.isNull(object);
-    }
-
-    private boolean checkId0(int id){
-        return !Util.isZero(id);
     }
 }

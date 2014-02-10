@@ -343,13 +343,18 @@ public class AppraisalResult implements Serializable {
     private NewCollateralView callCOM_S(final String jobIDSearch){
         log.info("-- jobIDSearch is  {}", jobIDSearch);
         AppraisalDataResult appraisalDataResult;
-        appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
-        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
-            log.debug("-- SUCCEED");
-            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-            return newCollateralView;
-        } else {
-            log.error("Exception : {}", appraisalDataResult.getReason());
+        try {
+            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
+            if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
+                log.debug("-- SUCCEED");
+                newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                return newCollateralView;
+            } else {
+                log.error("Exception : {}", appraisalDataResult.getReason());
+                return null;
+            }
+        } catch (Exception e){
+            log.error("-- Exception [{}]", e.getMessage());
             return null;
         }
     }

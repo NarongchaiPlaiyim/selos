@@ -95,11 +95,10 @@ public class AppraisalResultControl extends BusinessControl {
 
     public void onSaveAppraisalResult(final AppraisalView appraisalView,final long workCaseId, final User user){
         log.info("-- onSaveAppraisalResult begin");
-        workCase = workCaseDAO.findById(workCaseId);
-
-        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
-        appraisalDAO.persist(appraisal);
-        log.info( "appraisalDAO persist end" );
+//        workCase = workCaseDAO.findById(workCaseId);
+//        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
+//        appraisalDAO.persist(appraisal);
+//        log.info( "appraisalDAO persist end" );
 
         newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 

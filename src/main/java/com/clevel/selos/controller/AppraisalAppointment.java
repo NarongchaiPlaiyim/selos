@@ -193,8 +193,6 @@ public class AppraisalAppointment implements Serializable {
                 log.debug("-- AppraisalContactDetailView[New] created");
                 appraisalContactDetailView = new AppraisalContactDetailView();
                 log.debug("-- AppraisalContactDetailView[New] created");
-
-
             }
         }
     }
