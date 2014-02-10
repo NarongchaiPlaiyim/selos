@@ -33,6 +33,7 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
         log.info("getListOrderByParameter. (orderField: {})", orderField);
         Criteria criteria = createCriteria();
         criteria.addOrder(Order.asc(orderField));
+        criteria.setCacheable(true);
         List<Province> provinces = criteria.list();
         log.info("getListByCustomerType. (result size: {})", provinces.size());
         return provinces;

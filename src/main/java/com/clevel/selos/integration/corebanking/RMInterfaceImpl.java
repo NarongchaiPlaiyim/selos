@@ -181,6 +181,7 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
         CustomerAccountResult customerAccountResult = new CustomerAccountResult();
         try {
             customerAccountResult = rmService.customerAccountService(searchCustomerAccountModel, userId);
+            log.debug("getCustomerAccountInfo :: Success.");
         } catch (ValidationException ex) {
             customerAccountResult.setCustomerId(customerId);
             customerAccountResult.setActionResult(ActionResult.FAILED);

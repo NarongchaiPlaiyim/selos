@@ -108,6 +108,7 @@ public class AppInProcessService implements Serializable {
             Map<String, AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
             for (CustomerDetail1 customerDetail1 : customerDetail1List) {
                 if (customerDetail1.getAppInProcess1() != null && !Util.isEmpty(customerDetail1.getAppInProcess1().getAppRefNumber())) {
+                    log.debug("---------- getAppInProcessList ------- : getAppInProcess1 : {}", customerDetail1.getAppInProcess1());
                     if (appInProcessHashMap.containsKey(customerDetail1.getAppInProcess1().getAppRefNumber())) {
                         //get app in process for add new cus detail
                         AppInProcess appInProcess = appInProcessHashMap.get(customerDetail1.getAppInProcess1().getAppRefNumber());
@@ -138,6 +139,7 @@ public class AppInProcessService implements Serializable {
             Map<String, AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
             for (CustomerDetail2 customerDetail2 : customerDetail2List) {
                 if (customerDetail2.getAppInProcess2() != null && !Util.isEmpty(customerDetail2.getAppInProcess2().getAppRefNumber())) {
+                    log.debug("---------- getAppInProcessList ------- : getAppInProcess2 : {}", customerDetail2.getAppInProcess2());
                     if (appInProcessHashMap.containsKey(customerDetail2.getAppInProcess2().getAppRefNumber())) {
                         //get app in process for add new cus detail
                         AppInProcess appInProcess = appInProcessHashMap.get(customerDetail2.getAppInProcess2().getAppRefNumber());

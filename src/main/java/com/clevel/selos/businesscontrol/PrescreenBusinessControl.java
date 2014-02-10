@@ -227,37 +227,40 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
 
+        log.debug("---- getInterfaceInfo : actionStatusViewList {}", bankStmtSummaryView.getActionStatusViewList());
+        log.debug("---- getInterfaceInfo : actionStatusViewList.size() {}", Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size());
         if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() == 1){
             ActionStatusView actionStatusView = bankStmtSummaryView.getActionStatusViewList().get(0);
             if(actionStatusView.getStatusCode() == ActionResult.FAILED){
+                log.error("getInterfaceInfo : exception : {}", actionStatusView.getStatusDesc());
                 throw new Exception(actionStatusView.getStatusDesc());
-            } else {
-                prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
-                prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
-                //Calculate for Group Income
-                BigDecimal groupIncome = new BigDecimal(0);
-                for(CustomerInfoView customerInfoView : customerInfoViewList){
-                    if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
-                        if(customerInfoView.getApproxIncome() != null)
-                            groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
-                    }
-                }
-                prescreenResultView.setGroupIncome(groupIncome);
-
-                //Calculate for Group Exposure
-                BigDecimal groupExposure = new BigDecimal(0);
-                if(existingCreditFacilityView.getTotalBorrowerComLimit() != null)
-                    groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit());
-                if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
-                    groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
-                if(existingCreditFacilityView.getTotalRelatedComLimit() != null)
-                    groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
-                if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
-                    groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
-
-                prescreenResultView.setGroupExposure(groupExposure);
             }
         }
+
+        prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
+        prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
+        //Calculate for Group Income
+        BigDecimal groupIncome = new BigDecimal(0);
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                if(customerInfoView.getApproxIncome() != null)
+                    groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
+            }
+        }
+        prescreenResultView.setGroupIncome(groupIncome);
+
+        //Calculate for Group Exposure
+        BigDecimal groupExposure = new BigDecimal(0);
+        if(existingCreditFacilityView.getTotalBorrowerComLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit());
+        if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
+        if(existingCreditFacilityView.getTotalRelatedComLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
+        if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+            groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
+
+        prescreenResultView.setGroupExposure(groupExposure);
 
         return prescreenResultView;
     }
