@@ -148,61 +148,9 @@ public class AppraisalAppointmentControl extends BusinessControl {
                     newCollateralHeadDAO.persist(newCollateralHead);
                 }
             }
-
-
-
         } else {
             log.debug("-- NewCreditFacility is null");
         }
         log.info("-- onSaveAppraisalAppointment end");
-
-
-//        Appraisal appraisal;
-//        List<AppraisalDetailView> appraisalDetailViewList;
-//        List<AppraisalPurpose> appraisalDetailList;
-//        List<AppraisalContactDetailView> appraisalContactDetailViewList;
-//        List<AppraisalContactDetail> appraisalContactDetailList;
-//        List<ContactRecordDetail> contactRecordDetailList;
-//        List<ContactRecordDetailView> contactRecordDetailViewList;
-//
-//        WorkCase workCase = workCaseDAO.findById(workCaseId);
-//
-//        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, getCurrentUser());
-//        appraisal.setWorkCase(workCase);
-//
-//        appraisalDAO.persist(appraisal);
-//        log.info( "appraisalDAO persist end" );
-//
-//        appraisalDetailViewList = appraisalView.getAppraisalDetailViewList();
-//        contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
-//
-//        if(appraisalDetailViewList.size()>0){
-//            List<AppraisalPurpose>   appraisalDetailListDel = appraisalDetailDAO.findByAppraisal(appraisal);
-//            appraisalDetailDAO.delete(appraisalDetailListDel);
-//        }
-//        appraisalDetailList = null;//appraisalDetailTransform.transformToModel(appraisalDetailViewList, appraisal);
-//        appraisalDetailDAO.persist(appraisalDetailList);
-//        log.info( "appraisalDetailDAO persist end" );
-
-
-
-//        if(appraisalContactDetailViewList.size()>0){
-//            List<AppraisalContactDetail>   appraisalContactDetailListDel = appraisalContactDetailDAO.findByAppraisal(appraisal);
-//            appraisalContactDetailDAO.delete(appraisalContactDetailListDel);
-//        }
-//        appraisalContactDetailList = appraisalContactDetailTransform.transformToModel(appraisalContactDetailViewList, appraisal);
-//        appraisalContactDetailDAO.persist(appraisalContactDetailList);
-//        log.info( "appraisalContactDetailDAO persist end" );
-
-
-
-//        if(contactRecordDetailViewList.size()>0){
-//            List<ContactRecordDetail>   contactRecordDetailListDel = contactRecordDetailDAO.findByAppraisal(appraisal);
-//            contactRecordDetailDAO.delete(contactRecordDetailListDel);
-//        }
-//        contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, appraisal,workCase);
-//        contactRecordDetailDAO.persist(contactRecordDetailList);
-//        log.info( "contactRecordDetailDAO persist end" );
-
     }
 }
