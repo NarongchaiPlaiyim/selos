@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.integration.SELOS;
@@ -38,7 +39,8 @@ public class FeeCalculation implements Serializable {
 	private long stepId = -1;
 	private User user;
 	
-	//
+	//Property
+	private int rowIndex;
 	private List<FeeCalculationDetail> debitFromCustomerList;
 	private List<FeeCalculationDetail> informCustomerList;
 	private List<FeeCalculationDetail> penaltyFeeList;
@@ -51,15 +53,6 @@ public class FeeCalculation implements Serializable {
 	public FeeCalculation() {
 	}
 	
-	public Date getLastUpdateDateTime() {
-		//TODO 
-		return new Date();
-	}
-	public String getLastUpdateBy() {
-		//TODO
-		return user.getDisplayName();
-	}
-
 	public List<FeeCalculationDetail> getDebitFromCustomerList() {
 		return debitFromCustomerList;
 	}
@@ -81,7 +74,12 @@ public class FeeCalculation implements Serializable {
 	public BigDecimal getTotalPenaltyFee() {
 		return totalPenaltyFee;
 	}
-	
+	public int getRowIndex() {
+		return rowIndex;
+	}
+	public void setRowIndex(int rowIndex) {
+		this.rowIndex = rowIndex;
+	}
 	/*
 	 * Action
 	 */
@@ -120,6 +118,11 @@ public class FeeCalculation implements Serializable {
 		} catch (IOException e) {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
+	}
+	
+	public void onSaveFeeCalculation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
 	
 	/*
@@ -217,6 +220,8 @@ public class FeeCalculation implements Serializable {
 	private BigDecimal _calculateTotal(List<FeeCalculationDetail> list) {
 		BigDecimal summ = new BigDecimal(0);
 		for (FeeCalculationDetail detail : list) {
+			if (detail.getAmount() == null)
+				continue;
 			summ = summ.add(detail.getAmount());
 		}
 		return summ;
