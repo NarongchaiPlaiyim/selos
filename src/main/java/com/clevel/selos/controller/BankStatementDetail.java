@@ -338,9 +338,7 @@ public class BankStatementDetail implements Serializable {
     }
 
     private void checkRequiredBankAccTypeSelected() {
-        if (bankStmtView.getBankAccountTypeView() == null) bankStmtView.setBankAccountTypeView(new BankAccountTypeView());
-
-        int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
+        int bankAccTypeId = bankStmtView.getBankAccountTypeId();
         int otherAccType = bankStmtView.getOtherAccountType();
 
         bankAccTypeSelectRequired = (bankAccTypeId == 0 && otherAccType == 0);
@@ -348,7 +346,7 @@ public class BankStatementDetail implements Serializable {
     }
 
     public void onChangeBankAccTypeSelected() {
-        if (bankStmtView.getBankAccountTypeView().getId() != 0) {
+        if (bankStmtView.getBankAccountTypeId() != 0) {
             bankStmtView.setOtherAccountType(0);
         }
         checkRequiredBankAccTypeSelected();
@@ -356,7 +354,7 @@ public class BankStatementDetail implements Serializable {
 
     public void onChangeOthAccTypeSelected() {
         if (bankStmtView.getOtherAccountType() != 0) {
-            bankStmtView.getBankAccountTypeView().setId(0);
+            bankStmtView.setBankAccountTypeId(0);
         }
         checkRequiredBankAccTypeSelected();
     }
