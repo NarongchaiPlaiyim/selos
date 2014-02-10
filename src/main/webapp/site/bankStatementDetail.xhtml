@@ -111,7 +111,7 @@
                             <tr>
                                 <td>
                                     <p:selectOneMenu id="bankAccountTypeSelect"
-                                                     value="#{bankStatementDetail.bankStmtView.bankAccountTypeView.id}"
+                                                     value="#{bankStatementDetail.bankStmtView.bankAccountTypeId}"
                                                      style="width:160px;"
                                                      required="#{bankStatementDetail.bankAccTypeSelectRequired}">
                                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
@@ -853,7 +853,7 @@
                                          process="@form"
                                          update=":frmMain,:msgBoxSystemMessagePanel"
                                          styleClass="smaller"/>
-                        <p:spacer width="5" height="0"/>
+                        <p:spacer width="10" height="0"/>
                         <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                          actionListener="#{bankStatementDetail.onCancel()}"
                                          process="@form"
