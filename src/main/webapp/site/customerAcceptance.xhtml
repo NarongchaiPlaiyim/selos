@@ -80,13 +80,11 @@
                         	</tr>
                         	<tr>
 	                            <td class="center" colspan="100%">
-	                            
 	                                <table class="table_content" style="width:100%;">
-	                                
 	                                    <tr>
-	                                        <td colspan="6">
+	                                        <th colspan="6">
 	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.title')}" />
-	                                        </td>
+	                                        </th>
 	                                    </tr>
 	                                    <tr>
 	                                        <td class="title left">
@@ -131,6 +129,7 @@
 	                                        	<p:calendar pattern="dd/MM/yyyy" showOn="button"
 	                                        		value="#{customerAcceptance.tcgInfoView.payinSlipSendDate}"
 	                                        		mindate="#{customerAcceptance.minTCGPayinSlipSendDate}"
+	                                        		autocomplete="false"
 	                                        		/>
 	                                         </td>
 	                                    </tr>
@@ -171,9 +170,8 @@
 	                        </tr>
 	                        <tr>
 	                           	<td colspan="100%">
-	                           		<p:dataTable id='contact_record_tbl' rowIndexVar="rowIdx" styleClass="datatable_full"
+	                           		<p:dataTable id='contact_record_tbl' rowIndexVar="rowIdx" 
 	                           			value="#{customerAcceptance.contactRecordDetailViews}" var="detail"
-	                           			style="width:100% !important"
 	                           			>
 	                           			<f:facet name="header">
 	                           				#{msg.get('app.cusaccept.contactRecord.title')}		
@@ -263,6 +261,9 @@
 	                        </tr>
 	                        <tr>
 	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
 	                        </tr>
 	                        <tr>
 	                             <td colspan="100%" class="center">
