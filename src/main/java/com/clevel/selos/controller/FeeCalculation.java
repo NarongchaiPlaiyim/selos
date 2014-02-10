@@ -40,7 +40,6 @@ public class FeeCalculation implements Serializable {
 	private User user;
 	
 	//Property
-	private int rowIndex;
 	private List<FeeCalculationDetail> debitFromCustomerList;
 	private List<FeeCalculationDetail> informCustomerList;
 	private List<FeeCalculationDetail> penaltyFeeList;
@@ -74,12 +73,7 @@ public class FeeCalculation implements Serializable {
 	public BigDecimal getTotalPenaltyFee() {
 		return totalPenaltyFee;
 	}
-	public int getRowIndex() {
-		return rowIndex;
-	}
-	public void setRowIndex(int rowIndex) {
-		this.rowIndex = rowIndex;
-	}
+
 	/*
 	 * Action
 	 */

@@ -1,14 +1,10 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.MortgageSummaryControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.MortgageSummaryView;
-import com.clevel.selos.system.message.ExceptionMessage;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.FacesUtil;
-import org.slf4j.Logger;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,65 +13,111 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
-@ManagedBean(name = "mortSum")
+@ManagedBean(name = "mortgageSummary")
 public class MortgageSummary implements Serializable {
-    @Inject
-    @SELOS
-    Logger log;
-    @Inject
-    @NormalMessage
-    Message msg;
+	private static final long serialVersionUID = 3803192687188180318L;
 
-    @Inject
-    @ValidationMessage
-    Message validationMsg;
-
-    @Inject
-    @ExceptionMessage
-    Message exceptionMsg;
-
-    @Inject
-    MortgageSummaryControl mortgageSummaryControl;
-
-    //session
-    private long workCaseId;
-
-    private MortgageSummaryView mortgageSummaryView;
-
-    public MortgageSummary(){
-    }
-
-    @PostConstruct
-    public void onCreation() {
-        HttpSession session = FacesUtil.getSession(true);
-
-        if(session.getAttribute("workCaseId") != null){
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        }else{
-            log.info("preRender ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
-            }
-        }
-
-        mortgageSummaryView = mortgageSummaryControl.getMortgageSummaryViewByWorkCaseId(workCaseId);
-    }
-
-    public void onSave() {
-
-    }
-
-    public MortgageSummaryView getMortgageSummaryView() {
-        return mortgageSummaryView;
-    }
-
-    public void setMortgageSummaryView(MortgageSummaryView mortgageSummaryView) {
-        this.mortgageSummaryView = mortgageSummaryView;
-    }
+	@Inject @SELOS
+	private Logger log;
+	
+	@Inject
+	private BasicInfoControl basicInfoControl;
+	
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private User user;
+	private BasicInfoView basicInfoView;
+	
+	
+	public MortgageSummary() {
+		
+	}
+	public Date getLastUpdateDateTime() {
+		//TODO 
+		return new Date();
+	}
+	public String getLastUpdateBy() {
+		//TODO
+		return user.getDisplayName();
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+	public String getMinDate() {
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(new Date());
+	}
+	
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
+		log.info("Construct");
+		HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			user = (User) session.getAttribute("user");
+		}
+		_loadInitData();
+	}
+	
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+		
+		String redirectPage = null;
+		if (workCaseId > 0) {
+			//TODO Validate step 
+			if (stepId <= 0) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath()+redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to "+redirectPage,e);
+		}
+	}
+	
+	public void onSaveMortgageSummary() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	/*
+	 * Private method
+	 */
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+	}
 }
