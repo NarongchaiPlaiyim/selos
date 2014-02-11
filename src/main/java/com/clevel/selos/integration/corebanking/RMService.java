@@ -827,7 +827,7 @@ public class RMService implements Serializable {
                 }
                 //check null
             } else {
-                log.warn(" resSearchCustomerAccount : Null");
+                log.warn(" resSearchCgustomerAccount : Null");
                 //Audit Data
                 rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCustomerAccount : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));

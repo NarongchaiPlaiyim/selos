@@ -17,7 +17,6 @@ public class NewGuarantorDetailView implements Serializable {
     private BigDecimal totalLimitGuaranteeAmount;
     private int isApproved;
 
-    private List<NewCreditDetailView> newCreditDetailViewList;   //no use
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
     private Date createDate;
@@ -33,7 +32,6 @@ public class NewGuarantorDetailView implements Serializable {
         this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
-        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
     }
 
@@ -93,14 +91,6 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = tcgLgNo;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
-    }
-
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
-    }
-
     public BigDecimal getTotalLimitGuaranteeAmount() {
         return totalLimitGuaranteeAmount;
     }
@@ -133,7 +123,6 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("isApproved", isApproved)
-                .append("newCreditDetailViewList", newCreditDetailViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
