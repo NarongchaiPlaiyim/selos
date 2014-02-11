@@ -25,6 +25,9 @@
         tfoot {
             background: none !important;
         }
+        .ui-datatable table {
+            width: 100% !important;
+        }
         table.ovr-border {
             margin: 0 auto !important;
         }
@@ -66,17 +69,17 @@
                     <table class="content_table_form">
                         <!-- ===== Existing Credit ===== -->
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.existingCredit')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.borrower')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Borrower Commercial Credit -->
                                 <p:dataTable id="dtExtBrwComCrd"
                                              var="extBrwComCrd" value="#{decision.decisionView.extBorrowerComCreditList}"
@@ -85,36 +88,39 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 130px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
-                                    <p:column styleClass="center top">#{rowIndex + 1}</p:column>
+                                    <p:column styleClass="top center">#{rowIndex + 1}</p:column>
 
-                                    <p:column styleClass="left top">
+                                    <p:column styleClass="top left">
                                         #{extBrwComCrd.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extBrwComCrd.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extBrwComCrd.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extBrwComCrd.accountStatus.code}-#{extBrwComCrd.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extBrwComCrd.accountStatus.code}-#{extBrwComCrd.accountStatus.description}"
+                                                      rendered="#{not empty extBrwComCrd.accountStatus}"/>
                                     </p:column>
 
-                                    <p:column styleClass="left top">#{extBrwComCrd.productProgram}</p:column>
+                                    <p:column styleClass="top left">#{extBrwComCrd.productProgram}</p:column>
 
-                                    <p:column styleClass="left top">#{extBrwComCrd.creditType}</p:column>
+                                    <p:column styleClass="top left">#{extBrwComCrd.creditType}</p:column>
 
-                                    <p:column styleClass="left top">
+                                    <p:column styleClass="top left">
                                         <h:panelGroup rendered="#{not empty extBrwComCrd.productCode or not empty extBrwComCrd.projectCode}">
                                             #{msg.get('app.decision.tb.td.label.product')} #{extBrwComCrd.productCode}<br/>
                                             #{msg.get('app.decision.tb.td.label.project')} #{extBrwComCrd.projectCode}
@@ -122,49 +128,71 @@
                                         <h:outputText value="-" rendered="#{empty extBrwComCrd.productCode and empty extBrwComCrd.projectCode}"/>
                                     </p:column>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwComCrd.limit}" rendered="#{not empty extBrwComCrd.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                    <p:column styleClass="top right">
+                                        <h:outputText value="#{extBrwComCrd.limit}"
+                                                      rendered="#{not empty extBrwComCrd.limit}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extBrwComCrd.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extBrwComCrd.notional}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extBrwComCrd.pcePercent}%">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extBrwComCrd.pceLimit}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extBrwComCrd.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extBrwComCrd.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extBrwComCrd.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwComCrd.outstanding}" rendered="#{not empty extBrwComCrd.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                    <p:column styleClass="top right">
+                                        <h:outputText value="#{extBrwComCrd.outstanding}"
+                                                      rendered="#{not empty extBrwComCrd.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwComCrd.outstanding}"/>
                                     </p:column>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwComCrd.installment}" rendered="#{not empty extBrwComCrd.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                    <p:column styleClass="top right">
+                                        <h:outputText value="#{extBrwComCrd.installment}"
+                                                      rendered="#{not empty extBrwComCrd.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwComCrd.installment}"/>
                                     </p:column>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwComCrd.intFeePercent}" rendered="#{not empty extBrwComCrd.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                    <p:column styleClass="top right">
+                                        <h:outputText value="#{extBrwComCrd.intFeePercent}"
+                                                      rendered="#{not empty extBrwComCrd.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwComCrd.intFeePercent}"/>
                                     </p:column>
 
-                                    <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwComCrd.tenor}" rendered="#{not empty extBrwComCrd.tenor}">
+                                    <p:column styleClass="top right">
+                                        <h:outputText value="#{extBrwComCrd.tenor}"
+                                                      rendered="#{not empty extBrwComCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwComCrd.tenor}"/>
@@ -176,11 +204,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalComLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -193,14 +224,15 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
+                        <!-- Condition Commercial Credit -->
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.conditionComCredit')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                <!-- Existing - Condition -->
+                            <td class="left" colspan="2">
                                 <p:dataTable id="dtExtCondition"
                                              var="extCondition" value="#{decision.decisionView.extConditionComCreditList}"
                                              paginator="false" rowKey="#{extCondition}" rowIndexVar="rowIndex"
@@ -208,24 +240,26 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.loanType')}" style="width: 400px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.conditionDesc')}" style="width: 900px"/>
+                                            <p:column style="width: 10%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.loanType')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.conditionDesc')}" style="width: 60%"/>
                                         </p:row>
                                     </p:columnGroup>
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
-                                    <p:column styleClass="left top">#{extCondition.loanType}</p:column>
-                                    <p:column styleClass="left top">#{extCondition.conditionDesc}</p:column>
 
+                                    <p:column styleClass="left top">#{extCondition.loanType}</p:column>
+
+                                    <p:column styleClass="left top">#{extCondition.conditionDesc}</p:column>
                                 </p:dataTable>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Borrower Retail Credit -->
                                 <p:dataTable id="dtExtBrwRetCrd"
                                              var="extBrwRetCrd" value="#{decision.decisionView.extBorrowerRetailCreditList}"
@@ -234,19 +268,20 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -256,7 +291,9 @@
                                         #{extBrwRetCrd.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extBrwRetCrd.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extBrwRetCrd.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extBrwRetCrd.accountStatus.code}-#{extBrwRetCrd.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extBrwRetCrd.accountStatus.code}-#{extBrwRetCrd.accountStatus.description}"
+                                                      rendered="#{not empty extBrwRetCrd.accountStatus}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">#{extBrwRetCrd.productProgram}</p:column>
@@ -272,48 +309,70 @@
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwRetCrd.limit}" rendered="#{not empty extBrwRetCrd.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwRetCrd.limit}"
+                                                      rendered="#{not empty extBrwRetCrd.limit}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extBrwRetCrd.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extBrwRetCrd.notional}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extBrwRetCrd.pcePercent}%">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extBrwRetCrd.pceLimit}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extBrwRetCrd.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extBrwRetCrd.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extBrwRetCrd.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
                                     <p:column styleClass="right  top">
-                                        <h:outputText value="#{extBrwRetCrd.outstanding}" rendered="#{not empty extBrwRetCrd.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwRetCrd.outstanding}"
+                                                      rendered="#{not empty extBrwRetCrd.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwRetCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwRetCrd.installment}" rendered="#{not empty extBrwRetCrd.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwRetCrd.installment}"
+                                                      rendered="#{not empty extBrwRetCrd.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwRetCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwRetCrd.intFeePercent}" rendered="#{not empty extBrwRetCrd.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwRetCrd.intFeePercent}"
+                                                      rendered="#{not empty extBrwRetCrd.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwRetCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwRetCrd.tenor}" rendered="#{not empty extBrwRetCrd.tenor}">
+                                        <h:outputText value="#{extBrwRetCrd.tenor}"
+                                                      rendered="#{not empty extBrwRetCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwRetCrd.tenor}"/>
@@ -325,11 +384,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalRetailLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -342,6 +404,7 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
                             <td colspan="2">
                                 <!-- Borrower App In RLOS -->
@@ -352,19 +415,20 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -374,7 +438,9 @@
                                         #{extBrwAppInRLOS.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extBrwAppInRLOS.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extBrwAppInRLOS.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extBrwAppInRLOS.accountStatus.code}-#{extBrwAppInRLOS.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extBrwAppInRLOS.accountStatus.code}-#{extBrwAppInRLOS.accountStatus.description}"
+                                                      rendered="#{not empty extBrwAppInRLOS.accountStatus}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">#{extBrwAppInRLOS.productProgram}</p:column>
@@ -390,48 +456,70 @@
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwAppInRLOS.limit}" rendered="#{not empty extBrwAppInRLOS.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwAppInRLOS.limit}"
+                                                      rendered="#{not empty extBrwAppInRLOS.limit}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extBrwAppInRLOS.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extBrwAppInRLOS.notional}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extBrwAppInRLOS.pcePercent}%">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extBrwAppInRLOS.pceLimit}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extBrwAppInRLOS.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extBrwAppInRLOS.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extBrwAppInRLOS.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwAppInRLOS.outstanding}" rendered="#{not empty extBrwAppInRLOS.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwAppInRLOS.outstanding}"
+                                                      rendered="#{not empty extBrwAppInRLOS.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwAppInRLOS.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwAppInRLOS.installment}" rendered="#{not empty extBrwAppInRLOS.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwAppInRLOS.installment}"
+                                                      rendered="#{not empty extBrwAppInRLOS.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwAppInRLOS.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwAppInRLOS.intFeePercent}" rendered="#{not empty extBrwAppInRLOS.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extBrwAppInRLOS.intFeePercent}"
+                                                      rendered="#{not empty extBrwAppInRLOS.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwAppInRLOS.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extBrwAppInRLOS.tenor}" rendered="#{not empty extBrwAppInRLOS.tenor}">
+                                        <h:outputText value="#{extBrwAppInRLOS.tenor}"
+                                                      rendered="#{not empty extBrwAppInRLOS.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extBrwAppInRLOS.tenor}"/>
@@ -443,11 +531,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalAppInRLOSLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -465,11 +556,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalCommercial')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommercial')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalCommercial}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -481,11 +575,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalComAndOBOD}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -497,11 +594,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalExposure')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalExposure')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalExposure}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -514,6 +614,7 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
                             <td colspan="2" class="title">
                                 <h:outputText value="#{msg.get('app.decision.relatedPerson')}"/>
@@ -529,19 +630,20 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -551,7 +653,9 @@
                                         #{extRelatedComCrd.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extRelatedComCrd.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extRelatedComCrd.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extRelatedComCrd.accountStatus.code}-#{extRelatedComCrd.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extRelatedComCrd.accountStatus.code}-#{extRelatedComCrd.accountStatus.description}"
+                                                      rendered="#{not empty extRelatedComCrd.accountStatus}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">#{extRelatedComCrd.productProgram}</p:column>
@@ -560,55 +664,77 @@
 
                                     <p:column styleClass="left top">
                                         <h:panelGroup rendered="#{not empty extRelatedComCrd.productCode or not empty extRelatedComCrd.projectCode}">
-                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extRelatedComCrd.productCode}<br/>
-                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extRelatedComCrd.projectCode}
+                                            #{msg.get('app.decision.tb.td.label.product')} #{extRelatedComCrd.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')} #{extRelatedComCrd.projectCode}
                                         </h:panelGroup>
                                         <h:outputText value="-" rendered="#{empty extRelatedComCrd.productCode and empty extRelatedComCrd.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedComCrd.limit}" rendered="#{not empty extRelatedComCrd.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedComCrd.limit}"
+                                                      rendered="#{not empty extRelatedComCrd.limit}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extRelatedComCrd.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extRelatedComCrd.notional}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extRelatedComCrd.pcePercent}%">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extRelatedComCrd.pceLimit}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extRelatedComCrd.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extRelatedComCrd.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extRelatedComCrd.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedComCrd.outstanding}" rendered="#{not empty extRelatedComCrd.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedComCrd.outstanding}"
+                                                      rendered="#{not empty extRelatedComCrd.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedComCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedComCrd.installment}" rendered="#{not empty extRelatedComCrd.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedComCrd.installment}"
+                                                      rendered="#{not empty extRelatedComCrd.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedComCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedComCrd.intFeePercent}" rendered="#{not empty extRelatedComCrd.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedComCrd.intFeePercent}"
+                                                      rendered="#{not empty extRelatedComCrd.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedComCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedComCrd.tenor}" rendered="#{not empty extRelatedComCrd.tenor}">
+                                        <h:outputText value="#{extRelatedComCrd.tenor}"
+                                                      rendered="#{not empty extRelatedComCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedComCrd.tenor}"/>
@@ -620,11 +746,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalComLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -637,8 +766,9 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Related Person - Retail Credit -->
                                 <p:dataTable id="dtExtRelatedRetCrd"
                                              var="extRelatedRetCrd" value="#{decision.decisionView.extRelatedRetailCreditList}"
@@ -647,19 +777,20 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -669,7 +800,9 @@
                                         #{extRelatedRetCrd.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extRelatedRetCrd.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extRelatedRetCrd.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extRelatedRetCrd.accountStatusID}-#{extRelatedRetCrd.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extRelatedRetCrd.accountStatus.code}-#{extRelatedRetCrd.accountStatus.description}"
+                                                      rendered="#{not empty extRelatedRetCrd.accountStatus}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">#{extRelatedRetCrd.productProgram}</p:column>
@@ -686,47 +819,68 @@
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extRelatedRetCrd.limit}" rendered="#{not empty extRelatedRetCrd.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extRelatedRetCrd.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extRelatedRetCrd.notional}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extRelatedRetCrd.pcePercent}%">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                            </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extRelatedRetCrd.pceLimit}">
-                                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extRelatedRetCrd.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extRelatedRetCrd.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extRelatedRetCrd.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedRetCrd.outstanding}" rendered="#{not empty extRelatedRetCrd.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedRetCrd.outstanding}"
+                                                      rendered="#{not empty extRelatedRetCrd.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedRetCrd.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedRetCrd.installment}" rendered="#{not empty extRelatedRetCrd.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedRetCrd.installment}"
+                                                      rendered="#{not empty extRelatedRetCrd.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedRetCrd.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedRetCrd.intFeePercent}" rendered="#{not empty extRelatedRetCrd.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedRetCrd.intFeePercent}"
+                                                      rendered="#{not empty extRelatedRetCrd.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedRetCrd.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedRetCrd.tenor}" rendered="#{not empty extRelatedRetCrd.tenor}">
+                                        <h:outputText value="#{extRelatedRetCrd.tenor}"
+                                                      rendered="#{not empty extRelatedRetCrd.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedRetCrd.tenor}"/>
@@ -738,11 +892,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalRetailLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -755,6 +912,7 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
                             <td colspan="2">
                                 <!-- Related Person - App In RLOS -->
@@ -765,19 +923,20 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"/>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"
+                                                      style="width: 100%"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 120px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 100px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 80px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}" style="width: 4%"/>
                                         </p:row>
                                     </p:columnGroup>
 
@@ -787,7 +946,9 @@
                                         #{extRelatedAppInRLOS.accountName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extRelatedAppInRLOS.accountNumber}<br/>
                                         #{msg.get('app.decision.tb.td.label.suf')} #{extRelatedAppInRLOS.accountSuf}<br/>
-                                        #{msg.get('app.decision.tb.td.label.accStatus')} #{extRelatedAppInRLOS.accountStatus.code}-#{extRelatedAppInRLOS.accountStatus.description}
+                                        #{msg.get('app.decision.tb.td.label.accStatus')}&#160;
+                                        <h:outputText value="#{extRelatedAppInRLOS.accountStatus.code}-#{extRelatedAppInRLOS.accountStatus.description}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.accountStatus}"/>
                                     </p:column>
 
                                     <p:column styleClass="left top">#{extRelatedAppInRLOS.productProgram}</p:column>
@@ -796,55 +957,77 @@
 
                                     <p:column styleClass="left top">
                                         <h:panelGroup rendered="#{not empty extRelatedAppInRLOS.productCode or not empty extRelatedAppInRLOS.projectCode}">
-                                            #{msg.get('app.decision.tb.td.label.product')}&#160;#{extRelatedAppInRLOS.productCode}<br/>
-                                            #{msg.get('app.decision.tb.td.label.project')}&#160;#{extRelatedAppInRLOS.projectCode}
+                                            #{msg.get('app.decision.tb.td.label.product')} #{extRelatedAppInRLOS.productCode}<br/>
+                                            #{msg.get('app.decision.tb.td.label.project')} #{extRelatedAppInRLOS.projectCode}
                                         </h:panelGroup>
                                         <h:outputText value="-" rendered="#{empty extRelatedAppInRLOS.productCode and empty extRelatedAppInRLOS.projectCode}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedAppInRLOS.limit}" rendered="#{not empty extRelatedAppInRLOS.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedAppInRLOS.limit}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.limit}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
 
                                         <h:panelGroup rendered="#{empty extRelatedAppInRLOS.limit}" styleClass="left">
-                                            #{msg.get('app.decision.tb.td.label.notional')} <h:outputText value="#{extRelatedAppInRLOS.notional}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                        </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pcePercent')} <h:outputText value="#{extRelatedAppInRLOS.pcePercent}%">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                        </h:outputText><br/>
-
-                                            #{msg.get('app.decision.tb.td.label.pceLimit')} <h:outputText value="#{extRelatedAppInRLOS.pceLimit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                        </h:outputText>
+                                            #{msg.get('app.decision.tb.td.label.notional')}&#160;
+                                            <h:outputText value="#{extRelatedAppInRLOS.notional}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pcePercent')}&#160;
+                                            <h:outputText value="#{extRelatedAppInRLOS.pcePercent}%">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                            <br/>
+                                            #{msg.get('app.decision.tb.td.label.pceLimit')}&#160;
+                                            <h:outputText value="#{extRelatedAppInRLOS.pceLimit}">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedAppInRLOS.outstanding}" rendered="#{not empty extRelatedAppInRLOS.outstanding}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedAppInRLOS.outstanding}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.outstanding}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedAppInRLOS.outstanding}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedAppInRLOS.installment}" rendered="#{not empty extRelatedAppInRLOS.installment}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedAppInRLOS.installment}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.installment}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedAppInRLOS.installment}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedAppInRLOS.intFeePercent}" rendered="#{not empty extRelatedAppInRLOS.intFeePercent}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                        <h:outputText value="#{extRelatedAppInRLOS.intFeePercent}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.intFeePercent}">
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedAppInRLOS.intFeePercent}"/>
                                     </p:column>
 
                                     <p:column styleClass="right top">
-                                        <h:outputText value="#{extRelatedAppInRLOS.tenor}" rendered="#{not empty extRelatedAppInRLOS.tenor}">
+                                        <h:outputText value="#{extRelatedAppInRLOS.tenor}"
+                                                      rendered="#{not empty extRelatedAppInRLOS.tenor}">
                                             <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
                                         </h:outputText>
                                         <h:outputText value="-" rendered="#{empty extRelatedAppInRLOS.tenor}"/>
@@ -856,11 +1039,14 @@
                                         </p:row>
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalAppInRLOSLimit}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -878,11 +1064,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalCommercial')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommercial')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalCommercial}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -894,11 +1083,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalCommAndOBOD')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalComAndOBOD}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -910,11 +1102,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.totalExposure')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.totalExposure')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalExposure}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -929,14 +1124,16 @@
                                             <p:column colspan="10" footerText="#{msg.get('app.decision.group')}"
                                                       style="line-height:30px; height:30px; text-align:left;"/>
                                         </p:row>
-
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.grpTotalCommercial')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.grpTotalCommercial')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extGroupTotalCommercial}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -948,11 +1145,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.grpTotalCommAndOBOD')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.grpTotalCommAndOBOD')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extGroupTotalComAndOBOD}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -964,11 +1164,14 @@
 
                                         <p:row>
                                             <p:column styleClass="summary_column"/>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.decision.grpTotalExposure')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.decision.grpTotalExposure')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extGroupTotalExposure}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -986,18 +1189,19 @@
                                 <div class="separate"><!-- --></div>
                             </td>
                         </tr>
+
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.existingCollateral')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.borrower')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Borrower - Collateral -->
                                 <p:dataTable id="dtExtBrwCollateral"
                                              var="extBrwCollateral" value="#{decision.decisionView.extBorrowerCollateralList}"
@@ -1006,19 +1210,19 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}" style="width: 400px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}" style="width: 250px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}" style="width: 125px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}" style="width: 125px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}" style="width: 40%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}" style="width: 9%"/>
                                         </p:row>
                                     </p:columnGroup>
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 100%;">
                                             <tr>
                                                 <td style="border-style:none !important;">#{msg.get('app.decision.tb.td.label.potential')}</td>
                                                 <td style="border-style:none !important;">#{extBrwCollateral.potentialCollateral.description}</td>
@@ -1061,24 +1265,33 @@
                                     <p:column styleClass="left top">
                                         #{extBrwCollateral.cusName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extBrwCollateral.accountNumber}&#160;
-                                        #{msg.get('app.decision.tb.td.label.suf')} #{extBrwCollateral.accountSuffix}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')} #{extBrwCollateral.accountSuffix}
+                                        <br/>
                                         #{extBrwCollateral.productProgram}, #{extBrwCollateral.creditFacility}&#160;
                                         <h:outputText value="#{extBrwCollateral.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
-                                    <p:column styleClass="left top">#{extBrwCollateral.mortgageType.mortgage}</p:column>
+                                    <p:column styleClass="left top">
+                                        #{not empty extBrwCollateral.mortgageType ? extBrwCollateral.mortgageType.mortgage : ''}
+                                    </p:column>
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extBrwCollateral.appraisalValue}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extBrwCollateral.mortgageValue}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
@@ -1087,18 +1300,23 @@
                                             <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalAppraisalValue}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extBorrowerTotalMortgageValue}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -1110,13 +1328,14 @@
                         <tr>
                             <td colspan="2" style="height:28px;"></td>
                         </tr>
+
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.relatedPerson')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Related Person - Collateral -->
                                 <p:dataTable id="dtExtRelatedCollateral"
                                              var="extRelatedCollateral" value="#{decision.decisionView.extRelatedCollateralList}"
@@ -1125,19 +1344,19 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}" style="width: 400px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 300px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}" style="width: 250px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}" style="width: 125px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}" style="width: 125px"/>
+                                            <p:column headerText="" style="width: 3%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}" style="width: 40%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 30%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}" style="width: 9%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}" style="width: 9%"/>
                                         </p:row>
                                     </p:columnGroup>
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 100%;">
                                             <tr>
                                                 <td style="border-style:none !important;">#{msg.get('app.decision.tb.td.label.potential')}</td>
                                                 <td style="border-style:none !important;">#{extRelatedCollateral.potentialCollateral.description}</td>
@@ -1180,24 +1399,33 @@
                                     <p:column styleClass="left top">
                                         #{extRelatedCollateral.cusName}<br/>
                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extRelatedCollateral.accountNumber}&#160;
-                                        #{msg.get('app.decision.tb.td.label.suf')} #{extRelatedCollateral.accountSuffix}<br/>
+                                        #{msg.get('app.decision.tb.td.label.suf')} #{extRelatedCollateral.accountSuffix}
+                                        <br/>
                                         #{extRelatedCollateral.productProgram}, #{extRelatedCollateral.creditFacility}&#160;
                                         <h:outputText value="#{extRelatedCollateral.limit}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
-                                    <p:column styleClass="left top">#{extRelatedCollateral.mortgageType.mortgage}</p:column>
+                                    <p:column styleClass="left top">
+                                        #{not empty extRelatedCollateral.mortgageType ? extRelatedCollateral.mortgageType.mortgage : ''}
+                                    </p:column>
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extRelatedCollateral.appraisalValue}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extRelatedCollateral.mortgageValue}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
@@ -1206,18 +1434,23 @@
                                             <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalAppraisalValue}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extRelatedTotalMortgageValue}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -1256,43 +1489,50 @@
 
                                     <p:columnGroup type="header">
                                         <p:row>
-                                            <p:column headerText="" style="width: 30px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}" style="width: 250px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}" style="width: 150px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 700px"/>
-                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}" style="width: 200px"/>
+                                            <p:column style="width: 5%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}" style="width: 20%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}" style="width: 10%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}" style="width: 50%"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}" style="width: 15%"/>
                                         </p:row>
                                     </p:columnGroup>
 
                                     <p:column styleClass="center top">#{rowIndex + 1}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <h:outputText value="#{extGuarantor.guarantorName.titleTh}#{extGuarantor.guarantorName.firstNameTh} #{extGuarantor.guarantorName.lastNameTh}"
+                                        <h:outputText value="#{extGuarantor.guarantorName.firstNameTh} #{extGuarantor.guarantorName.lastNameTh}"
                                                       rendered="#{not empty extGuarantor.guarantorName}"/>
                                     </p:column>
 
                                     <p:column styleClass="center top">#{extGuarantor.tcgLgNo}</p:column>
 
                                     <p:column styleClass="left top">
-                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
                                             <ui:repeat value="#{extGuarantor.existingCreditTypeDetailViewList}" var="extCreditType">
                                                 <tr>
-                                                    <td class="left" style="border-style:none !important;">#{extCreditType.accountName}</td>
-                                                    <td class="left middle" rowspan="2" style="border-style:none !important;">
-                                                        #{extCreditType.productProgram} #{extCreditType.creditFacility}&#160;
-                                                        <h:outputText value="#{extCreditType.limit}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                                        </h:outputText>&#160;&#160;
-                                                        #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
-                                                        <h:outputText value="#{extCreditType.guaranteeAmount}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                                                        </h:outputText>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left" style="border-style:none !important;">
+                                                    <td class="top left" style="border-style: none !important;">
+                                                        #{extCreditType.accountName}<br/>
                                                         #{msg.get('app.decision.tb.td.label.accNo')} #{extCreditType.accountNumber},&#160;
                                                         #{msg.get('app.decision.tb.td.label.suf')} #{extCreditType.accountSuf}
+                                                    </td>
+                                                    <td class="top center" style="border-style: none !important;">
+                                                        #{extCreditType.productProgram}<br/>
+                                                        #{extCreditType.creditFacility}
+                                                    </td>
+                                                    <td class="top center" style="border-style: none !important;">
+                                                        <h:outputText value="#{extCreditType.limit}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="top center" style="border-style: none !important;">
+                                                        #{msg.get('app.decision.tb.td.label.guaranteeAmt')}&#160;
+                                                        <h:outputText value="#{extCreditType.guaranteeAmount}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
                                                     </td>
                                                 </tr>
                                             </ui:repeat>
@@ -1301,7 +1541,9 @@
 
                                     <p:column styleClass="right top">
                                         <h:outputText value="#{extGuarantor.totalLimitGuaranteeAmount}">
-                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                            <f:convertNumber pattern="#,##0.##"
+                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                             maxIntegerDigits="14"/>
                                         </h:outputText>
                                     </p:column>
 
@@ -1310,11 +1552,14 @@
                                             <p:column colspan="5" style="background-color:#ffffff; line-height:10px; height:10px;"/>
                                         </p:row>
                                         <p:row>
-                                            <p:column styleClass="summary_column" style="text-align:left;" colspan="4" footerText="#{msg.get('app.label.total')}"/>
-                                            <p:column styleClass="summary_column" style="text-align:right;">
+                                            <p:column styleClass="summary_column" style="text-align: left;" colspan="4"
+                                                      footerText="#{msg.get('app.label.total')}"/>
+                                            <p:column styleClass="summary_column" style="text-align: right;">
                                                 <f:facet name="footer">
                                                     <h:outputText value="#{decision.decisionView.extTotalGuaranteeAmount}">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                        <f:convertNumber pattern="#,##0.##"
+                                                                         minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
                                                     </h:outputText>
                                                 </f:facet>
                                             </p:column>
@@ -1334,33 +1579,35 @@
 
                         <!-- ===== Propose Credit ===== -->
                         <tr>
-                            <td colspan="2" class="title">
+                            <td class="title" colspan="2">
                                 <h:outputText value="#{msg.get('app.decision.proposedCredit')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td class="left" colspan="2">
                                 <!-- Propose Credit Table -->
                                 <div class="ui-datatable ui-widget">
                                     <div class="ui-datatable-tablewrapper">
-                                        <table>
+                                        <table style="width: 100%">
                                             <thead>
-                                            <tr>
-                                                <th class="ui-state-default" style="width: 30px"></th>
-                                                <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.productProgram')}</th>
-                                                <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.creditType')}</th>
-                                                <th class="ui-state-default" style="width: 150px">#{msg.get('app.decision.tb.th.code')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.limit')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.standardPricePercent')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.suggestPricePercent')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.finalPricePercent')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.installment')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
-                                                <th class="ui-state-default" style="width: 100px">#{msg.get('app.decision.tb.th.frontEndFeePercent')}</th>
-                                            </tr>
+                                                <tr>
+                                                    <th class="ui-state-default" style="width: 5%"></th>
+                                                    <th class="ui-state-default" style="width: 10%">#{msg.get('app.decision.tb.th.productProgram')}</th>
+                                                    <th class="ui-state-default" style="width: 10%">#{msg.get('app.decision.tb.th.creditType')}</th>
+                                                    <th class="ui-state-default" style="width: 10%">#{msg.get('app.decision.tb.th.code')}</th>
+                                                    <th class="ui-state-default" style="width: 10%">#{msg.get('app.decision.tb.th.limit')}</th>
+                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.standardPricePercent')}</th>
+                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.suggestPricePercent')}</th>
+                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.finalPricePercent')}</th>
+                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.installment')}</th>
+                                                    <th class="ui-state-default" style="width: 9%">#{msg.get('app.decision.tb.th.tenorMonths')}</th>
+                                                    <th class="ui-state-default" style="width: 10%">#{msg.get('app.decision.tb.th.frontEndFeePercent')}</th>
+                                                </tr>
                                             </thead>
+
                                             <tbody class="ui-datatable-data ui-widget-content">
-                                            <ui:repeat value="#{decision.decisionView.proposeCreditList}" var="proposeCredit" varStatus="i">
+                                            <ui:repeat value="#{decision.decisionView.proposeCreditList}"
+                                                       var="proposeCredit" varStatus="i">
                                                 <tr>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1387,19 +1634,18 @@
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.limit}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
+
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.standardPrice : ''}">
-                                                        </h:outputText>
+                                                        <h:outputText value="#{proposeCredit.standardPrice}"/>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.suggestPrice : ''}">
-                                                        </h:outputText>
+                                                        <h:outputText value="#{proposeCredit.suggestPrice}"/>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1409,7 +1655,9 @@
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                             proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -1418,11 +1666,14 @@
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
+
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                         <h:outputText value="#{proposeCredit.frontEndFee}">
-                                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2" maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
                                                         </h:outputText>
                                                     </td>
                                                 </tr>
