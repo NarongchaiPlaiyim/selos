@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.perfectionReview.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{perfectionReview.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.perfectionReview.subtitle')}</div>
+                <div id="content">
+                    <div id="content_form">
+                    	<p:spacer height="1em"/>
+                        <!-- start content -->
+                        <p:dataTable styleClass="content_table_form full_table" 
+                        	style="width:90%;margin:0 auto" 
+                        	rowIndexVar="rowIdx" value="#{perfectionReview.perfectionReviewList}"
+                        	var="review"
+                        	>
+                        	<p:column style="width:30px" styleClass="center">
+                        		#{rowIdx +1}
+                        	</p:column>
+                        	<p:column style="width:200px" styleClass="title"
+								headerText="#{msg.get('app.perfectionReview.table.type')}"
+                        		>
+                        		#{review.type}
+                        	</p:column>
+                        	<p:column style="width:120px" styleClass="center"
+								headerText="#{msg.get('app.perfectionReview.table.date')}"
+                        		>
+                        		<h:outputText value="#{review.date}">
+                        			<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        		</h:outputText>
+                        	</p:column>
+                        	<p:column style="width:120px" styleClass="center"
+                        		headerText="#{msg.get('app.perfectionReview.table.completeddate')}"
+                        		>
+                        		<h:outputText value="#{review.completeDate}">
+                        			<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        		</h:outputText>
+                        	</p:column>
+                        	<p:column style="width:130px" styleClass="center"
+                        		headerText="#{msg.get('app.perfectionReview.table.status')}"
+                        		>
+                        		#{review.status}
+                        	</p:column>
+                        	<p:column
+                        		headerText="#{msg.get('app.perfectionReview.table.remark')}"
+                        		>
+                        		#{review.remark}
+                        	</p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </div>
+        </h:form>
+    </p:panel>
+</h:body>
+</f:view>
+</html>
