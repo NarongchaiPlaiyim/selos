@@ -181,28 +181,28 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
 
             StringBuilder addressTH = new StringBuilder();
-            addressTH = addressTH.append("เลขที่ : ");
+            addressTH = addressTH.append("เลขที่ ");
             addressTH = addressTH.append(bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-");
-            addressTH = addressTH.append(" หมู่ที่ : ");
+            addressTH = addressTH.append(" หมู่ที่ ");
             addressTH = addressTH.append(bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-");
-            addressTH = addressTH.append(" อาคาร/หมู่บ้าน : ");
+            addressTH = addressTH.append(" อาคาร/หมู่บ้าน ");
             addressTH = addressTH.append(bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-");
-            addressTH = addressTH.append(" ตรอก/ซอย/ถนน : ");
+            addressTH = addressTH.append(" ตรอก/ซอย/ถนน ");
             addressTH = addressTH.append(bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-");
-            addressTH = addressTH.append(" ตำบล : ");
+            addressTH = addressTH.append(" ตำบล ");
             addressTH = addressTH.append(bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getName() : "-");
-            addressTH = addressTH.append(" อำเภอ : ");
+            addressTH = addressTH.append(" อำเภอ ");
             addressTH = addressTH.append(bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getName() : "-");
-            addressTH = addressTH.append(" จังหวัด : ");
+            addressTH = addressTH.append(" จังหวัด ");
             addressTH = addressTH.append(bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getName() : "-");
-            addressTH = addressTH.append(" ประเทศ : ");
+            addressTH = addressTH.append(" ประเทศ ");
             addressTH = addressTH.append(bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getName() : "-");
 
             exSummaryView.setBusinessLocationAddress(addressTH.toString());
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
-                exSummaryView.setOwner(bizInfoSummaryView.getExpiryDate().toString());
+                exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate()));
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
             }
@@ -280,7 +280,6 @@ public class ExSummaryControl extends BusinessControl {
             if(qualitativeView != null && qualitativeView.getId() != 0){
                 //todo: BOT Class
 //                exSumCreditRiskInfoView.setBotClass();
-                System.out.println("qualitativeView : "+qualitativeView.toString());
                 if(qualitativeView.getReason() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
                 } else {
