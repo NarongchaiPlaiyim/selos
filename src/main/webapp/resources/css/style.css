@@ -849,3 +849,10 @@ table tbody tr.grandtotal_summary td {
     table-layout: auto !important;
     width: 100% !important;
 }
+.inline_select {
+	float:left;
+	margin-top: 1px;
+}
+.inline_select label {
+	line-height:16px;
+}

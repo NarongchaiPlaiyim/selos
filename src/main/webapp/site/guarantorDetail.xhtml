@@ -173,12 +173,12 @@
 	                        					>
 	                        				</p:column>
 	                        				<p:column style="width:30px">
-	                        					<p:button icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-	                           						outcome="customerInfoSummary"
+	                        					<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+	                           						action="#{guarantorDetail.clickCustomerInfo(0)}"
+	                           						ajax="false"
+	                           						process="@this"
 	                           						style="margin-right:0px !important"
-	                           						>
-	                           						<f:param name="customerId" value="0" />
-	                           					</p:button>
+	                           						/>
 	                        				</p:column>
 	                        			</p:dataTable>
                         		</td>
@@ -196,7 +196,7 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveGuarantorDetailDlg.hide()"
+	                                 	oncomplete="p_saveGuarantorDetailDlg.show()"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"

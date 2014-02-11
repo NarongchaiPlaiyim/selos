@@ -2,10 +2,14 @@ package com.clevel.selos.dao;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
+
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -93,6 +97,14 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
             getSession().delete(entity);
         }
     }
+    @SuppressWarnings("unchecked")
+    public List<T> findActiveAll() {
+         Criteria criteria = createCriteria();
+         criteria.add(Restrictions.eq("active", 1));
+         criteria.addOrder(Order.asc("id"));
+         List<T> list = criteria.list();
+         return list;
+     }
     @SuppressWarnings("unchecked")
     public void deleteById(ID id) {
     	T ref = (T) getSession().byId(entityClass).getReference(id);

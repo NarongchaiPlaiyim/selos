@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -22,6 +24,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -41,6 +44,7 @@ public class GuarantorDetail implements Serializable {
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private long guarantorId = -1;
+	private String fromPage;
 	private User user;
 	private BasicInfoView basicInfoView;
 	
@@ -69,6 +73,7 @@ public class GuarantorDetail implements Serializable {
 	}
 	
 	
+	
 	/*
 	 * Action
 	 */
@@ -81,7 +86,9 @@ public class GuarantorDetail implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
-		guarantorId = Util.parseLong(FacesUtil.getParameter("guarantorId"),-1);
+		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
+		fromPage = (String)params.get("fromPage");
+		guarantorId = Util.parseLong(params.get("guarantorId"),-1);
 		_loadInitData();
 	}
 	
@@ -111,12 +118,27 @@ public class GuarantorDetail implements Serializable {
 	}
 	
 	
-	
+	public String clickCustomerInfo(long id) {
+		//TODO Clear what it is
+		Map<String, Object> map = new HashMap<String, Object>();
+		/*
+        map.put("isFromSummaryParam",true);
+        map.put("isFromJuristicParam",false);
+        map.put("isFromIndividualParam",false);
+        map.put("isEditFromJuristic", false);
+        CustomerInfoView cusView = new CustomerInfoView();
+        cusView.reset();
+        map.put("customerInfoView", cusView);
+        */
+        map.put("customerId", id);
+		return "customerInfoIndividual?faces-redirect=true";
+	}
 	public void onSaveGuarantorDetail() {
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
+	
 	/*
 	 * Private method
 	 */
