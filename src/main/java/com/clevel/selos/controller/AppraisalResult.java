@@ -12,6 +12,7 @@ import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -91,7 +92,8 @@ public class AppraisalResult implements Serializable {
     private boolean flagReadOnly;
 
     private User user;
-    private Long workCaseId;
+    private long workCaseId;
+    private long stepId;
     private AppraisalView appraisalView;
 
     //collateralDetailViewList
@@ -158,35 +160,47 @@ public class AppraisalResult implements Serializable {
         saveAndEditFlag = false;
     }
 
+    public void preRender(){
+        log.info("-- preRender.");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("preRender ::: setSession ");
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            log.debug("-- workCasePreScreenId[{}]", workCaseId);
+            user = (User)session.getAttribute("user");
+            log.debug("-- User.id[{}]", user.getId());
+            stepId = Long.valueOf(""+session.getAttribute("stepId"));
+            log.debug("-- stepId[{}]", stepId);
+            try{
+                String page = Util.getCurrentPage();
+                if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalResult.jsf".equals(page)){
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+            }catch (Exception ex){
+                log.debug("Exception :: {}",ex);
+            }
+        } else {
+            log.debug("preRender ::: workCasePrescreenId is null.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
-        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
-            log.info("preRender ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+        preRender();
+        init();
+        appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+        if(!Util.isNull(appraisalView)){
+            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+            if(newCollateralViewList.size() == 0){
+                newCollateralViewList = new ArrayList<NewCollateralView>();
             }
         } else {
-            user = (User)session.getAttribute("user");
-            log.debug("-- User : {}", ""+user.toString());
-            init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            workCaseId = 4L;
-            log.info("workCaseId :: {} ",workCaseId);
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
-            if(!Util.isNull(appraisalView)){
-                newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
-                if(newCollateralViewList.size() == 0){
-                    newCollateralViewList = new ArrayList<NewCollateralView>();
-                }
-            } else {
-                appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] created");
-            }
+            appraisalView = new AppraisalView();
+            log.debug("-- AppraisalView[New] created");
         }
     }
 

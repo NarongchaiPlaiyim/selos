@@ -565,7 +565,9 @@
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                                                                <f:convertNumber pattern="##0.##"
+                                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                                 maxIntegerDigits="3"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -581,7 +583,9 @@
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                                                                <f:convertNumber pattern="##0.##"
+                                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                                 maxIntegerDigits="3"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -717,7 +721,9 @@
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                      styleClass="right" style="width:200px;">
-                            <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                            <f:convertNumber pattern="##0.##"
+                                             minFractionDigits="2" maxFractionDigits="2"
+                                             maxIntegerDigits="3"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
@@ -734,7 +740,9 @@
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                      styleClass="right" style="width:200px;">
-                            <f:convertNumber pattern="#0.##" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                            <f:convertNumber pattern="##0.##"
+                                             minFractionDigits="2" maxFractionDigits="2"
+                                             maxIntegerDigits="3"/>
                             <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                     </td>
