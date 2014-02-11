@@ -164,8 +164,7 @@ public class AppraisalAppointment implements Serializable {
             try{
                 String page = Util.getCurrentPage();
                 if(stepId != StepValue.APPOINTMENT_APPRAISAL.value() || !"appraisalAppointment.jsf".equals(page)){
-                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    FacesUtil.redirect("/site/inbox.jsf");
                     return;
                 }
             }catch (Exception ex){
@@ -173,12 +172,8 @@ public class AppraisalAppointment implements Serializable {
             }
         } else {
             log.debug("preRender ::: workCasePrescreenId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
-            }
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 

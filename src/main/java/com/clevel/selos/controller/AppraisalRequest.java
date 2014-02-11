@@ -123,8 +123,7 @@ public class AppraisalRequest implements Serializable {
             try{
                 String page = Util.getCurrentPage();
                 if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalRequest.jsf".equals(page)){
-                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    FacesUtil.redirect("/site/inbox.jsf");
                     return;
                 }
             }catch (Exception ex){
@@ -132,12 +131,8 @@ public class AppraisalRequest implements Serializable {
             }
         } else {
             log.debug("preRender ::: workCasePrescreenId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
-            }
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
