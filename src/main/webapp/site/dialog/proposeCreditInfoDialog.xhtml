@@ -111,12 +111,15 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
+                                 id="limit"
                                  required="#{not empty param[onSaveCreditInfo.clientId]}">
                         <f:convertNumber pattern="#,##0.##"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
                                          maxIntegerDigits="14"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <p:ajax event="blur"
+                                listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                                process=":creditInfoDlgForm" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal:installment" />
                     </p:inputText>
                 </td>
                 <td class="title" style="width: 170px">
