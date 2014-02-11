@@ -656,7 +656,7 @@
                                                                  update=":creditInfoDlgForm"
                                                                  oncomplete="creditInfoDlg.show();">
                                                     <f:setPropertyActionListener value="#{proposeCredit}"
-                                                                                 target="#{creditFacPropose.proposeCreditDetailSelected}"/>
+                                                                                 target="#{creditFacPropose.newCreditDetailSelected}"/>
                                                     <f:setPropertyActionListener value="#{i.index}"
                                                                                  target="#{creditFacPropose.rowIndex}"/>
                                                     <p:resetInput target=":creditInfoDlgForm"/>
@@ -666,7 +666,7 @@
                                                                  process="@this"
                                                                  onsuccess="confirmDeleteCreditInfoDlg.show();">
                                                     <f:setPropertyActionListener value="#{proposeCredit}"
-                                                                                 target="#{creditFacPropose.proposeCreditDetailSelected}"/>
+                                                                                 target="#{creditFacPropose.newCreditDetailSelected}"/>
                                                 </p:commandButton>
                                             </td>
                                         </tr>

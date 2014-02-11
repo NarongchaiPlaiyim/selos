@@ -18,6 +18,9 @@ public class NewCreditDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_CREDIT_DET_ID")
     private long id;
 
+    @Column(name = "propose_type")
+    private String proposeType;
+
     @Column(name = "line_no", length = 5)
     private int lineNo;
 
@@ -481,10 +484,19 @@ public class NewCreditDetail implements Serializable {
         this.workCase = workCase;
     }
 
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("proposeType", proposeType)
                 .append("lineNo", lineNo)
                 .append("noFlag", noFlag)
                 .append("guaranteeAmount", guaranteeAmount)
@@ -519,7 +531,12 @@ public class NewCreditDetail implements Serializable {
                 .append("loanPurpose", loanPurpose)
                 .append("newCreditFacility", newCreditFacility)
                 .append("proposeCreditTierDetailList", proposeCreditTierDetailList)
+                .append("workCase", workCase)
                 .append("type", type)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

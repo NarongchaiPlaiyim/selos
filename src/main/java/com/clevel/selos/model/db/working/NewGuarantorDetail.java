@@ -21,6 +21,9 @@ public class NewGuarantorDetail implements Serializable {
     @Column(name = "no")
     private int no;
 
+    @Column(name = "propose_type")
+    private String proposeType;
+
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer  guarantorName;
@@ -143,11 +146,20 @@ public class NewGuarantorDetail implements Serializable {
         this.newGuarantorCreditList = newGuarantorCreditList;
     }
 
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("no", no)
+                .append("proposeType", proposeType)
                 .append("guarantorName", guarantorName)
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
@@ -156,6 +168,7 @@ public class NewGuarantorDetail implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("newGuarantorCreditList", newGuarantorCreditList)
                 .toString();
     }
 }

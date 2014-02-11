@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.MortgageTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -63,7 +64,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-            newCollateral.setProposeType("P");
+            newCollateral.setProposeType(ProposeType.P.type());
             if (newCollateralView.getId() != 0) {
                 newCollateral.setCreateDate(newCollateralView.getCreateDate());
                 newCollateral.setCreateBy(newCollateralView.getCreateBy());
