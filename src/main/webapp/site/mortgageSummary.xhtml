@@ -11,12 +11,6 @@
     <title>#{msg.get('app.mortgageSummary.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-<style type="text/css">
-.morgage_table.ui-datatable table {
-    table-layout: auto !important;
-    width: 100% !important;
-}
-</style>
 </h:head>
 
 <h:body>
@@ -150,7 +144,7 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='mortgagesumm_tbl' styleClass="morgage_table"
+                        			<p:dataTable id='mortgagesumm_tbl' styleClass="full_table"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
@@ -203,7 +197,7 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='pledgesumm_tbl' styleClass="morgage_table"
+                        			<p:dataTable id='pledgesumm_tbl' styleClass="full_table"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
@@ -255,7 +249,7 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='guarantorsumm_tbl' styleClass="morgage_table"
+                        			<p:dataTable id='guarantorsumm_tbl' styleClass="full_table"
                         				rowIndexVar="rowIdx"
                         				>
                         				<p:column style="width:20px" styleClass="center">
