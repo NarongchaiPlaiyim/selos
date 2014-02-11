@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
@@ -80,7 +81,8 @@ public class AppraisalAppointment implements Serializable {
     private String message;
 
     private User user;
-    private Long workCaseId;
+    private long workCaseId;
+    private long stepId;
     private AppraisalView appraisalView;
 
     private boolean showNoRequest;
@@ -148,52 +150,61 @@ public class AppraisalAppointment implements Serializable {
         appraisalDetailViewSelected = new AppraisalDetailView();
     }
 
+    public void preRender(){
+        log.info("-- preRender.");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("preRender ::: setSession ");
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            log.debug("-- workCasePreScreenId[{}]", workCaseId);
+            user = (User)session.getAttribute("user");
+            log.debug("-- User.id[{}]", user.getId());
+            stepId = Long.valueOf(""+session.getAttribute("stepId"));
+            log.debug("-- stepId[{}]", stepId);
+            try{
+                String page = Util.getCurrentPage();
+                if(stepId != StepValue.APPOINTMENT_APPRAISAL.value() || !"appraisalAppointment.jsf".equals(page)){
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+            }catch (Exception ex){
+                log.debug("Exception :: {}",ex);
+            }
+        } else {
+            log.debug("preRender ::: workCasePrescreenId is null.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
-        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
-            log.info("preRender ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+        preRender();
+        init();
+        appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, user);
+        if(!Util.isNull(appraisalView)){
+            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+            if(Util.isZero(appraisalDetailViewList.size())){
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
             }
-        } else {
-            user = (User)session.getAttribute("user");
-            log.debug("-- User : {}", ""+user.toString());
-            init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            workCaseId = 4L;
-            log.info("workCaseId :: {} ",workCaseId);
-            appraisalView = appraisalAppointmentControl.getAppraisalAppointment(workCaseId, user);
-            if(!Util.isNull(appraisalView)){
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-                if(Util.isZero(appraisalDetailViewList.size())){
-                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-                }
-                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-                if(Util.isNull(appraisalContactDetailView)){
-                    appraisalContactDetailView = new AppraisalContactDetailView();
-                }
+            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+            if(Util.isNull(appraisalContactDetailView)){
+                appraisalContactDetailView = new AppraisalContactDetailView();
+            }
 
 //                contactRecordDetailViewList = appraisalView.getContactRecordDetailViewList();
 //                for(ContactRecordDetailView view : contactRecordDetailViewList){
 //                    log.debug("-- ContactRecordDetailView.id[{}]", view.getId());
 //                }
-
-                log.debug("-- ");
-
-                updateContractFlag(appraisalContactDetailView);
-            } else {
-                appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
-            }
+            updateContractFlag(appraisalContactDetailView);
+        } else {
+            appraisalView = new AppraisalView();
+            log.debug("-- AppraisalView[New] created");
+            appraisalContactDetailView = new AppraisalContactDetailView();
+            log.debug("-- AppraisalContactDetailView[New] created");
+            appraisalContactDetailView = new AppraisalContactDetailView();
+            log.debug("-- AppraisalContactDetailView[New] created");
         }
     }
 
