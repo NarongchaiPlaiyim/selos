@@ -285,24 +285,27 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        if(bizInfoSummaryView != null && bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
-            if(bizInfoSummaryView.getBizInfoDetailViewList().size() > 1){
-                int tmpIndex = 0;
-                BigDecimal tmpHighestProportion = BigDecimal.ZERO;
-                for (int i=0 ; i < bizInfoSummaryView.getBizInfoDetailViewList().size(); i++){ // find highest business proportion
-                    BigDecimal currentProportion;
-                    currentProportion = bizInfoSummaryView.getBizInfoDetailViewList().get(i).getPercentBiz();
-                    if(currentProportion.compareTo(tmpHighestProportion) > 0){
-                        tmpHighestProportion = currentProportion;
-                        tmpIndex = i;
-                    }
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        if(bizInfoSummaryView.getId() != 0){
+            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+        }
+
+        if(bizInfoDetailViewList.size() > 1){
+            int tmpIndex = 0;
+            BigDecimal tmpHighestProportion = BigDecimal.ZERO;
+            for (int i=0 ; i < bizInfoDetailViewList.size() ; i++){ // find highest business proportion
+                BigDecimal currentProportion;
+                currentProportion = bizInfoDetailViewList.get(i).getPercentBiz();
+                if(currentProportion.compareTo(tmpHighestProportion) > 0){
+                    tmpHighestProportion = currentProportion;
+                    tmpIndex = i;
                 }
-                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getExpIndCountryName());
-                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getPercentExpIndCountryName());
-            } else {
-                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getExpIndCountryName());
-                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getPercentExpIndCountryName());
             }
+            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndex).getExpIndCountryName());
+            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndex).getPercentExpIndCountryName());
+        } else {
+            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(0).getExpIndCountryName());
+            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(0).getPercentExpIndCountryName());
         }
 
         if(exSummary != null && exSummary.getLastReviewDate() != null){
