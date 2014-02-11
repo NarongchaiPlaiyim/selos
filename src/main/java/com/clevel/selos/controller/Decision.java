@@ -123,8 +123,7 @@ public class Decision implements Serializable {
     private TCGView tcgView;
     private int applyTCG;
 
-    private List<ProposeCreditDetailView> sharedCreditTypeList;
-
+    private List<ProposeCreditDetailView> sharedProposeCreditTypeList;
     // View Selected for Add/Edit/Delete
     private NewCreditDetailView selectedAppProposeCredit;
     private NewCollateralView selectedAppProposeCollateral;
@@ -244,7 +243,7 @@ public class Decision implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            roleUW = decisionControl.isRoleUW();
+            roleUW = !decisionControl.isRoleUW();   // test
 
         } else {
             //TODO return to inbox
@@ -413,6 +412,8 @@ public class Decision implements Serializable {
     }
 
     public void setDataFromNewCreditFacility() {
+        Cloner cloner = new Cloner();
+
         decisionView.setProposeCreditList(newCreditFacilityView.getNewCreditDetailViewList());
         decisionView.setProposeGuarantorList(newCreditFacilityView.getNewGuarantorDetailViewList());
         decisionView.setProposeCollateralList(newCreditFacilityView.getNewCollateralViewList());
@@ -420,6 +421,10 @@ public class Decision implements Serializable {
         decisionView.setProposeTotalCreditLimit(newCreditFacilityView.getTotalPropose());
         decisionView.setProposeTotalGuaranteeAmt(newCreditFacilityView.getTotalGuaranteeAmount());
 
+        // Approved Credit
+        decisionView.setApproveCreditList(cloner.deepClone(newCreditFacilityView.getNewCreditDetailViewList()));
+        decisionView.setApproveCollateralList(cloner.deepClone(newCreditFacilityView.getNewCollateralViewList()));
+        decisionView.setApproveGuarantorList(cloner.deepClone(newCreditFacilityView.getNewGuarantorDetailViewList()));
     }
 
     public void onRetrievePricingFee() {
@@ -741,7 +746,7 @@ public class Decision implements Serializable {
             selectedCollateralCrdTypeItems = selectedAppProposeCollateral.getProposeCreditDetailViewList();
             // update Guarantee Amount before render dialog
             Cloner cloner = new Cloner();
-            collateralCreditTypeList = cloner.deepClone(sharedCreditTypeList);
+            collateralCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
         }
 
         modeEditCollateral = true;
@@ -957,7 +962,7 @@ public class Decision implements Serializable {
         selectedAppProposeGuarantor = new NewGuarantorDetailView();
         selectedGuarantorCrdTypeItems = new ArrayList<ProposeCreditDetailView>();
         Cloner cloner = new Cloner();
-        guarantorCreditTypeList = cloner.deepClone(sharedCreditTypeList);
+        guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
 
         modeEditGuarantor = false;
         modeForButton = ModeForButton.ADD;
@@ -970,7 +975,7 @@ public class Decision implements Serializable {
             selectedGuarantorCrdTypeItems = selectedAppProposeGuarantor.getProposeCreditDetailViewList();
             // update Guarantee Amount before render dialog
             Cloner cloner = new Cloner();
-            guarantorCreditTypeList = cloner.deepClone(sharedCreditTypeList);
+            guarantorCreditTypeList = cloner.deepClone(sharedProposeCreditTypeList);
             for (ProposeCreditDetailView creditTypeFromAll : guarantorCreditTypeList) {
                 for (ProposeCreditDetailView creditTypeFromSelected : selectedAppProposeGuarantor.getProposeCreditDetailViewList()) {
                     if (creditTypeFromAll.getSeq() == creditTypeFromSelected.getSeq()) {
@@ -1427,12 +1432,12 @@ public class Decision implements Serializable {
         this.rowIndexCollateral = rowIndexCollateral;
     }
 
-    public List<ProposeCreditDetailView> getSharedCreditTypeList() {
-        return sharedCreditTypeList;
+    public List<ProposeCreditDetailView> getsharedProposeCreditTypeList() {
+        return sharedProposeCreditTypeList;
     }
 
-    public void setSharedCreditTypeList(List<ProposeCreditDetailView> sharedCreditTypeList) {
-        this.sharedCreditTypeList = sharedCreditTypeList;
+    public void setsharedProposeCreditTypeList(List<ProposeCreditDetailView> sharedProposeCreditTypeList) {
+        this.sharedProposeCreditTypeList = sharedProposeCreditTypeList;
     }
 
     public List<ProposeCreditDetailView> getCollateralCreditTypeList() {

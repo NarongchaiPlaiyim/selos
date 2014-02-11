@@ -717,24 +717,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return relatedWithAllList;
     }
 
-    public BigDecimal calculateInstallment(NewCreditTierDetailView newCreditTierDetailView, BigDecimal CreditDetailLimit) {
-//  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
-// อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
-        log.info("newCreditTierDetailView.getFinalPriceSum : : {}", newCreditTierDetailView.getFinalPriceSum());
-
-        BigDecimal sumFinal = newCreditTierDetailView.getFinalPriceSum();
-        BigDecimal sumFinalPerMonth = Util.divide(Util.divide(sumFinal.add(BigDecimal.ONE), BigDecimal.valueOf(100)), BigDecimal.valueOf(12));
-        int tenor = newCreditTierDetailView.getTenor();
-        BigDecimal limit = CreditDetailLimit;
-        BigDecimal installmentSum = BigDecimal.ZERO;
-        log.info("sumFinal : {} , tenor : {} , limit : {} ", sumFinalPerMonth, tenor, limit);
-        installmentSum = Util.divide(Util.multiply(Util.multiply(sumFinalPerMonth, limit), Util.add(BigDecimal.ONE, sumFinal).pow(tenor)),
-                Util.subtract(Util.add(BigDecimal.ONE, sumFinalPerMonth).pow(tenor), BigDecimal.ONE));
-        log.info("installmentSum : {}", installmentSum);
-
-        return installmentSum;
-    }
-
     public void calWC(long workCaseId) { // todo: ncb && dbr && bizInfoSummary pls call me !!!!!!!!
         log.debug("calWC ::: workCaseId : {}", workCaseId);
         BigDecimal dayOfYear = BigDecimal.valueOf(365);

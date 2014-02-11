@@ -302,7 +302,7 @@
                             id="addTier"
                             process="@this"
                             update=":creditInfoDlgForm:resultFinal"
-                            disabled="true"
+                            disabled="#{creditFacPropose.modeEdit}"
                             actionListener="#{creditFacPropose.onAddTierInfo()}" >
                     </p:commandButton>
                 </td>

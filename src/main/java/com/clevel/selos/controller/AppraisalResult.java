@@ -12,6 +12,7 @@ import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -87,12 +88,12 @@ public class AppraisalResult implements Serializable {
     private String message;
     private boolean showNoRequest;
     private Date currentDate;
-    private boolean searchCOMS;
     private int rowCollateral;
     private boolean flagReadOnly;
 
     private User user;
-    private Long workCaseId;
+    private long workCaseId;
+    private long stepId;
     private AppraisalView appraisalView;
 
     //collateralDetailViewList
@@ -136,6 +137,7 @@ public class AppraisalResult implements Serializable {
 
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
+    private boolean saveAndEditFlag;
 
     public AppraisalResult() {
 
@@ -155,121 +157,56 @@ public class AppraisalResult implements Serializable {
 
         appraisalView = new AppraisalView();
         flagReadOnly = false;
+        saveAndEditFlag = false;
     }
 
-    @PostConstruct
-    public void onCreation() {
-        log.info("-- onCreation.");
+    public void preRender(){
+        log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
-        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
-            log.info("preRender ::: workCaseId is null.");
+        log.debug("preRender ::: setSession ");
+        if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
+            log.debug("-- workCasePreScreenId[{}]", workCaseId);
+            user = (User)session.getAttribute("user");
+            log.debug("-- User.id[{}]", user.getId());
+            stepId = Long.valueOf(""+session.getAttribute("stepId"));
+            log.debug("-- stepId[{}]", stepId);
+            try{
+                String page = Util.getCurrentPage();
+                if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalResult.jsf".equals(page)){
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    return;
+                }
+            }catch (Exception ex){
+                log.debug("Exception :: {}",ex);
+            }
+        } else {
+            log.debug("preRender ::: workCasePrescreenId is null.");
             try{
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
-        } else {
-            user = (User)session.getAttribute("user");
-            log.debug("-- User : {}", ""+user.toString());
-            init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-            workCaseId = 4L;
-            log.info("workCaseId :: {} ",workCaseId);
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
-            if(!Util.isNull(appraisalView)){
-                newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
-                if(newCollateralViewList.size() == 0){
-                    newCollateralViewList = new ArrayList<NewCollateralView>();
-                }
-            } else {
-                appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] created");
-            }
         }
     }
 
-    private void data(){
-        log.debug("-- Generate data.");
-        appraisalData = new AppraisalData();
-        appraisalData.setJobId("job 1");
-        appraisalData.setAppraisalDate(DateTime.now().toDate());
-        appraisalData.setAadDecision("ไม่ผ่าน");
-        appraisalData.setAadDecisionReason("ดารากู้");
-        appraisalData.setAadDecisionReasonDetail("bdm ไม่เป็น แฟนคลับผู้หญิง");
-
-        List<HeadCollateralData> headCollateralDataList = new ArrayList<HeadCollateralData>();
-
-        headCollateralData = new HeadCollateralData();
-        headCollateralData.setCollateralLocation("ประเทศไทย แลน ออฟ สไมล์");
-        headCollateralData.setTitleDeed("สส 126,ออ 156");
-        headCollateralData.setAppraisalValue(BigDecimal.valueOf(200000));
-        headCollateralDataList.add(headCollateralData);
-        appraisalData.setHeadCollateralDataList(headCollateralDataList);
-
-        subCollateralDataList = new ArrayList<SubCollateralData>();
-        subCollateralData = new SubCollateralData();
-        subCollateralData.setLandOffice("ขอนแก่น");
-        subCollateralData.setAddress("ถนน ข้าวแนว จ ขอนแก่น");
-        subCollateralData.setTitleDeed("สส 126");
-        subCollateralData.setCollateralOwner("ญาญ่า ปันดอน");
-        subCollateralData.setAppraisalValue(BigDecimal.valueOf(150000));
-        subCollateralDataList.add(subCollateralData);
-
-        subCollateralData = new SubCollateralData();
-
-        subCollateralData.setTitleDeed("ออ 156");
-        subCollateralData.setLandOffice("กทม");
-        subCollateralData.setAddress("ถนน ข้าวหมาก จ กรุงเทพมหานคร");
-        subCollateralData.setCollateralOwner("คิม เบอลิน");
-        subCollateralData.setAppraisalValue(BigDecimal.valueOf(1000000));
-        subCollateralDataList.add(subCollateralData);
-
-
-        newCollateralViewList = new ArrayList<NewCollateralView>();
-        newCollateralView = new NewCollateralView();
-
-//        appraisalData.setSubCollateralDataList(subCollateralDataList);
-
-        convertCollateral(appraisalData);
-
-        newCollateralHeadView = new NewCollateralHeadView();
-
-        newCollateralHeadView.setTitleDeed("xx");
-        newCollateralHeadView.setCollateralLocation( "yy");
-
-        newCollateralSubViewList = new ArrayList<NewCollateralSubView>();
-
-        newCollateralSubView = new NewCollateralSubView();
-        newCollateralSubView.setTitleDeed("LN 159");
-        newCollateralSubView.setLandOffice("london");
-        newCollateralSubView.setAddress("Nothing Hill");
-        newCollateralSubView.setCollateralOwner("Bill Bill Bang");
-        newCollateralSubView.setAppraisalValue(new BigDecimal(1000000));
-        newCollateralSubViewList.add(newCollateralSubView);
-
-        newCollateralHeadView.setNewCollateralSubViewList(newCollateralSubViewList);
-
-        newCollateralView.getNewCollateralHeadViewList().add(newCollateralHeadView);
-        newCollateralViewList.add(newCollateralView);
-
-//        for(CollateralDetailView detailView : collateralDetailViewList){
-//            collateralHeaderDetailViewList = safetyList(detailView.getCollateralHeaderDetailViewList());
-//            for(CollateralHeaderDetailView headerDetailView : collateralHeaderDetailViewList){
-//                subCollateralDetailViewList = headerDetailView.getSubCollateralDetailViewList();
-//            }
-//        }
-
-    }
-    private <T> List<T> safetyList(List<T> list) {
-        return Util.safetyList(list);
-    }
-
-    public void onClickForDialogNoRequest(){
-        log.info("onClickForDialogNoRequest");
-        messageHeader = "เกิดข้อผิดพลาด";
-        message = "ยังไม่มีการกรอกข้อมูลการร้องขอ Appraisal มาก่อน";
-        RequestContext.getCurrentInstance().execute("msgBoxNoRequestMessageDlg.show()");
+    @PostConstruct
+    public void onCreation() {
+        log.info("-- onCreation.");
+        preRender();
+        init();
+        appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, user);
+        if(!Util.isNull(appraisalView)){
+            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
+            if(newCollateralViewList.size() == 0){
+                newCollateralViewList = new ArrayList<NewCollateralView>();
+            }
+        } else {
+            appraisalView = new AppraisalView();
+            log.debug("-- AppraisalView[New] created");
+        }
     }
 
     public void onChangePageCauseNoRequest(){
@@ -295,41 +232,65 @@ public class AppraisalResult implements Serializable {
         }
     }
     public void onAddCollateralDetailView(){
-        //Add from main page
         log.info("-- onAddCollateralDetailView >>> begin ");
         modeForButton = ModeForButton.ADD;
         flagReadOnly = false;
+        saveAndEditFlag = false;
         newCollateralView = new NewCollateralView();
-        searchCOMS = false;
+        log.debug("-- NewCollateralView[New] created");
     }
 
     public void onCallRetrieveAppraisalReportInfo() {
-        String jobIDSearch = newCollateralView.getJobIDSearch();
-        log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobIDSearch);
+        String jobID = newCollateralView.getJobID();
+        log.info("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
         boolean flag = true;
         messageHeader = "Information";
         message = "Duplicate Job ID";
-        try{
-            if(ModeForButton.ADD.equals(modeForButton)){
-                flag = checkJobIdExist(newCollateralViewList, jobIDSearch);
-                if(flag){
-                    //todo : call interface COM_S
-                    newCollateralView = callCOM_S(jobIDSearch);
-//                    newCollateralView = newCollateralViewForTest();//callCOM_S(jobIDSearch);
-                    if(Util.isNull(newCollateralView)){
-                        newCollateralView = new NewCollateralView();
+
+        if(!Util.isNull(jobID)){
+            try {
+                if(ModeForButton.ADD.equals(modeForButton)){
+                    log.debug("-- ADD");
+                    flag = checkJobIdExist(newCollateralViewList, jobID);
+                    if(flag){
+                        AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
+                        if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
+                            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                            saveAndEditFlag = true;
+                        } else {
+                            saveAndEditFlag = false;
+                            messageHeader = ""+appraisalDataResult.getActionResult();
+                            message = appraisalDataResult.getReason();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        }
+                    } else {
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-                } else {
-                    log.debug("-- {}", message);
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+                } else if(ModeForButton.EDIT.equals(modeForButton)){
+                    log.debug("-- EDIT");
+                    AppraisalDataResult appraisalDataResult = callCOM_S(jobID);
+                    if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
+                        newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        saveAndEditFlag = true;
+                    } else {
+                        saveAndEditFlag = false;
+                        messageHeader = ""+appraisalDataResult.getActionResult();
+                        message = appraisalDataResult.getReason();
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    }
                 }
-            } else {
-                newCollateralView = callCOM_S(jobIDSearch);
+            } catch (COMSInterfaceException e){
+                messageHeader = "Exception";
+                message = e.getMessage();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
+
+        } else {
+            messageHeader = "Exception";
+            message = "Job ID Search is empty";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-        log.info("onCallRetrieveAppraisalReportInfo End");
     }
     private boolean checkJobIdExist(final List<NewCollateralView> viewList, String jobIDSearch){
         for(NewCollateralView view : viewList){
@@ -339,47 +300,32 @@ public class AppraisalResult implements Serializable {
         }
         return true;
     }
-
-    private NewCollateralView callCOM_S(final String jobIDSearch){
-        log.info("-- jobIDSearch is  {}", jobIDSearch);
-        AppraisalDataResult appraisalDataResult;
-        try {
-            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobIDSearch);
-            if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCEED.equals(appraisalDataResult.getActionResult())){
-                log.debug("-- SUCCEED");
-                newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-                return newCollateralView;
-            } else {
-                log.error("Exception : {}", appraisalDataResult.getReason());
-                return null;
-            }
-        } catch (Exception e){
-            log.error("-- Exception [{}]", e.getMessage());
-            return null;
-        }
+    private AppraisalDataResult callCOM_S(final String jobID){
+        log.info("-- jobIDSearch is  {}", jobID);
+        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobID);
+        return appraisalDataResult;
     }
-
-
 
     public void onSaveCollateralDetailView(){
         log.debug("-- onSaveCollateralDetailView()");
         boolean complete = false;
-
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- Flag {}", ModeForButton.ADD);
             complete=true;
-            log.info("-- onSaveCollateralDetailView add >>> begin ");
             String jobID = newCollateralView.getJobID();
             if(!Util.isNull(jobID) && !Util.equals(jobID, "")){
-                log.debug("-- JobID( id = {}) Added to list", jobID);
-                newCollateralViewList.add(newCollateralView);
+                if(saveAndEditFlag){
+                    newCollateralViewList.add(newCollateralView);
+                    log.info("-- NewCollateralView.jobID[{}] added to NewCollateralViewList[{}]", newCollateralView.getJobID(), newCollateralViewList.size()+1);
+                }
             }
-            log.info("-- onSaveCollateralDetailView add >>> end ");
         }else if(ModeForButton.EDIT.equals(modeForButton)){
             complete=true;
             log.debug("-- Flag {}", ModeForButton.EDIT);
-            newCollateralViewList.set(rowCollateral, newCollateralView);
-            log.info("onSaveCollateralDetailView edit >>> begin ");
+            if(saveAndEditFlag){
+                newCollateralViewList.set(rowCollateral, newCollateralView);
+                log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
+            }
         }
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -394,15 +340,8 @@ public class AppraisalResult implements Serializable {
     public void onDeleteCollateralDetailView(){
         newCollateralViewList.remove(selectCollateralDetailView);
         log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
-//        onSetRowNoCollateralDetailView();
     }
-    public void onSetRowNoCollateralDetailView(){
-//        CollateralDetailView collateralDetailViewRow;
-//        for(int i=0;i< collateralDetailViewList.size();i++){
-//            collateralDetailViewRow = collateralDetailViewList.get(i);
-//            collateralDetailViewRow.setNo(i+1);
-//        }
-    }
+
     public void onSaveAppraisalResult() {
         log.info("-- onSaveAppraisalResult");
         try{
@@ -476,203 +415,6 @@ public class AppraisalResult implements Serializable {
         appraisalView.setDueDate(dueDate);
         appraisalView.setAppointmentDate(appraisalView.getAppraisalDate());
     }
-    public void onChangeReceivedTaskDate(){
-    }
-
-
-
-
-
-    public void onSetRowNoHeaderCollaral(List<NewCollateralHeadView> collateralHeaderDetailViewList){
-//        CollateralHeaderDetailView collateralHeaderDetailView;
-//        for(int h=0;h<collateralHeaderDetailViewList.size();h++){
-//            collateralHeaderDetailView = collateralHeaderDetailViewList.get(h);
-//            collateralHeaderDetailView.setNo(h+1);
-//        }
-    }
-
-    public void onSetRowNoSubCollaral(List<NewCollateralSubView> subCollateralDetailViewList){
-//        SubCollateralDetailView subCollateralDetailView;
-//        for(int s=0;s<subCollateralDetailViewList.size();s++){
-//            subCollateralDetailView = subCollateralDetailViewList.get(s);
-//            subCollateralDetailView.setNo(s+1);
-//        }
-    }
-
-    public void onSearchCollateral() {
-        log.info("onSearchCollateral begin key is " + newCollateralView.getJobIDSearch() );
-
-        ///Call ComS
-        //DataComes
-        //COMSInterface
-        //
-        String jobId;
-        jobId = "";//collateralDetailView.getJobIDSearch();
-        AppraisalDataResult appraisalDataResult;
-        log.info("userId is   " + user.getId() + "      jobId is  " + jobId);
-        try{
-            log.info("begin coms ");
-            appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobId);
-            log.info("end coms ");
-            searchCOMS = true;
-//            collateralDetailView = collateralBizTransform.transformCollateral(appraisalDataResult);
-//
-//            for(int i=0;i<collateralDetailView.getCollateralHeaderDetailViewList().size();i++){
-//                onSetRowNoHeaderCollaral(collateralDetailView.getCollateralHeaderDetailViewList());
-//
-//                for(int j=0;j<collateralDetailView.getCollateralHeaderDetailViewList().get(i).getSubCollateralDetailViewList().size();j++){
-//                    onSetRowNoSubCollaral(collateralDetailView.getCollateralHeaderDetailViewList().get(i).getSubCollateralDetailViewList());
-//                }
-//
-//            }
-
-
-        log.info("getData From COMS begin");
-        appraisalData = new AppraisalData();
-        appraisalData.setJobId(newCollateralView.getJobID());
-        appraisalData.setAppraisalDate(DateTime.now().toDate());
-        appraisalData.setAadDecision("ผ่าน");
-        appraisalData.setAadDecisionReason("ดารากู้");
-        appraisalData.setAadDecisionReasonDetail("bdm เป็น แฟนคลับ");
-
-        headCollateralDataList = new ArrayList<HeadCollateralData>();
-        headCollateralData = new HeadCollateralData();
-        headCollateralData.setCollateralLocation("ประเทศไทย แลน ออฟ สไมล์");
-        headCollateralData.setTitleDeed("กค 126,ญก 156");
-        headCollateralData.setAppraisalValue(BigDecimal.valueOf(4810000));
-
-//        appraisalData.setHeadCollateralDataList(headCollateralDataList.add(headCollateralData));
-                     //headCollateralData
-        subCollateralDataList = new ArrayList<SubCollateralData>();
-        subCollateralData = new SubCollateralData();
-        subCollateralData.setLandOffice("ขอนแก่น");
-        subCollateralData.setAddress("ถนน ข้าวแนว จ ขอนแก่น");
-        subCollateralData.setTitleDeed("กค 126");
-        subCollateralData.setCollateralOwner("แบรี่ ณเดช");
-        subCollateralData.setAppraisalValue(new BigDecimal(3810000));
-        subCollateralDataList.add(subCollateralData);
-
-        subCollateralData = new SubCollateralData();
-
-        subCollateralData.setTitleDeed("ญก 156");
-        subCollateralData.setLandOffice("กทม");
-        subCollateralData.setAddress("ถนน ข้าวหมาก จ กรุงเทพมหานคร");
-        subCollateralData.setCollateralOwner("หมาก ปริญ");
-        subCollateralData.setAppraisalValue(new BigDecimal(1000000));
-        subCollateralDataList.add(subCollateralData);
-
-//        appraisalData.setSubCollateralDataList(subCollateralDataList);
-
-        log.info("getData From COMS end");
-
-        log.info("getData convert ComS to View Model Begin");
-//        collateralDetailView =  convertCollateral(appraisalData);
-        log.info("getData convert ComS to View Model End");
-
-        log.info("onSearchCollateral End");
-
-        }catch (COMSInterfaceException comsEx){
-            log.info("error comsEx ");
-            searchCOMS = false;
-            messageHeader = msg.get("app.appraisal.message.validate.header.fail");
-            message = comsEx.getMessage() + " JOB ID " + jobId ;
-            newCollateralView = new NewCollateralView();
-            newCollateralView.setNewCollateralHeadViewList(new ArrayList<NewCollateralHeadView>());
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
-        }
-    }
-
-    private NewCollateralView convertCollateral(AppraisalData appraisalData ){
-        log.info("convertCollateral begin");
-        /*collateralDetailView = new CollateralDetailView();
-        collateralDetailView.setJobID(appraisalData.getJobId());
-        collateralDetailView.setAppraisalDate(appraisalData.getAppraisalDate());
-        collateralDetailView.setAADDecision(appraisalData.getAadDecision());
-        collateralDetailView.setAADDecisionReason(appraisalData.getAadDecisionReason());
-        collateralDetailView.setAADDecisionReasonDetail(appraisalData.getAadDecisionReasonDetail());
-        collateralDetailView.setUsage(appraisalData.getUsage());
-        collateralDetailView.setTypeOfUsage(appraisalData.getTypeOfUsage());
-        collateralDetailView.setMortgageCondition(appraisalData.getMortgageCondition());
-        collateralDetailView.setMortgageConditionDetail(appraisalData.getMortgageConditionDetail());
-
-        List<CollateralHeaderDetailView> collateralHeadDetailViewList = new ArrayList<CollateralHeaderDetailView>();
-        HeadCollateralData headCollateralData = appraisalData.getHeadCollateralData();
-        CollateralHeaderDetailView collateralHeadDetailView = convertCollateralHeader(headCollateralData);
-        collateralHeadDetailViewList.add(collateralHeadDetailView);
-
-        List<SubCollateralData> SubCollateralDataList = appraisalData.getSubCollateralDataList();
-        List<SubCollateralDetailView> subCollateralDetailViewList = new ArrayList<SubCollateralDetailView>();
-
-        for(int i=0;i< collateralHeadDetailViewList.size();i++){
-            CollateralHeaderDetailView collateralHeadDetailViewTemp = collateralHeadDetailViewList.get(i);
-            collateralHeadDetailViewTemp.setNo(i+1);
-
-            for(int j= 0;j<SubCollateralDataList.size();j++){
-                SubCollateralDetailView subCollateralDetailView = convertSubCollateral(SubCollateralDataList.get(j));
-                subCollateralDetailView.setNo(j+1);
-                subCollateralDetailView.getSubCollateralType().setCollateralType(collateralHeadDetailViewTemp.getHeadCollType());
-                SubCollateralType  subCollateralTypeResult = subCollateralTypeDAO.findByBySubColCode(subCollateralDetailView.getSubCollateralType());
-                log.info("subCollateralTypeDAO.findByBySubColCode ID is " + subCollateralTypeResult.getId());
-                subCollateralDetailView.setSubCollateralType(subCollateralTypeResult);
-                subCollateralDetailViewList.add(subCollateralDetailView);
-            }
-            collateralHeadDetailViewTemp.setSubCollateralDetailViewList(subCollateralDetailViewList);
-        }
-
-        collateralDetailView.setCollateralHeaderDetailViewList(collateralHeadDetailViewList);
-        log.info("convertCollateral end");*/
-        return null;
-    }
-
-    private NewCollateralHeadView convertCollateralHeader(HeadCollateralData headCollateralData ){
-        log.info("convertCollateralHeader begin");
-        /*CollateralHeaderDetailView collateralHeaderDetailView = new CollateralHeaderDetailView();
-
-        collateralHeadDetailView.setTitleDeed(headCollateralData.getTitleDeed());
-        double appraisalValue = Double.parseDouble(headCollateralData.getAppraisalValue());
-        collateralHeadDetailView.setAppraisalValue(new BigDecimal(appraisalValue));
-        collateralHeadDetailView.setCollateralLocation(headCollateralData.getCollateralLocation());
-        CollateralType headCollType = new CollateralType();
-        if(headCollateralData.getHeadCollType()== null || headCollateralData.getHeadCollType().equals("")){
-            headCollType.setCode("286003");
-        }else{
-            headCollType.setCode(headCollateralData.getHeadCollType());
-        }
-
-        headCollType = collateralTypeDAO.findByCollateralCode(headCollType);
-        log.info("collateralTypeDAO.findByCollateralCode ID is " + headCollType.getId());
-        collateralHeadDetailView.setHeadCollType(headCollType);
-        log.info("convertCollateralHeader end");*/
-
-        //todo : change this , AS
-        return null;
-    }
-
-    private NewCollateralSubView convertSubCollateral(SubCollateralData subCollateralData ){
-        log.info("convertSubCollateral begin");
-        /*SubCollateralDetailView subCollateralDetailView = new SubCollateralDetailView();
-
-        subCollateralDetailView.setTitleDeed(subCollateralData.getTitleDeed());
-        subCollateralDetailView.setAppraisalValue(subCollateralData.getAppraisalValue());
-        subCollateralDetailView.setAddress(subCollateralData.getAddress());
-        subCollateralDetailView.setLandOffice(subCollateralData.getLandOffice());
-        subCollateralDetailView.setCollateralOwnerAAD(subCollateralData.getCollateralOwner());
-        SubCollateralType subCollType = new SubCollateralType();
-
-        if(subCollateralData.getCollateralType()==null || subCollateralData.getCollateralType().equals("")){
-            subCollType.setCode("00");
-        }else{
-            subCollType.setCode(subCollateralData.getCollateralType());
-        }
-
-        subCollateralDetailView.setSubCollateralType(subCollType);
-        log.info("convertSubCollateral end");*/
-        return null;
-    }
-
-
-
 
     public ContactRecordDetailView getSelectContactRecordDetail() {
         return selectContactRecordDetail;

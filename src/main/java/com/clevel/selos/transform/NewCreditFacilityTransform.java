@@ -157,8 +157,17 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
         newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
         newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
+
         newCreditFacilityView.setLoanRequestType(newCreditFacility.getLoanRequestType());
+        if(newCreditFacilityView.getLoanRequestType() == null){
+            newCreditFacilityView.setLoanRequestType(new CreditRequestType());
+        }
+
         newCreditFacilityView.setInvestedCountry(newCreditFacility.getInvestedCountry());
+        if(newCreditFacilityView.getInvestedCountry() == null){
+            newCreditFacilityView.setInvestedCountry(new Country());
+        }
+
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
         newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());
