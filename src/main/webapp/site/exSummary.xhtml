@@ -602,7 +602,9 @@
                                     <h:outputText value="#{msg.get('app.exSummary.businessInfoSum.label.expiryDate')}"/>
                                 </td>
                                 <td>
-                                    <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}"/>
+                                    <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
                                 </td>
                             </tr>
                         </table>
@@ -1158,7 +1160,7 @@
                             </tr>
 
                             <tr>
-                                <td colspan="2" style="text-align: left">
+                                <td colspan="2" style="text-align: left" class="title">
                                     <h:outputText value="#{msg.get('app.exSummary.label.section.remark')}"/>
                                 </td>
                             </tr>
@@ -1266,8 +1268,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4" style="text-align: left" class="title">
-                                    <h:selectOneRadio id="decision"  value="#{executiveSummary.exSummaryView.decision}">
+                                <td colspan="4" style="text-align: left">
+                                    <h:selectOneRadio id="decision" value="#{executiveSummary.exSummaryView.decision}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}     " itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}     " itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.reject')}" itemValue="3"/>
