@@ -475,24 +475,43 @@ public class CreditFacPropose implements Serializable {
 
     public void calculateInstallment(NewCreditDetailView proposeCreditDetail) {
         log.info("proposeCreditDetail : {}", proposeCreditDetail);
-        for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
-    //  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
-    // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
-            BigDecimal sumFinal = newCreditTierDetailView.getFinalBasePrice().getValue().add(newCreditTierDetailView.getFinalInterest());
-            log.info("newCreditTierDetailView.getFinalBasePrice().getValue() :: {}",newCreditTierDetailView.getFinalBasePrice().getValue());
-            log.info("newCreditTierDetailView.getFinalInterest() :: {}",newCreditTierDetailView.getFinalInterest());
-            log.info("sumFinal ::: {}", sumFinal);
-            BigDecimal sumFinalPerMonth = Util.divide(Util.add(sumFinal,(BigDecimal.ONE)), BigDecimal.valueOf(12));
-            int tenor = newCreditTierDetailView.getTenor();
-            BigDecimal limit = proposeCreditDetail.getLimit();
-            BigDecimal installmentSum = BigDecimal.ZERO;
-            log.info("sumFinalPerMonth : {} , tenor : {} , limit : {} ", sumFinalPerMonth, tenor, limit);
-            installmentSum = Util.divide(Util.multiply(Util.multiply(sumFinalPerMonth, limit), Util.add(BigDecimal.ONE, sumFinal).pow(tenor)),
-                    Util.subtract(Util.add(BigDecimal.ONE, sumFinalPerMonth).pow(tenor), BigDecimal.ONE));
-            log.info("installmentSum : {}", installmentSum);
+        if(proposeCreditDetail != null && proposeCreditDetail.getNewCreditTierDetailViewList() != null && proposeCreditDetail.getNewCreditTierDetailViewList().size() > 0){
+            for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
+//                  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
+                // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
+                BigDecimal twelve = BigDecimal.valueOf(12);
+                BigDecimal baseRate = BigDecimal.ZERO;
+                BigDecimal interest = BigDecimal.ZERO;
+                if(newCreditTierDetailView.getFinalBasePrice() != null){
+                    baseRate = newCreditTierDetailView.getFinalBasePrice().getValue();
+                }
+                if(newCreditTierDetailView.getFinalInterest() != null){
+                    interest = newCreditTierDetailView.getFinalInterest();
+                }
+
+                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate,Util.add(interest,BigDecimal.ONE)),twelve);
+                log.info("baseRate :: {}",baseRate);
+                log.info("interest :: {}",interest);
+                log.info("interestPerMonth :: {}",interestPerMonth);
+
+                BigDecimal limit = BigDecimal.ZERO;
+                int tenor = newCreditTierDetailView.getTenor();
+                BigDecimal installment;
+
+                if(proposeCreditDetail.getLimit() != null){
+                    limit = proposeCreditDetail.getLimit();
+                }
+
+                log.info("limit :: {}",limit);
+                log.info("tenor :: {}",tenor);
+
+                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),(Util.add(BigDecimal.ONE,interestPerMonth)).pow(tenor)),
+                        Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
+                log.info("installment : {}", installment);
 
 
-            newCreditTierDetailView.setInstallment(installmentSum);
+                newCreditTierDetailView.setInstallment(installment);
+            }
         }
     }
 
