@@ -91,7 +91,7 @@ public class NCBInfoControl extends BusinessControl {
         BigDecimal loanCreditWCTMB = new BigDecimal(0);
 
         for(NCBDetail item : ncbDetailList){
-            if(item.getAccountType().getWcFlag() == 1){
+            if(item.getAccountType() != null && item.getAccountType().getWcFlag() == 1){
                 loanCredit = loanCredit.add(item.getLimit());
             }
             if(item.getWcFlag() == RadioValue.YES.value()){
