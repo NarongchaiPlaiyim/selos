@@ -78,26 +78,15 @@
                                             <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt2" value="Yes" /><p:spacer width="15px" />
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}" styleClass="title left"/> :
-                                            <!--<clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"-->
-                                                            <!--value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"-->
-                                                            <!--disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"-->
-                                                            <!--yearRange="1950:2100"-->
-                                                            <!--defaultdate="#{bizInfoSummary.currentDateDDMMYY}"-->
-                                                            <!--mindate="#{bizInfoSummary.currentDateDDMMYY}"-->
-                                                            <!--showButtonPanel="true"-->
-                                                            <!--pattern="dd/MM/yyyy">-->
-                                                <!--<p:ajax event="blur" update=":frmMain:expiryDate"/>-->
-                                            <!--</clv:BECalendar>-->
                                             <clv:BECalendar id="expiryDate" showOn="button" navigator="true" locale="th_TH"
                                                             value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
-                                                            disabled="#{bizInfoSummary.disableExpiryDate}"
-                                                            required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
+                                                            disabled="#{bizInfoSummary.disableExpiryDate}" required="#{!bizInfoSummary.disableExpiryDate and not empty param[addBizInfoSummary.clientId]}"
                                                             yearRange="1950:2100"
-                                                            pattern="dd/MM/yyyy"
-                                                            mindate="01/01/1950"
-                                                            showButtonPanel="true"
                                                             defaultdate="#{bizInfoSummary.currentDateDDMMYY}"
-                                                            maxdate="#{bizInfoSummary.currentDateDDMMYY}">
+                                                            mindate="#{bizInfoSummary.currentDateDDMMYY}"
+                                                            showButtonPanel="true"
+                                                            pattern="dd/MM/yyyy">
+                                                <p:ajax event="blur" update=":frmMain:expiryDate"/>
                                             </clv:BECalendar>
                                         </td>
                                     </tr>
@@ -187,7 +176,7 @@
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
                                                     <td colspan="3">
-                                                        <p:selectOneMenu  id="countryId" style="min-width: 200px; width: 200px; max-width: 200px;"
+                                                        <p:selectOneMenu  id="countryId" style="min-width: 200px; width: 250px; max-width: 250px;"
                                                                           value="#{bizInfoSummary.bizInfoSummaryView.country.id}"
                                                                           required="#{not empty param[addBizInfoSummary.clientId]}" >
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -527,7 +516,8 @@
                                     <td class="left">
                                         <p:inputText id="noOfEmployee" styleClass="right"
                                                      onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
-                                                     value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }">
+                                                     value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}" required="#{not empty param[addBizInfoSummary.clientId] }"
+                                                     maxlength="15">
                                             <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                             <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
                                         </p:inputText>
@@ -623,7 +613,7 @@
 
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit" process="@this"
-                                                         oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                                         oncomplete="confirmEditBizInfoDetailDlg.show()" >
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
                                             <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
                                         </p:commandButton>
@@ -774,6 +764,18 @@
         <ui:param name="formId" value="frmConfirmAddBizInfoDetail"/>
         <ui:param name="controller" value="#{bizInfoSummary}"/>
         <ui:param name="action" value="onCheckAdd"/>
+        <ui:param name="redirectValue" value="#{bizInfoSummary.redirect}"/>
+        <ui:param name="update" value=":msgBoxSystemMessagePanel,:frmMain"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmChangeScreenDlg.xhtml">
+        <ui:param name="headerMessage" value="คำเตือน"/>
+        <ui:param name="message" value="เมื่อทำการเปลี่ยนหน้าจอ จะทำการบันทึกหน้าปัจจุบัน"/>
+        <ui:param name="id" value="confirmEditBizInfoDetailDialog"/>
+        <ui:param name="name" value="confirmEditBizInfoDetailDlg"/>
+        <ui:param name="formId" value="frmConfirmEditBizInfoDetail"/>
+        <ui:param name="controller" value="#{bizInfoSummary}"/>
+        <ui:param name="action" value="onCheckEdit"/>
         <ui:param name="redirectValue" value="#{bizInfoSummary.redirect}"/>
         <ui:param name="update" value=":msgBoxSystemMessagePanel,:frmMain"/>
     </ui:include>

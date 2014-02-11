@@ -21,13 +21,14 @@
                     <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}" />
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}"
+                                 required="#{not empty param[saveStakeholderBtn.clientId]}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/><h:outputLabel value="*"
-                                                                                                             styleClass="require-field"/>
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/>
+                    <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
