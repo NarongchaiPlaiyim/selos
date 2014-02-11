@@ -8,6 +8,8 @@ import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.ExSummaryTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -25,6 +27,9 @@ public class ExSummaryControl extends BusinessControl {
     @Inject
     @SELOS
     Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     private ExSummaryDAO exSummaryDAO;
@@ -178,21 +183,21 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
 
             StringBuilder addressTH = new StringBuilder();
-            addressTH = addressTH.append("เลขที่ ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-");
-            addressTH = addressTH.append(" หมู่ที่ ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressMoo").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-");
-            addressTH = addressTH.append(" อาคาร/หมู่บ้าน ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-");
-            addressTH = addressTH.append(" ตรอก/ซอย/ถนน ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressStreet").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-");
-            addressTH = addressTH.append(" ตำบล ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.subdistrict").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getName() : "-");
-            addressTH = addressTH.append(" อำเภอ ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.district").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getName() : "-");
-            addressTH = addressTH.append(" จังหวัด ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.province").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getName() : "-");
-            addressTH = addressTH.append(" ประเทศ ");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.country").concat(" "));
             addressTH = addressTH.append(bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getName() : "-");
 
             exSummaryView.setBusinessLocationAddress(addressTH.toString());
