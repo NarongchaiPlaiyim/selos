@@ -18,10 +18,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class ExSummaryControl extends BusinessControl {
@@ -202,7 +199,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
-                exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate()));
+                exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
             }

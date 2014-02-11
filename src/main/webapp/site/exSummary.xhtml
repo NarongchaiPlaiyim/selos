@@ -409,7 +409,7 @@
 
                                         <p:column styleClass="center">
                                             <h:outputText value="#{itemBorCha.startBusinessDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                         </p:column>
 
@@ -604,7 +604,7 @@
                                             </td>
                                             <td style="text-align: left">
                                                 <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}">
-                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                                 </h:outputText>
                                             </td>
                                         </tr>
