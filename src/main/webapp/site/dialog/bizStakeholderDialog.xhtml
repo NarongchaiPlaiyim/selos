@@ -44,7 +44,7 @@
                     <p:inputText id="contactYear" value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}" styleClass="right"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
                                  required="#{not empty param[saveStakeholderBtn.clientId]}">
-                        <f:convertNumber pattern="#,##0" integerOnly="true"/>
+                        <!--<f:convertNumber integerOnly="true"/>-->
                         <p:ajax event="blur" update=":stakeholderViewDlgForm:contactYear"/>
                     </p:inputText>
                 </td>
