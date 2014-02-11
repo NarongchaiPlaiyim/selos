@@ -90,13 +90,6 @@ public class NewCollateralTransform extends Transform {
         }
         return newCollateralList;
     }
-    
-    public NewCollateralView transformsCollateralToView(NewCollateral newCollateral) {
-    	List<NewCollateral> newCollateralList = new ArrayList<NewCollateral>();
-    	newCollateralList.add(newCollateral);
-    	List<NewCollateralView> newCollateralViewList = this.transformsCollateralToView(newCollateralList);
-    	return newCollateralViewList.get(0);
-    }
 
     public List<NewCollateralView> transformsCollateralToView(List<NewCollateral> newCollateralList) {
         List<NewCollateralView> newCollateralViewList = new ArrayList<NewCollateralView>();
@@ -104,6 +97,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
+            newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
@@ -259,6 +253,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralHead collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadView = new NewCollateralHeadView();
+            newCollateralHeadView.setId(collateralHeaderDetail.getId());
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());

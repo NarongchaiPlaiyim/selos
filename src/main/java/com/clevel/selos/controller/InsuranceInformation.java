@@ -23,7 +23,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "insuranceInfo")
-public class InsuranceInfo implements Serializable {
+public class InsuranceInformation implements Serializable {
     @Inject
     @SELOS
     Logger log;
@@ -34,8 +34,7 @@ public class InsuranceInfo implements Serializable {
 
     //*** View ***//
     private List<InsuranceInfoView> insuranceInfoViewList;
-    private InsuranceInfoView insuranceInfoView;
-
+    
     //New / New + Change
     private int approvedType;
 
@@ -54,7 +53,7 @@ public class InsuranceInfo implements Serializable {
     private InsuranceInfoControl insuranceInfoControl;
 
     @Inject
-    public InsuranceInfo() {
+    public InsuranceInformation() {
     }
 
     @PostConstruct
@@ -152,5 +151,11 @@ public class InsuranceInfo implements Serializable {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+    
+    public void onSave(){
+    	log.info("InsuranceInfo: onSave()");
+    	insuranceInfoControl.saveInsuranceInfo(insuranceInfoViewList, this.total, workCaseId);
+    	this.onCreation();
     }
 }

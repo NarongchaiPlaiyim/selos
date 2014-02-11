@@ -245,8 +245,7 @@
 	                                            
 	                                            <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
 	                                            	process="@this"
-	                           						onstart="p_blockUI.show()"
-	                           						oncomplete="p_blockUI.hide();p_delContactRecordDlg.show()"
+	                           						oncomplete="p_delContactRecordDlg.show()"
 	                           						style="margin-right:0px !important"
 	                                            	>
 	                                            	<f:setPropertyActionListener target="#{customerAcceptance.deletedRowId}" value="#{rowIdx}" />
