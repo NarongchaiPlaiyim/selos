@@ -9,10 +9,13 @@ import javax.faces.context.Flash;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.Serializable;
+import java.util.Map;
 
 public class FacesUtil implements Serializable {
-    private static Logger log = LoggerFactory.getLogger(FacesUtil.class);
+    private static final long serialVersionUID = 553394611368789880L;
+	private static Logger log = LoggerFactory.getLogger(FacesUtil.class);
 
     public static HttpServletRequest getRequest() {
         return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -57,4 +60,10 @@ public class FacesUtil implements Serializable {
             log.error("", e);
         }
     }
+    public static final String getParameter(String name) {
+		Map<String,String> paramMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		if (paramMap == null)
+			return null;
+		return paramMap.get(name);
+	}
 }

@@ -1,18 +1,13 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.LoanPaymentDetailView;
-import com.clevel.selos.model.view.PledgeACView;
-import com.clevel.selos.model.view.PledgeDetailView;
-import com.clevel.selos.system.message.ExceptionMessage;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
-import com.filenet.apiimpl.wsi.serialization.Serialization;
-import org.slf4j.Logger;
+import java.io.IOException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -21,150 +16,195 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.PledgeACDepView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
 @ManagedBean(name = "pledgeDetail")
 public class PledgeDetail implements Serializable {
-    @Inject
-    @SELOS
-    Logger log;
-    @Inject
-    @NormalMessage
-    Message msg;
+    private static final long serialVersionUID = 4686000947793273583L;
 
-    @Inject
-    @ValidationMessage
-    Message validationMsg;
+	@Inject @SELOS
+	private Logger log;
+	
+	@Inject
+	private BasicInfoControl basicInfoControl;
 
-    @Inject
-    @ExceptionMessage
-    Message exceptionMsg;
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private long pledgeId = -1;
+	private User user;
+	private BasicInfoView basicInfoView;
+	private List<PledgeACDepView> deleteList;
+	
+	//Property
+	private List<PledgeACDepView> pledgeACDepList;
+	private PledgeACDepView pledgeACDepView;
+	private int deletedRowId;
+	private boolean addDialog = false;
 
-    // message //
-    private String messageHeader;
-    private String message;
-
-    // content //
-    private PledgeDetailView pledgeDetailView;
-    private PledgeACView pledgeACView;
-    private int rowIndex;
-
-    //session
-    private long workCaseId;
-
-
-    public PledgeDetail(){}
-
-    public void preRender() {
-        log.info("preRender ::: setSession ");
-
-        HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-//            userId = session.getAttribute("userId").toString();
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
-        }
+    public PledgeDetail(){
+    	
     }
-
-    @PostConstruct
-    public void onCreation(){
-        pledgeDetailView = new PledgeDetailView();
-        pledgeACView = new PledgeACView();
-        try {
-            List<PledgeACView> pledgeACViews = new ArrayList<PledgeACView>();
-            for(int i =0;i<5;i++){
-                PledgeACView model = new PledgeACView();
-                model.setAcAccountNumber("0123456789");
-                model.setAcHoldAmount(BigDecimal.valueOf(i));
-                model.setAcNumberofDep(String.valueOf(i));
-                pledgeACViews.add(model);
-
-            }
-            pledgeDetailView.setPledgeACViews(pledgeACViews);
-
-        }catch (Exception e){
-
-        }
-    }
-
-    public void onAddPledgeAC(){
-        log.debug("onAdd seleteItem pledgeACView :{} ", pledgeACView);
-        pledgeDetailView.getPledgeACViews().add(pledgeACView);
-
-    }
-
-    public void onEditPledgeAC(){
-        log.debug("onEditPledgeAC rowIndex:{}", rowIndex);
-        pledgeACView = pledgeDetailView.getPledgeACViews().get(rowIndex);
-
-    }
-
-    public void onDeletePledgeAC(){
-        log.debug("onDeletePledgeAC rowIndex:{}", rowIndex);
-        pledgeDetailView.getPledgeACViews().remove(rowIndex);
-    }
-
-    public BigDecimal getTotalHoldAmount(){
-        BigDecimal result = BigDecimal.ZERO;
-        for(PledgeACView model : pledgeDetailView.getPledgeACViews()){
-            result = Util.add(result, model.getAcHoldAmount());
-        }
-        return result;
-    }
-
-    public String getCurrentDateDDMMYY(){
-        return  DateTimeUtil.convertToStringDDMMYYYY(new Date());
-    }
-
-    public String getMessageHeader() {
-        return messageHeader;
-    }
-
-    public void setMessageHeader(String messageHeader) {
-        this.messageHeader = messageHeader;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public PledgeDetailView getPledgeDetailView() {
-        return pledgeDetailView;
-    }
-
-    public void setPledgeDetailView(PledgeDetailView pledgeDetailView) {
-        this.pledgeDetailView = pledgeDetailView;
-    }
-
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
-
-    public PledgeACView getPledgeACView() {
-        return pledgeACView;
-    }
-
-    public void setPledgeACView(PledgeACView pledgeACView) {
-        this.pledgeACView = pledgeACView;
-    }
+    public Date getLastUpdateDateTime() {
+		//TODO 
+		return new Date();
+	}
+	public String getLastUpdateBy() {
+		//TODO
+		return user.getDisplayName();
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+	public String getMinDate() {
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(new Date());
+	}
+	
+	public List<PledgeACDepView> getPledgeACDepList() {
+		return pledgeACDepList;
+	}
+	public PledgeACDepView getPledgeACDepView() {
+		return pledgeACDepView;
+	}
+	public void setPledgeACDepView(PledgeACDepView pledgeACDepView) {
+		this.pledgeACDepView = pledgeACDepView;
+	}
+	public int getDeletedRowId() {
+		return deletedRowId;
+	}
+	public void setDeletedRowId(int deletedRowId) {
+		this.deletedRowId = deletedRowId;
+	}
+	public int getNumberOfPledgeAC() {
+		if (pledgeACDepList == null)
+			return 0;
+		else
+			return pledgeACDepList.size();
+	}
+	public BigDecimal getTotalHoldAmount() {
+		BigDecimal summ = new BigDecimal(0);
+		if (pledgeACDepList != null) {
+			for (PledgeACDepView pledgeAC : pledgeACDepList) {
+				if (pledgeAC.getHoldAmount() == null)
+					continue;
+				summ = summ.add(pledgeAC.getHoldAmount());
+			}
+		}
+		return summ;
+	}
+	public boolean isAddDialog() {
+		return addDialog;
+	}
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
+		log.info("Construct");
+		HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			user = (User) session.getAttribute("user");
+		}
+		pledgeId = Util.parseLong(FacesUtil.getParameter("pledgeId"),-1);
+		_loadInitData();
+	}
+	
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+		
+		String redirectPage = null;
+		if (workCaseId > 0) {
+			//TODO Validate step 
+			if (stepId <= 0) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath()+redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to "+redirectPage,e);
+		}
+	}
+	
+	public void onOpenAddPledgeACDepDialog() {
+		pledgeACDepView = new PledgeACDepView();
+		pledgeACDepView.setId(0);
+		pledgeACDepView.setHoldAmount(new BigDecimal(0));
+		pledgeACDepView.setDep("");
+		
+		addDialog = true;
+	}
+	public void onOpenUpdatePledgeACDepDialog() {
+		addDialog = false;	
+	}
+	public void onAddPledgeACDep() {
+		pledgeACDepList.add(pledgeACDepView);
+		pledgeACDepView = null;
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onUpdatePledgeACDep() {
+		pledgeACDepView.setNeedUpdate(true);
+		pledgeACDepView = null;
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeletePledgeACDep() {
+		if (deletedRowId < 0 || deletedRowId > pledgeACDepList.size())
+			return;
+		PledgeACDepView delete = pledgeACDepList.remove(deletedRowId);
+		if (delete != null)
+			deleteList.add(delete);
+		deletedRowId = -1;
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	
+	public void onSavePledgeDetail() {
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	/*
+	 * Private method
+	 */
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+		//TODO Load pledge info by using workcase and pledgeId
+		//TODO Load pledge AC 
+		pledgeACDepList = new ArrayList<PledgeACDepView>();
+		deleteList = new ArrayList<PledgeACDepView>();
+		pledgeACDepView = null;
+		deletedRowId = -1;
+	}
 }

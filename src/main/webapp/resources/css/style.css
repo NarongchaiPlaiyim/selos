@@ -823,6 +823,7 @@ tfoot {
 .summary_column{
     background-color:#f4f8b6;
 }
+
 /** Add for post app **/
 table.ui-selectoneradio td {
     line-height: normal;
@@ -837,9 +838,14 @@ table.ui-selectoneradio td {
 	padding-top :4px !important;
 	padding-bottom :4px !important;
 }
-table tbody tr.total_summary td {
+table tbody tr.total_summary td ,
+table tbody td.total_summary{
 	background-color: #f4f8b6;	
 }
 table tbody tr.grandtotal_summary td {
 	background-color: #f8d0b6;	
+}
+.full_table.ui-datatable table {
+    table-layout: auto !important;
+    width: 100% !important;
 }

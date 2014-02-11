@@ -11,12 +11,6 @@
     <title>#{msg.get('app.cusaccept.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-<style type="text/css">
-#frmMain\:contact_record_tbl.ui-datatable table {
-    table-layout: auto !important;
-    width: 100% !important;
-}
-</style>
 </h:head>
 
 <h:body>
@@ -172,6 +166,7 @@
 	                           	<td colspan="100%">
 	                           		<p:dataTable id='contact_record_tbl' rowIndexVar="rowIdx" 
 	                           			value="#{customerAcceptance.contactRecordDetailViews}" var="detail"
+	                           			styleClass="full_table"
 	                           			>
 	                           			<f:facet name="header">
 	                           				#{msg.get('app.cusaccept.contactRecord.title')}		
