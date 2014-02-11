@@ -63,4 +63,8 @@ public class FullApplicationControl extends BusinessControl {
     public void submitToZM(String zmUserId, String queueName, long workCaseId) throws Exception {
         bpmExecutor.submitZM(workCaseId, queueName, zmUserId, ActionCode.SUBMIT_TO_ZM.getVal());
     }
+
+    public void requestAppraisal(String queueName, long workCasePreScreenId, long workCaseId) throws Exception {
+        bpmExecutor.requestAppraisal(workCasePreScreenId, workCaseId, queueName, ActionCode.REQUEST_APPRAISAL.getVal());
+    }
 }
