@@ -369,4 +369,20 @@ public class Util implements Serializable {
             return true;
         }
     }
+    public static long parseLong(Object input,long defaultValue) {
+    	if (input == null)
+    		return defaultValue;
+    	else if (input instanceof Long)
+    		return (Long) input;
+    	else { 
+    		String inputStr = input.toString();
+	    	if (isEmpty(inputStr))
+	    		return defaultValue;
+	    	try {
+	    		return Long.parseLong(inputStr);
+	    	} catch (NumberFormatException e) {
+	    		return defaultValue;
+	    	}
+    	}
+    }
 }

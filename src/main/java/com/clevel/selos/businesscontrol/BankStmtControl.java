@@ -1193,6 +1193,48 @@ public class BankStmtControl extends BusinessControl {
         bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView, bankAccTypeFromBankStmt, savingAccType, currentAccType, othFDType, othBOEType) );
     }
 
+    public void calSrcOfCollateral(BankStmtSummaryView summaryView) {
+        // Calculate reference from CA Web Formula
+
+    }
+
+    public Date[] getSourceOfCollateralMonths(BankStmtSummaryView summaryView) {
+        Date[] threeMonths = new Date[3];
+        if (summaryView != null &&
+            ((summaryView.getTmbBankStmtViewList() != null && !summaryView.getTmbBankStmtViewList().isEmpty())
+              || (summaryView.getOthBankStmtViewList() != null && !summaryView.getOthBankStmtViewList().isEmpty()))) {
+
+            Date maxDate = null;
+            for (BankStmtView tmbBankStmtView : summaryView.getTmbBankStmtViewList()) {
+                for (BankStmtDetailView detailView : tmbBankStmtView.getBankStmtDetailViewList()) {
+                    if (maxDate == null) {
+                        maxDate = detailView.getAsOfDate();
+                    }
+                    else if (DateTimeUtil.compareDate(detailView.getAsOfDate(), maxDate) > 1) {
+                        maxDate = detailView.getAsOfDate();
+                    }
+                }
+            }
+
+            for (BankStmtView othBankStmtView : summaryView.getOthBankStmtViewList()) {
+                for (BankStmtDetailView detailView : othBankStmtView.getBankStmtDetailViewList()) {
+                    if (maxDate == null) {
+                        maxDate = detailView.getAsOfDate();
+                    }
+                    else if (DateTimeUtil.compareDate(detailView.getAsOfDate(), maxDate) > 1) {
+                        maxDate = detailView.getAsOfDate();
+                    }
+                }
+            }
+
+            threeMonths[0] = DateTimeUtil.getOnlyDatePlusMonth(maxDate, -2);
+            threeMonths[1] = DateTimeUtil.getOnlyDatePlusMonth(maxDate, -1);
+            threeMonths[2] = maxDate;
+        }
+        log.debug("getSourceOfCollateralMonths() threeMonths is empty!");
+        return threeMonths;
+    }
+
     public boolean isABDMorBDM() {
         User user = getCurrentUser();
         if (RoleUser.ABDM.getValue() == user.getRole().getId() || RoleUser.BDM.getValue() == user.getRole().getId())

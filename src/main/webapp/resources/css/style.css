@@ -820,3 +820,23 @@ tfoot {
 .summary_column{
     background-color:#f4f8b6;
 }
+/** Add for post app **/
+table.ui-selectoneradio td {
+    line-height: normal;
+    padding: 0 8px 0 0;
+}
+.ui-datatable .ui-datatable-header {
+   background: url("#{resource['images:table/table_header_bg.jpg']}") repeat-x scroll 0 0 #3F3F3F !important;
+   color: #FFFFFF !important;
+}
+.ui-datatable thead th {
+	line-height: normal;
+	padding-top :4px !important;
+	padding-bottom :4px !important;
+}
+table tbody tr.total_summary td {
+	background-color: #f4f8b6;	
+}
+table tbody tr.grandtotal_summary td {
+	background-color: #f8d0b6;	
+}

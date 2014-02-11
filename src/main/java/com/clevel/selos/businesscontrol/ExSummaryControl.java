@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -254,6 +255,9 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryView.setExSumCharacteristicView(exSumCharacteristicView);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Collateral
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Credit Risk Type
         ExSumCreditRiskInfoView exSumCreditRiskInfoView = new ExSumCreditRiskInfoView();
         if(basicInfo != null && basicInfo.getRiskCustomerType() != null && basicInfo.getRiskCustomerType().getId() != 0){
@@ -263,10 +267,11 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        if(basicInfo != null && basicInfo.getExistingSMECustomer() != RadioValue.NO.value()){ //new customer
+        if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
             if(qualitativeView != null && qualitativeView.getId() != 0){
                 //todo: BOT Class
 //                exSumCreditRiskInfoView.setBotClass();
+                System.out.println("qualitativeView : "+qualitativeView.toString());
                 if(qualitativeView.getReason() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getReason());
                 } else {
@@ -295,9 +300,22 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        exSumCreditRiskInfoView.setLastReviewDate(DateTimeUtil.getCurrentDateTH());
-        //Todo:nextReviewDate
-        exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getOnlyDatePlusYear(DateTimeUtil.getCurrentDateTH(),1)); //(1st day of approve month + 12 Months)
+        if(exSummary != null && exSummary.getLastReviewDate() != null){
+            exSumCreditRiskInfoView.setLastReviewDate(exSummary.getLastReviewDate());
+        } else {
+            exSumCreditRiskInfoView.setLastReviewDate(new Date());
+        }
+
+        if(exSummary != null && exSummary.getNextReviewDate() != null){
+            exSumCreditRiskInfoView.setNextReviewDate(exSummary.getNextReviewDate());
+        } else {
+            if(exSummary != null && exSummary.getLastReviewDate() != null){
+                exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getFirstDayOfMonthDatePlusOneYear(exSummary.getLastReviewDate()));
+            } else {
+                exSumCreditRiskInfoView.setNextReviewDate(DateTimeUtil.getFirstDayOfMonthDatePlusOneYear(new Date()));
+            }
+        }
+
         exSumCreditRiskInfoView.setExtendedReviewDate(null); //Always '-'
 
         exSummaryView.setExSumCreditRiskInfoView(exSumCreditRiskInfoView);
@@ -336,6 +354,7 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeBorrowerCharacteristic(workCaseId);
         calActualWCBorrowerCharacteristic(workCaseId);
         calGroupExposureBorrowerCharacteristic(workCaseId);
+        calAppraisalValue(workCaseId);
     }
 
     public void calForBankStmtSummary(long workCaseId){
@@ -544,7 +563,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
 
-        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){ // BDM //update groupSaleBDM && groupSaleUW
+        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value() && user.getRole().getId() == RoleValue.BDM.id()){ // BDM //update groupSaleBDM && groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12 //
                 BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
@@ -588,7 +607,7 @@ public class ExSummaryControl extends BusinessControl {
                 groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
                 groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
             }
-        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value()){ //UW //update only groupSaleUW
+        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value() && user.getRole().getId() == RoleValue.UW.id()){ //UW //update only groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
                 BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
@@ -691,6 +710,65 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
         exSummary.setYearInBusiness(year);
+
+        exSummaryDAO.persist(exSummary);
+    }
+
+    public void calReviewDate(long workCaseId){ // todo:submit button
+        //for submit button
+//        lastReviewDate = Current Date until click submit, display submit date.
+//        nextReviewDate = (1st day of approve month + 12 Months)
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
+//        exSummary.setLastReviewDate();
+//        exSummary.setNextReviewDate();
+
+        exSummaryDAO.persist(exSummary);
+    }
+
+    public void calAppraisalValue(long workCaseId){ //todo: decision pls call me !? or other !?
+        BigDecimal cashColl = BigDecimal.ZERO;
+        BigDecimal coreColl = BigDecimal.ZERO;
+        BigDecimal noneCoreColl = BigDecimal.ZERO;
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
+            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                if (newCollateral.getProposeType() != null && newCollateral.getProposeType().equals("A")){
+                    if(newCollateral.getNewCollateralHeadList() != null && newCollateral.getNewCollateralHeadList().size() > 0){
+                        for (NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                            //todo:check this !? or not
+//                            if (newCollateralHead.getProposeType() != null && newCollateralHead.getProposeType().equals("A")){
+                                if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CASH_COLLATERAL.id()){
+                                    cashColl = Util.add(cashColl,newCollateralHead.getAppraisalValue());
+                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CORE_ASSET.id()){
+                                    coreColl = Util.add(coreColl,newCollateralHead.getAppraisalValue());
+                                } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.NONE_CORE_ASSET.id()){
+                                    noneCoreColl = Util.add(noneCoreColl,newCollateralHead.getAppraisalValue());
+                                }
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+        if(exSummary == null){
+            exSummary = new ExSummary();
+            WorkCase workCase = new WorkCase();
+            workCase.setId(workCaseId);
+            exSummary.setWorkCase(workCase);
+        }
+        exSummary.setCashCollateralValue(cashColl);
+        exSummary.setCoreAssetValue(coreColl);
+        exSummary.setNoneCoreAssetValue(noneCoreColl);
+//        exSummary.setLimitApprove();
+//        exSummary.setPercentLTV();
 
         exSummaryDAO.persist(exSummary);
     }

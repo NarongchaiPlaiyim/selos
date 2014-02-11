@@ -37,7 +37,7 @@ public class NewCollateralSubView {
     private User modifyBy;
     private String usage;
     private String typeOfUsage;
-
+    private int lineNo;
 
     public NewCollateralSubView() {
         reset();
@@ -57,6 +57,14 @@ public class NewCollateralSubView {
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
     }
 
     public String getUsage() {

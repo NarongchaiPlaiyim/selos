@@ -47,4 +47,9 @@ public class ProvinceDAO extends GenericDAO<Province, Integer> {
         log.info("getByName . (result : {})", province);
         return province;
     }
+
+    public void clearCache() {
+        log.debug("clearCache.");
+        clearCache("com.clevel.selos.model.db.master.Province");
+    }
 }

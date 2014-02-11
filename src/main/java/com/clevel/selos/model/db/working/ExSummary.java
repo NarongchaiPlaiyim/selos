@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AuthorizationDOA;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -170,7 +171,7 @@ public class ExSummary implements Serializable {
 
     @Column(name = "trade_cheque_percent")
     private BigDecimal tradeChequeReturnPercent;
-    ///////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////   */
 
     //Collateral
     //exSumCollateralView;
@@ -188,7 +189,18 @@ public class ExSummary implements Serializable {
 
     @Column(name = "percent_ltv")
     private BigDecimal percentLTV;
-    ///////////////////////////////////////////////////////////////*/
+
+    ///////////////////////////////////////////////////////////////
+    //Credit Risk Information
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_review_date")
+    private Date lastReviewDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "next_review_date")
+    private Date nextReviewDate;
+
+    ///////////////////////////////////////////////////////////////
 
     //Business Overview and Support Decision
     @Column(name = "nature_of_business", length = 500)
@@ -502,5 +514,106 @@ public class ExSummary implements Serializable {
 
     public void setGroupExposureUW(BigDecimal groupExposureUW) {
         this.groupExposureUW = groupExposureUW;
+    }
+
+    public Date getLastReviewDate() {
+        return lastReviewDate;
+    }
+
+    public void setLastReviewDate(Date lastReviewDate) {
+        this.lastReviewDate = lastReviewDate;
+    }
+
+    public Date getNextReviewDate() {
+        return nextReviewDate;
+    }
+
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
+    }
+
+    public BigDecimal getCashCollateralValue() {
+        return cashCollateralValue;
+    }
+
+    public void setCashCollateralValue(BigDecimal cashCollateralValue) {
+        this.cashCollateralValue = cashCollateralValue;
+    }
+
+    public BigDecimal getCoreAssetValue() {
+        return coreAssetValue;
+    }
+
+    public void setCoreAssetValue(BigDecimal coreAssetValue) {
+        this.coreAssetValue = coreAssetValue;
+    }
+
+    public BigDecimal getNoneCoreAssetValue() {
+        return noneCoreAssetValue;
+    }
+
+    public void setNoneCoreAssetValue(BigDecimal noneCoreAssetValue) {
+        this.noneCoreAssetValue = noneCoreAssetValue;
+    }
+
+    public BigDecimal getLimitApprove() {
+        return limitApprove;
+    }
+
+    public void setLimitApprove(BigDecimal limitApprove) {
+        this.limitApprove = limitApprove;
+    }
+
+    public BigDecimal getPercentLTV() {
+        return percentLTV;
+    }
+
+    public void setPercentLTV(BigDecimal percentLTV) {
+        this.percentLTV = percentLTV;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("income", income).
+                append("recommendedWCNeed", recommendedWCNeed).
+                append("actualWC", actualWC).
+                append("yearInBusiness", yearInBusiness).
+                append("salePerYearBDM", salePerYearBDM).
+                append("salePerYearUW", salePerYearUW).
+                append("groupSaleBDM", groupSaleBDM).
+                append("groupSaleUW", groupSaleUW).
+                append("groupExposureBDM", groupExposureBDM).
+                append("groupExposureUW", groupExposureUW).
+                append("cashCollateralValue", cashCollateralValue).
+                append("coreAssetValue", coreAssetValue).
+                append("noneCoreAssetValue", noneCoreAssetValue).
+                append("limitApprove", limitApprove).
+                append("percentLTV", percentLTV).
+                append("lastReviewDate", lastReviewDate).
+                append("nextReviewDate", nextReviewDate).
+                append("natureOfBusiness", natureOfBusiness).
+                append("historicalAndReasonOfChange", historicalAndReasonOfChange).
+                append("tmbCreditHistory", tmbCreditHistory).
+                append("supportReason", supportReason).
+                append("rm008Code", rm008Code).
+                append("rm008Remark", rm008Remark).
+                append("rm204Code", rm204Code).
+                append("rm204Remark", rm204Remark).
+                append("rm020Code", rm020Code).
+                append("rm020Remark", rm020Remark).
+                append("approveAuthority", approveAuthority).
+                append("uwCode", uwCode).
+                append("decision", decision).
+                append("deviateCode", deviateCode).
+                append("uwComment", uwComment).
+                append("yearInBusinessMonth", yearInBusinessMonth).
+                toString();
     }
 }
