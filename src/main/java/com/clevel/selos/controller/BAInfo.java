@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -26,9 +27,9 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
 @ViewScoped
-@ManagedBean(name = "mortgageSummary")
-public class MortgageSummary implements Serializable {
-	private static final long serialVersionUID = 3803192687188180318L;
+@ManagedBean(name="baInfo")
+public class BAInfo implements Serializable {
+	private static final long serialVersionUID = -6678163555513002049L;
 
 	@Inject @SELOS
 	private Logger log;
@@ -43,10 +44,12 @@ public class MortgageSummary implements Serializable {
 	private User user;
 	private BasicInfoView basicInfoView;
 	
+	//Property
 	
-	public MortgageSummary() {
-		
+	
+	public BAInfo() {
 	}
+	
 	public Date getLastUpdateDateTime() {
 		//TODO 
 		return new Date();
@@ -61,11 +64,16 @@ public class MortgageSummary implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
-	public String getMinDate() {
+	public String getMinCheckDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
 	}
-	
+	public String getMaxCheckDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 90);
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(calendar.getTime());
+	}
 	/*
 	 * Action
 	 */
@@ -105,15 +113,37 @@ public class MortgageSummary implements Serializable {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
 	}
-	public void onSelectSignContract() {
+	
+	public void onOpenApplyInformationDialog() {
 		
 	}
-	
-	public void onSaveMortgageSummary() {
+	public void onApplyBAInformation() {
 		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
-	
+	public void onOpenAddBAPAInformationDialog() {
+		
+	}
+	public void onAddBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenUpdateBAPAInformaionDialog() {
+		
+	}
+	public void onUpdateBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onSaveBAInformation() {
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
 	/*
 	 * Private method
 	 */

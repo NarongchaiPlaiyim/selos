@@ -5,34 +5,34 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clevel.selos.model.view.NewCollateralView;
+
 public class InsuranceInfoView implements Serializable {
-    private String jobID;
-    private BigDecimal premium;
     private List<InsuranceInfoSectionView> sectionList;
+    private NewCollateralView newCollateralView;
 
     public InsuranceInfoView() {
         init();
     }
 
     private void init(){
-        premium = BigDecimal.ZERO;
         sectionList = new ArrayList<InsuranceInfoSectionView>();
     }
 
     public String getJobID() {
-        return jobID;
+        return getNewCollateralView().getJobID();
     }
 
     public void setJobID(String jobID) {
-        this.jobID = jobID;
+        getNewCollateralView().setJobID(jobID);
     }
 
     public BigDecimal getPremium() {
-        return premium;
+        return getNewCollateralView().getPremiumAmount();
     }
 
-    public void setPremium(BigDecimal premium) {
-        this.premium = premium;
+    public void setPremium(BigDecimal premiumAmount) {
+        getNewCollateralView().setPremiumAmount(premiumAmount);
     }
 
     public List<InsuranceInfoSectionView> getSectionList() {
@@ -42,4 +42,12 @@ public class InsuranceInfoView implements Serializable {
     public void setSectionList(List<InsuranceInfoSectionView> sectionList) {
         this.sectionList = sectionList;
     }
+
+	public NewCollateralView getNewCollateralView() {
+		return newCollateralView;
+	}
+
+	public void setNewCollateralView(NewCollateralView newCollateralView) {
+		this.newCollateralView = newCollateralView;
+	}
 }

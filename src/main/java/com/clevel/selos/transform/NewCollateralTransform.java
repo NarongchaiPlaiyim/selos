@@ -85,6 +85,7 @@ public class NewCollateralTransform extends Transform {
             newCollateral.setUwDecision(newCollateralView.getUwDecision());
             newCollateral.setUwRemark(newCollateralView.getUwRemark());
             newCollateral.setNewCreditFacility(newCreditFacility);
+            newCollateral.setPremiumAmount(newCollateralView.getPremiumAmount());
             newCollateralList.add(newCollateral);
         }
         return newCollateralList;
@@ -96,6 +97,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
+            newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
@@ -112,6 +114,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralView.setUsage(newCollateralDetail1.getUsage());
             newCollateralView.setUwDecision(newCollateralDetail1.getUwDecision());
             newCollateralView.setUwRemark(newCollateralDetail1.getUwRemark());
+            newCollateralView.setPremiumAmount(newCollateralDetail1.getPremiumAmount());
 
             List<NewCollateralCredit> newCollateralRelCredits = newCollateralCreditDAO.getListCollRelationByNewCollateral(newCollateralDetail1);
             List<NewCreditDetail> newCreditDetailList = new ArrayList<NewCreditDetail>();
@@ -250,6 +253,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralHead collateralHeaderDetail : collateralHeaderDetailList) {
             newCollateralHeadView = new NewCollateralHeadView();
+            newCollateralHeadView.setId(collateralHeaderDetail.getId());
             newCollateralHeadView.setCreateBy(collateralHeaderDetail.getCreateBy());
             newCollateralHeadView.setCreateDate(collateralHeaderDetail.getCreateDate());
             newCollateralHeadView.setModifyBy(collateralHeaderDetail.getModifyBy());
@@ -391,6 +395,7 @@ public class NewCollateralTransform extends Transform {
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setNewCreditFacility(newCreditFacility);
+            model.setPremiumAmount(view.getPremiumAmount());
             newCollateralList.add(model);
         }
         log.debug("--[RETURNED] NewCollateralList.size[{}]", newCollateralList.size());
@@ -424,6 +429,7 @@ public class NewCollateralTransform extends Transform {
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
             model.setNewCreditFacility(newCreditFacility);
+            model.setPremiumAmount(view.getPremiumAmount());
             newCollateralList.add(model);
         }
         log.debug("--[RETURNED] NewCollateralList.size[{}]", newCollateralList.size());
@@ -461,6 +467,7 @@ public class NewCollateralTransform extends Transform {
             view.setNewCollateralHeadViewList(newCollateralHeadTransform.transformToView(Util.safetyList(model.getNewCollateralHeadList())));
             view.setModifyDate(model.getModifyDate());
             view.setModifyBy(model.getModifyBy());
+            view.setPremiumAmount(model.getPremiumAmount());
             newCollateralViewList.add(view);
             //model.setNewCollateralCreditList();
             /*view.setProposeType();
