@@ -354,6 +354,7 @@ public class ExSummaryControl extends BusinessControl {
         calIncomeBorrowerCharacteristic(workCaseId);
         calActualWCBorrowerCharacteristic(workCaseId);
         calGroupExposureBorrowerCharacteristic(workCaseId);
+        calAppraisalValue(workCaseId);
     }
 
     public void calForBankStmtSummary(long workCaseId){
@@ -562,7 +563,7 @@ public class ExSummaryControl extends BusinessControl {
             exSummary.setWorkCase(workCase);
         }
 
-        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value()){ // BDM //update groupSaleBDM && groupSaleUW
+        if(stepId == StepValue.FULLAPP_BDM_SSO_ABDM.value() && user.getRole().getId() == RoleValue.BDM.id()){ // BDM //update groupSaleBDM && groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12 //
                 BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
@@ -606,7 +607,7 @@ public class ExSummaryControl extends BusinessControl {
                 groupSaleBDM = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
                 groupSaleUW = Util.multiply(Util.add(saleFromFinStmt,approxIncome),twenty);
             }
-        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value()){ //UW //update only groupSaleUW
+        } else if(stepId == StepValue.CREDIT_DECISION_UW1.value() && user.getRole().getId() == RoleValue.UW.id()){ //UW //update only groupSaleUW
             if(basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value()){ // use bank statement
 //    groupSaleBDM - กรณีผู้กู้ = Individual (Grand Total Income Gross จากหน้า Bank Statement Summary + รายได้ของผู้ค้ำฯ / ผู้เกี่ยวข้องทุกคนที่ Flag Group Income = Y)*12
                 BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
@@ -713,7 +714,7 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryDAO.persist(exSummary);
     }
 
-    public void calReviewDate(long workCaseId){
+    public void calReviewDate(long workCaseId){ // todo:submit button
         //for submit button
 //        lastReviewDate = Current Date until click submit, display submit date.
 //        nextReviewDate = (1st day of approve month + 12 Months)
@@ -730,18 +731,18 @@ public class ExSummaryControl extends BusinessControl {
         exSummaryDAO.persist(exSummary);
     }
 
-    public void calAppraisalValue(long workCaseId){
+    public void calAppraisalValue(long workCaseId){ //todo: decision pls call me !? or other !?
         BigDecimal cashColl = BigDecimal.ZERO;
         BigDecimal coreColl = BigDecimal.ZERO;
         BigDecimal noneCoreColl = BigDecimal.ZERO;
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
         if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
             for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-                //todo:check this !? or not
                 if (newCollateral.getProposeType() != null && newCollateral.getProposeType().equals("A")){
                     if(newCollateral.getNewCollateralHeadList() != null && newCollateral.getNewCollateralHeadList().size() > 0){
                         for (NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
-                            if (newCollateralHead.getProposeType() != null && newCollateralHead.getProposeType().equals("A")){
+                            //todo:check this !? or not
+//                            if (newCollateralHead.getProposeType() != null && newCollateralHead.getProposeType().equals("A")){
                                 if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CASH_COLLATERAL.id()){
                                     cashColl = Util.add(cashColl,newCollateralHead.getAppraisalValue());
                                 } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.CORE_ASSET.id()){
@@ -749,12 +750,13 @@ public class ExSummaryControl extends BusinessControl {
                                 } else if(newCollateralHead.getPotential().getId() == PotentialCollateralValue.NONE_CORE_ASSET.id()){
                                     noneCoreColl = Util.add(noneCoreColl,newCollateralHead.getAppraisalValue());
                                 }
-                            }
+//                            }
                         }
                     }
                 }
             }
         }
+
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
         if(exSummary == null){
             exSummary = new ExSummary();

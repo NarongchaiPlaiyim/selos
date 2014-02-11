@@ -103,7 +103,7 @@ public class NewCollateralHeadTransform extends Transform {
         log.debug("----[RETURNED] NewCollateralHeadList.size[{}]", newCollateralHeadList.size());
         return newCollateralHeadList;
     }
-
+    
     public List<NewCollateralHeadView> transformToView(final List<NewCollateralHead> newCollateralHeadList){
         log.debug("---- transformToView [NewCollateralHeadList.size[{}]]", newCollateralHeadList.size());
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
