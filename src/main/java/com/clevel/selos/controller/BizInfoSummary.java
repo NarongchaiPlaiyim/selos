@@ -205,6 +205,7 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
+            onCalSummaryTable();
             bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
             bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
         }
@@ -401,7 +402,6 @@ public class BizInfoSummary implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
-            System.out.println("redirect :" + redirect);
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
@@ -483,6 +483,11 @@ public class BizInfoSummary implements Serializable {
 
     public void onCheckAdd(){
         redirect = "addDetail";
+        onSaveBizInfoSummary();
+    }
+
+    public void onCheckEdit(){
+        redirect = "viewDetail";
         onSaveBizInfoSummary();
     }
 

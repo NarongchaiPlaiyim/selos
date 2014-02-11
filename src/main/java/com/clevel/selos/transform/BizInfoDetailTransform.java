@@ -33,7 +33,11 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setPercentBiz(bizInfoDetailView.getPercentBiz());
         bizInfoDetail.setBizPermission(bizInfoDetailView.getBizPermission());
         bizInfoDetail.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
+
+
         bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
+
+
         bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
         bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
         bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
@@ -92,7 +96,9 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setPercentBiz(bizInfoDetail.getPercentBiz());
         bizInfoDetailView.setBizPermission(bizInfoDetail.getBizPermission());
         bizInfoDetailView.setBizDocPermission(bizInfoDetail.getBizDocPermission());
+
         bizInfoDetailView.setBizDocExpiryDate(bizInfoDetail.getBizDocExpiryDate());
+
         bizInfoDetailView.setExpIndCountryName(bizInfoDetail.getExpIndCountryName());
         bizInfoDetailView.setPercentExpIndCountryName(bizInfoDetail.getPercentExpIndCountryName());
         bizInfoDetailView.setSupplierTotalPercentBuyVolume(bizInfoDetail.getSupplierTotalPercentBuyVolume());
