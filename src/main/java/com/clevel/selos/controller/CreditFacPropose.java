@@ -479,7 +479,7 @@ public class CreditFacPropose implements Serializable {
             for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
 //                  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
                 // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
-                BigDecimal twenty = BigDecimal.valueOf(12);
+                BigDecimal twelve = BigDecimal.valueOf(12);
                 BigDecimal baseRate = BigDecimal.ZERO;
                 BigDecimal interest = BigDecimal.ZERO;
                 if(newCreditTierDetailView.getFinalBasePrice() != null){
@@ -489,7 +489,7 @@ public class CreditFacPropose implements Serializable {
                     interest = newCreditTierDetailView.getFinalInterest();
                 }
 
-                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate,Util.add(interest,BigDecimal.ONE)),twenty);
+                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate,Util.add(interest,BigDecimal.ONE)),twelve);
                 log.info("baseRate :: {}",baseRate);
                 log.info("interest :: {}",interest);
                 log.info("interestPerMonth :: {}",interestPerMonth);
