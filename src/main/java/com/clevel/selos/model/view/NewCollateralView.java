@@ -1,10 +1,12 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,10 +30,9 @@ public class NewCollateralView implements Serializable {
     private User createBy;
     private User modifyBy;
     private int isApproved;
+    private BigDecimal premiumAmount;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
-    private List<NewCreditDetailView> newCreditDetailViewList;      //NoUse
-
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
     //Added by Chai
     private String jobIDSearch;
@@ -55,7 +56,6 @@ public class NewCollateralView implements Serializable {
         this.bdmComments= "";
 
         this.newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
-        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
     }
 
@@ -227,13 +227,6 @@ public class NewCollateralView implements Serializable {
         this.jobIDSearch = jobIDSearch;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
-    }
-
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
-    }
 
     @Override
     public String toString() {
@@ -258,8 +251,16 @@ public class NewCollateralView implements Serializable {
                 .append("isApproved", isApproved)
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
-                .append("newCreditDetailViewList", newCreditDetailViewList)
                 .append("jobIDSearch", jobIDSearch)
+                .append("premiumAmount", premiumAmount)
                 .toString();
     }
+
+	public BigDecimal getPremiumAmount() {
+		return premiumAmount;
+	}
+
+	public void setPremiumAmount(BigDecimal premiumAmount) {
+		this.premiumAmount = premiumAmount;
+	}
 }

@@ -94,7 +94,7 @@
                                                                     <p:outputLabel value="#{msg.get('app.insurance.head.coll.title')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:outputLabel value="#{sectionList.headColl.titleDeed}"/>
+                                                                    <p:outputLabel value="#{sectionList.titleDeed}"/>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -102,7 +102,7 @@
                                                                     <p:outputLabel value="#{msg.get('app.insurance.company')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneRadio value="#{sectionList.insurance.company}" layout="grid" columns="2">
+                                                                    <p:selectOneRadio value="#{sectionList.company}" layout="grid" columns="2">
                                                                         <f:selectItem itemLabel="#{msg.get('app.insurance.company.partner')}"     itemValue="1"/>
                                                                         <f:selectItem itemLabel="#{msg.get('app.insurance.company.non.partner')}" itemValue="2"/>
                                                                     </p:selectOneRadio>
@@ -113,7 +113,7 @@
                                                                     <p:outputLabel value="#{msg.get('app.insurance.head.coll.exiting.credit')}"/>
                                                                 </td>
                                                                 <td>
-                                                                    <p:selectOneRadio value="#{sectionList.headColl.exitingCredit}" layout="grid" columns="3" >
+                                                                    <p:selectOneRadio value="#{sectionList.existingCredit}" layout="grid" columns="3" >
                                                                         <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.yes')}"    itemValue="1"/>
                                                                         <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.no')}"     itemValue="2"/>
                                                                         <f:selectItem itemLabel="#{msg.get('app.insurance.head.coll.exiting.credit.add')}" itemValue="3"/>
@@ -161,15 +161,22 @@
                                             </td>
 
                                             <td colspan="3">
-                                                <p:outputLabel value="#{insuranceInfo.total}" styleClass="right" id="total">
+                                                <!--p:outputLabel value="#{insuranceInfo.total}" styleClass="right" id="total">
                                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
-                                                </p:outputLabel>
+                                                </p:outputLabel-->
+                                                <p:inputText value="#{insuranceInfo.total}" styleClass="right" readonly="true">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14" />
+                                                </p:inputText>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="center" colspan="2" style="margin-top: 20px;">
-                                                <p:commandButton value="#{msg.get('app.button.ok')}" styleClass="small" />
-                                                <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
+                                                <p:commandButton id="saveBtn" value="#{msg.get('app.button.ok')}" styleClass="small"
+                                                	process="@form" update=":frmMain"
+                                                	oncomplete="confirmEditInsuranceInfoDlg.show()" binding="#{saveBtn}" />
+                                                <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                                	process="@form" update=":frmMain"
+                                         			actionListener="#{insuranceInfo.onCreation()}" />
                                             </td>
                                         </tr>
 
@@ -195,6 +202,15 @@
     </h:form>
 
 </p:panel>
+
+<ui:include src="dialog/confirmEditDlg.xhtml">
+        <ui:param name="id" value="confirmEditInsuranceInfoDialog"/>
+        <ui:param name="name" value="confirmEditInsuranceInfoDlg"/>
+        <ui:param name="formId" value="frmConfirmEditInsuranceInfo"/>
+        <ui:param name="controller" value="#{insuranceInfo}"/>
+        <ui:param name="action" value="onSave"/>
+        <ui:param name="update" value=":frmMain"/>
+</ui:include>
 
 </h:body>
 </f:view>
