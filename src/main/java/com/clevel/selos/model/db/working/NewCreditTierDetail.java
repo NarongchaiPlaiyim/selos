@@ -24,6 +24,9 @@ public class NewCreditTierDetail implements Serializable {
     @Column(name = "suggest_interest")
     private BigDecimal suggestInterest;
 
+    @Column(name = "standard_interest")
+    private BigDecimal standardInterest;
+
     @Column(name = "no")
     private int no ;
 
@@ -43,6 +46,10 @@ public class NewCreditTierDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "suggest_rate_id")
     private BaseRate suggestBasePrice ;
+
+    @OneToOne
+    @JoinColumn(name = "standard_rate_id")
+    private BaseRate standardBasePrice ;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -176,18 +183,36 @@ public class NewCreditTierDetail implements Serializable {
         this.suggestBasePrice = suggestBasePrice;
     }
 
+    public BigDecimal getStandardInterest() {
+        return standardInterest;
+    }
+
+    public void setStandardInterest(BigDecimal standardInterest) {
+        this.standardInterest = standardInterest;
+    }
+
+    public BaseRate getStandardBasePrice() {
+        return standardBasePrice;
+    }
+
+    public void setStandardBasePrice(BaseRate standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("finalInterest", finalInterest).
                 append("suggestInterest", suggestInterest).
+                append("standardInterest", standardInterest).
                 append("no", no).
                 append("installment", installment).
                 append("tenor", tenor).
                 append("editFlag", editFlag).
                 append("finalBasePrice", finalBasePrice).
                 append("suggestBasePrice", suggestBasePrice).
+                append("standardBasePrice", standardBasePrice).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).

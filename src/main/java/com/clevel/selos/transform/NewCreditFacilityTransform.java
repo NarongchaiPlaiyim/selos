@@ -31,7 +31,8 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setWorkCase(workCase);
 
         if (newCreditFacilityView.getId() != 0) {
-            newCreditFacility.setId(newCreditFacilityView.getId());
+            //newCreditFacility.setId(newCreditFacilityView.getId());
+            newCreditFacility = newCreditFacilityDAO.findById(newCreditFacilityView.getId());
             newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
             newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
         } else { // id = 0 create new
