@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.brms.model.request.data2;
+package com.clevel.selos.integration.brms.model.request.data;
 
 import com.clevel.selos.model.db.master.SettlementStatus;
 import org.apache.commons.lang3.builder.ToStringBuilder;
