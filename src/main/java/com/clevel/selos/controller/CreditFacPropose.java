@@ -122,7 +122,6 @@ public class CreditFacPropose implements Serializable {
     private BigDecimal reducePrice;
     private boolean reducePricePanelRendered;
     private boolean cannotEditStandard;
-    private boolean canAddTier;
 
     private boolean flagComs;
     private boolean flagButtonCollateral;
@@ -318,7 +317,6 @@ public class CreditFacPropose implements Serializable {
             newCreditFacilityView = new NewCreditFacilityView();
             reducePricePanelRendered = false;
             cannotEditStandard = true;
-            canAddTier = false;
         }
 
         if (creditRequestTypeList == null) {
@@ -527,44 +525,51 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetail.setInstallment(sumOfInstallment);
         }
     }
+   public void onChangeJobId(){
+       flagButtonCollateral = true;
+   }
 
     public void onCallRetrieveAppraisalReportInfo() {
         String jobID = newCollateralView.getJobID();
         log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobID);
         boolean flag = true;
 
-            if (!Util.isNull(jobID)) {
-                flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobID);
-                if (flag) {
-                    try {
-                        AppraisalDataResult appraisalDataResult = creditFacProposeControl.toCallComsInterface(jobID);
+        if (!Util.isNull(jobID)) {
+            flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobID);
+            if (flag) {
+                try {
+                    AppraisalDataResult appraisalDataResult = creditFacProposeControl.toCallComsInterface(jobID);
 
-                        if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
-                            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-                        } else {
-                            newCollateralView = new NewCollateralView();
-                            messageHeader = msg.get("app.propose.exception");
-                            message = appraisalDataResult.getReason();
-                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                        }
-                    } catch (COMSInterfaceException e) {
-                        log.info("COMSInterfaceException :: ");
+                    if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
+                        newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        flagComs = true;
+                        flagButtonCollateral = false;
+                    } else {
+                        newCollateralView = new NewCollateralView();
                         messageHeader = msg.get("app.propose.exception");
-                        message = e.getMessage();
+                        message = appraisalDataResult.getReason();
                         messageErr = true;
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
-                } else {
+                } catch (COMSInterfaceException e) {
+                    log.info("COMSInterfaceException :: ");
                     messageHeader = msg.get("app.propose.exception");
-                    message = msg.get("app.credit.facility.propose.coms.err");
+                    message = e.getMessage();
                     messageErr = true;
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
                 messageHeader = msg.get("app.propose.exception");
-                message = msg.get("app.credit.facility.propose.job.empty");
+                message = msg.get("app.credit.facility.propose.coms.err");
+                messageErr = true;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+        } else {
+            messageHeader = msg.get("app.propose.exception");
+            message = msg.get("app.credit.facility.propose.job.empty");
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
 
         log.info("onCallRetrieveAppraisalReportInfo End");
     }
@@ -645,14 +650,15 @@ public class CreditFacPropose implements Serializable {
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
             newCreditDetailView.getProductProgram().setId(0);
             cannotEditStandard = false;
-            canAddTier = true;
+            cannotAddTier = false;
+
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
                 newCreditDetailView.getCreditType().setId(0);
             }
             cannotEditStandard = true;
-            canAddTier = false;
+            cannotAddTier = true;
         }
     }
 
@@ -920,7 +926,7 @@ public class CreditFacPropose implements Serializable {
         proposeCreditDetailListTemp = cloner.deepClone(proposeCreditDetailViewList);
         newCollateralView.setProposeCreditDetailViewList(proposeCreditDetailListTemp);
         newCollateralView.getNewCollateralHeadViewList().add(new NewCollateralHeadView());
-
+        flagButtonCollateral = true;
     }
 
     public void onEditProposeCollInfo() {
@@ -1032,12 +1038,14 @@ public class CreditFacPropose implements Serializable {
                     }
                 }
 
-                newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
+            }
+
+            if (flagComs) {
+                proposeCollateralInfoAdd.setComs(false);
+                flagButtonCollateral = false;
             } else {
-                messageHeader = msg.get("app.propose.exception");
-                message = msg.get("app.propose.desc.add.data");
-                messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                proposeCollateralInfoAdd.setComs(true);
+                flagButtonCollateral = true;
             }
 
             newCreditFacilityView.getNewCollateralViewList().add(proposeCollateralInfoAdd);
@@ -1965,14 +1973,6 @@ public class CreditFacPropose implements Serializable {
 
     public void setNewGuarantorCreditDetailList(List<ProposeCreditDetailView> newGuarantorCreditDetailList) {
         this.newGuarantorCreditDetailList = newGuarantorCreditDetailList;
-    }
-
-    public boolean isCanAddTier() {
-        return canAddTier;
-    }
-
-    public void setCanAddTier(boolean canAddTier) {
-        this.canAddTier = canAddTier;
     }
 
     public List<CollateralType> getHeadCollateralTypeList() {
