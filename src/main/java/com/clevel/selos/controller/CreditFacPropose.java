@@ -255,7 +255,7 @@ public class CreditFacPropose implements Serializable {
         if (workCaseId != null) {
 
             modeForDB = ModeForDB.ADD_DB;
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            //WorkCase workCase = workCaseDAO.findById(workCaseId);
             hashSeqCredit = new Hashtable<String, String>();
 
             try {
@@ -266,13 +266,13 @@ public class CreditFacPropose implements Serializable {
 
                     modeForDB = ModeForDB.EDIT_DB;
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-                    log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
+                    log.info("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
 
                 }
 
             } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+                log.error("Exception while loading [Credit Facility] page :: ", ex);
             }
 
             log.info("onCreation :: modeForDB :: {}", modeForDB);

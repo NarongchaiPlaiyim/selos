@@ -80,11 +80,12 @@ public class NewCreditTierTransform extends Transform {
     public String toGetPricing(BaseRate baseRate ,BigDecimal price){
         String priceToShow = "";
 
-        if (price.doubleValue() < 0)
-        {
-            priceToShow = baseRate.getName() + " " + price;
-        }else{
-            priceToShow = baseRate.getName() + " + " + price;
+        if(price != null){
+            if (price.doubleValue() < 0) {
+                priceToShow = baseRate.getName() + " " + price;
+            } else {
+                priceToShow = baseRate.getName() + " + " + price;
+            }
         }
 
         return priceToShow;
