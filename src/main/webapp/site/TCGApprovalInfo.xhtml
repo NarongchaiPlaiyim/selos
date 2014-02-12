@@ -76,8 +76,7 @@
 												value="#{msg.get('app.tcgApprovalInfo.submitDate')}" /></td>
 										<td class="left"
 											style="min-width: 300px; max-width: 400px; width: 400px;"><p:calendar
-												value="#{tcgApprovalInfo.submitDate}" id="popupButtonCal"
-												showOn="button" /></td>
+												value="#{tcgApprovalInfo.submitDate}" showOn="button" /></td>
 										<td></td>
 										<td></td>
 									</tr>
@@ -93,8 +92,7 @@
 												value="#{msg.get('app.tcgApprovalInfo.approveDate')}" /></td>
 										<td class="left">
 										<td class="left"><p:calendar
-												value="#{tcgApprovalInfo.approveDate}" id="popupButtonCal"
-												showOn="button" /></td>
+												value="#{tcgApprovalInfo.approveDate}" showOn="button" /></td>
 										</td>
 									</tr>
 									<tr>
@@ -107,13 +105,9 @@
 									</tr>
 									<tr>
 										<td colspan="5" class="center"><p:commandButton
-												value="#{msg.get('app.tcg.button.save')}" id="btnSave"
-												binding="#{saveTCG}" styleClass="medium" process=":frmMain"
-												action="#{tcgInfo.onSaveTcgInfo()}"
-												update=":msgBoxSystemMessagePanel" /> <p:commandButton
-												value="#{msg.get('app.tcg.button.Cancel')}" id="btnCancel"
-												styleClass="medium" process=":frmMain"
-												action="#{tcgInfo.onCancelTcgInfo()}" update=":frmMain" /></td>
+												value="#{msg.get('app.tcg.button.save')}" id="btnSave" /> <p:commandButton
+												value="#{msg.get('app.tcg.button.Cancel')}" id="btnCancel" />
+										</td>
 									</tr>
 
 								</table>
@@ -137,32 +131,6 @@
 					<p:graphicImage value="/resources/images/shared/ajax-loader.gif" />
 				</p:blockUI>
 			</h:form>
-		</p:panel>
-
-		<p:dialog id="tcgDialog"
-			header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-			closable="false" closeOnEscape="false" modal="true" width="530"
-			height="200">
-			<ui:include src="dialog/TCGDetailDialog.xhtml" />
-		</p:dialog>
-
-		<ui:include src="dialog/confirmDeleteDlg.xhtml">
-			<ui:param name="id" value="confirmDeleteTcgDialog" />
-			<ui:param name="name" value="confirmDeleteTcgDlg" />
-			<ui:param name="formId" value="frmConfirmDeleteTcgRecord" />
-			<ui:param name="controller" value="#{tcgInfo}" />
-			<ui:param name="action" value="onDeleteTcgDetail" />
-			<ui:param name="update" value=":frmMain" />
-		</ui:include>
-
-
-		<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-			<p:confirmDialog id="msgBoxSystemMessageDialog"
-				widgetVar="msgBoxSystemMessageDlg" header="#{tcgInfo.messageHeader}"
-				message="#{tcgInfo.message}">
-				<p:commandButton value="OK" process="@this" update="frmMain"
-					oncomplete="msgBoxSystemMessageDlg.hide()" />
-			</p:confirmDialog>
 		</p:panel>
 
 	</h:body>
