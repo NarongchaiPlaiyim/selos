@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<title>#{msg.get('app.tcgApprovalInfo.title')}</title>
+		<h:outputStylesheet name="css/style.css" />
+		<script type="text/javascript" language="javascript"
+			src="#{request.contextPath}/resources/js/jquery.numeric.js" />
+		<h:outputScript library="js" name="custom.js" />
+	</h:head>
+
+	<h:body>
+		<p:panel id="pnl_maincontainer"
+			style="border:0; margin:0; padding: 0;">
+			<h:form id="frmMain">
+				<div id="main_container">
+					<!-- Start Header Logo -->
+					<ui:include src="include/header_logo.xhtml" />
+					<!-- End Header Logo -->
+					<!-- Start Header Detail -->
+					<ui:include src="include/header_detail.xhtml" />
+					<!-- End Header Detail -->
+					<!-- Start Menu -->
+					<ui:include src="include/menubar.xhtml" />
+					<!-- End Menu -->
+					<div id="content_container">
+						<div id="content_name">#{msg.get('app.tcgApprovalInfo.subtitle')}</div>
+						<div id="content">
+							<div id="content_info">
+								<div id="content_trackchange">
+									[
+									<h:outputLink value="#">
+										<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+									</h:outputLink>
+									]
+								</div>
+								<div id="content_lastupdate">
+									<h:outputText value="#{msg.get('app.lastUpdateBy')} " />
+									<h:outputText value="#{tcgApprovalInfo.lastUpdateBy}" />
+									,
+									<h:outputText value="#{tcgApprovalInfo.lastUpdateDateTime}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"
+											locale="th_TH" />
+									</h:outputText>
+								</div>
+							</div>
+							<div id="content_form">
+								<!-- start content -->
+								<table class="content_table_form">
+									<tr>
+										<td class="title" style="width: 200px;"><p:outputLabel
+												value="#{msg.get('app.approveType')}" styleClass="center" />
+										</td>
+										<td style="width: 200px;"><p:selectOneRadio
+												disabled="true" value="#{tcgApprovalInfo.approveType}">
+												<f:selectItems value="#{enumGeneralControl.approveTypes}"
+													var="approveType"
+													itemLabel="#{msg.get(approveType.msgKey)}"
+													itemValue="#{approveType}" />
+											</p:selectOneRadio></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td colspan="100%">
+											<div class="separate"></div>
+										</td>
+									</tr>
+									<tr>
+										<td class="title"><h:outputText
+												value="#{msg.get('app.tcgApprovalInfo.submitDate')}" /></td>
+										<td class="left"
+											style="min-width: 300px; max-width: 400px; width: 400px;"><p:calendar
+												value="#{tcgApprovalInfo.submitDate}" id="popupButtonCal"
+												showOn="button" /></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td class="title">#{msg.get('app.tcgApprovalInfo.approveResult')}</td>
+										<td><p:selectOneRadio
+												value="#{tcgApprovalInfo.approveResult}" layout="grid"
+												columns="2">
+												<f:selectItem itemLabel="#{'Approved'}" itemValue="1" />
+												<f:selectItem itemLabel="#{'Not Approved'}" itemValue="2" />
+											</p:selectOneRadio></td>
+										<td class="title" style="width: 130px;"><h:outputText
+												value="#{msg.get('app.tcgApprovalInfo.approveDate')}" /></td>
+										<td class="left">
+										<td class="left"><p:calendar
+												value="#{tcgApprovalInfo.approveDate}" id="popupButtonCal"
+												showOn="button" /></td>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="100%">
+											<div class="separate"></div>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="100%" style="height: 20px;"></td>
+									</tr>
+									<tr>
+										<td colspan="5" class="center"><p:commandButton
+												value="#{msg.get('app.tcg.button.save')}" id="btnSave"
+												binding="#{saveTCG}" styleClass="medium" process=":frmMain"
+												action="#{tcgInfo.onSaveTcgInfo()}"
+												update=":msgBoxSystemMessagePanel" /> <p:commandButton
+												value="#{msg.get('app.tcg.button.Cancel')}" id="btnCancel"
+												styleClass="medium" process=":frmMain"
+												action="#{tcgInfo.onCancelTcgInfo()}" update=":frmMain" /></td>
+									</tr>
+
+								</table>
+								<!-- end content -->
+							</div>
+						</div>
+						<div id="bottom_line">
+							<!-- -->
+						</div>
+					</div>
+					<div class="clear"></div>
+					<!-- Start Footer -->
+					<ui:include src="include/footer.xhtml" />
+					<!-- End Footer -->
+					<h:inputHidden id="pagename" value="mnuprescreen" />
+					<h:inputHidden id="subpagename" value="submnuprescreen" />
+				</div>
+				<p:blockUI block=":frmMain"
+					trigger=":frmMain:btnSave,:frmMain:btnCancel">
+    LOADING<br />
+					<p:graphicImage value="/resources/images/shared/ajax-loader.gif" />
+				</p:blockUI>
+			</h:form>
+		</p:panel>
+
+		<p:dialog id="tcgDialog"
+			header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
+			closable="false" closeOnEscape="false" modal="true" width="530"
+			height="200">
+			<ui:include src="dialog/TCGDetailDialog.xhtml" />
+		</p:dialog>
+
+		<ui:include src="dialog/confirmDeleteDlg.xhtml">
+			<ui:param name="id" value="confirmDeleteTcgDialog" />
+			<ui:param name="name" value="confirmDeleteTcgDlg" />
+			<ui:param name="formId" value="frmConfirmDeleteTcgRecord" />
+			<ui:param name="controller" value="#{tcgInfo}" />
+			<ui:param name="action" value="onDeleteTcgDetail" />
+			<ui:param name="update" value=":frmMain" />
+		</ui:include>
+
+
+		<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+			<p:confirmDialog id="msgBoxSystemMessageDialog"
+				widgetVar="msgBoxSystemMessageDlg" header="#{tcgInfo.messageHeader}"
+				message="#{tcgInfo.message}">
+				<p:commandButton value="OK" process="@this" update="frmMain"
+					oncomplete="msgBoxSystemMessageDlg.hide()" />
+			</p:confirmDialog>
+		</p:panel>
+
+	</h:body>
+</f:view>
+</html>
