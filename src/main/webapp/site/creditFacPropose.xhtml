@@ -24,6 +24,9 @@
         tfoot {
             background: none !important;
         }
+        .ui-datatable table {
+            width: 100% !important;
+        }
     </style>
 </h:head>
 
@@ -607,8 +610,7 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.standardPrice}">
-                                                </h:outputText>
+                                                <h:outputText value="#{proposeCredit.standardPrice}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{proposeCredit.suggestPrice}"/>
@@ -1597,7 +1599,7 @@
                             </p:column>
 
                             <p:column styleClass="top left">
-                                <table border="0" style="margin:-1px 0 -1px -10px;">
+                                <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
                                     <ui:repeat value="#{newGuarantorDetailView.proposeCreditDetailViewList}" var="newCreditDetail">
                                         <tr>
                                             <td class="top left" style="border-style: none !important;">
@@ -1887,7 +1889,7 @@
 <!-- Propose Credit Dialog -->
 <p:dialog id="creditInfoDialog" header="Propose Credit Information" widgetVar="creditInfoDlg"
           modal="true"
-          height="500"
+          width="900" height="500"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeCreditInfoDialog.xhtml"/>
 </p:dialog>
@@ -1904,7 +1906,8 @@
 <!-- Propose Collateral Dialog -->
 <p:dialog id="collateralInfoDialog" widgetVar="collateralInfoDlg"
           header="Propose Collateral Information"
-          modal="true" height="500"
+          modal="true"
+          width="900" height="500"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
@@ -1921,7 +1924,8 @@
 <!-- Sub-Collateral Dialog  -->
 <p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg"
           header="Sub Collateral Information"
-          modal="true" height="500"
+          modal="true"
+          width="700" height="500"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
 </p:dialog>
@@ -1939,6 +1943,7 @@
 <p:dialog id="guarantorDialog" widgetVar="guarantorInfoDlg"
           header="Propose Guarantor Information"
           modal="true"
+          width="900"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeGuarantorInfoDialog.xhtml"/>
 </p:dialog>
@@ -1954,7 +1959,9 @@
 
 <!-- Condition Dialog -->
 <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="180">
+          modal="true"
+          width="600"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeConditionInfoDialog.xhtml"/>
 </p:dialog>
 

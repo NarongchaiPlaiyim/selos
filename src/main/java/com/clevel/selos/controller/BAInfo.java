@@ -3,10 +3,9 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -24,36 +23,34 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
-import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
 @ViewScoped
-@ManagedBean(name = "guarantorDetail")
-public class GuarantorDetail implements Serializable {
-	private static final long serialVersionUID = -7897839845100860116L;
+@ManagedBean(name="baInfo")
+public class BAInfo implements Serializable {
+	private static final long serialVersionUID = -6678163555513002049L;
 
 	@Inject @SELOS
 	private Logger log;
 	
 	@Inject
 	private BasicInfoControl basicInfoControl;
-
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private long guarantorId = -1;
-	private String fromPage;
 	private User user;
 	private BasicInfoView basicInfoView;
 	
 	//Property
-
-    public GuarantorDetail(){
-    	
-    }
-    public Date getLastUpdateDateTime() {
+	
+	
+	public BAInfo() {
+	}
+	
+	public Date getLastUpdateDateTime() {
 		//TODO 
 		return new Date();
 	}
@@ -67,13 +64,16 @@ public class GuarantorDetail implements Serializable {
 		else
 			return basicInfoView.getApproveType();
 	}
-	public String getMinDate() {
+	public String getMinCheckDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
 	}
-	
-	
-	
+	public String getMaxCheckDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 90);
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(calendar.getTime());
+	}
 	/*
 	 * Action
 	 */
@@ -86,9 +86,6 @@ public class GuarantorDetail implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
-		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("guarantorParams");
-		fromPage = (String)params.get("fromPage");
-		guarantorId = Util.parseLong(params.get("guarantorId"),-1);
 		_loadInitData();
 	}
 	
@@ -117,28 +114,36 @@ public class GuarantorDetail implements Serializable {
 		}
 	}
 	
-	
-	public String clickCustomerInfo(long id) {
-		//TODO Clear what it is
-		Map<String, Object> map = new HashMap<String, Object>();
-		/*
-        map.put("isFromSummaryParam",true);
-        map.put("isFromJuristicParam",false);
-        map.put("isFromIndividualParam",false);
-        map.put("isEditFromJuristic", false);
-        CustomerInfoView cusView = new CustomerInfoView();
-        cusView.reset();
-        map.put("customerInfoView", cusView);
-        */
-        map.put("customerId", id);
-		return "customerInfoIndividual?faces-redirect=true";
+	public void onOpenApplyInformationDialog() {
+		
 	}
-	public void onSaveGuarantorDetail() {
+	public void onApplyBAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenAddBAPAInformationDialog() {
+		
+	}
+	public void onAddBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onOpenUpdateBAPAInformaionDialog() {
+		
+	}
+	public void onUpdateBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onDeleteBAPAInformation() {
+		
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	public void onSaveBAInformation() {
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
-	
 	/*
 	 * Private method
 	 */
@@ -147,7 +152,5 @@ public class GuarantorDetail implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
-		//TODO Load guarantor info by using workcase and guarantorId
-		
 	}
 }

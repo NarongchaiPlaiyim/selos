@@ -24,6 +24,7 @@ public class TitleDAO extends GenericDAO<Title, Integer> {
         log.info("getListByCustomerType. (customerEntity: {})", customerEntity);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity", customerEntity));
+        criteria.add(Restrictions.eq("active", 1));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
         log.info("getListByCustomerType. (result size: {})", titles.size());
@@ -34,6 +35,7 @@ public class TitleDAO extends GenericDAO<Title, Integer> {
         log.info("getListByCustomerEntityId. (customerEntityId: {})", customerEntityId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("active", 1));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
         log.info("getListByCustomerType. (result size: {})", titles.size());

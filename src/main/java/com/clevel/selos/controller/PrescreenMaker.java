@@ -255,7 +255,7 @@ public class PrescreenMaker implements Serializable {
 
             if(!checkPage){
                 try{
-                    if(stepId == 1001 && page.equals("prescreen.jsf")){
+                    if(stepId == StepValue.PRESCREEN_MAKER.value() && page.equals("prescreen.jsf")){
                         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                         ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
                         return;

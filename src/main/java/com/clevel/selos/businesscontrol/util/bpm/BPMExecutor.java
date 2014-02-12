@@ -218,6 +218,42 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void requestAppraisal(long workCasePreScreenId, long workCaseId, String queueName, long actionCode) throws Exception{
+        String wobNumber = "";
+        if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(workCasePrescreen != null){
+                wobNumber = workCasePrescreen.getWobNumber();
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
+            }
+        } else {
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(workCase != null){
+                wobNumber = workCase.getWobNumber();
+            } else {
+                throw new Exception("An exception occurred, Can not find WorkCase.");
+            }
+        }
+
+        if(wobNumber != null && wobNumber != ""){
+            Action action = actionDAO.findById(actionCode);
+            if(action != null){
+                HashMap<String,String> fields = new HashMap<String, String>();
+                fields.put("Action_Code", Long.toString(action.getId()));
+                fields.put("Action_Name", action.getDescription());
+
+                log.debug("dispatch case for [Request Appraisal]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+                execute(queueName, wobNumber, fields);
+            } else {
+                throw new Exception("An exception occurred, Can not find Action.");
+            }
+        } else {
+            throw new Exception("An exception occurred, Can not find WorkCase.");
+        }
+    }
+
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);

@@ -7,12 +7,12 @@
 
 <p:panel id="creditInfoDlgPanel" styleClass="panel-dialog">
     <h:form id="creditInfoDlgForm">
-        <table class="content_form">
+        <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="width: 170px;">
+                <td class="title" style="width: 20%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
                 </td>
-                <td class="left" colspan="3">
+                <td class="left" style="width: 80%" colspan="3">
                     <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}"
                                       required="#{not empty param[onSaveCreditInfo.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
@@ -26,7 +26,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -39,7 +39,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productProgram')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -61,7 +61,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.creditType')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -83,17 +83,17 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title" style="width: 20%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="width: 30%">
                     <p:inputText id="productCode"
                                  value="#{creditFacPropose.newCreditDetailView.productCode}"/>
                 </td>
-                <td class="title" style="width: 170px">
+                <td class="title" style="width: 20%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="width: 30%">
                     <p:inputText id="projectCode"
                                  value="#{creditFacPropose.newCreditDetailView.projectCode}"
                                  required="#{not empty param[onSaveCreditInfo.clientId]}"/>
@@ -101,7 +101,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
                 </td>
                 <td class="left">
@@ -122,7 +122,7 @@
                                 process=":creditInfoDlgForm" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal:installment" />
                     </p:inputText>
                 </td>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
                 </td>
                 <td class="left">
@@ -174,7 +174,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="left">
                     <h:selectBooleanCheckbox value="#{creditFacPropose.newCreditDetailView.reducePriceFlag}"
                                              id="reducePriceFlagChk"
                                              disabled="#{creditFacPropose.modeEditReducePricing}">
@@ -212,7 +212,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -247,12 +247,11 @@
                             </td>
                         </tr>
                     </table>
-
                 </td>
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                 </td>
                 <td colspan="3">
@@ -299,7 +298,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.final')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -316,7 +315,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px"></td>
+                <td class="title"></td>
                 <td class="left" colspan="3">
                     <p:dataTable id="resultFinal"
                                  var="item"
@@ -338,12 +337,12 @@
                             </p:row>
                         </p:columnGroup>
 
-                        <p:column styleClass="center">
+                        <p:column styleClass="center top">
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
 
-                        <p:column>
-                            <p:panelGrid  styleClass="panelGridPadding0" style="width:200px;">
+                        <p:column styleClass="center top">
+                            <p:panelGrid styleClass="panelGridPadding0">
                                 <p:row>
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}"
@@ -376,7 +375,7 @@
                             </p:panelGrid>
                         </p:column>
 
-                        <p:column styleClass="right">
+                        <p:column styleClass="center top">
                             <p:inputText id="tenor" value="#{item.tenor}"
                                          maxlength="2"
                                          onclick="this.select()"
@@ -392,7 +391,7 @@
                             </p:inputText>
                         </p:column>
 
-                        <p:column styleClass="right">
+                        <p:column styleClass="center top">
                             <p:inputText id="installment" value="#{item.installment}"
                                          maxlength="18"
                                          onclick="this.select()"
@@ -408,7 +407,7 @@
                             </p:inputText>
                         </p:column>
 
-                        <p:column styleClass="center">
+                        <p:column styleClass="center top">
                             <p:commandButton icon="ui-icon-trash"
                                              rendered="#{item.canEdit}"
                                              process="@form"
@@ -422,7 +421,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.frontEnd')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -445,7 +444,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.loanPurpose')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -464,7 +463,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.purposeDetail')}"/>
                 </td>
                 <td class="left" colspan="3">
@@ -475,7 +474,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 170px">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.disbursement')}"/>
                 </td>
                 <td class="left">
@@ -492,7 +491,7 @@
 
                     </p:selectOneMenu>
                 </td>
-                <td class="title" style="min-width: 120px; width: 120px; max-width: 120px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}" />
                 </td>
                 <td class="left">
@@ -515,7 +514,6 @@
             <tr>
                 <td colspan="4" style="height:28px;"></td>
             </tr>
-
             <tr>
                 <td colspan="4" class="center">
                     <p:commandButton id="dlgSaveCreditBtn"
@@ -532,9 +530,8 @@
                                      onclick="creditInfoDlg.hide()"/>
                 </td>
             </tr>
-
             <tr>
-                <td colspan="4" style="height:28px;"></td>
+                <td colspan="4" style="height:10px;"></td>
             </tr>
         </table>
     </h:form>
