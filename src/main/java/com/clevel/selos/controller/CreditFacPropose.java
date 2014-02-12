@@ -838,30 +838,37 @@ public class CreditFacPropose implements Serializable {
         log.info("onAddTierInfo ::: rowIndex of proposeCredit to edit :: {}", rowIndex);
         BaseRate finalBaseRate;
         BigDecimal finalInterest;
-        String suggestPriceLabel;
-        String standardPriceLabel;
         String finalPriceLabel;
 
-        BaseRate standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
+        BigDecimal suggestPrice = BigDecimal.ZERO;
+        String suggestPriceLabel = "";
+
+        BigDecimal standardPrice = BigDecimal.ZERO;
+        String standardPriceLabel = "";
+
         BaseRate suggestBase = baseRateDAO.findById(suggestBasePriceDlg.getId());
-
-        BigDecimal suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
-        if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
-            suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
-        } else {
-            suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+        if(suggestBase != null){
+            suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
+            if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
+                suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
+            } else {
+                suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+            }
         }
 
-        BigDecimal standardPrice = standardBase.getValue().add(standardInterestDlg);
-        if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
-            standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
-        } else {
-            standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+        BaseRate standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
+        if(standardBase != null){
+            standardPrice = standardBase.getValue().add(standardInterestDlg);
+            if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
+                standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
+            } else {
+                standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+            }
         }
 
-        log.info("standardBase getValue :: {}", standardBase.getValue());
+        log.info("standardBase :: {}", standardBase);
         log.info("SuggestInterest :: {}", suggestInterestDlg);
-        log.info("suggestBase getValue :: {}", suggestBase.getValue());
+        log.info("suggestBase :: {}", suggestBase);
         log.info("StandardInterest :: {}", standardInterestDlg);
         log.info("suggestPrice :: {}", suggestPrice);
         log.info("standardPrice :: {}", standardPrice);
