@@ -291,11 +291,11 @@ public class ExSummaryControl extends BusinessControl {
         }
 
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        if(bizInfoSummaryView.getId() != 0){
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
             bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
         }
 
-        if(bizInfoDetailViewList.size() > 1){
+        if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 1){
             int tmpIndex = 0;
             BigDecimal tmpHighestProportion = BigDecimal.ZERO;
             for (int i=0 ; i < bizInfoDetailViewList.size() ; i++){ // find highest business proportion
@@ -308,7 +308,7 @@ public class ExSummaryControl extends BusinessControl {
             }
             exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndex).getExpIndCountryName());
             exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndex).getPercentExpIndCountryName());
-        } else {
+        } else if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() == 1){
             exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(0).getExpIndCountryName());
             exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(0).getPercentExpIndCountryName());
         }
