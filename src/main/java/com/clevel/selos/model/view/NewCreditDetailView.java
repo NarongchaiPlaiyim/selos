@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
@@ -36,9 +37,6 @@ public class NewCreditDetailView implements Serializable {
     private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
-    private BaseRate suggestBasePrice;
-    private String suggestPrice;
-    private BigDecimal suggestInterest;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -55,6 +53,7 @@ public class NewCreditDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
+    private String proposeType;
 
     public NewCreditDetailView() {
         reset();
@@ -93,12 +92,9 @@ public class NewCreditDetailView implements Serializable {
         this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         this.standardPrice = "";
-        this.suggestPrice = "";
         this.standardBasePrice = new BaseRate();
-        this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
-        this.suggestInterest = BigDecimal.ZERO;
-
+        this.proposeType= ProposeType.P.type();
     }
 
     public long getId() {
@@ -253,14 +249,6 @@ public class NewCreditDetailView implements Serializable {
         this.standardPrice = standardPrice;
     }
 
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
-    }
-
     public BigDecimal getFrontEndFee() {
         return frontEndFee;
     }
@@ -333,28 +321,12 @@ public class NewCreditDetailView implements Serializable {
         this.standardBasePrice = standardBasePrice;
     }
 
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
-    }
-
     public BigDecimal getStandardInterest() {
         return standardInterest;
     }
 
     public void setStandardInterest(BigDecimal standardInterest) {
         this.standardInterest = standardInterest;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
     }
 
     public int getApproved() {
@@ -437,6 +409,14 @@ public class NewCreditDetailView implements Serializable {
         this.accountSuf = accountSuf;
     }
 
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -463,9 +443,6 @@ public class NewCreditDetailView implements Serializable {
                 .append("standardBasePrice", standardBasePrice)
                 .append("standardPrice", standardPrice)
                 .append("standardInterest", standardInterest)
-                .append("suggestBasePrice", suggestBasePrice)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestInterest", suggestInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)

@@ -3,7 +3,9 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.db.master.*;
@@ -118,6 +120,8 @@ public class CreditFacProposeControl extends BusinessControl {
     NCBInfoControl ncbInfoControl;
     @Inject
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    @Inject
+    private COMSInterface comsInterface;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
@@ -955,5 +959,15 @@ public class CreditFacProposeControl extends BusinessControl {
             newGuarantorDetailDAO.persist(newGuarantorDetailList);
             log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
         }
+    }
+
+    // Call COMSInterface
+    public AppraisalDataResult toCallComsInterface(final String jobId) {
+        log.info("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
+        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
+        if (appraisalDataResult != null) {
+            log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+        }
+        return appraisalDataResult;
     }
 }

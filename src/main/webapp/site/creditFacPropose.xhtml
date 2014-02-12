@@ -613,7 +613,8 @@
                                                 <h:outputText value="#{proposeCredit.standardPrice}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -682,7 +683,7 @@
                                                     <h:outputText value="#{proposeCredit.standardPrice}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.suggestPrice}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                     <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
@@ -1182,6 +1183,7 @@
                                 </td>
                                 <td class="right" colspan="2">
                                     <p:commandButton value="Edit"
+                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      action="#{creditFacPropose.onEditProposeCollInfo()}"
                                                      update=":collateralDlgForm"
                                                      process="@this"
@@ -1193,7 +1195,9 @@
                                         <p:resetInput target=":collateralDlgForm"/>
                                     </p:commandButton>
                                     <p:spacer width="10" height="0"/>
-                                    <p:commandButton value="Remove" process="@this"
+                                    <p:commandButton value="Remove"
+                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
+                                                     process="@this"
                                                      oncomplete="confirmDeleteCollateralInfoDlg.show()">
                                         <f:setPropertyActionListener value="#{newCollateralView}"
                                                                      target="#{creditFacPropose.selectCollateralDetailView}"/>

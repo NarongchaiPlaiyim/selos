@@ -64,7 +64,7 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             newCollateral = new NewCollateral();
-            newCollateral.setProposeType(ProposeType.P.type());
+
             if (newCollateralView.getId() != 0) {
                 newCollateral.setCreateDate(newCollateralView.getCreateDate());
                 newCollateral.setCreateBy(newCollateralView.getCreateBy());
@@ -72,6 +72,8 @@ public class NewCollateralTransform extends Transform {
                 newCollateral.setCreateDate(new Date());
                 newCollateral.setCreateBy(user);
             }
+            newCollateral.setComs(Util.isTrue(newCollateralView.isComs()));
+            newCollateral.setProposeType(ProposeType.P.type());
             newCollateral.setWorkCase(workCase);
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());
@@ -98,6 +100,8 @@ public class NewCollateralTransform extends Transform {
 
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
+            newCollateralView.setProposeType(newCollateralDetail1.getProposeType());
+            newCollateralView.setComs(Util.isTrue(newCollateralDetail1.getComs()));
             newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
@@ -297,6 +301,7 @@ public class NewCollateralTransform extends Transform {
             newCollateralSubView.setTitleDeed(subCollateralDetail.getTitleDeed());
             newCollateralSubView.setAppraisalValue(subCollateralDetail.getAppraisalValue());
             newCollateralSubView.setAddress(subCollateralDetail.getAddress());
+            newCollateralSubView.setCollateralOwnerAAD(subCollateralDetail.getCollateralOwnerAAD());
             newCollateralSubView.setCollateralOwner(subCollateralDetail.getCollateralOwner());
             newCollateralSubView.setSubCollateralType(subCollateralDetail.getSubCollateralType());
             newCollateralSubView.setCreateBy(subCollateralDetail.getCreateBy());
@@ -357,6 +362,7 @@ public class NewCollateralTransform extends Transform {
         subCollateralDetail.setAppraisalValue(newCollateralSubView.getAppraisalValue());
         subCollateralDetail.setAddress(newCollateralSubView.getAddress());
         subCollateralDetail.setCollateralOwner(newCollateralSubView.getCollateralOwner());
+        subCollateralDetail.setCollateralOwnerAAD(newCollateralSubView.getCollateralOwnerAAD());
         subCollateralDetail.setSubCollateralType(newCollateralSubView.getSubCollateralType());
         subCollateralDetail.setNewCollateralHead(collateralHeaderDetail);
 
@@ -478,5 +484,6 @@ public class NewCollateralTransform extends Transform {
         log.debug("--[RETURNED] NewCollateralViewList.size[{}]", newCollateralViewList.size());
         return newCollateralViewList;
     }
+
 
 }

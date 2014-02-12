@@ -83,8 +83,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setStandardInterest(newCreditDetailView.getStandardInterest());
             newCreditDetail.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
-            newCreditDetail.setSuggestInterest(newCreditDetailView.getSuggestInterest());
-            newCreditDetail.setSuggestBasePrice(newCreditDetailView.getSuggestBasePrice());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
             if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
@@ -107,7 +105,7 @@ public class NewCreditDetailTransform extends Transform {
 
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             newCreditDetailView = new NewCreditDetailView();
-
+            newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
             newCreditDetailView.setId(newCreditDetail.getId());
             newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
             newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
@@ -143,9 +141,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setStandardInterest(newCreditDetail.getStandardInterest());
             newCreditDetailView.setStandardBasePrice(newCreditDetail.getStandardBasePrice());
             newCreditDetailView.setStandardPrice(toGetPricing(newCreditDetail.getStandardBasePrice(),newCreditDetail.getStandardInterest()));
-            newCreditDetailView.setSuggestInterest(newCreditDetail.getSuggestInterest());
-            newCreditDetailView.setSuggestBasePrice(newCreditDetail.getSuggestBasePrice());
-            newCreditDetailView.setSuggestPrice(toGetPricing(newCreditDetail.getSuggestBasePrice(),newCreditDetail.getStandardInterest()));
 
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 

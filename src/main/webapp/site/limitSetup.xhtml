@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.limitSetup.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{limitSetup.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.limitSetup.subtitle')}</div>
+                <div id="content">
+                    <div id="content_info">
+                        <div id="content_trackchange">
+                        	[
+                        	<h:outputLink value="#">
+                        		<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+                        	</h:outputLink>
+                        	]
+                        </div>
+                        <div id="content_lastupdate">
+                        	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
+                        	<h:outputText value="#{limitSetup.lastUpdateBy}"/>, 
+                        	<h:outputText value="#{limitSetup.lastUpdateDateTime}">
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
+                        	</h:outputText>
+                        </div>
+                    </div>
+                    <div id="content_form">
+                   		<p:spacer height="18"/>
+                        <!-- start content -->
+                        <p:dataTable styleClass="content_table_form full_table" 
+                        	style="width:90%;margin:0 auto" 
+                        	rowIndexVar="rowIdx" 
+                        	>
+                        	<p:column style="width:30px" styleClass="center">
+                        		#{rowIdx +1}
+                        	</p:column>
+                        	
+                        	<p:column style="width:150px" styleClass="center"
+								headerText="#{msg.get('app.limitSetup.table.setupcomplete')}"
+                        		>
+                        		<p:selectOneRadio>
+                                     <f:selectItem
+                                     	itemLabel="#{msg.get('app.button.yes')}" 
+                                     	itemValue="2"/>
+                                     <f:selectItem 
+                                     	itemLabel="#{msg.get('app.button.no')}" 
+                                     	itemValue="1"/>
+                                 </p:selectOneRadio>
+                        	</p:column>
+                        	<p:column style="width:70px" styleClass="center"
+								headerText="#{msg.get('app.limitSetup.table.type')}"
+                        		>
+                        	</p:column>
+                        	<p:column style="width:150px" 
+								headerText="#{msg.get('app.limitSetup.table.productProgram')}"
+                        		>
+                        	</p:column>
+                        	<p:column style="width:150px"
+								headerText="#{msg.get('app.limitSetup.table.creditType')}"
+                        		>
+                        	</p:column>
+                        	
+                        	<p:column style="width:100px" styleClass="center"
+								headerText="#{msg.get('app.limitSetup.table.productCode')}"
+                        		>
+                        		
+                        	</p:column>
+                        	<p:column style="width:100px" styleClass="center"
+								headerText="#{msg.get('app.limitSetup.table.projectCode')}"
+                        		>
+                        		
+                        	</p:column>
+                        	<p:column style="width:100px" styleClass="right"
+                        		headerText="#{msg.get('app.limitSetup.table.limit')}"
+                        		>
+                        		<h:outputText value="0">
+                        			<f:convertNumber pattern="#,##0.00"/>
+                        		</h:outputText>
+                        	</p:column>
+                        	<p:column style="width:100px" styleClass="right"
+                        		headerText="#{msg.get('app.limitSetup.table.installment')}"
+                        		>
+                        		<h:outputText value="0">
+                        			<f:convertNumber pattern="#,##0.00"/>
+                        		</h:outputText>
+                        	</p:column>
+                        	<p:column style="width:80px" styleClass="right"
+                        		headerText="#{msg.get('app.limitSetup.table.tenor')}"
+                        		>
+                        		<h:outputText value="0">
+                        			<f:convertNumber pattern="0"/>
+                        		</h:outputText>
+                        	</p:column>
+                        </p:dataTable>
+                        <p:spacer height="18"/>
+                        <p:separator/>
+                        
+                        <div style="margin:40px auto 0;" class="medium">
+                        	<p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+                             	styleClass="medium"
+                             	oncomplete="p_saveLimitSetupDlg.show();"
+                             	 />
+                        </div>
+                    </div>
+                </div>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </div>
+           	
+           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn'>
+           		LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+             </p:blockUI>
+        </h:form>
+    </p:panel>
+
+	<ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="saveLimitSetupDlg"/>
+		<ui:param name="name" value="p_saveLimitSetupDlg"/>
+		<ui:param name="formId" value="saveLimitSetupFrm"/>
+		<ui:param name="controller" value="#{limitSetup}"/>
+		<ui:param name="action" value="onSaveLimitSetup"/>
+		<ui:param name="update" value=":frmMain"/>
+	</ui:include>
+</h:body>
+</f:view>
+</html>
