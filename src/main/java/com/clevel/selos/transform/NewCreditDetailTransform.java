@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditDetail;
@@ -47,6 +48,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
+            newCreditDetail.setProposeType(ProposeType.P.type());
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
@@ -77,8 +79,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setStandardInterest(newCreditDetailView.getStandardInterest());
             newCreditDetail.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
-            newCreditDetail.setSuggestInterest(newCreditDetailView.getSuggestInterest());
-            newCreditDetail.setSuggestBasePrice(newCreditDetailView.getSuggestBasePrice());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
             newCreditDetailList.add(newCreditDetail);
@@ -94,7 +94,7 @@ public class NewCreditDetailTransform extends Transform {
 
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             newCreditDetailView = new NewCreditDetailView();
-
+            newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
             newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
             newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
             newCreditDetailView.setModifyBy(newCreditDetail.getModifyBy());
@@ -129,9 +129,6 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setStandardInterest(newCreditDetail.getStandardInterest());
             newCreditDetailView.setStandardBasePrice(newCreditDetail.getStandardBasePrice());
             newCreditDetailView.setStandardPrice(toGetPricing(newCreditDetail.getStandardBasePrice(),newCreditDetail.getStandardInterest()));
-            newCreditDetailView.setSuggestInterest(newCreditDetail.getSuggestInterest());
-            newCreditDetailView.setSuggestBasePrice(newCreditDetail.getSuggestBasePrice());
-            newCreditDetailView.setSuggestPrice(toGetPricing(newCreditDetail.getSuggestBasePrice(),newCreditDetail.getStandardInterest()));
 
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 

@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewFeeDetail;
@@ -30,6 +31,7 @@ public class NewFeeDetailTransform extends Transform {
                 newFeeDetail.setCreateDate(new Date());
                 newFeeDetail.setCreateBy(user);
             }
+            newFeeDetail.setProposeType(ProposeType.P.type());
             newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
             newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
             newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());

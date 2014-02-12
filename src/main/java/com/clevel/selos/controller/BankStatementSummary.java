@@ -147,10 +147,25 @@ public class BankStatementSummary implements Serializable {
             seasonalFlag = summaryView.getSeasonal();
             expectedSubmitDate = summaryView.getExpectedSubmitDate();
             currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(summaryView.getExpectedSubmitDate());
+            // Set Summary Colors
             bankStmtControl.setSummaryColor(summaryView, workCaseId);
+
+            Date[] threeMonthsOfSrcOfColl = bankStmtControl.getSourceOfCollateralMonths(summaryView);
+            if (threeMonthsOfSrcOfColl.length == 3) {
+                lastThreeMonth1 = threeMonthsOfSrcOfColl[0];
+                lastThreeMonth2 = threeMonthsOfSrcOfColl[1];
+                lastThreeMonth3 = threeMonthsOfSrcOfColl[2];
+            }
+            else {
+                lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+                lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+                lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
+            }
+
             provideSOCPAndCalSummary();
         }
-        else {// Create new Bank statement summary
+        else {
+            // Create new Bank statement summary
             log.debug("Create new Bank statement summary");
             seasonalFlag = RadioValue.NOT_SELECTED.value();
             expectedSubmitDate = getCurrentDate();
@@ -159,6 +174,10 @@ public class BankStatementSummary implements Serializable {
             summaryView = new BankStmtSummaryView();
             summaryView.setSeasonal(seasonalFlag);
             summaryView.setExpectedSubmitDate(expectedSubmitDate);
+
+            lastThreeMonth3 = bankStmtControl.getLastMonthDateBankStmt(expectedSubmitDate);
+            lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -1);
+            lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
         }
 
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(seasonalFlag);
@@ -186,37 +205,7 @@ public class BankStatementSummary implements Serializable {
     }
 
     private void provideSOCPAndCalSummary() {
-        if (summaryView == null || summaryView.getId() == 0)
-            return;
-
-        // provide the last three months
-        Date theLastMonthDate = bankStmtControl.getLastMonthDateBankStmt(summaryView.getExpectedSubmitDate());
-        if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
-            // TMB Bank
-            BankStmtView bankStmtView = summaryView.getTmbBankStmtViewList().get(0);
-            List<BankStmtDetailView> detailViews = bankStmtControl.getLastThreeMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList());
-            if (detailViews != null && detailViews.size() > 0) {
-                lastThreeMonth1 = detailViews.get(0).getAsOfDate();
-                lastThreeMonth2 = detailViews.get(1).getAsOfDate();
-                lastThreeMonth3 = detailViews.get(2).getAsOfDate();
-            }
-        }
-        else if (summaryView.getOthBankStmtViewList() != null && summaryView.getOthBankStmtViewList().size() > 0) {
-            // Other Bank
-            BankStmtView bankStmtView = summaryView.getOthBankStmtViewList().get(0);
-            List<BankStmtDetailView> detailViews = bankStmtControl.getLastThreeMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList());
-            if (detailViews != null && detailViews.size() > 0) {
-                lastThreeMonth1 = detailViews.get(0).getAsOfDate();
-                lastThreeMonth2 = detailViews.get(1).getAsOfDate();
-                lastThreeMonth3 = detailViews.get(2).getAsOfDate();
-            }
-        }
-        else {
-            // Anything else retrieve from expectedSubmitDate (T - x)
-            lastThreeMonth1 = theLastMonthDate; // Ex. April 2013
-            lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(theLastMonthDate, 1); // Ex. May 2013
-            lastThreeMonth3 = DateTimeUtil.getOnlyDatePlusMonth(theLastMonthDate, 2); // Ex. June 2013
-        }
+        if (summaryView == null || summaryView.getId() == 0) return;
         // provide Source of Collateral Proof from all Bank statement
         provideSrcOfCollateralProofList();
         // calculate total & grand total summary

@@ -155,7 +155,7 @@
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
                             <td colspan="3" class="title">
                                 <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
-                                                  required="#{not empty param[saveButton.clientId]}">
+                                                  required="#{not empty param[saveButton.clientId]}" layout="grid" columns="1">
                                     <f:selectItem itemLabel="NO"  itemValue="N" />
                                     <f:selectItem itemLabel="Yes" itemValue="Y" />
                                     <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
@@ -175,7 +175,10 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
                             </td>
                             <td>
-                                <p:inputText style="width: 450px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}" disabled="#{bizInfoDetail.disable}" />
+                                <p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
+                                             required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
+                                    <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
+                                </p:inputText>
                             </td>
                         </tr>
                         <tr>
@@ -185,7 +188,7 @@
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
-                                                disabled="#{bizInfoDetail.disable}"
+                                                required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
                                                 mindate="#{bizInfoDetail.currentDateDDMMYY}"

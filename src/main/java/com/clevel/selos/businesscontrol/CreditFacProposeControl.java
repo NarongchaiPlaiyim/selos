@@ -3,7 +3,9 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
 import com.clevel.selos.model.db.master.*;
@@ -118,6 +120,8 @@ public class CreditFacProposeControl extends BusinessControl {
     NCBInfoControl ncbInfoControl;
     @Inject
     ExistingCollateralDetailDAO existingCollateralDetailDAO;
+    @Inject
+    private COMSInterface comsInterface;
 
     private ExistingCreditFacilityView existingCreditFacilityView;
 
@@ -717,24 +721,6 @@ public class CreditFacProposeControl extends BusinessControl {
         return relatedWithAllList;
     }
 
-    public BigDecimal calculateInstallment(NewCreditTierDetailView newCreditTierDetailView, BigDecimal CreditDetailLimit) {
-//  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
-// อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
-        log.info("newCreditTierDetailView.getFinalPriceSum : : {}", newCreditTierDetailView.getFinalPriceSum());
-
-        BigDecimal sumFinal = newCreditTierDetailView.getFinalPriceSum();
-        BigDecimal sumFinalPerMonth = Util.divide(Util.divide(sumFinal.add(BigDecimal.ONE), BigDecimal.valueOf(100)), BigDecimal.valueOf(12));
-        int tenor = newCreditTierDetailView.getTenor();
-        BigDecimal limit = CreditDetailLimit;
-        BigDecimal installmentSum = BigDecimal.ZERO;
-        log.info("sumFinal : {} , tenor : {} , limit : {} ", sumFinalPerMonth, tenor, limit);
-        installmentSum = Util.divide(Util.multiply(Util.multiply(sumFinalPerMonth, limit), Util.add(BigDecimal.ONE, sumFinal).pow(tenor)),
-                Util.subtract(Util.add(BigDecimal.ONE, sumFinalPerMonth).pow(tenor), BigDecimal.ONE));
-        log.info("installmentSum : {}", installmentSum);
-
-        return installmentSum;
-    }
-
     public void calWC(long workCaseId) { // todo: ncb && dbr && bizInfoSummary pls call me !!!!!!!!
         log.debug("calWC ::: workCaseId : {}", workCaseId);
         BigDecimal dayOfYear = BigDecimal.valueOf(365);
@@ -929,5 +915,15 @@ public class CreditFacProposeControl extends BusinessControl {
         } else {
             return b1;
         }
+    }
+
+    // Call COMSInterface
+    public AppraisalDataResult toCallComsInterface(final String jobId) {
+        log.info("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
+        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
+        if (appraisalDataResult != null) {
+            log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());
+        }
+        return appraisalDataResult;
     }
 }

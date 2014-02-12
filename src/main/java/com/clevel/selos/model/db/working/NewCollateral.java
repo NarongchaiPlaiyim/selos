@@ -24,6 +24,9 @@ public class NewCollateral implements Serializable {
     @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
     private int appraisalRequest;
 
+    @Column(name = "coms")
+    private int coms;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "appraisal_date")
     private Date appraisalDate;
@@ -239,6 +242,22 @@ public class NewCollateral implements Serializable {
         this.newCollateralCreditList = newCollateralCreditList;
     }
 
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -271,20 +290,12 @@ public class NewCollateral implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public BigDecimal getPremiumAmount() {
-        return premiumAmount;
+    public int getComs() {
+        return coms;
     }
 
-    public void setPremiumAmount(BigDecimal premiumAmount) {
-        this.premiumAmount = premiumAmount;
-    }
-
-    public WorkCase getWorkCase() {
-        return workCase;
-    }
-
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
+    public void setComs(int coms) {
+        this.coms = coms;
     }
 
     @Override
@@ -316,6 +327,4 @@ public class NewCollateral implements Serializable {
                 .append("workCase", workCase)
                 .toString();
     }
-
-
 }

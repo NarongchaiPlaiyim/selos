@@ -99,7 +99,7 @@ public class DBRControl extends BusinessControl {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
-        if(dbr == null){
+        if(dbr == null || dbr.getId() == 0){
             dbr = new DBR();
             BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
             if(bizInfoSummary != null){
@@ -238,17 +238,7 @@ public class DBRControl extends BusinessControl {
                 dbrView.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
             }
             List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workCaseId);
-//            BigDecimal totalMonthDebtBorrowerStart = BigDecimal.ZERO;
-//            BigDecimal totalMonthDebtBorrowerFinal = BigDecimal.ZERO;
-//            for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-//                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-//                if(ncbDetailView.getRefinanceFlag() == 2){
-//                    totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
-//                }
-//            }
-//            dbrView.setTotalMonthDebtBorrowerStart(totalMonthDebtBorrowerStart);
-//            dbrView.setTotalMonthDebtBorrowerFinal(totalMonthDebtBorrowerFinal);
-//            dbrView.setUpdateTotalDebtBorrower(true);
+
             DBR dbr =  calculateDBR(dbrView, workCase, ncbDetailViews);
             dbrdao.persist(dbr);
         }

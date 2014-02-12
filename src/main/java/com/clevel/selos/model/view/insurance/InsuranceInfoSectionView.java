@@ -1,33 +1,42 @@
 package com.clevel.selos.model.view.insurance;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
+import com.clevel.selos.model.view.NewCollateralHeadView;
 
 public class InsuranceInfoSectionView implements Serializable {
-    private InsuranceInfoHeadCollView headColl;
-    private InsuranceCompanyView insurance;
-
-    public InsuranceInfoSectionView() {
-        init();
+    private NewCollateralHeadView newCollateralHeadView = new NewCollateralHeadView();
+    
+    public String getTitleDeed() {
+        return this.newCollateralHeadView.getTitleDeed();
     }
 
-    private void init(){
-        headColl = new InsuranceInfoHeadCollView();
-        insurance = new InsuranceCompanyView();
+    public void setTitleDeed(String titleDeed) {
+    	this.newCollateralHeadView.setTitleDeed(titleDeed);
     }
 
-    public InsuranceInfoHeadCollView getHeadColl() {
-        return headColl;
+    public BigDecimal getExistingCredit() {
+        return this.newCollateralHeadView.getExistingCredit();
     }
 
-    public void setHeadColl(InsuranceInfoHeadCollView headColl) {
-        this.headColl = headColl;
+    public void setExistingCredit(BigDecimal existingCredit) {
+        this.newCollateralHeadView.setExistingCredit(existingCredit);
+    }
+    
+    public int getCompany() {
+        return this.newCollateralHeadView.getInsuranceCompany();
     }
 
-    public InsuranceCompanyView getInsurance() {
-        return insurance;
+    public void setCompany(int company) {
+        this.newCollateralHeadView.setInsuranceCompany(company);
     }
 
-    public void setInsurance(InsuranceCompanyView insurance) {
-        this.insurance = insurance;
-    }
+	public NewCollateralHeadView getNewCollateralHeadView() {
+		return newCollateralHeadView;
+	}
+
+	public void setNewCollateralHeadView(NewCollateralHeadView newCollateralHeadView) {
+		this.newCollateralHeadView = newCollateralHeadView;
+	}
 }

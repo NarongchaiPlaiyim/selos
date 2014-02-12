@@ -6,35 +6,38 @@
 
     <p:panel id="conditionDlgPanel" styleClass="panel-dialog">
         <h:form id="conditionDlgForm">
-            <table class="content_form">
+            <table class="content_form content_table_form">
                 <tr>
-                    <td class="title" style="width: 250px;">
+                    <td class="title" style="width: 40%">
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.loanType')}"/>
                     </td>
-                    <td style="width: 200px;">
+                    <td class="left" style="width: 60%">
                         <p:inputText styleClass="large"
                                      id="loanType"
                                      value="#{creditFacPropose.newConditionDetailView.loanType}"
-                                     required="#{not empty param[addConditionDlg.clientId]}"
-                                     style="width:200px;">
+                                     required="#{not empty param[addConditionDlg.clientId]}">
                         </p:inputText>
                     </td>
                 </tr>
+
                 <tr>
                     <td class="title">
                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.conditionDesc')}"/>
                     </td>
-                    <td>
-                        <p:inputTextarea cols="50"
-                                         rows="3"
-                                         id="conditionDesc"
+                    <td class="left">
+                        <p:inputTextarea id="conditionDesc"
+                                         rows="3" cols="50"
                                          value="#{creditFacPropose.newConditionDetailView.conditionDesc}"
                                          required="#{not empty param[addConditionDlg.clientId]}" >
                         </p:inputTextarea>
                     </td>
                 </tr>
+
                 <tr>
-                    <td colspan="2" class="center">
+                    <td colspan="2" style="height:28px;"></td>
+                </tr>
+                <tr>
+                    <td class="center" colspan="2">
                         <p:commandButton
                                 id="save"
                                 value="#{msg.get('app.credit.facility.propose.okButton')}"
@@ -44,13 +47,16 @@
                                 process=":conditionDlgForm"
                                 update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
                                 oncomplete="handleConditionInfoRequest(xhr, status, args)"/>
-
+                        <p:spacer width="10" height="0"/>
                         <p:commandButton
                                 value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                                 styleClass="small"
                                 onclick="PF('conditionDlg').hide()"
                                 update=":conditionDlgForm"/>
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:10px;"></td>
                 </tr>
             </table>
         </h:form>
