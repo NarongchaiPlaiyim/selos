@@ -261,7 +261,7 @@
                                 <p:selectOneMenu id="suggestDlg"
                                                  value="#{creditFacPropose.newCreditDetailView.suggestBasePrice.id}"
                                                  style="width: 50px;"
-                                                 disabled="false">
+                                                 disabled="#{creditFacPropose.cannotAddTier}">
                                     <f:selectItems value="#{creditFacPropose.baseRateList}"
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
@@ -281,7 +281,7 @@
                                              onkeypress="return onKeyPressMoney(event);"
                                              style="width: 50px;"
                                              styleClass="right"
-                                             disabled="false">
+                                             disabled="#{creditFacPropose.cannotAddTier}">
                                     <f:convertNumber pattern="##0.##"
                                                      minFractionDigits="2"
                                                      maxFractionDigits="2"
