@@ -34,9 +34,6 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal PCEAmount;
     private boolean reducePriceFlag;
     private boolean reduceFrontEndFee;
-    private BaseRate standardBasePrice;
-    private String standardPrice;
-    private BigDecimal standardInterest;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -90,10 +87,6 @@ public class NewCreditDetailView implements Serializable {
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
         this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-
-        this.standardPrice = "";
-        this.standardBasePrice = new BaseRate();
-        this.standardInterest = BigDecimal.ZERO;
         this.proposeType= ProposeType.P.type();
     }
 
@@ -241,14 +234,6 @@ public class NewCreditDetailView implements Serializable {
         this.reduceFrontEndFee = reduceFrontEndFee;
     }
 
-    public String getStandardPrice() {
-        return standardPrice;
-    }
-
-    public void setStandardPrice(String standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
     public BigDecimal getFrontEndFee() {
         return frontEndFee;
     }
@@ -311,22 +296,6 @@ public class NewCreditDetailView implements Serializable {
 
     public void setPurpose(BigDecimal purpose) {
         this.purpose = purpose;
-    }
-
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public BigDecimal getStandardInterest() {
-        return standardInterest;
-    }
-
-    public void setStandardInterest(BigDecimal standardInterest) {
-        this.standardInterest = standardInterest;
     }
 
     public int getApproved() {
@@ -440,9 +409,6 @@ public class NewCreditDetailView implements Serializable {
                 .append("PCEAmount", PCEAmount)
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
-                .append("standardBasePrice", standardBasePrice)
-                .append("standardPrice", standardPrice)
-                .append("standardInterest", standardInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)

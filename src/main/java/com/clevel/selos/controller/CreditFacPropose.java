@@ -103,20 +103,12 @@ public class CreditFacPropose implements Serializable {
     //for control Propose Credit
     private NewCreditDetailView newCreditDetailView;
     private NewCreditDetailView newCreditDetailSelected;
-    private NewCreditTierDetailView newCreditTierDetailView;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
     private int rowSpanNumber;
     private boolean modeEdit;
     private boolean cannotAddTier;
     private int seq;
     private Hashtable hashSeqCredit;
-    private BigDecimal suggestPrice;
-    private String suggestPriceLabel;
-    private BigDecimal standardPrice;
-    private String standardPriceLabel;
-    private BaseRate finalBaseRate;
-    private BigDecimal finalInterest;
-    private String finalPriceRate;
     private boolean modeEditReducePricing;
     private boolean modeEditReduceFront;
     private BigDecimal reducePrice;
@@ -160,6 +152,8 @@ public class CreditFacPropose implements Serializable {
     private NewConditionDetailView selectConditionItem;
 
     //for suggest
+    private BaseRate standardBasePriceDlg;
+    private BigDecimal standardInterestDlg;
     private BaseRate suggestBasePriceDlg;
     private BigDecimal suggestInterestDlg;
 
@@ -406,39 +400,33 @@ public class CreditFacPropose implements Serializable {
         potentialCollateralList = potentialCollateralDAO.findAll();
         baseRateList = baseRateDAO.findAll();
         cannotAddTier = false;
-        suggestPrice = BigDecimal.ZERO;
-        standardPrice = BigDecimal.ZERO;
-        finalBaseRate = new BaseRate();
-        finalInterest = BigDecimal.ZERO;
-        suggestPriceLabel = "";
-        standardPriceLabel = "";
-        finalPriceRate = "";
+
         suggestBasePriceDlg = new BaseRate();
         suggestInterestDlg = BigDecimal.ZERO;
+        standardBasePriceDlg = new BaseRate();
+        standardInterestDlg = BigDecimal.ZERO;
     }
 
     //Call  BRMS to get data Propose Credit Info
     public void onRetrieveStandardPrice() {
         BaseRate baseRate = baseRateDAO.findById(1);     //test
         NewCreditDetailView creditDetailRetrieve = new NewCreditDetailView();
-        creditDetailRetrieve.setStandardBasePrice(baseRate);
-        creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
+//        creditDetailRetrieve.setStandardBasePrice(baseRate);
+//        creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
     }
 
     public void onRetrievePricingFee() {
         // test create data from retrieving
-        NewCreditDetailView creditDetailRetrieve = new NewCreditDetailView();
-        BaseRate baseRate = baseRateDAO.findById(1);
-        BigDecimal installment = BigDecimal.ZERO;
-        creditDetailRetrieve.setStandardBasePrice(baseRate);
-        creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
+        BaseRate baseRate = baseRateDAO.findById(1);                            // for test only
+        BigDecimal testValue = BigDecimal.valueOf(-1.75);                       // for test only
+        String testLabel;                                                       // for test only
 
         // ************************************************* fix ****************************************************//
 
-        if (creditDetailRetrieve.getStandardInterest().doubleValue() < 0) {
-            creditDetailRetrieve.setStandardPrice(creditDetailRetrieve.getStandardBasePrice().getName() + " " + creditDetailRetrieve.getStandardInterest());
+        if (testValue.compareTo(BigDecimal.ZERO) < 0) {
+            testLabel = baseRate.getName() + " " + testValue;
         } else {
-            creditDetailRetrieve.setStandardPrice(creditDetailRetrieve.getStandardBasePrice().getName() + " + " + creditDetailRetrieve.getStandardInterest());
+            testLabel = baseRate.getName() + " + " + testValue;
         }
 
 //        BigDecimal sumStandard = baseRate.getValue().add(creditDetailRetrieve.getStandardInterest());
@@ -450,32 +438,29 @@ public class CreditFacPropose implements Serializable {
 
         //****** tier test create ********//
         newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-        newCreditTierDetailView = new NewCreditTierDetailView();
-//        newCreditTierDetailView.setStandardBasePrice(baseRate);
-//        newCreditTierDetailView.setStandardPrice(creditDetailRetrieve.getStandardPrice());
-//        newCreditTierDetailView.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-//        newCreditTierDetailView.setStandardPriceSum(sumStandard);
-//        newCreditTierDetailView.setSuggestBasePrice(baseRate);
-//        newCreditTierDetailView.setSuggestPrice(creditDetailRetrieve.getStandardPrice());
-//        newCreditTierDetailView.setSuggestInterest(creditDetailRetrieve.getStandardInterest());
-//        newCreditTierDetailView.setSuggestPriceSum(sumSuggest);
+
+        NewCreditTierDetailView newCreditTierDetailView = new NewCreditTierDetailView();
+
         newCreditTierDetailView.setFinalBasePrice(baseRate);
-        newCreditTierDetailView.setFinalPriceRate(creditDetailRetrieve.getStandardPrice());
-        newCreditTierDetailView.setFinalInterest(creditDetailRetrieve.getStandardInterest());
-        newCreditTierDetailView.setCanEdit(false);
+        newCreditTierDetailView.setFinalInterest(testValue);
+        newCreditTierDetailView.setFinalPriceLabel(testLabel);
+
         newCreditTierDetailView.setSuggestBasePrice(baseRate);
-        newCreditTierDetailView.setSuggestPrice(creditDetailRetrieve.getStandardPrice());
-        newCreditTierDetailView.setSuggestInterest(creditDetailRetrieve.getStandardInterest());
+        newCreditTierDetailView.setSuggestInterest(testValue);
+        newCreditTierDetailView.setSuggestPriceLabel(testLabel);
+
+        newCreditTierDetailView.setStandardBasePrice(baseRate);
+        newCreditTierDetailView.setStandardInterest(testValue);
+        newCreditTierDetailView.setStandardPriceLabel(testLabel);
+
+        newCreditTierDetailView.setCanEdit(false);
+
         newCreditTierDetailViewList.add(newCreditTierDetailView);
 
         for (NewCreditDetailView proposeCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
             if(proposeCreditDetail.getRequestType() == 2) { // 1 = change , 2 = new ( if 2 can't Retrieve Pricing Fee
                 proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
                 log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
-                proposeCreditDetail.setStandardBasePrice(baseRate);
-                proposeCreditDetail.setStandardPrice(creditDetailRetrieve.getStandardPrice());
-                proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-                log.info("proposeCreditDetail.getInstallment ::  {}", proposeCreditDetail.getInstallment());
             }
         }
 
@@ -525,9 +510,10 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetail.setInstallment(sumOfInstallment);
         }
     }
-   public void onChangeJobId(){
+
+    public void onChangeJobId(){
        flagButtonCollateral = true;
-   }
+    }
 
     public void onCallRetrieveAppraisalReportInfo() {
         String jobID = newCollateralView.getJobID();
@@ -690,9 +676,16 @@ public class CreditFacPropose implements Serializable {
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         calculateInstallment(newCreditDetailView);
 
-        suggestInterestDlg = newCreditDetailView.getStandardInterest();
-        suggestBasePriceDlg = newCreditDetailView.getStandardBasePrice();
-        onChangeSuggestValue();
+        if(newCreditDetailView.getRequestType() == 2){ // 1 = change , 2 = new
+            suggestInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
+            suggestBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
+        } else {
+            suggestInterestDlg = BigDecimal.ZERO;
+            suggestBasePriceDlg = new BaseRate();
+            standardInterestDlg = BigDecimal.ZERO;
+            standardBasePriceDlg = new BaseRate();
+        }
+
 
         /*if (rowIndex < newCreditFacilityView.getNewCreditDetailViewList().size()) {
             newCreditDetailView = new NewCreditDetailView();
@@ -746,8 +739,6 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setPCEAmount(newCreditDetailView.getPCEAmount());
                 creditDetailAdd.setReduceFrontEndFee(newCreditDetailView.isReduceFrontEndFee());
                 creditDetailAdd.setReducePriceFlag(newCreditDetailView.isReducePriceFlag());
-                creditDetailAdd.setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
-                creditDetailAdd.setStandardInterest(newCreditDetailView.getStandardInterest());
                 creditDetailAdd.setFrontEndFee(newCreditDetailView.getFrontEndFee());
                 creditDetailAdd.setLoanPurpose(loanPurpose);
                 creditDetailAdd.setRemark(newCreditDetailView.getRemark());
@@ -776,8 +767,6 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setPCEAmount(newCreditDetailView.getPCEAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setReducePriceFlag(newCreditDetailView.isReducePriceFlag());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setReduceFrontEndFee(newCreditDetailView.isReduceFrontEndFee());
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setStandardBasePrice(newCreditDetailView.getStandardBasePrice());
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setStandardInterest(newCreditDetailView.getStandardInterest());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setFrontEndFee(newCreditDetailView.getFrontEndFee());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setLoanPurpose(loanPurpose);
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setRemark(newCreditDetailView.getRemark());
@@ -841,73 +830,67 @@ public class CreditFacPropose implements Serializable {
     //  Start Tier Dialog //
     public void onAddTierInfo() {
         log.info("onAddTierInfo ::: rowIndex of proposeCredit to edit :: {}", rowIndex);
-        NewCreditTierDetailView creditTierDetailAdd = new NewCreditTierDetailView();
-        BaseRate finalBase = baseRateDAO.findById(finalBaseRate.getId());
+        BaseRate finalBaseRate;
+        BigDecimal finalInterest;
+        String suggestPriceLabel;
+        String standardPriceLabel;
+        String finalPriceLabel;
+
+        BaseRate standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
         BaseRate suggestBase = baseRateDAO.findById(suggestBasePriceDlg.getId());
 
-        creditTierDetailAdd.setFinalBasePrice(finalBase);
-        creditTierDetailAdd.setFinalInterest(finalInterest);
-        creditTierDetailAdd.setFinalPriceRate(finalPriceRate);
-
-        creditTierDetailAdd.setSuggestPrice(suggestPriceLabel);
-        creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
-        creditTierDetailAdd.setSuggestBasePrice(suggestBase);
-
-        creditTierDetailAdd.setStandardPrice(standardPriceLabel);
-
-        creditTierDetailAdd.setCanEdit(true);
-//        newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
-        newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
-    }
-
-    public void onChangeSuggestValue() {
-        log.info("onChangeSuggestValue ::{}", rowIndex);
-        suggestPrice = BigDecimal.ZERO;
-        standardPrice = BigDecimal.ZERO;
-        finalBaseRate = new BaseRate();
-        finalInterest = BigDecimal.ZERO;
-        suggestPriceLabel = "";
-        standardPriceLabel = "";
-        finalPriceRate = "";
-
-        BaseRate baseRate1 = baseRateDAO.findById(newCreditDetailView.getStandardBasePrice().getId());
-        BaseRate baseRate2 = baseRateDAO.findById(suggestBasePriceDlg.getId());
-
-        suggestPrice = baseRate2.getValue().add(suggestInterestDlg);
-
+        BigDecimal suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
         if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
-            suggestPriceLabel = baseRate2.getName() + " " + suggestInterestDlg;
+            suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
         } else {
-            suggestPriceLabel = baseRate2.getName() + " + " + suggestInterestDlg;
+            suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
         }
 
-        standardPrice = baseRate1.getValue().add(newCreditDetailView.getStandardInterest());
-        if (newCreditDetailView.getStandardInterest().doubleValue() < 0) {
-            standardPriceLabel = baseRate1.getName() + " " + newCreditDetailView.getStandardInterest();
+        BigDecimal standardPrice = standardBase.getValue().add(standardInterestDlg);
+        if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
+            standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
         } else {
-            standardPriceLabel = baseRate1.getName() + " + " + newCreditDetailView.getStandardInterest();
+            standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
         }
 
-        log.info("baseRate1 getValue :: {}", baseRate1.getValue());
-        log.info("getSuggestInterest :: {}", suggestInterestDlg);
-        log.info("baseRate2 getValue :: {}", baseRate2.getValue());
-        log.info("getStandardInterest :: {}", newCreditDetailView.getStandardInterest());
+        log.info("standardBase getValue :: {}", standardBase.getValue());
+        log.info("SuggestInterest :: {}", suggestInterestDlg);
+        log.info("suggestBase getValue :: {}", suggestBase.getValue());
+        log.info("StandardInterest :: {}", standardInterestDlg);
         log.info("suggestPrice :: {}", suggestPrice);
         log.info("standardPrice :: {}", standardPrice);
 
         if (standardPrice.compareTo(suggestPrice) > 0) {
-            finalBaseRate = baseRate1;
-            finalInterest = newCreditDetailView.getStandardInterest();
-            finalPriceRate = standardPriceLabel;
+            finalBaseRate = standardBase;
+            finalInterest = standardInterestDlg;
+            finalPriceLabel = standardPriceLabel;
         } else if (suggestPrice.compareTo(standardPrice) > 0) {
-            finalBaseRate = baseRate2;
+            finalBaseRate = suggestBase;
             finalInterest = suggestInterestDlg;
-            finalPriceRate = suggestPriceLabel;
+            finalPriceLabel = suggestPriceLabel;
         } else { // if equal
-            finalBaseRate = baseRate1;
-            finalInterest = newCreditDetailView.getStandardInterest();
-            finalPriceRate = standardPriceLabel;
+            finalBaseRate = standardBase;
+            finalInterest = standardInterestDlg;
+            finalPriceLabel = standardPriceLabel;
         }
+
+        NewCreditTierDetailView creditTierDetailAdd = new NewCreditTierDetailView();
+        BaseRate finalBase = baseRateDAO.findById(finalBaseRate.getId());
+
+        creditTierDetailAdd.setFinalPriceLabel(finalPriceLabel);
+        creditTierDetailAdd.setFinalInterest(finalInterest);
+        creditTierDetailAdd.setFinalBasePrice(finalBase);
+
+        creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
+        creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
+        creditTierDetailAdd.setSuggestBasePrice(suggestBase);
+
+        creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
+        creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
+        creditTierDetailAdd.setSuggestBasePrice(standardBase);
+
+        creditTierDetailAdd.setCanEdit(true);
+        newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);
     }
 
     public void onDeleteProposeTierInfo(int row) {
@@ -1743,14 +1726,6 @@ public class CreditFacPropose implements Serializable {
         this.newCreditDetailSelected = newCreditDetailSelected;
     }
 
-    public NewCreditTierDetailView getNewCreditTierDetailView() {
-        return newCreditTierDetailView;
-    }
-
-    public void setNewCreditTierDetailView(NewCreditTierDetailView newCreditTierDetailView) {
-        this.newCreditTierDetailView = newCreditTierDetailView;
-    }
-
     public int getRowIndex() {
         return rowIndex;
     }
@@ -2021,6 +1996,22 @@ public class CreditFacPropose implements Serializable {
 
     public void setSuggestInterestDlg(BigDecimal suggestInterestDlg) {
         this.suggestInterestDlg = suggestInterestDlg;
+    }
+
+    public BaseRate getStandardBasePriceDlg() {
+        return standardBasePriceDlg;
+    }
+
+    public void setStandardBasePriceDlg(BaseRate standardBasePriceDlg) {
+        this.standardBasePriceDlg = standardBasePriceDlg;
+    }
+
+    public BigDecimal getStandardInterestDlg() {
+        return standardInterestDlg;
+    }
+
+    public void setStandardInterestDlg(BigDecimal standardInterestDlg) {
+        this.standardInterestDlg = standardInterestDlg;
     }
 }
 

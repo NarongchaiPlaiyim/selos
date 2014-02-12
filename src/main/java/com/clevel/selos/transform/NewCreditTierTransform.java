@@ -64,13 +64,13 @@ public class NewCreditTierTransform extends Transform {
             newFeeDetailView.setNo(newCreditTierDetail.getNo());
             newFeeDetailView.setFinalBasePrice(newCreditTierDetail.getFinalBasePrice());
             newFeeDetailView.setFinalInterest(newCreditTierDetail.getFinalInterest());
-            newFeeDetailView.setFinalPriceRate(toGetPricing(newCreditTierDetail.getFinalBasePrice(),newCreditTierDetail.getFinalInterest()));
+            newFeeDetailView.setFinalPriceLabel(toGetPricing(newCreditTierDetail.getFinalBasePrice(),newCreditTierDetail.getFinalInterest()));
             newFeeDetailView.setSuggestBasePrice(newCreditTierDetail.getSuggestBasePrice());
             newFeeDetailView.setSuggestInterest(newCreditTierDetail.getSuggestInterest());
-            newFeeDetailView.setSuggestPrice(toGetPricing(newCreditTierDetail.getSuggestBasePrice(),newCreditTierDetail.getSuggestInterest()));
+            newFeeDetailView.setSuggestPriceLabel(toGetPricing(newCreditTierDetail.getSuggestBasePrice(),newCreditTierDetail.getSuggestInterest()));
             newFeeDetailView.setStandardBasePrice(newCreditTierDetail.getStandardBasePrice());
             newFeeDetailView.setStandardInterest(newCreditTierDetail.getStandardInterest());
-            newFeeDetailView.setStandardPrice(toGetPricing(newCreditTierDetail.getStandardBasePrice(),newCreditTierDetail.getStandardInterest()));
+            newFeeDetailView.setStandardPriceLabel(toGetPricing(newCreditTierDetail.getStandardBasePrice(),newCreditTierDetail.getStandardInterest()));
             newFeeDetailView.setInstallment(newCreditTierDetail.getInstallment());
             newFeeDetailView.setTenor(newCreditTierDetail.getTenor());
             newCreditTierDetailViewList.add(newFeeDetailView);

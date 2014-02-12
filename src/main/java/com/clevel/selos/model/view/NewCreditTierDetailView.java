@@ -15,16 +15,16 @@ public class NewCreditTierDetailView implements Serializable {
     private int no;
 
     private BaseRate finalBasePrice;
-    private String finalPriceRate;
     private BigDecimal finalInterest;
+    private String finalPriceLabel;
 
     private BaseRate standardBasePrice;
-    private String standardPrice;
     private BigDecimal standardInterest;
+    private String standardPriceLabel;
 
     private BaseRate suggestBasePrice;
-    private String suggestPrice;
     private BigDecimal suggestInterest;
+    private String suggestPriceLabel;
 
     private BigDecimal installment;
     private int tenor;
@@ -42,9 +42,9 @@ public class NewCreditTierDetailView implements Serializable {
         this.tenor = 0;
         this.installment = BigDecimal.ZERO;
 
-        this.standardPrice = "";
-        this.suggestPrice = "";
-        this.finalPriceRate = "";
+        this.standardPriceLabel = "";
+        this.suggestPriceLabel = "";
+        this.finalPriceLabel = "";
 
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
@@ -79,14 +79,6 @@ public class NewCreditTierDetailView implements Serializable {
         this.finalBasePrice = finalBasePrice;
     }
 
-    public String getFinalPriceRate() {
-        return finalPriceRate;
-    }
-
-    public void setFinalPriceRate(String finalPriceRate) {
-        this.finalPriceRate = finalPriceRate;
-    }
-
     public BigDecimal getFinalInterest() {
         return finalInterest;
     }
@@ -103,14 +95,6 @@ public class NewCreditTierDetailView implements Serializable {
         this.standardBasePrice = standardBasePrice;
     }
 
-    public String getStandardPrice() {
-        return standardPrice;
-    }
-
-    public void setStandardPrice(String standardPrice) {
-        this.standardPrice = standardPrice;
-    }
-
     public BigDecimal getStandardInterest() {
         return standardInterest;
     }
@@ -125,14 +109,6 @@ public class NewCreditTierDetailView implements Serializable {
 
     public void setSuggestBasePrice(BaseRate suggestBasePrice) {
         this.suggestBasePrice = suggestBasePrice;
-    }
-
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
     }
 
     public BigDecimal getSuggestInterest() {
@@ -199,20 +175,44 @@ public class NewCreditTierDetailView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public String getFinalPriceLabel() {
+        return finalPriceLabel;
+    }
+
+    public void setFinalPriceLabel(String finalPriceLabel) {
+        this.finalPriceLabel = finalPriceLabel;
+    }
+
+    public String getStandardPriceLabel() {
+        return standardPriceLabel;
+    }
+
+    public void setStandardPriceLabel(String standardPriceLabel) {
+        this.standardPriceLabel = standardPriceLabel;
+    }
+
+    public String getSuggestPriceLabel() {
+        return suggestPriceLabel;
+    }
+
+    public void setSuggestPriceLabel(String suggestPriceLabel) {
+        this.suggestPriceLabel = suggestPriceLabel;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("no", no).
                 append("finalBasePrice", finalBasePrice).
-                append("finalPriceRate", finalPriceRate).
                 append("finalInterest", finalInterest).
+                append("finalPriceLabel", finalPriceLabel).
                 append("standardBasePrice", standardBasePrice).
-                append("standardPrice", standardPrice).
                 append("standardInterest", standardInterest).
+                append("standardPriceLabel", standardPriceLabel).
                 append("suggestBasePrice", suggestBasePrice).
-                append("suggestPrice", suggestPrice).
                 append("suggestInterest", suggestInterest).
+                append("suggestPriceLabel", suggestPriceLabel).
                 append("installment", installment).
                 append("tenor", tenor).
                 append("canEdit", canEdit).
