@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class ConvertImp implements ConvertInf, Serializable {
+public class Convert implements Serializable {
 
     private ApplicationTypeLevel applicationTypeLevel = null;
     private List<BorrowerTypeLevel> borrowerTypeLevelList;
@@ -37,10 +37,9 @@ public class ConvertImp implements ConvertInf, Serializable {
     Logger log;
 
     @Inject
-    public ConvertImp() {
+    public Convert() {
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(PreScreenRequest : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest request = null;
@@ -481,7 +480,6 @@ public class ConvertImp implements ConvertInf, Serializable {
         }
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(FullApplication : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest request = null;
@@ -1149,7 +1147,6 @@ public class ConvertImp implements ConvertInf, Serializable {
         }
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceRequest convertInputModelToRequestModel(DocCustomerRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(DocCustomerRequest : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceRequest request = null;
@@ -1340,7 +1337,6 @@ public class ConvertImp implements ConvertInf, Serializable {
 
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceRequest convertInputModelToRequestModel(DocAppraisalRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(DocAppraisalRequest : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceRequest request = null;
@@ -1456,7 +1452,6 @@ public class ConvertImp implements ConvertInf, Serializable {
         }
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceRequest convertInputModelToRequestModel(StandardPricingIntRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(StandardPricingIntRequest : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceRequest request = null;
@@ -1625,7 +1620,6 @@ public class ConvertImp implements ConvertInf, Serializable {
         }
     }
 
-    @Override
     public com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(StandardPricingFeeRequest : {})", inputModel.toString());
         com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest request = null;
