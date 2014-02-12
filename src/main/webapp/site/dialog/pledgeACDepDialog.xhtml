@@ -1,0 +1,77 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+<h:form id="pledgeACDepDlgFrm">   
+    <p:panel styleClass="panel-dialog" rendered="#{not empty pledgeDetail.pledgeACDepView}">
+    	<p:messages/>
+        <table class="content_form">
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.pledgeDetail.pledgeAC.dialog.dep')}"
+                		for='dep'
+                		/>
+                </td>
+                <td>
+                	<p:inputText id='dep'
+                	     value="#{pledgeDetail.pledgeACDepView.dep}"
+                	     required="true" requiredMessage="#{msg.get('app.pledgeDetail.dep.validate')}"
+                	     />
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                	<p:outputLabel value="#{msg.get('app.pledgeDetail.pledgeAC.dialog.holdAmount')}"
+                		for='holdamount'
+                		/>
+                </td>
+                <td>
+                	<p:inputText id='holdamount' value="#{pledgeDetail.pledgeACDepView.holdAmount}"
+                		required="true" requiredMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
+                		converterMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
+                		validatorMessage="#{msg.get('app.pledgeDetail.holdAmount.validate')}"
+                	>
+                		<f:convertNumber pattern="#,##0.00"/>
+                		<f:validateDoubleRange minimum="0"/>
+                	</p:inputText>
+				</td>   
+			</tr>                 
+            <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                         id="addPledgeACDepBtn"
+                         value="#{msg.get('app.button.ok')}"
+                         actionListener="#{pledgeDetail.onAddPledgeACDep()}"
+                         update=":frmMain:pledgeac_tbl,:pledgeACDepDlgFrm,:frmMain:number_of_pledge"
+                         oncomplete="handleDialogRequest(xhr, status, args,'p_pledgeACDepDlg')"
+                         styleClass="small"
+                         rendered="#{pledgeDetail.addDialog}"/>
+                     <p:commandButton
+                         id="updPledgeACDepBtn"
+                         value="#{msg.get('app.button.ok')}"
+                         actionListener="#{pledgeDetail.onUpdatePledgeACDep()}"
+                         update=":frmMain:pledgeac_tbl,:pledgeACDepDlgFrm,:frmMain:number_of_pledge"
+                         oncomplete="handleDialogRequest(xhr, status, args,'p_pledgeACDepDlg')"
+                         styleClass="small"
+                         rendered="#{not pledgeDetail.addDialog}"/>
+                    <p:commandButton
+                    	type='button' styleClass="small" 
+                    	value="#{msg.get('app.button.cancel')}" onclick="p_pledgeACDepDlg.hide()"/>
+                    
+                </td>
+            </tr>
+        </table>
+	</p:panel>
+	<p:blockUI block="pledgeACDepDlgFrm" trigger="addPledgeACDepBtn,updPledgeACDepBtn">
+	    LOADING<br />
+	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+	</p:blockUI>
+ </h:form>
+</ui:composition>

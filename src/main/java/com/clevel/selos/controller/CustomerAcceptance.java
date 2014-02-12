@@ -64,6 +64,7 @@ public class CustomerAcceptance implements Serializable {
 	private ContactRecordDetailView contactRecord;
 	private int deletedRowId;
 	private List<Reason> reasons;
+	private boolean addDialog;
 	
 	public CustomerAcceptance() {
 	}
@@ -121,6 +122,9 @@ public class CustomerAcceptance implements Serializable {
 	public TCGInfoView getTcgInfoView() {
 		return tcgInfoView;
 	}
+	public boolean isAddDialog() {
+		return addDialog;
+	}
 	
 	/*
 	 * Action
@@ -174,12 +178,14 @@ public class CustomerAcceptance implements Serializable {
 		if (reasons == null) {
 			reasons = customerAcceptanceControl.getContactRecordReasons();
 		}
+		addDialog = true;
 	}
 	public void onOpenUpdateContactRecordDialog() {
 		log.info("Open Update Contact Record Dialog");
 		if (reasons == null) {
 			reasons = customerAcceptanceControl.getContactRecordReasons();
 		}
+		addDialog = false;
 	}
 	public void onAddContactRecord() {
 		log.info("Add Contact Record Dialog");

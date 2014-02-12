@@ -30,6 +30,16 @@ public class DistrictDAO extends GenericDAO<District, Integer> {
         log.debug("getListByProvince. (result size: {})", districts.size());
         return districts;
     }
+    @SuppressWarnings("unchecked")
+    public List<District> getListByProvince(int provinceId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("province.code", provinceId));
+        criteria.add(Restrictions.eq("active",1));
+        criteria.addOrder(Order.asc("name"));
+        List<District> districts = criteria.list();
+        return districts;
+    }
+    
 
     public District getByNameAndProvince(String districtName, Province province) {
         log.debug("getByNameAndProvince. (districtName: {}, province: {})", districtName, province);
