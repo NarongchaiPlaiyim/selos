@@ -27,6 +27,7 @@ public class NewCreditTierTransform extends Transform {
             newCreditTierDetail = new NewCreditTierDetail();
 
             if (newCreditTierDetail.getId() != 0) {
+                //newCreditTierDetail.setId(newCreditTierDetailView.getId());
                 newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
                 newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -57,6 +58,8 @@ public class NewCreditTierTransform extends Transform {
 
         for (NewCreditTierDetail newCreditTierDetail : newCreditTierDetailList) {
             newFeeDetailView = new NewCreditTierDetailView();
+
+            newFeeDetailView.setId(newCreditTierDetail.getId());
             newFeeDetailView.setCreateDate(newCreditTierDetail.getCreateDate());
             newFeeDetailView.setCreateBy(newCreditTierDetail.getCreateBy());
             newFeeDetailView.setModifyDate(newCreditTierDetail.getModifyDate());
@@ -82,11 +85,12 @@ public class NewCreditTierTransform extends Transform {
     public String toGetPricing(BaseRate baseRate ,BigDecimal price){
         String priceToShow = "";
 
-        if (price.doubleValue() < 0)
-        {
-            priceToShow = baseRate.getName() + " " + price;
-        }else{
-            priceToShow = baseRate.getName() + " + " + price;
+        if(price != null){
+            if (price.doubleValue() < 0) {
+                priceToShow = baseRate.getName() + " " + price;
+            } else {
+                priceToShow = baseRate.getName() + " + " + price;
+            }
         }
 
         return priceToShow;

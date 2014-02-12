@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.BankStmtSummaryView;

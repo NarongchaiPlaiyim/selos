@@ -8,6 +8,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.DBRMethod;
 import com.clevel.selos.model.ExposureMethod;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.*;
@@ -56,6 +57,8 @@ public class CreditFacProposeControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     NewCreditFacilityDAO newCreditFacilityDAO;
+    @Inject
+    NewCollateralCreditDAO newCollateralCreditDAO;
     @Inject
     NewFeeCreditDAO newFeeCreditDAO;
     @Inject
@@ -109,6 +112,8 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
     @Inject
+    NewCollateralSubOwnerDAO newCollateralSubOwnerDAO;
+    @Inject
     NewCollateralCreditTransform newCollateralCreditTransform;
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
@@ -131,63 +136,68 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public NewCreditFacilityView findNewCreditFacilityByWorkCase(Long workCaseId) {
         NewCreditFacilityView newCreditFacilityView = null;
-        log.info("findNewCreditFacilityByWorkCase start ::::");
+        log.debug("findNewCreditFacilityByWorkCase start ::::");
         try {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if (workCase != null) {
                 NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-                log.info("find new creditFacility{}", newCreditFacility.getId());
+                log.debug("find new creditFacility{}", newCreditFacility.getId());
                 if (newCreditFacility != null) {
                     newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
                     List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
                     if (newFeeDetailList.size() > 0) {
-                        log.info("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
+                        log.debug("newCreditFacility.getNewFeeDetailList() :: {}", newCreditFacility.getNewFeeDetailList());
                         List<NewFeeDetailView> newFeeDetailViewList = newFeeDetailTransform.transformToView(newFeeDetailList);
+                        log.debug("newFeeDetailViewList : {}", newFeeDetailViewList);
                         newCreditFacilityView.setNewFeeDetailViewList(newFeeDetailViewList);
                     }
 
                     List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
                     if (newCreditList.size() > 0) {
-                        log.info("newCreditFacility.getNewCreditDetailList() :; {}", newCreditFacility.getNewCreditDetailList().size());
+                        log.debug("newCreditFacility.getNewCreditDetailList() :: {}", newCreditFacility.getNewCreditDetailList().size());
                         List<NewCreditDetailView> newCreditDetailViewList = newCreditDetailTransform.transformToView(newCreditList);
+                        log.debug("newCreditDetailViewList : {}", newCreditDetailViewList);
                         newCreditFacilityView.setNewCreditDetailViewList(newCreditDetailViewList);
                     }
 
                     List<NewCollateral> newCollateralDetailList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
                     if (newCollateralDetailList.size() > 0) {
-                        log.info("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
+                        log.debug("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
                         List<NewCollateralView> newCollateralViewList = newCollateralTransform.transformsCollateralToView(newCollateralDetailList);
+                        log.debug("newCollateralViewList : {}", newCollateralViewList);
                         newCreditFacilityView.setNewCollateralViewList(newCollateralViewList);
                     }
 
                     List<NewGuarantorDetail> newGuarantorDetails = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
                     if (newGuarantorDetails.size() > 0) {
-                        log.info("newGuarantorDetails:: {}", newGuarantorDetails.size());
+                        log.debug("newGuarantorDetails:: {}", newGuarantorDetails.size());
                         List<NewGuarantorDetailView> newGuarantorDetailViewList = newGuarantorDetailTransform.transformToView(newGuarantorDetails);
+                        log.debug("newGuarantorDetailViewList : {}", newGuarantorDetailViewList);
                         newCreditFacilityView.setNewGuarantorDetailViewList(newGuarantorDetailViewList);
                     }
 
                     List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.findByNewCreditFacility(newCreditFacility);
                     if (newConditionDetailList.size() > 0) {
-                        log.info("newConditionDetailList() :: {}", newConditionDetailList.size());
+                        log.debug("newConditionDetailList() :: {}", newConditionDetailList.size());
                         List<NewConditionDetailView> newConditionDetailViewList = newConditionDetailTransform.transformToView(newConditionDetailList);
+                        log.debug("newConditionDetailViewList : {}", newConditionDetailViewList);
                         newCreditFacilityView.setNewConditionDetailViewList(newConditionDetailViewList);
                     }
                 }
             }
-        } catch (Exception e) {
-            log.error("findNewCreditFacilityByWorkCase  error ::: {}", e.getMessage());
+        } catch (Exception ex) {
+            log.error("exception while load data in page {}", ex);
         } finally {
-            log.info("findNewCreditFacilityByWorkCase end");
+            log.debug("findNewCreditFacilityByWorkCase end");
         }
 
         return newCreditFacilityView;
     }
 
     public void onSaveNewCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId) {
-        log.info("onSaveNewCreditFacility begin");
-        log.info("workCaseId {} ", workCaseId);
+        log.debug("onSaveNewCreditFacility begin");
+        log.debug("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = getCurrentUser();
         Date createDate = DateTime.now().toDate();
@@ -195,64 +205,64 @@ public class CreditFacProposeControl extends BusinessControl {
 
         NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, user);
         newCreditFacilityDAO.persist(newCreditFacility);
-        log.info("persist :: creditFacilityPropose...");
+        log.debug("persist :: creditFacilityPropose...");
 
         onDeleteDetailOfNewCreditFacility(newCreditFacility);
 
         if (newCreditFacilityView.getNewFeeDetailViewList().size() > 0) {
-            log.info("newCreditFacilityView.getNewFeeDetailViewList().size() ::  {}", newCreditFacilityView.getNewFeeDetailViewList().size());
+            log.debug("newCreditFacilityView.getNewFeeDetailViewList().size() ::  {}", newCreditFacilityView.getNewFeeDetailViewList().size());
             List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(), newCreditFacility, user);
             newFeeCreditDAO.persist(newFeeDetailList);
-            log.info("persist :: newFeeDetailList...");
+            log.debug("persist :: newFeeDetailList...");
         }
 
         if (newCreditFacilityView.getNewConditionDetailViewList().size() > 0) {
-            log.info("newCreditFacilityView.getNewConditionDetailViewList().size() :: {}", newCreditFacilityView.getNewConditionDetailViewList().size());
+            log.debug("newCreditFacilityView.getNewConditionDetailViewList().size() :: {}", newCreditFacilityView.getNewConditionDetailViewList().size());
             List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, user);
             newConditionDetailDAO.persist(newConditionDetailList);
-            log.info("persist :: newConditionDetail ...");
+            log.debug("persist :: newConditionDetail ...");
         }
 
         List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, user, workCase);
         newCreditDetailDAO.persist(newCreditDetailList);
-        log.info("persist newCreditDetailList...");
+        log.debug("persist newCreditDetailList...");
         onDeleteDetailOfNewCreditDetail(newCreditDetailList);
 
         for (int i = 0; i < newCreditDetailList.size(); i++) {
-            log.info(" newCreditDetailList  is " + i);
+            log.debug(" newCreditDetailList  is " + i);
             NewCreditDetail newCreditDetail = newCreditDetailList.get(i);
             NewCreditDetailView newCreditDetailView = newCreditFacilityView.getNewCreditDetailViewList().get(i);
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList(), newCreditDetail, user);
             newCreditTierDetailDAO.persist(newCreditTierDetailList);
-            log.info("persist newCreditTierDetailList...{}", newCreditTierDetailList.size());
+            log.debug("persist newCreditTierDetailList...{}", newCreditTierDetailList.size());
         }
 
         if (newCreditFacilityView.getNewCollateralViewList() != null) {
             List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, user, workCase);
             newCollateralDetailDAO.persist(newCollateralList);
-            log.info("persist newCollateralDetailList...");
+            log.debug("persist newCollateralDetailList...");
 
             onDeleteDetailOfNewCollateral(newCollateralList);
 
             for (int i = 0; i < newCollateralList.size(); i++) {
-                log.info(" newCollateralDetailList  is " + i);
+                log.debug(" newCollateralDetailList  is " + i);
                 NewCollateral newCollateralDetail = newCollateralList.get(i);
                 NewCollateralView newCollateralView = newCreditFacilityView.getNewCollateralViewList().get(i);
 
 //                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
                 List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
                 newCollateralRelationDAO.persist(newCollateralCreditList);
-                log.info("persist newCollateralCreditList...");
+                log.debug("persist newCollateralCreditList...");
 
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
                     NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
                     newCollateralHeadDetailDAO.persist(newCollateralHeadDetail);
-                    log.info("persist newCollateralHeadDetail...{}", newCollateralHeadDetail.getId());
+                    log.debug("persist newCollateralHeadDetail...{}", newCollateralHeadDetail.getId());
 
                     for (NewCollateralSubView newCollateralSubView : newCollateralHeadView.getNewCollateralSubViewList()) {
                         NewCollateralSub newCollateralSubDetail = newCollateralTransform.transformCollateralSubToModel(newCollateralSubView, newCollateralHeadDetail, user);
                         newCollateralSubDetailDAO.persist(newCollateralSubDetail);
-                        log.info("persist newCollateralSubDetail...{}", newCollateralSubDetail.getId());
+                        log.debug("persist newCollateralSubDetail...{}", newCollateralSubDetail.getId());
                         onDeleteDetailOfNewCollateralSub(newCollateralSubDetail);
 
                         for (NewCollateralSubView newSubCollateralView : newCollateralHeadView.getNewCollateralSubViewList()) {
@@ -267,7 +277,7 @@ public class CreditFacProposeControl extends BusinessControl {
                                     newCollateralSubCustomerList.add(newCollateralSubCustomer);
                                 }
                                 newSubCollCustomerDAO.persist(newCollateralSubCustomerList);
-                                log.info("persist newCollateralSubCustomerList...{}", newCollateralSubCustomerList.size());
+                                log.debug("persist newCollateralSubCustomerList...{}", newCollateralSubCustomerList.size());
 
                             }
 
@@ -282,21 +292,21 @@ public class CreditFacProposeControl extends BusinessControl {
                                     newCollateralSubMortgageList.add(newCollateralSubMortgage);
                                 }
                                 newSubCollMortgageDAO.persist(newCollateralSubMortgageList);
-                                log.info("persist newCollateralSubMortgageList...{}", newCollateralSubMortgageList.size());
+                                log.debug("persist newCollateralSubMortgageList...{}", newCollateralSubMortgageList.size());
 
                             }
 
                             if (newSubCollateralView.getRelatedWithList() != null) {
                                 NewCollateralSubRelated newCollateralSubRelate;
                                 for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
-                                    log.info("relatedView.getId() ::: {} ", relatedView.getId());
+                                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
                                     NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
-                                    log.info("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+                                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
                                     newCollateralSubRelate = new NewCollateralSubRelated();
                                     newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
                                     newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
                                     newSubCollRelateDAO.persist(newCollateralSubRelate);
-                                    log.info("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
+                                    log.debug("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
                                 }
                             }
                         }
@@ -309,127 +319,127 @@ public class CreditFacProposeControl extends BusinessControl {
         if (newCreditFacilityView.getNewGuarantorDetailViewList() != null) {
             List<NewGuarantorDetail> newGuarantorDetailListPersist = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, user);
             newGuarantorDetailDAO.persist(newGuarantorDetailListPersist);
-            log.info("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
+            log.debug("persist newGuarantorDetailList :: {}", newGuarantorDetailListPersist.size());
             onDeleteDetailOfNewGuarantor(newGuarantorDetailListPersist);
 
             for (int i = 0; i < newGuarantorDetailListPersist.size(); i++) {
-                log.info("  newGuarantorDetailList  is " + i);
+                log.debug("  newGuarantorDetailList  is " + i);
                 NewGuarantorDetail newGuarantorDetail = newGuarantorDetailListPersist.get(i);
                 NewGuarantorDetailView newGuarantorDetailView = newCreditFacilityView.getNewGuarantorDetailViewList().get(i);
                 List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditDetailList, newGuarantorDetail, user);
                 newGuarantorRelationDAO.persist(newGuarantorCreditList);
-                log.info("persist newGuarantorCreditList...");
+                log.debug("persist newGuarantorCreditList...");
             }
         }
 
-        log.info("onSaveNewCreditFacility  end :: {}", workCaseId);
+        log.debug("onSaveNewCreditFacility  end :: {}", workCaseId);
     }
 
     public void onDeleteDetailOfNewCreditFacility(NewCreditFacility newCreditFacility) {
-        log.info("start delete all list under newCreditFacility id is :: {}", newCreditFacility);
+        log.debug("start delete all list under newCreditFacility id is :: {}", newCreditFacility);
         if (newCreditFacility != null) {
             List<NewFeeDetail> newFeeDetailList = newFeeCreditDAO.findByNewCreditFacility(newCreditFacility);
             if (newFeeDetailList.size() > 0) {
-                log.info(" newFeeDetailList size ::{}", newFeeDetailList.size());
+                log.debug(" newFeeDetailList size ::{}", newFeeDetailList.size());
                 newFeeCreditDAO.delete(newFeeDetailList);
-                log.info("delete newFeeDetailList::");
+                log.debug("delete newFeeDetailList::");
             }
 
             List<NewConditionDetail> newConditionDetailList = newConditionDetailDAO.findByNewCreditFacility(newCreditFacility);
             if (newConditionDetailList.size() > 0) {
-                log.info("newConditionList.size :: {}", newConditionDetailList.size());
+                log.debug("newConditionList.size :: {}", newConditionDetailList.size());
                 newConditionDetailDAO.delete(newConditionDetailList);
-                log.info("delete newConditionDetailList");
+                log.debug("delete newConditionDetailList");
             }
 
             List<NewCreditDetail> newCreditList = newCreditDetailDAO.findNewCreditDetailByNewCreditFacility(newCreditFacility);
             if (newCreditList.size() > 0) {
                 newCreditDetailDAO.delete(newCreditList);
-                log.info("delete newCreditList :: ");
+                log.debug("delete newCreditList :: ");
             }
 
             List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailDAO.findNewGuarantorByNewCreditFacility(newCreditFacility);
             if (newGuarantorDetailList.size() > 0) {
                 newGuarantorDetailDAO.delete(newGuarantorDetailList);
-                log.info("delete newGuarantorDetailList :::");
+                log.debug("delete newGuarantorDetailList :::");
             }
 
             List<NewCollateral> newCollateralList = newCollateralDetailDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
             if (newCollateralList.size() > 0) {
                 newCollateralDetailDAO.delete(newCollateralList);
-                log.info("delete newCollateralList :::");
+                log.debug("delete newCollateralList :::");
             }
 
         }
 
-        log.info("END onDeleteAllDetailOfNewCreditFacility ::: ");
+        log.debug("END onDeleteAllDetailOfNewCreditFacility ::: ");
 
     }
 
     public void onDeleteDetailOfNewCreditDetail(List<NewCreditDetail> newCreditDetailList) {
-        log.info("newCreditList .size :: {}", newCreditDetailList.size());
+        log.debug("newCreditList .size :: {}", newCreditDetailList.size());
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
             if (newCreditTierDetailList != null) {
-                log.info("newCreditTierDetailList.size ::{}", newCreditTierDetailList.size());
+                log.debug("newCreditTierDetailList.size ::{}", newCreditTierDetailList.size());
                 newCreditTierDetailDAO.delete(newCreditTierDetailList);
-                log.info("delete newCreditTierDetailList ::");
+                log.debug("delete newCreditTierDetailList ::");
             }
         }
     }
 
     public void onDeleteDetailOfNewCollateral(List<NewCollateral> newCollateralList) {
-        log.info("START onDeleteDetailOfNewCollateral newCollateralList.size :: {} ", newCollateralList.size());
+        log.debug("START onDeleteDetailOfNewCollateral newCollateralList.size :: {} ", newCollateralList.size());
         for (NewCollateral newCollateral : newCollateralList) {
-            log.info("newCollateral.id::{}", newCollateral.getId());
+            log.debug("newCollateral.id::{}", newCollateral.getId());
             List<NewCollateralCredit> newCollateralRelCreditList = newCollateralRelationDAO.getListCollRelationByNewCollateral(newCollateral);
             if (newCollateralRelCreditList.size() > 0) {
-                log.info("newCollateralRelCreditList::: {}", newCollateralRelCreditList.size());
+                log.debug("newCollateralRelCreditList::: {}", newCollateralRelCreditList.size());
                 newCollateralRelationDAO.delete(newCollateralRelCreditList);
-                log.info("delete newCollateralRelCredits");
+                log.debug("delete newCollateralRelCredits");
             }
         }
     }
 
     public void onDeleteDetailOfNewGuarantor(List<NewGuarantorDetail> newGuarantorDetailList) {
-        log.info("START onDeleteDetailOfNewGuarantor newGuarantorDetailList.size :: {} ", newGuarantorDetailList.size());
+        log.debug("START onDeleteDetailOfNewGuarantor newGuarantorDetailList.size :: {} ", newGuarantorDetailList.size());
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
-            log.info("newGuarantorDetail.id::{}", newGuarantorDetail.getId());
+            log.debug("newGuarantorDetail.id::{}", newGuarantorDetail.getId());
             List<NewGuarantorCredit> newGuarantorCreditListDelete = newGuarantorRelationDAO.getListGuarantorRelationByNewGuarantor(newGuarantorDetail);
             if (newGuarantorCreditListDelete.size() > 0) {
-                log.info("newGuarantorRelCreditList.size :: {}", newGuarantorCreditListDelete.size());
+                log.debug("newGuarantorRelCreditList.size :: {}", newGuarantorCreditListDelete.size());
                 newGuarantorRelationDAO.delete(newGuarantorCreditListDelete);
-                log.info("delete newGuarantorCreditListDelete");
+                log.debug("delete newGuarantorCreditListDelete");
             }
         }
     }
 
     public void onDeleteDetailOfNewCollateralSub(NewCollateralSub newCollateralSubDetail) {
-        log.info("START onDeleteDetailOfNewCollateralSub newCollateralSubDetail.size :: {} ", newCollateralSubDetail.getId());
+        log.debug("START onDeleteDetailOfNewCollateralSub newCollateralSubDetail.size :: {} ", newCollateralSubDetail.getId());
 
         List<NewCollateralSubOwner> newCollateralSubCustomerListDel = newSubCollCustomerDAO.getListNewCollateralSubCustomer(newCollateralSubDetail);
         if (newCollateralSubCustomerListDel != null) {
-            log.info("newCollateralSubCustomerListDel.size ::{}", newCollateralSubCustomerListDel.size());
+            log.debug("newCollateralSubCustomerListDel.size ::{}", newCollateralSubCustomerListDel.size());
             newSubCollCustomerDAO.delete(newCollateralSubCustomerListDel);
-            log.info("delete newCollateralSubCustomerListDel");
+            log.debug("delete newCollateralSubCustomerListDel");
         }
         List<NewCollateralSubMortgage> newCollateralSubMortgages = newSubCollMortgageDAO.getListNewCollateralSubMortgage(newCollateralSubDetail);
         if (newCollateralSubMortgages != null) {
-            log.info("newCollateralSubMortgages .size :: {}", newCollateralSubMortgages.size());
+            log.debug("newCollateralSubMortgages .size :: {}", newCollateralSubMortgages.size());
             newSubCollMortgageDAO.delete(newCollateralSubMortgages);
-            log.info("delete newCollateralSubMortgages");
+            log.debug("delete newCollateralSubMortgages");
         }
         List<NewCollateralSubRelated> newCollateralSubRelates = newSubCollRelateDAO.getListNewCollateralSubRelate(newCollateralSubDetail);
         if (newCollateralSubRelates != null) {
-            log.info("newCollateralSubRelates.size ::{}", newCollateralSubRelates.size());
+            log.debug("newCollateralSubRelates.size ::{}", newCollateralSubRelates.size());
             newSubCollRelateDAO.delete(newCollateralSubRelates);
-            log.info("delete newCollateralSubRelates");
+            log.debug("delete newCollateralSubRelates");
         }
 
     }
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
-        log.info("calTotalGuaranteeAmount start :: ");
+        log.debug("calTotalGuaranteeAmount start :: ");
         BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
         if (guarantorDetailViewList == null || guarantorDetailViewList.size() == 0) {
             return sumTotalGuaranteeAmount;
@@ -439,17 +449,17 @@ public class CreditFacProposeControl extends BusinessControl {
             sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
         }
 
-        log.info("calTotalGuaranteeAmount end :: ");
+        log.debug("calTotalGuaranteeAmount end :: ");
         return sumTotalGuaranteeAmount;
     }
 
     public void calculateTotalProposeAmount(long workCaseId) {
-        log.info("calculateTotalProposeAmount start ::: ");
+        log.debug("calculateTotalProposeAmount start ::: ");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         if (workCase != null) {
             NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if (newCreditFacility != null) {
-                log.info("newCreditFacility .id::: {}", newCreditFacility.getId());
+                log.debug("newCreditFacility .id::: {}", newCreditFacility.getId());
                 BasicInfoView basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
                 TCGView tcgView = tcgInfoControl.getTcgView(workCaseId);
 
@@ -466,7 +476,7 @@ public class CreditFacProposeControl extends BusinessControl {
                     if (newCreditDetailList != null && newCreditDetailList.size() != 0) {
 
                         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
-                            log.info("newCreditDetail id :: {}", newCreditDetail.getId());
+                            log.debug("newCreditDetail id :: {}", newCreditDetail.getId());
                             if ((newCreditDetail.getProductProgram().getId() != 0) && (newCreditDetail.getCreditType().getId() != 0)) {
                                 ProductProgram productProgram = productProgramDAO.findById(newCreditDetail.getProductProgram().getId());
                                 CreditType creditType = creditTypeDAO.findById(newCreditDetail.getCreditType().getId());
@@ -478,40 +488,40 @@ public class CreditFacProposeControl extends BusinessControl {
                                             newCreditFacility.getCreditCustomerType(), basicInfoView.getSpecialProgram(), tcgView.getTCG());
 
                                     if (productFormula != null) {
-                                        log.info("productFormula id :: {}", productFormula.getId());
+                                        log.debug("productFormula id :: {}", productFormula.getId());
                                         //ExposureMethod
                                         if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
-                                            log.info("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("NOT_CALCULATE :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(BigDecimal.ZERO);
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
-                                            log.info("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(newCreditDetail.getLimit());
                                         } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //limit * %PCE
-                                            log.info("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
+                                            log.debug("PCE_LIMIT :: productFormula.getExposureMethod() :: {}", productFormula.getExposureMethod());
                                             sumTotalPropose = sumTotalPropose.add(Util.multiply(newCreditDetail.getLimit(), newCreditDetail.getPcePercent()));
                                         }
 
-                                        log.info("sumTotalPropose :: {}", sumTotalPropose);
+                                        log.debug("sumTotalPropose :: {}", sumTotalPropose);
                                         //For DBR
                                         if (productFormula.getDbrCalculate() == 1)//N
                                         {
-                                            log.info("NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                            log.debug("NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                             sumTotalNonLoanDbr = BigDecimal.ZERO;
                                         } else if (productFormula.getDbrCalculate() == 2)//Y
                                         {
-                                            log.info("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                            log.debug("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                             if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
-                                                log.info("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                                log.debug("NOT_CALCULATE :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(BigDecimal.ZERO);
                                             } else if (productFormula.getDbrMethod() == DBRMethod.INSTALLMENT.value()) { //Installment
-                                                log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                                log.debug("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetail.getInstallment());
                                             } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                                log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                                log.debug("INT_YEAR :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetail, productFormula.getDbrSpread()));
                                             }
                                         }
-                                        log.info("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
+                                        log.debug("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
                                         //WC
 //                                        if (productFormula.getWcCalculate() == 0) {
 //
@@ -539,8 +549,8 @@ public class CreditFacProposeControl extends BusinessControl {
                             newCreditFacility.setTotalExposure(sumTotalExposure); //sumTotalExposure
                         }
 
-                        log.info("sumTotalCommercial :: {}", sumTotalCommercial);
-                        log.info("sumTotalExposure :: {}", sumTotalExposure);
+                        log.debug("sumTotalCommercial :: {}", sumTotalCommercial);
+                        log.debug("sumTotalExposure :: {}", sumTotalExposure);
                     }
                 }
 
@@ -550,21 +560,21 @@ public class CreditFacProposeControl extends BusinessControl {
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(NewCreditDetail newCreditDetail, BigDecimal dbrSpread) {
-        log.info("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
+        log.debug("calTotalProposeLoanDBRForIntYear start :: newCreditDetail and  dbrSpread ::{}", newCreditDetail, dbrSpread);
         BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
         BigDecimal sum;
-        log.info("limit :: {}", newCreditDetail.getLimit());
-        log.info("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
+        log.debug("limit :: {}", newCreditDetail.getLimit());
+        log.debug("newCreditTierDetailViews.size :: {}", newCreditDetail.getProposeCreditTierDetailList().size());
         if (newCreditDetail.getProposeCreditTierDetailList() != null) {
             for (NewCreditTierDetail newCreditTierDetail : newCreditDetail.getProposeCreditTierDetailList()) //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
             {
                 sum = BigDecimal.ZERO;
                 if (newCreditTierDetail != null) {
-                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
-                    log.info("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
-                    log.info("dbrSpread :: {}", dbrSpread);
+                    log.debug("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
+                    log.debug("newCreditTierDetail.getFinalInterest() :: {}", newCreditTierDetail.getFinalInterest());
+                    log.debug("dbrSpread :: {}", dbrSpread);
                     sum = Util.divide((Util.multiply(newCreditTierDetail.getFinalBasePrice().getValue(), newCreditTierDetail.getFinalInterest()).add(dbrSpread)), 100);
-                    log.info("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
+                    log.debug("newCreditTierDetail.getFinalBasePrice().getValue() :: {}", newCreditTierDetail.getFinalBasePrice().getValue());
                     sum = Util.multiply(newCreditDetail.getLimit(), sum);
                     sum = Util.divide(sum, 12);
                     sumTotalLoanDbr = sumTotalLoanDbr.add(sum);
@@ -572,7 +582,7 @@ public class CreditFacProposeControl extends BusinessControl {
             }
         }
 
-        log.info("calTotalProposeLoanDBRForIntYear end");
+        log.debug("calTotalProposeLoanDBRForIntYear end");
         return sumTotalLoanDbr;
     }
 
@@ -651,7 +661,7 @@ public class CreditFacProposeControl extends BusinessControl {
 
 
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
-        log.info("findProposeCreditDetail :: ", workCaseId);
+        log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
         List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         ProposeCreditDetailView proposeCreditDetailView;
@@ -707,11 +717,11 @@ public class CreditFacProposeControl extends BusinessControl {
         for (NewCollateralView newCollateralView : newCollateralViewList) {
             for (NewCollateralHeadView newCollateralHeadDetail : newCollateralView.getNewCollateralHeadViewList()) {
                 if (newCollateralHeadDetail.getNewCollateralSubViewList().size() > 0) {
-                    log.info("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
+                    log.debug("newCollateralHeadDetail . getId:: {}", newCollateralHeadDetail.getId());
                     for (NewCollateralSubView newCollateralSubView : newCollateralHeadDetail.getNewCollateralSubViewList()) {
                         newCollateralSubView.setNo(countNo);
                         relatedWithAllList.add(newCollateralSubView);
-                        log.info("relatedWithAllList > size :: {}", relatedWithAllList.size());
+                        log.debug("relatedWithAllList > size :: {}", relatedWithAllList.size());
                         countNo++;
                     }
                 }
@@ -917,9 +927,68 @@ public class CreditFacProposeControl extends BusinessControl {
         }
     }
 
+    public void saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId){
+        log.debug("Starting saveCreditFacility...");
+        log.debug("saveCreditFacility ::: workCaseId : {}", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User currentUser = getCurrentUser();
+
+        log.debug("saveCreditFacility ::: newCreditFacilityView : {}", newCreditFacilityView);
+        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, currentUser);
+        newCreditFacilityDAO.persist(newCreditFacility);
+        log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
+
+        //--- Save to NewFeeCredit
+        if(Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newFeeDetailViewList : {}", newCreditFacilityView.getNewFeeDetailViewList());
+            List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(), newCreditFacility, currentUser);
+            newFeeCreditDAO.persist(newFeeDetailList);
+            log.debug("saveCreditFacility ::: persist newFeeDetailList : {}", newFeeDetailList);
+        }
+
+        //--- Save to NewConditionCredit
+        if(Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newConditionDetailViewList : {}", newCreditFacilityView.getNewConditionDetailViewList());
+            List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, currentUser);
+            newConditionDetailDAO.persist(newConditionDetailList);
+            log.debug("saveCreditFacility ::: persist newConditionDetailList : {}", newConditionDetailList);
+        }
+
+        //--- Save to NewCreditDetail
+        if(Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
+            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase);
+            newCreditDetailDAO.persist(newCreditDetailList);
+            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
+        }
+
+        //--- Save to NewGuarantor
+        if(Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            newGuarantorDetailDAO.persist(newGuarantorDetailList);
+            log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
+        }
+
+        //--- Save to NewCollateral
+        //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.findAll();
+        newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
+        //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
+        List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.findAll();
+        newCollateralCreditDAO.delete(newCollateralCreditList);
+
+        if(Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newCollateralViewList : {}", newCreditFacilityView.getNewCollateralViewList());
+            List<NewCollateral> newCollateralList = newCollateralTransform.transformsCollateralToModel(newCreditFacilityView.getNewCollateralViewList(), newCreditFacility, currentUser, workCase);
+            newCollateralDetailDAO.persist(newCollateralList);
+            log.debug("saveCreditFacility ::: persist newCollateralList : {}", newCollateralList);
+        }
+    }
+
     // Call COMSInterface
     public AppraisalDataResult toCallComsInterface(final String jobId) {
-        log.info("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
+        log.debug("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(getCurrentUserID(), jobId);
         if (appraisalDataResult != null) {
             log.debug("-- appraisalDataResult.getActionResult() ::: {}", appraisalDataResult.getActionResult());

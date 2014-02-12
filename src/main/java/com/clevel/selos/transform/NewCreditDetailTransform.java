@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.NewCreditDetailView;
 import com.clevel.selos.model.view.NewCreditTierDetailView;
 import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -38,11 +39,14 @@ public class NewCreditDetailTransform extends Transform {
         NewCreditDetail newCreditDetail;
 
         for (NewCreditDetailView newCreditDetailView : newCreditDetailViews) {
+            //---- Start Transform for NewCreditDetail ------//
+            log.debug("Start.. transformToModel for newCreditDetailView : {}", newCreditDetailView);
             newCreditDetail = new NewCreditDetail();
             if (newCreditDetailView.getId() != 0) {
-                newCreditDetail.setId(newCreditDetailView.getId());
-                newCreditDetail.setCreateDate(newCreditDetailView.getCreateDate());
-                newCreditDetail.setCreateBy(newCreditDetailView.getCreateBy());
+                //newCreditDetail.setId(newCreditDetailView.getId());
+                newCreditDetail = newCreditDetailDAO.findById(newCreditDetailView.getId());
+                newCreditDetail.setModifyDate(DateTime.now().toDate());
+                newCreditDetail.setModifyBy(user);
             } else { // id = 0 create new
                 newCreditDetail.setCreateDate(new Date());
                 newCreditDetail.setCreateBy(user);
@@ -79,6 +83,13 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
+            if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
+                log.debug("Start.. transformToModel for newCreditTierDetailViewList : {}", newCreditDetailView.getNewCreditTierDetailViewList());
+                List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierTransform.transformToModel(newCreditDetailView.getNewCreditTierDetailViewList(), newCreditDetail, user);
+                log.debug("End.. transformToModel for newCreditTierDetailList : {}", newCreditTierDetailList);
+                newCreditDetail.setProposeCreditTierDetailList(newCreditTierDetailList);
+            }
+            log.debug("End.. transformToModel for newCreditDetail : {}", newCreditDetail);
             newCreditDetailList.add(newCreditDetail);
         }
 
@@ -92,6 +103,8 @@ public class NewCreditDetailTransform extends Transform {
 
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             newCreditDetailView = new NewCreditDetailView();
+
+            newCreditDetailView.setId(newCreditDetail.getId());
             newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
             newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
             newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());

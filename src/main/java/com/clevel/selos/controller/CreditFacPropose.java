@@ -9,6 +9,7 @@ import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
@@ -247,7 +248,7 @@ public class CreditFacPropose implements Serializable {
         if (workCaseId != null) {
 
             modeForDB = ModeForDB.ADD_DB;
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            //WorkCase workCase = workCaseDAO.findById(workCaseId);
             hashSeqCredit = new Hashtable<String, String>();
 
             try {
@@ -258,13 +259,13 @@ public class CreditFacPropose implements Serializable {
 
                     modeForDB = ModeForDB.EDIT_DB;
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-                    log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
+                    log.info("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
 
 
                 }
 
             } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+                log.error("Exception while loading [Credit Facility] page :: ", ex);
             }
 
             log.info("onCreation :: modeForDB :: {}", modeForDB);
@@ -275,7 +276,12 @@ public class CreditFacPropose implements Serializable {
                 productGroup = null;
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
-                specialProgramBasicInfo = basicInfo.getSpecialProgram();
+                if(basicInfo.getApplySpecialProgram() == RadioValue.YES.value()){
+                    specialProgramBasicInfo = basicInfo.getSpecialProgram();
+                } else {
+                    specialProgramBasicInfo = specialProgramDAO.findById(3);
+                }
+                log.debug("specialProgramBasicInfo : {}", specialProgramBasicInfo);
                 productGroup = basicInfo.getProductGroup();
             }
 
@@ -1494,8 +1500,9 @@ public class CreditFacPropose implements Serializable {
 //                && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
 //                && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-
-            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+            //creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
