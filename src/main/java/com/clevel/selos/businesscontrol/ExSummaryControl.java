@@ -184,21 +184,21 @@ public class ExSummaryControl extends BusinessControl {
 
             StringBuilder addressTH = new StringBuilder();
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressMoo").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressStreet").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.subdistrict").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getName() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getCode() != 0 ? bizInfoSummaryView.getSubDistrict().getName() : "-" : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.district").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getName() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getId() != 0 ? bizInfoSummaryView.getDistrict().getName() : "-" : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.province").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getName() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getCode() != 0 ? bizInfoSummaryView.getProvince().getName() : "-" : "-").concat(" "));
             addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.country").concat(" "));
-            addressTH = addressTH.append(bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getName() : "-");
+            addressTH = addressTH.append((bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getId() != 0 ? bizInfoSummaryView.getCountry().getName() : "-" : "-").concat(" "));
 
             exSummaryView.setBusinessLocationAddress(addressTH.toString());
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
