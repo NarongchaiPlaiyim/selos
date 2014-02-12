@@ -16,7 +16,8 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 
 public class CustomerAcceptanceTransform extends Transform {
-    @Inject
+    private static final long serialVersionUID = -1413018148590835051L;
+	@Inject
     @SELOS
     private Logger log;
     @Inject

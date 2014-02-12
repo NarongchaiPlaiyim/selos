@@ -18,6 +18,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -96,7 +97,10 @@ public class BizInfoDetail implements Serializable {
     private BizInfoSummaryView bizInfoSummaryView;
     private User user;
 
-    private boolean isDisable = false;
+    private boolean isDisable;
+
+    private  boolean docPermisionFlag;
+    private boolean expiryDateFlag;
 
     @Inject
     @SELOS
@@ -120,14 +124,19 @@ public class BizInfoDetail implements Serializable {
 
     }
 
+    private void init(){
+        docPermisionFlag = false;
+        expiryDateFlag = false;
+    }
     @PostConstruct
     public void onCreation(){
+        init();
         try{
             log.debug("BizInfoDetail onCreation ");
 
             HttpSession session = FacesUtil.getSession(true);
 
-            if(session.getAttribute("workCaseId") != null){
+            if(!Util.isNull(session.getAttribute("workCaseId"))){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             }else{
                 log.info("onCreation ::: workCaseId is null.");
@@ -141,6 +150,7 @@ public class BizInfoDetail implements Serializable {
 
             log.debug("session.getAttribute('bizInfoDetailViewId') {}",session.getAttribute("bizInfoDetailViewId"));
 
+
             if(!"".equalsIgnoreCase(session.getAttribute("bizInfoDetailViewId").toString())){
                 bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
             }else{
@@ -150,6 +160,9 @@ public class BizInfoDetail implements Serializable {
             user = (User)session.getAttribute("user");
 
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+
+
+
             if(bizInfoSummaryView.getCirculationAmount()!=null){
                 circulationAmount =bizInfoSummaryView.getCirculationAmount().doubleValue();
             }
@@ -198,7 +211,10 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setBizGroup(bizGroup);
                 bizInfoDetailView.setBizType(bizType);
                 bizInfoDetailView.setBizActivity(bizActivity);
+                bizInfoDetailView.setBizPermission("N");
 
+
+                log.info("bizInfoDetailView____ ",bizInfoDetailView.toString());
 
 
             }else{
@@ -218,13 +234,20 @@ public class BizInfoDetail implements Serializable {
                     buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
                 }
 
+                if(!Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
+                    bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
+                    log.info("setBizDocExpiryDate :",bizInfoDetailView.getBizDocExpiryDate());
+                } else {
+                    bizInfoDetailView.setBizDocExpiryDate(null);
+                }
+
                 bizGroup =  bizInfoDetailView.getBizGroup();
                 bizDesc =  bizInfoDetailView.getBizDesc();
 
                 descType = "1";
                 onChangeBusinessGroup();
                 onChangeBusinessDesc();
-                onChangeBizPermission();
+//                onChangeBizPermission();
                 descType = "";
 
                 sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
@@ -303,24 +326,20 @@ public class BizInfoDetail implements Serializable {
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
-        onChangeBizPermission();
+//        onChangeBizPermission();
 
     }
 
     public void onChangeBizPermission(){
         log.debug("onChangeBizPermission ");
-//        isDisable = true;
         if(bizInfoDetailView.getBizPermission() != null ){
             if( bizInfoDetailView.getBizPermission().equals("Y")){
-                isDisable = false;
-            }
-            /*else{
-                bizInfoDetailView.setBizDocExpiryDate(null);
                 bizInfoDetailView.setBizDocPermission("");
+                bizInfoDetailView.setBizDocExpiryDate(null);
             }
-        }else{
-            bizInfoDetailView.setBizDocExpiryDate(null);
-            bizInfoDetailView.setBizDocPermission("");*/
+            else{
+                bizInfoDetailView.setBizPermission("N");
+            }
         }
     }
 
@@ -664,21 +683,25 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setCreateBy(user);
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
             }
-            bizInfoDetailView.setModifyBy(user);
-            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
-            messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
-            message = msg.get("app.bizInfoDetail.message.body.save.success");
 
-            log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
-            bizInfoDetailViewId =  bizInfoDetailView.getId();
-            HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
-            log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
-            creditFacProposeControl.calWC(workCaseId);
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            if(onCheckPermission()){
+
+                bizInfoDetailView.setModifyBy(user);
+                bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+                bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+                bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId);
+                messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
+                message = msg.get("app.bizInfoDetail.message.body.save.success");
+
+                log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
+                bizInfoDetailViewId =  bizInfoDetailView.getId();
+                HttpSession session = FacesUtil.getSession(true);
+                session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
+                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}",session.getAttribute("bizInfoDetailViewId"));
+                creditFacProposeControl.calWC(workCaseId);
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
         } catch(Exception ex){
             log.debug("ERROR");
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
@@ -764,6 +787,24 @@ public class BizInfoDetail implements Serializable {
     double stockValueUW= (productionCostsAmount/365)*stockDuUW;
     bizInfoDetailView.setStockValueUW( new BigDecimal(stockValueUW));
 
+    }
+
+    public boolean onCheckPermission(){
+        boolean  result = true;
+        if("Y".equals(bizInfoDetailView.getBizPermission())){
+            if(Util.isNull(bizInfoDetailView.getBizDocPermission()) || Util.isZero(bizInfoDetailView.getBizDocPermission().length())){
+                docPermisionFlag = true;
+                result = false;
+            }
+            else if(Util.isNull(bizInfoDetailView.getBizDocExpiryDate())) {
+                expiryDateFlag = true;
+                result = false;
+            }
+            return result;
+        } else {
+            log.debug("-- success and result[{}]", result);
+            return result;
+        }
     }
 
 
@@ -958,5 +999,21 @@ public class BizInfoDetail implements Serializable {
 
     public void setReadonlyIsBDM(boolean readonlyIsBDM) {
         this.readonlyIsBDM = readonlyIsBDM;
+    }
+
+    public boolean isDocPermisionFlag() {
+        return docPermisionFlag;
+    }
+
+    public void setDocPermisionFlag(boolean docPermisionFlag) {
+        this.docPermisionFlag = docPermisionFlag;
+    }
+
+    public boolean isExpiryDateFlag() {
+        return expiryDateFlag;
+    }
+
+    public void setExpiryDateFlag(boolean expiryDateFlag) {
+        this.expiryDateFlag = expiryDateFlag;
     }
 }

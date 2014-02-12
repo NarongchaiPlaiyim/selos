@@ -19,7 +19,7 @@
                 	     value="#{customerAcceptance.contactRecord.callingDate}"
                 	     styleClass="readonly"
                          >
-                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th-TH"/>
+                         <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
                       </p:inputText>
                 </td>
             </tr>
@@ -113,7 +113,7 @@
                          update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
                          styleClass="small"
-                         rendered="#{customerAcceptance.contactRecord.new}"/>
+                         rendered="#{customerAcceptance.addDialog}"/>
                      <p:commandButton
                          id="updContactRecordBtn"
                          value="#{msg.get('app.button.ok')}"
@@ -121,7 +121,7 @@
                          update=":frmMain:contact_record_tbl,:contactRecordViewDlgFrm"
                          oncomplete="handleDialogRequest(xhr, status, args,'p_contactRecordDlg')"
                          styleClass="small"
-                         rendered="#{not customerAcceptance.contactRecord.new}"/>
+                         rendered="#{not customerAcceptance.addDialog}"/>
                     <p:commandButton
                     	type='button' styleClass="small" 
                     	value="#{msg.get('app.button.cancel')}" onclick="p_contactRecordDlg.hide()"/>

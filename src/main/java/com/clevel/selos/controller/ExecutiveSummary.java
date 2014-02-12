@@ -24,6 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,24 +48,26 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     Message exceptionMsg;
 
     private Long workCaseId;
+
     private String messageHeader;
     private String message;
+    private String severity;
 
     private ExSummaryView exSummaryView;
 
     private ExSumReasonView selectDeviate;
 
     @Inject
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Inject
-    CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     @Inject
-    ReasonDAO reasonDAO;
+    private ReasonDAO reasonDAO;
     @Inject
-    AuthorizationDOADAO authorizationDOADAO;
+    private AuthorizationDOADAO authorizationDOADAO;
 
     @Inject
-    ExSummaryControl exSummaryControl;
+    private ExSummaryControl exSummaryControl;
 
     //*** Drop down List ***//
     private List<AuthorizationDOA> authorizationDOAList;
@@ -93,7 +96,7 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             }
         }
 
-        reasonList = reasonDAO.getRejectList();
+        reasonList = new ArrayList<Reason>();
         authorizationDOAList = authorizationDOADAO.findAll();
 
         reason = new ExSumReasonView();
@@ -103,15 +106,38 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
         if(exSummaryView == null){
             exSummaryView = new ExSummaryView();
         }
+
+        exSummaryView.setUwCode("6500000000");
+
+        //for reasonList
+        if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
+            reasonList = reasonDAO.getDeviateList();
+        } else if(exSummaryView.getDecision() == 3){
+            reasonList = reasonDAO.getRejectList();
+        } else {
+            reasonList = new ArrayList<Reason>();
+        }
     }
 
     public void onSaveExecutiveSummary() {
         log.debug("onSaveExecutiveSummary :::");
+        if(exSummaryView.getDecision() == 2 || exSummaryView.getDecision() == 3){ //1 approve , 2 deviate , 3 reject
+            if(exSummaryView.getDeviateCode() == null || exSummaryView.getDeviateCode().size() < 1){
+                messageHeader = msg.get("app.header.information");
+                message = "Save Ex Summary Failed. "+
+                        "<br/><br/> Cause : Reason is null.";
+                severity = "info";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
+        }
+
         try {
             exSummaryControl.saveExSummary(exSummaryView, workCaseId);
 
             messageHeader = msg.get("app.header.information");
             message = "Save Ex Summary data success.";
+            severity = "info";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
@@ -122,7 +148,19 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             } else {
                 message = "Save Ex Summary data failed. Cause : " + ex.getMessage();
             }
+            severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onChangeDeviate(){
+        exSummaryView.setDeviateCode(new ArrayList<ExSumReasonView>());
+        if(exSummaryView.getDecision() == 2){ //1 approve , 2 deviate , 3 reject
+            reasonList = reasonDAO.getDeviateList();
+        } else if(exSummaryView.getDecision() == 3){
+            reasonList = reasonDAO.getRejectList();
+        } else {
+            reasonList = new ArrayList<Reason>();
         }
     }
 
@@ -196,6 +234,14 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void setSelectDeviate(ExSumReasonView selectDeviate) {
         this.selectDeviate = selectDeviate;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }
 

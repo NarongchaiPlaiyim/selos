@@ -162,13 +162,13 @@
                                         <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}" style="min-width: 250px; width:250px; max-width: 250px;">
                                             <p:outputLabel value="#{itemNCB.accountName}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 250px; width:250px; max-width: 250px;">
+                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}" style="min-width: 250px; width:250px; max-width: 250px;" styleClass="center">
                                             <h:outputText value="#{itemNCB.loanAccountTypeView.name}"/>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.limit')}" style="min-width: 150px; width:150px; max-width: 1500px;" styleClass="right">
                                             <h:outputText value="#{itemNCB.limit}" >
                                                 <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                                                </h:outputText>
+                                            </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{msg.get('app.dbr.table.column.installment')}" style="min-width: 150px; width:150px; max-width: 150px;" styleClass="right">
                                             <p:outputLabel value="#{itemNCB.installment}">
@@ -218,7 +218,7 @@
                                             <td class="title top">
                                                 <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
                                             </td>
-                                            <td>
+                                            <td style="padding-left: 10px;">
                                                 <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}"
                                                                  styleClass="smaller"
                                                                  action="#{dbrInfo.initAddDBRDetail}"

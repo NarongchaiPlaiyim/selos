@@ -11,12 +11,6 @@
     <title>#{msg.get('app.baInfo.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-<style type="text/css">
-.ba_table.ui-datatable table {
-    table-layout: auto !important;
-    width: 100% !important;
-}
-</style>
 </h:head>
 
 <h:body>
@@ -50,7 +44,7 @@
                         	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
                         	<h:outputText value="#{baInfo.lastUpdateBy}"/>, 
                         	<h:outputText value="#{baInfo.lastUpdateDateTime}">
-                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th-TH"/>
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
                         	</h:outputText>
                         </div>
                     </div>
@@ -115,7 +109,7 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='bainfo_tbl' styleClass="ba_table"
+                        			<p:dataTable id='bainfo_tbl' styleClass="full_table"
 	                           			>
 	                           			<p:column style='width:80px' styleClass="center"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.applyBA')}">
@@ -143,9 +137,13 @@
 	                           			</p:column>
 	                           			<p:column styleClass="center" style="width:30px;">
 	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                           						
+                           						process="@this"
+                           						onstart="p_blockUI.show()"
+                           						oncomplete="p_blockUI.hide();p_baApplyInfoDlg.show();"
+                           						action="#{baInfo.onOpenApplyInformationDialog()}"
                            						style="margin-right:0px !important"
                            						>
+                           						<p:resetInput target="baApplyInfoDlgForm" />
                            					</p:commandButton>
 	                           			</p:column>
 	                           		</p:dataTable>
@@ -164,14 +162,19 @@
 	                            </td>
 	                            <td>
 	                            	<p:commandButton id='addBtn' value="#{msg.get('app.button.add')}"
-		                                styleClass="medium"
-		                                >
+		                               		styleClass="medium"
+			                                process="@this"
+			                                action="#{baInfo.onOpenAddBAPAInformationDialog()}"
+			                                oncomplete="p_bapaApplyInfoDlg.show()"
+			                                update=":bapaApplyInfoDlg"
+			                                >
+										<p:resetInput target=":bapaApplyInfoDlg" />
 				                   	</p:commandButton>
 	                            </td>
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='bapainfo_tbl' rowIndexVar="rowIdx" styleClass="ba_table"
+                        			<p:dataTable id='bapainfo_tbl' rowIndexVar="rowIdx" styleClass="full_table"
                         				>
 	                           			<p:column style='width:30px' styleClass="center">
 	                           				#{rowIdx+1}
@@ -220,15 +223,21 @@
 	                           			
 	                           			<p:column styleClass="center" style="width:50px;">
 	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
-                           						
-                           						style="margin-right:0px !important"
-                           						>
+                           						process="@this"
+	                           						onstart="p_blockUI.show()"
+	                           						oncomplete="p_blockUI.hide();p_bapaApplyInfoDlg.show();"
+	                           						action="#{baInfo.onOpenUpdateBAPAInformaionDialog()}"
+	                           						update=":bapaApplyInfoDlg"
+	                           						style="margin-right:0px !important"
+	                           						>
+	                           						<p:resetInput target=":bapaApplyInfoDlg" />
                            					</p:commandButton>
                            					<p:commandButton icon="ui-icon-trash" title="#{msg.get('app.button.delete')}"
-                           						
-                           						style="margin-right:0px !important"
-                           						>
-                           					</p:commandButton>
+                          							process="@this"
+                           							oncomplete="p_delBAPADlg.show()"
+                           							style="margin-right:0px !important"
+                                            	>
+                                            </p:commandButton>
 	                           			</p:column>
 	                           			
 	                           			<p:summaryRow>
@@ -301,7 +310,7 @@
 	                             <td colspan="100%" class="center">
 	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
 	                                 	styleClass="medium"
-	                                 	oncomplete="p_saveCusAcceptanceDlg.show();"
+	                                 	oncomplete="p_saveBAInformationDlg.show();"
 	                                 	 />
 	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
 										styleClass="medium"
@@ -326,32 +335,36 @@
              </p:blockUI>
         </h:form>
     </p:panel>
-<ui:remove>
-	<p:dialog id='contactRecordDlg' widgetVar="p_contactRecordDlg"
-		header="#{msg.get('app.cusaccept.dialog.contactRecord.title')}" 
+    <p:dialog id='baApplyInfoDlg' widgetVar="p_baApplyInfoDlg"
+		header="#{msg.get('app.baInfo.ba.dialog.title')}" 
 		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
 		modal='true' closeOnEscape="true" closable="true"
-		dynamic="true">
-		<ui:include src="dialog/contactRecordDetailViewDialog.xhtml" />
+		dynamic="true" width="385">
+		<ui:include src="dialog/baApplyInfoDialog.xhtml" />
 	</p:dialog>
-    
-	 <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="delContactRecordDlg"/>
-        <ui:param name="name" value="p_delContactRecordDlg"/>
-        <ui:param name="formId" value="delContactRecordFrm"/>
-        <ui:param name="controller" value="#{customerAcceptance}"/>
-        <ui:param name="action" value="onDeleteContactRecord"/>
-        <ui:param name="update" value=":frmMain:contact_record_tbl"/>
+    <p:dialog id='bapaApplyInfoDlg' widgetVar="p_bapaApplyInfoDlg"
+		header="#{msg.get('app.baInfo.bapa.dialog.title')}" 
+		onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()' resizable="false"
+		modal='true' closeOnEscape="true" closable="true"
+		dynamic="true" width="780">
+		<ui:include src="dialog/bapaApplyInfoDialog.xhtml" />
+	</p:dialog>
+	<ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="delBAPADlg"/>
+        <ui:param name="name" value="p_delBAPADlg"/>
+        <ui:param name="formId" value="delBAPADlgFrm"/>
+        <ui:param name="controller" value="#{baInfo}"/>
+        <ui:param name="action" value="onDeleteBAPAInformation"/>
+        <ui:param name="update" value=":frmMain:bainfo_tbl"/>
     </ui:include>
-	<ui:include src="dialog/confirmEditDlg.xhtml">
-		<ui:param name="id" value="saveCusAcceptanceDlg"/>
-		<ui:param name="name" value="p_saveCusAcceptanceDlg"/>
-		<ui:param name="formId" value="saveCusAcceptanceFrm"/>
-		<ui:param name="controller" value="#{customerAcceptance}"/>
-		<ui:param name="action" value="onSaveCustomerAcceptance"/>
+    <ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="saveBAInformationDlg"/>
+		<ui:param name="name" value="p_saveBAInformationDlg"/>
+		<ui:param name="formId" value="saveBAInformationFrm"/>
+		<ui:param name="controller" value="#{baInfo}"/>
+		<ui:param name="action" value="onSaveBAInformation"/>
 		<ui:param name="update" value=":frmMain"/>
 	</ui:include>
-</ui:remove>
 </h:body>
 </f:view>
 </html>

@@ -154,7 +154,7 @@ public class BasicInfo implements Serializable {
 
     @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
     private int retrievedFlag;
-
+    
     //Update for Post Approval
     @Column(name = "approved_type", length = 1, nullable = false, columnDefinition = "int default 0")
     @Enumerated(EnumType.ORDINAL)
@@ -483,7 +483,6 @@ public class BasicInfo implements Serializable {
     public void setRetrievedFlag(int retrievedFlag) {
         this.retrievedFlag = retrievedFlag;
     }
-
 	public ApproveResult getApproveResult() {
 		return approveResult;
 	}
@@ -499,7 +498,6 @@ public class BasicInfo implements Serializable {
 	public void setApproveType(ApproveType approveType) {
 		this.approveType = approveType;
 	}
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).

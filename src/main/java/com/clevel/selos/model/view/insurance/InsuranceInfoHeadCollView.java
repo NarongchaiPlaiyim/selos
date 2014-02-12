@@ -1,10 +1,11 @@
 package com.clevel.selos.model.view.insurance;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class InsuranceInfoHeadCollView implements Serializable {
     private String titleDeed;
-    private int exitingCredit;
+    private BigDecimal exitingCredit;
 
     public InsuranceInfoHeadCollView() {
 
@@ -18,11 +19,11 @@ public class InsuranceInfoHeadCollView implements Serializable {
         this.titleDeed = titleDeed;
     }
 
-    public int getExitingCredit() {
+    public BigDecimal getExitingCredit() {
         return exitingCredit;
     }
 
-    public void setExitingCredit(int exitingCredit) {
+    public void setExitingCredit(BigDecimal exitingCredit) {
         this.exitingCredit = exitingCredit;
     }
 }

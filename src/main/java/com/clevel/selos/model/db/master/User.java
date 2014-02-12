@@ -194,7 +194,6 @@ public class User implements Serializable {
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
-
     public String getDisplayName() {
     	//TODO Confirm with P'Lukkeaw about displaying user name in Last Update
 //		StringBuilder builder = new StringBuilder();

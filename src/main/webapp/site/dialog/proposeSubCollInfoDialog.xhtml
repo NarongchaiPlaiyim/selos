@@ -7,12 +7,12 @@
 
 <p:panel id="subCollateralDlgPanel" styleClass="panel-dialog">
     <h:form id="subCollateralDlgForm">
-        <table class="content_form">
+        <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title" style="width: 20%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.subcollTypeCaption')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="width: 80%">
                     <p:selectOneMenu id="dlgSubCollateralType"
                                      value="#{creditFacPropose.newCollateralSubView.subCollateralType.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
@@ -27,7 +27,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.titleDeed')}"/>
                 </td>
                 <td class="left">
@@ -37,7 +37,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.address')}"/>
                 </td>
                 <td class="left">
@@ -48,7 +48,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')}"/>
                 </td>
                 <td class="left">
@@ -58,7 +58,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.AAD')}"/>
                 </td>
                 <td class="left">
@@ -68,7 +68,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
                 </td>
                 <td class="left">
@@ -101,23 +101,21 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;"></td>
+                <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="CollOwnerUWTb"
                                  value="#{creditFacPropose.newCollateralSubView.collateralOwnerUWList}"
                                  var="collateralOwnerUWItem"
                                  rowKey="#{collateralOwnerUWItem.id}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                                 <p:column style="width: 80%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralName')}"/>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
 
@@ -143,7 +141,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
                 </td>
                 <td class="left">
@@ -177,23 +175,21 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px"></td>
+                <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="MortgageTb"
                                  value="#{creditFacPropose.newCollateralSubView.mortgageList}"
                                  var="mortgageItem"
                                  rowKey="#{mortgageItem.MortgageType}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                                 <p:column style="width: 80%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
 
@@ -219,7 +215,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
                 </td>
                 <td class="left">
@@ -252,23 +248,21 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px"></td>
+                <td class="title"></td>
                 <td class="left">
                     <p:dataTable id="RelatedWithTb"
                                  value="#{creditFacPropose.newCollateralSubView.relatedWithList}"
                                  var="relatedWithItem"
                                  rowKey="#{relatedWithItem.NewCollateralSubDetail}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                                 <p:column style="width: 80%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"
-                                          headerText=" "/>
+                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
                             </p:row>
                         </p:columnGroup>
 
@@ -294,7 +288,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.appraisalValue')}"/>
                 </td>
                 <td class="left">
@@ -315,7 +309,7 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 200px;">
+                <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageValue')}"/>
                 </td>
                 <td class="left">
@@ -338,9 +332,8 @@
             <tr>
                 <td colspan="2" style="height:28px;"></td>
             </tr>
-
             <tr>
-                <td colspan="2" class="center">
+                <td class="center" colspan="2">
                     <p:commandButton
                             id="saveSubColl"
                             value="#{msg.get('app.credit.facility.propose.okButton')}"
@@ -350,16 +343,15 @@
                             process=":subCollateralDlgForm"
                             update=":subCollateralDlgForm,:collateralDlgForm,:msgBoxSystemMessagePanel"
                             oncomplete="handleSubCollateralInfoRequest(xhr, status, args)"/>
-                    <p:spacer width="10" height=""/>
+                    <p:spacer width="10" height="0"/>
                     <p:commandButton
                             value="#{msg.get('app.credit.facility.propose.cancelButton')}"
                             styleClass="small"
                             onclick="subCollateralInfoDlg.hide()"/>
                 </td>
             </tr>
-
             <tr>
-                <td colspan="2" style="height:28px;"></td>
+                <td colspan="2" style="height:10px;"></td>
             </tr>
         </table>
     </h:form>

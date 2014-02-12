@@ -49,6 +49,7 @@ public class ContactRecordDetail implements Serializable {
     @JoinColumn(name="status_id")
     private Status status;
 
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;

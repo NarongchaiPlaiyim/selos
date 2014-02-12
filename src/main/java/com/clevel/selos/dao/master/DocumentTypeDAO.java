@@ -24,6 +24,7 @@ public class DocumentTypeDAO extends GenericDAO<DocumentType, Integer> {
         log.info("findByCustomerEntityId. (customerEntityId: {})", customerEntityId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("active", 1));
         criteria.addOrder(Order.asc("id"));
         List<DocumentType> documentTypeList = criteria.list();
         log.info("findByCustomerEntityId. (result size: {})", documentTypeList.size());

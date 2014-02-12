@@ -11,12 +11,6 @@
     <title>#{msg.get('app.cusaccept.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-<style type="text/css">
-#frmMain\:contact_record_tbl.ui-datatable table {
-    table-layout: auto !important;
-    width: 100% !important;
-}
-</style>
 </h:head>
 
 <h:body>
@@ -50,7 +44,7 @@
                         	<h:outputText value="#{msg.get('app.lastUpdateBy')} "/>
                         	<h:outputText value="#{customerAcceptance.lastUpdateBy}"/>, 
                         	<h:outputText value="#{customerAcceptance.lastUpdateDateTime}">
-                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th-TH"/>
+                        		<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="th_TH"/>
                         	</h:outputText>
                         </div>
                     </div>
@@ -126,6 +120,7 @@
 	                                        	<h:outputText value="#{msg.get('app.cusaccept.customerAcceptance.TCGPayinSlipSendDate')}" />
 	                                        </td>
 	                                        <td class="left" colspan="5">
+	                                        
 	                                        	<p:calendar pattern="dd/MM/yyyy" showOn="button"
 	                                        		value="#{customerAcceptance.tcgInfoView.payinSlipSendDate}"
 	                                        		mindate="#{customerAcceptance.minTCGPayinSlipSendDate}"
@@ -172,6 +167,7 @@
 	                           	<td colspan="100%">
 	                           		<p:dataTable id='contact_record_tbl' rowIndexVar="rowIdx" 
 	                           			value="#{customerAcceptance.contactRecordDetailViews}" var="detail"
+	                           			styleClass="full_table"
 	                           			>
 	                           			<f:facet name="header">
 	                           				#{msg.get('app.cusaccept.contactRecord.title')}		
@@ -245,8 +241,7 @@
 	                                            
 	                                            <p:commandButton icon="ui-icon-trash"  title="#{msg.get('app.button.delete')}"
 	                                            	process="@this"
-	                           						onstart="p_blockUI.show()"
-	                           						oncomplete="p_blockUI.hide();p_delContactRecordDlg.show()"
+	                           						oncomplete="p_delContactRecordDlg.show()"
 	                           						style="margin-right:0px !important"
 	                                            	>
 	                                            	<f:setPropertyActionListener target="#{customerAcceptance.deletedRowId}" value="#{rowIdx}" />

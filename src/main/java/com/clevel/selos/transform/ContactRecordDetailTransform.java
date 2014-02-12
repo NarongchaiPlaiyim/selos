@@ -11,7 +11,7 @@ import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 
 public class ContactRecordDetailTransform extends Transform  {
-	private static final long serialVersionUID = 6103962644039122088L;
+    private static final long serialVersionUID = -4310732427668590367L;
 	/*
     @Inject
     @SELOS

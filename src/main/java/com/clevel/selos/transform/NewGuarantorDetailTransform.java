@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NewGuarantorRelationDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -43,6 +44,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 newGuarantorDetail.setCreateDate(new Date());
                 newGuarantorDetail.setCreateBy(user);
             }
+            newGuarantorDetail.setProposeType(ProposeType.P.type());
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
@@ -60,6 +62,8 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             newGuarantorDetailView = new NewGuarantorDetailView();
+
+            newGuarantorDetailView.setProposeType(newGuarantorDetail.getProposeType());
             CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
             newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
             newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());

@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,9 +16,9 @@ public class NewGuarantorDetailView implements Serializable {
     private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
+    private String proposeType;
     private int isApproved;
 
-    private List<NewCreditDetailView> newCreditDetailViewList;   //no use
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
 
     private Date createDate;
@@ -33,8 +34,8 @@ public class NewGuarantorDetailView implements Serializable {
         this.guarantorName = new CustomerInfoView();
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
-        this.newCreditDetailViewList = new ArrayList<NewCreditDetailView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.proposeType= ProposeType.P.type();
     }
 
     public long getId() {
@@ -43,6 +44,14 @@ public class NewGuarantorDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
     }
 
     public Date getCreateDate() {
@@ -93,14 +102,6 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = tcgLgNo;
     }
 
-    public List<NewCreditDetailView> getNewCreditDetailViewList() {
-        return newCreditDetailViewList;
-    }
-
-    public void setNewCreditDetailViewList(List<NewCreditDetailView> newCreditDetailViewList) {
-        this.newCreditDetailViewList = newCreditDetailViewList;
-    }
-
     public BigDecimal getTotalLimitGuaranteeAmount() {
         return totalLimitGuaranteeAmount;
     }
@@ -133,7 +134,6 @@ public class NewGuarantorDetailView implements Serializable {
                 .append("tcgLgNo", tcgLgNo)
                 .append("totalLimitGuaranteeAmount", totalLimitGuaranteeAmount)
                 .append("isApproved", isApproved)
-                .append("newCreditDetailViewList", newCreditDetailViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

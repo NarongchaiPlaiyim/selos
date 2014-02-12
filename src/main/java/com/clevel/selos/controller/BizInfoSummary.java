@@ -157,14 +157,12 @@ public class BizInfoSummary implements Serializable {
 
         bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
+
         if(bankStmtSummaryView != null ){
             if(bankStmtSummaryView.getGrdTotalIncomeGross() != null ){
                 bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeGross();
 
             }else{
-//                if(bankStmtSummaryView.getGrdTotalIncomeNetBDM() != null ){
-//                    bankStatementAvg = bankStmtSummaryView.getGrdTotalIncomeNetBDM().doubleValue();
-//                }
                 bankStatementAvg = BigDecimal.ZERO;
             }
         }
@@ -198,7 +196,8 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightAP(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightINV(BigDecimal.ZERO);
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
-            bizInfoSummaryView.setCirculationAmount(BigDecimal.ZERO);
+            bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
 
         } else {
             fromDB = true;
@@ -206,7 +205,9 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
+            onCalSummaryTable();
             bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
+            bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
         }
         onCheckInterview();
     }
@@ -396,10 +397,11 @@ public class BizInfoSummary implements Serializable {
             log.info("onSaveBizInfoSummary begin");
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
+
             if (redirect != null && !redirect.equals("")) {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-            System.out.println("DATE :" + bizInfoSummaryView.getExpiryDate() + ","+bizInfoSummaryView.getRegistrationDate()+","+bizInfoSummaryView.getEstablishDate());
+
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             exSummaryControl.calForBizInfoSummary(workCaseId);
@@ -477,6 +479,16 @@ public class BizInfoSummary implements Serializable {
             disableOwnerName = true;
             bizInfoSummaryView.setOwnerName("");
         }
+    }
+
+    public void onCheckAdd(){
+        redirect = "addDetail";
+        onSaveBizInfoSummary();
+    }
+
+    public void onCheckEdit(){
+        redirect = "viewDetail";
+        onSaveBizInfoSummary();
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {
