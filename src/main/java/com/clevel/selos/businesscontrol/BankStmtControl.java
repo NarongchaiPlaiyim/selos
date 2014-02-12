@@ -1237,7 +1237,7 @@ public class BankStmtControl extends BusinessControl {
 
     public boolean isABDMorBDM() {
         User user = getCurrentUser();
-        if (RoleUser.ABDM.getValue() == user.getRole().getId() || RoleUser.BDM.getValue() == user.getRole().getId())
+        if (RoleValue.ABDM.id() == user.getRole().getId() || RoleValue.BDM.id() == user.getRole().getId())
             return true;
         else
             return false;
@@ -1245,7 +1245,7 @@ public class BankStmtControl extends BusinessControl {
 
     public boolean isUW() {
         User user = getCurrentUser();
-        if (RoleUser.UW.getValue() == user.getRole().getId())
+        if (RoleValue.UW.id() == user.getRole().getId())
             return true;
         else
             return false;

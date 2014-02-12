@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.ws.Endpoint;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     @Inject
     @BRMS
     Logger log;
+
 
     @Inject
     public BRMSInterfaceImpl() {

@@ -11,7 +11,7 @@ import com.clevel.selos.integration.bpm.model.FieldName;
 import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.brms.service.EndPointImp;
+import com.clevel.selos.integration.brms.service.EndPoint;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
@@ -24,8 +24,6 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.view.NewCollateralView;
-import com.clevel.selos.model.view.CollateralDetailResultView;
 import com.clevel.selos.model.view.NewCollateralView;
 import com.clevel.selos.report.ReportService;
 import com.clevel.selos.report.SimpleReport;
@@ -106,7 +104,7 @@ public class WelcomePage implements Serializable {
     BPMInterface bpmInterface;
 
     @Inject
-    EndPointImp endPointImp;
+    EndPoint endPointImp;
 
     //user auditor
     @Inject

@@ -123,6 +123,12 @@ textarea {
     border: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+}
+
+#pnl_maincontainer_login {
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: table;
     min-width: 980px;
     width: 100%;
@@ -811,10 +817,10 @@ tfoot {
 }
 
 .isa_searchColumn1{
-     width: 250px;
+    width: 250px;
 }
 .isa_searchColumn2{
-     width: 580px;
+    width: 580px;
 }
 .isaPanelGridSearch table,tr{
     background: transparent !important;
@@ -830,29 +836,29 @@ table.ui-selectoneradio td {
     padding: 0 8px 0 0;
 }
 .ui-datatable .ui-datatable-header {
-   background: url("#{resource['images:table/table_header_bg.jpg']}") repeat-x scroll 0 0 #3F3F3F !important;
-   color: #FFFFFF !important;
+    background: url("#{resource['images:table/table_header_bg.jpg']}") repeat-x scroll 0 0 #3F3F3F !important;
+    color: #FFFFFF !important;
 }
 .ui-datatable thead th {
-	line-height: normal;
-	padding-top :4px !important;
-	padding-bottom :4px !important;
+    line-height: normal;
+    padding-top :4px !important;
+    padding-bottom :4px !important;
 }
 table tbody tr.total_summary td ,
 table tbody td.total_summary{
-	background-color: #f4f8b6;	
+    background-color: #f4f8b6;
 }
 table tbody tr.grandtotal_summary td {
-	background-color: #f8d0b6;	
+    background-color: #f8d0b6;
 }
 .full_table.ui-datatable table {
     table-layout: auto !important;
     width: 100% !important;
 }
 .inline_select {
-	float:left;
-	margin-top: 1px;
+    float:left;
+    margin-top: 1px;
 }
 .inline_select label {
-	line-height:16px;
+    line-height:16px;
 }

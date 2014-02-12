@@ -64,8 +64,6 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     RMInterface rmInterface;
     @Inject
-    BRMSInterface brmsInterface;
-    @Inject
     DWHInterface dwhInterface;
 
     @Inject

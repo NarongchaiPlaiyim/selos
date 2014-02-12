@@ -6,12 +6,13 @@ import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCollateralHeadView {
+public class NewCollateralHeadView implements Serializable {
     private long id;
     private int no;
     private String titleDeed;

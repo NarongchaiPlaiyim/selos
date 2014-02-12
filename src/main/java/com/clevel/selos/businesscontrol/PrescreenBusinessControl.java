@@ -842,7 +842,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     public void saveCustomerData(List<CustomerInfoView> customerInfoDeleteList, List<CustomerInfoView> customerInfoViewList, WorkCasePrescreen workCasePrescreen){
         //Remove all Customer before add new
         List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
-        log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
+        /*log.info("saveCustomer ::: customerDeleteList size : {}", customerDeleteList.size());
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
@@ -867,7 +867,8 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getCustomerOblInfo() != null){
                 customerOblInfoDAO.delete(customer.getCustomerOblInfo());
             }
-        }
+        }*/
+        customerDAO.delete(customerDeleteList);
 
         //Add all Customer from customer list
         for(CustomerInfoView customerInfoView : customerInfoViewList){
