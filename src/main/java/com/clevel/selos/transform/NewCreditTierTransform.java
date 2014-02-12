@@ -36,7 +36,9 @@ public class NewCreditTierTransform extends Transform {
 
             newCreditTierDetail.setNo(newCreditTierDetailView.getNo());
             newCreditTierDetail.setFinalBasePrice(newCreditTierDetailView.getFinalBasePrice());
-            newCreditTierDetail.setFinalInterest(newCreditTierDetailView.getStandardInterest());
+            newCreditTierDetail.setFinalInterest(newCreditTierDetailView.getFinalInterest());
+            newCreditTierDetail.setSuggestBasePrice(newCreditTierDetailView.getSuggestBasePrice());
+            newCreditTierDetail.setSuggestInterest(newCreditTierDetailView.getSuggestInterest());
             newCreditTierDetail.setInstallment(newCreditTierDetailView.getInstallment());
             newCreditTierDetail.setTenor(newCreditTierDetailView.getTenor());
             newCreditTierDetail.setNewCreditDetail(newCreditDetail);
@@ -61,6 +63,9 @@ public class NewCreditTierTransform extends Transform {
             newFeeDetailView.setFinalBasePrice(newCreditTierDetail.getFinalBasePrice());
             newFeeDetailView.setFinalInterest(newCreditTierDetail.getFinalInterest());
             newFeeDetailView.setFinalPriceRate(toGetPricing(newCreditTierDetail.getFinalBasePrice(),newCreditTierDetail.getFinalInterest()));
+            newFeeDetailView.setSuggestBasePrice(newCreditTierDetail.getSuggestBasePrice());
+            newFeeDetailView.setSuggestInterest(newCreditTierDetail.getSuggestInterest());
+            newFeeDetailView.setSuggestPrice(toGetPricing(newCreditTierDetail.getSuggestBasePrice(),newCreditTierDetail.getSuggestInterest()));
             newFeeDetailView.setInstallment(newCreditTierDetail.getInstallment());
             newFeeDetailView.setTenor(newCreditTierDetail.getTenor());
             newCreditTierDetailViewList.add(newFeeDetailView);

@@ -479,9 +479,9 @@ public class Decision implements Serializable {
         for (NewCreditDetailView proposeCreditDetail : decisionView.getApproveCreditList()) {
             proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             proposeCreditDetail.setStandardBasePrice(baseRate);
-            proposeCreditDetail.setSuggestBasePrice(baseRate);
+//            proposeCreditDetail.setSuggestBasePrice(baseRate); //todo: change suggest to tier
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest());
+//            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest()); //todo: change suggest to tier
         }
     }
 
@@ -499,7 +499,7 @@ public class Decision implements Serializable {
 
             if (baseRateList != null && !baseRateList.isEmpty()) {
                 selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0));
-                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0));
+//                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0)); //todo: change suggest to tier
             }
 
             if (loanPurposeList != null && !loanPurposeList.isEmpty()) {
@@ -580,8 +580,8 @@ public class Decision implements Serializable {
                 creditDetailEdit.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
                 creditDetailEdit.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice());
                 creditDetailEdit.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
-                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice());
-                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
+//                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailEdit.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
                 creditDetailEdit.setLoanPurpose(loanPurpose);
                 creditDetailEdit.setRemark(selectedAppProposeCredit.getRemark());
@@ -606,8 +606,8 @@ public class Decision implements Serializable {
                 creditDetailAdd.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
                 creditDetailAdd.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice());
                 creditDetailAdd.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
-                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice());
-                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
+//                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailAdd.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
                 creditDetailAdd.setLoanPurpose(loanPurpose);
                 creditDetailAdd.setRemark(selectedAppProposeCredit.getRemark());
@@ -704,7 +704,7 @@ public class Decision implements Serializable {
     }
 
     public void onChangeSuggestValue() {
-        log.info("onChangeSuggestValue(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {})",
+        /*log.info("onChangeSuggestValue(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {})", //todo: change suggest to tier
                 selectedAppProposeCredit.getStandardBasePrice().getId(), selectedAppProposeCredit.getStandardInterest(),
                 selectedAppProposeCredit.getSuggestBasePrice().getId(), selectedAppProposeCredit.getSuggestInterest());
 
@@ -721,14 +721,14 @@ public class Decision implements Serializable {
         standardBaseRate = (BaseRate) values[3];
         standardPriceLabel = (String) values[4];
         suggestBaseRate = (BaseRate) values[5];
-        suggestPriceLabel = (String) values[6];
+        suggestPriceLabel = (String) values[6];*/
     }
 
     public void onAddTierInfo() {
-        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
-                standardBaseRate.getId(), selectedAppProposeCredit.getStandardInterest(),
-                suggestBaseRate.getId(), selectedAppProposeCredit.getSuggestInterest(),
-                finalBaseRate.getId(), finalInterest);
+//        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
+//                standardBaseRate.getId(), selectedAppProposeCredit.getStandardInterest(),
+//                suggestBaseRate.getId(), selectedAppProposeCredit.getSuggestInterest(),
+//                finalBaseRate.getId(), finalInterest);
 
         NewCreditTierDetailView newCreditTierDetail = new NewCreditTierDetailView();
         newCreditTierDetail.setFinalBasePrice(finalBaseRate);
@@ -738,7 +738,7 @@ public class Decision implements Serializable {
         newCreditTierDetail.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
         newCreditTierDetail.setStandardPrice(standardPriceLabel);
         newCreditTierDetail.setSuggestBasePrice(suggestBaseRate);
-        newCreditTierDetail.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
+//        newCreditTierDetail.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());//todo: change suggest to tier
         newCreditTierDetail.setSuggestPrice(suggestPriceLabel);
         newCreditTierDetail.setCanEdit(true);
 
