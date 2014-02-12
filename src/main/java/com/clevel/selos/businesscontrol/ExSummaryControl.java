@@ -204,7 +204,9 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
-                exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                if(bizInfoSummaryView.getExpiryDate() != null){
+                    exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                }
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
             }
