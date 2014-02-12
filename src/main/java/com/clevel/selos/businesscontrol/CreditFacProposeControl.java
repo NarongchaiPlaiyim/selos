@@ -493,11 +493,12 @@ public class CreditFacProposeControl extends BusinessControl {
 
                                         log.info("sumTotalPropose :: {}", sumTotalPropose);
                                         //For DBR
-                                        if (productFormula.getDbrCalculate() == 1)//N
+                                        if (productFormula.getDbrCalculate() == 1)//No
                                         {
-                                            log.info("NO :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
+                                            log.info("NO calculate :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                             sumTotalNonLoanDbr = BigDecimal.ZERO;
-                                        } else if (productFormula.getDbrCalculate() == 2)//Y
+                                        }
+                                        else if (productFormula.getDbrCalculate() == 2)//Yes
                                         {
                                             log.info("YES :: productFormula.getDbrCalculate() :: {}", productFormula.getDbrCalculate());
                                             if (productFormula.getDbrMethod() == DBRMethod.NOT_CALCULATE.value()) {// not calculate
@@ -507,19 +508,12 @@ public class CreditFacProposeControl extends BusinessControl {
                                                 log.info("INSTALLMENT :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(newCreditDetail.getInstallment());
                                             } else if (productFormula.getDbrMethod() == DBRMethod.INT_YEAR.value()) { //(Limit*((อัตราดอกเบี้ย+ Spread)/100))/12
-                                                log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}", productFormula.getDbrMethod());
+                                                log.info("INT_YEAR :: productFormula.getDbrMethod() :: {}, productFormula.getDbrSpread() :::{}", productFormula.getDbrMethod(),productFormula.getDbrSpread());
                                                 sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(newCreditDetail, productFormula.getDbrSpread()));
                                             }
                                         }
                                         log.info("sumTotalLoanDbr :: {}", sumTotalLoanDbr);
-                                        //WC
-//                                        if (productFormula.getWcCalculate() == 0) {
-//
-//                                        } else if (productFormula.getWcCalculate() == 1) {
-//
-//                                        } else if (productFormula.getWcCalculate() == 2) {
-//
-//                                        }
+
                                     }
                                 }
                             }
@@ -530,12 +524,17 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
                         existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
+                        log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}",existingCreditFacilityView.getTotalBorrowerComLimit());
+                        log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}",existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
                         if (existingCreditFacilityView != null) {
-                            sumTotalCommercial = sumTotalCommercial.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(sumTotalPropose));
+                            sumTotalCommercial = Util.add(sumTotalCommercial,(Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(),sumTotalPropose)));
                             newCreditFacility.setTotalCommercial(sumTotalCommercial); //sumTotalCommercial
 
-                            sumTotalExposure = sumTotalExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit().add(sumTotalPropose).add(existingCreditFacilityView.getTotalBorrowerRetailLimit()));
+                            sumTotalExposure = Util.add(sumTotalExposure,Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(),(Util.add(sumTotalPropose,existingCreditFacilityView.getTotalBorrowerRetailLimit()))));
+                            newCreditFacility.setTotalExposure(sumTotalExposure); //sumTotalExposure
+                        }else{
+                            newCreditFacility.setTotalCommercial(sumTotalCommercial); //sumTotalCommercial
                             newCreditFacility.setTotalExposure(sumTotalExposure); //sumTotalExposure
                         }
 
