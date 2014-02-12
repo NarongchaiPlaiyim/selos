@@ -32,6 +32,7 @@ public class NewCollateralView implements Serializable {
     private int isApproved;
     private BigDecimal premiumAmount;
     private String proposeType;
+    private boolean coms;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
@@ -58,6 +59,7 @@ public class NewCollateralView implements Serializable {
         this.proposeType= ProposeType.P.type();
         this.newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.coms = false;
     }
 
     public long getId() {
@@ -227,7 +229,29 @@ public class NewCollateralView implements Serializable {
     public void setJobIDSearch(String jobIDSearch) {
         this.jobIDSearch = jobIDSearch;
     }
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
 
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public boolean isComs() {
+        return coms;
+    }
+
+    public void setComs(boolean coms) {
+        this.coms = coms;
+    }
 
     @Override
     public String toString() {
@@ -257,19 +281,5 @@ public class NewCollateralView implements Serializable {
                 .toString();
     }
 
-	public BigDecimal getPremiumAmount() {
-		return premiumAmount;
-	}
 
-	public void setPremiumAmount(BigDecimal premiumAmount) {
-		this.premiumAmount = premiumAmount;
-	}
-
-    public String getProposeType() {
-        return proposeType;
-    }
-
-    public void setProposeType(String proposeType) {
-        this.proposeType = proposeType;
-    }
 }

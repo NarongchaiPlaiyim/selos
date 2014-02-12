@@ -72,7 +72,7 @@ public class NewCollateralTransform extends Transform {
                 newCollateral.setCreateDate(new Date());
                 newCollateral.setCreateBy(user);
             }
-
+            newCollateral.setComs(Util.isTrue(newCollateralView.isComs()));
             newCollateral.setProposeType(ProposeType.P.type());
             newCollateral.setWorkCase(workCase);
             newCollateral.setJobID(newCollateralView.getJobID());
@@ -101,6 +101,7 @@ public class NewCollateralTransform extends Transform {
         for (NewCollateral newCollateralDetail1 : newCollateralList) {
             newCollateralView = new NewCollateralView();
             newCollateralView.setProposeType(newCollateralDetail1.getProposeType());
+            newCollateralView.setComs(Util.isTrue(newCollateralDetail1.getComs()));
             newCollateralView.setId(newCollateralDetail1.getId());
             newCollateralView.setCreateDate(newCollateralDetail1.getCreateDate());
             newCollateralView.setCreateBy(newCollateralDetail1.getCreateBy());
@@ -483,5 +484,6 @@ public class NewCollateralTransform extends Transform {
         log.debug("--[RETURNED] NewCollateralViewList.size[{}]", newCollateralViewList.size());
         return newCollateralViewList;
     }
+
 
 }

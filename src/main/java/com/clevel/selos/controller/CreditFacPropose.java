@@ -5,7 +5,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.COMSInterface;
+import com.clevel.selos.exception.COMSInterfaceException;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
@@ -62,7 +62,6 @@ public class CreditFacPropose implements Serializable {
     Message exceptionMsg;
 
     private Long workCaseId;
-    private User user;
 
     enum ModeForButton {ADD, EDIT}
 
@@ -108,6 +107,7 @@ public class CreditFacPropose implements Serializable {
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
     private int rowSpanNumber;
     private boolean modeEdit;
+    private boolean cannotAddTier;
     private int seq;
     private Hashtable hashSeqCredit;
     private BigDecimal suggestPrice;
@@ -216,8 +216,6 @@ public class CreditFacPropose implements Serializable {
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
-    private COMSInterface comsInterface;
-    @Inject
     private CollateralBizTransform collateralBizTransform;
 
     public CreditFacPropose() {
@@ -232,8 +230,6 @@ public class CreditFacPropose implements Serializable {
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
-            user = (User) session.getAttribute("user");
-
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -403,12 +399,11 @@ public class CreditFacPropose implements Serializable {
         mortgageTypeList = mortgageTypeDAO.findAll();
         loanPurposeList = loanPurposeDAO.findAll();
         disbursementList = disbursementDAO.findAll();
-//        subCollateralTypeList = subCollateralTypeDAO.findAll();
         collateralTypeList = collateralTypeDAO.findAll();
         headCollateralTypeList = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
         baseRateList = baseRateDAO.findAll();
-        modeEdit = false;
+        cannotAddTier = false;
         suggestPrice = BigDecimal.ZERO;
         standardPrice = BigDecimal.ZERO;
         finalBaseRate = new BaseRate();
@@ -434,28 +429,32 @@ public class CreditFacPropose implements Serializable {
         creditDetailRetrieve.setStandardBasePrice(baseRate);
         creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
 
+        // ************************************************* fix ****************************************************//
+
         if (creditDetailRetrieve.getStandardInterest().doubleValue() < 0) {
             creditDetailRetrieve.setStandardPrice(creditDetailRetrieve.getStandardBasePrice().getName() + " " + creditDetailRetrieve.getStandardInterest());
         } else {
             creditDetailRetrieve.setStandardPrice(creditDetailRetrieve.getStandardBasePrice().getName() + " + " + creditDetailRetrieve.getStandardInterest());
         }
+
         BigDecimal sumStandard = baseRate.getValue().add(creditDetailRetrieve.getStandardInterest());
         log.info("sumStandard ::: {}", sumStandard);
         BigDecimal sumSuggest = baseRate.getValue().add(creditDetailRetrieve.getStandardInterest());
         log.info("sumSuggest ::: {}", sumSuggest);
         BigDecimal sumFinal = baseRate.getValue().add(creditDetailRetrieve.getStandardInterest());
         log.info("sumFinal ::: {}", sumFinal);
+
         //****** tier test create ********//
         newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
         newCreditTierDetailView = new NewCreditTierDetailView();
-        newCreditTierDetailView.setStandardBasePrice(baseRate);
-        newCreditTierDetailView.setStandardPrice(creditDetailRetrieve.getStandardPrice());
-        newCreditTierDetailView.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-        newCreditTierDetailView.setStandardPriceSum(sumStandard);
-        newCreditTierDetailView.setSuggestBasePrice(baseRate);
-        newCreditTierDetailView.setSuggestPrice(creditDetailRetrieve.getStandardPrice());
-        newCreditTierDetailView.setSuggestInterest(creditDetailRetrieve.getStandardInterest());
-        newCreditTierDetailView.setSuggestPriceSum(sumSuggest);
+//        newCreditTierDetailView.setStandardBasePrice(baseRate);
+//        newCreditTierDetailView.setStandardPrice(creditDetailRetrieve.getStandardPrice());
+//        newCreditTierDetailView.setStandardInterest(creditDetailRetrieve.getStandardInterest());
+//        newCreditTierDetailView.setStandardPriceSum(sumStandard);
+//        newCreditTierDetailView.setSuggestBasePrice(baseRate);
+//        newCreditTierDetailView.setSuggestPrice(creditDetailRetrieve.getStandardPrice());
+//        newCreditTierDetailView.setSuggestInterest(creditDetailRetrieve.getStandardInterest());
+//        newCreditTierDetailView.setSuggestPriceSum(sumSuggest);
         newCreditTierDetailView.setFinalBasePrice(baseRate);
         newCreditTierDetailView.setFinalPriceRate(creditDetailRetrieve.getStandardPrice());
         newCreditTierDetailView.setFinalInterest(creditDetailRetrieve.getStandardInterest());
@@ -467,54 +466,59 @@ public class CreditFacPropose implements Serializable {
             proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
             proposeCreditDetail.setStandardBasePrice(baseRate);
-            proposeCreditDetail.setSuggestBasePrice(baseRate);
+            proposeCreditDetail.setStandardPrice(creditDetailRetrieve.getStandardPrice());
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest());
-            proposeCreditDetail.setInstallment(newCreditTierDetailView.getInstallment());
-            calculateInstallment(proposeCreditDetail);
+            proposeCreditDetail.setSuggestBasePrice(baseRate);
+            proposeCreditDetail.setSuggestPrice(creditDetailRetrieve.getStandardPrice());
+            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getStandardInterest());
+
             log.info("proposeCreditDetail.getInstallment ::  {}", proposeCreditDetail.getInstallment());
         }
+
     }
 
     public void calculateInstallment(NewCreditDetailView proposeCreditDetail) {
         log.info("proposeCreditDetail : {}", proposeCreditDetail);
-        if(proposeCreditDetail != null && proposeCreditDetail.getNewCreditTierDetailViewList() != null && proposeCreditDetail.getNewCreditTierDetailViewList().size() > 0){
+        if (proposeCreditDetail != null && proposeCreditDetail.getNewCreditTierDetailViewList() != null && proposeCreditDetail.getNewCreditTierDetailViewList().size() > 0) {
+            BigDecimal sumOfInstallment = BigDecimal.ZERO;
             for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
-//                  Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
+                // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
                 // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
                 BigDecimal twelve = BigDecimal.valueOf(12);
                 BigDecimal baseRate = BigDecimal.ZERO;
                 BigDecimal interest = BigDecimal.ZERO;
-                if(newCreditTierDetailView.getFinalBasePrice() != null){
+
+                if (newCreditTierDetailView.getFinalBasePrice() != null) {
                     baseRate = newCreditTierDetailView.getFinalBasePrice().getValue();
                 }
-                if(newCreditTierDetailView.getFinalInterest() != null){
+                if (newCreditTierDetailView.getFinalInterest() != null) {
                     interest = newCreditTierDetailView.getFinalInterest();
                 }
 
-                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate,Util.add(interest,BigDecimal.ONE)),twelve);
-                log.info("baseRate :: {}",baseRate);
-                log.info("interest :: {}",interest);
-                log.info("interestPerMonth :: {}",interestPerMonth);
+                BigDecimal interestPerMonth = Util.divide(Util.add(baseRate, Util.add(interest, BigDecimal.ONE)), twelve);
+                log.info("baseRate :: {}", baseRate);
+                log.info("interest :: {}", interest);
+                log.info("interestPerMonth :: {}", interestPerMonth);
 
                 BigDecimal limit = BigDecimal.ZERO;
                 int tenor = newCreditTierDetailView.getTenor();
                 BigDecimal installment;
 
-                if(proposeCreditDetail.getLimit() != null){
+                if (proposeCreditDetail.getLimit() != null) {
                     limit = proposeCreditDetail.getLimit();
                 }
 
-                log.info("limit :: {}",limit);
-                log.info("tenor :: {}",tenor);
+                log.info("limit :: {}", limit);
+                log.info("tenor :: {}", tenor);
 
-                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth,limit),(Util.add(BigDecimal.ONE,interestPerMonth)).pow(tenor)),
-                        Util.subtract(Util.add(BigDecimal.ONE,interestPerMonth).pow(tenor),BigDecimal.ONE));
+                installment = Util.divide(Util.multiply(Util.multiply(interestPerMonth, limit), (Util.add(BigDecimal.ONE, interestPerMonth)).pow(tenor)),
+                        Util.subtract(Util.add(BigDecimal.ONE, interestPerMonth).pow(tenor), BigDecimal.ONE));
                 log.info("installment : {}", installment);
 
-
                 newCreditTierDetailView.setInstallment(installment);
+                sumOfInstallment.add(installment);
             }
+            proposeCreditDetail.setInstallment(sumOfInstallment);
         }
     }
 
@@ -522,30 +526,43 @@ public class CreditFacPropose implements Serializable {
         String jobID = newCollateralView.getJobID();
         log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobID);
         boolean flag = true;
-        try {
-            if (ModeForButton.ADD.equals(modeForButton)) {
+
+            if (!Util.isNull(jobID)) {
                 flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobID);
                 if (flag) {
-                    newCollateralView = COMSInterface(jobID);
-                    if (Util.isNull(newCollateralView)) {
-                        newCollateralView = new NewCollateralView();
+                    try {
+                        AppraisalDataResult appraisalDataResult = creditFacProposeControl.toCallComsInterface(jobID);
+
+                        if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
+                            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
+                        } else {
+                            newCollateralView = new NewCollateralView();
+                            messageHeader = msg.get("app.propose.exception");
+                            message = appraisalDataResult.getReason();
+                            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        }
+                    } catch (COMSInterfaceException e) {
+                        log.info("COMSInterfaceException :: ");
+                        messageHeader = msg.get("app.propose.exception");
+                        message = e.getMessage();
+                        messageErr = true;
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     }
                 } else {
-                    log.debug("-- {}", message);
                     messageHeader = msg.get("app.propose.exception");
-//                    message = msg.get("app.propose.error.delete.credit");
-                    message = "มีรายการของ Collateral ที่ JobId นี้แล้ว";
+                    message = msg.get("app.credit.facility.propose.coms.err");
                     messageErr = true;
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
             } else {
-                newCollateralView = COMSInterface(jobID);
+                messageHeader = msg.get("app.propose.exception");
+                message = msg.get("app.credit.facility.propose.job.empty");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
-        }
+
         log.info("onCallRetrieveAppraisalReportInfo End");
     }
+
 
     private boolean checkJobIdExist(final List<NewCollateralView> viewList, String jobIDSearch) {
         for (NewCollateralView view : viewList) {
@@ -554,25 +571,6 @@ public class CreditFacPropose implements Serializable {
             }
         }
         return true;
-    }
-
-    // Call COMSInterface
-    public NewCollateralView COMSInterface(final String jobId) {
-        log.info("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-
-        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
-        log.info("appraisalDataResult :: {}", appraisalDataResult.toString());
-        newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-        if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
-            log.debug("-- call com-s is succeed ::: {}", ActionResult.SUCCESS);
-            log.info("appraisalDataResult :: {}", appraisalDataResult.toString());
-            newCollateralView = collateralBizTransform.transformCollateral(appraisalDataResult);
-            flagComs=true;
-            return newCollateralView;
-        } else {
-            log.error("Exception : {}", appraisalDataResult.getActionResult());
-            return null;
-        }
     }
 
     //  Start Propose Credit Information  //
@@ -665,11 +663,13 @@ public class CreditFacPropose implements Serializable {
         newCreditDetailView = new NewCreditDetailView();
         modeForButton = ModeForButton.ADD;
         onChangeRequestType();
+        cannotAddTier = true;
     }
 
 
     public void onEditCreditInfo() {
         modeEdit = false;
+        cannotAddTier = false;
         modeForButton = ModeForButton.EDIT;
         log.info("rowIndex :: {}", rowIndex);
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
@@ -706,7 +706,7 @@ public class CreditFacPropose implements Serializable {
             newCreditDetailView.setHoldLimitAmount(newCreditDetailSelected.getHoldLimitAmount());
             newCreditDetailView.setSeq(newCreditDetailSelected.getSeq());
             newCreditDetailView.setNewCreditTierDetailViewList(newCreditDetailSelected.getNewCreditTierDetailViewList());
-
+            calculateInstallment(newCreditDetailView);
         }
     }
 
@@ -1061,6 +1061,14 @@ public class CreditFacPropose implements Serializable {
             newCreditFacilityView.getNewCollateralViewList().get(rowIndexCollateral).setProposeCreditDetailViewList(newCollateralView.getProposeCreditDetailViewList());
             newCollateralView.setProposeCreditDetailViewList(new ArrayList<ProposeCreditDetailView>());
 
+            if (flagComs) {
+                newCollateralView.setComs(false);
+                flagButtonCollateral = false;
+            } else {
+                newCollateralView.setComs(true);
+                flagButtonCollateral = true;
+            }
+
             for (int i = 0; i < proposeCreditDetailListTemp.size(); i++) {
                 if (proposeCreditDetailListTemp.get(i).isNoFlag() == true) {
                     newCollateralView.getProposeCreditDetailViewList().add(proposeCreditDetailListTemp.get(i));
@@ -1089,12 +1097,6 @@ public class CreditFacPropose implements Serializable {
         } else {
             log.info("onSaveSubCollateral ::: Undefined modeForButton !!");
             complete = false;
-        }
-
-        if(flagComs){
-           flagButtonCollateral = false;
-        }else{
-           flagButtonCollateral =true;
         }
 
         flagComs = false;
@@ -1219,11 +1221,11 @@ public class CreditFacPropose implements Serializable {
         log.info(" newCreditFacilityView.getNewCollateralViewList().size ::{}", newCreditFacilityView.getNewCollateralViewList().size());
         relatedWithAllList = creditFacProposeControl.findNewCollateralSubView(newCreditFacilityView.getNewCollateralViewList());
 
-        if(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId()!=0){
+        if (newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId() != 0) {
             CollateralType collateralType = collateralTypeDAO.findById(newCollateralView.getNewCollateralHeadViewList().get(rowCollHeadIndex).getHeadCollType().getId());
             subCollateralTypeList = subCollateralTypeDAO.findByCollateralType(collateralType);
             log.info("subCollateralTypeList ::: {}", subCollateralTypeList.size());
-        }else{
+        } else {
 
         }
 
@@ -1570,13 +1572,6 @@ public class CreditFacPropose implements Serializable {
         this.newCreditFacilityView = newCreditFacilityView;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public NewCreditDetailView getNewCreditDetailView() {
         return newCreditDetailView;
@@ -1992,6 +1987,14 @@ public class CreditFacPropose implements Serializable {
 
     public void setFlagButtonCollateral(boolean flagButtonCollateral) {
         this.flagButtonCollateral = flagButtonCollateral;
+    }
+
+    public boolean isCannotAddTier() {
+        return cannotAddTier;
+    }
+
+    public void setCannotAddTier(boolean cannotAddTier) {
+        this.cannotAddTier = cannotAddTier;
     }
 }
 
