@@ -10,6 +10,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -113,7 +114,12 @@ public class Decision implements Serializable {
     private long workCaseId;
     private long workCasePrescreenId;
 
+    //User Role
+    private boolean roleBDM;
+    private boolean roleZM_RGM;
     private boolean roleUW;
+
+    //Main Model View
     private DecisionView decisionView;
     private FollowUpConditionView followUpConditionView;
     private ApprovalHistory approvalHistory;
@@ -243,7 +249,18 @@ public class Decision implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            roleUW = !decisionControl.isRoleUW();   // test
+
+            // set role
+            int roleId = decisionControl.getUserRoleId();
+            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+                roleBDM = true;
+            }
+            else if (RoleValue.UW.id() == roleId) {
+                roleUW = true;
+            }
+            else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
+                roleZM_RGM = true;
+            }
 
         } else {
             //TODO return to inbox
@@ -1248,14 +1265,6 @@ public class Decision implements Serializable {
         this.guarantorList = guarantorList;
     }
 
-    public boolean isRoleUW() {
-        return roleUW;
-    }
-
-    public void setRoleUW(boolean roleUW) {
-        this.roleUW = roleUW;
-    }
-
     public int getCreditCustomerType() {
         return creditCustomerType;
     }
@@ -1526,5 +1535,29 @@ public class Decision implements Serializable {
 
     public void setCreditTypeList(List<CreditType> creditTypeList) {
         this.creditTypeList = creditTypeList;
+    }
+
+    public boolean isRoleBDM() {
+        return roleBDM;
+    }
+
+    public void setRoleBDM(boolean roleBDM) {
+        this.roleBDM = roleBDM;
+    }
+
+    public boolean isRoleZM_RGM() {
+        return roleZM_RGM;
+    }
+
+    public void setRoleZM_RGM(boolean roleZM_RGM) {
+        this.roleZM_RGM = roleZM_RGM;
+    }
+
+    public boolean isRoleUW() {
+        return roleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        this.roleUW = roleUW;
     }
 }

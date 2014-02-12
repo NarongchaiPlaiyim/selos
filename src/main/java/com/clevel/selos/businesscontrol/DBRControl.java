@@ -5,7 +5,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.RoleUser;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.RoleType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -284,9 +284,9 @@ public class DBRControl extends BusinessControl {
         //todo non confirm
         if(newCreditFacility != null){
             totalPurposeForDBR = newCreditFacility.getTotalProposeLoanDBR();
-            if(roleId == RoleUser.UW.getValue()){
+            if(roleId == RoleValue.UW.id()){
 
-            }else if(roleId == RoleUser.BDM.getValue()){
+            }else if(roleId == RoleValue.BDM.id()){
 
             }
         }
@@ -300,13 +300,13 @@ public class DBRControl extends BusinessControl {
     private BigDecimal getMonthlyIncome(BankStatementSummary bankStatementSummary){
         BigDecimal monthlyIncome = BigDecimal.ZERO;
         int roleId = getCurrentUser().getRole().getId();
-        if(roleId == RoleUser.UW.getValue()){
+        if(roleId == RoleValue.UW.id()){
             if(bankStatementSummary.getGrdTotalIncomeNetUW() == null)
                 monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
             else
                 monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetUW();
 
-        }else if(roleId == RoleUser.BDM.getValue()){
+        }else if(roleId == RoleValue.BDM.id()){
             monthlyIncome = bankStatementSummary.getGrdTotalIncomeNetBDM();
         }
         return monthlyIncome;
