@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -44,6 +45,7 @@ public class PledgeDetail implements Serializable {
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
+	private String fromPage;
 	private long pledgeId = -1;
 	private User user;
 	private BasicInfoView basicInfoView;
@@ -124,7 +126,9 @@ public class PledgeDetail implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
-		pledgeId = Util.parseLong(FacesUtil.getParameter("pledgeId"),-1);
+		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("pledgeParams");
+		fromPage = (String)params.get("fromPage");
+		pledgeId = Util.parseLong(params.get("pledgeId"),-1);
 		_loadInitData();
 	}
 	

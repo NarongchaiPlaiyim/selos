@@ -3,6 +3,8 @@ package com.clevel.selos.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.clevel.selos.model.Language;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FacesUtil implements Serializable {
@@ -66,4 +69,19 @@ public class FacesUtil implements Serializable {
 			return null;
 		return paramMap.get(name);
 	}
+    @SuppressWarnings("unchecked")
+	public static final Map<String,Object> getParamMapFromFlash(String name) {
+    	Object obj = getFlash().get(name);
+    	if (obj == null || !(obj instanceof Map))
+    		return new HashMap<String, Object>();
+    	else
+    		return (HashMap<String, Object>) obj;
+    }
+    public static final Language getLanguage() {
+    	Language lang = (Language) FacesUtil.getSession(false).getAttribute("language");
+    	if (lang == null)
+    		return Language.EN;
+    	else
+    		return lang;
+    }
 }
