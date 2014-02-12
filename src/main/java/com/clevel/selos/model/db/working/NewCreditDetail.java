@@ -72,12 +72,6 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name = "standard_interest")
-    private BigDecimal standardInterest;
-
-    @Column(name = "suggest_interest")
-    private BigDecimal suggestInterest;
-
     @Column(name = "front_end_fee")
     private BigDecimal frontEndFee;
 
@@ -106,14 +100,6 @@ public class NewCreditDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "credit_type_id")
     private CreditType creditType;
-
-    @OneToOne
-    @JoinColumn(name = "standard_rate_id")
-    private BaseRate standardBasePrice;
-
-    @OneToOne
-    @JoinColumn(name = "suggest_rate_id")
-    private BaseRate suggestBasePrice;
 
     @OneToOne
     @JoinColumn(name = "disbursement_type_id")
@@ -274,22 +260,6 @@ public class NewCreditDetail implements Serializable {
         this.outstanding = outstanding;
     }
 
-    public BigDecimal getStandardInterest() {
-        return standardInterest;
-    }
-
-    public void setStandardInterest(BigDecimal standardInterest) {
-        this.standardInterest = standardInterest;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
-    }
-
     public BigDecimal getFrontEndFee() {
         return frontEndFee;
     }
@@ -352,22 +322,6 @@ public class NewCreditDetail implements Serializable {
 
     public void setCreditType(CreditType creditType) {
         this.creditType = creditType;
-    }
-
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
     }
 
     public DisbursementType getDisbursementType() {
@@ -514,8 +468,6 @@ public class NewCreditDetail implements Serializable {
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
                 .append("outstanding", outstanding)
-                .append("standardInterest", standardInterest)
-                .append("suggestInterest", suggestInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)
@@ -525,8 +477,6 @@ public class NewCreditDetail implements Serializable {
                 .append("isApproved", isApproved)
                 .append("productProgram", productProgram)
                 .append("creditType", creditType)
-                .append("standardBasePrice", standardBasePrice)
-                .append("suggestBasePrice", suggestBasePrice)
                 .append("disbursementType", disbursementType)
                 .append("loanPurpose", loanPurpose)
                 .append("newCreditFacility", newCreditFacility)
