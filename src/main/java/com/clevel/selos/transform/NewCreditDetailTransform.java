@@ -96,7 +96,7 @@ public class NewCreditDetailTransform extends Transform {
 
         for (NewCreditDetail newCreditDetail : newCreditDetailList) {
             newCreditDetailView = new NewCreditDetailView();
-
+            newCreditDetailView.setProposeType(newCreditDetail.getProposeType());
             newCreditDetailView.setCreateBy(newCreditDetail.getCreateBy());
             newCreditDetailView.setCreateDate(newCreditDetail.getCreateDate());
             newCreditDetailView.setModifyBy(newCreditDetail.getModifyBy());

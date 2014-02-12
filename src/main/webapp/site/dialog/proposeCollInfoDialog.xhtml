@@ -24,7 +24,7 @@
                                      binding="#{retrieveButton}"
                                      styleClass="largest"
                                      process="@form"
-                                     update=":collateralDlgForm"
+                                     update=":collateralDlgForm,:msgBoxSystemMessagePanel"
                                      action="#{creditFacPropose.onCallRetrieveAppraisalReportInfo}"/>
                 </td>
             </tr>
@@ -312,6 +312,7 @@
                                 id="btnAddSubCollateralInfo"
                                 value="#{msg.get('app.addButton')}"
                                 styleClass="smaller"
+                                rendered="#{creditFacPropose.flagButtonCollateral}"
                                 process="@form"
                                 action="#{creditFacPropose.onAddSubCollateral}"
                                 update=":subCollateralDlgForm"
@@ -414,6 +415,7 @@
 
                             <p:column styleClass="center">
                                 <p:commandButton icon="ui-icon-pencil"
+                                                 rendered="#{creditFacPropose.flagButtonCollateral}"
                                                  action="#{creditFacPropose.onEditSubCollateral()}"
                                                  update=":subCollateralDlgForm"
                                                  process="@this"
@@ -429,6 +431,7 @@
 
                                 <p:commandButton icon="ui-icon-trash"
                                                  process="@this"
+                                                 rendered="#{creditFacPropose.flagButtonCollateral}"
                                                  oncomplete="confirmDeleteSubCollateralInfoDlg.show()">
                                     <f:setPropertyActionListener value="#{newCollateralSubView}"
                                                                  target="#{creditFacPropose.subCollateralDetailItem}"/>

@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
@@ -55,6 +56,7 @@ public class NewCreditDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
+    private String proposeType;
 
     public NewCreditDetailView() {
         reset();
@@ -98,7 +100,7 @@ public class NewCreditDetailView implements Serializable {
         this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
         this.suggestInterest = BigDecimal.ZERO;
-
+        this.proposeType= ProposeType.P.type();
     }
 
     public long getId() {
@@ -435,6 +437,14 @@ public class NewCreditDetailView implements Serializable {
 
     public void setAccountSuf(String accountSuf) {
         this.accountSuf = accountSuf;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
     }
 
     @Override

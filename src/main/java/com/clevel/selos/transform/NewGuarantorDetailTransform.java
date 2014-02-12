@@ -62,6 +62,8 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             newGuarantorDetailView = new NewGuarantorDetailView();
+
+            newGuarantorDetailView.setProposeType(newGuarantorDetail.getProposeType());
             CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
             newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
             newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());

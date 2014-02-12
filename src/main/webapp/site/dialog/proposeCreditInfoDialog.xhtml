@@ -111,12 +111,15 @@
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
+                                 id="limit"
                                  required="#{not empty param[onSaveCreditInfo.clientId]}">
                         <f:convertNumber pattern="#,##0.##"
                                          minFractionDigits="2"
                                          maxFractionDigits="2"
                                          maxIntegerDigits="14"/>
-                        <p:ajax event="blur" update="@this"/>
+                        <p:ajax event="blur"
+                                listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
+                                process=":creditInfoDlgForm" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal:installment" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -259,12 +262,14 @@
                                                  value="#{creditFacPropose.newCreditDetailView.suggestBasePrice.id}"
                                                  style="width: 50px;"
                                                  disabled="false">
-                                    <f:selectItems value="#{creditFacPropose.baseRateList}" var="suggest"
+                                    <f:selectItems value="#{creditFacPropose.baseRateList}"
+                                                   var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
                                     <p:ajax event="change"
                                             listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm" />
+                                            process=":creditInfoDlgForm"
+                                            update=":creditInfoDlgForm:resultFinal" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -283,7 +288,8 @@
                                                      maxIntegerDigits="3"/>
                                     <p:ajax event="blur"
                                             listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm" />
+                                            process=":creditInfoDlgForm"
+                                            update=":creditInfoDlgForm:resultFinal" />
                                 </p:inputText>
                             </td>
                         </tr>
@@ -302,7 +308,7 @@
                             id="addTier"
                             process="@this"
                             update=":creditInfoDlgForm:resultFinal"
-                            disabled="#{creditFacPropose.modeEdit}"
+                            disabled="#{creditFacPropose.cannotAddTier}"
                             actionListener="#{creditFacPropose.onAddTierInfo()}" >
                     </p:commandButton>
                 </td>
@@ -340,6 +346,7 @@
                                 <p:row>
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}"
+                                                         id="finalBase"
                                                          style="width: 50px;"
                                                          disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
                                             <f:selectItems value="#{creditFacPropose.baseRateList}"
@@ -351,6 +358,7 @@
                                     <p:column>
                                         <p:inputText value="#{item.finalInterest}"
                                                      onclick="this.select()"
+                                                     id="finalInterest"
                                                      onkeydown="return onKeyDownMoney(event);"
                                                      onkeypress="return onKeyPressMoney(event);"
                                                      style="width: 50px;"
