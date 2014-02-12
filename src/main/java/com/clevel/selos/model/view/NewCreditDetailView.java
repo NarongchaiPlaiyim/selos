@@ -37,9 +37,6 @@ public class NewCreditDetailView implements Serializable {
     private BaseRate standardBasePrice;
     private String standardPrice;
     private BigDecimal standardInterest;
-    private BaseRate suggestBasePrice;
-    private String suggestPrice;
-    private BigDecimal suggestInterest;
     private BigDecimal frontEndFee;
     private String remark;
     private BigDecimal holdLimitAmount;
@@ -95,11 +92,8 @@ public class NewCreditDetailView implements Serializable {
         this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
 
         this.standardPrice = "";
-        this.suggestPrice = "";
         this.standardBasePrice = new BaseRate();
-        this.suggestBasePrice = new BaseRate();
         this.standardInterest = BigDecimal.ZERO;
-        this.suggestInterest = BigDecimal.ZERO;
         this.proposeType= ProposeType.P.type();
     }
 
@@ -255,14 +249,6 @@ public class NewCreditDetailView implements Serializable {
         this.standardPrice = standardPrice;
     }
 
-    public String getSuggestPrice() {
-        return suggestPrice;
-    }
-
-    public void setSuggestPrice(String suggestPrice) {
-        this.suggestPrice = suggestPrice;
-    }
-
     public BigDecimal getFrontEndFee() {
         return frontEndFee;
     }
@@ -335,28 +321,12 @@ public class NewCreditDetailView implements Serializable {
         this.standardBasePrice = standardBasePrice;
     }
 
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
-    }
-
     public BigDecimal getStandardInterest() {
         return standardInterest;
     }
 
     public void setStandardInterest(BigDecimal standardInterest) {
         this.standardInterest = standardInterest;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
     }
 
     public int getApproved() {
@@ -473,9 +443,6 @@ public class NewCreditDetailView implements Serializable {
                 .append("standardBasePrice", standardBasePrice)
                 .append("standardPrice", standardPrice)
                 .append("standardInterest", standardInterest)
-                .append("suggestBasePrice", suggestBasePrice)
-                .append("suggestPrice", suggestPrice)
-                .append("suggestInterest", suggestInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)
