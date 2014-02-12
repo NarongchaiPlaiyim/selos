@@ -27,6 +27,7 @@ public class NewCreditTierTransform extends Transform {
             newCreditTierDetail = new NewCreditTierDetail();
 
             if (newCreditTierDetail.getId() != 0) {
+                //newCreditTierDetail.setId(newCreditTierDetailView.getId());
                 newCreditTierDetail.setCreateDate(newCreditTierDetailView.getCreateDate());
                 newCreditTierDetail.setCreateBy(newCreditTierDetailView.getCreateBy());
             } else { // id = 0 create new
@@ -53,6 +54,8 @@ public class NewCreditTierTransform extends Transform {
 
         for (NewCreditTierDetail newCreditTierDetail : newCreditTierDetailList) {
             newFeeDetailView = new NewCreditTierDetailView();
+
+            newFeeDetailView.setId(newCreditTierDetail.getId());
             newFeeDetailView.setCreateDate(newCreditTierDetail.getCreateDate());
             newFeeDetailView.setCreateBy(newCreditTierDetail.getCreateBy());
             newFeeDetailView.setModifyDate(newCreditTierDetail.getModifyDate());

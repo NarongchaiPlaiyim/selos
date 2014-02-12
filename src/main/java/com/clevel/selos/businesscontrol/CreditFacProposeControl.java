@@ -912,4 +912,48 @@ public class CreditFacProposeControl extends BusinessControl {
             return b1;
         }
     }
+
+    public void saveCreditFacility(NewCreditFacilityView newCreditFacilityView, long workCaseId){
+        log.debug("Starting saveCreditFacility...");
+        log.debug("saveCreditFacility ::: workCaseId : {}", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User currentUser = getCurrentUser();
+
+        log.debug("saveCreditFacility ::: newCreditFacilityView : {}", newCreditFacilityView);
+        NewCreditFacility newCreditFacility = newCreditFacilityTransform.transformToModelDB(newCreditFacilityView, workCase, currentUser);
+        newCreditFacilityDAO.persist(newCreditFacility);
+        log.debug("saveCreditFacility ::: persist newCreditFacility : {}", newCreditFacility);
+
+        //--- Save to NewFeeCredit
+        if(Util.safetyList(newCreditFacilityView.getNewFeeDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newFeeDetailViewList : {}", newCreditFacilityView.getNewFeeDetailViewList());
+            List<NewFeeDetail> newFeeDetailList = newFeeDetailTransform.transformToModel(newCreditFacilityView.getNewFeeDetailViewList(), newCreditFacility, currentUser);
+            newFeeCreditDAO.persist(newFeeDetailList);
+            log.debug("saveCreditFacility ::: persist newFeeDetailList : {}", newFeeDetailList);
+        }
+
+        //--- Save to NewConditionCredit
+        if(Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newConditionDetailViewList : {}", newCreditFacilityView.getNewConditionDetailViewList());
+            List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, currentUser);
+            newConditionDetailDAO.persist(newConditionDetailList);
+            log.debug("saveCreditFacility ::: persist newConditionDetailList : {}", newConditionDetailList);
+        }
+
+        //--- Save to NewCreditDetail
+        if(Util.safetyList(newCreditFacilityView.getNewCreditDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newCreditDetailViewList : {}", newCreditFacilityView.getNewCreditDetailViewList());
+            List<NewCreditDetail> newCreditDetailList = newCreditDetailTransform.transformToModel(newCreditFacilityView.getNewCreditDetailViewList(), newCreditFacility, currentUser, workCase);
+            newCreditDetailDAO.persist(newCreditDetailList);
+            log.debug("saveCreditFacility ::: persist newCreditDetailList : {}", newCreditDetailList);
+        }
+
+        //--- Save to NewGuarantor
+        if(Util.safetyList(newCreditFacilityView.getNewGuarantorDetailViewList()).size() > 0){
+            log.debug("saveCreditFacility ::: newGuarantorDetailViewList : {}", newCreditFacilityView.getNewGuarantorDetailViewList());
+            List<NewGuarantorDetail> newGuarantorDetailList = newGuarantorDetailTransform.transformToModel(newCreditFacilityView.getNewGuarantorDetailViewList(), newCreditFacility, currentUser);
+            newGuarantorDetailDAO.persist(newGuarantorDetailList);
+            log.debug("saveCreditFacility ::: persist newGuarantorDetailList : {}", newGuarantorDetailList);
+        }
+    }
 }

@@ -130,6 +130,12 @@ public class NewCreditDetail implements Serializable {
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
 
+    /*@OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    private List<NewCollateralCredit> newCollateralCreditList;
+
+    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
+    private List<NewGuarantorCredit> newGuarantorCreditList;*/
+
     @ManyToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
@@ -491,6 +497,22 @@ public class NewCreditDetail implements Serializable {
     public void setProposeType(String proposeType) {
         this.proposeType = proposeType;
     }
+
+    /*public List<NewCollateralCredit> getNewCollateralCreditList() {
+        return newCollateralCreditList;
+    }
+
+    public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
+        this.newCollateralCreditList = newCollateralCreditList;
+    }
+
+    public List<NewGuarantorCredit> getNewGuarantorCreditList() {
+        return newGuarantorCreditList;
+    }
+
+    public void setNewGuarantorCreditList(List<NewGuarantorCredit> newGuarantorCreditList) {
+        this.newGuarantorCreditList = newGuarantorCreditList;
+    }*/
 
     @Override
     public String toString() {

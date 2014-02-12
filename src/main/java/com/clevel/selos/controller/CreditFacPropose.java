@@ -9,6 +9,7 @@ import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
@@ -281,7 +282,12 @@ public class CreditFacPropose implements Serializable {
                 productGroup = null;
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
-                specialProgramBasicInfo = basicInfo.getSpecialProgram();
+                if(basicInfo.getApplySpecialProgram() == RadioValue.YES.value()){
+                    specialProgramBasicInfo = basicInfo.getSpecialProgram();
+                } else {
+                    specialProgramBasicInfo = specialProgramDAO.findById(3);
+                }
+                log.debug("specialProgramBasicInfo : {}", specialProgramBasicInfo);
                 productGroup = basicInfo.getProductGroup();
             }
 
@@ -556,7 +562,7 @@ public class CreditFacPropose implements Serializable {
     // Call COMSInterface
     public NewCollateralView COMSInterface(final String jobId) {
         log.info("onCallRetrieveAppraisalReportInfo begin jobId is  :: {}", jobId);
-
+        //TODO Move function to Business Control
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
         log.info("appraisalDataResult :: {}", appraisalDataResult.toString());
 
@@ -1466,8 +1472,9 @@ public class CreditFacPropose implements Serializable {
 //                && (newCreditFacilityView.getNewCollateralViewList().size() > 0)
 //                && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
-
-            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+            //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
+            //creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
