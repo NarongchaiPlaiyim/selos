@@ -613,7 +613,8 @@
                                                 <h:outputText value="#{proposeCredit.standardPrice}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -682,7 +683,7 @@
                                                     <h:outputText value="#{proposeCredit.standardPrice}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.suggestPrice}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                     <h:outputText value="#{creditTierDetail.finalPriceRate}"/>

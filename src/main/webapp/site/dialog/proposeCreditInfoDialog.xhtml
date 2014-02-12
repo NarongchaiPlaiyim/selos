@@ -105,13 +105,12 @@
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText value="#{creditFacPropose.newCreditDetailView.limit}"
+                    <p:inputText id="limit" value="#{creditFacPropose.newCreditDetailView.limit}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
                                  onkeypress="return onKeyPressMoney(event);"
                                  styleClass="right"
-                                 id="limit"
                                  required="#{not empty param[onSaveCreditInfo.clientId]}">
                         <f:convertNumber pattern="#,##0.##"
                                          minFractionDigits="2"
@@ -119,7 +118,7 @@
                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
-                                process=":creditInfoDlgForm" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal:installment" />
+                                process="@form" update=":creditInfoDlgForm:resultFinal" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -259,7 +258,7 @@
                         <tr>
                             <td>
                                 <p:selectOneMenu id="suggestDlg"
-                                                 value="#{creditFacPropose.newCreditDetailView.suggestBasePrice.id}"
+                                                 value="#{creditFacPropose.suggestBasePriceDlg.id}"
                                                  style="width: 50px;"
                                                  disabled="#{creditFacPropose.cannotAddTier}">
                                     <f:selectItems value="#{creditFacPropose.baseRateList}"
@@ -274,11 +273,11 @@
                             </td>
                             <td>
                                 <p:inputText id="suggestPriceDlg"
-                                             value="#{creditFacPropose.newCreditDetailView.suggestInterest}"
+                                             value="#{creditFacPropose.suggestInterestDlg}"
                                              maxlength="6"
                                              onclick="this.select()"
-                                             onkeydown="return onKeyDownMoney(event);"
-                                             onkeypress="return onKeyPressMoney(event);"
+                                             onkeydown="return onKeyDownNegMoney(event);"
+                                             onkeypress="return onKeyPressNegMoney(event);"
                                              style="width: 50px;"
                                              styleClass="right"
                                              disabled="#{creditFacPropose.cannotAddTier}">
@@ -347,8 +346,8 @@
                                     <p:column>
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}"
                                                          id="finalBase"
-                                                         style="width: 50px;"
-                                                         disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
+                                                         style="width: 50px;" disabled="true">
+                                                         <!--disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                             <f:selectItems value="#{creditFacPropose.baseRateList}"
                                                            var="final"
                                                            itemLabel="#{final.name}"
@@ -362,8 +361,8 @@
                                                      onkeydown="return onKeyDownMoney(event);"
                                                      onkeypress="return onKeyPressMoney(event);"
                                                      style="width: 50px;"
-                                                     styleClass="right"
-                                                     readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
+                                                     styleClass="right" readonly="true">
+                                                     <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                             <f:convertNumber pattern="#,##0"
                                                              minFractionDigits="2"
                                                              maxFractionDigits="2"
@@ -397,8 +396,8 @@
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right"
-                                         readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">
+                                         styleClass="right" readonly="true">
+                                         <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
