@@ -342,9 +342,9 @@
                                                          style="width: 50px;" disabled="true">
                                                          <!--disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                             <f:selectItems value="#{creditFacPropose.baseRateList}"
-                                                           var="final"
-                                                           itemLabel="#{final.name}"
-                                                           itemValue="#{final.id}"/>
+                                                           var="finalBase"
+                                                           itemLabel="#{finalBase.name}"
+                                                           itemValue="#{finalBase.id}"/>
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>
