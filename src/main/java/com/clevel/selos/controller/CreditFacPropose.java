@@ -840,29 +840,35 @@ public class CreditFacPropose implements Serializable {
         BigDecimal finalInterest;
         String finalPriceLabel;
 
+        BaseRate suggestBase = new BaseRate();
         BigDecimal suggestPrice = BigDecimal.ZERO;
         String suggestPriceLabel = "";
 
+        BaseRate standardBase = new BaseRate();
         BigDecimal standardPrice = BigDecimal.ZERO;
         String standardPriceLabel = "";
 
-        BaseRate suggestBase = baseRateDAO.findById(suggestBasePriceDlg.getId());
-        if(suggestBase != null){
-            suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
-            if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
-                suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
-            } else {
-                suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+        if(suggestBasePriceDlg.getId() != 0){
+            suggestBase = baseRateDAO.findById(suggestBasePriceDlg.getId());
+            if(suggestBase != null){
+                suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
+                if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
+                    suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
+                } else {
+                    suggestPriceLabel = suggestBase.getName() + " + " + suggestInterestDlg;
+                }
             }
         }
 
-        BaseRate standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
-        if(standardBase != null){
-            standardPrice = standardBase.getValue().add(standardInterestDlg);
-            if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
-                standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
-            } else {
-                standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+        if(standardBasePriceDlg.getId() != 0){
+            standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
+            if(standardBase != null){
+                standardPrice = standardBase.getValue().add(standardInterestDlg);
+                if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
+                    standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
+                } else {
+                    standardPriceLabel = standardBase.getName() + " + " + standardInterestDlg;
+                }
             }
         }
 
@@ -888,11 +894,10 @@ public class CreditFacPropose implements Serializable {
         }
 
         NewCreditTierDetailView creditTierDetailAdd = new NewCreditTierDetailView();
-        BaseRate finalBase = baseRateDAO.findById(finalBaseRate.getId());
 
         creditTierDetailAdd.setFinalPriceLabel(finalPriceLabel);
         creditTierDetailAdd.setFinalInterest(finalInterest);
-        creditTierDetailAdd.setFinalBasePrice(finalBase);
+        creditTierDetailAdd.setFinalBasePrice(finalBaseRate);
 
         creditTierDetailAdd.setSuggestPriceLabel(suggestPriceLabel);
         creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
