@@ -1516,8 +1516,8 @@ public class CreditFacPropose implements Serializable {
 //                && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
-            //creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            //creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
