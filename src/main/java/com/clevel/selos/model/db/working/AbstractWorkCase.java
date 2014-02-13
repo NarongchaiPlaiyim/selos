@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +11,43 @@ public class AbstractWorkCase implements Serializable{
 
     @Column(name = "app_number", length = 16,nullable = false)
     protected String appNumber;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "received_date")
+    protected Date receivedDate;
+
+    @Column(name = "at_user_team")
+    protected UserTeam atUserTeam;
+
+    @Column(name = "product_group")
+    protected ProductGroup productGroup;
+
+    @Column(name = "request_type")
+    protected RequestType request_type;
+
+    @Column(name = "from_user")
+    protected User fromUser;
+
+    @Column(name = "at_user")
+    protected User atUser;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "appointment_date")
+    protected Date appointmentDate;
+
+    @ManyToOne
+    @JoinColumn(name = "doa_level")
+    protected AuthorizationDOA authorizationDOA;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JoinColumn(name = "sla_end_date")
+    protected Date slaEndDate;
+
+    @Column(name = "total_time_at_user")
+    protected int totalTimeAtUser;
+
+    @Column(name = "total_time_at_process")
+    protected int totalTimeAtProcess;
 
     @Column(name = "wob_number")
     protected String wobNumber;
@@ -46,6 +81,9 @@ public class AbstractWorkCase implements Serializable{
     @OneToOne
     @JoinColumn(name = "modify_by")
     protected User modifyBy;
+
+    @Column(name = "bpm_active", length = 1, columnDefinition = "int default 1")
+    protected int bpmActive;
 
     public Date getCreateDate() {
         return createDate;

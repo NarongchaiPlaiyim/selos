@@ -219,7 +219,7 @@
                         <tr>
                             <td>
                                 <p:selectOneMenu id="standDlg"
-                                                 value="#{creditFacPropose.newCreditDetailView.standardBasePrice.id}"
+                                                 value="#{creditFacPropose.standardBasePriceDlg.id}"
                                                  style="width: 50px;"
                                                  disabled="#{creditFacPropose.cannotEditStandard}">
                                     <f:selectItems value="#{creditFacPropose.baseRateList}" var="standard"
@@ -229,11 +229,11 @@
                             </td>
                             <td>
                                 <p:inputText id="standPriceDlg"
-                                             value="#{creditFacPropose.newCreditDetailView.standardInterest}"
+                                             value="#{creditFacPropose.standardInterestDlg}"
                                              maxlength="6"
                                              onclick="this.select()"
-                                             onkeydown="return onKeyDownMoney(event);"
-                                             onkeypress="return onKeyPressMoney(event);"
+                                             onkeydown="return onKeyDownNegMoney(event);"
+                                             onkeypress="return onKeyPressNegMoney(event);"
                                              style="width: 50px;"
                                              styleClass="right"
                                              disabled="#{creditFacPropose.cannotEditStandard}">
