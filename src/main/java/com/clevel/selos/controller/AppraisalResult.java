@@ -166,6 +166,7 @@ public class AppraisalResult implements Serializable {
         log.debug("preRender ::: setSession ");
 //        workCaseId = 4;
 //        user = (User)session.getAttribute("user");
+
         if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
             workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
             log.debug("-- workCasePreScreenId[{}]", workCaseId);
@@ -175,7 +176,7 @@ public class AppraisalResult implements Serializable {
             log.debug("-- stepId[{}]", stepId);
             try{
                 String page = Util.getCurrentPage();
-                if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalResult.jsf".equals(page)){
+                if(stepId != StepValue.PRESCREEN_MAKER.value() || stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
                     FacesUtil.redirect("/site/inbox.jsf");
                     return;
                 }
