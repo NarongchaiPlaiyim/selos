@@ -37,7 +37,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -46,7 +45,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "creditFacPropose")
-public class CreditFacPropose implements Serializable {
+public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     @SELOS
     Logger log;
@@ -158,8 +157,6 @@ public class CreditFacPropose implements Serializable {
     private BaseRate suggestBasePriceDlg;
     private BigDecimal suggestInterestDlg;
 
-    private User user;
-
     @Inject
     UserDAO userDAO;
     @Inject
@@ -231,10 +228,6 @@ public class CreditFacPropose implements Serializable {
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
-
-            //test
-            user = (User)session.getAttribute("user");
-
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -539,6 +532,7 @@ public class CreditFacPropose implements Serializable {
         String jobId = newCollateralView.getJobID();
         log.info("onCallRetrieveAppraisalReportInfo begin key is  :: {}", jobId);
         boolean flag = true;
+        User user = getCurrentUser();
 
         if (!Util.isNull(jobId)){
             flag = checkJobIdExist(newCreditFacilityView.getNewCollateralViewList(), jobId);
@@ -647,7 +641,7 @@ public class CreditFacPropose implements Serializable {
 
     public void onChangeRequestType() {
         log.info("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
-        System.out.println("newCreditDetailView.getRequestType() :: "+ newCreditDetailView.getRequestType());
+        System.out.println("newCreditDetailView.getRequestType() :: " + newCreditDetailView.getRequestType());
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
 
