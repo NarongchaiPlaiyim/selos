@@ -186,7 +186,7 @@
             </tr>
             <tr>
                 <td class="left" colspan="2">
-                    <table border="0" style="width: 100%">
+                    <table border="0">
                         <tr>
                             <td style="border-style: none !important;">
                                 <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing"
@@ -224,11 +224,11 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <table border="0" style="width: 100%">
+                    <table border="0">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSelectStandardPrice"
-                                                 value="#{decision.selectedAppProposeCredit.standardBasePrice.id}"
+                                                 value="#{decision.standardBasePriceDlg.id}"
                                                  style="width: 50px;"
                                                  disabled="#{decision.cannotEditStandard}">
                                     <f:selectItems value="#{decision.baseRateList}"
@@ -239,7 +239,7 @@
                             </td>
                             <td>
                                 <p:inputText id="dlgStandardInterest"
-                                             value="#{decision.selectedAppProposeCredit.standardInterest}"
+                                             value="#{decision.standardInterestDlg}"
                                              maxlength="6"
                                              onclick="this.select()"
                                              onkeydown="return onKeyDownNegMoney(event);"
@@ -263,11 +263,11 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <table border="0" style="width: 100%">
+                    <table border="0">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgSelectSuggestPrice"
-                                                 value="#{decision.selectedAppProposeCredit.suggestBasePrice.id}"
+                                                 value="#{decision.suggestBasePriceDlg.id}"
                                                  style="width: 50px;"
                                                  disabled="#{decision.modeEditCredit}">
                                     <f:selectItems value="#{decision.baseRateList}"
@@ -281,7 +281,7 @@
                             </td>
                             <td>
                                 <p:inputText id="dlgSuggestInterest"
-                                             value="#{decision.selectedAppProposeCredit.suggestInterest}"
+                                             value="#{decision.suggestInterestDlg}"
                                              maxlength="6"
                                              onclick="this.select()"
                                              onkeydown="return onKeyDownNegMoney(event);"
@@ -349,9 +349,9 @@
                                                          style="width: 50px;" disabled="true">
                                                          <!--disabled="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">-->
                                             <f:selectItems value="#{decision.baseRateList}"
-                                                           var="final"
-                                                           itemLabel="#{final.name}"
-                                                           itemValue="#{final.id}"/>
+                                                           var="finalBase"
+                                                           itemLabel="#{finalBase.name}"
+                                                           itemValue="#{finalBase.id}"/>
                                         </p:selectOneMenu>
                                     </td>
                                     <td style="border-style: none !important; padding-left: 2px !important;">
