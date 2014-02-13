@@ -248,10 +248,11 @@ public class CreditFacProposeControl extends BusinessControl {
                 NewCollateral newCollateralDetail = newCollateralList.get(i);
                 NewCollateralView newCollateralView = newCreditFacilityView.getNewCollateralViewList().get(i);
 
-//                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
-                newCollateralRelationDAO.persist(newCollateralCreditList);
-                log.debug("persist newCollateralCreditList...");
+                if (newCollateralView.getProposeCreditDetailViewList().size() > 0) {
+                    List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+                    newCollateralRelationDAO.persist(newCollateralCreditList);
+                    log.debug("persist newCollateralCreditList...");
+                }
 
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
                     NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
@@ -295,19 +296,19 @@ public class CreditFacProposeControl extends BusinessControl {
 
                             }
 
-                            if (newSubCollateralView.getRelatedWithList() != null) {
-                                NewCollateralSubRelated newCollateralSubRelate;
-                                for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
-                                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
-                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
-                                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                                    newCollateralSubRelate = new NewCollateralSubRelated();
-                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
-                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
-                                    log.debug("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
-                                }
-                            }
+//                            if (newSubCollateralView.getRelatedWithList() != null) {
+//                                NewCollateralSubRelated newCollateralSubRelate;
+//                                for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
+//                                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
+//                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
+//                                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+//                                    newCollateralSubRelate = new NewCollateralSubRelated();
+//                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+//                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
+//                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
+//                                    log.debug("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
+//                                }
+//                            }
                         }
                     }
                 }

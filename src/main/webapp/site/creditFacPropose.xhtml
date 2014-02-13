@@ -1181,7 +1181,6 @@
                                 </td>
                                 <td class="right" colspan="2">
                                     <p:commandButton value="Edit"
-                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      action="#{creditFacPropose.onEditProposeCollInfo()}"
                                                      update=":collateralDlgForm"
                                                      process="@this"
@@ -1194,7 +1193,6 @@
                                     </p:commandButton>
                                     <p:spacer width="10" height="0"/>
                                     <p:commandButton value="Remove"
-                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      process="@this"
                                                      oncomplete="confirmDeleteCollateralInfoDlg.show()">
                                         <f:setPropertyActionListener value="#{newCollateralView}"
