@@ -419,7 +419,7 @@ public class NewCollateralTransform extends Transform {
     }
 
     public List<NewCollateral> transformToModel(final List<NewCollateralView> newCollateralViewList, final User user, final NewCreditFacility newCreditFacility){
-        log.debug("-- transformToModel [NewCollateralList.size[{}]]", newCollateralViewList.size());
+        log.debug("-- transformToModel [NewCollateralViewList.size[{}]]", newCollateralViewList.size());
         newCollateralList = new ArrayList<NewCollateral>();
         NewCollateral model = null;
         for(NewCollateralView view : newCollateralViewList){
