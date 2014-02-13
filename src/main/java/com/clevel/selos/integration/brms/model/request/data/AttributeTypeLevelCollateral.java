@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.brms.model.request.data2;
+package com.clevel.selos.integration.brms.model.request.data;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

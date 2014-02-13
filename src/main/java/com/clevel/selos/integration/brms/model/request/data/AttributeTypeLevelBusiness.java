@@ -5,36 +5,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class BusinessLevel implements Serializable {
-    private int businessSeqId;
-    private String businesscode;
+public class AttributeTypeLevelBusiness implements Serializable {
     private boolean negativeFlag;
     private boolean highRiskFlag;
 
-    public BusinessLevel() {
+    public AttributeTypeLevelBusiness() {
     }
 
-    public BusinessLevel(int businessSeqId, String businesscode, boolean negativeFlag, boolean highRiskFlag) {
-        this.businessSeqId = businessSeqId;
-        this.businesscode = businesscode;
+    public AttributeTypeLevelBusiness(boolean negativeFlag, boolean highRiskFlag) {
         this.negativeFlag = negativeFlag;
         this.highRiskFlag = highRiskFlag;
-    }
-
-    public int getBusinessSeqId() {
-        return businessSeqId;
-    }
-
-    public void setBusinessSeqId(int businessSeqId) {
-        this.businessSeqId = businessSeqId;
-    }
-
-    public String getBusinesscode() {
-        return businesscode;
-    }
-
-    public void setBusinesscode(String businesscode) {
-        this.businesscode = businesscode;
     }
 
     public boolean isNegativeFlag() {
@@ -56,10 +36,8 @@ public class BusinessLevel implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("businessSeqId", businessSeqId)
-                .append("businesscode", businesscode)
-                .append("negativeFlag", negativeFlag)
                 .append("highRiskFlag", highRiskFlag)
+                .append("negativeFlag", negativeFlag)
                 .toString();
     }
 }

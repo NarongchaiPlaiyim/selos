@@ -7,32 +7,29 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class NcbAccountLevel implements Serializable {
-    private String ncbAccountStatus;
-    private boolean tmbBankFlag;
-    private boolean ncbNPLFlag;
+public class AccountTypeLevelNCBReport implements Serializable {
+    private String ncbAccountStatus; //todo : to be enum
     private BigDecimal creditAmountFirstNPL;
     private boolean ncbTDRFlag;
     private SettlementStatus currentPayment;
     private SettlementStatus paymentPattern6M;
     private SettlementStatus paymentPattern12M;
-    private int overdue31dTo60dCount;
-    private int overLimitLast6MthsCount;
-
-    public NcbAccountLevel() {
+    private int overDue31to60DaysWithinLast12Months;
+    private int overLimitWithinLast6Months;
+    private AttributeTypeLevelAccountTypeNCB attributeType;
+    public AccountTypeLevelNCBReport() {
     }
 
-    public NcbAccountLevel(String ncbAccountStatus, boolean tmbBankFlag, boolean ncbNPLFlag, BigDecimal creditAmountFirstNPL, boolean ncbTDRFlag, SettlementStatus currentPayment, SettlementStatus paymentPattern6M, SettlementStatus paymentPattern12M, int overdue31dTo60dCount, int overLimitLast6MthsCount) {
+    public AccountTypeLevelNCBReport(String ncbAccountStatus, BigDecimal creditAmountFirstNPL, boolean ncbTDRFlag, SettlementStatus currentPayment, SettlementStatus paymentPattern6M, SettlementStatus paymentPattern12M, int overDue31to60DaysWithinLast12Months, int overLimitWithinLast6Months, AttributeTypeLevelAccountTypeNCB attributeType) {
         this.ncbAccountStatus = ncbAccountStatus;
-        this.tmbBankFlag = tmbBankFlag;
-        this.ncbNPLFlag = ncbNPLFlag;
         this.creditAmountFirstNPL = creditAmountFirstNPL;
         this.ncbTDRFlag = ncbTDRFlag;
         this.currentPayment = currentPayment;
         this.paymentPattern6M = paymentPattern6M;
         this.paymentPattern12M = paymentPattern12M;
-        this.overdue31dTo60dCount = overdue31dTo60dCount;
-        this.overLimitLast6MthsCount = overLimitLast6MthsCount;
+        this.overDue31to60DaysWithinLast12Months = overDue31to60DaysWithinLast12Months;
+        this.overLimitWithinLast6Months = overLimitWithinLast6Months;
+        this.attributeType = attributeType;
     }
 
     public String getNcbAccountStatus() {
@@ -41,22 +38,6 @@ public class NcbAccountLevel implements Serializable {
 
     public void setNcbAccountStatus(String ncbAccountStatus) {
         this.ncbAccountStatus = ncbAccountStatus;
-    }
-
-    public boolean isTmbBankFlag() {
-        return tmbBankFlag;
-    }
-
-    public void setTmbBankFlag(boolean tmbBankFlag) {
-        this.tmbBankFlag = tmbBankFlag;
-    }
-
-    public boolean isNcbNPLFlag() {
-        return ncbNPLFlag;
-    }
-
-    public void setNcbNPLFlag(boolean ncbNPLFlag) {
-        this.ncbNPLFlag = ncbNPLFlag;
     }
 
     public BigDecimal getCreditAmountFirstNPL() {
@@ -99,35 +80,42 @@ public class NcbAccountLevel implements Serializable {
         this.paymentPattern12M = paymentPattern12M;
     }
 
-    public int getOverdue31dTo60dCount() {
-        return overdue31dTo60dCount;
+    public int getOverDue31to60DaysWithinLast12Months() {
+        return overDue31to60DaysWithinLast12Months;
     }
 
-    public void setOverdue31dTo60dCount(int overdue31dTo60dCount) {
-        this.overdue31dTo60dCount = overdue31dTo60dCount;
+    public void setOverDue31to60DaysWithinLast12Months(int overDue31to60DaysWithinLast12Months) {
+        this.overDue31to60DaysWithinLast12Months = overDue31to60DaysWithinLast12Months;
     }
 
-    public int getOverLimitLast6MthsCount() {
-        return overLimitLast6MthsCount;
+    public int getOverLimitWithinLast6Months() {
+        return overLimitWithinLast6Months;
     }
 
-    public void setOverLimitLast6MthsCount(int overLimitLast6MthsCount) {
-        this.overLimitLast6MthsCount = overLimitLast6MthsCount;
+    public void setOverLimitWithinLast6Months(int overLimitWithinLast6Months) {
+        this.overLimitWithinLast6Months = overLimitWithinLast6Months;
+    }
+
+    public AttributeTypeLevelAccountTypeNCB getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(AttributeTypeLevelAccountTypeNCB attributeType) {
+        this.attributeType = attributeType;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("ncbAccountStatus", ncbAccountStatus)
-                .append("tmbBankFlag", tmbBankFlag)
-                .append("ncbNPLFlag", ncbNPLFlag)
                 .append("creditAmountFirstNPL", creditAmountFirstNPL)
                 .append("ncbTDRFlag", ncbTDRFlag)
                 .append("currentPayment", currentPayment)
                 .append("paymentPattern6M", paymentPattern6M)
                 .append("paymentPattern12M", paymentPattern12M)
-                .append("overdue31dTo60dCount", overdue31dTo60dCount)
-                .append("overLimitLast6MthsCount", overLimitLast6MthsCount)
+                .append("overDue31to60DaysWithinLast12Months", overDue31to60DaysWithinLast12Months)
+                .append("overLimitWithinLast6Months", overLimitWithinLast6Months)
+                .append("attributeType", attributeType)
                 .toString();
     }
 }

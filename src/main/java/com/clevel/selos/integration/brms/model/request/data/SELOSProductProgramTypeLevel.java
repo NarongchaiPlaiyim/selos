@@ -1,36 +1,36 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
-import com.clevel.selos.model.db.master.ProductProgram;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class RequestedAccountLevel implements Serializable {
-    private ProductProgram productProgram;
-    private String creditFacilityType; //todo: to be enum
+public class SELOSProductProgramTypeLevel implements Serializable {
+    private String productProgram; //todo : to be enum
+    private List<CreditFacilityTypeLevel> creditFacilityType;
 
-    public RequestedAccountLevel() {
+    public SELOSProductProgramTypeLevel() {
     }
 
-    public RequestedAccountLevel(ProductProgram productProgram, String creditFacilityType) {
+    public SELOSProductProgramTypeLevel(String productProgram, List<CreditFacilityTypeLevel> creditFacilityType) {
         this.productProgram = productProgram;
         this.creditFacilityType = creditFacilityType;
     }
 
-    public ProductProgram getProductProgram() {
+    public String getProductProgram() {
         return productProgram;
     }
 
-    public void setProductProgram(ProductProgram productProgram) {
+    public void setProductProgram(String productProgram) {
         this.productProgram = productProgram;
     }
 
-    public String getCreditFacilityType() {
+    public List<CreditFacilityTypeLevel> getCreditFacilityType() {
         return creditFacilityType;
     }
 
-    public void setCreditFacilityType(String creditFacilityType) {
+    public void setCreditFacilityType(List<CreditFacilityTypeLevel> creditFacilityType) {
         this.creditFacilityType = creditFacilityType;
     }
 

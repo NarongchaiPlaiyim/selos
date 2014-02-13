@@ -16,19 +16,24 @@ public class AbstractWorkCase implements Serializable{
     @Column(name = "received_date")
     protected Date receivedDate;
 
-    @Column(name = "at_user_team")
+    @OneToOne
+    @JoinColumn(name = "at_user_team_id")
     protected UserTeam atUserTeam;
 
-    @Column(name = "product_group")
+    @OneToOne
+    @JoinColumn(name = "product_group_id")
     protected ProductGroup productGroup;
 
-    @Column(name = "request_type")
+    @OneToOne
+    @JoinColumn(name = "request_type_id")
     protected RequestType request_type;
 
-    @Column(name = "from_user")
+    @OneToOne
+    @JoinColumn(name = "from_user_id")
     protected User fromUser;
 
-    @Column(name = "at_user")
+    @OneToOne
+    @JoinColumn(name = "at_user_id")
     protected User atUser;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,23 +41,23 @@ public class AbstractWorkCase implements Serializable{
     protected Date appointmentDate;
 
     @ManyToOne
-    @JoinColumn(name = "doa_level")
+    @JoinColumn(name = "doa_level_id")
     protected AuthorizationDOA authorizationDOA;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JoinColumn(name = "sla_end_date")
     protected Date slaEndDate;
 
-    @Column(name = "total_time_at_user")
+    @Column(name = "total_time_at_user", length = 1, columnDefinition = "int default 0")
     protected int totalTimeAtUser;
 
-    @Column(name = "total_time_at_process")
+    @Column(name = "total_time_at_process", length = 1, columnDefinition = "int default 0")
     protected int totalTimeAtProcess;
 
     @Column(name = "wob_number")
     protected String wobNumber;
 
-    @Column(name = "case_lock")
+    @Column(name = "case_lock", length = 1, columnDefinition = "int default 0")
     protected int lock;
 
     @Column(name = "lock_user")
