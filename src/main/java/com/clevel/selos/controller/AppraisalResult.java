@@ -164,6 +164,8 @@ public class AppraisalResult implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
+//        workCaseId = 4;
+//        user = (User)session.getAttribute("user");
         if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
             workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
             log.debug("-- workCasePreScreenId[{}]", workCaseId);
@@ -203,7 +205,6 @@ public class AppraisalResult implements Serializable {
             log.debug("-- AppraisalView[New] created");
         }
     }
-
     public void onChangePageCauseNoRequest(){
         try{
             log.info("onChangePageCauseNoRequest 1");
@@ -232,16 +233,15 @@ public class AppraisalResult implements Serializable {
         flagReadOnly = false;
         saveAndEditFlag = false;
         newCollateralView = new NewCollateralView();
+        newCollateralView.setJobID("");
         log.debug("-- NewCollateralView[New] created");
     }
-
     public void onCallRetrieveAppraisalReportInfo() {
         String jobID = newCollateralView.getJobID();
         log.info("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
         boolean flag = true;
         messageHeader = "Information";
         message = "Duplicate Job ID";
-
         if(!Util.isNull(jobID)){
             try {
                 if(ModeForButton.ADD.equals(modeForButton)){
@@ -283,7 +283,7 @@ public class AppraisalResult implements Serializable {
 
         } else {
             messageHeader = "Exception";
-            message = "Job ID Search is empty";
+            message = "Job ID Search is empty or null";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -300,7 +300,6 @@ public class AppraisalResult implements Serializable {
         AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(),jobID);
         return appraisalDataResult;
     }
-
     public void onSaveCollateralDetailView(){
         log.debug("-- onSaveCollateralDetailView()");
         boolean complete = false;
@@ -330,7 +329,11 @@ public class AppraisalResult implements Serializable {
         log.info("-- onEditCollateralDetailView " + newCollateralViewList.size());
         modeForButton = ModeForButton.EDIT;
         newCollateralView = selectCollateralDetailView;
-        flagReadOnly = true;
+        if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
+            flagReadOnly = false;
+        } else {
+            flagReadOnly = true;
+        }
     }
     public void onDeleteCollateralDetailView(){
         newCollateralViewList.remove(selectCollateralDetailView);

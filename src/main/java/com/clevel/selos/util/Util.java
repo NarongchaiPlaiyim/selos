@@ -116,13 +116,13 @@ public class Util implements Serializable {
         }
     }
 
-    public static boolean isNull(String string) {
-        if (string == null || "null".equals(string.toLowerCase().trim())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public static boolean isNull(String string) {
+//        if (string == null || "null".equals(string.toLowerCase().trim())) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     public static boolean checkLength(String string, int length) {
         if (null != string) {
@@ -335,7 +335,11 @@ public class Util implements Serializable {
     }
 
     public static<T> boolean isNull(T object){
-        return object == null ? true : false;
+        if(object != null){
+            return !"null".equals(object.toString().toLowerCase().trim()) ? false : true;
+        } else {
+            return true;
+        }
     }
 
     public static boolean isZero(int id){
@@ -356,7 +360,7 @@ public class Util implements Serializable {
 
     public static boolean equals(String string, String string2){
         try{
-            return string.equals(string2);
+            return string.toLowerCase().trim().equals(string2.toLowerCase().trim());
         } catch (NullPointerException e) {
             return false;
         }
