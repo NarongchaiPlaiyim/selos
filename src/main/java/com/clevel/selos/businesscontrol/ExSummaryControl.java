@@ -8,6 +8,8 @@ import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.ExSummaryTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
@@ -18,16 +20,16 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class ExSummaryControl extends BusinessControl {
     @Inject
     @SELOS
     Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     private ExSummaryDAO exSummaryDAO;
@@ -181,28 +183,30 @@ public class ExSummaryControl extends BusinessControl {
             exSummaryView.setBusinessLocationName(bizInfoSummaryView.getBizLocationName());
 
             StringBuilder addressTH = new StringBuilder();
-            addressTH = addressTH.append("เลขที่ ");
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-");
-            addressTH = addressTH.append(" หมู่ที่ ");
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-");
-            addressTH = addressTH.append(" อาคาร/หมู่บ้าน ");
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-");
-            addressTH = addressTH.append(" ตรอก/ซอย/ถนน ");
-            addressTH = addressTH.append(bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-");
-            addressTH = addressTH.append(" ตำบล ");
-            addressTH = addressTH.append(bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getName() : "-");
-            addressTH = addressTH.append(" อำเภอ ");
-            addressTH = addressTH.append(bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getName() : "-");
-            addressTH = addressTH.append(" จังหวัด ");
-            addressTH = addressTH.append(bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getName() : "-");
-            addressTH = addressTH.append(" ประเทศ ");
-            addressTH = addressTH.append(bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getName() : "-");
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressNo() != null ? bizInfoSummaryView.getAddressNo() : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressMoo").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressMoo() != null ? bizInfoSummaryView.getAddressMoo() : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressBuilding() != null ? bizInfoSummaryView.getAddressBuilding() : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressStreet").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getAddressStreet() != null ? bizInfoSummaryView.getAddressStreet() : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.subdistrict").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getSubDistrict() != null ? bizInfoSummaryView.getSubDistrict().getCode() != 0 ? bizInfoSummaryView.getSubDistrict().getName() : "-" : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.district").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getDistrict() != null ? bizInfoSummaryView.getDistrict().getId() != 0 ? bizInfoSummaryView.getDistrict().getName() : "-" : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.province").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getProvince() != null ? bizInfoSummaryView.getProvince().getCode() != 0 ? bizInfoSummaryView.getProvince().getName() : "-" : "-").concat(" "));
+            addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.country").concat(" "));
+            addressTH = addressTH.append((bizInfoSummaryView.getCountry() != null ? bizInfoSummaryView.getCountry().getId() != 0 ? bizInfoSummaryView.getCountry().getName() : "-" : "-").concat(" "));
 
             exSummaryView.setBusinessLocationAddress(addressTH.toString());
             exSummaryView.setBusinessLocationAddressEN(bizInfoSummaryView.getAddressEng());
             //if isRental = N, display ownerName. If isRental = Y, display expiryDate
             if(bizInfoSummaryView.getRental() == 1) { // 1 is yes??
-                exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate()));
+                if(bizInfoSummaryView.getExpiryDate() != null){
+                    exSummaryView.setOwner(DateTimeUtil.convertToStringDDMMYYYY(bizInfoSummaryView.getExpiryDate() , new Locale("th", "TH")));
+                }
             } else {
                 exSummaryView.setOwner(bizInfoSummaryView.getOwnerName()); //owner name
             }
@@ -288,24 +292,27 @@ public class ExSummaryControl extends BusinessControl {
             }
         }
 
-        if(bizInfoSummaryView != null && bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0){
-            if(bizInfoSummaryView.getBizInfoDetailViewList().size() > 1){
-                int tmpIndex = 0;
-                BigDecimal tmpHighestProportion = BigDecimal.ZERO;
-                for (int i=0 ; i < bizInfoSummaryView.getBizInfoDetailViewList().size(); i++){ // find highest business proportion
-                    BigDecimal currentProportion;
-                    currentProportion = bizInfoSummaryView.getBizInfoDetailViewList().get(i).getPercentBiz();
-                    if(currentProportion.compareTo(tmpHighestProportion) > 0){
-                        tmpHighestProportion = currentProportion;
-                        tmpIndex = i;
-                    }
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        if(bizInfoSummaryView != null && bizInfoSummaryView.getId() != 0){
+            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+        }
+
+        if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 1){
+            int tmpIndex = 0;
+            BigDecimal tmpHighestProportion = BigDecimal.ZERO;
+            for (int i=0 ; i < bizInfoDetailViewList.size() ; i++){ // find highest business proportion
+                BigDecimal currentProportion;
+                currentProportion = bizInfoDetailViewList.get(i).getPercentBiz();
+                if(currentProportion.compareTo(tmpHighestProportion) > 0){
+                    tmpHighestProportion = currentProportion;
+                    tmpIndex = i;
                 }
-                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getExpIndCountryName());
-                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(tmpIndex).getPercentExpIndCountryName());
-            } else {
-                exSumCreditRiskInfoView.setIndirectCountryName(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getExpIndCountryName());
-                exSumCreditRiskInfoView.setPercentExport(bizInfoSummaryView.getBizInfoDetailViewList().get(0).getPercentExpIndCountryName());
             }
+            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(tmpIndex).getExpIndCountryName());
+            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(tmpIndex).getPercentExpIndCountryName());
+        } else if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() == 1){
+            exSumCreditRiskInfoView.setIndirectCountryName(bizInfoDetailViewList.get(0).getExpIndCountryName());
+            exSumCreditRiskInfoView.setPercentExport(bizInfoDetailViewList.get(0).getPercentExpIndCountryName());
         }
 
         if(exSummary != null && exSummary.getLastReviewDate() != null){

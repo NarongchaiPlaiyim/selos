@@ -7,6 +7,7 @@ import javax.faces.bean.RequestScoped;
 
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.Gender;
 
 @RequestScoped
 @ManagedBean(name="enumGeneralControl")
@@ -18,5 +19,8 @@ public class EnumGeneralControl implements Serializable{
 	}
 	public ApproveResult[] getApproveResults() {
 		return ApproveResult.displayList();
+	}
+	public Gender[] getGenders() {
+		return Gender.displayList();
 	}
 }

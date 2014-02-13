@@ -24,6 +24,9 @@ public class NewCollateral implements Serializable {
     @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
     private int appraisalRequest;
 
+    @Column(name = "coms")
+    private int coms;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "appraisal_date")
     private Date appraisalDate;
@@ -285,6 +288,14 @@ public class NewCollateral implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public int getComs() {
+        return coms;
+    }
+
+    public void setComs(int coms) {
+        this.coms = coms;
     }
 
     @Override

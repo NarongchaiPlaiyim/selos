@@ -7,12 +7,12 @@
 
 <p:panel id="guarantorDlgPanel" styleClass="panel-dialog">
     <h:form id="guarantorDlgForm">
-        <table class="content_form">
+        <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="width: 120px;">
+                <td class="title" style="width: 20%">
                     <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.guarantorName')}"/>
                 </td>
-                <td class="left">
+                <td class="left" style="width: 80%">
                     <p:selectOneMenu id="guarantorName"
                                      value="#{creditFacPropose.newGuarantorDetailView.guarantorName.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
@@ -25,8 +25,9 @@
                     </p:selectOneMenu>
                 </td>
             </tr>
+
             <tr>
-                <td class="title" style="width: 120px">
+                <td class="title">
                     <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.TCGLGNo')}"/>
                 </td>
                 <td class="left">
@@ -34,27 +35,25 @@
                                  mask="99-9999"/>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2" style="height:28px;"></td>
-            </tr>
+
             <tr>
                 <td class="title" colspan="2">
                     <h:outputLabel value="#{msg.get('app.credit.facility.propose.label.guarantorDlg.creditType')}"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td class="left" colspan="2">
                     <p:dataTable id="creditTypeTable"
                                  value="#{creditFacPropose.newGuarantorDetailView.proposeCreditDetailViewList}"
                                  var="creditTypeItem"
                                  rowKey="#{creditTypeItem.ProposeCreditDetailView}"
                                  rowIndexVar="rowIndex"
-                                 style="width: 100%; font-size: 12px !important;">
+                                 style="width: 100%;">
 
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column style="width: 10%; padding: 5px 10px !important;"/>
-                                <p:column style="width: 40%; padding: 5px 10px !important;"
+                                <p:column style="width: 5%; padding: 5px 10px !important;"/>
+                                <p:column style="width: 35%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
                                 <p:column style="width: 10%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
@@ -73,25 +72,25 @@
                             <h:selectBooleanCheckbox value="#{creditTypeItem.noFlag}"/>
                         </p:column>
 
-                        <p:column styleClass="left">
+                        <p:column styleClass="left top">
                             <h:outputText value="#{creditTypeItem.accountName}"/><br/>
                             <h:outputText value="#{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}"/>
                         </p:column>
 
-                        <p:column styleClass="left">
+                        <p:column styleClass="left top">
                             <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') :
                                                    creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
                         </p:column>
 
-                        <p:column styleClass="left">
+                        <p:column styleClass="left top">
                             <h:outputText value="#{creditTypeItem.productProgram.name}"/>
                         </p:column>
 
-                        <p:column styleClass="left">
+                        <p:column styleClass="left top">
                             <h:outputText value="#{creditTypeItem.creditFacility.name}"/>
                         </p:column>
 
-                        <p:column styleClass="right">
+                        <p:column styleClass="right top">
                             <h:outputText value="#{creditTypeItem.limit}">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
@@ -100,7 +99,7 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column>
+                        <p:column styleClass="center top">
                             <p:inputText value="#{creditTypeItem.guaranteeAmount}"
                                          maxlength="18"
                                          onclick="this.select()"
@@ -120,9 +119,8 @@
             </tr>
 
             <tr>
-                <td colspan="4" style="height:28px;"></td>
+                <td colspan="2" style="height:28px;"></td>
             </tr>
-
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
@@ -141,9 +139,8 @@
                             onclick="guarantorInfoDlg.hide()"/>
                 </td>
             </tr>
-
             <tr>
-                <td colspan="4" style="height:28px;"></td>
+                <td colspan="2" style="height:10px;"></td>
             </tr>
         </table>
     </h:form>

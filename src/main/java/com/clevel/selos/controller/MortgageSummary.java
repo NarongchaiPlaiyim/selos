@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -113,7 +115,27 @@ public class MortgageSummary implements Serializable {
 		
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
 	}
-	
+	public String clickMorgageDetail(long id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mortgageId", id);
+		map.put("fromPage", "mortgageSummary");
+		FacesUtil.getFlash().put("mortgageParams",map);
+		return "mortgageDetail?faces-redirect=true";
+	}
+	public String clickPledgeDetail(long id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pledgeId", id);
+		map.put("fromPage", "mortgageSummary");
+		FacesUtil.getFlash().put("pledgeParams",map);
+		return "pledgeDetail?faces-redirect=true";
+	}
+	public String clickGuarantorDetail(long id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("guarantorId", id);
+		map.put("fromPage", "mortgageSummary");
+		FacesUtil.getFlash().put("guarantorParams",map);
+		return "guarantorDetail?faces-redirect=true";
+	}
 	/*
 	 * Private method
 	 */

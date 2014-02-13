@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,6 +16,7 @@ public class NewGuarantorDetailView implements Serializable {
     private CustomerInfoView guarantorName;
     private String tcgLgNo;
     private BigDecimal totalLimitGuaranteeAmount;
+    private String proposeType;
     private int isApproved;
 
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
@@ -33,6 +35,7 @@ public class NewGuarantorDetailView implements Serializable {
         this.tcgLgNo = "";
         this.totalLimitGuaranteeAmount = BigDecimal.ZERO;
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.proposeType= ProposeType.P.type();
     }
 
     public long getId() {
@@ -41,6 +44,14 @@ public class NewGuarantorDetailView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
     }
 
     public Date getCreateDate() {

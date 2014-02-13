@@ -21,6 +21,12 @@ public class NewCreditTierDetail implements Serializable {
     @Column(name = "final_interest")
     private BigDecimal finalInterest;
 
+    @Column(name = "suggest_interest")
+    private BigDecimal suggestInterest;
+
+    @Column(name = "standard_interest")
+    private BigDecimal standardInterest;
+
     @Column(name = "no")
     private int no ;
 
@@ -36,6 +42,14 @@ public class NewCreditTierDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "final_rate_id")
     private BaseRate finalBasePrice ;
+
+    @OneToOne
+    @JoinColumn(name = "suggest_rate_id")
+    private BaseRate suggestBasePrice ;
+
+    @OneToOne
+    @JoinColumn(name = "standard_rate_id")
+    private BaseRate standardBasePrice ;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -153,20 +167,57 @@ public class NewCreditTierDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public BigDecimal getSuggestInterest() {
+        return suggestInterest;
+    }
+
+    public void setSuggestInterest(BigDecimal suggestInterest) {
+        this.suggestInterest = suggestInterest;
+    }
+
+    public BaseRate getSuggestBasePrice() {
+        return suggestBasePrice;
+    }
+
+    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
+        this.suggestBasePrice = suggestBasePrice;
+    }
+
+    public BigDecimal getStandardInterest() {
+        return standardInterest;
+    }
+
+    public void setStandardInterest(BigDecimal standardInterest) {
+        this.standardInterest = standardInterest;
+    }
+
+    public BaseRate getStandardBasePrice() {
+        return standardBasePrice;
+    }
+
+    public void setStandardBasePrice(BaseRate standardBasePrice) {
+        this.standardBasePrice = standardBasePrice;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("finalInterest", finalInterest)
-                .append("no", no)
-                .append("installment", installment)
-                .append("tenor", tenor)
-                .append("editFlag", editFlag)
-                .append("finalBasePrice", finalBasePrice)
-                .append("createDate", createDate)
-                .append("modifyDate", modifyDate)
-                .append("createBy", createBy)
-                .append("modifyBy", modifyBy)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("finalInterest", finalInterest).
+                append("suggestInterest", suggestInterest).
+                append("standardInterest", standardInterest).
+                append("no", no).
+                append("installment", installment).
+                append("tenor", tenor).
+                append("editFlag", editFlag).
+                append("finalBasePrice", finalBasePrice).
+                append("suggestBasePrice", suggestBasePrice).
+                append("standardBasePrice", standardBasePrice).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("newCreditDetail", newCreditDetail).
+                toString();
     }
 }
