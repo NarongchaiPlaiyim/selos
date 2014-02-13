@@ -1170,15 +1170,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM008Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1190,15 +1191,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM204Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1210,15 +1212,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM020Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1256,7 +1259,8 @@
                                 <td style="text-align: left; width:200px;">
                                     <p:selectOneMenu styleClass="largest" size="1"
                                                      style="width: 200px; max-width: 200px; min-width: 200px"
-                                                     value="#{executiveSummary.exSummaryView.approveAuthority.id}">
+                                                     value="#{executiveSummary.exSummaryView.approveAuthority.id}"
+                                                     disabled="#{not executiveSummary.roleUW}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{executiveSummary.authorizationDOAList}"
                                                        var="authoriz"
@@ -1273,7 +1277,8 @@
                             </tr>
                             <tr>
                                 <td colspan="4" style="text-align: left">
-                                    <h:selectOneRadio id="decision" value="#{executiveSummary.exSummaryView.decision}">
+                                    <h:selectOneRadio id="decision" value="#{executiveSummary.exSummaryView.decision}"
+                                                      disabled="#{not executiveSummary.roleUW}">
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}     " itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}     " itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.reject')}" itemValue="3"/>
@@ -1285,7 +1290,8 @@
                                 <td style="text-align: left; padding-top: 4px;" colspan="4">
                                     <p:selectOneMenu styleClass="largest" size="1" id="reasonList"
                                                      style="width: 900px; min-width: 900px; max-width: 900px;"
-                                                     value="#{executiveSummary.reason.id}" >
+                                                     value="#{executiveSummary.reason.id}"
+                                                     disabled="#{not executiveSummary.roleUW}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                         <f:selectItems value="#{executiveSummary.reasonList}" var="reasonItem"
                                                        itemDescription="#{reasonItem.description}"
@@ -1295,7 +1301,8 @@
                                 </td>
                                 <td style="text-align: left">
                                     <p:commandButton value="#{msg.get('app.addButton')}" styleClass="small" process="@form"
-                                                     action="#{executiveSummary.onAddReason()}" update=":frmMain"/>
+                                                     action="#{executiveSummary.onAddReason()}" update=":frmMain"
+                                                     disabled="#{not executiveSummary.roleUW}"/>
                                 </td>
                             </tr>
 
@@ -1309,7 +1316,7 @@
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:20px;"/>
-                                                <p:column style="width:600px;"
+                                                <p:column style="width:800px; max-width: 800px; min-width: 800px;"
                                                           headerText="#{msg.get('app.exSummary.label.tb.label.reasonCode')}"/>
                                                 <p:column style="width:20px;"/>
                                             </p:row>
@@ -1319,8 +1326,9 @@
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
-                                        <p:column styleClass="left">
-                                            <h:outputText value="#{itemUWDecision.code} - #{itemUWDecision.description}"/>
+                                        <p:column styleClass="left" style="width:800px; max-width: 800px; min-width: 800px;">
+                                            <h:outputText value="#{itemUWDecision.code} - #{itemUWDecision.description}"
+                                                          style="width:800px; max-width: 800px; min-width: 800px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -1328,7 +1336,8 @@
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteDeviateDlg.show()"
                                                              update=":frmMain:deviateTable"
-                                                             process="@form">
+                                                             process="@form"
+                                                             disabled="#{not executiveSummary.roleUW}">
                                                 <f:setPropertyActionListener value="#{itemUWDecision}"
                                                                              target="#{executiveSummary.selectDeviate}"/>
                                             </p:commandButton>
@@ -1358,7 +1367,8 @@
                     <td colspan="2" style="text-align: left">
                         <h:inputTextarea cols="170"
                                          rows="7"
-                                         value="#{executiveSummary.exSummaryView.uwComment}"/>
+                                         value="#{executiveSummary.exSummaryView.uwComment}"
+                                         disabled="#{not executiveSummary.roleUW}"/>
                     </td>
                 </tr>
 

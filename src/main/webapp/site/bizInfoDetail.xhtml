@@ -265,7 +265,7 @@
                                         <p:outputLabel value="#{bizProductDetailView.productDetail}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:8%;">
-                                        <p:commandButton icon="ui-icon-pencil"
+                                        <p:commandButton icon="ui-icon-pencil" id="onEditBizProductDetailView"
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
@@ -274,6 +274,7 @@
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{bizInfoDetail.rowIndex}"/>
+                                            <p:resetInput target=":bizProductViewDlgForm"/>
                                         </p:commandButton>
                                         <p:commandButton title="Remove" process="@this"
                                                          icon="ui-icon-trash"
@@ -386,6 +387,7 @@
                                                                          target="#{bizInfoDetail.selectStakeHolder}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{bizInfoDetail.rowIndex}"/>
+                                            <p:resetInput target=":stakeholderViewDlgForm"/>
                                         </p:commandButton>
 
                                         <p:commandButton icon="ui-icon-trash"
@@ -748,7 +750,7 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"  readonly="true"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">

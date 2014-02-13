@@ -14,7 +14,8 @@
                 </td>
                 <td class="left" style="width: 80%" colspan="3">
                     <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}"
-                                      required="#{not empty param[onSaveCreditInfo.clientId]}">
+                                      required="#{not empty param[onSaveCreditInfo.clientId]}"
+                                      disabled="#{creditFacPropose.modeEdit}">
                         <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
                         <p:ajax event="change"
@@ -265,10 +266,6 @@
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
-                                    <p:ajax event="change"
-                                            listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm"
-                                            update=":creditInfoDlgForm:resultFinal" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -285,10 +282,6 @@
                                                      minFractionDigits="2"
                                                      maxFractionDigits="2"
                                                      maxIntegerDigits="3"/>
-                                    <p:ajax event="blur"
-                                            listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm"
-                                            update=":creditInfoDlgForm:resultFinal" />
                                 </p:inputText>
                             </td>
                         </tr>

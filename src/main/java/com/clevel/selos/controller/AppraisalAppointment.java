@@ -154,9 +154,9 @@ public class AppraisalAppointment implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
-        if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-            log.debug("-- workCasePreScreenId[{}]", workCaseId);
+        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            log.debug("-- workCaseId[{}]", workCaseId);
             user = (User)session.getAttribute("user");
             log.debug("-- User.id[{}]", user.getId());
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
@@ -171,7 +171,7 @@ public class AppraisalAppointment implements Serializable {
                 log.debug("Exception :: {}",ex);
             }
         } else {
-            log.debug("preRender ::: workCasePrescreenId is null.");
+            log.debug("preRender ::: workCaseId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }

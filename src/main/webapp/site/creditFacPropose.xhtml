@@ -611,6 +611,7 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
