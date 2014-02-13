@@ -13,9 +13,13 @@ import java.util.List;
 public interface BPMInterface {
     public boolean createCase(CaseCreationHistory caseCreationHistory);
 
+    public boolean createParallelCase(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName);
+
     public void authenticate(String userName, String password);
 
     public List<CaseDTO> getInboxList();
+
+    public List<CaseDTO> getInboxPoolList(String queueName);
 
     public void dispatchCase(String queueName, String wobNumber, HashMap<String, String> fields);
 

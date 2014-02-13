@@ -945,8 +945,9 @@ public class CreditFacProposeControl extends BusinessControl {
         if (Util.safetyList(newCreditFacilityView.getNewConditionDetailViewList()).size() > 0) {
             log.debug("saveCreditFacility ::: newConditionDetailViewList : {}", newCreditFacilityView.getNewConditionDetailViewList());
             List<NewConditionDetail> newConditionDetailList = newConditionDetailTransform.transformToModel(newCreditFacilityView.getNewConditionDetailViewList(), newCreditFacility, currentUser);
+            log.debug("saveCreditFacility ::: before persist newConditionDetailList : {}", newConditionDetailList);
             newConditionDetailDAO.persist(newConditionDetailList);
-            log.debug("saveCreditFacility ::: persist newConditionDetailList : {}", newConditionDetailList);
+            log.debug("saveCreditFacility ::: after persist newConditionDetailList : {}", newConditionDetailList);
         }
 
         //--- Save to NewCreditDetail

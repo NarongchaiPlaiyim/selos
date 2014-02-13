@@ -131,6 +131,33 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
+    public boolean createParallelCase(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName){
+        boolean success = true;
+        Date now = new Date();
+        log.debug("CE URI: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
+
+        HashMap<String, String> caseParameter = new HashMap<String, String>();
+        caseParameter.put("AppNumber", appNumber);
+        caseParameter.put("BorrowerName", borrowerName);
+        caseParameter.put("ProductGroup", productGroup);
+        caseParameter.put("RequestType", Integer.toString(requestType));
+        caseParameter.put("BDMUserName", bdmUserName);
+
+        String linkKey = Util.getLinkKey(bpmUsername);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(), getConfigurationDTO());
+            bpmService.launchWorkflow(caseParameter, "Parallel Appraisal Workflow");
+            log.debug("[{}] BPM launch work flow successful.", linkKey);
+            bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception ex) {
+            success = false;
+            bpmAuditor.add(bpmUsername, "createParallelCase", "", now, ActionResult.FAILED, msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), linkKey);
+        }
+
+        return success;
+    }
+
+    @Override
     public void authenticate(String userName, String password) {
         log.debug("BPM authentication (userName: {}, password: [HIDDEN])", userName);
         Date now = new Date();
@@ -162,6 +189,27 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
             caseDTOs = bpmService.getCases(BPMConstants.BPM_QUEUE_PERSONAL_INBOX_NAME, BPMConstants.BPM_QUEUE_TYPE_PERSONALQ, null, null);
+            log.debug("[{}] getInboxList success.", linkKey);
+            bpmAuditor.add(getUserDTO().getUserName(), "getInboxList", "", now, ActionResult.SUCCESS, "", linkKey);
+        } catch (Exception e) {
+            log.error("[{}] Exception while get inbox list in BPM!", linkKey, e);
+            bpmAuditor.add(getUserDTO().getUserName(), "getInboxList", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION, msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
+        }
+
+        log.debug("getInboxList. (result size: {})", caseDTOs.size());
+        return caseDTOs;
+    }
+
+    @Override
+    public List<CaseDTO> getInboxPoolList(String queueName) {
+        log.debug("getInboxList.");
+        Date now = new Date();
+        List<CaseDTO> caseDTOs;
+        String linkKey = Util.getLinkKey(getUserDTO().getUserName());
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(), getConfigurationDTO());
+            caseDTOs = bpmService.getCases(queueName, BPMConstants.BPM_QUEUE_TYPE_POOLQ, null, null);
             log.debug("[{}] getInboxList success.", linkKey);
             bpmAuditor.add(getUserDTO().getUserName(), "getInboxList", "", now, ActionResult.SUCCESS, "", linkKey);
         } catch (Exception e) {
