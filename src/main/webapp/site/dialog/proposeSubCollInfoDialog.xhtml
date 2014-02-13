@@ -72,7 +72,7 @@
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.collateralOwner.UW')}"/>
                 </td>
                 <td class="left">
-                    <table border="0">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgCollateralOwnerUW"
@@ -128,7 +128,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <p:commandButton title="Remove"
+                            <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@form"
                                              actionListener="#{creditFacPropose.onDeleteCollateralOwnerUW(rowIndex)}"
@@ -145,7 +145,7 @@
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.mortgageType')}"/>
                 </td>
                 <td class="left">
-                    <table border="0">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgMortgageType"
@@ -202,7 +202,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <p:commandButton title="Remove"
+                            <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@form"
                                              actionListener="#{creditFacPropose.onDeleteMortgageType(rowIndex)}"
@@ -219,7 +219,7 @@
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.subcoll.relatedWith')}"/>
                 </td>
                 <td class="left">
-                    <table border="0">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="dlgRelatedWith"
@@ -275,7 +275,7 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <p:commandButton title="Remove"
+                            <p:commandButton title="#{msg.get('app.button.delete')}"
                                              icon="ui-icon-trash"
                                              process="@form"
                                              actionListener="#{creditFacPropose.onDeleteRelatedWith(rowIndex)}"
@@ -295,8 +295,8 @@
                     <p:inputText value="#{creditFacPropose.newCollateralSubView.appraisalValue}"
                                  maxlength="18"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownNegMoney(event);"
+                                 onkeypress="return onKeyPressNegMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[addSubCollDlg.clientId]}">
                         <f:convertNumber pattern="#,##0.##"
@@ -316,8 +316,8 @@
                     <p:inputText value="#{creditFacPropose.newCollateralSubView.mortgageValue}"
                                  maxlength="18"
                                  onclick="this.select()"
-                                 onkeydown="return onKeyDownMoney(event);"
-                                 onkeypress="return onKeyPressMoney(event);"
+                                 onkeydown="return onKeyDownNegMoney(event);"
+                                 onkeypress="return onKeyPressNegMoney(event);"
                                  styleClass="right"
                                  required="#{not empty param[addSubCollDlg.clientId]}">
                         <f:convertNumber pattern="#,##0.##"

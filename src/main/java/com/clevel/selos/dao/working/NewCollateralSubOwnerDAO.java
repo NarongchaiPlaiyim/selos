@@ -40,10 +40,12 @@ public class NewCollateralSubOwnerDAO extends GenericDAO<NewCollateralSubOwner, 
     public List<NewCollateralSubOwner> getListByWorkCase(WorkCase workCase){
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
         Criteria criteria = createCriteria();
-        for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-            for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
-                for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
-                    criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
+        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
+            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                for(NewCollateralHead newCollateralHead : newCollateral.getNewCollateralHeadList()){
+                    for(NewCollateralSub newCollateralSub : newCollateralHead.getNewCollateralSubList()){
+                        criteria.add(Restrictions.eq("newCollateralSub", newCollateralSub));
+                    }
                 }
             }
         }

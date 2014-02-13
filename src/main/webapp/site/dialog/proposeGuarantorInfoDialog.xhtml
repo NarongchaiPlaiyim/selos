@@ -73,21 +73,21 @@
                         </p:column>
 
                         <p:column styleClass="left top">
-                            <h:outputText value="#{creditTypeItem.accountName}"/><br/>
-                            <h:outputText value="#{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}"/>
+                            #{creditTypeItem.accountName}<br/>
+                            #{creditTypeItem.accountNumber}  #{creditTypeItem.accountSuf}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            <h:outputText value="#{creditTypeItem.requestType == 2 ? msg.get('app.label.new') :
-                                                   creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}"/>
+                            #{creditTypeItem.requestType == 2 ? msg.get('app.label.new') :
+                              creditTypeItem.requestType == 1 ? msg.get('app.label.change') : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            <h:outputText value="#{creditTypeItem.productProgram.name}"/>
+                            #{not empty creditTypeItem.productProgram ? creditTypeItem.productProgram.name : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            <h:outputText value="#{creditTypeItem.creditFacility.name}"/>
+                            #{not empty creditTypeItem.creditFacility ? creditTypeItem.creditFacility.name : ''}
                         </p:column>
 
                         <p:column styleClass="right top">
@@ -117,12 +117,11 @@
                     </p:dataTable>
                 </td>
             </tr>
-
             <tr>
                 <td colspan="2" style="height:28px;"></td>
             </tr>
             <tr>
-                <td colspan="2" class="center">
+                <td class="center" colspan="2">
                     <p:commandButton
                             id="saveGuarantorDlg"
                             value="#{msg.get('app.credit.facility.propose.okButton')}"
