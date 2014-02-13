@@ -972,10 +972,10 @@ public class CreditFacProposeControl extends BusinessControl {
 
         //--- Save to NewCollateral
         //--- Need to Delete SubOwner from CollateralSubOwner before Insert new
-        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.findAll();
+        List<NewCollateralSubOwner> newCollateralSubOwnerList = newCollateralSubOwnerDAO.getListByWorkCase(workCase);
         newCollateralSubOwnerDAO.delete(newCollateralSubOwnerList);
         //--- Need to delete Collateral Credit from CollateralRelCredit before Insert new
-        List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.findAll();
+        List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditDAO.getListByWorkCase(workCase);
         newCollateralCreditDAO.delete(newCollateralCreditList);
 
         if(Util.safetyList(newCreditFacilityView.getNewCollateralViewList()).size() > 0){

@@ -155,7 +155,7 @@
                                                     <td>
                                                         <p:selectOneMenu  id="subDistrictCode" size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                                                           value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
-                                                                          required="#{not empty param[addBizInfoSummary.clientId]}" onchange="event">
+                                                                          required="#{not empty param[addBizInfoSummary.clientId]}">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
                                                                            var="subDistrict"
