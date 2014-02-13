@@ -7,8 +7,11 @@ import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -293,6 +296,9 @@ public class ExSummaryTransform extends Transform {
     }
 
     public ExSumBusinessInfoView transformBizInfoSumToExSumBizView(BizInfoSummaryView bizInfoSummaryView, QualitativeView qualitativeView, BigDecimal bizSize){
+
+
+
         ExSumBusinessInfoView exSumBusinessInfoView = new ExSumBusinessInfoView();
 
         exSumBusinessInfoView.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
