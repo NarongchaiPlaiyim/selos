@@ -253,7 +253,7 @@ public class CreditFacPropose implements Serializable {
 
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-
+                log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 if (newCreditFacilityView != null) {
                     log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
