@@ -21,6 +21,7 @@ public class  ProposeCreditDetailView implements Serializable {
     private CreditType creditFacility;
     private BigDecimal limit;
     private BigDecimal guaranteeAmount;
+    private int useCount;
 
 
     public  ProposeCreditDetailView(){
@@ -38,6 +39,7 @@ public class  ProposeCreditDetailView implements Serializable {
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
         this.noFlag = false;
+        this.useCount=0;
     }
 
     public int getId() {
@@ -134,6 +136,14 @@ public class  ProposeCreditDetailView implements Serializable {
 
     public void setNoFlag(boolean noFlag) {
         this.noFlag = noFlag;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
 
     @Override

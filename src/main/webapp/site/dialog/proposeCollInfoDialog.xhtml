@@ -25,9 +25,9 @@
         <p:commandButton value="#{msg.get('app.credit.facility.propose.dlg.retrieveButton')}"
                          binding="#{retrieveButton}"
                          styleClass="largest"
+                         action="#{creditFacPropose.onCallRetrieveAppraisalReportInfo()}"
                          process="@form"
-                         update=":collateralDlgForm,:msgBoxSystemMessagePanel"
-                         action="#{creditFacPropose.onCallRetrieveAppraisalReportInfo}"/>
+                         update=":collateralDlgForm,:msgBoxSystemMessagePanel"/>
     </td>
 </tr>
 
