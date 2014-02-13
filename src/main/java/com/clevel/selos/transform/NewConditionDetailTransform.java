@@ -22,7 +22,6 @@ public class NewConditionDetailTransform extends Transform {
     }
 
     public List<NewConditionDetail> transformToModel(List<NewConditionDetailView> newConditionDetailViewList, NewCreditFacility newCreditFacility, User user) {
-
         List<NewConditionDetail> newConditionDetails = new ArrayList<NewConditionDetail>();
         NewConditionDetail newConditionDetail;
 
@@ -50,12 +49,13 @@ public class NewConditionDetailTransform extends Transform {
     }
 
     public List<NewConditionDetailView> transformToView(List<NewConditionDetail> newConditionDetailList) {
-
         List<NewConditionDetailView> newConditionDetailViewList = new ArrayList<NewConditionDetailView>();
         NewConditionDetailView newConditionDetailView;
 
         for (NewConditionDetail newConditionDetail : newConditionDetailList) {
             newConditionDetailView = new NewConditionDetailView();
+
+            newConditionDetailView.setId(newConditionDetail.getId());
             newConditionDetailView.setCreateBy(newConditionDetail.getCreateBy());
             newConditionDetailView.setCreateDate(newConditionDetail.getCreateDate());
             newConditionDetailView.setNo(newConditionDetail.getNo());
@@ -65,6 +65,7 @@ public class NewConditionDetailTransform extends Transform {
             newConditionDetailView.setModifyDate(newConditionDetail.getModifyDate());
             newConditionDetailViewList.add(newConditionDetailView);
         }
+
 
         return newConditionDetailViewList;
     }

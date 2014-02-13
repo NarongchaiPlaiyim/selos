@@ -540,8 +540,7 @@
                         <p:spacer width="10" height="0"/>
 
                         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                         styleClass="small"
-                                         style="width:200px"
+                                         styleClass="largest"
                                          process="@this"
                                          update=":frmMain"
                                          action="#{creditFacPropose.onRetrievePricingFee}"/>
@@ -610,15 +609,17 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.standardPrice}"/>
+                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
+                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPrice : ''}"/>
+                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceRate : ''}"/>
+                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}"/>
                                             </td>
                                             <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -680,13 +681,13 @@
                                                    offset="1">
                                             <tr>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{proposeCredit.standardPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.suggestPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
+                                                    <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
                                                 </td>
                                                 <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                     <h:outputText value="#{creditTierDetail.installment}">
@@ -1057,7 +1058,8 @@
                                 </td>
                                 <td class="left" colspan="5">
                                     <p:inputTextarea value="#{creditFacPropose.newCreditFacilityView.reasonForReduction}"
-                                                     rows="3" cols="150"/>
+                                                     rows="3" cols="150"
+                                                     autoResize="false"/>
                                 </td>
                             </tr>
                         </table>

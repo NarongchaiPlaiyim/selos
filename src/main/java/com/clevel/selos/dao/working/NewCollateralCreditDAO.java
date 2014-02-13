@@ -5,6 +5,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCollateralCredit;
 import com.clevel.selos.model.db.working.NewCreditFacility;
+import com.clevel.selos.model.db.working.WorkCase;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -17,6 +18,8 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
     @Inject
     @SELOS
     Logger log;
+    @Inject
+    NewCreditFacilityDAO newCreditFacilityDAO;
     @Inject
     public NewCollateralCreditDAO() {
     }
@@ -43,6 +46,17 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
 
         return newCollateralRelCreditList;
 
+    }
+
+    public List<NewCollateralCredit> getListByWorkCase(WorkCase workCase){
+        Criteria criteria = createCriteria();
+        NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
+        for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+            criteria.add(Restrictions.eq("newCollateral", newCollateral));
+        }
+        List<NewCollateralCredit> newCollateralCreditList = criteria.list();
+
+        return newCollateralCreditList;
     }
 
 
