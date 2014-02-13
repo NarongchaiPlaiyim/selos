@@ -119,7 +119,7 @@
                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
-                                process="@form" update=":creditInfoDlgForm:resultFinal" />
+                                process="@form" update="@this,:creditInfoDlgForm:resultFinal" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -254,7 +254,7 @@
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                 </td>
-                <td colspan="3">
+                <td class="left" colspan="3">
                     <table border="0">
                         <tr>
                             <td>
@@ -356,7 +356,7 @@
                                                      style="width: 50px;"
                                                      styleClass="right" readonly="true">
                                                      <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
-                                            <f:convertNumber pattern="#,##0"
+                                            <f:convertNumber pattern="##0.##"
                                                              minFractionDigits="2"
                                                              maxFractionDigits="2"
                                                              maxIntegerDigits="3"/>

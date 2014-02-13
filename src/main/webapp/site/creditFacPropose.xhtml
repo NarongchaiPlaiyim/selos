@@ -540,8 +540,7 @@
                         <p:spacer width="10" height="0"/>
 
                         <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
-                                         styleClass="small"
-                                         style="width:200px"
+                                         styleClass="largest"
                                          process="@this"
                                          update=":frmMain"
                                          action="#{creditFacPropose.onRetrievePricingFee}"/>
@@ -1059,7 +1058,8 @@
                                 </td>
                                 <td class="left" colspan="5">
                                     <p:inputTextarea value="#{creditFacPropose.newCreditFacilityView.reasonForReduction}"
-                                                     rows="3" cols="150"/>
+                                                     rows="3" cols="150"
+                                                     autoResize="false"/>
                                 </td>
                             </tr>
                         </table>
