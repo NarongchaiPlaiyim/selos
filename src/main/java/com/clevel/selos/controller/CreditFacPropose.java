@@ -219,24 +219,16 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void preRender() {
-
         log.info("preRender ::: setSession ");
-
         HttpSession session = FacesUtil.getSession(true);
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         } else {
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
@@ -260,10 +252,7 @@ public class CreditFacPropose implements Serializable {
                     modeForDB = ModeForDB.EDIT_DB;
                     proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
                     log.info("[List for select in Collateral] :: proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
-
-
                 }
-
             } catch (Exception ex) {
                 log.error("Exception while loading [Credit Facility] page :: ", ex);
             }
