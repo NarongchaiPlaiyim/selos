@@ -472,11 +472,12 @@ public class CreditFacPropose implements Serializable {
 
     }
 
-    public void calculateInstallment(NewCreditDetailView proposeCreditDetail) {
-        log.info("proposeCreditDetail : {}", proposeCreditDetail);
-        if (proposeCreditDetail != null && proposeCreditDetail.getNewCreditTierDetailViewList() != null && proposeCreditDetail.getNewCreditTierDetailViewList().size() > 0) {
-            BigDecimal sumOfInstallment = BigDecimal.ZERO;
-            for (NewCreditTierDetailView newCreditTierDetailView : proposeCreditDetail.getNewCreditTierDetailViewList()) {
+    public void calculateInstallment(NewCreditDetailView creditDetailView) {
+        log.info("creditDetailView : {}", creditDetailView);
+        BigDecimal sumOfInstallment = BigDecimal.ZERO;
+        if (creditDetailView != null && creditDetailView.getNewCreditTierDetailViewList() != null && creditDetailView.getNewCreditTierDetailViewList().size() > 0) {
+
+            for (NewCreditTierDetailView newCreditTierDetailView : creditDetailView.getNewCreditTierDetailViewList()) {
                 // Installment = (อัตราดอกเบี้ยต่อเดือน * Limit * (1 + อัตราดอกเบี้ยต่อเดือน)ยกกำลัง tenors(month)) / ((1 + อัตราดอกเบี้ยต่อเดือน) ยกกำลัง tenors(month) - 1)
                 // อัตราดอกเบี้ยต่อเดือน = baseRate.value +  interest + 1% / 12
                 BigDecimal twelve = BigDecimal.valueOf(12);
@@ -499,8 +500,8 @@ public class CreditFacPropose implements Serializable {
                 int tenor = newCreditTierDetailView.getTenor();
                 BigDecimal installment;
 
-                if (proposeCreditDetail.getLimit() != null) {
-                    limit = proposeCreditDetail.getLimit();
+                if (creditDetailView.getLimit() != null) {
+                    limit = creditDetailView.getLimit();
                 }
 
                 log.info("limit :: {}", limit);
@@ -511,9 +512,12 @@ public class CreditFacPropose implements Serializable {
                 log.info("installment : {}", installment);
 
                 newCreditTierDetailView.setInstallment(installment);
-                sumOfInstallment.add(installment);
+                sumOfInstallment = Util.add(sumOfInstallment,installment);
+                log.info("creditDetailAdd :sumOfInstallment: {}",sumOfInstallment);
+                creditDetailView.setInstallment(sumOfInstallment);
             }
-            proposeCreditDetail.setInstallment(sumOfInstallment);
+
+
         }
     }
 
@@ -752,7 +756,10 @@ public class CreditFacPropose implements Serializable {
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
+                calculateInstallment(creditDetailAdd);
+                log.info("creditDetailAdd :getInstallment: {}",creditDetailAdd.getInstallment());
                 newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
+
 
                 log.info("seq of credit after add proposeCredit :: {}", seq);
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
@@ -780,6 +787,7 @@ public class CreditFacPropose implements Serializable {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
+                calculateInstallment(newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex));
             } else {
                 log.info("onSaveCreditInfo ::: Undefined modeForButton !!");
             }
