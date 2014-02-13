@@ -1,16 +1,10 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CreditFacProposeControl;
-import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.view.*;
-import com.clevel.selos.system.message.ExceptionMessage;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
-import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
-import org.slf4j.Logger;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -19,151 +13,116 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.parser.AttributeList;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 
 @ViewScoped
 @ManagedBean(name = "approveDetailInformation")
 public class ApproveDetailInformation implements Serializable {
+	private static final long serialVersionUID = 5055575396070904261L;
 
-    @Inject
-    @SELOS
-    Logger log;
-    @Inject
-    @NormalMessage
-    Message msg;
+	@Inject @SELOS
+	private Logger log;
+	
+	@Inject
+	private BasicInfoControl basicInfoControl;
+	
+	//Private variable
+	private boolean preRenderCheck = false;
+	private long workCaseId = -1;
+	private long stepId = -1;
+	private User user;
+	private BasicInfoView basicInfoView;
+	
+	//Property
+	
+	public ApproveDetailInformation() {
+	}
+	
+	public Date getLastUpdateDateTime() {
+		//TODO
+		return new Date();
+	}
+	public String getLastUpdateBy() {
+		//TODO
+		return user.getDisplayName();
+	}
+	public ApproveType getApproveType() {
+		if (basicInfoView == null)
+			return ApproveType.NA;
+		else
+			return basicInfoView.getApproveType();
+	}
+	public String getMinDate() {
+		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
+		return dFmt.format(new Date());
+	}
+	
+	/*
+	 * Action
+	 */
+	@PostConstruct
+	private void init() {
+		HttpSession session = FacesUtil.getSession(false);
+		if (session != null) {
+			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
+			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
+			user = (User) session.getAttribute("user");
+		}
+		_loadInitData();
+	}
+	
+	public void preRender() {
+		if (preRenderCheck)
+			return;
+		preRenderCheck = true;
+		
+		String redirectPage = null;
+		log.info("preRender workCase Id = "+workCaseId);
+		if (workCaseId > 0) {
+			//TODO Validate step 
+			if (stepId <= 0) {
+				redirectPage = "/site/inbox.jsf";
+			} else {
+				return;
+			}
+		}
+		try {
+			log.info("preRender "+redirectPage);
+			if (redirectPage == null) {
+				redirectPage = "/site/inbox.jsf";
+			}
+			ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			ec.redirect(ec.getRequestContextPath()+redirectPage);
+		} catch (IOException e) {
+			log.error("Fail to redirect screen to "+redirectPage,e);
+		}
+	}
+	
+	public void onSaveApproveDetail() {
+		
+		
+		_loadInitData();
+		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+	}
+	/*
+	 * Private method
+	 */
 
-    @Inject
-    @ValidationMessage
-    Message validationMsg;
-
-    @Inject
-    @ExceptionMessage
-    Message exceptionMsg;
-
-    @Inject
-    CreditFacProposeControl creditFacProposeControl;
-
-    // message //
-    private String messageHeader;
-    private String message;
-
-    //session
-    private long workCaseId;
-
-    //Modify
-
-    // content //
-    private List<NewCreditDetailView> approveCreditDetailViews;
-    private List<AccountInfoDetailView> accountInfoDetailViews;
-    private List<FollowUpConditionView>  followUpConditionViews;
-    private LoanPaymentDetailView loanPaymentDetailView;
-
-    public void preRender() {
-
-        log.info("preRender ::: setSession ");
-        HttpSession session = FacesUtil.getSession(true);
-        if (session.getAttribute("workCaseId") != null) {
-            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        } else {
-            //TODO return to inbox
-            log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
-        }
-    }
-
-    @PostConstruct
-    public void onCreation(){
-        followUpConditionViews = new ArrayList<FollowUpConditionView>();
-        approveCreditDetailViews = new ArrayList<NewCreditDetailView>();
-        accountInfoDetailViews = new ArrayList<AccountInfoDetailView>();
-        loanPaymentDetailView = new LoanPaymentDetailView();
-        try{
-
-
-
-
-        }catch (Exception e){
-
-        }
-    }
-
-    public BigDecimal getTotalApprovedCredit(){
-        BigDecimal result = BigDecimal.ZERO;
-        for(NewCreditDetailView newCreditDetailView : Util.safetyList(approveCreditDetailViews)){
-            result = Util.add(result,newCreditDetailView.getLimit());
-        }
-    return result;
-    }
-
-    public String getCurrentDateDDMMYY(){
-        return  DateTimeUtil.convertToStringDDMMYYYY(new Date());
-    }
-
-
-    public long getWorkCaseId() {
-        return workCaseId;
-    }
-
-    public void setWorkCaseId(long workCaseId) {
-        this.workCaseId = workCaseId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getMessageHeader() {
-        return messageHeader;
-    }
-
-    public void setMessageHeader(String messageHeader) {
-        this.messageHeader = messageHeader;
-    }
-
-    public List<NewCreditDetailView> getApproveCreditDetailViews() {
-        return approveCreditDetailViews;
-    }
-
-    public void setApproveCreditDetailViews(List<NewCreditDetailView> approveCreditDetailViews) {
-        this.approveCreditDetailViews = approveCreditDetailViews;
-    }
-
-    public List<AccountInfoDetailView> getAccountInfoDetailViews() {
-        return accountInfoDetailViews;
-    }
-
-    public void setAccountInfoDetailViews(List<AccountInfoDetailView> accountInfoDetailViews) {
-        this.accountInfoDetailViews = accountInfoDetailViews;
-    }
-
-    public List<FollowUpConditionView> getFollowUpConditionViews() {
-        return followUpConditionViews;
-    }
-
-    public void setFollowUpConditionViews(List<FollowUpConditionView> followUpConditionViews) {
-        this.followUpConditionViews = followUpConditionViews;
-    }
-
-    public LoanPaymentDetailView getLoanPaymentDetailView() {
-        return loanPaymentDetailView;
-    }
-
-    public void setLoanPaymentDetailView(LoanPaymentDetailView loanPaymentDetailView) {
-        this.loanPaymentDetailView = loanPaymentDetailView;
-    }
+	private void _loadInitData() {
+		preRenderCheck = false;
+		if (workCaseId > 0) {
+			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+		}
+		
+	}
 }

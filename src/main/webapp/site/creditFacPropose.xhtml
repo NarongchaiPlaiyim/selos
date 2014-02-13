@@ -582,12 +582,12 @@
                                             <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                #{proposeCredit.productProgram.name}
+                                                #{not empty proposeCredit.productProgram ? proposeCredit.productProgram.name : ''}
                                             </td>
                                             <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                #{proposeCredit.creditType.name}
+                                                #{not empty proposeCredit.creditType ? proposeCredit.creditType.name : ''}
                                             </td>
                                             <td class="top left" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -610,14 +610,17 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.standardPrice}"/>
-                                            </td>
-                                            <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
+                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceRate : ''}"/>
+                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}"/>
+                                            </td>
+                                            <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}"/>
                                             </td>
                                             <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -679,13 +682,13 @@
                                                    offset="1">
                                             <tr>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{proposeCredit.standardPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{proposeCredit.suggestPrice}"/>
+                                                    <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
                                                 </td>
                                                 <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.finalPriceRate}"/>
+                                                    <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
                                                 </td>
                                                 <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                     <h:outputText value="#{creditTierDetail.installment}">
@@ -713,14 +716,14 @@
                                                         <td class="title" style="border-style:none !important;">
                                                             #{msg.get('app.decision.tb.td.label.requestType')}
                                                         </td>
-                                                        <td style="border-style: none !important;">
+                                                        <td class="left" style="border-style: none !important;">
                                                             #{proposeCredit.requestType == 2 ? msg.get('app.label.new') :
                                                               proposeCredit.requestType == 1 ? msg.get('app.label.change') : ''}
                                                         </td>
                                                         <td class="title" style="border-style:none !important;">
                                                             #{msg.get('app.decision.tb.td.label.refinance')}
                                                         </td>
-                                                        <td style="border-style: none !important;">
+                                                        <td class="left" style="border-style: none !important;">
                                                             #{proposeCredit.refinance == 2 ? msg.get('app.label.no') :
                                                               proposeCredit.refinance == 1 ? msg.get('app.label.yes') : ''}
                                                         </td>
@@ -729,7 +732,7 @@
                                                         <td class="title" style="border-style: none !important;">
                                                             #{msg.get('app.decision.tb.td.label.purpose')}
                                                         </td>
-                                                        <td colspan="3" style="border-style: none !important;">
+                                                        <td class="left" colspan="3" style="border-style: none !important;">
                                                             #{not empty proposeCredit.loanPurpose ?
                                                               proposeCredit.loanPurpose.description : ''}
                                                         </td>
@@ -738,7 +741,7 @@
                                                         <td class="title" style="border-style: none !important;">
                                                             #{msg.get('app.decision.tb.td.label.purposeDetail')}
                                                         </td>
-                                                        <td colspan="3" style="border-style: none !important;">
+                                                        <td class="left" colspan="3" style="border-style: none !important;">
                                                             #{proposeCredit.remark}
                                                         </td>
                                                     </tr>
@@ -746,14 +749,14 @@
                                                         <td class="title" style="border-style: none !important;">
                                                             #{msg.get('app.decision.tb.td.label.disbursement')}
                                                         </td>
-                                                        <td style="border-style: none !important;">
+                                                        <td class="left" style="border-style: none !important;">
                                                             #{not empty proposeCredit.disbursement ?
                                                               proposeCredit.disbursement.disbursement : ''}
                                                         </td>
                                                         <td class="title" style="border-style: none !important;">
                                                             #{msg.get('app.decision.tb.td.label.holdAmount')}
                                                         </td>
-                                                        <td style="border-style: none !important;">
+                                                        <td class="left" style="border-style: none !important;">
                                                             <h:outputText value="#{proposeCredit.holdLimitAmount}">
                                                                 <f:convertNumber pattern="#,##0.##"
                                                                                  minFractionDigits="2"
@@ -772,7 +775,6 @@
                                             <td colspan="12">No records found.</td>
                                         </tr>
                                     </h:panelGroup>
-
                                     </tbody>
 
                                     <tfoot>
@@ -781,8 +783,7 @@
                                         </tr>
                                         <tr>
                                             <td class="summary_column"></td>
-                                            <td class="summary_column title" style="text-align: left;"
-                                                colspan="3">
+                                            <td class="summary_column title" style="text-align: left;" colspan="3">
                                                 #{msg.get('app.credit.facility.propose.tb.label.totalPropose')}
                                             </td>
                                             <td class="summary_column title" style="text-align: right;">
@@ -807,8 +808,7 @@
                                         </tr>
                                         <tr>
                                             <td class="summary_column"></td>
-                                            <td class="summary_column title" style="text-align: left;"
-                                                colspan="3">
+                                            <td class="summary_column title" style="text-align: left;" colspan="3">
                                                 #{msg.get('app.credit.facility.propose.tb.label.totalCommercial')}
                                             </td>
                                             <td class="summary_column title" style="text-align: right;">
@@ -827,8 +827,7 @@
 
                                         <tr>
                                             <td class="summary_column"></td>
-                                            <td class="summary_column title" style="text-align: left;"
-                                                colspan="3">
+                                            <td class="summary_column title" style="text-align: left;" colspan="3">
                                                 #{msg.get('app.credit.facility.propose.tb.label.totalCommercialAndOBOD')}
                                             </td>
                                             <td class="summary_column title" style="text-align: right;">
@@ -1182,6 +1181,7 @@
                                 </td>
                                 <td class="right" colspan="2">
                                     <p:commandButton value="Edit"
+                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      action="#{creditFacPropose.onEditProposeCollInfo()}"
                                                      update=":collateralDlgForm"
                                                      process="@this"
@@ -1193,7 +1193,9 @@
                                         <p:resetInput target=":collateralDlgForm"/>
                                     </p:commandButton>
                                     <p:spacer width="10" height="0"/>
-                                    <p:commandButton value="Remove" process="@this"
+                                    <p:commandButton value="Remove"
+                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
+                                                     process="@this"
                                                      oncomplete="confirmDeleteCollateralInfoDlg.show()">
                                         <f:setPropertyActionListener value="#{newCollateralView}"
                                                                      target="#{creditFacPropose.selectCollateralDetailView}"/>
@@ -1435,6 +1437,7 @@
 
                                 <tr>
                                     <td class="left" colspan="4">
+                                        <!-- Sub Collateral -->
                                         <p:dataTable id="subCollateralDetailViewTable"
                                                      value="#{CollateralHeaderDetailView.newCollateralSubViewList}"
                                                      var="newCollateralSubView"
@@ -1463,8 +1466,10 @@
 
                                             <p:column styleClass="top left">
                                                 #{not empty newCollateralSubView.subCollateralType ?
-                                                            newCollateralSubView.subCollateralType.description : ''}<br/>
-                                                #{msg.get('app.credit.facility.propose.dlg.subcoll.address')} #{newCollateralSubView.address}<br/>
+                                                            newCollateralSubView.subCollateralType.description : ''}
+                                                <br/>
+                                                #{msg.get('app.credit.facility.propose.dlg.subcoll.address')} #{newCollateralSubView.address}
+                                                <br/>
                                                 #{msg.get('app.credit.facility.propose.dlg.subcoll.landOffice')} #{newCollateralSubView.landOffice}
                                             </p:column>
 
@@ -1527,6 +1532,13 @@
                                 </h:panelGroup>
                             </ui:repeat>
 
+                            <h:panelGroup rendered="#{!collIndex.last}">
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
+                            </h:panelGroup>
                         </ui:repeat>
                         </table>
                     </td>
@@ -1922,7 +1934,7 @@
 <p:dialog id="subCollateralInfoDialog" widgetVar="subCollateralInfoDlg"
           header="Sub Collateral Information"
           modal="true"
-          width="700" height="500"
+          width="600" height="500"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
     <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
 </p:dialog>

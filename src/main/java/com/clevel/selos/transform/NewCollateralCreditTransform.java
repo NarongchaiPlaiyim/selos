@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
+import com.clevel.selos.dao.working.NewCollateralCreditDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.NewCollateral;
@@ -22,6 +23,8 @@ public class NewCollateralCreditTransform extends Transform {
 
     @Inject
     ExistingCreditDetailDAO existingCreditDetailDAO;
+    @Inject
+    NewCollateralCreditDAO newCollateralRelationDAO;
 
 
     public List<NewCollateralCredit> transformsToModelForCollateral(List<ProposeCreditDetailView> proposeCreditDetailViewList, List<NewCreditDetail> newCreditDetailList, NewCollateral newCollateralDetail, User user) {
@@ -30,11 +33,15 @@ public class NewCollateralCreditTransform extends Transform {
         NewCollateralCredit newCollateralRelCredit;
 
         for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
+            log.debug("Start... transformToModelForCollateral : proposeCreditDetailView : {}", proposeCreditDetailView);
+
             newCollateralRelCredit = new NewCollateralCredit();
-            newCollateralRelCredit.setCreateBy(user);
-            newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
-            newCollateralRelCredit.setModifyBy(user);
+
+            //newCollateralRelCredit = newCollateralRelationDAO.findById(Long.parseLong(Integer.toString(proposeCreditDetailView.getId())));
             newCollateralRelCredit.setModifyDate(DateTime.now().toDate());
+            newCollateralRelCredit.setModifyBy(user);
+            newCollateralRelCredit.setCreateDate(DateTime.now().toDate());
+            newCollateralRelCredit.setCreateBy(user);
 
             for (NewCreditDetail newCreditDetailAdd : newCreditDetailList) {
                 log.info("newCreditDetailAdd id is {} detail seq is {}", newCreditDetailAdd.getId(), newCreditDetailAdd.getSeq());

@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.AuthorizationDOADAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.integration.corebanking.model.CustomerInfo;
@@ -18,6 +19,9 @@ public class ExSummaryTransform extends Transform {
     private AuthorizationDOADAO authorizationDOADAO;
     @Inject
     private ReasonDAO reasonDAO;
+
+    @Inject
+    private BizInfoSummaryControl bizInfoSummaryControl;
 
     @Inject
     public ExSummaryTransform() {
@@ -295,8 +299,13 @@ public class ExSummaryTransform extends Transform {
         exSumBusinessInfoView.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
         exSumBusinessInfoView.setBizProvince(bizInfoSummaryView.getProvince().getName());
 
-        if(bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
-            for(BizInfoDetailView bd : bizInfoSummaryView.getBizInfoDetailViewList()){
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        if(bizInfoSummaryView.getId() != 0){
+            bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailViewByBizInfoSummary(bizInfoSummaryView.getId());
+        }
+
+        if(bizInfoDetailViewList != null && bizInfoDetailViewList.size() > 0) {
+            for(BizInfoDetailView bd : bizInfoDetailViewList){
                 if(bd.getIsMainDetail() == 1){
                     exSumBusinessInfoView.setBizType(bd.getBizType().getDescription());
                     exSumBusinessInfoView.setBizGroup(bd.getBizGroup().getDescription());

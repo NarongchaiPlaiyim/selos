@@ -40,14 +40,14 @@
                             <div id="content_form">
 
                                 <!-- start content -->
-                                <table class="content_table_form" border="0">
+                                <table class="content_form" border="0">
 
                                     <tr>
                                         <td class="title" style="width: 150px;">
                                             <p:outputLabel value="#{msg.get('app.insurance.approved')}"/>
                                         </td>
                                         <td class="left">
-                                            <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
+                                            <p:selectOneRadio  value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
                                                 <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new')}"         itemValue="0"/>
                                                 <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new.change')}" itemValue="1"/>
                                             </p:selectOneRadio>
@@ -55,41 +55,42 @@
                                     </tr>
 
                                     <tr>
-                                        <td colspan="2">
+                                        <td colspan="100%">
                                             <div class="separate"></div>
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="title" colspan="2">
+                                        <td class="title" colspan="100%">
                                             <p:outputLabel value="#{'Pre Disbursement Checklist'}"/>
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td colspan="2">
-                                            <table border="0">
+                                        <td colspan="100%">
+                                            <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
                                                 <tr>
-                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
-                                                        <p:outputLabel value="#{''}"/>
-                                                    </td>
+                                                    <th style="width:30px;"></th>
 
-                                                    <td class="center title" style="width: 800px; max-width: 800px; min-width: 800px;">
+                                                    <th>
                                                         <h:outputText value="#{'Description'}" />
-                                                    </td>
-                                                    <td class="center title" style="width: 250px; max-width: 250px; min-width: 250px;">
+                                                    </th>
+                                                    <th>
                                                         <h:outputText value="#{'Submission Date'}"/>
-                                                    </td>
-                                                    <td class="center title" style="width: 100px; max-width: 100px; min-width: 100px;">
-                                                        <h:outputText styleClass="center" value="#{'Y/N'}"/>
-                                                    </td>
+                                                    </th>
+                                                    <th>
+                                                        <h:outputText styleClass="center" value="#{'Y'}"/>
+                                                    </th>
+                                                    <th>
+                                                        <h:outputText styleClass="center" value="#{'N'}"/>
+                                                    </th>
                                                 </tr>
 
                                                 <tr>
                                                     <td class="left title">
                                                         <h:outputText value="#{'1'}"/>
                                                     </td>
-                                                    <td colspan="3" class="left title">
+                                                    <td colspan="4" class="left title">
                                                         <h:outputText value="#{'Basic Condition'}"/>
                                                     </td>
                                                 </tr>
@@ -103,28 +104,16 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
-                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                            <p:ajax update="msgQuestion" event="valueChange" />
                                                         </p:selectOneRadio>
                                                     </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-
-                                                    </td>
-                                                    <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
-                                                    </td>
                                                     <td class="center">
-                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
-                                                    </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
-                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
+                                                            <p:ajax update="msgQuestion" event="valueChange" />
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
@@ -139,9 +128,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -157,9 +150,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -175,9 +172,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -193,9 +194,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -211,16 +216,42 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
+                                                            <f:selectItem itemLabel="" itemValue="1"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td class="left">
+                                                        <h:outputText value="#{'- Customer rating ไม่เท่ากับ SBF 19-22'}"/>
+                                                    </td>
+                                                    <td class="center">
+                                                        <h:outputText value="#{'dd/MM/yyyy'}"/>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
+                                                            <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="left title">
                                                         <h:outputText value="#{'2'}"/>
                                                     </td>
@@ -229,7 +260,7 @@
                                                     </td>
                                                 </tr>
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="center">
                                                         <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
                                                     </td>
@@ -248,9 +279,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -266,15 +301,19 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="center">
                                                         <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
                                                     </td>
@@ -293,9 +332,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -310,9 +353,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -327,9 +374,13 @@
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 8px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>

@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,10 +12,52 @@ public class AbstractWorkCase implements Serializable{
     @Column(name = "app_number", length = 16,nullable = false)
     protected String appNumber;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "received_date")
+    protected Date receivedDate;
+
+    @OneToOne
+    @JoinColumn(name = "at_user_team_id")
+    protected UserTeam atUserTeam;
+
+    @OneToOne
+    @JoinColumn(name = "product_group_id")
+    protected ProductGroup productGroup;
+
+    @OneToOne
+    @JoinColumn(name = "request_type_id")
+    protected RequestType request_type;
+
+    @OneToOne
+    @JoinColumn(name = "from_user_id")
+    protected User fromUser;
+
+    @OneToOne
+    @JoinColumn(name = "at_user_id")
+    protected User atUser;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "appointment_date")
+    protected Date appointmentDate;
+
+    @ManyToOne
+    @JoinColumn(name = "doa_level_id")
+    protected AuthorizationDOA authorizationDOA;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JoinColumn(name = "sla_end_date")
+    protected Date slaEndDate;
+
+    @Column(name = "total_time_at_user", length = 1, columnDefinition = "int default 0")
+    protected int totalTimeAtUser;
+
+    @Column(name = "total_time_at_process", length = 1, columnDefinition = "int default 0")
+    protected int totalTimeAtProcess;
+
     @Column(name = "wob_number")
     protected String wobNumber;
 
-    @Column(name = "case_lock")
+    @Column(name = "case_lock", length = 1, columnDefinition = "int default 0")
     protected int lock;
 
     @Column(name = "lock_user")
@@ -46,6 +86,9 @@ public class AbstractWorkCase implements Serializable{
     @OneToOne
     @JoinColumn(name = "modify_by")
     protected User modifyBy;
+
+    @Column(name = "bpm_active", length = 1, columnDefinition = "int default 1")
+    protected int bpmActive;
 
     public Date getCreateDate() {
         return createDate;

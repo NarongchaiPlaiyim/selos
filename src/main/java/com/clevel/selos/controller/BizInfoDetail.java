@@ -638,7 +638,6 @@ public class BizInfoDetail implements Serializable {
     private boolean onValidateStakeHolder(){
         boolean validate  = false;
         if(!bizStakeHolderDetailView.getName().equals("" )
-                &&!bizStakeHolderDetailView.getContactName().equals("")
                 &&!bizStakeHolderDetailView.getPhoneNo().equals("")
                 &&!bizStakeHolderDetailView.getContactYear().equals("")
                 &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
@@ -737,15 +736,7 @@ public class BizInfoDetail implements Serializable {
     }
 
     public void onCancel(){
-        try{
-            String url = "bizInfoSummary.jsf";
-            FacesContext fc = FacesContext.getCurrentInstance();
-            ExternalContext ec = fc.getExternalContext();
-            log.debug("redirect to new page");
-            ec.redirect(url);
-        }catch (Exception ex){
-            log.error("", ex);
-        }
+        FacesUtil.redirect("/site/bizInfoSummary.jsf");
     }
 
 

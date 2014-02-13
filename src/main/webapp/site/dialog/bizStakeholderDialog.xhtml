@@ -12,7 +12,9 @@
                     <h:outputText value="#{bizInfoDetail.dlgStakeName}"/><h:outputLabel value="*"  styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.name}" required="#{not empty param[saveStakeholderBtn.clientId]}"/>
+                    <p:inputText id="name" value="#{bizInfoDetail.bizStakeHolderDetailView.name}" required="#{not empty param[saveStakeholderBtn.clientId]}">
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:name"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
@@ -21,8 +23,7 @@
                     <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}"
-                                 required="#{not empty param[saveStakeholderBtn.clientId]}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}"/>
                 </td>
             </tr>
             <tr>
@@ -31,9 +32,12 @@
                     <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
+                    <p:inputText id="phoneNo" value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"
                                  onkeydown="return onKeyDownTelNo(event);" onkeypress="return onKeyPressTelNo(event);"
-                                 required="#{not empty param[saveStakeholderBtn.clientId]}"/>
+                                 required="#{not empty param[saveStakeholderBtn.clientId]}">
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:phoneNo"/>
+                    </p:inputText>
+
                 </td>
             </tr>
             <tr>
@@ -116,7 +120,7 @@
                                      binding="#{saveStakeholderBtn}"
                                      process=":stakeholderViewDlgForm"
                                      action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
-                                     update=":frmMain,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
+                                     update=":frmMain:supplierTable,:frmMain:buyerTable,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
                                      oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
 
                     <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" update=":stakeholderViewDlgForm"

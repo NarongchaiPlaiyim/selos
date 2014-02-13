@@ -19,7 +19,7 @@ public class NewGuarantorCredit implements Serializable {
     @JoinColumn(name = "new_guarantor_id")
     private NewGuarantorDetail newGuarantorDetail;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "new_credit_detail_id")
     private NewCreditDetail newCreditDetail;
 

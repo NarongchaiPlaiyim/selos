@@ -10,6 +10,7 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.CreditCustomerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -113,7 +114,12 @@ public class Decision implements Serializable {
     private long workCaseId;
     private long workCasePrescreenId;
 
+    //User Role
+    private boolean roleBDM;
+    private boolean roleZM_RGM;
     private boolean roleUW;
+
+    //Main Model View
     private DecisionView decisionView;
     private FollowUpConditionView followUpConditionView;
     private ApprovalHistory approvalHistory;
@@ -243,7 +249,18 @@ public class Decision implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            roleUW = !decisionControl.isRoleUW();   // test
+
+            // set role
+            int roleId = decisionControl.getUserRoleId();
+            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+                roleBDM = true;
+            }
+            else if (RoleValue.UW.id() == roleId) {
+                roleUW = true;
+            }
+            else if (RoleValue.ZM.id() == roleId || RoleValue.RGM.id() == roleId) {
+                roleZM_RGM = true;
+            }
 
         } else {
             //TODO return to inbox
@@ -433,7 +450,8 @@ public class Decision implements Serializable {
         // todo: retrieve base rate by criteria?
         BaseRate baseRate = baseRateDAO.findById(1);
         NewCreditDetailView creditDetailRetrieve = new NewCreditDetailView();
-        creditDetailRetrieve.setStandardBasePrice(baseRate);
+        // todo: change standard to tier
+        /*creditDetailRetrieve.setStandardBasePrice(baseRate);
         creditDetailRetrieve.setStandardInterest(BigDecimal.valueOf(-1.75));
 
         if (ValidationUtil.isValueLessThanZero(creditDetailRetrieve.getStandardInterest())) {
@@ -442,7 +460,7 @@ public class Decision implements Serializable {
             creditDetailRetrieve.setStandardPrice(creditDetailRetrieve.getStandardBasePrice().getName() + " + " + creditDetailRetrieve.getStandardInterest());
         }
 
-        //****** tier test create ********//
+        /*//****** tier test create ********//*/
         List<NewCreditTierDetailView> newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
         NewCreditTierDetailView newCreditTierDetailView = new NewCreditTierDetailView();
         newCreditTierDetailView.setStandardBasePrice(baseRate);
@@ -462,10 +480,10 @@ public class Decision implements Serializable {
         for (NewCreditDetailView proposeCreditDetail : decisionView.getApproveCreditList()) {
             proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             proposeCreditDetail.setStandardBasePrice(baseRate);
-            proposeCreditDetail.setSuggestBasePrice(baseRate);
+//            proposeCreditDetail.setSuggestBasePrice(baseRate); //todo: change suggest to tier
             proposeCreditDetail.setStandardInterest(creditDetailRetrieve.getStandardInterest());
-            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest());
-        }
+//            proposeCreditDetail.setSuggestInterest(creditDetailRetrieve.getSuggestInterest()); //todo: change suggest to tier
+        }*/
     }
 
     // ---------- Propose Credit Dialog ---------- //
@@ -481,8 +499,8 @@ public class Decision implements Serializable {
             selectedAppProposeCredit = new NewCreditDetailView();
 
             if (baseRateList != null && !baseRateList.isEmpty()) {
-                selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0));
-                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0));
+//                selectedAppProposeCredit.setStandardBasePrice(baseRateList.get(0)); // todo: change standard to tier
+//                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0)); //todo: change suggest to tier
             }
 
             if (loanPurposeList != null && !loanPurposeList.isEmpty()) {
@@ -561,10 +579,10 @@ public class Decision implements Serializable {
                 creditDetailEdit.setPCEAmount(selectedAppProposeCredit.getPCEAmount());
                 creditDetailEdit.setReducePriceFlag(selectedAppProposeCredit.isReducePriceFlag());
                 creditDetailEdit.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
-                creditDetailEdit.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice());
-                creditDetailEdit.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
-                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice());
-                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
+//                creditDetailEdit.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice()); // todo: change standard to tier
+//                creditDetailEdit.setStandardInterest(selectedAppProposeCredit.getStandardInterest()); // todo: change standard to tier
+//                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailEdit.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
                 creditDetailEdit.setLoanPurpose(loanPurpose);
                 creditDetailEdit.setRemark(selectedAppProposeCredit.getRemark());
@@ -587,10 +605,10 @@ public class Decision implements Serializable {
                 creditDetailAdd.setPCEAmount(selectedAppProposeCredit.getPCEAmount());
                 creditDetailAdd.setReducePriceFlag(selectedAppProposeCredit.isReducePriceFlag());
                 creditDetailAdd.setReduceFrontEndFee(selectedAppProposeCredit.isReduceFrontEndFee());
-                creditDetailAdd.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice());
-                creditDetailAdd.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
-                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice());
-                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
+//                creditDetailAdd.setStandardBasePrice(selectedAppProposeCredit.getStandardBasePrice()); // todo: change standard to tier
+//                creditDetailAdd.setStandardInterest(selectedAppProposeCredit.getStandardInterest()); // todo: change standard to tier
+//                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
+//                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailAdd.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
                 creditDetailAdd.setLoanPurpose(loanPurpose);
                 creditDetailAdd.setRemark(selectedAppProposeCredit.getRemark());
@@ -687,7 +705,7 @@ public class Decision implements Serializable {
     }
 
     public void onChangeSuggestValue() {
-        log.info("onChangeSuggestValue(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {})",
+        /*log.info("onChangeSuggestValue(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {})", //todo: change suggest to tier
                 selectedAppProposeCredit.getStandardBasePrice().getId(), selectedAppProposeCredit.getStandardInterest(),
                 selectedAppProposeCredit.getSuggestBasePrice().getId(), selectedAppProposeCredit.getSuggestInterest());
 
@@ -704,25 +722,25 @@ public class Decision implements Serializable {
         standardBaseRate = (BaseRate) values[3];
         standardPriceLabel = (String) values[4];
         suggestBaseRate = (BaseRate) values[5];
-        suggestPriceLabel = (String) values[6];
+        suggestPriceLabel = (String) values[6];*/
     }
 
     public void onAddTierInfo() {
-        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
-                standardBaseRate.getId(), selectedAppProposeCredit.getStandardInterest(),
-                suggestBaseRate.getId(), selectedAppProposeCredit.getSuggestInterest(),
-                finalBaseRate.getId(), finalInterest);
+//        log.debug("onAddTierInfo(standardBaseRate.id: {}, standardInterest: {}, suggestBaseRate.id: {}, suggestInterest: {}, finalBaseRate.id: {}, finalInterest: {})",
+//                standardBaseRate.getId(), selectedAppProposeCredit.getStandardInterest(),
+//                suggestBaseRate.getId(), selectedAppProposeCredit.getSuggestInterest(),
+//                finalBaseRate.getId(), finalInterest);
 
         NewCreditTierDetailView newCreditTierDetail = new NewCreditTierDetailView();
         newCreditTierDetail.setFinalBasePrice(finalBaseRate);
         newCreditTierDetail.setFinalInterest(finalInterest);
-        newCreditTierDetail.setFinalPriceRate(finalPriceRate);
+        newCreditTierDetail.setFinalPriceLabel(finalPriceRate);
         newCreditTierDetail.setStandardBasePrice(standardBaseRate);
-        newCreditTierDetail.setStandardInterest(selectedAppProposeCredit.getStandardInterest());
-        newCreditTierDetail.setStandardPrice(standardPriceLabel);
+//        newCreditTierDetail.setStandardInterest(selectedAppProposeCredit.getStandardInterest()); // todo: change standard to tier
+        newCreditTierDetail.setStandardPriceLabel(standardPriceLabel);
         newCreditTierDetail.setSuggestBasePrice(suggestBaseRate);
-        newCreditTierDetail.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());
-        newCreditTierDetail.setSuggestPrice(suggestPriceLabel);
+//        newCreditTierDetail.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest());//todo: change suggest to tier
+        newCreditTierDetail.setSuggestPriceLabel(suggestPriceLabel);
         newCreditTierDetail.setCanEdit(true);
 
         if (selectedAppProposeCredit.getNewCreditTierDetailViewList() != null) {
@@ -1248,14 +1266,6 @@ public class Decision implements Serializable {
         this.guarantorList = guarantorList;
     }
 
-    public boolean isRoleUW() {
-        return roleUW;
-    }
-
-    public void setRoleUW(boolean roleUW) {
-        this.roleUW = roleUW;
-    }
-
     public int getCreditCustomerType() {
         return creditCustomerType;
     }
@@ -1526,5 +1536,29 @@ public class Decision implements Serializable {
 
     public void setCreditTypeList(List<CreditType> creditTypeList) {
         this.creditTypeList = creditTypeList;
+    }
+
+    public boolean isRoleBDM() {
+        return roleBDM;
+    }
+
+    public void setRoleBDM(boolean roleBDM) {
+        this.roleBDM = roleBDM;
+    }
+
+    public boolean isRoleZM_RGM() {
+        return roleZM_RGM;
+    }
+
+    public void setRoleZM_RGM(boolean roleZM_RGM) {
+        this.roleZM_RGM = roleZM_RGM;
+    }
+
+    public boolean isRoleUW() {
+        return roleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        this.roleUW = roleUW;
     }
 }
