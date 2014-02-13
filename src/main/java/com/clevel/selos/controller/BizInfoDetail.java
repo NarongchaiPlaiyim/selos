@@ -638,7 +638,6 @@ public class BizInfoDetail implements Serializable {
     private boolean onValidateStakeHolder(){
         boolean validate  = false;
         if(!bizStakeHolderDetailView.getName().equals("" )
-                &&!bizStakeHolderDetailView.getContactName().equals("")
                 &&!bizStakeHolderDetailView.getPhoneNo().equals("")
                 &&!bizStakeHolderDetailView.getContactYear().equals("")
                 &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
