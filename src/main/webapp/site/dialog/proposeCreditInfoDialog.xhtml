@@ -215,7 +215,7 @@
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <table border="0">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="standDlg"
@@ -253,8 +253,8 @@
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                 </td>
-                <td colspan="3">
-                    <table border="0">
+                <td class="left" colspan="3">
+                    <table border="0" style="width: 100%">
                         <tr>
                             <td>
                                 <p:selectOneMenu id="suggestDlg"
@@ -363,7 +363,7 @@
                                                      style="width: 50px;"
                                                      styleClass="right" readonly="true">
                                                      <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
-                                            <f:convertNumber pattern="#,##0"
+                                            <f:convertNumber pattern="##0.##"
                                                              minFractionDigits="2"
                                                              maxFractionDigits="2"
                                                              maxIntegerDigits="3"/>
