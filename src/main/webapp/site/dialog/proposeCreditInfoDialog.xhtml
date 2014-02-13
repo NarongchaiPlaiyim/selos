@@ -237,6 +237,7 @@
                                     <f:selectItems value="#{creditFacPropose.baseRateList}" var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
+                                    <p:ajax event="change" process=":creditInfoDlgForm" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -277,6 +278,7 @@
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
+                                    <p:ajax event="change" process=":creditInfoDlgForm" />
                                 </p:selectOneMenu>
                             </td>
                             <td>

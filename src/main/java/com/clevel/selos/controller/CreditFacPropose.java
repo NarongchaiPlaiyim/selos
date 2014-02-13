@@ -653,16 +653,18 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
 
+        if(newCreditDetailView.getProductProgram().getId() != 0){
+            ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+            prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        }
+
         if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {   //change
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
-            newCreditDetailView.getProductProgram().setId(0);
             cannotEditStandard = false;
             cannotAddTier = false;
-
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
-                newCreditDetailView.getCreditType().setId(0);
             }
             cannotEditStandard = true;
             if(modeForButton == ModeForButton.ADD){
@@ -708,8 +710,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         modeForButton = ModeForButton.EDIT;
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
-        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         onChangeRequestType();
         calculateInstallment(newCreditDetailView);
 
@@ -904,18 +904,16 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.info("suggestPrice :: {}", suggestPrice);
         log.info("standardPrice :: {}", standardPrice);
 
-        Cloner cloner = new Cloner();
-
         if (standardPrice.compareTo(suggestPrice) > 0) {
-            finalBaseRate = cloner.deepClone(standardBase);
+            finalBaseRate = baseRateDAO.findById(standardBasePriceDlg.getId());
             finalInterest = standardInterestDlg;
             finalPriceLabel = standardPriceLabel;
         } else if (suggestPrice.compareTo(standardPrice) > 0) {
-            finalBaseRate = cloner.deepClone(suggestBase);
+            finalBaseRate = baseRateDAO.findById(suggestBasePriceDlg.getId());
             finalInterest = suggestInterestDlg;
             finalPriceLabel = suggestPriceLabel;
         } else { // if equal
-            finalBaseRate = cloner.deepClone(standardBase);
+            finalBaseRate = baseRateDAO.findById(standardBasePriceDlg.getId());
             finalInterest = standardInterestDlg;
             finalPriceLabel = standardPriceLabel;
         }
