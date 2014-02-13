@@ -420,7 +420,11 @@ public class Decision implements Serializable {
         approvalHistory.setAction("Approve CA");
         approvalHistory.setApprover(decisionControl.getApprover());
 
-//        setDummyData();
+        // Initial Standard & Suggest BaseRate to Approved Credit Dialog
+        standardBasePriceDlg = new BaseRate();
+        standardInterestDlg = BigDecimal.ZERO;
+        suggestBasePriceDlg = new BaseRate();
+        suggestInterestDlg = BigDecimal.ZERO;
     }
 
     public void setDataFromNewCreditFacility() {
