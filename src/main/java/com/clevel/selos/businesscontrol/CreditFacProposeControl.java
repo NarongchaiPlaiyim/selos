@@ -140,7 +140,7 @@ public class CreditFacProposeControl extends BusinessControl {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if (workCase != null) {
                 NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-                log.debug("find new creditFacility{}", newCreditFacility.getId());
+                log.debug("find new creditFacility: {}", newCreditFacility);
                 if (newCreditFacility != null) {
                     newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 

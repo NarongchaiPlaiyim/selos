@@ -51,6 +51,15 @@
                                  style="width: 100%;">
 
                         <p:columnGroup type="header">
+                            <!--<p:row>-->
+                                <!--<p:column style="width: 30px; padding: 5px 10px !important;"/>-->
+                                <!--<p:column style="width: 300px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>-->
+                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>-->
+                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>-->
+                                <!--<p:column style="width: 80px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>-->
+                                <!--<p:column style="width: 130px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>-->
+                                <!--<p:column style="width: 130px; padding: 5px 10px !important;" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>-->
+                            <!--</p:row>-->
                             <p:row>
                                 <p:column style="width: 5%; padding: 5px 10px !important;"/>
                                 <p:column style="width: 35%; padding: 5px 10px !important;"
@@ -105,7 +114,7 @@
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right">
+                                         styleClass="right" style="width: 100px">
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"

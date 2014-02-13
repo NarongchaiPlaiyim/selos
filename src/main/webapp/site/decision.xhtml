@@ -21,6 +21,7 @@
         }
         .ui-datatable tbody td {
             border-color: #868686 !important;
+            white-space: normal !important;
         }
         tfoot {
             background: none !important;
@@ -1643,22 +1644,22 @@
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##"
                                                                              minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -1666,7 +1667,7 @@
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
@@ -1710,7 +1711,7 @@
 
                                                 <tr>
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
@@ -1987,22 +1988,22 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                                 <f:convertNumber pattern="#,##0.##"
                                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                                  maxIntegerDigits="14"/>
@@ -2083,7 +2084,7 @@
 
                                                     <tr>
                                                         <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                            <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                                 <tr>
                                                                     <td class="title" style="border-style: none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.requestType')}
@@ -2305,22 +2306,22 @@
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##"
                                                                              minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -2374,7 +2375,7 @@
 
                                                 <tr>
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
