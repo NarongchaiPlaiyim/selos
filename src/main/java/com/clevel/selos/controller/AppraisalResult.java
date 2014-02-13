@@ -167,16 +167,16 @@ public class AppraisalResult implements Serializable {
 //        workCaseId = 4;
 //        user = (User)session.getAttribute("user");
 
-        if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
-            workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
-            log.debug("-- workCasePreScreenId[{}]", workCaseId);
+        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            log.debug("-- workCaseId[{}]", workCaseId);
             user = (User)session.getAttribute("user");
             log.debug("-- User.id[{}]", user.getId());
             stepId = Long.valueOf(""+session.getAttribute("stepId"));
             log.debug("-- stepId[{}]", stepId);
             try{
                 String page = Util.getCurrentPage();
-                if(stepId != StepValue.PRESCREEN_MAKER.value() || stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                if(stepId != StepValue.REVIEW_APPRAISAL_REQUEST.value() || !"appraisalResult.jsf".equals(page)){
                     FacesUtil.redirect("/site/inbox.jsf");
                     return;
                 }
@@ -184,7 +184,7 @@ public class AppraisalResult implements Serializable {
                 log.debug("Exception :: {}",ex);
             }
         } else {
-            log.debug("preRender ::: workCasePrescreenId is null.");
+            log.debug("preRender ::: workCaseId is null.");
             FacesUtil.redirect("/site/inbox.jsf");
             return;
         }
