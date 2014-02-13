@@ -21,7 +21,18 @@
                         <p:ajax event="change"
                                 listener="#{creditFacPropose.onChangeRequestType()}"
                                 process="@this"
-                                update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg,:creditInfoDlgForm:addTier"/>
+                                update=":creditInfoDlgForm:dlgSelCreditType,
+                                        :creditInfoDlgForm:dlgSelProdProgram,
+                                        :creditInfoDlgForm:productCode,
+                                        :creditInfoDlgForm:projectCode,
+                                        :creditInfoDlgForm:reducePriceFlagChk,
+                                        :creditInfoDlgForm:reduceFrontEndFeeChk,
+                                        :creditInfoDlgForm:reducePrice,
+                                        :creditInfoDlgForm:standPriceDlg,
+                                        :creditInfoDlgForm:standDlg,
+                                        :creditInfoDlgForm:suggestPriceDlg,
+                                        :creditInfoDlgForm:suggestDlg,
+                                        :creditInfoDlgForm:addTier"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -119,7 +130,7 @@
                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
-                                process="@form" update="@this,:creditInfoDlgForm:resultFinal" />
+                                process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -282,6 +293,7 @@
                                                      minFractionDigits="2"
                                                      maxFractionDigits="2"
                                                      maxIntegerDigits="3"/>
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </td>
                         </tr>
