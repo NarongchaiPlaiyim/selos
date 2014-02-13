@@ -1170,15 +1170,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM008Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1190,15 +1191,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM204Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1210,15 +1212,16 @@
                             </tr>
 
                             <tr>
-                                <td style="text-align: left; width: 350px;">
+                                <td style="text-align: left; width: 200px;">
                                     <h:outputText value="#{msg.get('app.exSummary.label.RM020Code')}"/>
                                 </td>
                                 <td>
                                     <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
-                                        <f:selectItem itemLabel="ตอบ" itemValue="1"/>
-                                        <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.answer')}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.notAnswer')}" itemValue="0"/>
                                     </h:selectOneRadio>
                                 </td>
+                                <td></td>
                             </tr>
 
                             <tr>
@@ -1309,7 +1312,7 @@
                                         <p:columnGroup type="header">
                                             <p:row>
                                                 <p:column style="width:20px;"/>
-                                                <p:column style="width:600px;"
+                                                <p:column style="width:800px; max-width: 800px; min-width: 800px;"
                                                           headerText="#{msg.get('app.exSummary.label.tb.label.reasonCode')}"/>
                                                 <p:column style="width:20px;"/>
                                             </p:row>
@@ -1319,8 +1322,9 @@
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
-                                        <p:column styleClass="left">
-                                            <h:outputText value="#{itemUWDecision.code} - #{itemUWDecision.description}"/>
+                                        <p:column styleClass="left" style="width:800px; max-width: 800px; min-width: 800px;">
+                                            <h:outputText value="#{itemUWDecision.code} - #{itemUWDecision.description}"
+                                                          style="width:800px; max-width: 800px; min-width: 800px;"/>
                                         </p:column>
 
                                         <p:column styleClass="center">
