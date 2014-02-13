@@ -220,24 +220,16 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void preRender() {
-
         log.info("preRender ::: setSession ");
-
         HttpSession session = FacesUtil.getSession(true);
 
         if(!Util.isNull(session.getAttribute("workCaseId"))){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         } else {
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
@@ -254,7 +246,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-
+                log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 if (newCreditFacilityView != null) {
                     log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 

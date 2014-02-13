@@ -59,8 +59,10 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         for(NewCollateral newCollateral : newCollateralList){
             id = newCollateral.getId();
             if(id != 0){
+                newCollateral = findById(id);
+                newCollateral.setProposeType("P");
                 newCollateral.setAppraisalRequest(2);
-                persist(newCollateral);
+                save(newCollateral);
                 log.debug("-- NewCollateral(id : {}) updated", id);
             }
         }

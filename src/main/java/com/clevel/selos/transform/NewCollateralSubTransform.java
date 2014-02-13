@@ -26,7 +26,7 @@ public class NewCollateralSubTransform extends Transform {
     }
 
     public List<NewCollateralSub> transformToModel(final List<NewCollateralSubView> newCollateralSubViewList, final User user){
-        log.debug("------ transformToNewModel [NewCollateralSubViewList.size[{}]]", newCollateralSubViewList.size());
+        log.debug("------ transformToModel [NewCollateralSubViewList.size[{}]]", newCollateralSubViewList.size());
         newCollateralSubList = new ArrayList<NewCollateralSub>();
         NewCollateralSub model = null;
         for(NewCollateralSubView view : newCollateralSubViewList){
@@ -58,7 +58,6 @@ public class NewCollateralSubTransform extends Transform {
             model.setMortgageValue(view.getMortgageValue());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
-            newCollateralSubViewList.add(view);
             newCollateralSubList.add(model);
         }
         log.debug("------[RETURNED] NewCollateralSubList.size[{}]", newCollateralSubList.size());
@@ -94,7 +93,6 @@ public class NewCollateralSubTransform extends Transform {
             model.setMortgageValue(view.getMortgageValue());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
-            newCollateralSubViewList.add(view);
             newCollateralSubList.add(model);
         }
         log.debug("------[RETURNED] NewCollateralSubList.size[{}]", newCollateralSubList.size());
