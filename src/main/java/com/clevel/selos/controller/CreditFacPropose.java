@@ -689,6 +689,8 @@ public class CreditFacPropose implements Serializable {
         if(newCreditDetailView.getRequestType() == 2){ // 1 = change , 2 = new
             suggestInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
             suggestBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
+            standardInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
+            standardBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
         } else {
             suggestInterestDlg = BigDecimal.ZERO;
             suggestBasePriceDlg = new BaseRate();

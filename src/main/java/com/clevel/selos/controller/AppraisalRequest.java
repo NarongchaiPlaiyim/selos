@@ -113,6 +113,8 @@ public class AppraisalRequest implements Serializable {
         log.info("-- preRender.");
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
+//        workCaseId = 4;
+//        user = (User)session.getAttribute("user");
         if(!Util.isNull(session.getAttribute("workCasePreScreenId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
             workCaseId = Long.valueOf(""+session.getAttribute("workCasePreScreenId"));
             log.debug("-- workCasePreScreenId[{}]", workCaseId);
@@ -201,15 +203,6 @@ public class AppraisalRequest implements Serializable {
         log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
 
-    public void onSetRowNoAppraisalDetailView(){
-        AppraisalDetailView appraisalDetailViewRow;
-        for(int i=0;i< appraisalDetailViewList.size();i++){
-            appraisalDetailViewRow = appraisalDetailViewList.get(i);
-            appraisalDetailViewRow.setNo(i+1);
-        }
-    }
-
-
     public void onSaveAppraisalRequest() {
         log.info("-- onSaveAppraisalRequest::::");
 
@@ -256,7 +249,7 @@ public class AppraisalRequest implements Serializable {
     private boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
-        if(appraisalDetailViewDialog.getTitleDeed().length() == 0){
+        if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
             titleDeedFlag = true;
             result = false;
         } else {
