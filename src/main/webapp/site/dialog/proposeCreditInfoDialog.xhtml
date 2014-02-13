@@ -14,13 +14,25 @@
                 </td>
                 <td class="left" style="width: 80%" colspan="3">
                     <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}"
-                                      required="#{not empty param[onSaveCreditInfo.clientId]}">
+                                      required="#{not empty param[onSaveCreditInfo.clientId]}"
+                                      disabled="#{creditFacPropose.modeEdit}">
                         <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
                         <p:ajax event="change"
                                 listener="#{creditFacPropose.onChangeRequestType()}"
                                 process="@this"
-                                update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg,:creditInfoDlgForm:addTier"/>
+                                update=":creditInfoDlgForm:dlgSelCreditType,
+                                        :creditInfoDlgForm:dlgSelProdProgram,
+                                        :creditInfoDlgForm:productCode,
+                                        :creditInfoDlgForm:projectCode,
+                                        :creditInfoDlgForm:reducePriceFlagChk,
+                                        :creditInfoDlgForm:reduceFrontEndFeeChk,
+                                        :creditInfoDlgForm:reducePrice,
+                                        :creditInfoDlgForm:standPriceDlg,
+                                        :creditInfoDlgForm:standDlg,
+                                        :creditInfoDlgForm:suggestPriceDlg,
+                                        :creditInfoDlgForm:suggestDlg,
+                                        :creditInfoDlgForm:addTier"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -118,7 +130,7 @@
                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
-                                process="@form" update=":creditInfoDlgForm:resultFinal" />
+                                process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -253,7 +265,7 @@
                 <td class="title">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
                 </td>
-                <td colspan="3">
+                <td class="left" colspan="3">
                     <table border="0">
                         <tr>
                             <td>
@@ -265,10 +277,6 @@
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
-                                    <p:ajax event="change"
-                                            listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm"
-                                            update=":creditInfoDlgForm:resultFinal" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -285,10 +293,7 @@
                                                      minFractionDigits="2"
                                                      maxFractionDigits="2"
                                                      maxIntegerDigits="3"/>
-                                    <p:ajax event="blur"
-                                            listener="#{creditFacPropose.onChangeSuggestValue}"
-                                            process=":creditInfoDlgForm"
-                                            update=":creditInfoDlgForm:resultFinal" />
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </td>
                         </tr>
@@ -349,9 +354,9 @@
                                                          style="width: 50px;" disabled="true">
                                                          <!--disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                             <f:selectItems value="#{creditFacPropose.baseRateList}"
-                                                           var="final"
-                                                           itemLabel="#{final.name}"
-                                                           itemValue="#{final.id}"/>
+                                                           var="finalBase"
+                                                           itemLabel="#{finalBase.name}"
+                                                           itemValue="#{finalBase.id}"/>
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>
@@ -363,7 +368,7 @@
                                                      style="width: 50px;"
                                                      styleClass="right" readonly="true">
                                                      <!--readonly="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
-                                            <f:convertNumber pattern="#,##0"
+                                            <f:convertNumber pattern="##0.##"
                                                              minFractionDigits="2"
                                                              maxFractionDigits="2"
                                                              maxIntegerDigits="3"/>

@@ -350,6 +350,14 @@ public class Util implements Serializable {
         }
     }
 
+    public static boolean isZero(BigDecimal bigDecimal){
+        try {
+            return bigDecimal == BigDecimal.ZERO ? true : false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
     public static boolean isZero(long id){
         try {
             return id == 0 ? true : false;

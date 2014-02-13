@@ -27,8 +27,8 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/>
                     <h:outputLabel value="*" styleClass="require-field"/>
                 </td>
                 <td>
@@ -41,9 +41,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactYear')}"/><h:outputLabel
-                        value="*" styleClass="require-field"/></td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactYear')}"/>
+                    <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="contactYear" value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}" styleClass="right"
                                  onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"
@@ -68,9 +68,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText
-                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCash')}"/><h:outputLabel
-                        value="*" styleClass="require-field"/></td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCash')}"/>
+                    <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentCash" styleClass="right"
                                  onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"

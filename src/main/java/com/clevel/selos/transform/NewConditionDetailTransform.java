@@ -27,7 +27,7 @@ public class NewConditionDetailTransform extends Transform {
 
         for (NewConditionDetailView newConditionDetailView : newConditionDetailViewList) {
             newConditionDetail = new NewConditionDetail();
-            if (newConditionDetail.getId() != 0) {
+            if (newConditionDetailView.getId() != 0) {
                 //newConditionDetail.setId(newConditionDetailView.getId());
                 newConditionDetail = newConditionDetailDAO.findById(newConditionDetailView.getId());
                 newConditionDetail.setModifyDate(DateTime.now().toDate());
