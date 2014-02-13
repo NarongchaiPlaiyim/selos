@@ -7,8 +7,10 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.AuthorizationDOA;
 import com.clevel.selos.model.db.master.Reason;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ExSumReasonView;
 import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -52,6 +54,8 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
     private String messageHeader;
     private String message;
     private String severity;
+
+    private boolean isRoleUW;
 
     private ExSummaryView exSummaryView;
 
@@ -116,6 +120,13 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
             reasonList = reasonDAO.getRejectList();
         } else {
             reasonList = new ArrayList<Reason>();
+        }
+
+        User user = getCurrentUser();
+        if(user != null && user.getRole() != null && user.getRole().getId() == RoleValue.UW.id()){
+            isRoleUW = true;
+        } else {
+            isRoleUW = false;
         }
     }
 
@@ -242,6 +253,14 @@ public class ExecutiveSummary extends MandatoryFieldsControl {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public boolean isRoleUW() {
+        return isRoleUW;
+    }
+
+    public void setRoleUW(boolean roleUW) {
+        isRoleUW = roleUW;
     }
 }
 

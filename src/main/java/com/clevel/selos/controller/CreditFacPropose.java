@@ -647,23 +647,28 @@ public class CreditFacPropose implements Serializable {
 
     public void onChangeRequestType() {
         log.info("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
+        System.out.println("newCreditDetailView.getRequestType() :: "+ newCreditDetailView.getRequestType());
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
 
         if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {   //change
+            System.out.println("1");
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
             newCreditDetailView.getProductProgram().setId(0);
             cannotEditStandard = false;
             cannotAddTier = false;
 
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
+            System.out.println("2");
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
                 newCreditDetailView.getCreditType().setId(0);
             }
             cannotEditStandard = true;
-            cannotAddTier = true;
+            cannotAddTier = false;
         }
+        System.out.println("cannotEditStandard : "+cannotEditStandard);
+        System.out.println("cannotAddTier : "+cannotAddTier);
     }
 
     public void onRequestReducePrice() {
@@ -679,15 +684,24 @@ public class CreditFacPropose implements Serializable {
         modeForButton = ModeForButton.ADD;
         onChangeRequestType();
         cannotAddTier = true;
+
+        BaseRate standardBase = baseRateDAO.findById(1);
+        BaseRate suggestBase = baseRateDAO.findById(1);
+
+        standardBasePriceDlg = standardBase;
+        standardInterestDlg = BigDecimal.ZERO;
+        suggestBasePriceDlg = suggestBase;
+        suggestInterestDlg = BigDecimal.ZERO;
+
+        modeEdit = false;
     }
 
     public void onEditCreditInfo() {
-        modeEdit = false;
-        cannotAddTier = false;
+        onChangeRequestType();
+        modeEdit = true;
         modeForButton = ModeForButton.EDIT;
         log.info("rowIndex :: {}", rowIndex);
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
-        onChangeRequestType();
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
         ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
@@ -695,40 +709,18 @@ public class CreditFacPropose implements Serializable {
         calculateInstallment(newCreditDetailView);
 
         if(newCreditDetailView.getRequestType() == 2){ // 1 = change , 2 = new
-            suggestInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
-            suggestBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
+            if(newCreditDetailView.getNewCreditTierDetailViewList() != null && newCreditDetailView.getNewCreditTierDetailViewList().size() > 0){
+                suggestInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
+                suggestBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
+                standardInterestDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardInterest());
+                standardBasePriceDlg = cloner.deepClone(newCreditDetailView.getNewCreditTierDetailViewList().get(0).getStandardBasePrice());
+            }
         } else {
             suggestInterestDlg = BigDecimal.ZERO;
             suggestBasePriceDlg = new BaseRate();
             standardInterestDlg = BigDecimal.ZERO;
             standardBasePriceDlg = new BaseRate();
         }
-
-
-        /*if (rowIndex < newCreditFacilityView.getNewCreditDetailViewList().size()) {
-            newCreditDetailView = new NewCreditDetailView();
-            newCreditDetailView.setProductProgram(productProgram);
-            newCreditDetailView.setCreditType(creditType);
-            newCreditDetailView.setRequestType(newCreditDetailSelected.getRequestType());
-            newCreditDetailView.setRefinance(newCreditDetailSelected.getRefinance());
-            newCreditDetailView.setProductCode(newCreditDetailSelected.getProductCode());
-            newCreditDetailView.setProjectCode(newCreditDetailSelected.getProjectCode());
-            newCreditDetailView.setLimit(newCreditDetailSelected.getLimit());
-            newCreditDetailView.setPCEPercent(newCreditDetailSelected.getPCEPercent());
-            newCreditDetailView.setPCEAmount(newCreditDetailSelected.getPCEAmount());
-            newCreditDetailView.setReduceFrontEndFee(newCreditDetailSelected.isReduceFrontEndFee());
-            newCreditDetailView.setReducePriceFlag(newCreditDetailSelected.isReducePriceFlag());
-            newCreditDetailView.setStandardBasePrice(newCreditDetailSelected.getStandardBasePrice());
-            newCreditDetailView.setStandardInterest(newCreditDetailSelected.getStandardInterest());
-            newCreditDetailView.setFrontEndFee(newCreditDetailSelected.getFrontEndFee());
-            newCreditDetailView.setLoanPurpose(newCreditDetailSelected.getLoanPurpose());
-            newCreditDetailView.setRemark(newCreditDetailSelected.getRemark());
-            newCreditDetailView.setDisbursement(newCreditDetailSelected.getDisbursement());
-            newCreditDetailView.setHoldLimitAmount(newCreditDetailSelected.getHoldLimitAmount());
-            newCreditDetailView.setSeq(newCreditDetailSelected.getSeq());
-            newCreditDetailView.setNewCreditTierDetailViewList(newCreditDetailSelected.getNewCreditTierDetailViewList());
-            calculateInstallment(newCreditDetailView);
-        }*/
     }
 
     public void onSaveCreditInfo() {
