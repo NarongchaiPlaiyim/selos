@@ -53,7 +53,7 @@ public class NewGuarantorDetailTransform extends Transform {
                 newGuarantorDetail.setCreateDate(new Date());
                 newGuarantorDetail.setCreateBy(user);
             }
-            newGuarantorDetail.setProposeType(ProposeType.P.type());
+            newGuarantorDetail.setProposeType(ProposeType.P);
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());

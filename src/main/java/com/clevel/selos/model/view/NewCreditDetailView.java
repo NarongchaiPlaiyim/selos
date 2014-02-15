@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RequestTypes;
@@ -42,7 +43,7 @@ public class NewCreditDetailView implements Serializable {
     private DisbursementType disbursement;
     private LoanPurpose loanPurpose;
     private BigDecimal purpose;
-    private int isApproved;
+    private DecisionType uwDecision;
     private BigDecimal installment;
     private BigDecimal outstanding;
     private Date createDate;
@@ -50,7 +51,7 @@ public class NewCreditDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
     private List<NewCreditTierDetailView> newCreditTierDetailViewList;
-    private String proposeType;
+    private ProposeType proposeType;
 
     public NewCreditDetailView() {
         reset();
@@ -87,7 +88,7 @@ public class NewCreditDetailView implements Serializable {
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
         this.newCreditTierDetailViewList = new ArrayList<NewCreditTierDetailView>();
-        this.proposeType= ProposeType.P.type();
+        this.proposeType= ProposeType.P;
     }
 
     public long getId() {
@@ -298,12 +299,12 @@ public class NewCreditDetailView implements Serializable {
         this.purpose = purpose;
     }
 
-    public int getApproved() {
-        return isApproved;
+    public DecisionType getUwDecision() {
+        return uwDecision;
     }
 
-    public void setApproved(int approved) {
-        isApproved = approved;
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
     }
 
     public LoanPurpose getLoanPurpose() {
@@ -378,11 +379,11 @@ public class NewCreditDetailView implements Serializable {
         this.accountSuf = accountSuf;
     }
 
-    public String getProposeType() {
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
     }
 
@@ -417,7 +418,7 @@ public class NewCreditDetailView implements Serializable {
                 .append("disbursement", disbursement)
                 .append("loanPurpose", loanPurpose)
                 .append("purpose", purpose)
-                .append("isApproved", isApproved)
+                .append("uwDecision", uwDecision)
                 .append("installment", installment)
                 .append("outstanding", outstanding)
                 .append("newCreditTierDetailViewList", newCreditTierDetailViewList)

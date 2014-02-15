@@ -2926,8 +2926,8 @@
                                                         <!--<f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>-->
                                                         <!--<f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>-->
                                                     <!--</p:selectOneRadio>-->
-                                                    #{proposeColl.approved eq 2 ? msg.get('app.button.yes')
-                                                    : proposeColl.approved eq 1 ? msg.get('app.button.no')
+                                                    #{proposeColl.uwDecision eq 2 ? msg.get('app.button.yes')
+                                                    : proposeColl.uwDecision eq 1 ? msg.get('app.button.no')
                                                     : ''}
                                                 </td>
                                             </tr>

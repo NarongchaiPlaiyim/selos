@@ -633,6 +633,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 }
             }
         }
+        log.info("-- success --");
     }
 
     // 2:Y(false)can to edit , 1:N(true) cannot to edit

@@ -77,7 +77,7 @@ public class NewCollateralTransform extends Transform {
                 newCollateral.setCreateBy(user);
             }
             newCollateral.setComs(Util.isTrue(newCollateralView.isComs()));
-            newCollateral.setProposeType(ProposeType.P.type());
+            newCollateral.setProposeType(ProposeType.P);
             newCollateral.setWorkCase(workCase);
             newCollateral.setJobID(newCollateralView.getJobID());
             newCollateral.setAadDecision(newCollateralView.getAadDecision());

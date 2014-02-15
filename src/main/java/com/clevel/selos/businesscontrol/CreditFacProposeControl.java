@@ -609,7 +609,7 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal finalInterest = BigDecimal.ZERO;
         String finalPriceLabel = "";
 
-// Standard Price Rate
+        //  Standard Price Rate
         BaseRate standardBaseRate = baseRateDAO.findById(standardBaseRateId);
         if (standardBaseRate != null && standardInterest != null) {
             standardPrice = standardBaseRate.getValue().add(standardInterest);
@@ -810,7 +810,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-//        Sum(weight cost of goods sold * businessProportion)
+    //      Sum(weight cost of goods sold * businessProportion)
             if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
                 log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
                 for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {

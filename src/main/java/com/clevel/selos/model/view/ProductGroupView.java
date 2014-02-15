@@ -1,33 +1,18 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.view;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "mst_product_group")
-public class ProductGroup implements Serializable {
-    @Id
-    @Column(name = "id")
-    private int id;
-    @Column(name = "name", length = 100)
-    private String name;
-    @Column(name = "description", length = 100)
-    private String description;
-    @Column(name = "brms_code", length = 5)
-    private String brmsCode;
-    @Column(name = "special_ltv")
-    private int specialLTV;
-    @Column(name = "active")
-    private int active;
+public class ProductGroupView implements Serializable{
 
-    public ProductGroup() {
-    }
+    private int id;
+    private String name;
+    private String description;
+    private String brmsCode;
+    private int specialLTV;
+    private int active;
 
     public int getId() {
         return id;
@@ -79,13 +64,13 @@ public class ProductGroup implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("brmsCode", brmsCode).
-                append("specialLTV", specialLTV).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("description", description)
+                .append("brmsCode", brmsCode)
+                .append("specialLTV", specialLTV)
+                .append("active", active)
+                .toString();
     }
 }

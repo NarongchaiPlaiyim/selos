@@ -58,6 +58,7 @@ public class NewCollateralSubTransform extends Transform {
             model.setMortgageValue(view.getMortgageValue());
             model.setModifyBy(user);
             model.setModifyDate(DateTime.now().toDate());
+
             newCollateralSubList.add(model);
         }
         log.debug("------[RETURNED] NewCollateralSubList.size[{}]", newCollateralSubList.size());

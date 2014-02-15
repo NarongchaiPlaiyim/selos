@@ -35,7 +35,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -112,7 +112,6 @@ public class Decision implements Serializable {
 
     //Session
     private long workCaseId;
-    private long workCasePrescreenId;
 
     //User Role
     private boolean roleBDM;
@@ -155,7 +154,7 @@ public class Decision implements Serializable {
     private int rowSpanNumber;
     private boolean modeEdit;
     private int seq;
-    private Hashtable hashSeqCredit;
+    private HashMap<Integer, Integer> hashSeqCredit;
 //    private BigDecimal suggestPrice;
 //    private BigDecimal standardPrice;
     private boolean modeEditReduceFront;
@@ -408,7 +407,7 @@ public class Decision implements Serializable {
 
         // Initial sequence number credit
         seq = 1;
-        hashSeqCredit = new Hashtable<Integer, Integer>();
+        hashSeqCredit = new HashMap<Integer, Integer>();
 
         // Retrieve Pricing/Fee
         creditCustomerType = RadioValue.NOT_SELECTED.value();
@@ -797,8 +796,8 @@ public class Decision implements Serializable {
         collateralInfoEdit.setUsage(selectedAppProposeCollateral.getUsage());
         collateralInfoEdit.setTypeOfUsage(selectedAppProposeCollateral.getTypeOfUsage());
         collateralInfoEdit.setApproved(selectedAppProposeCollateral.getApproved());
-        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getApproved() == 2 ? "Approved"
-                : selectedAppProposeCollateral.getApproved() == 1 ? "Not Approved" : "");
+//        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getA.getApproved() == 2 ? "Approved"
+//                : selectedAppProposeCollateral.getApproved() == 1 ? "Not Approved" : "");
         collateralInfoEdit.setUwRemark(selectedAppProposeCollateral.getUwRemark());
         collateralInfoEdit.setMortgageCondition(selectedAppProposeCollateral.getMortgageCondition());
         collateralInfoEdit.setMortgageConditionDetail(selectedAppProposeCollateral.getMortgageConditionDetail());
@@ -1055,7 +1054,7 @@ public class Decision implements Serializable {
             // Add New
             log.debug("===> Add New - Guarantor: {}", selectedAppProposeGuarantor);
             NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
-            guarantorDetailAdd.setApproved(selectedAppProposeGuarantor.getApproved());
+            //guarantorDetailAdd.setApproved(selectedAppProposeGuarantor.getApproved());
             guarantorDetailAdd.setGuarantorName(getByIdFromGuarantorList(selectedAppProposeGuarantor.getGuarantorName().getId()));
             guarantorDetailAdd.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
 

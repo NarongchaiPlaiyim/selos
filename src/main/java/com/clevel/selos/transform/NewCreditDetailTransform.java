@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
@@ -52,7 +53,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
-            newCreditDetail.setProposeType(ProposeType.P.type());
+            newCreditDetail.setProposeType(ProposeType.P);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
@@ -61,7 +62,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setAccountName(newCreditDetailView.getAccountName());
             newCreditDetail.setRequestType(newCreditDetailView.getRequestType());
             newCreditDetail.setRefinance(newCreditDetailView.getRefinance());
-            newCreditDetail.setApproved(newCreditDetailView.getApproved());
+            newCreditDetail.setUwDecision(newCreditDetailView.getUwDecision());
             newCreditDetail.setNoFlag(Util.returnNumForFlag(newCreditDetailView.isNoFlag()));
             newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
             newCreditDetail.setDisbursementType(newCreditDetailView.getDisbursement());
@@ -117,7 +118,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setAccountName(newCreditDetail.getAccountName());
             newCreditDetailView.setRequestType(newCreditDetail.getRequestType());
             newCreditDetailView.setRefinance(newCreditDetail.getRefinance());
-            newCreditDetailView.setApproved(newCreditDetail.getApproved());
+            newCreditDetailView.setUwDecision(newCreditDetail.getUwDecision());
             newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
             newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
             newCreditDetailView.setDisbursement(newCreditDetail.getDisbursementType());
