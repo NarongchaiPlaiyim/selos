@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -166,6 +167,35 @@ public class BAPAInfoControl extends BusinessControl {
 			 return Collections.emptyList();
 		 List<BAPAInfoCredit> bapaCredits = bapaInfoCreditDAO.findByBAPAInfo(bapaInfoId);
 		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId);
+		 
+		 HashMap<Long, NewCreditDetail> creditHash = new HashMap<Long, NewCreditDetail>();
+		 for (NewCreditDetail credit : credits) {
+			 creditHash.put(credit.getId(), credit);
+		 }
+		 /*
+		 
+		 ArrayList<BAPAInfoCreditView> rtnDatas = new ArrayList<BAPAInfoCreditView>();
+		 for (BAPAInfoCredit bapaCredit : bapaCredits) {
+			 BAPAInfoCreditView view = new BAPAInfoCreditView();
+			 view.setId(bapaCredit.getId());
+			 view.setCreditId(bapaCredit.getCreditDetail().getId());
+			 view.setProductProgram(bapaCredit.getCreditDetail().getProductProgram().getName());
+			 view.setCreditType(bapaCredit.getCreditDetail().getCreditType().getName());
+			 view.setLoanPurpose(bapaCredit.getCreditDetail().getLoanPurpose().getDescription());
+			 
+			 view.setPayByCustomer(bapaCredit.isPayByCustomer());
+			 view.setFromCredit(bapaCredit.isFromCredit());
+			 view.setLimit(bapaCredit.getLimit());
+			 view.setPremiumAmount(bapaCredit.getPremiumAmount());
+			 
+			  
+			 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
+			 if (credit != null) {
+				 view.setFromCredit(true);
+			 }
+				 
+		 }
+		 */
 		 
 		 return Collections.emptyList();
 	 }

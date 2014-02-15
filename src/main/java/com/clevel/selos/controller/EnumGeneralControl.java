@@ -8,6 +8,7 @@ import javax.faces.bean.RequestScoped;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.RadioValue;
 
 @RequestScoped
@@ -23,6 +24,9 @@ public class EnumGeneralControl implements Serializable{
 	}
 	public Gender[] getGenders() {
 		return Gender.displayList();
+	}
+	public MortgageSignLocationType[] getMortgageSignLocations() {
+		return MortgageSignLocationType.displayList();
 	}
 	
 	public RadioValue[] getYesNoEnum() {
