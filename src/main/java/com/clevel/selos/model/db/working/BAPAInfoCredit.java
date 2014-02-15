@@ -3,6 +3,9 @@ package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
 
+import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.model.RadioValue;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -17,8 +20,8 @@ public class BAPAInfoCredit implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BAPA_CREDIT_REQ")
     private long id;
 
-    @Column(name = "bapa_type")
-    private int bapaType;
+    @Column(name = "bapa_type",columnDefinition="int default 0")
+    private BAPAType bapaType;
     
 
     @Column(name = "pay_by_customer")
@@ -40,6 +43,11 @@ public class BAPAInfoCredit implements Serializable {
     @ManyToOne
     @JoinColumn(name = "bapa_info_id")
     private BAPAInfo bapaInfo;
+    
+
+    @Column(name="from_approve",columnDefinition="int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private RadioValue fromApprove;
 
 	public long getId() {
 		
@@ -50,11 +58,10 @@ public class BAPAInfoCredit implements Serializable {
 		this.id = id;
 	}
 
-	public int getBapaType() {
+	public BAPAType getBapaType() {
 		return bapaType;
 	}
-
-	public void setBapaType(int bapaType) {
+	public void setBapaType(BAPAType bapaType) {
 		this.bapaType = bapaType;
 	}
 

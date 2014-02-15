@@ -3,7 +3,6 @@ package com.clevel.selos.model.db.working;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -50,12 +48,6 @@ public class BAPAInfo implements Serializable {
 
     @Column(name = "ba_payment_method")
     private BAPaymentMethodValue baPaymentMethod;
-
-    @OneToMany(mappedBy = "bapaInfo")
-    private List<BAPAInfoCustomer> bapaInfoCustomerList;
-
-    @OneToMany(mappedBy = "bapaInfo")
-    private List<BAPAInfoCredit> bapaInfoCreditList;
 
     @ManyToOne
     @JoinColumn(name = "insurance_company_id")
@@ -121,22 +113,6 @@ public class BAPAInfo implements Serializable {
     public void setBaPaymentMethod(BAPaymentMethodValue baPaymentMethod) {
 		this.baPaymentMethod = baPaymentMethod;
 	}
-
-    public List<BAPAInfoCustomer> getBapaInfoCustomerList() {
-        return bapaInfoCustomerList;
-    }
-
-    public void setBapaInfoCustomerList(List<BAPAInfoCustomer> bapaInfoCustomerList) {
-        this.bapaInfoCustomerList = bapaInfoCustomerList;
-    }
-
-    public List<BAPAInfoCredit> getBapaInfoCreditList() {
-        return bapaInfoCreditList;
-    }
-
-    public void setBapaInfoCreditList(List<BAPAInfoCredit> bapaInfoCreditList) {
-        this.bapaInfoCreditList = bapaInfoCreditList;
-    }
 
     public InsuranceCompany getInsuranceCompany() {
         return insuranceCompany;
@@ -218,8 +194,6 @@ public class BAPAInfo implements Serializable {
                 .append("workCase", workCase)
                 .append("applyBA", applyBA)
                 .append("baPaymentMethod", baPaymentMethod)
-                .append("bapaInfoCustomerList", bapaInfoCustomerList)
-                .append("bapaInfoCreditList", bapaInfoCreditList)
                 .append("insuranceCompany", insuranceCompany)
                 .append("payToInsuranceCompany", payToInsuranceCompany)
                 .append("totalLimit", totalLimit)

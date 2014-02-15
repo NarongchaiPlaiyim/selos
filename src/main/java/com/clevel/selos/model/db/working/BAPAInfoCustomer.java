@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
 
 @Entity
@@ -48,9 +45,6 @@ public class BAPAInfoCustomer implements Serializable {
     @Column(name = "health_check_date")
     private Date healthCheckDate;
 
-    @Column(name="from_approve",columnDefinition="int default 0")
-    @Enumerated(EnumType.ORDINAL)
-    private RadioValue fromApprove;
     
 	public long getId() {
 		return id;
@@ -92,11 +86,4 @@ public class BAPAInfoCustomer implements Serializable {
 		this.healthCheckDate = healthCheckDate;
 	}
 
-	public RadioValue getFromApprove() {
-		return fromApprove;
-	}
-	public void setFromApprove(RadioValue fromApprove) {
-		this.fromApprove = fromApprove;
-	}
-    
 }
