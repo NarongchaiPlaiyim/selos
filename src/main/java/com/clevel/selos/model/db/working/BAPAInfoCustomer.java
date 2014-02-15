@@ -44,7 +44,7 @@ public class BAPAInfoCustomer implements Serializable {
     @JoinColumn(name = "ba_result_hc_id")
     private BAResultHC baResultHC;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "health_check_date")
     private Date healthCheckDate;
 

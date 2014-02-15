@@ -19,6 +19,7 @@ public class BAPAInfoCredit implements Serializable {
 
     @Column(name = "bapa_type")
     private int bapaType;
+    
 
     @Column(name = "pay_by_customer")
     private int payByCustomer;
@@ -41,6 +42,7 @@ public class BAPAInfoCredit implements Serializable {
     private BAPAInfo bapaInfo;
 
 	public long getId() {
+		
 		return id;
 	}
 
