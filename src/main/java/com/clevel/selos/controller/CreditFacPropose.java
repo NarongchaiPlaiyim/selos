@@ -627,13 +627,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         modeEditReducePricing = flagForModeDisable(productFormula.getReducePricing());
                         modeEditReduceFront = flagForModeDisable(productFormula.getReduceFrontEndFee());
 
-                        reducePricePanelRendered = (modeEditReducePricing == true) ? true : false;
+                        //reducePricePanelRendered = (modeEditReducePricing == true) ? true : false;
+                        reducePricePanelRendered = modeEditReducePricing;
                         log.info("reducePricePanelRendered:: {}", reducePricePanelRendered);
                     }
                 }
             }
         }
-        log.info("-- success --");
     }
 
     // 2:Y(false)can to edit , 1:N(true) cannot to edit
