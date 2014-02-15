@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long> {
@@ -50,11 +51,14 @@ public class NewCollateralCreditDAO extends GenericDAO<NewCollateralCredit, Long
 
     public List<NewCollateralCredit> getListByWorkCase(WorkCase workCase){
         Criteria criteria = createCriteria();
+        List<NewCollateralCredit> newCollateralCreditList = new ArrayList<NewCollateralCredit>();
         NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
-        for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
-            criteria.add(Restrictions.eq("newCollateral", newCollateral));
+        if(newCreditFacility != null && newCreditFacility.getNewCollateralDetailList() != null && newCreditFacility.getNewCollateralDetailList().size() > 0){
+            for(NewCollateral newCollateral : newCreditFacility.getNewCollateralDetailList()){
+                criteria.add(Restrictions.eq("newCollateral", newCollateral));
+            }
+            newCollateralCreditList = criteria.list();
         }
-        List<NewCollateralCredit> newCollateralCreditList = criteria.list();
 
         return newCollateralCreditList;
     }

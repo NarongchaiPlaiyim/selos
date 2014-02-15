@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.PostConstruct;
@@ -18,10 +19,15 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
+import com.clevel.selos.businesscontrol.BAPAInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.model.db.master.InsuranceCompany;
+import com.clevel.selos.model.view.BAPAInfoCustomerView;
+import com.clevel.selos.model.view.BAPAInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -37,26 +43,33 @@ public class BAInfo implements Serializable {
 	@Inject
 	private BasicInfoControl basicInfoControl;
 	
+	@Inject
+	private BAPAInfoControl bapaInfoControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
-	private User user;
 	private BasicInfoView basicInfoView;
 	
 	//Property
-	
+	private BAPAInfoView bapaInfoView;
+	private List<InsuranceCompany> insuranceCompanies;
+	private List<BAResultHC> baResultHCs;
+	private List<BAPAInfoCustomerView> bapaInfoCustomers;
+	private BAPAInfoCustomerView bapaInfoCustomerView;
 	
 	public BAInfo() {
 	}
 	
 	public Date getLastUpdateDateTime() {
-		//TODO 
-		return new Date();
+		return bapaInfoView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return user.getDisplayName();
+		if (bapaInfoView.getModifyBy() == null)
+			return "-";
+		else
+			return bapaInfoView.getModifyBy().getDisplayName();
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -74,6 +87,47 @@ public class BAInfo implements Serializable {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(calendar.getTime());
 	}
+	
+	public BAPAInfoView getBapaInfoView() {
+		return bapaInfoView;
+	}
+	public List<InsuranceCompany> getInsuranceCompanies() {
+		return insuranceCompanies;
+	}
+	public List<BAResultHC> getBaResultHCs() {
+		return baResultHCs;
+	}
+	public String getInsuranceAccount() {
+		if (bapaInfoView.getUpdInsuranceCompany() > 0) {
+			for (InsuranceCompany company : insuranceCompanies) {
+				if (company.getId() == bapaInfoView.getUpdInsuranceCompany())
+					return company.getAccountNumber();
+			}
+		}
+		return null;
+	}
+	public List<BAPAInfoCustomerView> getBapaInfoCustomers() {
+		return bapaInfoCustomers;
+	}
+	
+	public boolean canUpdateBAInfoTable() {
+		return bapaInfoView.getApplyBA().equals(RadioValue.YES);
+	}
+	public BAPAInfoCustomerView getBapaInfoCustomerView() {
+		return bapaInfoCustomerView;
+	}
+	public void setBapaInfoCustomerView(BAPAInfoCustomerView bapaInfoCustomerView) {
+		this.bapaInfoCustomerView = bapaInfoCustomerView;
+	}
+	public String getDisplayResultHealthCheck(BAPAInfoCustomerView view) {
+		if (view == null || view.getUpdBAResultHC() <= 0 || baResultHCs == null)
+			return "";
+		for (BAResultHC hc : baResultHCs) {
+			if (hc.getId() == view.getUpdBAResultHC())
+				return hc.getName();
+		}
+		return "";
+	}
 	/*
 	 * Action
 	 */
@@ -84,8 +138,9 @@ public class BAInfo implements Serializable {
 		if (session != null) {
 			workCaseId = Util.parseLong(session.getAttribute("workCaseId"), -1);
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
-			user = (User) session.getAttribute("user");
 		}
+		insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
+		baResultHCs = bapaInfoControl.getBAResultHCs();
 		_loadInitData();
 	}
 	
@@ -113,7 +168,9 @@ public class BAInfo implements Serializable {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
 	}
-	
+	public void onChangeApplyToBA() {
+		
+	}
 	public void onOpenApplyInformationDialog() {
 		
 	}
@@ -149,8 +206,11 @@ public class BAInfo implements Serializable {
 	 */
 	private void _loadInitData() {
 		preRenderCheck = false;
+		bapaInfoView = bapaInfoControl.getBAPAInfoView(workCaseId);
+		
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+			bapaInfoCustomers = bapaInfoControl.getBAPAInfoCustomerView(workCaseId, bapaInfoView.getId());
 		}
 	}
 }

@@ -8,6 +8,7 @@ import javax.faces.bean.RequestScoped;
 import com.clevel.selos.model.ApproveResult;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.RadioValue;
 
 @RequestScoped
 @ManagedBean(name="enumGeneralControl")
@@ -22,5 +23,9 @@ public class EnumGeneralControl implements Serializable{
 	}
 	public Gender[] getGenders() {
 		return Gender.displayList();
+	}
+	
+	public RadioValue[] getYesNoEnum() {
+		return RadioValue.displayListYesNo();
 	}
 }

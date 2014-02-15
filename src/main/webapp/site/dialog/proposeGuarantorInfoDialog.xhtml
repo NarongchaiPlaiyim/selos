@@ -62,7 +62,7 @@
                             <!--</p:row>-->
                             <p:row>
                                 <p:column style="width: 5%; padding: 5px 10px !important;"/>
-                                <p:column style="width: 35%; padding: 5px 10px !important;"
+                                <p:column style="width: 25%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
                                 <p:column style="width: 10%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
@@ -72,7 +72,7 @@
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
                                 <p:column style="width: 15%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
-                                <p:column style="width: 15%; padding: 5px 10px !important;"
+                                <p:column style="width: 20%; padding: 5px 10px !important;"
                                           headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guaranteeAmount')}"/>
                             </p:row>
                         </p:columnGroup>
@@ -114,11 +114,9 @@
                                          onclick="this.select()"
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
-                                         styleClass="right" style="width: 100px">
-                                <f:convertNumber pattern="#,##0.##"
-                                                 minFractionDigits="2"
-                                                 maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
+                                         style="width:150px;text-align: right" >
+                                <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                 type="number"/>
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </p:column>
