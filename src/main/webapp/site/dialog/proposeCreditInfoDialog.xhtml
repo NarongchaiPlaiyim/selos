@@ -21,7 +21,18 @@
                         <p:ajax event="change"
                                 listener="#{creditFacPropose.onChangeRequestType()}"
                                 process="@this"
-                                update=":creditInfoDlgForm:dlgSelCreditType,:creditInfoDlgForm:dlgSelProdProgram,:creditInfoDlgForm:productCode,:creditInfoDlgForm:projectCode,:creditInfoDlgForm:reducePriceFlagChk,:creditInfoDlgForm:reduceFrontEndFeeChk,:creditInfoDlgForm:reducePrice,:creditInfoDlgForm:standPriceDlg,:creditInfoDlgForm:standDlg,:creditInfoDlgForm:addTier"/>
+                                update=":creditInfoDlgForm:dlgSelCreditType,
+                                        :creditInfoDlgForm:dlgSelProdProgram,
+                                        :creditInfoDlgForm:productCode,
+                                        :creditInfoDlgForm:projectCode,
+                                        :creditInfoDlgForm:reducePriceFlagChk,
+                                        :creditInfoDlgForm:reduceFrontEndFeeChk,
+                                        :creditInfoDlgForm:reducePrice,
+                                        :creditInfoDlgForm:standPriceDlg,
+                                        :creditInfoDlgForm:standDlg,
+                                        :creditInfoDlgForm:suggestPriceDlg,
+                                        :creditInfoDlgForm:suggestDlg,
+                                        :creditInfoDlgForm:addTier"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -119,7 +130,7 @@
                                          maxIntegerDigits="14"/>
                         <p:ajax event="blur"
                                 listener="#{creditFacPropose.calculateInstallment(creditFacPropose.newCreditDetailView)}"
-                                process="@form" update="@this,:creditInfoDlgForm:resultFinal" />
+                                process="@form" update=":creditInfoDlgForm:limit,:creditInfoDlgForm:resultFinal" />
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -226,6 +237,7 @@
                                     <f:selectItems value="#{creditFacPropose.baseRateList}" var="standard"
                                                    itemLabel="#{standard.name}"
                                                    itemValue="#{standard.id}"/>
+                                    <p:ajax event="change" process=":creditInfoDlgForm" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -266,6 +278,7 @@
                                                    var="suggest"
                                                    itemLabel="#{suggest.name}"
                                                    itemValue="#{suggest.id}"/>
+                                    <p:ajax event="change" process=":creditInfoDlgForm" />
                                 </p:selectOneMenu>
                             </td>
                             <td>
@@ -282,6 +295,7 @@
                                                      minFractionDigits="2"
                                                      maxFractionDigits="2"
                                                      maxIntegerDigits="3"/>
+                                    <p:ajax event="blur" update="@this"/>
                                 </p:inputText>
                             </td>
                         </tr>
@@ -342,9 +356,9 @@
                                                          style="width: 50px;" disabled="true">
                                                          <!--disabled="#{(rowIndex+1)== fn:length(creditFacPropose.newCreditDetailView.newCreditTierDetailViewList)?true:false}">-->
                                             <f:selectItems value="#{creditFacPropose.baseRateList}"
-                                                           var="final"
-                                                           itemLabel="#{final.name}"
-                                                           itemValue="#{final.id}"/>
+                                                           var="finalBase"
+                                                           itemLabel="#{finalBase.name}"
+                                                           itemValue="#{finalBase.id}"/>
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>

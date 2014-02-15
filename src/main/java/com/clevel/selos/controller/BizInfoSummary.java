@@ -156,7 +156,6 @@ public class BizInfoSummary implements Serializable {
         bankStatementAvg = BigDecimal.ZERO;
         long stepId = 0;
 
-
         bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
         log.debug("bankStmtSummaryView : {}", bankStmtSummaryView);
 
@@ -168,8 +167,8 @@ public class BizInfoSummary implements Serializable {
 
         BigDecimal Income = BigDecimal.ZERO;
         BigDecimal twenty = BigDecimal.valueOf(12);
-        BigDecimal calSumIncomeNet = Util.multiply(Income,twenty);
-        BigDecimal sumIncomeNet = calSumIncomeNet.setScale(2,RoundingMode.HALF_UP);
+        BigDecimal calSumIncomeNet = BigDecimal.ZERO;
+        BigDecimal sumIncomeNet = BigDecimal.ZERO;
 
         if(!Util.isNull(bankStmtSummaryView)){
             if(!Util.isNull(bankStmtSummaryView.getGrdTotalIncomeGross())){
@@ -241,10 +240,18 @@ public class BizInfoSummary implements Serializable {
             onChangeProvince();
             onChangeDistrict();
             onChangeRental();
-            onCalSummaryTable();
             bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
+            onCalSummaryTable();
             bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
             bizInfoSummaryView.setSumIncomeAmount(sumIncomeNet);
+            if(Util.isZero(sumIncomeNet)){
+                bizInfoSummaryView.setProductionCostsPercentage(BigDecimal.ZERO);
+                bizInfoSummaryView.setProfitMarginPercentage(BigDecimal.ZERO);
+                bizInfoSummaryView.setEarningsBeforeTaxPercentage(BigDecimal.ZERO);
+                bizInfoSummaryView.setNetMarginPercentage(BigDecimal.ZERO);
+            }
+
+            log.info("SumIncomeAmount : {}",bizInfoSummaryView.getSumIncomeAmount());
         }
         onCheckInterview();
     }

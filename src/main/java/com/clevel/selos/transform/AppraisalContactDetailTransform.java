@@ -28,7 +28,7 @@ public class AppraisalContactDetailTransform extends Transform {
     }
 
     public List<AppraisalContactDetail> transformToModel(final AppraisalContactDetailView view, final long appraisal, final User user){
-        log.debug("-- transform AppraisalContactDetailView to List<AppraisalContactDetail> {}", ""+appraisalContactDetailView.toString());
+        log.debug("-- transform AppraisalContactDetailView to List<AppraisalContactDetail> {}", ""+view.toString());
         long contractId = 0;
         AppraisalContactDetail model = null;
         String contractForCheck;

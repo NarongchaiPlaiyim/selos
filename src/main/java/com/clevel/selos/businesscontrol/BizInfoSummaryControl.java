@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.db.working.BizInfoDetail;
@@ -15,12 +16,16 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizInfoSummaryTransform;
+import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +43,15 @@ public class BizInfoSummaryControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
+    @Inject
+    BankStmtControl bankStmtControl;
 
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
     @Inject
     BizInfoSummaryTransform bizInfoSummaryTransform;
+
+    private long workCaseId;
 
     @Inject
     public BizInfoSummaryControl(){
@@ -101,9 +110,44 @@ public class BizInfoSummaryControl extends BusinessControl {
         List<BizInfoDetailView> bizInfoDetailViewList;
         BizInfoDetailView bizInfoDetailViewTemp;
         BizInfoDetail bizInfoDetailTemp;
+        BigDecimal Income = BigDecimal.ZERO;
+        BigDecimal twenty = BigDecimal.valueOf(12);
+        BigDecimal calSumIncomeNet = BigDecimal.ZERO;
+        BigDecimal sumIncomeNet = BigDecimal.ZERO;
+        BigDecimal inComeTotalNet = BigDecimal.ZERO;
+        BigDecimal oneHundred = BigDecimal.valueOf(100);
+        BigDecimal incomePercentD = BigDecimal.ZERO;
+        long stepId = 0;
+
+        BankStmtSummaryView bankStmtSummaryView;
+
+        HttpSession session = FacesUtil.getSession(true);
+        if(!Util.isNull(session.getAttribute("workCaseId"))){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        }
+
+        bankStmtSummaryView = bankStmtControl.getBankStmtSummaryByWorkCaseId(workCaseId);
+
+        log.debug("info WorkCaseId is: {}", workCaseId);
+
         bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryID);
+
+
+        if(session.getAttribute("stepId") != null){
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+        }
+
+        if(!Util.isNull(bankStmtSummaryView)){
+            if(stepId >= StepValue.CREDIT_DECISION_UW1.value()){
+                Income = bankStmtSummaryView.getGrdTotalIncomeNetUW();
+            } else {
+                Income = bankStmtSummaryView.getGrdTotalIncomeNetBDM();
+            }
+
+            log.debug("Income : {} " + Income);
+        }
 
         log.info("workCase after findById " + bizInfoSummary);
 
@@ -113,8 +157,24 @@ public class BizInfoSummaryControl extends BusinessControl {
             for (int i = 0; i < bizInfoDetailList.size(); i++) {
                 bizInfoDetailTemp = bizInfoDetailList.get(i);
                 bizInfoDetailViewTemp = bizInfoDetailTransform.transformToView(bizInfoDetailTemp);
+
+                if(Util.isNull(bizInfoDetailViewTemp.getIncomeAmount()) && !Util.isNull(Income)){
+                    calSumIncomeNet = Util.multiply(Income,twenty);
+                    incomePercentD = bizInfoDetailViewTemp.getPercentBiz();
+                    inComeTotalNet = Util.divide(Util.multiply(calSumIncomeNet,incomePercentD),oneHundred);
+                    bizInfoDetailViewTemp.setIncomeAmount(inComeTotalNet.setScale(2,RoundingMode.HALF_UP));
+                } else if (!Util.isNull(bankStmtSummaryView.getGrdTotalBorrowerIncomeNetUW())){
+                    calSumIncomeNet = Util.multiply(Income,twenty);
+                    incomePercentD = bizInfoDetailViewTemp.getPercentBiz();
+                    inComeTotalNet = Util.divide(Util.multiply(calSumIncomeNet,incomePercentD),oneHundred);
+                    bizInfoDetailViewTemp.setIncomeAmount(inComeTotalNet.setScale(2,RoundingMode.HALF_UP));
+                }
                 bizInfoDetailViewList.add(bizInfoDetailViewTemp);
+                log.info("getIncomeAmount : {}",bizInfoDetailViewTemp.getIncomeAmount());
+
             }
+
+            log.info("IncomeAmount :",sumIncomeNet);
         } else {
             //bizInfoSummaryView = null;
         }

@@ -19,6 +19,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -308,6 +309,7 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBizPermission("");
             bizInfoDetailView.setBizDocPermission("");
             bizInfoDetailView.setBizDocExpiryDate(null);
+            bizInfoDetailView.setPercentBiz(null);
         }
     }
 
@@ -316,12 +318,18 @@ public class BizInfoDetail implements Serializable {
         BusinessDescription businessDesc;
         viewBizDesc = bizInfoDetailView.getBizDesc();
         businessDesc = bizInfoDetailControl.onFindBizDescByID(viewBizDesc);
-        if(descType.equals("")){
+        if(!Util.isNull(descType) && descType.equals("")){
             bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
             bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
-            bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
             bizInfoDetailView.setBizComment(businessDesc.getComment());
             bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
+
+            if(Util.equals("Y",businessDesc.getBusinessPermission())) {
+                bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
+            } else {
+                bizInfoDetailView.setBizPermission("N");
+            }
+
         }
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());

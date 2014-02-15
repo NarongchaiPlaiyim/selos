@@ -277,10 +277,10 @@ public class Decision implements Serializable {
         if (decisionView == null || decisionView.getId() == 0) {
             decisionView = new DecisionView();
             newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-            log.info("newCreditFacilityView :: {}", newCreditFacilityView.getId());
-            log.info("newCreditFacilityView :: getNewCreditDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
-            log.info("newCreditFacilityView :: getNewConditionDetailViewList :: {}", newCreditFacilityView.getNewConditionDetailViewList().size());
-            log.info("newCreditFacilityView :: getNewGuarantorDetailViewList :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().size());
+//            log.info("newCreditFacilityView :: {}", newCreditFacilityView.getId());
+//            log.info("newCreditFacilityView :: getNewCreditDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList().size());
+//            log.info("newCreditFacilityView :: getNewConditionDetailViewList :: {}", newCreditFacilityView.getNewConditionDetailViewList().size());
+//            log.info("newCreditFacilityView :: getNewGuarantorDetailViewList :: {}", newCreditFacilityView.getNewGuarantorDetailViewList().size());
 
             if (newCreditFacilityView != null) {
                 setDataFromNewCreditFacility();
@@ -420,7 +420,11 @@ public class Decision implements Serializable {
         approvalHistory.setAction("Approve CA");
         approvalHistory.setApprover(decisionControl.getApprover());
 
-//        setDummyData();
+        // Initial Standard & Suggest BaseRate to Approved Credit Dialog
+        standardBasePriceDlg = new BaseRate();
+        standardInterestDlg = BigDecimal.ZERO;
+        suggestBasePriceDlg = new BaseRate();
+        suggestInterestDlg = BigDecimal.ZERO;
     }
 
     public void setDataFromNewCreditFacility() {

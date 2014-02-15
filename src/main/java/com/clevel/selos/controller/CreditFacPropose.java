@@ -228,15 +228,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         } else {
-            //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
-            }
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
@@ -253,7 +247,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
             try {
                 newCreditFacilityView = creditFacProposeControl.findNewCreditFacilityByWorkCase(workCaseId);
-
+                log.debug("onCreation ::: newCreditFacilityView : {}", newCreditFacilityView);
                 if (newCreditFacilityView != null) {
                     log.info("newCreditFacilityView.id ::: {}", newCreditFacilityView.getId());
 
@@ -465,13 +459,23 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         newCreditTierDetailViewList.add(newCreditTierDetailView);
 
-        for (NewCreditDetailView proposeCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
-            if (proposeCreditDetail.getRequestType() == 2) { // 1 = change , 2 = new ( if 2 can't Retrieve Pricing Fee
-                proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
-                log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
+        if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
+            List<Integer> intTmp = new ArrayList<Integer>();
+            for (int i = 0 ; i < newCreditFacilityView.getNewCreditDetailViewList().size() ; i++){
+                if(newCreditFacilityView.getNewCreditDetailViewList().get(i).getRequestType() == RequestTypes.NEW.value()){
+                    intTmp.add(i);
+                }
+            }
+            for (Integer a : intTmp){
+                newCreditFacilityView.getNewCreditDetailViewList().get(a).setNewCreditTierDetailViewList(newCreditTierDetailViewList);
             }
         }
-
+//        for (NewCreditDetailView proposeCreditDetail : newCreditFacilityView.getNewCreditDetailViewList()) {
+//            if(proposeCreditDetail.getRequestType() == 2) { // 1 = change , 2 = new ( if 2 can't Retrieve Pricing Fee
+//                proposeCreditDetail.setNewCreditTierDetailViewList(newCreditTierDetailViewList);
+//                log.info("proposeCreditDetail :: {}", proposeCreditDetail.getNewCreditTierDetailViewList());
+//            }
+//        }
     }
 
     public void calculateInstallment(NewCreditDetailView creditDetailView) {
@@ -640,28 +644,33 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     public void onChangeRequestType() {
         log.info("newCreditDetailView.getRequestType() :: {}", newCreditDetailView.getRequestType());
-        System.out.println("newCreditDetailView.getRequestType() :: " + newCreditDetailView.getRequestType());
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
 
+        if(newCreditDetailView.getProductProgram().getId() != 0){
+            ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+            prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        }
+
         if (newCreditDetailView.getRequestType() == RequestTypes.CHANGE.value()) {   //change
-            System.out.println("1");
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
-            newCreditDetailView.getProductProgram().setId(0);
             cannotEditStandard = false;
             cannotAddTier = false;
-
         } else if (newCreditDetailView.getRequestType() == RequestTypes.NEW.value()) {  //new
-            System.out.println("2");
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
-                newCreditDetailView.getCreditType().setId(0);
             }
             cannotEditStandard = true;
-            cannotAddTier = false;
+            if(modeForButton == ModeForButton.ADD){
+                cannotAddTier = true;
+            } else {
+                if(newCreditDetailView.getNewCreditTierDetailViewList() == null || newCreditDetailView.getNewCreditTierDetailViewList().size() < 1){
+                    cannotAddTier = true;
+                } else {
+                    cannotAddTier = false;
+                }
+            }
         }
-        System.out.println("cannotEditStandard : " + cannotEditStandard);
-        System.out.println("cannotAddTier : " + cannotAddTier);
     }
 
     public void onRequestReducePrice() {
@@ -676,7 +685,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         newCreditDetailView = new NewCreditDetailView();
         modeForButton = ModeForButton.ADD;
         onChangeRequestType();
-        cannotAddTier = true;
 
         BaseRate standardBase = baseRateDAO.findById(1);
         BaseRate suggestBase = baseRateDAO.findById(1);
@@ -690,15 +698,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
     public void onEditCreditInfo() {
-        onChangeRequestType();
-        modeEdit = true;
-        modeForButton = ModeForButton.EDIT;
         log.info("rowIndex :: {}", rowIndex);
         log.info("newCreditFacilityView.creditInfoDetailViewList :: {}", newCreditFacilityView.getNewCreditDetailViewList());
+        modeEdit = true;
+        modeForButton = ModeForButton.EDIT;
         Cloner cloner = new Cloner();
         newCreditDetailView = cloner.deepClone(newCreditDetailSelected);
-        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        onChangeRequestType();
         calculateInstallment(newCreditDetailView);
 
         if (newCreditDetailView.getRequestType() == 2) { // 1 = change , 2 = new
@@ -861,9 +867,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         BigDecimal standardPrice = BigDecimal.ZERO;
         String standardPriceLabel = "";
 
-        if (suggestBasePriceDlg.getId() != 0) {
+        if(suggestBasePriceDlg.getId() != 0){
             suggestBase = baseRateDAO.findById(suggestBasePriceDlg.getId());
-            if (suggestBase != null) {
+            if(suggestBase != null){
                 suggestPrice = suggestBase.getValue().add(suggestInterestDlg);
                 if (suggestInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
                     suggestPriceLabel = suggestBase.getName() + " " + suggestInterestDlg;
@@ -873,9 +879,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             }
         }
 
-        if (standardBasePriceDlg.getId() != 0) {
+        if(standardBasePriceDlg.getId() != 0){
             standardBase = baseRateDAO.findById(standardBasePriceDlg.getId());
-            if (standardBase != null) {
+            if(standardBase != null){
                 standardPrice = standardBase.getValue().add(standardInterestDlg);
                 if (standardInterestDlg.compareTo(BigDecimal.ZERO) < 0) {
                     standardPriceLabel = standardBase.getName() + " " + standardInterestDlg;
@@ -893,15 +899,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.info("standardPrice :: {}", standardPrice);
 
         if (standardPrice.compareTo(suggestPrice) > 0) {
-            finalBaseRate = standardBase;
+            finalBaseRate = baseRateDAO.findById(standardBasePriceDlg.getId());
             finalInterest = standardInterestDlg;
             finalPriceLabel = standardPriceLabel;
         } else if (suggestPrice.compareTo(standardPrice) > 0) {
-            finalBaseRate = suggestBase;
+            finalBaseRate = baseRateDAO.findById(suggestBasePriceDlg.getId());
             finalInterest = suggestInterestDlg;
             finalPriceLabel = suggestPriceLabel;
         } else { // if equal
-            finalBaseRate = standardBase;
+            finalBaseRate = baseRateDAO.findById(standardBasePriceDlg.getId());
             finalInterest = standardInterestDlg;
             finalPriceLabel = standardPriceLabel;
         }
@@ -917,8 +923,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         creditTierDetailAdd.setSuggestBasePrice(suggestBase);
 
         creditTierDetailAdd.setStandardPriceLabel(standardPriceLabel);
-        creditTierDetailAdd.setSuggestInterest(suggestInterestDlg);
-        creditTierDetailAdd.setSuggestBasePrice(standardBase);
+        creditTierDetailAdd.setStandardInterest(standardInterestDlg);
+        creditTierDetailAdd.setStandardBasePrice(standardBase);
 
         creditTierDetailAdd.setCanEdit(true);
         newCreditDetailView.getNewCreditTierDetailViewList().add(0, creditTierDetailAdd);

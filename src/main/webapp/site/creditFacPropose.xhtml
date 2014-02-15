@@ -20,6 +20,7 @@
         }
         .ui-datatable tbody td {
             border-color: #868686 !important;
+            white-space: normal !important;
         }
         tfoot {
             background: none !important;
@@ -651,7 +652,7 @@
                                                 </h:outputText>
                                             </td>
 
-                                            <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
+                                            <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                             fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
                                                 <p:commandButton icon="ui-icon-pencil"
@@ -710,7 +711,7 @@
 
                                         <tr>
                                             <td class="left top" colspan="12" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <table style="margin:-1px 0 -1px -10px;">
+                                                <table style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                     <tr>
                                                         <td class="title" style="border-style:none !important;">
                                                             #{msg.get('app.decision.tb.td.label.requestType')}
