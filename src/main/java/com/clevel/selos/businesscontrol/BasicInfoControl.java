@@ -230,14 +230,19 @@ public class BasicInfoControl extends BusinessControl {
         BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCase);
         if(bapaInfo == null) {
             bapaInfo = new BAPAInfo();
+            bapaInfo.setCreateBy(user);
+            bapaInfo.setCreateDate(new Date());
         }
-        bapaInfo.setApplyBA(basicInfoView.getApplyBA());
+        
+        bapaInfo.setApplyBA(RadioValue.lookup(basicInfoView.getApplyBA()));
         if(basicInfoView.getApplyBA() == 2){ // apply ba = yes
-            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethodValue().value());
+            bapaInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethodValue());
         } else {
-            bapaInfo.setBaPaymentMethod(0);
+            bapaInfo.setBaPaymentMethod(BAPaymentMethodValue.NA);
         }
         bapaInfo.setWorkCase(workCase);
+        bapaInfo.setModifyBy(user);
+        bapaInfo.setModifyDate(new Date());
         bapaInfoDAO.persist(bapaInfo);
 
         basicInfo.setProductGroup(productGroupDAO.findById(basicInfoView.getProductGroup().getId()));
