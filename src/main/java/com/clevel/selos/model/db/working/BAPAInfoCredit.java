@@ -1,13 +1,21 @@
 package com.clevel.selos.model.db.working;
 
 
-import javax.persistence.*;
-
-import com.clevel.selos.model.BAPAType;
-import com.clevel.selos.model.RadioValue;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import com.clevel.selos.model.BAPAType;
 
 @Entity
 @Table(name = "wrk_bapa_credit")
@@ -24,8 +32,8 @@ public class BAPAInfoCredit implements Serializable {
     private BAPAType bapaType;
     
 
-    @Column(name = "pay_by_customer")
-    private int payByCustomer;
+    @Column(name = "pay_by_customer",columnDefinition="int default 0")
+    private boolean payByCustomer;
 
     @Column(name = "limit")
     private BigDecimal limit;
@@ -45,9 +53,8 @@ public class BAPAInfoCredit implements Serializable {
     private BAPAInfo bapaInfo;
     
 
-    @Column(name="from_approve",columnDefinition="int default 0")
-    @Enumerated(EnumType.ORDINAL)
-    private RadioValue fromApprove;
+    @Column(name="from_credit",columnDefinition="int default 0")
+    private boolean fromCredit;
 
 	public long getId() {
 		
@@ -65,14 +72,12 @@ public class BAPAInfoCredit implements Serializable {
 		this.bapaType = bapaType;
 	}
 
-	public int getPayByCustomer() {
+	public boolean isPayByCustomer() {
 		return payByCustomer;
 	}
-
-	public void setPayByCustomer(int payByCustomer) {
+	public void setPayByCustomer(boolean payByCustomer) {
 		this.payByCustomer = payByCustomer;
 	}
-
 	public BigDecimal getLimit() {
 		return limit;
 	}
@@ -113,6 +118,10 @@ public class BAPAInfoCredit implements Serializable {
 		this.bapaInfo = bapaInfo;
 	}
 
-
-    
+	public boolean isFromCredit() {
+		return fromCredit;
+	}
+	public void setFromCredit(boolean fromCredit) {
+		this.fromCredit = fromCredit;
+	}
 }
