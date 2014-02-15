@@ -23,7 +23,10 @@ import com.clevel.selos.businesscontrol.BAPAInfoControl;
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
+import com.clevel.selos.model.view.BAPAInfoCustomerView;
 import com.clevel.selos.model.view.BAPAInfoView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.util.FacesUtil;
@@ -52,7 +55,9 @@ public class BAInfo implements Serializable {
 	//Property
 	private BAPAInfoView bapaInfoView;
 	private List<InsuranceCompany> insuranceCompanies;
-	
+	private List<BAResultHC> baResultHCs;
+	private List<BAPAInfoCustomerView> bapaInfoCustomers;
+	private BAPAInfoCustomerView bapaInfoCustomerView;
 	
 	public BAInfo() {
 	}
@@ -89,6 +94,9 @@ public class BAInfo implements Serializable {
 	public List<InsuranceCompany> getInsuranceCompanies() {
 		return insuranceCompanies;
 	}
+	public List<BAResultHC> getBaResultHCs() {
+		return baResultHCs;
+	}
 	public String getInsuranceAccount() {
 		if (bapaInfoView.getUpdInsuranceCompany() > 0) {
 			for (InsuranceCompany company : insuranceCompanies) {
@@ -97,6 +105,28 @@ public class BAInfo implements Serializable {
 			}
 		}
 		return null;
+	}
+	public List<BAPAInfoCustomerView> getBapaInfoCustomers() {
+		return bapaInfoCustomers;
+	}
+	
+	public boolean canUpdateBAInfoTable() {
+		return bapaInfoView.getApplyBA().equals(RadioValue.YES);
+	}
+	public BAPAInfoCustomerView getBapaInfoCustomerView() {
+		return bapaInfoCustomerView;
+	}
+	public void setBapaInfoCustomerView(BAPAInfoCustomerView bapaInfoCustomerView) {
+		this.bapaInfoCustomerView = bapaInfoCustomerView;
+	}
+	public String getDisplayResultHealthCheck(BAPAInfoCustomerView view) {
+		if (view == null || view.getUpdBAResultHC() <= 0 || baResultHCs == null)
+			return "";
+		for (BAResultHC hc : baResultHCs) {
+			if (hc.getId() == view.getUpdBAResultHC())
+				return hc.getName();
+		}
+		return "";
 	}
 	/*
 	 * Action
@@ -110,6 +140,7 @@ public class BAInfo implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		insuranceCompanies = bapaInfoControl.getInsuranceCompanies();
+		baResultHCs = bapaInfoControl.getBAResultHCs();
 		_loadInitData();
 	}
 	
@@ -137,7 +168,9 @@ public class BAInfo implements Serializable {
 			log.error("Fail to redirect screen to "+redirectPage,e);
 		}
 	}
-	
+	public void onChangeApplyToBA() {
+		
+	}
 	public void onOpenApplyInformationDialog() {
 		
 	}
@@ -173,9 +206,11 @@ public class BAInfo implements Serializable {
 	 */
 	private void _loadInitData() {
 		preRenderCheck = false;
+		bapaInfoView = bapaInfoControl.getBAPAInfoView(workCaseId);
+		
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+			bapaInfoCustomers = bapaInfoControl.getBAPAInfoCustomerView(workCaseId, bapaInfoView.getId());
 		}
-		bapaInfoView = bapaInfoControl.getBAPAInfoView(workCaseId);
 	}
 }

@@ -82,10 +82,11 @@
                         			<h:outputText value="#{msg.get('app.baInfo.ba.applyBA')}" />			
                         		</td>
                         		<td>
-             			            <p:selectOneRadio disabled="true" value="#{baInfo.bapaInfoView.applyBA}">
+             			            <p:selectOneRadio value="#{baInfo.bapaInfoView.applyBA}">
+             			            	<p:ajax update="bainfo_tbl" />
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
-    	                                   	itemValue="radio"/>
+    	                                   	itemValue="#{radio}"/>
                                    </p:selectOneRadio>
                         		</td>                     		
                         	</tr>
@@ -97,7 +98,7 @@
                         			<p:selectOneRadio value="#{baInfo.bapaInfoView.payToInsuranceCompany}">
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
-    	                                   	itemValue="radio"/>
+    	                                   	itemValue="#{radio}"/>
                                    </p:selectOneRadio>
              			            
                         		</td>                     		
@@ -105,40 +106,57 @@
                         	<tr>
                         		<td colspan="100%">
                         			<p:dataTable id='bainfo_tbl' styleClass="full_table"
+                        				value="#{baInfo.bapaInfoCustomers}" var="customer"
 	                           			>
 	                           			<p:column style='width:80px' styleClass="center"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.applyBA')}">
-	                           				<p:selectBooleanCheckbox />
+	                           				<p:selectBooleanCheckbox value="#{customer.applyBA}"
+	                           					disabled="#{not baInfo.canUpdateBAInfoTable()}"
+	                           					styleClass="normal_checkbox"
+	                           					>
+	                           					<p:ajax update="upd_baCustomer"/>
+	                           				</p:selectBooleanCheckbox>
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.cusName')}">
+	                           				#{customer.customerName}
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.contactNumber')}">
+	                           				#{customer.customerContractNo}
 	                           			</p:column>
 	                           			
 	                           			<p:column style="width:250px;"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.relationship')}">
+	                           				#{customer.relationship}
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.resultHealthcheck')}">
+	                           				#{baInfo.getDisplayResultHealthCheck(customer)}
 	                           			</p:column>
 	                           			
 	                           			<p:column styleClass="center" style="width:100px;"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.checkDate')}">
+	                           				<h:outputText value="#{customer.checkDate}">
+	                           					<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+	                           				</h:outputText>
 	                           			</p:column>
 	                           			<p:column styleClass="center" style="width:30px;">
-	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+	                           				<p:commandButton
+	                           					id='upd_baCustomer' 
+	                           					icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
                            						onstart="p_blockUI.show()"
                            						oncomplete="p_blockUI.hide();p_baApplyInfoDlg.show();"
                            						action="#{baInfo.onOpenApplyInformationDialog()}"
                            						style="margin-right:0px !important"
+                           						disabled="#{not (customer.updateable and baInfo.canUpdateBAInfoTable())}"
                            						>
-                           						<p:resetInput target="baApplyInfoDlgForm" />
+                           						<p:resetInput target=":baApplyInfoDlgForm" />
+                           						<f:setPropertyActionListener target="#{baInfo.bapaInfoCustomerView}" value="#{customer}" />
                            					</p:commandButton>
 	                           			</p:column>
 	                           		</p:dataTable>
