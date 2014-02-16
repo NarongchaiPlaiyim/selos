@@ -14,6 +14,9 @@ import java.util.List;
 public class ExistingCreditDetailTransform extends Transform {
 
     @Inject
+    ProductTransform productTransform;
+
+    @Inject
     public ExistingCreditDetailTransform() {
     }
 
@@ -50,8 +53,8 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetail.setAccountSuf(existingCreditDetailView.getAccountSuf());
             existingCreditDetail.setExistAccountStatus(existingCreditDetailView.getExistAccountStatus());
-            existingCreditDetail.setExistProductProgram(existingCreditDetailView.getExistProductProgram());
-            existingCreditDetail.setExistCreditType(existingCreditDetailView.getExistCreditType());
+            existingCreditDetail.setExistProductProgram(productTransform.transformToModel(existingCreditDetailView.getExistProductProgramView()));
+            existingCreditDetail.setExistCreditType(productTransform.transformToModel(existingCreditDetailView.getExistCreditTypeView()));
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
             existingCreditDetail.setCreditType(existingCreditDetailView.getCreditType());
             existingCreditDetail.setProductProgram(existingCreditDetailView.getProductProgram());
@@ -92,8 +95,8 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
             existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
             existingCreditDetailView.setExistAccountStatus(existingCreditDetail.getExistAccountStatus());
-            existingCreditDetailView.setExistProductProgram(existingCreditDetail.getExistProductProgram());
-            existingCreditDetailView.setExistCreditType(existingCreditDetail.getExistCreditType());
+            existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingCreditDetail.getExistProductProgram()));
+            existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingCreditDetail.getExistCreditType()));
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());
             existingCreditDetailView.setCreditType(existingCreditDetail.getCreditType());
             existingCreditDetailView.setProductProgram(existingCreditDetail.getProductProgram());

@@ -51,7 +51,7 @@
     <tr>
         <td class="title" style="width:145px;">Product Program :</td>
         <td>
-            <p:selectOneMenu id="dlgSelProdProgram" value="#{creditFacExisting.existingCreditDetailView.existProductProgram.id}" required="#{not empty param[saveCreditBtn.clientId]}"
+            <p:selectOneMenu id="dlgSelProdProgram" value="#{creditFacExisting.existingCreditDetailView.existProductProgramView.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                              size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                              >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -68,7 +68,7 @@
     <tr>
         <td class="title">Facility :</td>
         <td>
-            <p:selectOneMenu id="creditTypeName" value="#{creditFacExisting.existingCreditDetailView.existCreditType.id}" required="#{not empty param[saveCreditBtn.clientId]}"
+            <p:selectOneMenu id="creditTypeName" value="#{creditFacExisting.existingCreditDetailView.existCreditTypeView.id}" required="#{not empty param[saveCreditBtn.clientId]}"
                              size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                              >
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>

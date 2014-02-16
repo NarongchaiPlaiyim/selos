@@ -25,8 +25,8 @@ public class NewCreditDetailView implements Serializable {
     private int seq;
     private int requestType;
     private int isRefinance;
-    private ProductProgram productProgram;
-    private CreditType creditType;
+    private ProductProgramView productProgramView;
+    private CreditTypeView creditTypeView;
     private String productCode;
     private String projectCode;
     private String borrowerName;
@@ -40,8 +40,8 @@ public class NewCreditDetailView implements Serializable {
     private BigDecimal holdLimitAmount;
     private BigDecimal finalPrice;
     private BigDecimal tenor;
-    private DisbursementType disbursement;
-    private LoanPurpose loanPurpose;
+    private DisbursementTypeView disbursementTypeView;
+    private LoanPurposeView loanPurposeView;
     private BigDecimal purpose;
     private DecisionType uwDecision;
     private BigDecimal installment;
@@ -67,10 +67,10 @@ public class NewCreditDetailView implements Serializable {
         this.seq = 0;
         this.requestType = RequestTypes.NEW.value();
         this.isRefinance = RadioValue.NO.value();
-        this.productProgram = new ProductProgram();
-        this.creditType = new CreditType();
-        this.disbursement = new DisbursementType();
-        this.loanPurpose = new LoanPurpose();
+        this.productProgramView = new ProductProgramView();
+        this.creditTypeView = new CreditTypeView();
+        this.disbursementTypeView = new DisbursementTypeView();
+        this.loanPurposeView = new LoanPurposeView();
         this.productCode = "";
         this.projectCode = "";
         this.borrowerName = "";
@@ -155,20 +155,20 @@ public class NewCreditDetailView implements Serializable {
         isRefinance = refinance;
     }
 
-    public ProductProgram getProductProgram() {
-        return productProgram;
+    public ProductProgramView getProductProgramView() {
+        return productProgramView;
     }
 
-    public void setProductProgram(ProductProgram productProgram) {
-        this.productProgram = productProgram;
+    public void setProductProgramView(ProductProgramView productProgramView) {
+        this.productProgramView = productProgramView;
     }
 
-    public CreditType getCreditType() {
-        return creditType;
+    public CreditTypeView getCreditTypeView() {
+        return creditTypeView;
     }
 
-    public void setCreditType(CreditType creditType) {
-        this.creditType = creditType;
+    public void setCreditTypeView(CreditTypeView creditTypeView) {
+        this.creditTypeView = creditTypeView;
     }
 
     public String getProductCode() {
@@ -283,12 +283,12 @@ public class NewCreditDetailView implements Serializable {
         this.tenor = tenor;
     }
 
-    public DisbursementType getDisbursement() {
-        return disbursement;
+    public DisbursementTypeView getDisbursementTypeView() {
+        return disbursementTypeView;
     }
 
-    public void setDisbursement(DisbursementType disbursement) {
-        this.disbursement = disbursement;
+    public void setDisbursementTypeView(DisbursementTypeView disbursementTypeView) {
+        this.disbursementTypeView = disbursementTypeView;
     }
 
     public BigDecimal getPurpose() {
@@ -307,12 +307,12 @@ public class NewCreditDetailView implements Serializable {
         this.uwDecision = uwDecision;
     }
 
-    public LoanPurpose getLoanPurpose() {
-        return loanPurpose;
+    public LoanPurposeView getLoanPurposeView() {
+        return loanPurposeView;
     }
 
-    public void setLoanPurpose(LoanPurpose loanPurpose) {
-        this.loanPurpose = loanPurpose;
+    public void setLoanPurposeView(LoanPurposeView loanPurposeView) {
+        this.loanPurposeView = loanPurposeView;
     }
 
     public BigDecimal getInstallment() {
@@ -400,8 +400,8 @@ public class NewCreditDetailView implements Serializable {
                 .append("seq", seq)
                 .append("requestType", requestType)
                 .append("isRefinance", isRefinance)
-                .append("productProgram", productProgram)
-                .append("creditType", creditType)
+                .append("productProgramView", productProgramView)
+                .append("creditTypeView", creditTypeView)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("borrowerName", borrowerName)
@@ -415,8 +415,8 @@ public class NewCreditDetailView implements Serializable {
                 .append("holdLimitAmount", holdLimitAmount)
                 .append("finalPrice", finalPrice)
                 .append("tenor", tenor)
-                .append("disbursement", disbursement)
-                .append("loanPurpose", loanPurpose)
+                .append("disbursementTypeView", disbursementTypeView)
+                .append("loanPurposeView", loanPurposeView)
                 .append("purpose", purpose)
                 .append("uwDecision", uwDecision)
                 .append("installment", installment)

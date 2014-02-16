@@ -17,8 +17,8 @@ public class  ProposeCreditDetailView implements Serializable {
     private String accountNumber;
     private String accountSuf;
     private int requestType;
-    private ProductProgram productProgram;
-    private CreditType creditFacility;
+    private ProductProgramView productProgramView;
+    private CreditTypeView creditFacilityView;
     private BigDecimal limit;
     private BigDecimal guaranteeAmount;
     private int useCount;
@@ -34,8 +34,8 @@ public class  ProposeCreditDetailView implements Serializable {
         this.accountNumber = "";
         this.accountSuf = "";
         this.requestType = 0;
-        this.productProgram = new ProductProgram();
-        this.creditFacility = new CreditType();
+        this.productProgramView = new ProductProgramView();
+        this.creditFacilityView = new CreditTypeView();
         this.limit = BigDecimal.ZERO;
         this.guaranteeAmount = BigDecimal.ZERO;
         this.noFlag = false;
@@ -90,20 +90,20 @@ public class  ProposeCreditDetailView implements Serializable {
         this.requestType = requestType;
     }
 
-    public ProductProgram getProductProgram() {
-        return productProgram;
+    public ProductProgramView getProductProgramView() {
+        return productProgramView;
     }
 
-    public void setProductProgram(ProductProgram productProgram) {
-        this.productProgram = productProgram;
+    public void setProductProgramView(ProductProgramView productProgramView) {
+        this.productProgramView = productProgramView;
     }
 
-    public CreditType getCreditFacility() {
-        return creditFacility;
+    public CreditTypeView getCreditFacilityView() {
+        return creditFacilityView;
     }
 
-    public void setCreditFacility(CreditType creditFacility) {
-        this.creditFacility = creditFacility;
+    public void setCreditFacilityView(CreditTypeView creditFacilityView) {
+        this.creditFacilityView = creditFacilityView;
     }
 
     public BigDecimal getLimit() {
@@ -157,8 +157,8 @@ public class  ProposeCreditDetailView implements Serializable {
                 .append("accountNumber", accountNumber)
                 .append("accountSuf", accountSuf)
                 .append("requestType", requestType)
-                .append("productProgram", productProgram)
-                .append("creditFacility", creditFacility)
+                .append("productProgramView", productProgramView)
+                .append("creditFacilityView", creditFacilityView)
                 .append("limit", limit)
                 .append("guaranteeAmount", guaranteeAmount)
                 .toString();

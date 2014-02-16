@@ -117,6 +117,8 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
+    ProductTransform productTransform;
+    @Inject
     DBRControl dbrControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
@@ -533,10 +535,11 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
                         existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-                        log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit() != null ? existingCreditFacilityView.getTotalBorrowerComLimit() : "null");
-                        log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerRetailLimit() != null ? existingCreditFacilityView.getTotalBorrowerRetailLimit() : "null");
 
                         if (existingCreditFacilityView != null) {
+                            log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit() != null ? existingCreditFacilityView.getTotalBorrowerComLimit() : "null");
+                            log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerRetailLimit() != null ? existingCreditFacilityView.getTotalBorrowerRetailLimit() : "null");
+
                             sumTotalCommercial = Util.add(sumTotalCommercial, (Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), sumTotalPropose)));
                             newCreditFacility.setTotalCommercial(sumTotalCommercial); //sumTotalCommercial
 
@@ -673,8 +676,8 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
                 proposeCreditDetailView.setRequestType(tmp.getRequestType());
-                proposeCreditDetailView.setProductProgram(tmp.getProductProgram());
-                proposeCreditDetailView.setCreditFacility(tmp.getCreditType());
+                proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
+                proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
@@ -696,8 +699,8 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
                 proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                proposeCreditDetailView.setProductProgram(existingCreditDetailView.getExistProductProgram());
-                proposeCreditDetailView.setCreditFacility(existingCreditDetailView.getExistCreditType());
+                proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
+                proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
                 proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;

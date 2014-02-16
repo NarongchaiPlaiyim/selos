@@ -22,7 +22,10 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.DisbursementTypeTransform;
+import com.clevel.selos.transform.LoanPurposeTransform;
 import com.clevel.selos.transform.NewCollateralTransform;
+import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.transform.business.CollateralBizTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -95,7 +98,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     // case from select database must to transform to view before to use continue
     private BasicInfo basicInfo;
     private TCG tcg;
-    private SpecialProgram specialProgramBasicInfo;
+    private SpecialProgramView specialProgramBasicInfo;
     private int applyTCG;
 
     //for control Propose Credit
@@ -173,7 +176,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ProductFormulaDAO productFormulaDAO;
     @Inject
-    DisbursementDAO disbursementDAO;
+    DisbursementTypeDAO disbursementDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -209,9 +212,17 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ExSummaryControl exSummaryControl;
     @Inject
+    ProductControl productControl;
+    @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
     private CollateralBizTransform collateralBizTransform;
+    @Inject
+    private ProductTransform productTransform;
+    @Inject
+    private LoanPurposeTransform loanPurposeTransform;
+    @Inject
+    private DisbursementTypeTransform disbursementTypeTransform;
     @Inject
     private COMSInterface comsInterface;
 
@@ -272,9 +283,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             } else {
                 log.info("basicInfo.id ::: {}", basicInfo.getId());
                 if (basicInfo.getApplySpecialProgram() == RadioValue.YES.value()) {
-                    specialProgramBasicInfo = basicInfo.getSpecialProgram();
+                    specialProgramBasicInfo = productTransform.transformToView(basicInfo.getSpecialProgram());
                 } else {
-                    specialProgramBasicInfo = specialProgramDAO.findById(3);
+                    specialProgramBasicInfo = productTransform.transformToView(specialProgramDAO.findById(3));
                 }
                 log.debug("specialProgramBasicInfo : {}", specialProgramBasicInfo);
                 productGroup = basicInfo.getProductGroup();
@@ -585,7 +596,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     //  Start Propose Credit Information  //
     public void onChangeProductProgram() {
-        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+        ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
@@ -594,13 +605,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         log.debug("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " + prdProgramToCreditTypeList.size());
-        newCreditDetailView.getCreditType().setId(0);
+        newCreditDetailView.setCreditTypeView(new CreditTypeView());
     }
 
     public void onChangeCreditType() {
-        log.debug("onChangeCreditType :::: creditType : {}", newCreditDetailView.getCreditType().getId());
-        if ((newCreditDetailView.getProductProgram().getId() != 0) && (newCreditDetailView.getCreditType().getId() != 0)) {
-            ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+        log.info("onChangeCreditType {}::::", newCreditDetailView.getId());
+        log.debug("onChangeCreditType :::: creditType : {}", newCreditDetailView.getCreditTypeView().getId());
+        if ((newCreditDetailView.getProductProgramView().getId() != 0) && (newCreditDetailView.getCreditTypeView().getId() != 0)) {
+            /*ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
             CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
 
             log.info("productProgram :: {}", productProgram.getId());
@@ -633,6 +645,24 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                         log.info("reducePricePanelRendered:: {}", reducePricePanelRendered);
                     }
                 }
+            }*/
+
+            ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
+                    newCreditDetailView.getProductProgramView().getId(),
+                    newCreditFacilityView.getCreditCustomerType(), specialProgramBasicInfo.getId(), applyTCG);
+            if (productFormulaView != null) {
+                log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
+                newCreditDetailView.setProductCode(productFormulaView.getProductCode());
+                newCreditDetailView.setProjectCode(productFormulaView.getProjectCode());
+                log.info("productFormula.getReduceFrontEndFee() ::: {}", productFormulaView.getReduceFrontEndFee());
+                log.info("productFormula.getReducePricing() ::: {}", productFormulaView.getReducePricing());
+
+                modeEditReducePricing = flagForModeDisable(productFormulaView.getReducePricing());
+                modeEditReduceFront = flagForModeDisable(productFormulaView.getReduceFrontEndFee());
+
+                //reducePricePanelRendered = (modeEditReducePricing == true) ? true : false;
+                reducePricePanelRendered = modeEditReducePricing;
+                log.info("reducePricePanelRendered:: {}", reducePricePanelRendered);
             }
         }
     }
@@ -647,8 +677,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
 
-        if (newCreditDetailView.getProductProgram().getId() != 0) {
-            ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
+        if (newCreditDetailView.getProductProgramView().getId() != 0) {
+            ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
             prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
         }
 
@@ -727,18 +757,18 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if ((newCreditDetailView.getProductProgram().getId() != 0) && (newCreditDetailView.getCreditType().getId() != 0)
-                && (newCreditDetailView.getLoanPurpose().getId() != 0) && (newCreditDetailView.getDisbursement().getId() != 0)) {
+        if ((newCreditDetailView.getProductProgramView().getId() != 0) && (newCreditDetailView.getCreditTypeView().getId() != 0)
+                && (newCreditDetailView.getLoanPurposeView().getId() != 0) && (newCreditDetailView.getDisbursementTypeView().getId() != 0)) {
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
 
-                ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
-                CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
-                LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurpose().getId());
-                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
+                ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
+                CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditTypeView().getId());
+                LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurposeView().getId());
+                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursementTypeView().getId());
 
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
-                creditDetailAdd.setProductProgram(productProgram);
-                creditDetailAdd.setCreditType(creditType);
+                creditDetailAdd.setProductProgramView(productTransform.transformToView(productProgram));
+                creditDetailAdd.setCreditTypeView(productTransform.transformToView(creditType));
                 creditDetailAdd.setRequestType(newCreditDetailView.getRequestType());
                 creditDetailAdd.setRefinance(newCreditDetailView.getRefinance());
                 creditDetailAdd.setProductCode(newCreditDetailView.getProductCode());
@@ -749,9 +779,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setReduceFrontEndFee(newCreditDetailView.isReduceFrontEndFee());
                 creditDetailAdd.setReducePriceFlag(newCreditDetailView.isReducePriceFlag());
                 creditDetailAdd.setFrontEndFee(newCreditDetailView.getFrontEndFee());
-                creditDetailAdd.setLoanPurpose(loanPurpose);
+                creditDetailAdd.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 creditDetailAdd.setRemark(newCreditDetailView.getRemark());
-                creditDetailAdd.setDisbursement(disbursement);
+                creditDetailAdd.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 creditDetailAdd.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
@@ -763,13 +793,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 log.info("seq of credit after add proposeCredit :: {}", seq);
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
-                ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
-                CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
-                LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurpose().getId());
-                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursement().getId());
+                ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgramView().getId());
+                CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditTypeView().getId());
+                LoanPurpose loanPurpose = loanPurposeDAO.findById(newCreditDetailView.getLoanPurposeView().getId());
+                DisbursementType disbursement = disbursementDAO.findById(newCreditDetailView.getDisbursementTypeView().getId());
 
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductProgram(productProgram);
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setCreditType(creditType);
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductProgramView(productTransform.transformToView(productProgram));
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setCreditTypeView(productTransform.transformToView(creditType));
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setRequestType(newCreditDetailView.getRequestType());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setRefinance(newCreditDetailView.getRefinance());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setProductCode(newCreditDetailView.getProductCode());
@@ -780,9 +810,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setReducePriceFlag(newCreditDetailView.isReducePriceFlag());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setReduceFrontEndFee(newCreditDetailView.isReduceFrontEndFee());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setFrontEndFee(newCreditDetailView.getFrontEndFee());
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setLoanPurpose(loanPurpose);
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setRemark(newCreditDetailView.getRemark());
-                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDisbursement(disbursement);
+                newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setSeq(newCreditDetailView.getSeq());
                 newCreditFacilityView.getNewCreditDetailViewList().get(rowIndex).setNewCreditTierDetailViewList(newCreditDetailView.getNewCreditTierDetailViewList());

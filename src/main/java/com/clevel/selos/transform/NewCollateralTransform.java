@@ -213,8 +213,8 @@ public class NewCollateralTransform extends Transform {
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
                 proposeCreditDetailView.setRequestType(tmp.getRequestType());
-                proposeCreditDetailView.setProductProgram(tmp.getProductProgram());
-                proposeCreditDetailView.setCreditFacility(tmp.getCreditType());
+                proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
+                proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
@@ -234,8 +234,8 @@ public class NewCollateralTransform extends Transform {
             proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
             proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
             proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-            proposeCreditDetailView.setProductProgram(existingCreditDetailView.getExistProductProgram());
-            proposeCreditDetailView.setCreditFacility(existingCreditDetailView.getExistCreditType());
+            proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
+            proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
             proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
             proposeCreditDetailViewList.add(proposeCreditDetailView);
             rowCount++;

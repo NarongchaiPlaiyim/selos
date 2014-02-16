@@ -63,8 +63,8 @@ public class CreditFacExisting implements Serializable {
     private List<ExistingCreditTierDetailView> existingCreditTierDetailViewList;
     private ExistingSplitLineDetailView existingSplitLineDetailView;
     private List<ExistingSplitLineDetailView> existingSplitLineDetailViewList;
-    private ProductProgram existProductProgram;
-    private CreditType existCreditType;
+    private ProductProgramView existProductProgramView;
+    private CreditTypeView existCreditTypeView;
     private AccountStatus existAccountStatus ;
     private List<BaseRate> baseRateList;
     private ExistingCreditDetailView  existingCreditDetailView;
@@ -214,12 +214,12 @@ public class CreditFacExisting implements Serializable {
 
             existingCreditDetailView = new ExistingCreditDetailView();
 
-            existProductProgram = new ProductProgram();
-            existCreditType = new CreditType();
+            existProductProgramView = new ProductProgramView();
+            existCreditTypeView = new CreditTypeView();
 
             existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
-            existingCreditDetailView.setExistProductProgram(existProductProgram);
-            existingCreditDetailView.setExistCreditType(existCreditType);
+            existingCreditDetailView.setExistProductProgramView(existProductProgramView);
+            existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
             existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
 
             existingSplitLineDetailView = new ExistingSplitLineDetailView();
@@ -397,8 +397,8 @@ public class CreditFacExisting implements Serializable {
 
 
     public void onChangeProductProgram(){
-        log.info("onChangeProductProgram :::: productProgram : {}"+ existingCreditDetailView.getExistProductProgram().getId());
-        ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
+        log.info("onChangeProductProgram :::: productProgram : {}"+ existingCreditDetailView.getExistProductProgramView().getId());
+        ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
         log.info("onChangeProductProgram :::: productProgram : {}", productProgram);
 
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
@@ -409,14 +409,14 @@ public class CreditFacExisting implements Serializable {
     }
 
     public void onChangeCreditType(){
-        int id = existingCreditDetailView.getExistCreditType().getId();
+        int id = existingCreditDetailView.getExistCreditTypeView().getId();
         showSplitLine = false;
         if(id == 9){
             showSplitLine = true;
         }
-        if ((existingCreditDetailView.getExistProductProgram().getId() != 0) && (existingCreditDetailView.getExistCreditType().getId() != 0)) {
-            ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditType().getId());
+        if ((existingCreditDetailView.getExistProductProgramView().getId() != 0) && (existingCreditDetailView.getExistCreditTypeView().getId() != 0)) {
+            ProductProgram productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
+            CreditType creditType = creditTypeDAO.findById(existingCreditDetailView.getExistCreditTypeView().getId());
 
             if(productProgram != null && creditType != null){
                 PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType,productProgram);
@@ -436,13 +436,13 @@ public class CreditFacExisting implements Serializable {
         log.info("onAddCommercialCredit ::: ");
         existingCreditDetailView = new ExistingCreditDetailView();
         existAccountStatus = new AccountStatus();
-        existProductProgram = new ProductProgram();
-        existCreditType = new CreditType();
+        existProductProgramView = new ProductProgramView();
+        existCreditTypeView = new CreditTypeView();
 
         existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
         existingCreditDetailView.setExistAccountStatus(new BankAccountStatus());
-        existingCreditDetailView.setExistProductProgram(existProductProgram);
-        existingCreditDetailView.setExistCreditType(existCreditType);
+        existingCreditDetailView.setExistProductProgramView(existProductProgramView);
+        existingCreditDetailView.setExistCreditTypeView(existCreditTypeView);
 
         existingCreditTierDetailView = new ExistingCreditTierDetailView();
         existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
@@ -470,9 +470,9 @@ public class CreditFacExisting implements Serializable {
         existingCreditDetailView.setAccountNumber(selectCreditDetail.getAccountNumber());
         existingCreditDetailView.setAccountSuf(selectCreditDetail.getAccountSuf());
         existingCreditDetailView.setExistAccountStatus(selectCreditDetail.getExistAccountStatus());
-        existingCreditDetailView.setExistProductProgram(selectCreditDetail.getExistProductProgram());
+        existingCreditDetailView.setExistProductProgramView(selectCreditDetail.getExistProductProgramView());
         onChangeProductProgram();
-        existingCreditDetailView.setExistCreditType(selectCreditDetail.getExistCreditType());
+        existingCreditDetailView.setExistCreditTypeView(selectCreditDetail.getExistCreditTypeView());
         onChangeCreditType();
         existingCreditDetailView.setLimit(selectCreditDetail.getLimit());
         existingCreditDetailView.setProductCode(selectCreditDetail.getProductCode());
@@ -606,16 +606,16 @@ public class CreditFacExisting implements Serializable {
         log.info("typeOfList ::: "+ typeOfList);
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
             log.info("add to list begin");
-            ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditType().getId());
+            //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgramView().getId());
+            //CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditTypeView().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
 
 
 
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-            existingCreditDetailView.setExistProductProgram(productProgram);
-            existingCreditDetailView.setExistCreditType(creditType);
+            existingCreditDetailView.setExistProductProgramView(existingCreditDetailView.getExistProductProgramView());
+            existingCreditDetailView.setExistCreditTypeView(existingCreditDetailView.getExistCreditTypeView());
             existingCreditDetailView.setExistAccountStatus(bankAccountStatus);
 
             for(int i=0;i<existingSplitLineDetailViewList.size();i++){
@@ -661,15 +661,15 @@ public class CreditFacExisting implements Serializable {
                 existingCreditDetailViewRow = relatedExistingCreditDetailViewList.get(rowIndex);
             }
 
-            ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditType().getId());
+            //ProductProgram  productProgram = productProgramDAO.findById(existingCreditDetailView.getExistProductProgram().getId());
+            //CreditType creditType = creditTypeDAO.findById( existingCreditDetailView.getExistCreditType().getId());
             //AccountStatus accountStatus = accountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findById( existingCreditDetailView.getExistAccountStatus().getId());
 
             BankAccountStatusView bankAccountStatusV = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
 
-            existingCreditDetailViewRow.setExistProductProgram(productProgram);
-            existingCreditDetailViewRow.setExistCreditType(creditType);
+            existingCreditDetailViewRow.setExistProductProgramView(existingCreditDetailView.getExistProductProgramView());
+            existingCreditDetailViewRow.setExistCreditTypeView(existingCreditDetailView.getExistCreditTypeView());
             existingCreditDetailViewRow.setAccountStatus(bankAccountStatusV);
             existingCreditDetailViewRow.setAccountName(existingCreditDetailView.getAccountName());
             existingCreditDetailViewRow.setAccountNumber(existingCreditDetailView.getAccountNumber());
@@ -868,8 +868,8 @@ public class CreditFacExisting implements Serializable {
                 existingCreditTypeDetailView.setAccountName(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getAccountName());
                 existingCreditTypeDetailView.setAccountNumber(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getAccountNumber());
                 existingCreditTypeDetailView.setAccountSuf(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getAccountSuf());
-                existingCreditTypeDetailView.setProductProgram(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getExistProductProgram().getName());
-                existingCreditTypeDetailView.setCreditFacility(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getExistCreditType().getName());
+                existingCreditTypeDetailView.setProductProgram(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getExistProductProgramView().getName());
+                existingCreditTypeDetailView.setCreditFacility(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getExistCreditTypeView().getName());
                 existingCreditTypeDetailView.setLimit(existingCreditFacilityView.getBorrowerComExistingCredit().get(i).getLimit());
                 borrowerCreditTypeDetailList.add(existingCreditTypeDetailView);
             }
@@ -891,8 +891,8 @@ public class CreditFacExisting implements Serializable {
                 existingCreditTypeDetailView.setAccountName(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getAccountName());
                 existingCreditTypeDetailView.setAccountNumber(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getAccountNumber());
                 existingCreditTypeDetailView.setAccountSuf(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getAccountSuf());
-                existingCreditTypeDetailView.setProductProgram(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getExistProductProgram().getName());
-                existingCreditTypeDetailView.setCreditFacility(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getExistCreditType().getName());
+                existingCreditTypeDetailView.setProductProgram(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getExistProductProgramView().getName());
+                existingCreditTypeDetailView.setCreditFacility(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getExistCreditTypeView().getName());
                 existingCreditTypeDetailView.setLimit(existingCreditFacilityView.getRelatedComExistingCredit().get(i).getLimit());
                 relatedCreditTypeDetailList.add(existingCreditTypeDetailView);
             }
@@ -1657,12 +1657,12 @@ public class CreditFacExisting implements Serializable {
         this.productGroupList = productGroupList;
     }
 
-    public CreditType getExistCreditType() {
-        return existCreditType;
+    public CreditTypeView getExistCreditTypeView() {
+        return existCreditTypeView;
     }
 
-    public void setExistCreditType(CreditType existCreditType) {
-        this.existCreditType = existCreditType;
+    public void setExistCreditType(CreditTypeView existCreditTypeView) {
+        this.existCreditTypeView = existCreditTypeView;
     }
 
     public List<ExistingCreditTierDetailView> getExistingCreditTierDetailViewList() {
