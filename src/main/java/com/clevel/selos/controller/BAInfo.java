@@ -67,7 +67,7 @@ public class BAInfo implements Serializable {
 	}
 	public String getLastUpdateBy() {
 		if (bapaInfoView.getModifyBy() == null)
-			return "-";
+			return "";
 		else
 			return bapaInfoView.getModifyBy().getDisplayName();
 	}

@@ -3,8 +3,10 @@ package com.clevel.selos.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -20,10 +23,12 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MortgageSummaryControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 
@@ -38,24 +43,34 @@ public class MortgageSummary implements Serializable {
 	@Inject
 	private BasicInfoControl basicInfoControl;
 	
+	@Inject
+	private MortgageSummaryControl mortgageSummaryControl;
+	
 	//Private variable
 	private boolean preRenderCheck = false;
 	private long workCaseId = -1;
 	private long stepId = -1;
 	private User user;
 	private BasicInfoView basicInfoView;
+	private List<SelectItem> branches;
+	private List<SelectItem> zones; 
+	
+	//Property
+	private List<SelectItem> locations;
+	private MortgageSummaryView mortgageSummaryView;
 	
 	
 	public MortgageSummary() {
 		
 	}
 	public Date getLastUpdateDateTime() {
-		//TODO 
-		return new Date();
+		return mortgageSummaryView.getModifyDate();
 	}
 	public String getLastUpdateBy() {
-		//TODO
-		return user.getDisplayName();
+		if (mortgageSummaryView.getModifyBy() != null ) 
+			return mortgageSummaryView.getModifyBy().getDisplayName();
+		else
+			return "";
 	}
 	public ApproveType getApproveType() {
 		if (basicInfoView == null)
@@ -66,6 +81,13 @@ public class MortgageSummary implements Serializable {
 	public String getMinDate() {
 		SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
 		return dFmt.format(new Date());
+	}
+	
+	public List<SelectItem> getLocations() {
+		return locations;
+	}
+	public MortgageSummaryView getMortgageSummaryView() {
+		return mortgageSummaryView;
 	}
 	
 	/*
@@ -80,6 +102,10 @@ public class MortgageSummary implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 			user = (User) session.getAttribute("user");
 		}
+		
+		branches = mortgageSummaryControl.listBankBranches();
+		zones = mortgageSummaryControl.listUserZones();
+		
 		_loadInitData();
 	}
 	
@@ -108,7 +134,18 @@ public class MortgageSummary implements Serializable {
 		}
 	}
 	public void onSelectSignContract() {
-		
+		mortgageSummaryView.setUpdLocation(0);
+		switch(mortgageSummaryView.getSigningLocation()) {
+			case BRANCH :
+				locations = branches;
+				break;
+			case ZONE :
+				locations = zones;
+				break;
+			default:
+				locations = Collections.emptyList();
+				break;
+		}
 	}
 	
 	public void onSaveMortgageSummary() {
@@ -144,5 +181,6 @@ public class MortgageSummary implements Serializable {
 		if (workCaseId > 0) {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
+		mortgageSummaryView = mortgageSummaryControl.getMortgageSummaryView(workCaseId);
 	}
 }
