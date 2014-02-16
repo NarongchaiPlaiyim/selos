@@ -81,6 +81,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setReduceFrontEndFee(Util.returnNumForFlag(newCreditDetailView.isReduceFrontEndFee()));
             newCreditDetail.setReducePriceFlag(Util.returnNumForFlag(newCreditDetailView.isReducePriceFlag()));
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
+            newCreditDetail.setUseCount(newCreditDetailView.getUseCount());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
             if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
@@ -137,6 +138,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
             newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
             newCreditDetailView.setRemark(newCreditDetail.getRemark());
+            newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
 
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 
