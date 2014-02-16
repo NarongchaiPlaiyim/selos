@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 import com.clevel.selos.model.BAPAType;
 
-public class BAPAInfoCreditView implements Serializable {
+public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCreditView> {
 	private static final long serialVersionUID = 891498608677139945L;
 
 	private long id;
@@ -22,8 +22,6 @@ public class BAPAInfoCreditView implements Serializable {
 	private boolean fromCredit;
 	private BigDecimal limit;
 	private BigDecimal premiumAmount;
-	
-	private boolean updateable;
 	
 	private boolean needUpdate;
 	
@@ -113,7 +111,10 @@ public class BAPAInfoCreditView implements Serializable {
 
 
 	public BigDecimal getLimit() {
-		return limit;
+		if (limit == null)
+			return new BigDecimal(0);
+		else
+			return limit;
 	}
 
 
@@ -123,24 +124,16 @@ public class BAPAInfoCreditView implements Serializable {
 
 
 	public BigDecimal getPremiumAmount() {
-		return premiumAmount;
+		if (premiumAmount == null)
+			return new BigDecimal(0);
+		else
+			return premiumAmount;
 	}
 
 
 	public void setPremiumAmount(BigDecimal premiumAmount) {
 		this.premiumAmount = premiumAmount;
 	}
-
-
-	public boolean isUpdateable() {
-		return updateable;
-	}
-
-
-	public void setUpdateable(boolean updateable) {
-		this.updateable = updateable;
-	}
-
 
 	public boolean isNeedUpdate() {
 		return needUpdate;
@@ -153,10 +146,36 @@ public class BAPAInfoCreditView implements Serializable {
 
 
 	public BigDecimal getExpenseAmount() {
-		if (payByCustomer) {
-			return limit.subtract(premiumAmount);
-		} else {
-			return premiumAmount;
+		if (type == null)
+			return getPremiumAmount();
+		switch (type) {
+			case BA:
+				if (limit != null && premiumAmount != null)
+					return limit.subtract(premiumAmount);
+				else if (limit != null) 
+					return limit;
+				else if (premiumAmount != null)
+					return premiumAmount;
+				else
+					return new BigDecimal(0);
+			default :
+				return getPremiumAmount();
 		}
+	}
+	
+	@Override
+	public int compareTo(BAPAInfoCreditView obj) {
+		if (obj == null)
+			return 1;
+		if (this == obj)
+			return 0;
+		//compare from credit
+		if (this.fromCredit != obj.fromCredit) {
+			if (this.fromCredit)
+				return -1;
+			else
+				return 0;
+		}
+		return Long.compare(id, obj.id);
 	}
 }

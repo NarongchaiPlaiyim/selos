@@ -42,13 +42,16 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
         return newCreditDetailList;
     }
 
-    public List<NewCreditDetail> findNewCreditDetailByWorkCaseIdForBA(long workCaseId) {
+    public List<NewCreditDetail> findNewCreditDetailByWorkCaseIdForBA(long workCaseId,boolean isTopUpBA) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("isApproved",RadioValue.YES.value()));
+        criteria.createAlias("productProgram", "product_program")
+        	.add(Restrictions.eq("product_program.ba",isTopUpBA));
+        
         //TODO Add restriction for listing in BA/PA
         
-        criteria.addOrder(Order.asc("newCreditDetail.id"));
+       
         List<NewCreditDetail> newCreditDetailList = (List<NewCreditDetail>) criteria.list();
         return newCreditDetailList;
     }
