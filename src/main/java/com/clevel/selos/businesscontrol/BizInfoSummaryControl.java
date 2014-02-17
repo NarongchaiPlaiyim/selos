@@ -153,25 +153,20 @@ public class BizInfoSummaryControl extends BusinessControl {
 
         bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
 
-        if (bizInfoDetailList.size() != 0) {
-            for (int i = 0; i < bizInfoDetailList.size(); i++) {
-                bizInfoDetailTemp = bizInfoDetailList.get(i);
-                bizInfoDetailViewTemp = bizInfoDetailTransform.transformToView(bizInfoDetailTemp);
-
-                if(Util.isNull(bizInfoDetailViewTemp.getIncomeAmount()) && !Util.isNull(Income)){
+        if (!Util.isZero(bizInfoDetailList.size())) {
+            for(BizInfoDetail bizInfoDetail : bizInfoDetailList){
+                bizInfoDetailViewTemp = bizInfoDetailTransform.transformToView(bizInfoDetail);
+                if(!Util.isNull(Income)){
                     calSumIncomeNet = Util.multiply(Income,twenty);
                     incomePercentD = bizInfoDetailViewTemp.getPercentBiz();
                     inComeTotalNet = Util.divide(Util.multiply(calSumIncomeNet,incomePercentD),oneHundred);
                     bizInfoDetailViewTemp.setIncomeAmount(inComeTotalNet.setScale(2,RoundingMode.HALF_UP));
-                } else if (!Util.isNull(bankStmtSummaryView.getGrdTotalBorrowerIncomeNetUW())){
-                    calSumIncomeNet = Util.multiply(Income,twenty);
-                    incomePercentD = bizInfoDetailViewTemp.getPercentBiz();
-                    inComeTotalNet = Util.divide(Util.multiply(calSumIncomeNet,incomePercentD),oneHundred);
-                    bizInfoDetailViewTemp.setIncomeAmount(inComeTotalNet.setScale(2,RoundingMode.HALF_UP));
+                } else {
+                    bizInfoDetailViewTemp.setIncomeAmount(BigDecimal.ZERO);
                 }
+
                 bizInfoDetailViewList.add(bizInfoDetailViewTemp);
                 log.info("getIncomeAmount : {}",bizInfoDetailViewTemp.getIncomeAmount());
-
             }
 
             log.info("IncomeAmount :",sumIncomeNet);
