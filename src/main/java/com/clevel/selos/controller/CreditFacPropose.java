@@ -601,40 +601,6 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         log.info("onChangeCreditType {}::::", newCreditDetailView.getId());
         log.debug("onChangeCreditType :::: creditType : {}", newCreditDetailView.getCreditTypeView().getId());
         if ((newCreditDetailView.getProductProgramView().getId() != 0) && (newCreditDetailView.getCreditTypeView().getId() != 0)) {
-            /*ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById(newCreditDetailView.getCreditType().getId());
-
-            log.info("productProgram :: {}", productProgram.getId());
-            log.info("creditType :: {}", creditType.getId());
-            log.info("specialProgramBasicInfo.getId() :: {}", specialProgramBasicInfo.getId());
-            //productFormulaDAO
-            //where 4 ตัว ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
-            if (productProgram != null && creditType != null) {
-                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
-                if ((prdProgramToCreditType.getId() != 0) && (specialProgramBasicInfo.getId() != 0)) {
-                    log.info("onChangeCreditType :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
-                    log.info("onChangeCreditType :: newCreditFacilityView.getCreditCustomerType() :: {}", newCreditFacilityView.getCreditCustomerType());
-                    log.info("onChangeCreditType :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
-                    log.info("onChangeCreditType :: applyTCG :: {}", applyTCG);
-                    SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
-                    ProductFormula productFormula = productFormulaDAO.findProductFormulaPropose(prdProgramToCreditType, newCreditFacilityView.getCreditCustomerType(), specialProgram, applyTCG);
-
-                    if (productFormula != null) {
-                        log.debug("onChangeCreditType :::: productFormula : {}", productFormula.getId());
-                        newCreditDetailView.setProductCode(productFormula.getProductCode());
-                        newCreditDetailView.setProjectCode(productFormula.getProjectCode());
-                        log.info("productFormula.getReduceFrontEndFee() ::: {}", productFormula.getReduceFrontEndFee());
-                        log.info("productFormula.getReducePricing() ::: {}", productFormula.getReducePricing());
-
-                        modeEditReducePricing = flagForModeDisable(productFormula.getReducePricing());
-                        modeEditReduceFront = flagForModeDisable(productFormula.getReduceFrontEndFee());
-
-                        //reducePricePanelRendered = (modeEditReducePricing == true) ? true : false;
-                        reducePricePanelRendered = modeEditReducePricing;
-                        log.info("reducePricePanelRendered:: {}", reducePricePanelRendered);
-                    }
-                }
-            }*/
 
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
                     newCreditDetailView.getProductProgramView().getId(),

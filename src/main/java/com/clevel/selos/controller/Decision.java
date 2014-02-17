@@ -20,6 +20,9 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.DecisionTransform;
+import com.clevel.selos.transform.DisbursementTypeTransform;
+import com.clevel.selos.transform.LoanPurposeTransform;
+import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
@@ -108,12 +111,18 @@ public class Decision implements Serializable {
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
 
-    //@Inject
-    //LoanPurposeDAO loanPurposeDAO;
+    @Inject
+    LoanPurposeDAO loanPurposeDAO;
 
     //Transform
     @Inject
     DecisionTransform decisionTransform;
+    @Inject
+    ProductTransform productTransform;
+    @Inject
+    DisbursementTypeTransform disbursementTypeTransform;
+    @Inject
+    LoanPurposeTransform loanPurposeTransform;
 
     //Session
     private long workCaseId;
@@ -566,15 +575,15 @@ public class Decision implements Serializable {
                 && selectedAppProposeCredit.getLoanPurposeView().getId() != 0
                 && selectedAppProposeCredit.getDisbursementTypeView().getId() != 0) {
 
-            //ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-            //CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
-            //LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurpose().getId());
-            //DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursement().getId());
+            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgramView().getId());
+            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditTypeView().getId());
+            LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurposeView().getId());
+            DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursementTypeView().getId());
 
             if (modeEditCredit) {
                 NewCreditDetailView creditDetailEdit = decisionView.getApproveCreditList().get(rowIndexCredit);
-                creditDetailEdit.setProductProgramView(selectedAppProposeCredit.getProductProgramView());
-                creditDetailEdit.setCreditTypeView(selectedAppProposeCredit.getCreditTypeView());
+                creditDetailEdit.setProductProgramView(productTransform.transformToView(productProgram));
+                creditDetailEdit.setCreditTypeView(productTransform.transformToView(creditType));
                 creditDetailEdit.setRequestType(selectedAppProposeCredit.getRequestType());
                 creditDetailEdit.setRefinance(selectedAppProposeCredit.getRefinance());
                 creditDetailEdit.setProductCode(selectedAppProposeCredit.getProductCode());
@@ -589,9 +598,9 @@ public class Decision implements Serializable {
 //                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
 //                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailEdit.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailEdit.setLoanPurposeView(selectedAppProposeCredit.getLoanPurposeView());
+                creditDetailEdit.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 creditDetailEdit.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailEdit.setDisbursementTypeView(selectedAppProposeCredit.getDisbursementTypeView());
+                creditDetailEdit.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 creditDetailEdit.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
                 creditDetailEdit.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
 
@@ -599,8 +608,8 @@ public class Decision implements Serializable {
             } else {
                 // Add New
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
-                creditDetailAdd.setProductProgramView(selectedAppProposeCredit.getProductProgramView());
-                creditDetailAdd.setCreditTypeView(selectedAppProposeCredit.getCreditTypeView());
+                creditDetailAdd.setProductProgramView(productTransform.transformToView(productProgram));
+                creditDetailAdd.setCreditTypeView(productTransform.transformToView(creditType));
                 creditDetailAdd.setRequestType(selectedAppProposeCredit.getRequestType());
                 creditDetailAdd.setRefinance(selectedAppProposeCredit.getRefinance());
                 creditDetailAdd.setProductCode(selectedAppProposeCredit.getProductCode());
@@ -615,9 +624,9 @@ public class Decision implements Serializable {
 //                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
 //                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailAdd.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailAdd.setLoanPurposeView(selectedAppProposeCredit.getLoanPurposeView());
+                creditDetailAdd.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 creditDetailAdd.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailAdd.setDisbursementTypeView(selectedAppProposeCredit.getDisbursementTypeView());
+                creditDetailAdd.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 creditDetailAdd.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
@@ -678,35 +687,6 @@ public class Decision implements Serializable {
     public void onChangeCreditType() {
         log.debug("onChangeCreditType() creditType.id: {}", selectedAppProposeCredit.getCreditTypeView().getId());
         if ((selectedAppProposeCredit.getProductProgramView().getId() != 0) && (selectedAppProposeCredit.getCreditTypeView().getId() != 0)) {
-            /*ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
-            //productFormulaDAO
-            //ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
-            if (productProgram != null && creditType != null) {
-                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
-
-                if ((prdProgramToCreditType != null && prdProgramToCreditType.getId() != 0)
-                        && (specialProgramBasicInfo != null && specialProgramBasicInfo.getId() != 0)) {
-                    log.info("onChangeCreditType() :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
-                    log.info("onChangeCreditType() :: creditCustomerType :: {}", creditCustomerType);
-                    log.info("onChangeCreditType() :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
-                    log.info("onChangeCreditType() :: applyTCG :: {}", applyTCG);
-                    SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
-                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType, creditCustomerType, specialProgram, applyTCG);
-
-                    if (productFormula != null) {
-                        log.debug("onChangeCreditType() :::: productFormula : {}", productFormula.getId());
-                        selectedAppProposeCredit.setProductCode(productFormula.getProductCode());
-                        selectedAppProposeCredit.setProjectCode(productFormula.getProjectCode());
-
-                        log.debug("productFormula.", productFormula.getReducePricing());
-                        log.debug("productFormula.", productFormula.getReducePricing());
-                        modeEditReducePricing = productFormula.getReducePricing() == 1 ? true : false;
-                        modeEditReduceFrontEndFee = productFormula.getReduceFrontEndFee() == 1 ? true : false;
-                    }
-                }
-            }
-            */
             ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
                     newCreditDetailView.getProductProgramView().getId(),
                     newCreditFacilityView.getCreditCustomerType(), specialProgramBasicInfo.getId(), applyTCG);
