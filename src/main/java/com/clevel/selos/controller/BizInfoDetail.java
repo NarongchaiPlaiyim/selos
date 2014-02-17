@@ -334,8 +334,6 @@ public class BizInfoDetail implements Serializable {
         bizInfoDetailView.setStandardAccountPayable(businessDesc.getAr());
         bizInfoDetailView.setStandardAccountReceivable(businessDesc.getAp());
         bizInfoDetailView.setStandardStock(businessDesc.getInv());
-//        onChangeBizPermission();
-
     }
 
     public void onChangeBizPermission(){

@@ -46,6 +46,7 @@
                              action="#{prescreenMaker.onCheckPreScreen}" disabled="true"/>
             <!--Request Appraisal-->
             <p:commandButton id="btnRequestAppraisal" value="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton" title="#{msg.get('app.header.button.requestAppraisal')}"
+                             update=":frmMain:msgBoxBaseMessagePanel"
                              action="#{baseController.onRequestAppraisal()}"
                              rendered="#{baseController.manageButton.requestAppraisalButton}" />
             <!--Check Criteria-->

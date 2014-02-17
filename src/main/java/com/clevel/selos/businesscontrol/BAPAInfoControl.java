@@ -20,6 +20,8 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
@@ -29,6 +31,7 @@ import com.clevel.selos.model.db.working.BAPAInfoCustomer;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.BAPAInfoCreditToSelectView;
 import com.clevel.selos.model.view.BAPAInfoCreditView;
 import com.clevel.selos.model.view.BAPAInfoCustomerView;
 import com.clevel.selos.model.view.BAPAInfoView;
@@ -82,7 +85,9 @@ public class BAPAInfoControl extends BusinessControl {
 		 return baResultHCDAO.findActiveAll();
 	 }
 	 
-	 public void saveBAPAInfo(long workCaseId,BAPAInfoView bapaInfoView) {
+	 public void saveBAPAInfo(long workCaseId,
+			 BAPAInfoView bapaInfoView,List<BAPAInfoCustomerView> customers,
+			 List<BAPAInfoCreditView> credits,List<BAPAInfoCreditView> deleteCredits) {
 		 User user = getCurrentUser();
 		 
 		 WorkCase workCase = workCaseDAO.findRefById(workCaseId);
@@ -94,6 +99,84 @@ public class BAPAInfoControl extends BusinessControl {
 			 bapaInfo = bapaInfoDAO.findById(bapaInfoView.getId());
 			 bapaInfoTransform.updateModelFromView(bapaInfo, bapaInfoView, user);
 			 bapaInfoDAO.persist(bapaInfo);
+		 }
+		 
+		 //Customer
+		 for (BAPAInfoCustomerView customer  : customers) {
+			 if (!customer.isApplyBA() || !RadioValue.YES.equals(bapaInfo.getApplyBA())) {
+				 if (customer.getId() > 0) {
+					 //remove
+					 bapaInfoCustomerDAO.deleteById(customer.getId());
+				 }
+				 continue;
+			 }
+				 
+			 if (customer.getId() > 0) {
+				 if (!customer.isNeedUpdate())
+					 continue;
+				 BAPAInfoCustomer model = bapaInfoCustomerDAO.findById(customer.getId());
+				 if (customer.getUpdBAResultHC() > 0)
+					 model.setBaResultHC(baResultHCDAO.findRefById(customer.getUpdBAResultHC()));
+				 else
+					 model.setBaResultHC(null);
+				 model.setHealthCheckDate(customer.getCheckDate());
+				 bapaInfoCustomerDAO.persist(model);
+			 } else {
+				 BAPAInfoCustomer model = new BAPAInfoCustomer();
+				 model.setBapaInfo(bapaInfo);
+				 model.setCustomer(customerDAO.findRefById(customer.getCustomerId()));
+				 if (customer.getUpdBAResultHC() > 0)
+					 model.setBaResultHC(baResultHCDAO.findRefById(customer.getUpdBAResultHC()));
+				 else
+					 model.setBaResultHC(null);
+				 model.setHealthCheckDate(customer.getCheckDate());
+				 
+				 bapaInfoCustomerDAO.save(model);
+			 }
+		 }
+		 
+		 //Credit
+		 for (BAPAInfoCreditView credit : credits) {
+			 if (credit.getId() > 0) {
+				 if (!credit.isNeedUpdate())
+					 continue;
+				 BAPAInfoCredit model = bapaInfoCreditDAO.findById(credit.getId());
+				 if (!credit.isFromCredit()) {
+					 model.setBapaType(credit.getType());
+					 model.setPayByCustomer(credit.isPayByCustomer());
+					 if (credit.getCreditId() > 0)
+						 model.setCreditDetail(newCreditDetailDAO.findRefById(credit.getCreditId()));
+					 else
+						 model.setCreditDetail(null);
+				 }
+				 model.setLimit(credit.getLimit());
+				 model.setPremiumAmount(credit.getPremiumAmount());
+				 model.setExpenseAmount(credit.getExpenseAmount());
+				 
+				 bapaInfoCreditDAO.persist(model);
+			 } else {
+				 BAPAInfoCredit model = new BAPAInfoCredit();
+				 model.setBapaType(credit.getType());
+				 model.setPayByCustomer(credit.isPayByCustomer());
+				 model.setLimit(credit.getLimit());
+				 model.setPremiumAmount(credit.getPremiumAmount());
+				 model.setExpenseAmount(credit.getExpenseAmount());
+				 if (credit.getCreditId() > 0)
+					 model.setCreditDetail(newCreditDetailDAO.findRefById(credit.getCreditId()));
+				 else
+					 model.setCreditDetail(null);
+				 model.setBapaInfo(bapaInfo);
+				 model.setFromCredit(credit.isFromCredit());
+				 
+				 bapaInfoCreditDAO.save(model);		
+			 }
+		 }
+		 
+		 //Delete Credit
+		 for (BAPAInfoCreditView delete : deleteCredits) {
+			 if (delete.getId() <= 0 || delete.isFromCredit())
+				 continue;
+			 bapaInfoCreditDAO.deleteById(delete.getId());
 		 }
 	 }
 	 
@@ -161,42 +244,85 @@ public class BAPAInfoControl extends BusinessControl {
 		 //TODO Check contract no
 		 return customer.getMobileNumber();
 	 }
-	 
+	 public List<BAPAInfoCreditToSelectView> getBAPAInfoCreditToSelectView(long workCaseId) {
+		 if (workCaseId <= 0)
+			 return Collections.emptyList();
+		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,false);
+		 ArrayList<BAPAInfoCreditToSelectView> rtnDatas = new ArrayList<BAPAInfoCreditToSelectView>();
+		 for (NewCreditDetail credit : credits) {
+			 BAPAInfoCreditToSelectView view = new BAPAInfoCreditToSelectView();
+			 view.setId(credit.getId());
+			 view.setProductProgram(credit.getProductProgram().getName());
+			 view.setCreditType(credit.getCreditType().getName());
+			 view.setLoanPurpose(credit.getLoanPurpose().getDescription());
+			 view.setLimit(credit.getLimit());
+			 rtnDatas.add(view);
+		 }
+		 return rtnDatas;
+	 }
 	 public List<BAPAInfoCreditView> getBAPAInfoCreditView(long workCaseId,long bapaInfoId) {
 		 if (workCaseId <= 0)
 			 return Collections.emptyList();
 		 List<BAPAInfoCredit> bapaCredits = bapaInfoCreditDAO.findByBAPAInfo(bapaInfoId);
-		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId);
+		 List<NewCreditDetail> credits = newCreditDetailDAO.findNewCreditDetailByWorkCaseIdForBA(workCaseId,true);
 		 
 		 HashMap<Long, NewCreditDetail> creditHash = new HashMap<Long, NewCreditDetail>();
 		 for (NewCreditDetail credit : credits) {
 			 creditHash.put(credit.getId(), credit);
 		 }
-		 /*
+		
 		 
 		 ArrayList<BAPAInfoCreditView> rtnDatas = new ArrayList<BAPAInfoCreditView>();
 		 for (BAPAInfoCredit bapaCredit : bapaCredits) {
 			 BAPAInfoCreditView view = new BAPAInfoCreditView();
 			 view.setId(bapaCredit.getId());
-			 view.setCreditId(bapaCredit.getCreditDetail().getId());
-			 view.setProductProgram(bapaCredit.getCreditDetail().getProductProgram().getName());
-			 view.setCreditType(bapaCredit.getCreditDetail().getCreditType().getName());
-			 view.setLoanPurpose(bapaCredit.getCreditDetail().getLoanPurpose().getDescription());
+			 view.setType(bapaCredit.getBapaType());
+			 if (bapaCredit.getCreditDetail() != null) {
+				 view.setCreditId(bapaCredit.getCreditDetail().getId());
+				 view.setProductProgram(bapaCredit.getCreditDetail().getProductProgram().getName());
+				 view.setCreditType(bapaCredit.getCreditDetail().getCreditType().getName());
+				 view.setLoanPurpose(bapaCredit.getCreditDetail().getLoanPurpose().getDescription());
+			 } else {
+				 view.setCreditId(0);
+				 view.setProductProgram("-");
+				 view.setCreditType("-");
+				 view.setLoanPurpose("-");
+			 }
 			 
 			 view.setPayByCustomer(bapaCredit.isPayByCustomer());
 			 view.setFromCredit(bapaCredit.isFromCredit());
 			 view.setLimit(bapaCredit.getLimit());
 			 view.setPremiumAmount(bapaCredit.getPremiumAmount());
 			 
-			  
-			 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
-			 if (credit != null) {
-				 view.setFromCredit(true);
+			 if (bapaCredit.getCreditDetail() != null) {
+				 NewCreditDetail credit = creditHash.get(bapaCredit.getCreditDetail().getId());
+				 if (credit != null) {
+					 creditHash.remove(bapaCredit.getCreditDetail().getId());
+				 }
 			 }
-				 
+			 rtnDatas.add(view);
 		 }
-		 */
-		 
-		 return Collections.emptyList();
+		
+		 if (!creditHash.isEmpty()) {
+			 for (long id : creditHash.keySet()) {
+				 NewCreditDetail credit = creditHash.get(id);
+				 
+				 BAPAInfoCreditView view = new BAPAInfoCreditView();
+				 view.setId(0);
+				 view.setType(BAPAType.BA);
+				 view.setCreditId(credit.getId());
+				 view.setProductProgram(credit.getProductProgram().getName());
+				 view.setCreditType(credit.getCreditType().getName());
+				 view.setLoanPurpose(credit.getLoanPurpose().getDescription());
+				 view.setPayByCustomer(!credit.getProductProgram().isBa());
+				 view.setFromCredit(true);
+				 view.setLimit(credit.getLimit());
+				 view.setPremiumAmount(new BigDecimal(0));
+				 rtnDatas.add(view);
+			 }
+		 }
+		 Collections.sort(rtnDatas);
+		 return rtnDatas;
 	 }
+
 }
