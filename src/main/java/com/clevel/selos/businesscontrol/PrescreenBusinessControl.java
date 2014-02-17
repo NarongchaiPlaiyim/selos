@@ -118,6 +118,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerAccountNameDAO customerAccountNameDAO;
     @Inject
     RelationCustomerDAO relationCustomerDAO;
+    @Inject
+    ProductGroupDAO productGroupDAO;
 
 
     @Inject
@@ -928,6 +930,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
         }
         workCasePrescreen.setBorrowerType(customerEntity);
+        workCasePrescreen.setProductGroup(productGroupDAO.findById(prescreenView.getProductGroup().getId()));
         workCasePrescreenDAO.persist(workCasePrescreen);
 
         log.debug("savePreScreenInitial ::: saving prescreen data...");

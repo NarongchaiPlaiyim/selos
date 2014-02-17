@@ -256,7 +256,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
                     for (int i = 0; i < proposeCreditDetailViewList.size(); i++) {
                         hashSeqCredit.put(i, proposeCreditDetailViewList.get(i).getUseCount());
-                }
+                    }
                 }
 
             } catch (Exception ex) {
