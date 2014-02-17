@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.util.Util;
 
 public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoCustomerView>{
 
@@ -125,10 +126,11 @@ public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoC
 		if (this == obj)
 			return 0;
 		//compare relation
-		int compare = Integer.compare(relationPriority, obj.relationPriority);
+
+		int compare = Util.compareInt(relationPriority, obj.relationPriority);
 		if (compare != 0)
 			return compare;
 		
-		return Long.compare(id, obj.id);
+		return Util.compareLong(id, obj.id);
 	}
 }

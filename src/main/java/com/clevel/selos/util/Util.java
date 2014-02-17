@@ -397,4 +397,23 @@ public class Util implements Serializable {
 	    	}
     	}
     }
+    
+    public static int compareLong(long l1,long l2) {
+    	long value = l1 - l2;
+    	if (value > 0)
+    		return 1;
+    	else if (value < 0)
+    		return -1;
+    	else
+    		return 0;
+    }
+    public static int compareInt(int i1,int i2) {
+    	int value = i1-i2;
+    	if (value > 0)
+    		return 1;
+    	else if (value < 0)
+    		return -1;
+    	else
+    		return 0;
+    }
 }

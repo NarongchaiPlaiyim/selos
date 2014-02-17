@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.util.Util;
 
 public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCreditView> {
 	private static final long serialVersionUID = 891498608677139945L;
@@ -176,6 +177,6 @@ public class BAPAInfoCreditView implements Serializable,Comparable<BAPAInfoCredi
 			else
 				return 0;
 		}
-		return Long.compare(id, obj.id);
+		return Util.compareLong(id, obj.id);
 	}
 }
