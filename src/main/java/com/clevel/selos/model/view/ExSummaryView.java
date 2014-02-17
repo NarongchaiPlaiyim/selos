@@ -383,6 +383,14 @@ public class ExSummaryView  implements Serializable {
         this.tradeFinance = tradeFinance;
     }
 
+    public ExSumCreditRiskInfoView getExSumCreditRiskInfoView() {
+        return exSumCreditRiskInfoView;
+    }
+
+    public void setExSumCreditRiskInfoView(ExSumCreditRiskInfoView exSumCreditRiskInfoView) {
+        this.exSumCreditRiskInfoView = exSumCreditRiskInfoView;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).

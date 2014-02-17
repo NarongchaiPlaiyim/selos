@@ -1,9 +1,12 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.NewFeeCreditDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import com.clevel.selos.model.db.working.NewFeeDetail;
 import com.clevel.selos.model.view.NewFeeDetailView;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -11,9 +14,12 @@ import java.util.Date;
 import java.util.List;
 
 public class NewFeeDetailTransform extends Transform {
+    @Inject
+    NewFeeCreditDAO newFeeCreditDAO;
 
     @Inject
     public NewFeeDetailTransform() {
+
     }
 
     public List<NewFeeDetail> transformToModel(List<NewFeeDetailView> newFeeDetailViewList, NewCreditFacility creditFacilityPropose, User user) {
@@ -24,12 +30,14 @@ public class NewFeeDetailTransform extends Transform {
         for (NewFeeDetailView newFeeDetailView : newFeeDetailViewList) {
             newFeeDetail = new NewFeeDetail();
             if (newFeeDetail.getId() != 0) {
-                newFeeDetail.setCreateDate(newFeeDetailView.getCreateDate());
-                newFeeDetail.setCreateBy(newFeeDetailView.getCreateBy());
+                newFeeDetail = newFeeCreditDAO.findById(newFeeDetailView.getId());
+                newFeeDetail.setModifyDate(DateTime.now().toDate());
+                newFeeDetail.setModifyBy(user);
             } else { // id = 0 create new
                 newFeeDetail.setCreateDate(new Date());
                 newFeeDetail.setCreateBy(user);
             }
+            newFeeDetail.setProposeType(ProposeType.P.type());
             newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
             newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
             newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());

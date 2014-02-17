@@ -31,7 +31,8 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacility.setWorkCase(workCase);
 
         if (newCreditFacilityView.getId() != 0) {
-            newCreditFacility.setId(newCreditFacilityView.getId());
+            //newCreditFacility.setId(newCreditFacilityView.getId());
+            newCreditFacility = newCreditFacilityDAO.findById(newCreditFacilityView.getId());
             newCreditFacility.setModifyDate(newCreditFacilityView.getModifyDate());
             newCreditFacility.setModifyBy(newCreditFacilityView.getModifyBy());
         } else { // id = 0 create new
@@ -157,8 +158,17 @@ public class NewCreditFacilityTransform extends Transform {
         newCreditFacilityView.setGuarantorBA(newCreditFacility.getGuarantorBA());
         newCreditFacilityView.setReasonForReduction(newCreditFacility.getReasonForReduction());
         newCreditFacilityView.setCreditCustomerType(newCreditFacility.getCreditCustomerType());
+
         newCreditFacilityView.setLoanRequestType(newCreditFacility.getLoanRequestType());
+        if(newCreditFacilityView.getLoanRequestType() == null){
+            newCreditFacilityView.setLoanRequestType(new CreditRequestType());
+        }
+
         newCreditFacilityView.setInvestedCountry(newCreditFacility.getInvestedCountry());
+        if(newCreditFacilityView.getInvestedCountry() == null){
+            newCreditFacilityView.setInvestedCountry(new Country());
+        }
+
         newCreditFacilityView.setTotalGuaranteeAmount(newCreditFacility.getTotalGuaranteeAmount());
         newCreditFacilityView.setRelatedTMBLending(newCreditFacility.getRelatedTMBLending());
         newCreditFacilityView.setTwentyFivePercentShareRelatedTMBLending(newCreditFacility.getTwentyFivePercentShareRelatedTMBLending());

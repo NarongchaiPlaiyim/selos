@@ -1,17 +1,23 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.ApproveResult;
+import com.clevel.selos.model.ApproveType;
 import com.clevel.selos.model.db.master.*;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "wrk_basicinfo")
 public class BasicInfo implements Serializable {
-    @Id
+    private static final long serialVersionUID = -6027640476330388411L;
+
+	@Id
     @SequenceGenerator(name = "SEQ_WRK_BASIC_INFO_ID", sequenceName = "SEQ_WRK_BASIC_INFO_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BASIC_INFO_ID")
     private long id;
@@ -148,13 +154,15 @@ public class BasicInfo implements Serializable {
 
     @Column(name = "retrieved_flag", length = 1, nullable = false, columnDefinition = "int default 0")
     private int retrievedFlag;
-
+    
     //Update for Post Approval
     @Column(name = "approved_type", length = 1, nullable = false, columnDefinition = "int default 0")
-    private int approveType;
+    @Enumerated(EnumType.ORDINAL)
+    private ApproveType approveType;
 
     @Column(name = "approved_result", length = 1, nullable = false, columnDefinition = "int default 0")
-    private int approveResult;
+    @Enumerated(EnumType.ORDINAL)
+    private ApproveResult approveResult;
 
     public long getId() {
         return id;
@@ -475,23 +483,21 @@ public class BasicInfo implements Serializable {
     public void setRetrievedFlag(int retrievedFlag) {
         this.retrievedFlag = retrievedFlag;
     }
+	public ApproveResult getApproveResult() {
+		return approveResult;
+	}
 
-    public int getApproveResult() {
-        return approveResult;
-    }
+	public void setApproveResult(ApproveResult approveResult) {
+		this.approveResult = approveResult;
+	}
 
-    public void setApproveResult(int approveResult) {
-        this.approveResult = approveResult;
-    }
+	public ApproveType getApproveType() {
+		return approveType;
+	}
 
-    public int getApproveType() {
-        return approveType;
-    }
-
-    public void setApproveType(int approveType) {
-        this.approveType = approveType;
-    }
-
+	public void setApproveType(ApproveType approveType) {
+		this.approveType = approveType;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -535,6 +541,8 @@ public class BasicInfo implements Serializable {
                 append("createBy", createBy).
                 append("modifyBy", modifyBy).
                 append("retrievedFlag", retrievedFlag).
+                append("approveType",approveType).
+                append("approveResult",approveResult).
                 toString();
     }
 }

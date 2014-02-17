@@ -79,6 +79,61 @@
                                             </p:dataTable>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="Pool Box" styleClass="title" rendered="#{inbox.renderedPool}"/>
+                                            <p:dataTable id="resultPoolInbox" var="itemPool" value="#{inbox.inboxPoolViewList}"
+                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                                         paginator="false" rowKey="#{itemPool.listKey}"
+                                                         rendered="#{inbox.renderedPool}"
+                                                         rowIndexVar="rowIndex">
+
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
+
+                                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                </p:column>
+
+                                                <p:column headerText="CA No." styleClass="center" style="width: 130px;">
+                                                    <h:outputText value="#{itemPool.caNo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_WobNum" styleClass="center"
+                                                          style="width: 130px;">
+                                                    <h:outputText value="#{itemPool.fnWobNum}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_StepName" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.fnStepName}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Code" style="width: 120px;">
+                                                    <h:outputText value="#{itemPool.stepCode}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Id" style="width: 120px;">
+                                                    <h:outputText value="#{itemPool.stepId}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Lock_Status" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.lockStatus}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Locked_User" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.lockedUser}"/>
+                                                </p:column>
+
+                                                <p:column headerText="QUEUE_NAME" styleClass="center"
+                                                          style="width: 110px;">
+                                                    <h:outputText value="#{itemPool.queueName}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

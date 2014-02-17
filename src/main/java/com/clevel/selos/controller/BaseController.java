@@ -206,6 +206,28 @@ public class BaseController implements Serializable {
 
     }
 
+    public void onRequestAppraisal(){
+        log.debug("onRequestAppraisal ( submit to aad admin )");
+        long workCasePreScreenId = 0;
+        long workCaseId = 0;
+        try{
+            HttpSession session = FacesUtil.getSession(true);
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+
+            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId);
+
+            messageHeader = "Information.";
+            message = "Request for appraisal success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
     public void onGoToInbox(){
         FacesUtil.redirect("/site/inbox.jsf");
     }

@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>Appraisal Result</title>
@@ -30,20 +31,35 @@
             <div id="content">
                 <table id="table_content" style="width: 100%;" class="content_table_form" border="0">
                     <tr>
-                        <td colspan="6" class="right" style="padding-right: 1%;">
+                        <td colspan="5" class="right" style="padding-right: 1%;">
                             Last update by <p:outputLabel value="#{appraisalResult.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalResult.appraisalView.modifyDate}"/>
                             <a style="cursor: pointer;" href="#">[View Track Change]</a>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6"><div class="separate"><!-- --></div></td>
+                        <td colspan="4"><div class="separate"><!-- --></div></td>
                     </tr>
+
                     <tr>
-                        <td colspan="6"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                        <td style="width: 150px; min-width: 150px; max-width: 150px;"/>
+                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
+                        <td style="width: 200px; min-width: 200px; max-width: 200px;"/>
                     </tr>
+
+
                     <tr>
-                        <td class="title"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
-                        <td>
+                        <td colspan="4"><div class="separate"><!-- --></div></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                    </tr>
+
+                    <tr>
+                        <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
+                        <td colspan="3">
                             <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" disabled="true">
                                 <f:selectItem itemLabel="Internal" itemValue="0" />
                                 <f:selectItem itemLabel="External" itemValue="1" />
@@ -52,10 +68,11 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
                         </td>
-                        <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}" disabled="true"  required="#{not empty param[saveButton.clientId]}">
+                        <td >
+                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}"
+                                             disabled="true">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalCompanyList}"
                                                var="appraisalCompany"
@@ -64,10 +81,11 @@
                             </p:selectOneMenu>
                         </td>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}" disabled="true" required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}"
+                                             disabled="true">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalDivisionList}"
                                                var="appraisalDivision"
@@ -78,34 +96,29 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalName')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                         </td>
-                        <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}"  disabled="true" />
+                        <td colspan="3">
+                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}" readonly="true" />
                         </td>
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
                         </td>
-                        <td>
-                            <p:calendar size="10" id="receivedTaskDate" showOn="button" navigator="true"   disabled="true"
-                                        value="#{appraisalResult.appraisalView.receivedTaskDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
-                                <p:ajax event="dateSelect" update=":frmMain:appraisalDate" />
+                        <td colspan="3">
+                            <p:inputText value="#{appraisalResult.appraisalView.receivedTaskDate}" readonly="true" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:calendar>
+                            </p:inputText>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}" disabled="true" required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}"
+                                             disabled="true" >
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.locationPropertyList}"
                                                var="locationProperty"
@@ -113,11 +126,11 @@
                                                itemValue="#{locationProperty.id}"/>
                             </p:selectOneMenu>
                         </td>
-                        <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
+                        <td class="title" style="min-width: 200px;width: 200px;max-width: 200px;">
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}" disabled="true" required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}" disabled="true" >
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.provinceList}"
                                                var="province"
@@ -128,41 +141,31 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="appraisalDate" mindate="#{appraisalResult.currentDate}" showOn="button" navigator="true" disabled="true"
-                                        value="#{appraisalResult.appraisalView.appraisalDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
+                            <p:inputText value="#{appraisalResult.appraisalView.appraisalDate}" readonly="true" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                                <p:ajax event="dateSelect" process=":frmMain" listener="#{appraisalResult.onChangeAppraisalDate()}" update=":frmMain:dueDate" />
-                            </p:calendar>
+                            </p:inputText>
                         </td>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.dueDate')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="dueDate" showOn="button" navigator="true" disabled="true"
-                                        value="#{appraisalResult.appraisalView.dueDate}"
-                                        pattern="dd/MM/yyyy"
-                                        locale="th_TH"
-                                        timeZone="Asia/Bangkok"
-                                        yearRange="2440:3000">
+                            <p:inputText value="#{appraisalResult.appraisalView.dueDate}" readonly="true" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-                            </p:calendar>
+                            </p:inputText>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
+                            <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}" />
                         </td>
-                        <td colspan="5">
-                            <p:inputTextarea cols="100" rows="3" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
+                        <td colspan="3">
+                            <p:inputTextarea cols="69" rows="4" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
                         </td>
                     </tr>
+
                     <tr>
                         <td colspan="6"><p:spacer width="5px"/> </td>
                     </tr>

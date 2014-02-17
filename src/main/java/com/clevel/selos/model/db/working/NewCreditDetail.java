@@ -18,11 +18,17 @@ public class NewCreditDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_CREDIT_DET_ID")
     private long id;
 
+    @Column(name = "propose_type")
+    private String proposeType;
+
     @Column(name = "line_no", length = 5)
     private int lineNo;
 
     @Column(name = "no_flag")
     private int noFlag;
+
+    @Column(name = "use_count")
+    private int useCount;
 
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
@@ -69,12 +75,6 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name = "standard_interest")
-    private BigDecimal standardInterest;
-
-    @Column(name = "suggest_interest")
-    private BigDecimal suggestInterest;
-
     @Column(name = "front_end_fee")
     private BigDecimal frontEndFee;
 
@@ -103,14 +103,6 @@ public class NewCreditDetail implements Serializable {
     @OneToOne
     @JoinColumn(name = "credit_type_id")
     private CreditType creditType;
-
-    @OneToOne
-    @JoinColumn(name = "standard_rate_id")
-    private BaseRate standardBasePrice;
-
-    @OneToOne
-    @JoinColumn(name = "suggest_rate_id")
-    private BaseRate suggestBasePrice;
 
     @OneToOne
     @JoinColumn(name = "disbursement_type_id")
@@ -271,22 +263,6 @@ public class NewCreditDetail implements Serializable {
         this.outstanding = outstanding;
     }
 
-    public BigDecimal getStandardInterest() {
-        return standardInterest;
-    }
-
-    public void setStandardInterest(BigDecimal standardInterest) {
-        this.standardInterest = standardInterest;
-    }
-
-    public BigDecimal getSuggestInterest() {
-        return suggestInterest;
-    }
-
-    public void setSuggestInterest(BigDecimal suggestInterest) {
-        this.suggestInterest = suggestInterest;
-    }
-
     public BigDecimal getFrontEndFee() {
         return frontEndFee;
     }
@@ -349,22 +325,6 @@ public class NewCreditDetail implements Serializable {
 
     public void setCreditType(CreditType creditType) {
         this.creditType = creditType;
-    }
-
-    public BaseRate getStandardBasePrice() {
-        return standardBasePrice;
-    }
-
-    public void setStandardBasePrice(BaseRate standardBasePrice) {
-        this.standardBasePrice = standardBasePrice;
-    }
-
-    public BaseRate getSuggestBasePrice() {
-        return suggestBasePrice;
-    }
-
-    public void setSuggestBasePrice(BaseRate suggestBasePrice) {
-        this.suggestBasePrice = suggestBasePrice;
     }
 
     public DisbursementType getDisbursementType() {
@@ -481,10 +441,27 @@ public class NewCreditDetail implements Serializable {
         this.workCase = workCase;
     }
 
+    public String getProposeType() {
+        return proposeType;
+    }
+
+    public void setProposeType(String proposeType) {
+        this.proposeType = proposeType;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("proposeType", proposeType)
                 .append("lineNo", lineNo)
                 .append("noFlag", noFlag)
                 .append("guaranteeAmount", guaranteeAmount)
@@ -502,8 +479,6 @@ public class NewCreditDetail implements Serializable {
                 .append("reducePriceFlag", reducePriceFlag)
                 .append("reduceFrontEndFee", reduceFrontEndFee)
                 .append("outstanding", outstanding)
-                .append("standardInterest", standardInterest)
-                .append("suggestInterest", suggestInterest)
                 .append("frontEndFee", frontEndFee)
                 .append("remark", remark)
                 .append("holdLimitAmount", holdLimitAmount)
@@ -513,13 +488,16 @@ public class NewCreditDetail implements Serializable {
                 .append("isApproved", isApproved)
                 .append("productProgram", productProgram)
                 .append("creditType", creditType)
-                .append("standardBasePrice", standardBasePrice)
-                .append("suggestBasePrice", suggestBasePrice)
                 .append("disbursementType", disbursementType)
                 .append("loanPurpose", loanPurpose)
                 .append("newCreditFacility", newCreditFacility)
                 .append("proposeCreditTierDetailList", proposeCreditTierDetailList)
+                .append("workCase", workCase)
                 .append("type", type)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
                 .toString();
     }
 }

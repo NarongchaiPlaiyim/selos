@@ -7,12 +7,13 @@ import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewCollateralSubView {
+public class NewCollateralSubView implements Serializable {
     private long id;
     private int no;
     private String collID;
@@ -37,7 +38,7 @@ public class NewCollateralSubView {
     private User modifyBy;
     private String usage;
     private String typeOfUsage;
-
+    private int lineNo;
 
     public NewCollateralSubView() {
         reset();
@@ -57,6 +58,14 @@ public class NewCollateralSubView {
         this.mortgageList = new ArrayList<MortgageType>();
         this.relatedWithList = new ArrayList<NewCollateralSubView>();
         this.collateralOwnerUW = new CustomerInfoView();
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(int lineNo) {
+        this.lineNo = lineNo;
     }
 
     public String getUsage() {

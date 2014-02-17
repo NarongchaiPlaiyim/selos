@@ -44,7 +44,7 @@
                                                  styleClass="largest"
                                                  process="@this"
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
-                                                 update="frmMain:interfaceInfoPanel">
+                                                 update="frmMain:interfaceInfoPanel, :msgBoxSystemMessagePanel">
 
                             </p:commandButton><p:spacer width="10" height="5"/><h:outputText styleClass="require-field" value="#{msg.get('app.prescreen.result.warning')}" rendered="#{prescreenResult.prescreenView.modifyFlag == 1}"/></td>
                         </tr>

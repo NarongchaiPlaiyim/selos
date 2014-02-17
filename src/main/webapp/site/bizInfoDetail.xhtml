@@ -80,7 +80,7 @@
                                                    var="businessGroup"
                                                    itemLabel="#{businessGroup.name}"
                                                    itemValue="#{businessGroup.id}"/>
-                                    <p:ajax process=":frmMain" listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain" />
+                                    <p:ajax process="@this" listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain:businessDescriptionId" />
                                 </p:selectOneMenu>
                             </td>
                         </tr>
@@ -155,8 +155,8 @@
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizPermission')}"/></td>
                             <td colspan="3" class="title">
                                 <p:selectOneRadio id="bizPermissionRadio" value="#{bizInfoDetail.bizInfoDetailView.bizPermission}"
-                                                  required="#{not empty param[saveButton.clientId]}">
-                                    <f:selectItem itemLabel="NO"  itemValue="N" />
+                                                  required="#{not empty param[saveButton.clientId]}" layout="grid" columns="1">
+                                    <f:selectItem itemLabel="No"  itemValue="N" />
                                     <f:selectItem itemLabel="Yes" itemValue="Y" />
                                     <p:ajax process="@this" update=":frmMain:bizDocPermission,:frmMain:bizDocExpiryDate" listener="#{bizInfoDetail.onChangeBizPermission}"/>
                                 </p:selectOneRadio>
@@ -175,7 +175,10 @@
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizDocPermission')}"/>
                             </td>
                             <td>
-                                <p:inputText style="width: 450px" id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}" disabled="#{bizInfoDetail.disable}" />
+                                <p:inputText id="bizDocPermission" value="#{bizInfoDetail.bizInfoDetailView.bizDocPermission}"
+                                             required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}">
+                                    <p:ajax event="blur" update=":frmMain:bizDocPermission"/>
+                                </p:inputText>
                             </td>
                         </tr>
                         <tr>
@@ -185,7 +188,7 @@
                             </td>
                             <td>
                                 <clv:BECalendar id="bizDocExpiryDate" showOn="button" navigator="true" locale="th_TH"
-                                                disabled="#{bizInfoDetail.disable}"
+                                                required="#{bizInfoDetail.bizInfoDetailView.bizPermission == 'Y' and not empty param[saveButton.clientId]}"
                                                 value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
                                                 defaultdate="#{bizInfoDetail.currentDateDDMMYY}"
                                                 mindate="#{bizInfoDetail.currentDateDDMMYY}"
@@ -205,7 +208,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
                             <td colspan="3">
-                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}">
+                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
@@ -262,7 +266,7 @@
                                         <p:outputLabel value="#{bizProductDetailView.productDetail}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:8%;">
-                                        <p:commandButton icon="ui-icon-pencil"
+                                        <p:commandButton icon="ui-icon-pencil" id="onEditBizProductDetailView"
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
@@ -271,6 +275,7 @@
                                                                          target="#{bizInfoDetail.selectBizProductDetail}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{bizInfoDetail.rowIndex}"/>
+                                            <p:resetInput target=":bizProductViewDlgForm"/>
                                         </p:commandButton>
                                         <p:commandButton title="Remove" process="@this"
                                                          icon="ui-icon-trash"
@@ -303,8 +308,7 @@
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
                                     <p:resetInput target=":stakeholderViewDlgForm" />
-                                    <f:setPropertyActionListener value="1"
-                                                                 target="#{bizInfoDetail.stakeType}"/>
+                                    <f:setPropertyActionListener value="1" target="#{bizInfoDetail.stakeType}"/>
 
                                 </p:commandButton>
                             </td>
@@ -383,6 +387,7 @@
                                                                          target="#{bizInfoDetail.selectStakeHolder}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{bizInfoDetail.rowIndex}"/>
+                                            <p:resetInput target=":stakeholderViewDlgForm"/>
                                         </p:commandButton>
 
                                         <p:commandButton icon="ui-icon-trash"
@@ -568,6 +573,7 @@
                                                                          target="#{bizInfoDetail.selectStakeHolder}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
                                                                          target="#{bizInfoDetail.rowIndex}"/>
+                                            <p:resetInput target=":stakeholderViewDlgForm"/>
                                         </p:commandButton>
                                         <p:commandButton icon="ui-icon-trash"
                                                          title="Remove" process="@this"
@@ -745,7 +751,7 @@
                                         </td>
                                         <td style="line-height: 15px"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.payablePercentCash')}"/></td>
                                         <td>
-                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"
+                                            <p:inputText styleClass="right" style="width: 95%;" id="payablePercentCash"  readonly="true"
                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                          value="#{bizInfoDetail.bizInfoDetailView.payablePercentCash}"
                                                          required="#{not empty param[saveButton.clientId]}">

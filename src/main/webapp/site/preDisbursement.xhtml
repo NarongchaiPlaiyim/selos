@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>SE-LOS : Pre-Disbursement</title>
+        <title>#{msg.get('app.preDisbursement.title')}</title>
         <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
 
         <h:outputStylesheet name="css/style.css" />
@@ -30,67 +30,81 @@
                     <ui:include src="include/menubar.xhtml"/>
                     <!-- End Menu -->
                     <div id="content_container">
-                        <div id="content_name">#{'Pre-Disbursement'}</div>
+                        <div id="content_name">#{msg.get('app.preDisbursement.subtitle')}</div>
                         <div id="content">
                             <div id="content_info">
-                                <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                                <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-                                        id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
-                            </div>
+								<div id="content_trackchange">
+									[
+									<h:outputLink value="#">
+										<h:outputText value="#{msg.get('app.viewTrackChange')}" />
+									</h:outputLink>
+									]
+								</div>
+								<div id="content_lastupdate">
+									<h:outputText value="#{msg.get('app.lastUpdateBy')} " />
+									<h:outputText value="#{preDisbursement.lastUpdateBy}" />
+									,
+									<h:outputText value="#{preDisbursement.lastUpdateDateTime}">
+										<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"
+											locale="th_TH" />
+									</h:outputText>
+								</div>
+							</div>
                             <div id="content_form">
 
                                 <!-- start content -->
-                                <table class="content_table_form" border="0">
+                                <table class="content_form" border="0">
 
                                     <tr>
-                                        <td class="title" style="width: 150px;">
-                                            <p:outputLabel value="#{msg.get('app.insurance.approved')}"/>
-                                        </td>
-                                        <td class="left">
-                                            <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" layout="grid" columns="2">
-                                                <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new')}"         itemValue="0"/>
-                                                <f:selectItem itemLabel="#{msg.get('app.insurance.approved.new.change')}" itemValue="1"/>
-                                            </p:selectOneRadio>
-                                        </td>
+                                        <td class="title" style="width: 200px;"><p:outputLabel
+												value="#{msg.get('app.approveType')}" styleClass="center" />
+										</td>
+										<td style="width: 200px;"><p:selectOneRadio
+												disabled="true" value="#{preDisbursement.approveType}">
+												<f:selectItems value="#{enumGeneralControl.approveTypes}"
+													var="approveType"
+													itemLabel="#{msg.get(approveType.msgKey)}"
+													itemValue="#{approveType}" />
+											</p:selectOneRadio></td>
                                     </tr>
 
                                     <tr>
-                                        <td colspan="2">
+                                        <td colspan="100%">
                                             <div class="separate"></div>
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="title" colspan="2">
-                                            <p:outputLabel value="#{'Pre Disbursement Checklist'}"/>
+                                        <td class="title" colspan="100%">
+                                            <p:outputLabel value="#{msg.get('app.preDisbursement.subtitle')}"/>
                                         </td>
                                     </tr>
-
                                     <tr>
-                                        <td colspan="2">
-                                            <table border="0">
+                                        <td colspan="100%">
+                                            <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
                                                 <tr>
-                                                    <td class="center title" style="width: 50px; max-width: 50px; min-width: 50px;">
-                                                        <p:outputLabel value="#{''}"/>
-                                                    </td>
+                                                    <th style="width:30px;"></th>
 
-                                                    <td class="center title" style="width: 800px; max-width: 800px; min-width: 800px;">
-                                                        <h:outputText value="#{'Description'}" />
-                                                    </td>
-                                                    <td class="center title" style="width: 250px; max-width: 250px; min-width: 250px;">
-                                                        <h:outputText value="#{'Submission Date'}"/>
-                                                    </td>
-                                                    <td class="center title" style="width: 100px; max-width: 100px; min-width: 100px;">
-                                                        <h:outputText styleClass="center" value="#{'Y/N'}"/>
-                                                    </td>
+                                                    <th>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.description')}" />
+                                                    </th>
+                                                    <th>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.submissionDate')}"/>
+                                                    </th>
+                                                    <th>
+                                                        <h:outputText styleClass="center" value="#{msg.get('app.preDisbursement.checklist.label.yes')}"/>
+                                                    </th>
+                                                    <th>
+                                                        <h:outputText styleClass="center" value="#{msg.get('app.preDisbursement.checklist.label.no')}"/>
+                                                    </th>
                                                 </tr>
 
                                                 <tr>
                                                     <td class="left title">
                                                         <h:outputText value="#{'1'}"/>
                                                     </td>
-                                                    <td colspan="3" class="left title">
-                                                        <h:outputText value="#{'Basic Condition'}"/>
+                                                    <td colspan="4" class="left title">
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCondition')}"/>
                                                     </td>
                                                 </tr>
 
@@ -98,14 +112,18 @@
                                                     <td>
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.1')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -116,14 +134,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมประกันภัยค้าง'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.2')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -134,14 +156,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีค่าธรรมเนียมหนังสือค้ำประกัน(L/G) ค้างมากกว่า 30 วัน'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.3')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -152,14 +178,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีการค้างการทบทวน Annual Review เกินกว่า 90 วัน'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.4')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -170,14 +200,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีภาระหนี้ RPD ของสินเชื่อทุกประเภท'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.5')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -188,53 +222,61 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่ติด Legal Status'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.6')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
-
+                                                
                                                 <tr>
                                                     <td>
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'- ไม่มีรายการค้างชำระ (DPD)ในสินเชื่อทุกประเภทมากกว่า 7 วัน'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.basicCond.7')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="left title">
                                                         <h:outputText value="#{'2'}"/>
                                                     </td>
                                                     <td colspan="4" class="left title">
-                                                        <h:outputText value="#{'SmartBiz Condition'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCondition')}"/>
                                                     </td>
                                                 </tr>
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="center">
                                                         <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
                                                     </td>
                                                     <td colspan="4" class="left title">
-                                                        <h:outputText value="#{'1. วัตถุประสงค์เพื่อลงทุนต่างๆในธุรกิจ เช่น ซื้อที่ดิน ที่ดินพร้อมสิ่งปลูกสร้าง เครื่องจักร'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1')}"/>
                                                     </td>
                                                 </tr>
 
@@ -243,14 +285,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'a. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1a')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -261,25 +307,29 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'b. เอกสารประกอบการเบิกใช้ตามวัตถุประสงค์ที่ระบุใน Opt Sheet'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.1b')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}">
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
                                                 </tr>
 
-                                                <tr>
+                                                <tr style="background-color: #e6e6e6">
                                                     <td class="center">
                                                         <h:selectBooleanCheckbox value="#{preDisbursement.preDisbursementView.selectedTest}"/>
                                                     </td>
                                                     <td colspan="4" class="left title">
-                                                        <h:outputText value="#{'2. กรณี SmartBiz Construction'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2')}"/>
                                                     </td>
                                                 </tr>
 
@@ -288,14 +338,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'a. ผ่านประเมิณตามหลักทรัพย์ตามเกณฑ์ 30 70 100% ของความคืบหน้าโครงการ/ เบิกตามความคืบหน้าของมูลงานที่กำหนดไว้ใน Construction form'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2a')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -305,14 +359,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'b. ระยะเวลาการเบิกทุกวงเงิน/ ระยะเวลาของเอกสารประกอบไม่เกิน 1 ปี นับจากวันทำสัญญา'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2b')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 10px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -322,14 +380,18 @@
 
                                                     </td>
                                                     <td class="left">
-                                                        <h:outputText value="#{'c. เอกสารประกอบการเบิกใช้'}"/>
+                                                        <h:outputText value="#{msg.get('app.preDisbursement.checklist.label.smartbizCond.2c')}"/>
                                                     </td>
                                                     <td class="center">
                                                         <h:outputText value="#{'dd/MM/yyyy'}"/>
                                                     </td>
-                                                    <td class="center" style="padding-left: 8px;">
-                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" style="width:100px;">
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="0"/>
+                                                        </p:selectOneRadio>
+                                                    </td>
+                                                    <td class="center">
+                                                        <p:selectOneRadio value="#{preDisbursement.preDisbursementView.approvedType}" >
                                                             <f:selectItem itemLabel="" itemValue="1"/>
                                                         </p:selectOneRadio>
                                                     </td>
@@ -351,7 +413,7 @@
 
                                     <tr>
                                         <td class="title">
-                                            <p:outputLabel value="#{'Remark'}"/>
+                                            <p:outputLabel value="#{msg.get('app.preDisbursement.checklist.label.remark')}"/>
                                         </td>
                                         <td >
                                             <p:inputTextarea value="#{preDisbursement.preDisbursementView.test}" rows="3" cols="130" />

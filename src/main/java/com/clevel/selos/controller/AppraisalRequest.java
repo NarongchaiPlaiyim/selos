@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.AppraisalRequestControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -23,6 +24,8 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -66,7 +69,8 @@ public class AppraisalRequest implements Serializable {
     private String message;
 
     private User user;
-    private Long workCaseId;
+    private long workCaseId;
+    private long stepId;
     private AppraisalView appraisalView;
 
     private AppraisalDetailView appraisalDetailView;
@@ -105,46 +109,55 @@ public class AppraisalRequest implements Serializable {
         contactFlag3 = false;
     }
 
+    public void preRender(){
+        log.info("-- preRender.");
+        HttpSession session = FacesUtil.getSession(true);
+        log.debug("preRender ::: setSession ");
+//        workCaseId = 4;
+//        user = (User)session.getAttribute("user");
+        if(!Util.isNull(session.getAttribute("workCaseId")) && !Util.isNull(session.getAttribute("stepId")) && !Util.isNull(session.getAttribute("user"))){
+            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
+            log.debug("-- workCaseId[{}]", workCaseId);
+            user = (User)session.getAttribute("user");
+            log.debug("-- User.id[{}]", user.getId());
+            stepId = Long.valueOf(""+session.getAttribute("stepId"));
+            log.debug("-- stepId[{}]", stepId);
+            try{
+                String page = Util.getCurrentPage();
+                if(stepId != StepValue.PRESCREEN_MAKER.value() && stepId != StepValue.FULLAPP_BDM_SSO_ABDM.value()){
+                    FacesUtil.redirect("/site/inbox.jsf");
+                    return;
+                }
+            }catch (Exception ex){
+                log.debug("Exception :: {}",ex);
+            }
+        } else {
+            log.debug("preRender ::: workCaseId is null.");
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
+        }
+    }
+
     @PostConstruct
     public void onCreation() {
         log.info("-- onCreation.");
-        HttpSession session = FacesUtil.getSession(true);
-        if(false){//Util.isNull(session.getAttribute("workCaseId"))){
-            log.info("preRender ::: workCaseId is null.");
-            try{
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+        preRender();
+        init();
+        appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
+        if(!Util.isNull(appraisalView)){
+            appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
+            if(Util.isZero(appraisalDetailViewList.size())){
+                appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
+            }
+            appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
+            if(Util.isNull(appraisalContactDetailView)){
+                appraisalContactDetailView = new AppraisalContactDetailView();
             }
         } else {
-            user = (User)session.getAttribute("user");
-            log.debug("-- User : {}", ""+user.toString());
-            init();
-//            workCaseId = Long.valueOf(""+session.getAttribute("workCaseId"));
-
-            //todo : What is zoneLocation?.
-
-            workCaseId = 4L;
-            log.info("-- workCaseId :: {} ",workCaseId);
-            appraisalView = appraisalRequestControl.getAppraisalRequest(workCaseId, user);
-            if(!Util.isNull(appraisalView)){
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(Util.safetyList(appraisalView.getAppraisalDetailViewList()));
-                if(Util.isZero(appraisalDetailViewList.size())){
-                    appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-                }
-                appraisalContactDetailView = appraisalView.getAppraisalContactDetailView();
-                if(Util.isNull(appraisalContactDetailView)){
-                    appraisalContactDetailView = new AppraisalContactDetailView();
-                }
-            } else {
-                appraisalView = new AppraisalView();
-                log.debug("-- AppraisalView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.debug("-- AppraisalContactDetailView[New] created");
-            }
+            appraisalView = new AppraisalView();
+            log.debug("-- AppraisalView[New] created");
+            appraisalContactDetailView = new AppraisalContactDetailView();
+            log.debug("-- AppraisalContactDetailView[New] created");
         }
     }
 
@@ -187,15 +200,6 @@ public class AppraisalRequest implements Serializable {
         appraisalDetailViewList.remove(rowIndex);
         log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
     }
-
-    public void onSetRowNoAppraisalDetailView(){
-        AppraisalDetailView appraisalDetailViewRow;
-        for(int i=0;i< appraisalDetailViewList.size();i++){
-            appraisalDetailViewRow = appraisalDetailViewList.get(i);
-            appraisalDetailViewRow.setNo(i+1);
-        }
-    }
-
 
     public void onSaveAppraisalRequest() {
         log.info("-- onSaveAppraisalRequest::::");
@@ -243,7 +247,7 @@ public class AppraisalRequest implements Serializable {
     private boolean appraisalDetailViewMandate(){
         log.debug("-- appraisalDetailViewMandate()");
         boolean result = true;
-        if(appraisalDetailViewDialog.getTitleDeed().length() == 0){
+        if(Util.isZero(appraisalDetailViewDialog.getTitleDeed().length())){
             titleDeedFlag = true;
             result = false;
         } else {
@@ -285,10 +289,12 @@ public class AppraisalRequest implements Serializable {
         log.debug("-- result = {}", result);
         return result;
     }
+
+
     private boolean appraisalDetailViewListMandate(){
         log.debug("-- appraisalDetailViewListMandate()");
         boolean result = true;
-        if(appraisalDetailViewList.size() == 0){
+        if(Util.isZero(appraisalDetailViewList.size())){
             result = false;
         }
         log.debug("-- result = {}", result);

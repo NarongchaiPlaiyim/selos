@@ -1,10 +1,14 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.NewGuarantorDetailDAO;
 import com.clevel.selos.dao.working.NewGuarantorRelationDAO;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.util.Util;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -22,11 +26,15 @@ public class NewGuarantorDetailTransform extends Transform {
     @Inject
     CustomerTransform customerTransform;
     @Inject
+    NewGuarantorDetailDAO newGuarantorDetailDAO;
+    @Inject
     NewGuarantorRelationDAO newGuarantorRelationDAO;
     @Inject
     NewCreditDetailTransform newCreditDetailTransform;
     @Inject
     ExistingCreditDetailTransform existingCreditDetailTransform;
+    @Inject
+    NewGuarantorCreditTransform newGuarantorCreditTransform;
 
 
     public List<NewGuarantorDetail> transformToModel(List<NewGuarantorDetailView> newGuarantorDetailViewList, NewCreditFacility newCreditFacility, User user) {
@@ -35,19 +43,32 @@ public class NewGuarantorDetailTransform extends Transform {
         NewGuarantorDetail newGuarantorDetail;
 
         for (NewGuarantorDetailView newGuarantorDetailView : newGuarantorDetailViewList) {
+            log.debug("Start.. transformToModel newGuarantorDetailView : {}", newGuarantorDetailView);
             newGuarantorDetail = new NewGuarantorDetail();
             if (newGuarantorDetailView.getId() != 0) {
-                newGuarantorDetail.setCreateDate(newGuarantorDetailView.getCreateDate());
-                newGuarantorDetail.setCreateBy(newGuarantorDetailView.getCreateBy());
+                newGuarantorDetail = newGuarantorDetailDAO.findById(newGuarantorDetailView.getId());
+                newGuarantorDetail.setModifyDate(DateTime.now().toDate());
+                newGuarantorDetail.setModifyBy(user);
             } else { // id = 0 create new
                 newGuarantorDetail.setCreateDate(new Date());
                 newGuarantorDetail.setCreateBy(user);
             }
+            newGuarantorDetail.setProposeType(ProposeType.P.type());
             Customer guarantor = customerDAO.findById(newGuarantorDetailView.getGuarantorName().getId());
             newGuarantorDetail.setGuarantorName(guarantor);
             newGuarantorDetail.setTcgLgNo(newGuarantorDetailView.getTcgLgNo());
             newGuarantorDetail.setNewCreditFacility(newCreditFacility);
             newGuarantorDetail.setTotalLimitGuaranteeAmount(newGuarantorDetailView.getTotalLimitGuaranteeAmount());
+
+
+            if(Util.safetyList(newGuarantorDetailView.getProposeCreditDetailViewList()).size() > 0){
+                log.debug("Start.. transformToModel proposeCreditDetailViewList : {}", newGuarantorDetailView.getProposeCreditDetailViewList());
+                List<NewGuarantorCredit> newGuarantorCreditList = newGuarantorCreditTransform.transformsToModelForGuarantor(newGuarantorDetailView.getProposeCreditDetailViewList(), newCreditFacility.getNewCreditDetailList(), newGuarantorDetail, user);
+                log.debug("End.. transformToModel newGuarantorCreditList : {}", newGuarantorCreditList);
+                newGuarantorDetail.setNewGuarantorCreditList(newGuarantorCreditList);
+            }
+
+            log.debug("End.. transformToModel newGuarantorDetail : {}", newGuarantorDetail);
             newGuarantorDetailList.add(newGuarantorDetail);
         }
 
@@ -60,6 +81,8 @@ public class NewGuarantorDetailTransform extends Transform {
 
         for (NewGuarantorDetail newGuarantorDetail : newGuarantorDetailList) {
             newGuarantorDetailView = new NewGuarantorDetailView();
+
+            newGuarantorDetailView.setProposeType(newGuarantorDetail.getProposeType());
             CustomerInfoView guarantorView = customerTransform.transformToView(newGuarantorDetail.getGuarantorName());
             newGuarantorDetailView.setCreateDate(newGuarantorDetail.getCreateDate());
             newGuarantorDetailView.setCreateBy(newGuarantorDetail.getCreateBy());

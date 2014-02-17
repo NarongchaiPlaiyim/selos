@@ -12,10 +12,11 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 
 public class BAPAInfoDAO extends GenericDAO<BAPAInfo, Long> {
-    @Inject
+    private static final long serialVersionUID = -7565650123721136407L;
+	@Inject
     @SELOS
     Logger log;
-    @Inject
+   
     public BAPAInfoDAO() {
     }
 
@@ -27,6 +28,12 @@ public class BAPAInfoDAO extends GenericDAO<BAPAInfo, Long> {
         criteria.addOrder(Order.asc("id"));
         BAPAInfo bapaInfo = (BAPAInfo) criteria.uniqueResult();
 
+        return bapaInfo;
+    }
+    public BAPAInfo findByWorkCase(long workCaseId) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        BAPAInfo bapaInfo = (BAPAInfo) criteria.uniqueResult();
         return bapaInfo;
     }
 }

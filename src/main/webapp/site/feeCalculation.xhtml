@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+<h:head>
+    <title>#{msg.get('app.feecalculation.title')}</title>
+    <h:outputStylesheet name="css/style.css" />
+    <h:outputScript library="js" name="custom.js" />
+</h:head>
+
+<h:body>
+    <f:event type="preRenderView" listener="#{feeCalculation.preRender()}" />
+    
+    <p:panel id="pnl_maincontainer" styleClass="panel">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+           
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.feecalculation.subtitle')}</div>
+                <div id="content">
+                    
+                    <div id="content_form">
+                        <!-- start content -->
+                        <table class="content_table_form">
+                        	<tr>
+				                <td style="width: 100px;"><p:spacer width="5"/></td>
+				                <td></td>
+				            </tr>
+	                        <tr>
+	                           <td></td>
+                               <td>
+                               		<table class="table_content">
+                               			<thead>
+                               				<tr>
+	                               				<th style="width: 15px;"></th>
+	                               				<th style="width: 180px;">#{msg.get('app.feecalculation.table.subject')}</th>
+	                               				<th style="width: 200px;">#{msg.get('app.feecalculation.table.feetype')}</th>
+	                               				<th style="width: 300px;">#{msg.get('app.feecalculation.table.formula')}</th>
+	                               				<th style="width: 150px;">#{msg.get('app.feecalculation.table.amount')}</th>
+	                               			</tr>
+                               			</thead>
+                               			<tbody>
+	                               			<ui:repeat var="debit" value="#{feeCalculation.debitFromCustomerList}" varStatus="rowStatus">
+	                               				<tr>
+	                               					<td class="center">
+	                               						#{rowStatus.index + 1}
+	                               					</td>
+	                               					<td class="title left">
+	                               						<h:outputText value="#{msg.get('app.feecalcualtion.type.debit')}" 
+	                               							rendered="#{rowStatus.index eq 0 }" />
+	                               					</td>
+	                               					<td class="left">
+	                               						#{debit.feeType}
+	                               					</td>
+	                               					<td class="left">
+	                               						#{debit.formula}
+	                               					</td>	
+	                               					<td class="right">
+	                               						<h:outputText value="#{debit.amount}">
+	                               							<f:convertNumber pattern="#,##0.00"/>
+	                               						</h:outputText>
+	                               					</td>
+	                               				</tr>
+	                               			</ui:repeat>
+	                               			<tr class='total_summary'>
+	                               				<td colspan="4" class="left title">
+	                               					#{msg.get('app.feecalculation.table.total')}
+	                               				</td>
+	                               				<td class="right" >
+                               						<h:outputText value="#{feeCalculation.totalDebitFromCustomer}">
+                               							<f:convertNumber pattern="#,##0.00"/>
+                               						</h:outputText>
+                               					</td>
+	                               			</tr>
+	                               			<tr>
+	                               				<td colspan="100%"></td>
+	                               			</tr>
+	                               			<ui:repeat var="inform" value="#{feeCalculation.informCustomerList}" varStatus="rowStatus">
+	                               				<tr>
+	                               					<td class="center">
+	                               						#{rowStatus.index + 1}
+	                               					</td>
+	                               					<td class="title left">
+	                               						<h:outputText value="#{msg.get('app.feecalcualtion.type.inform')}" 
+	                               							rendered="#{rowStatus.index eq 0 }" />
+	                               					</td>
+	                               					<td class="left">
+	                               						#{inform.feeType}
+	                               					</td>
+	                               					<td class="left">
+	                               						#{inform.formula}
+	                               					</td>	
+	                               					<td class="right">
+	                               						<h:outputText value="#{inform.amount}">
+	                               							<f:convertNumber pattern="#,##0.00"/>
+	                               						</h:outputText>
+	                               					</td>
+	                               				</tr>
+	                               			</ui:repeat>
+	                               			<tr class='total_summary'>
+	                               				<td colspan="4" class="left title">
+	                               					#{msg.get('app.feecalculation.table.total')}
+	                               				</td>
+	                               				<td class="right" >
+                               						<h:outputText value="#{feeCalculation.totalInformCustomer}">
+                               							<f:convertNumber pattern="#,##0.00"/>
+                               						</h:outputText>
+                               					</td>
+	                               			</tr>
+	                               			<tr class='grandtotal_summary'>
+	                               				<td colspan="4" class="left title">
+	                               					#{msg.get('app.feecalculation.table.grandtotal_agreement')}
+	                               				</td>
+	                               				<td class="right" >
+                               						<h:outputText value="#{feeCalculation.grandTotalAgreement}">
+                               							<f:convertNumber pattern="#,##0.00"/>
+                               						</h:outputText>
+                               					</td>
+	                               			</tr>
+	                               			<tr>
+	                               				<td colspan="100%"></td>
+	                               			</tr>
+	                               			<ui:repeat var="penalty" value="#{feeCalculation.penaltyFeeList}" varStatus="rowStatus">
+	                               				<tr>
+	                               					<td class="center">
+	                               						#{rowStatus.index + 1}
+	                               					</td>
+	                               					<td class="title left">
+	                               						<h:outputText value="#{msg.get('app.feecalcualtion.type.penalty')}" 
+	                               							rendered="#{rowStatus.index eq 0 }" />
+	                               					</td>
+	                               					<td class="left">
+	                               						#{penalty.feeType}
+	                               					</td>
+	                               					<td class="left">
+	                               						#{penalty.formula}
+	                               					</td>	
+	                               					<td class="right">
+	                               						<h:outputText value="#{penalty.amount}" 
+	                               							rendered="#{not empty penalty.amount and penalty.amount gt 0}">
+	                               							<f:convertNumber pattern="#,##0.00"/>
+	                               						</h:outputText>
+	                               					</td>
+	                               				</tr>
+	                               			</ui:repeat>
+	                               			<tr class='total_summary'>
+	                               				<td colspan="4" class="left title">
+	                               					#{msg.get('app.feecalculation.table.total')}
+	                               				</td>
+	                               				<td class="right" >
+                               						<h:outputText value="#{feeCalculation.totalPenaltyFee}">
+                               							<f:convertNumber pattern="#,##0.00"/>
+                               						</h:outputText>
+                               					</td>
+	                               			</tr>
+                               			</tbody>
+                               		</table>
+                                </td>
+                            </tr>
+                            <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+                            <tr>
+                              <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        	</tr>
+                        	<tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+                        	<tr>
+                        		<td></td>
+                        		<td class="title">
+                        			#{msg.get('app.feecalculation.collection.title')}
+                        		</td>
+                        	</tr>
+                        	<tr>
+                        		<td></td>
+                        		<td>
+                        			<p:dataTable id='feecollection_tbl' rowIndexVar="rowIdx"
+                        				>
+                        				<p:column styleClass="center" style="width:30px">
+                        					#{rowIdx+1}
+                        				</p:column>
+                        				<p:column headerText="#{msg.get('app.feecalculation.collection.accountType')}"
+                        					style="width:260px"
+                        					>
+                        				
+                        				</p:column>
+                        				<p:column style="width:200px"
+                        					headerText="#{msg.get('app.feecalculation.collection.accountNo')}"
+                        					>
+                        				</p:column>
+                        				<p:column style="width:140px" styleClass="right"
+                        					headerText="#{msg.get('app.feecalculation.collection.amount')}"
+                        				 	>
+                        				 	<h:outputText value="0" >
+                        				 		<f:convertNumber pattern="#,##0.00"/>
+                        				 	</h:outputText>
+                        				</p:column>
+                        			</p:dataTable>
+                        		</td>
+                        	</tr>
+                        	<tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                        	<td></td>
+	                        	<td>
+	                        		<table><tr>
+	                        			<td class='title' style="width:200px">
+	                        				#{msg.get('app.feecalculation.collection.is_completed')}
+	                        			</td>
+	                        			<td>
+	                        				<p:selectOneRadio >
+	                                                 <f:selectItem
+	                                                 	itemLabel="#{msg.get('app.button.yes')}" 
+	                                                 	itemValue="2"/>
+	                                                 <f:selectItem 
+	                                                 	itemLabel="#{msg.get('app.button.no')}" 
+	                                                 	itemValue="1"/>
+	                                         </p:selectOneRadio>
+	                        			</td>
+	                        		</tr></table>
+	                        	</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:separator/></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="100%"><p:spacer width="5px"/></td>
+	                        </tr>
+	                        <tr>
+	                             <td colspan="100%" class="center">
+	                                 <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" 
+	                                 	styleClass="medium"
+	                                 	oncomplete="p_saveFeeCompleteDlg.show();"
+	                                 	 />
+	                                 <p:commandButton id="cancelBtn" value="#{msg.get('app.button.cancel')}" 
+										styleClass="medium"
+										/>
+	                             </td>
+	                        </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="bottom_line"><!-- --></div>
+            </div>
+           
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <!-- End Footer -->
+            </div>
+           	
+           	<p:blockUI widgetVar="p_blockUI" block=":frmMain" trigger='saveBtn,cancelBtn'>
+           		LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+             </p:blockUI>
+        </h:form>
+    </p:panel>
+
+	
+	<ui:include src="dialog/confirmEditDlg.xhtml">
+		<ui:param name="id" value="saveFeeCompleteDlg"/>
+		<ui:param name="name" value="p_saveFeeCompleteDlg"/>
+		<ui:param name="formId" value="saveFeeCompleteFrm"/>
+		<ui:param name="controller" value="#{feeCalculation}"/>
+		<ui:param name="action" value="onSaveFeeCalculation"/>
+		<ui:param name="update" value=":frmMain"/>
+	</ui:include>
+</h:body>
+</f:view>
+</html>

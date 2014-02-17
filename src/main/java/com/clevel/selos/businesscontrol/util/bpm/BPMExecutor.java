@@ -218,6 +218,14 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void requestAppraisal(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
+        boolean success = bpmInterface.createParallelCase(appNumber, borrowerName, productGroup, requestType, bdmUserName);
+        if(!success){
+            log.debug("create workcase appraisal item failed.");
+            throw new Exception("exception while launch new case for appraisal");
+        }
+    }
+
     private void execute(String queueName, String wobNumber, HashMap<String, String> fields) throws Exception{
         log.debug("BPM Execute ::: queueName : {}, wobNumber : {}, fields : {}", queueName, wobNumber, fields);
         bpmInterface.dispatchCase(queueName, wobNumber, fields);
