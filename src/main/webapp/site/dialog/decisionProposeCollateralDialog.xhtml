@@ -73,7 +73,7 @@
                             <td>#{msg.get('app.decision.label.approved')}</td>
                             <td>
                                 <p:selectOneRadio id="dlgCollateralRadioApprove"
-                                                  value="#{decision.selectedAppProposeCollateral.approved}"
+                                                  value="#{decision.selectedAppProposeCollateral.uwDecision}"
                                                   required="#{not empty param[saveCollateralButton.clientId]}">
                                     <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                                     <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -151,11 +151,11 @@
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeDetailItem.productProgram ? creditTypeDetailItem.productProgram.name : ''}
+                            #{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeDetailItem.creditFacility ? creditTypeDetailItem.creditFacility.name : ''}
+                            #{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}
                         </p:column>
 
                         <p:column styleClass="right top">
