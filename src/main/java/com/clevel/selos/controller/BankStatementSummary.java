@@ -8,6 +8,7 @@ import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -117,11 +118,17 @@ public class BankStatementSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+
             if (session.getAttribute("workCasePreScreenId") != null) {
                 workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             }
-            // check user (ABDM/BDM)
-            isABDM_BDM = bankStmtControl.isABDMorBDM();
+
+            // Check Role (ABDM/BDM)
+            int roleId = bankStmtControl.getUserRoleId();
+            if (RoleValue.ABDM.id() == roleId || RoleValue.BDM.id() == roleId) {
+                isABDM_BDM = true;
+            }
+
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
