@@ -200,6 +200,7 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(BigDecimal.ZERO);
             bizInfoSummaryView.setCirculationAmount(bankStatementAvg);
             bizInfoSummaryView.setCirculationPercentage(new BigDecimal(100));
+            bizInfoSummaryView.setWeightIncomeFactor(BigDecimal.ZERO);
 
 
         } else {
