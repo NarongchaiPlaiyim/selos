@@ -1,6 +1,8 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,7 +28,7 @@ public class AbstractWorkCase implements Serializable{
 
     @OneToOne
     @JoinColumn(name = "request_type_id")
-    protected RequestType request_type;
+    protected RequestType requestType;
 
     @OneToOne
     @JoinColumn(name = "from_user_id")
@@ -169,4 +171,101 @@ public class AbstractWorkCase implements Serializable{
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Date getReceivedDate() {
+        return receivedDate;
+    }
+
+    public void setReceivedDate(Date receivedDate) {
+        this.receivedDate = receivedDate;
+    }
+
+    public UserTeam getAtUserTeam() {
+        return atUserTeam;
+    }
+
+    public void setAtUserTeam(UserTeam atUserTeam) {
+        this.atUserTeam = atUserTeam;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(RequestType request_type) {
+        this.requestType = request_type;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public User getAtUser() {
+        return atUser;
+    }
+
+    public void setAtUser(User atUser) {
+        this.atUser = atUser;
+    }
+
+    public Date getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(Date appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public AuthorizationDOA getAuthorizationDOA() {
+        return authorizationDOA;
+    }
+
+    public void setAuthorizationDOA(AuthorizationDOA authorizationDOA) {
+        this.authorizationDOA = authorizationDOA;
+    }
+
+    public Date getSlaEndDate() {
+        return slaEndDate;
+    }
+
+    public void setSlaEndDate(Date slaEndDate) {
+        this.slaEndDate = slaEndDate;
+    }
+
+    public int getTotalTimeAtUser() {
+        return totalTimeAtUser;
+    }
+
+    public void setTotalTimeAtUser(int totalTimeAtUser) {
+        this.totalTimeAtUser = totalTimeAtUser;
+    }
+
+    public int getTotalTimeAtProcess() {
+        return totalTimeAtProcess;
+    }
+
+    public void setTotalTimeAtProcess(int totalTimeAtProcess) {
+        this.totalTimeAtProcess = totalTimeAtProcess;
+    }
+
+    public int getBpmActive() {
+        return bpmActive;
+    }
+
+    public void setBpmActive(int bpmActive) {
+        this.bpmActive = bpmActive;
+    }
+
 }

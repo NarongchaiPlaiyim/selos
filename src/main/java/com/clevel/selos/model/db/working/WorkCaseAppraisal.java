@@ -181,20 +181,16 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("appNumber", appNumber)
-                .append("wobNumber", wobNumber)
-                .append("lock", lock)
-                .append("lockUser", lockUser)
-                .append("step", step)
-                .append("status", status)
                 .append("requestBy", requestBy)
                 .append("requestDate", requestDate)
                 .append("reviewBy", reviewBy)
                 .append("approveBy", approveBy)
                 .append("approveDate", approveDate)
-                .append("modifyBy", modifyBy)
                 .append("stepOwner", stepOwner)
                 .append("appraisalResult", appraisalResult)
+                .append("workCase", workCase)
+                .append("productGroup", productGroup)
+                .append("requestType", requestType)
                 .toString();
     }
 }
