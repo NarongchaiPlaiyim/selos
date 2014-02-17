@@ -110,19 +110,12 @@ public class ContactRecordDetailTransform extends Transform  {
     
     public ContactRecordDetail transformToNewModel(ContactRecordDetailView view,User user,CustomerAcceptance customerAcceptance) {
     	ContactRecordDetail model = new ContactRecordDetail();
-    	model.setCallingDate(view.getCallingDate());
-    	model.setCallingResult(view.getCallingResult());
-    	model.setAcceptResult(view.getAcceptResult());
-    	model.setNextCallingDate(view.getNextCallingDate());
-    	model.setReason(view.getReason());
-    	model.setRemark(view.getRemark());
-    	model.setStatus(view.getStatus());
     	model.setCreateDate(new Date());
-    	model.setModifyDate(new Date());
-    	model.setModifyBy(user);
     	model.setCreateBy(user);
     	model.setCustomerAcceptance(customerAcceptance);
     	model.setWorkCase(customerAcceptance.getWorkCase());
+    	
+    	updateModelFromView(model, view, user);
     	return model;
     }
     public void updateModelFromView(ContactRecordDetail model,ContactRecordDetailView view,User user) {

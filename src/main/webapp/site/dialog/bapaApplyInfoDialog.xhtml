@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:form id="bapaApplyInfoDlgForm">
-	<p:panel styleClass="panel-dialog" rendered="true">
+	<p:panel styleClass="panel-dialog" rendered="#{not empty baInfo.bapaInfoCreditView}">
 	<p:messages />
 	<table class="content_form">
 		<tr>
@@ -15,8 +15,13 @@
 			</td>
 			<td>
 				<p:selectOneMenu id='type' style="width:160px"
+					value="#{baInfo.bapaInfoCreditView.type}"
+					disabled="#{baInfo.bapaInfoCreditView.fromCredit}"
+					required="true" requiredMessage="#{msg.get('app.baInfo.bapa.baType.validate')}"
 					>
+					<p:ajax update='morepay' />
 					<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+					<f:selectItems value="#{enumGeneralControl.BAPATypes}"/>
 				</p:selectOneMenu>
 			</td>
 		</tr>
@@ -26,26 +31,33 @@
 					value="#{msg.get('app.baInfo.bapa.dialog.creditType')}" />
 			</td>
 			<td>
-				<p:dataTable id='credittype_tbl'>
-					<p:column styleClass="center" style="width:30px">
-						<p:selectBooleanCheckbox />
-					</p:column>
+				<p:dataTable id='credittype_tbl' value="#{baInfo.creditDataModel}" var="credit"
+					selection="#{baInfo.selectedCredit}"
+					disabledSelection="#{baInfo.bapaInfoCreditView.fromCredit}"
+					>
+					<p:column styleClass="center" style="width:30px"
+						selectionMode="single"
+						/>
+
 					<p:column styleClass="left" style="width:150px"
 						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.productProgram')}" 
 						>
+						#{credit.productProgram}
 					</p:column>
 					<p:column styleClass="left" style="width:130px"
 						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.creditFacility')}"
 						>
+						#{credit.creditType}
 					</p:column>
 					<p:column styleClass="left"
 						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.purpose')}"
 						>
+						#{credit.loanPurpose}
 					</p:column>
 					<p:column styleClass="right" style="width:150px"
 						headerText="#{msg.get('app.baInfo.bapa.dialog.creditType.limit')}"
 						>
-						<h:outputText value="0">
+						<h:outputText value="#{credit.limit}">
 							<f:convertNumber pattern="#,##0.00"/>
 						</h:outputText>
 					</p:column>
@@ -60,8 +72,15 @@
 			</td>
 			<td>
 				<p:inputText id='premium' style="large"
-					converterMessage="#{msg.get('app.baInfo.bapa.premium.validate')}">
-					<f:convertNumber pattern="#,##0.00" />
+					value="#{baInfo.bapaInfoCreditView.premiumAmount}"
+					required="true" requiredMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
+					converterMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
+					validatorMessage="#{msg.get('app.baInfo.bapa.premium.validate')}"
+					
+					>
+					<p:ajax event="blur" update='morepay' />
+					<f:validateDoubleRange minimum="0"/>
+					<f:convertNumber pattern="0.00" />
 				</p:inputText>
 			</td>
 		</tr>
@@ -72,8 +91,9 @@
 					value="#{msg.get('app.baInfo.bapa.dialog.morePay')}" />
 			</td>
 			<td>
-				<p:inputText id="morepay" style="large"
-					converterMessage="#{msg.get('app.baInfo.bapa.morepay.validate')}">
+				<p:inputText id="morepay" style="large" readonly="true"
+					value="#{baInfo.bapaInfoCreditView.expenseAmount}"
+					>
 					<f:convertNumber pattern="#,##0.00" />
 				</p:inputText>
 			</td>
@@ -92,16 +112,16 @@
                         update=":frmMain:bapainfo_tbl,:bapaApplyInfoDlgForm"
                         oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
                         styleClass="small"
-                        rendered="true"
+                        rendered="#{baInfo.addCreditDialog}"
                         />
 				 <p:commandButton
                         id="updateBtn"
                         value="#{msg.get('app.button.ok')}"
-                        actionListener="#{bapaInfo.onUpdateBAPAInformation()}"
-                        update=":frmMain:bainfo_tbl,:bapaApplyInfoDlgForm"
+                        actionListener="#{baInfo.onUpdateBAPAInformation()}"
+                        update=":frmMain:bapainfo_tbl,:bapaApplyInfoDlgForm"
                         oncomplete="handleDialogRequest(xhr, status, args,'p_bapaApplyInfoDlg')"
                         styleClass="small"
-                        rendered="false"
+                        rendered="#{not baInfo.addCreditDialog}"
                         />
 				<p:commandButton
                    	type='button' styleClass="small" 

@@ -79,11 +79,9 @@
                                         <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeed}"
                                                      maxlength="18"
                                                      readonly="true"
-                                                     styleClass="right">
-                                            <f:convertNumber pattern="#,##0.##"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"
-                                                             maxIntegerDigits="14"/>
+                                                     style="width:200px;text-align: right" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             type="number"/>
                                         </p:inputText>
                                         <p:spacer width="5" height="0"/>
                                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -96,11 +94,9 @@
                                         <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcDebit}"
                                                      maxlength="18"
                                                      readonly="true"
-                                                     styleClass="right">
-                                            <f:convertNumber pattern="#,##0.##"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"
-                                                             maxIntegerDigits="14"/>
+                                                     style="width:200px;text-align: right" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             type="number"/>
                                         </p:inputText>
                                         <p:spacer width="5" height="0"/>
                                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -113,11 +109,9 @@
                                         <p:inputText value="#{creditFacPropose.newCreditFacilityView.WCNeedDiffer}"
                                                      maxlength="18"
                                                      readonly="true"
-                                                     styleClass="right">
-                                            <f:convertNumber pattern="#,##0.##"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"
-                                                             maxIntegerDigits="14"/>
+                                                     style="width:200px;text-align: right" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             type="number"/>
                                         </p:inputText>
                                         <p:spacer width="5" height="0"/>
                                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -134,11 +128,9 @@
                                         <p:inputText value="#{creditFacPropose.newCreditFacilityView.totalWcTmb}"
                                                      maxlength="18"
                                                      readonly="true"
-                                                     styleClass="right">
-                                            <f:convertNumber pattern="#,##0.##"
-                                                             minFractionDigits="2"
-                                                             maxFractionDigits="2"
-                                                             maxIntegerDigits="14"/>
+                                                     style="width:200px;text-align: right" >
+                                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                             type="number"/>
                                         </p:inputText>
                                         <p:spacer width="5" height="0"/>
                                         <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -168,11 +160,9 @@
                                                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1WcLimit}"
                                                                  maxlength="18"
                                                                  readonly="true"
-                                                                 styleClass="right">
-                                                        <f:convertNumber pattern="#,##0"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                 style="width:200px;text-align: right" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
                                                     </p:inputText>
                                                     <p:spacer width="5" height="0"/>
                                                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -185,11 +175,9 @@
                                                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1WcMinLimit}"
                                                                  maxlength="18"
                                                                  readonly="true"
-                                                                 styleClass="right">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                 style="width:200px;text-align: right" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
                                                     </p:inputText>
                                                     <p:spacer width="5"/>
                                                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -203,11 +191,9 @@
                                                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.case1Wc50CoreWc}"
                                                                  maxlength="18"
                                                                  readonly="true"
-                                                                 styleClass="right">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
+                                                                 style="width:200px;text-align: right" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                                         type="number"/>
                                                     </p:inputText>
                                                     <p:spacer width="5" height="0"/>
                                                     <h:outputText value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
@@ -491,14 +477,12 @@
                                     <p:inputText value="#{creditFacPropose.newCreditFacilityView.existingSMELimit}"
                                                  maxlength="18"
                                                  onclick="this.select()"
-                                                 onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);"
                                                  required="#{not empty param[onsaveNewFacility.clientId]}"
-                                                 styleClass="right">
-                                        <f:convertNumber pattern="#,##0.##"
-                                                         minFractionDigits="2"
-                                                         maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
+                                                 style="width:200px;text-align: right"
+                                                 onkeydown="return onKeyDownMoney(event);"
+                                                 onkeypress="return onKeyPressMoney(event);">
+                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                         type="number"/>
                                         <p:ajax event="blur" update="@this"/>
                                     </p:inputText>
 
@@ -511,13 +495,11 @@
                                                  required="#{not empty param[onsaveNewFacility.clientId]}"
                                                  maxlength="18"
                                                  onclick="this.select()"
+                                                 style="width:200px;text-align: right"
                                                  onkeydown="return onKeyDownMoney(event);"
-                                                 onkeypress="return onKeyPressMoney(event);"
-                                                 styleClass="right">
-                                        <f:convertNumber pattern="#,##0.##"
-                                                         minFractionDigits="2"
-                                                         maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
+                                                 onkeypress="return onKeyPressMoney(event);">
+                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                         type="number"/>
                                         <p:ajax event="blur" update="@this"/>
                                     </p:inputText>
                                 </td>
@@ -555,7 +537,7 @@
                                 <table style="width: 100%">
                                     <thead>
                                         <tr>
-                                            <th class="ui-state-default" style="width: 5%"></th>
+                                            <th class="ui-state-default" style="width: 3%"></th>
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productProgram')}</th>
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.creditType')}</th>
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.productCode')}</th>
@@ -566,7 +548,7 @@
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.installment')}</th>
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.tenor')}</th>
                                             <th class="ui-state-default" style="width: 9%">#{msg.get('app.credit.facility.propose.tb.label.frontEndFee')}</th>
-                                            <th class="ui-state-default" style="width: 5%"></th>
+                                            <th class="ui-state-default" style="width: 10%"></th>
                                         </tr>
                                     </thead>
 
@@ -1043,11 +1025,9 @@
                                                  onclick="this.select()"
                                                  onkeydown="return onKeyDownMoney(event);"
                                                  onkeypress="return onKeyPressMoney(event);"
-                                                 styleClass="right">
-                                        <f:convertNumber pattern="#,##0.##"
-                                                         minFractionDigits="2"
-                                                         maxFractionDigits="2"
-                                                         maxIntegerDigits="14"/>
+                                                 style="width:200px;text-align: right" >
+                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                                         type="number"/>
                                         <p:ajax event="blur" update="@this"/>
                                     </p:inputText>
                                 </td>
@@ -1182,7 +1162,6 @@
                                 </td>
                                 <td class="right" colspan="2">
                                     <p:commandButton value="Edit"
-                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      action="#{creditFacPropose.onEditProposeCollInfo()}"
                                                      update=":collateralDlgForm"
                                                      process="@this"
@@ -1195,7 +1174,6 @@
                                     </p:commandButton>
                                     <p:spacer width="10" height="0"/>
                                     <p:commandButton value="Remove"
-                                                     rendered="#{creditFacPropose.newCollateralView.coms}"
                                                      process="@this"
                                                      oncomplete="confirmDeleteCollateralInfoDlg.show()">
                                         <f:setPropertyActionListener value="#{newCollateralView}"
@@ -1591,8 +1569,8 @@
                                     <p:column style="width: 5%"/>
                                     <p:column style="width: 20%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guarantorName')}"/>
                                     <p:column style="width: 10%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
-                                    <p:column style="width: 50%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
-                                    <p:column style="width: 10%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.totalGuaranteeAmount')}"/>
+                                    <p:column style="width: 40%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
+                                    <p:column style="width: 15%" headerText="#{msg.get('app.credit.facility.propose.label.guarantor.totalGuaranteeAmount')}"/>
                                     <p:column style="width: 5%"/>
                                 </p:row>
                             </p:columnGroup>
@@ -1644,7 +1622,7 @@
                                 </table>
                             </p:column>
 
-                            <p:column styleClass="top left">
+                            <p:column styleClass="top right">
                                 <h:outputText value="#{newGuarantorDetailView.totalLimitGuaranteeAmount}">
                                     <f:convertNumber pattern="#,##0.##"
                                                      minFractionDigits="2"
@@ -1897,10 +1875,15 @@
 </p:panel>
 
 <!-- Propose Credit Dialog -->
-<p:dialog id="creditInfoDialog" header="Propose Credit Information" widgetVar="creditInfoDlg"
+<p:dialog id="creditInfoDialog"
+          header="Propose Credit Information"
+          widgetVar="creditInfoDlg"
           modal="true"
           width="900" height="500"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()"
+          closable="false"
+          closeOnEscape="false">
     <ui:include src="dialog/proposeCreditInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1918,7 +1901,10 @@
           header="Propose Collateral Information"
           modal="true"
           width="900" height="500"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()"
+          closable="false"
+          closeOnEscape="false">
     <ui:include src="dialog/proposeCollInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1936,7 +1922,10 @@
           header="Sub Collateral Information"
           modal="true"
           width="600" height="500"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()"
+          closable="false"
+          closeOnEscape="false">
     <ui:include src="dialog/proposeSubCollInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1954,7 +1943,10 @@
           header="Propose Guarantor Information"
           modal="true"
           width="900"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()"
+          closable="false"
+          closeOnEscape="false">
     <ui:include src="dialog/proposeGuarantorInfoDialog.xhtml"/>
 </p:dialog>
 
@@ -1971,7 +1963,10 @@
 <p:dialog id="conditionDialog" header="Condition Information" widgetVar="conditionDlg"
           modal="true"
           width="600"
-          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()">
+          onShow="hideWindowsScrollBar()"
+          onHide="showWindowsScrollBar()"
+          closable="false"
+          closeOnEscape="false">
     <ui:include src="dialog/proposeConditionInfoDialog.xhtml"/>
 </p:dialog>
 

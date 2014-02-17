@@ -144,7 +144,7 @@
 
             <p:column styleClass="left top">
                 #{creditTypeDetailItem.requestType == 2 ? msg.get('app.label.new') :
-                  creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}
+                        creditTypeDetailItem.requestType == 1 ? msg.get('app.label.change') : ''}
             </p:column>
 
             <p:column styleClass="left top">
@@ -231,11 +231,9 @@
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
-                     styleClass="right">
-            <f:convertNumber pattern="#,##0.##"
-                             minFractionDigits="2"
-                             maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                     style="width:200px;text-align: right">
+            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                             type="number"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>
@@ -269,12 +267,10 @@
                      onclick="this.select()"
                      onkeydown="return onKeyDownMoney(event);"
                      onkeypress="return onKeyPressMoney(event);"
-                     styleClass="right"
-                     required="#{not empty param[btnSaveCollateral.clientId]}">
-            <f:convertNumber pattern="#,##0.##"
-                             minFractionDigits="2"
-                             maxFractionDigits="2"
-                             maxIntegerDigits="14"/>
+                     required="#{not empty param[btnSaveCollateral.clientId]}"
+                     style="width:200px;text-align: right">
+            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                             type="number"/>
             <p:ajax event="blur" update="@this"/>
         </p:inputText>
     </td>

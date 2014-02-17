@@ -1,7 +1,9 @@
 package com.clevel.selos.businesscontrol;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.faces.model.SelectItem;
@@ -72,13 +74,16 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 		 for (Title data : list) {
 			 SelectItem item = new SelectItem();
 			 item.setValue(data.getId());
-			 if (Language.TH.equals(lang)) {
-				 item.setLabel(data.getTitleTh());
-				 item.setDescription(data.getTitleTh());
-			 } else {
-				 item.setLabel(data.getTitleEn());
-				 item.setDescription(data.getTitleEn());
-			 }
+			 //Not use Langauge flag, send default as TH
+			 item.setLabel(data.getTitleTh());
+			 item.setDescription(data.getTitleTh());
+//			 if (Language.TH.equals(lang)) {
+//				 item.setLabel(data.getTitleTh());
+//				 item.setDescription(data.getTitleTh());
+//			 } else {
+//				 item.setLabel(data.getTitleEn());
+//				 item.setDescription(data.getTitleEn());
+//			 }
 			 rtnDatas.add(item);
 		 }
 		 return rtnDatas;
@@ -168,6 +173,16 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 		 }
 		 return rtnDatas; 
 	 }
+	 public Set<Integer> listSpouseReqMaritialStatues() {
+		 List<MaritalStatus> list = maritalStatusDAO.findActiveAll();
+		 Set<Integer> spouseSet = new HashSet<Integer>();
+		 for (MaritalStatus data : list) {
+			 if (data.getSpouseFlag() == 1)
+				 spouseSet.add(data.getId());
+		 }
+		 return spouseSet;
+	 }
+	 
 	 public List<SelectItem> listCountries() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
 		 

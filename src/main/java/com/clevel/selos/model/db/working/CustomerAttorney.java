@@ -1,10 +1,14 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.AttorneyType;
+import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -21,7 +25,9 @@ public class CustomerAttorney {
     Customer customer;
 
     @Column(name = "attorney_type")
-    private int attorneyType;
+    @Enumerated(EnumType.ORDINAL)
+    private AttorneyType attorneyType;
+    
 
     @OneToOne
     @JoinColumn(name = "documenttype_id")
@@ -40,7 +46,7 @@ public class CustomerAttorney {
     @Column(name="lastname_th")
     private String lastNameTh;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -48,7 +54,8 @@ public class CustomerAttorney {
     private int age;
 
     @Column(name = "gender", nullable=false, columnDefinition="int default 0")
-    private int gender;
+    @Enumerated(EnumType.ORDINAL)
+    private Gender gender;
 
     @OneToOne
     @JoinColumn(name = "nationality_id")
@@ -140,7 +147,11 @@ public class CustomerAttorney {
 
     @Column(name="mobile_2")
     private String mobile2;
-
+    
+    @ManyToOne
+    @JoinColumn(name="workcase_id")
+    private WorkCase workCase;
+    
     public long getId() {
         return id;
     }
@@ -157,14 +168,14 @@ public class CustomerAttorney {
         this.customer = customer;
     }
 
-    public int getAttorneyType() {
-        return attorneyType;
-    }
-
-    public void setAttorneyType(int attorneyType) {
-        this.attorneyType = attorneyType;
-    }
-
+    public AttorneyType getAttorneyType() {
+		return attorneyType;
+	}
+    
+    public void setAttorneyType(AttorneyType attorneyType) {
+		this.attorneyType = attorneyType;
+	}
+    
     public DocumentType getDocumentType() {
         return documentType;
     }
@@ -221,14 +232,14 @@ public class CustomerAttorney {
         this.age = age;
     }
 
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
+    public Gender getGender() {
+		return gender;
+	}
+    
+    public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+    
     public Nationality getNationality() {
         return nationality;
     }
@@ -444,6 +455,12 @@ public class CustomerAttorney {
     public void setMobile2(String mobile2) {
         this.mobile2 = mobile2;
     }
+    public WorkCase getWorkCase() {
+		return workCase;
+	}
+    public void setWorkCase(WorkCase workCase) {
+		this.workCase = workCase;
+	}
 
     @Override
     public String toString() {
