@@ -659,11 +659,12 @@ public class CreditFacProposeControl extends BusinessControl {
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
-        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = null;
         ProposeCreditDetailView proposeCreditDetailView;
         int rowCount = 1;       // seq of Model
 
-        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+        if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
+            proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
@@ -677,6 +678,7 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setCreditFacility(tmp.getCreditType());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
+                proposeCreditDetailView.setUseCount(tmp.getUseCount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }
@@ -687,7 +689,7 @@ public class CreditFacProposeControl extends BusinessControl {
         // find existingCreditType >>> Borrower Commercial in this workCase
         existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
 
-        if (existingCreditFacilityView != null && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
+        if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());  // id form DB

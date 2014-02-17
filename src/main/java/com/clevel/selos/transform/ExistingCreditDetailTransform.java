@@ -36,7 +36,7 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetail.setNo(existingCreditDetailView.getNo());
             existingCreditDetail.setBorrowerType(existingCreditDetailView.getBorrowerType());
             existingCreditDetail.setExistingCreditFrom(existingCreditDetailView.getExistingCreditFrom());
-
+            existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
             log.debug(" existingCreditDetailView seq is {}",existingCreditDetailView.getSeq());
             existingCreditDetail.setSeq(existingCreditDetailView.getSeq());
             log.debug(" existingCreditDetail seq is {}",existingCreditDetail.getSeq());

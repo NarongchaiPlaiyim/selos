@@ -1,8 +1,6 @@
 package com.clevel.selos.transform.business;
 
-import com.clevel.selos.dao.master.BankAccountStatusDAO;
-import com.clevel.selos.dao.master.BankAccountTypeDAO;
-import com.clevel.selos.dao.master.DWHBankDataSourceDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.ExistingCreditFacilityDAO;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
@@ -14,16 +12,10 @@ import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.db.master.BankAccountStatus;
-import com.clevel.selos.model.db.master.BankAccountType;
-import com.clevel.selos.model.db.master.DWHBankDataSource;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
-import com.clevel.selos.model.view.BankAccountStatusView;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.ExistingCreditDetailView;
-import com.clevel.selos.model.view.ExistingCreditFacilityView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
@@ -64,6 +56,12 @@ public class ObligationBizTransform extends BusinessTransform {
     BankAccountTypeDAO bankAccountTypeDAO;
 
     @Inject
+    ExistingProductFormulaDAO existingProductFormulaDAO;
+
+    @Inject
+    ProductProgramDAO productProgramDAO;
+
+    @Inject
     public ObligationBizTransform() {
 
     }
@@ -99,6 +97,41 @@ public class ObligationBizTransform extends BusinessTransform {
         existingCreditDetailView.setTenor(new BigDecimal(days / 30.4));
         existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
         existingCreditDetailView.setAccountRef(obligation.getAccountRef());
+
+        //get ProductProgram
+        ExistingProductFormula existingProductFormula = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode(), obligation.getTmbExtProductTypeCD());
+        if(existingProductFormula!=null){
+            existingCreditDetailView.setExistProductProgram(existingProductFormula.getProductProgram());
+            existingCreditDetailView.setExistCreditType(existingProductFormula.getCreditType());
+            existingCreditDetailView.setProductSegment(existingProductFormula.getProductSegment());
+        } else {
+            ProductProgram productProgram = productProgramDAO.getNonProductProgram();
+            existingCreditDetailView.setExistProductProgram(productProgram);
+        }
+
+        //get for existing credit in full app  (Tier List)
+        List<ExistingCreditTierDetailView> existingCreditTierDetailViewList = new ArrayList<ExistingCreditTierDetailView>();
+        ExistingCreditTierDetailView existingCreditTierDetailView = new ExistingCreditTierDetailView();
+
+        existingCreditTierDetailView.setInstallment(obligation.getTmbInstallmentAmt());
+        //calculate tenors ((tmb_maturity_date - tmb_origination_date) / 30.4) , tmb_origination_date = last_contact_date
+        int diffDate = DateTimeUtil.daysBetween2Dates(obligation.getLastContractDate(),obligation.getMaturityDate());
+        BigDecimal dividend = new BigDecimal(diffDate);
+        BigDecimal divisor = new BigDecimal("30.4");
+        BigDecimal tenors = BigDecimal.ZERO;
+        if(dividend.compareTo(BigDecimal.ZERO)!=0){
+            tenors = dividend.divide(divisor,0,BigDecimal.ROUND_HALF_UP);
+        }
+        existingCreditTierDetailView.setTenor(tenors.intValue());
+        //TODO: confirm which field used to be int/fee from OBLIGATION
+
+        existingCreditDetailView.setInstallment(obligation.getTmbInstallmentAmt());
+        existingCreditDetailView.setTenor(tenors);
+
+        existingCreditTierDetailViewList.add(existingCreditTierDetailView);
+
+        existingCreditDetailView.setExistingCreditTierDetailViewList(existingCreditTierDetailViewList);
+
         return existingCreditDetailView;
     }
 

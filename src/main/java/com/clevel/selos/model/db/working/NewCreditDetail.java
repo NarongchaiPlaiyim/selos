@@ -27,6 +27,9 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "no_flag")
     private int noFlag;
 
+    @Column(name = "use_count")
+    private int useCount;
+
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
 
@@ -115,12 +118,6 @@ public class NewCreditDetail implements Serializable {
 
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
-
-    /*@OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralCredit> newCollateralCreditList;
-
-    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewGuarantorCredit> newGuarantorCreditList;*/
 
     @ManyToOne
     @JoinColumn(name = "workcase_id")
@@ -452,21 +449,13 @@ public class NewCreditDetail implements Serializable {
         this.proposeType = proposeType;
     }
 
-    /*public List<NewCollateralCredit> getNewCollateralCreditList() {
-        return newCollateralCreditList;
+    public int getUseCount() {
+        return useCount;
     }
 
-    public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
-        this.newCollateralCreditList = newCollateralCreditList;
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
-
-    public List<NewGuarantorCredit> getNewGuarantorCreditList() {
-        return newGuarantorCreditList;
-    }
-
-    public void setNewGuarantorCreditList(List<NewGuarantorCredit> newGuarantorCreditList) {
-        this.newGuarantorCreditList = newGuarantorCreditList;
-    }*/
 
     @Override
     public String toString() {

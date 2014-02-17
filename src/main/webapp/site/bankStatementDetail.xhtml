@@ -252,6 +252,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.grossCreditBalance}"
+                                                                         maxlength="18"
                                                                          onclick="this.select();"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
@@ -267,10 +268,11 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.numberOfCreditTxn}"
+                                                                         maxlength="9"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
+                                                                <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -285,6 +287,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.excludeListBDM}"
+                                                                         maxlength="18"
                                                                          readonly="#{bankStatementDetail.roleUW}"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
@@ -301,6 +304,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.excludeListUW}"
+                                                                         maxlength="18"
                                                                          readonly="#{not bankStatementDetail.roleUW}"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
@@ -384,6 +388,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.debitAmount}"
+                                                                         maxlength="18"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
@@ -399,10 +404,11 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.numberOfDebitTxn}"
+                                                                         maxlength="9"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
+                                                                <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -435,6 +441,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.maxBalance}"
+                                                                         maxlength="18"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
@@ -468,6 +475,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.minBalance}"
+                                                                         maxlength="18"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
@@ -483,6 +491,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.monthBalance}"
+                                                                         maxlength="18"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownNegMoney(event);" onkeypress="return onKeyPressNegMoney(event);"
                                                                          styleClass="right">
@@ -501,10 +510,11 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.numberOfChequeReturn}"
+                                                                         maxlength="9"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
+                                                                <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -516,6 +526,7 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.chequeReturnAmount}"
+                                                                         maxlength="18"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
@@ -531,10 +542,11 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.overLimitTimes}"
+                                                                         maxlength="9"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
+                                                                <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>
@@ -546,10 +558,11 @@
                                                         <td class="center"
                                                             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                                                             <p:inputText value="#{item.overLimitDays}"
+                                                                         maxlength="9"
                                                                          onclick="this.select()"
                                                                          onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);"
                                                                          styleClass="right">
-                                                                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="14"/>
+                                                                <f:convertNumber pattern="#,##0" integerOnly="true" maxIntegerDigits="10"/>
                                                                 <p:ajax event="blur" update="@this"/>
                                                             </p:inputText>
                                                         </td>

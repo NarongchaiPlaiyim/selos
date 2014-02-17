@@ -1,8 +1,8 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.*;
+import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RoleValue;
@@ -15,7 +15,6 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -23,9 +22,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.Serializable;
@@ -65,11 +62,13 @@ public class BankStatementSummary implements Serializable {
     @Inject
     BankStatementSummaryDAO bankStmtSummaryDAO;
     @Inject
-    WorkCaseDAO workCaseDAO;
+    BankAccountTypeDAO bankAccountTypeDAO;
 
     //Transform
     @Inject
     BankStmtTransform bankStmtTransform;
+    @Inject
+    BankAccountTypeTransform bankAccTypeTransform;
 
     //View
     private int seasonalFlag;
@@ -83,6 +82,7 @@ public class BankStatementSummary implements Serializable {
     private Date currentDate;
     private String currentDateDDMMYY;
     private int yesValue;
+    private List<BankAccountTypeView> othBankAccTypeViewList;
 
     //Session
     private long workCaseId;
@@ -146,6 +146,8 @@ public class BankStatementSummary implements Serializable {
         preRender();
 
         yesValue = RadioValue.YES.value();
+
+        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.getOtherAccountTypeList());
 
         initBankStmtSummary();
 
@@ -374,6 +376,19 @@ public class BankStatementSummary implements Serializable {
         log.debug("onRedirectToBankStmtDetail()");
         passParamsToBankStmtDetail();
         FacesUtil.redirect("/site/bankStatementDetail.jsf");
+    }
+
+    public String getOtherBankAccType(int othBankAccTypeId) {
+        String bankAccTypeName = "";
+        if (othBankAccTypeViewList != null && othBankAccTypeId != 0) {
+            for (BankAccountTypeView typeView : othBankAccTypeViewList) {
+                if (typeView.getId() == othBankAccTypeId) {
+                    bankAccTypeName = typeView.getName();
+                    break;
+                }
+            }
+        }
+        return bankAccTypeName;
     }
 
     private boolean checkSelectSeasonalFlag() {
