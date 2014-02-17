@@ -304,14 +304,14 @@ public class BankStatementDetail implements Serializable {
 
         clickSave = true;
 
+        // update Main account and Highest inflow
+        bankStmtControl.updateMainAccAndHighestInflow(summaryView);
+        // re-calculate Total & Grand total summary
+        bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
+
         try {
-            // update Main account and Highest inflow
-            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
-            // re-calculate Total & Grand total summary
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-
+            // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);
