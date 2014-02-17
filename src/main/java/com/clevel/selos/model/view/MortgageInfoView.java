@@ -12,8 +12,8 @@ public class MortgageInfoView implements Serializable {
 	private static final long serialVersionUID = 3331548097385786737L;
 	private long id;
 	private Date signingDate;
-	private long osCompanyId;
-	private long landOfficeId;
+	private int osCompanyId;
+	private int landOfficeId;
 	private String mortgageType;
 	private int mortgageOrder;
 	private BigDecimal mortgageAmount;
@@ -23,6 +23,8 @@ public class MortgageInfoView implements Serializable {
 	
 	private User modifyBy;
 	private Date modifyDate;
+	
+	private long customerAttorneyId;
 	
 	public MortgageInfoView() {
 		
@@ -44,19 +46,19 @@ public class MortgageInfoView implements Serializable {
 		this.signingDate = signingDate;
 	}
 
-	public long getOsCompanyId() {
+	public int getOsCompanyId() {
 		return osCompanyId;
 	}
 
-	public void setOsCompanyId(long osCompanyId) {
+	public void setOsCompanyId(int osCompanyId) {
 		this.osCompanyId = osCompanyId;
 	}
 
-	public long getLandOfficeId() {
+	public int getLandOfficeId() {
 		return landOfficeId;
 	}
 
-	public void setLandOfficeId(long landOfficeId) {
+	public void setLandOfficeId(int landOfficeId) {
 		this.landOfficeId = landOfficeId;
 	}
 
@@ -85,7 +87,10 @@ public class MortgageInfoView implements Serializable {
 	}
 
 	public RadioValue getPoa() {
-		return poa;
+		if (poa == null)
+			return RadioValue.NA;
+		else
+			return poa;
 	}
 
 	public void setPoa(RadioValue poa) {
@@ -93,7 +98,10 @@ public class MortgageInfoView implements Serializable {
 	}
 
 	public AttorneyRelationType getAttorneyRelation() {
-		return attorneyRelation;
+		if (attorneyRelation == null)
+			return AttorneyRelationType.NA;
+		else
+			return attorneyRelation;
 	}
 
 	public void setAttorneyRelation(AttorneyRelationType attorneyRelation) {
@@ -115,5 +123,10 @@ public class MortgageInfoView implements Serializable {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-	
+	public long getCustomerAttorneyId() {
+		return customerAttorneyId;
+	}
+	public void setCustomerAttorneyId(long customerAttorneyId) {
+		this.customerAttorneyId = customerAttorneyId;
+	}
 }

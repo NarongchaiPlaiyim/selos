@@ -7,18 +7,17 @@ import com.clevel.selos.model.Gender;
 
 public class CustomerAttorneyView implements Serializable {
 	private static final long serialVersionUID = 3741911726626140767L;
-	private long id;
 	private long customerId;
-	private long documentTypeId;
+	private int documentTypeId;
 	private String personalId;
-	private long titleId;
+	private int titleId;
 	private String nameTh;
 	private String lastNameTh;
 	private Date birthDate;
 	private int age;
 	private Gender gender;
-	private long raceId;
-	private long nationalityId;
+	private int raceId;
+	private int nationalityId;
 	private String addressNo;
 	private String moo;
 	private String building;
@@ -27,17 +26,17 @@ public class CustomerAttorneyView implements Serializable {
 	private int districtId;
 	private int subDistrictId;
 	private String postalCode;
-	private long countryId;
+	private int countryId;
 	private String phoneNumber;
 	private String phoneExt;
-	private long maritalStatusId;
-	private long spouseTitleId;
+	private int maritalStatusId;
+	private int spouseTitleId;
 	private String spouseNameTh;
 	private String spouseLastNameTh;
-	private long fatherTitleId;
+	private int fatherTitleId;
 	private String fatherNameTh;
 	private String fatherLastNameTh;
-	private long motherTitleId;
+	private int motherTitleId;
 	private String motherNameTh;
 	private String motherLastNameTh;
 	private String homePhoneNumber;
@@ -59,13 +58,6 @@ public class CustomerAttorneyView implements Serializable {
 		canUpdateOthers = true;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public long getCustomerId() {
 		return customerId;
@@ -75,11 +67,11 @@ public class CustomerAttorneyView implements Serializable {
 		this.customerId = customerId;
 	}
 
-	public long getDocumentTypeId() {
+	public int getDocumentTypeId() {
 		return documentTypeId;
 	}
 
-	public void setDocumentTypeId(long documentTypeId) {
+	public void setDocumentTypeId(int documentTypeId) {
 		this.documentTypeId = documentTypeId;
 	}
 
@@ -91,11 +83,11 @@ public class CustomerAttorneyView implements Serializable {
 		this.personalId = personalId;
 	}
 
-	public long getTitleId() {
+	public int getTitleId() {
 		return titleId;
 	}
 
-	public void setTitleId(long titleId) {
+	public void setTitleId(int titleId) {
 		this.titleId = titleId;
 	}
 
@@ -139,19 +131,19 @@ public class CustomerAttorneyView implements Serializable {
 		this.gender = gender;
 	}
 
-	public long getRaceId() {
+	public int getRaceId() {
 		return raceId;
 	}
 
-	public void setRaceId(long raceId) {
+	public void setRaceId(int raceId) {
 		this.raceId = raceId;
 	}
 
-	public long getNationalityId() {
+	public int getNationalityId() {
 		return nationalityId;
 	}
 
-	public void setNationalityId(long nationalityId) {
+	public void setNationalityId(int nationalityId) {
 		this.nationalityId = nationalityId;
 	}
 
@@ -219,11 +211,11 @@ public class CustomerAttorneyView implements Serializable {
 		this.postalCode = postalCode;
 	}
 
-	public long getCountryId() {
+	public int getCountryId() {
 		return countryId;
 	}
 
-	public void setCountryId(long countryId) {
+	public void setCountryId(int countryId) {
 		this.countryId = countryId;
 	}
 
@@ -243,19 +235,19 @@ public class CustomerAttorneyView implements Serializable {
 		this.phoneExt = phoneExt;
 	}
 
-	public long getMaritalStatusId() {
+	public int getMaritalStatusId() {
 		return maritalStatusId;
 	}
 
-	public void setMaritalStatusId(long maritalStatusId) {
+	public void setMaritalStatusId(int maritalStatusId) {
 		this.maritalStatusId = maritalStatusId;
 	}
 
-	public long getSpouseTitleId() {
+	public int getSpouseTitleId() {
 		return spouseTitleId;
 	}
 
-	public void setSpouseTitleId(long spouseTitleId) {
+	public void setSpouseTitleId(int spouseTitleId) {
 		this.spouseTitleId = spouseTitleId;
 	}
 
@@ -275,11 +267,11 @@ public class CustomerAttorneyView implements Serializable {
 		this.spouseLastNameTh = spouseLastNameTh;
 	}
 
-	public long getFatherTitleId() {
+	public int getFatherTitleId() {
 		return fatherTitleId;
 	}
 
-	public void setFatherTitleId(long fatherTitleId) {
+	public void setFatherTitleId(int fatherTitleId) {
 		this.fatherTitleId = fatherTitleId;
 	}
 
@@ -299,11 +291,11 @@ public class CustomerAttorneyView implements Serializable {
 		this.fatherLastNameTh = fatherLastNameTh;
 	}
 
-	public long getMotherTitleId() {
+	public int getMotherTitleId() {
 		return motherTitleId;
 	}
 
-	public void setMotherTitleId(long motherTitleId) {
+	public void setMotherTitleId(int motherTitleId) {
 		this.motherTitleId = motherTitleId;
 	}
 

@@ -465,11 +465,11 @@
 	                        					</td>
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_gender'
-	                        							value="#{mortgageDetail.attorneyView}"
+	                        							value="#{mortgageDetail.attorneyView.gender}"
 														disabled="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateGeneralData)}">
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{enumGeneralControl.genders}" var="gender"
-				                        					itemLabel="#{msg.get(gender.msgKey)}" itemValue="#{gender.value()}"
+				                        					itemLabel="#{msg.get(gender.msgKey)}" itemValue="#{gender}"
 				                        					/>
 				                        			</p:selectOneMenu>
 				                        		</td>
@@ -586,6 +586,7 @@
 		                        					<p:inputText id='att_addresspostcode'
 		                        						value="#{mortgageDetail.attorneyView.postalCode}"
 		                        						readonly="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateAddress)}"
+		                        						maxlength="5"
 		                        						/>
 				                        		</td>
 				                        	</tr>
@@ -637,6 +638,7 @@
 	                        						<p:selectOneMenu id='att_marital'
 	                        							value="#{mortgageDetail.attorneyView.maritalStatusId}"
 														disabled="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateRelationInfo)}">
+														<p:ajax update="att_marriagetitle,att_marriagename,att_marriagesurname" />
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.maritalStatuses}"/>
 				                        			</p:selectOneMenu>
@@ -650,18 +652,18 @@
 	                        					<td colspan="3">
 	                        						<p:selectOneMenu id='att_marriagetitle' styleClass="inline_select"
 	                        							value="#{mortgageDetail.attorneyView.spouseTitleId}"
-														disabled="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateRelationInfo)}">
+														disabled="#{not mortgageDetail.canUpdateSpouse()}">
 				                        				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 				                        				<f:selectItems value="#{mortgageDetail.titles}"/>
 				                        			</p:selectOneMenu>
 				                        			<p:spacer width="5"/>
 	                        						<p:inputText id='att_marriagename' styleClass="large" 
 	                        							value="#{mortgageDetail.attorneyView.spouseNameTh}"
-	                        							readonly="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateRelationInfo)}"/>
+	                        							readonly="#{not mortgageDetail.canUpdateSpouse()}"/>
 	                        						<p:spacer width="5"/>
 	                        						<p:inputText id='att_marriagesurname' styleClass="largest"
 	                        							value="#{mortgageDetail.attorneyView.spouseLastNameTh}"
-	                        							readonly="#{not (mortgageDetail.attorneyDetailEditable and mortgageDetail.attorneyView.canUpdateRelationInfo)}"/>
+	                        							readonly="#{not mortgageDetail.canUpdateSpouse()}"/>
 				                        		</td>
 				                        	</tr>
 				                        	<tr>

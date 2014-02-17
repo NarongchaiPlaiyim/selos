@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -66,6 +67,7 @@ public class MortgageDetail implements Serializable {
 	private BasicInfoView basicInfoView;
 	private List<MortgageInfoAttorneySelectView> attorneySelectViews;
 	private CustomerAttorneyView currentAttorneyView;
+	private Set<Integer> spouseMaritialSet;
 	
 	//Dropdown list
 	private List<SelectItem> outsourceCompaines;
@@ -218,7 +220,15 @@ public class MortgageDetail implements Serializable {
 	public CustomerAttorneyView getAttorneyView() {
 		return attorneyView;
 	}
-	
+	public boolean canUpdateSpouse() {
+		if (!attorneyDetailEditable)
+			return false;
+		
+		if (attorneyView.isCanUpdateRelationInfo() && attorneyView.getMaritalStatusId() >= 0)
+			return spouseMaritialSet.contains(attorneyView.getMaritalStatusId());
+		else
+			return false;
+	}
 	/*
 	 * Action
 	 */
@@ -233,6 +243,8 @@ public class MortgageDetail implements Serializable {
 		Map<String,Object> params =  FacesUtil.getParamMapFromFlash("mortgageParams");
 		fromPage = (String)params.get("fromPage");
 		mortgageId = Util.parseLong(params.get("mortgageId"),-1);
+		if (mortgageId <= 0)
+			mortgageId = Util.parseLong(FacesUtil.getParameter("mortgageId"),-1);
 		attorneySelectViews = mortgageDetailControl.getAttorneySelectList(workCaseId);
 		attorneySelectDataModel = new AttorneySelectDataModel();
 		attorneySelectDataModel.setWrappedData(attorneySelectViews);
@@ -285,6 +297,12 @@ public class MortgageDetail implements Serializable {
 			subdistricts = Collections.emptyList();
 	}
 	public void onSelectPOA() {
+		if (!RadioValue.YES.equals(mortgageInfoView.getPoa())) {
+			//mark all POA in coll owners to false
+			for (MortgageInfoCollOwnerView owner : collOwners) {
+				owner.setPOA(false);
+			}
+		}
 		_calculateAttorneyDetail();
 	}
 	public void onSelectAppointeeRelationship() {
@@ -295,6 +313,8 @@ public class MortgageDetail implements Serializable {
 	}
 	
 	public void onSaveMortgageDetail() {
+		
+		mortgageId = mortgageDetailControl.saveMortgageDetail(workCaseId, mortgageInfoView, collOwners, attorneyView);
 		
 		_loadInitData();
 		RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
@@ -330,6 +350,8 @@ public class MortgageDetail implements Serializable {
 		subdistricts = Collections.emptyList(); //Need to process
 		maritalStatuses = generalPeopleInfoControl.listMaritialStatuses();
 		countries = generalPeopleInfoControl.listCountries();
+		
+		spouseMaritialSet = generalPeopleInfoControl.listSpouseReqMaritialStatues();
 	}
 	private void _loadInitData() {
 		preRenderCheck = false;
@@ -340,7 +362,7 @@ public class MortgageDetail implements Serializable {
 		//TODO Load mortage info by using workcase and mortgageId
 		mortgageInfoView = mortgageDetailControl.getMortgageInfo(mortgageId);
 		collOwners = mortgageDetailControl.getCollOwners(workCaseId, mortgageInfoView.getId());
-		currentAttorneyView = mortgageDetailControl.getCustomerAttorneyView(workCaseId);
+		currentAttorneyView = mortgageDetailControl.getCustomerAttorneyView(mortgageInfoView.getCustomerAttorneyId());
 		if (currentAttorneyView.getCustomerId() > 0) {
 			for (MortgageInfoAttorneySelectView view : attorneySelectViews) {
 				if (view.getCustomerId() == currentAttorneyView.getCustomerId()) {
@@ -369,7 +391,8 @@ public class MortgageDetail implements Serializable {
 			_preCalculateDropdown();
 			return;
 		}
-		
+		if (type == null)
+			type = AttorneyRelationType.NA;
 		switch (type) {
 			case BORROWER :
 				if (selectedAttorney != null) {

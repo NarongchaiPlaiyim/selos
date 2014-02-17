@@ -1,17 +1,30 @@
 package com.clevel.selos.model.db.working;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.MortgageLandOffice;
 import com.clevel.selos.model.db.master.MortgageOSCompany;
 import com.clevel.selos.model.db.master.MortgageType;
 import com.clevel.selos.model.db.master.User;
-
-import javax.persistence.*;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "wrk_mortgage_info")
@@ -41,16 +54,7 @@ public class MortgageInfo implements Serializable {
 
     @Column(name = "mortgage_order")
     private int mortgageOrder;
-    
-    @OneToMany(mappedBy = "mortgageInfo")
-    private List<MortgageInfoCredit> mortgageInfoCreditList;
-
-    @OneToMany(mappedBy = "mortgageInfo")
-    private List<MortgageInfoCollSub> mortgageInfoCollSubList;
-
-    @OneToMany(mappedBy = "mortgageInfo")
-    private List<MortgageInfoCollOwner> mortgageInfoCollOwnerList;
-
+   
     @Column(name = "attorney_required",columnDefinition="int default 0")
     @Enumerated(EnumType.ORDINAL)
     private RadioValue attorneyRequired;
@@ -58,10 +62,6 @@ public class MortgageInfo implements Serializable {
     @Column(name = "attorney_relation",columnDefinition="int default 0")
     @Enumerated(EnumType.ORDINAL)
     private AttorneyRelationType attorneyRelation;
-
-    @OneToOne
-    @JoinColumn(name = "poa_customer_id", nullable = true)
-    private Customer customer;
 
     @OneToOne
     @JoinColumn(name = "customer_attorney_id", nullable = true)
@@ -135,29 +135,7 @@ public class MortgageInfo implements Serializable {
 		this.mortgageOrder = mortgageOrder;
 	}
 
-	public List<MortgageInfoCredit> getMortgageInfoCreditList() {
-		return mortgageInfoCreditList;
-	}
-
-	public void setMortgageInfoCreditList(List<MortgageInfoCredit> mortgageInfoCreditList) {
-		this.mortgageInfoCreditList = mortgageInfoCreditList;
-	}
-
-	public List<MortgageInfoCollSub> getMortgageInfoCollSubList() {
-		return mortgageInfoCollSubList;
-	}
-
-	public void setMortgageInfoCollSubList(List<MortgageInfoCollSub> mortgageInfoCollSubList) {
-		this.mortgageInfoCollSubList = mortgageInfoCollSubList;
-	}
-
-	public List<MortgageInfoCollOwner> getMortgageInfoCollOwnerList() {
-		return mortgageInfoCollOwnerList;
-	}
-
-	public void setMortgageInfoCollOwnerList(List<MortgageInfoCollOwner> mortgageInfoCollOwnerList) {
-		this.mortgageInfoCollOwnerList = mortgageInfoCollOwnerList;
-	}
+	
 
 	public RadioValue getAttorneyRequired() {
 		return attorneyRequired;
@@ -173,14 +151,6 @@ public class MortgageInfo implements Serializable {
 	
 	public void setAttorneyRelation(AttorneyRelationType attorneyRelation) {
 		this.attorneyRelation = attorneyRelation;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
 	}
 
 	public CustomerAttorney getCustomerAttorney() {
