@@ -80,7 +80,7 @@
                                                    var="businessGroup"
                                                    itemLabel="#{businessGroup.name}"
                                                    itemValue="#{businessGroup.id}"/>
-                                    <p:ajax process=":frmMain" listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain" />
+                                    <p:ajax process="@this" listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain:businessDescriptionId" />
                                 </p:selectOneMenu>
                             </td>
                         </tr>
@@ -208,7 +208,8 @@
                         <tr>
                             <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoDetail.label.percentExpIndCountryName')}"/></td>
                             <td colspan="3">
-                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}">
+                                <p:inputText styleClass="large right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"
+                                             onkeydown="return onKeyDownMoney(event);" onkeypress="return onKeyPressMoney(event);">
                                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" />
                                     <f:validateDoubleRange maximum="100"/>
                                     <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>

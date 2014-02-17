@@ -33,8 +33,14 @@ public class BAPAInfoTransform extends Transform{
 		}
 		
 		view.setId(model.getId());
-		view.setApplyBA(model.getApplyBA());
-		view.setPayToInsuranceCompany(model.getPayToInsuranceCompany());
+		if (model.getApplyBA() == null)
+			view.setApplyBA(RadioValue.NA);
+		else
+			view.setApplyBA(model.getApplyBA());
+		if (model.getPayToInsuranceCompany() == null)
+			view.setPayToInsuranceCompany(RadioValue.NA);
+		else
+			view.setPayToInsuranceCompany(model.getPayToInsuranceCompany());
 		view.setInsuranceCompany(model.getInsuranceCompany());
 		if (model.getInsuranceCompany() != null)
 			view.setUpdInsuranceCompany(model.getInsuranceCompany().getId());
@@ -61,7 +67,10 @@ public class BAPAInfoTransform extends Transform{
 	public void updateModelFromView(BAPAInfo model,BAPAInfoView view,User user) {
 		model.setApplyBA(view.getApplyBA());
 		model.setPayToInsuranceCompany(view.getPayToInsuranceCompany());
-		model.setInsuranceCompany(insuranceCompanyDAO.findById(view.getUpdInsuranceCompany()));
+		if (view.getUpdInsuranceCompany() <= 0)
+			model.setInsuranceCompany(null);
+		else
+			model.setInsuranceCompany(insuranceCompanyDAO.findById(view.getUpdInsuranceCompany()));
 		model.setTotalExpense(view.getTotalExpense());
 		model.setTotalLimit(view.getTotalLimit());
 		model.setTotalPremium(view.getTotalPremium());

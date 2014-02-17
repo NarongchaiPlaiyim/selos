@@ -12,8 +12,8 @@ import java.util.List;
 public class ExistingCreditFacilityView implements Serializable {
 
     private long id;
-    private long workcasePrescreenId;
-    private long getWorkcaseFullAppId;
+    private long workCasePrescreenId;
+    private long workCaseId;
     private List<ActionStatusView> status;
 
     private BigDecimal totalBorrowerComLimit;
@@ -70,20 +70,20 @@ public class ExistingCreditFacilityView implements Serializable {
         this.id = id;
     }
 
-    public long getWorkcasePrescreenId() {
-        return workcasePrescreenId;
+    public long getWorkCasePrescreenId() {
+        return workCasePrescreenId;
     }
 
-    public void setWorkcasePrescreenId(long workcasePrescreenId) {
-        this.workcasePrescreenId = workcasePrescreenId;
+    public void setWorkCasePrescreenId(long workCasePrescreenId) {
+        this.workCasePrescreenId = workCasePrescreenId;
     }
 
-    public long getGetWorkcaseFullAppId() {
-        return getWorkcaseFullAppId;
+    public long getWorkCaseId() {
+        return workCaseId;
     }
 
-    public void setGetWorkcaseFullAppId(long getWorkcaseFullAppId) {
-        this.getWorkcaseFullAppId = getWorkcaseFullAppId;
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
     }
 
     public List<ActionStatusView> getStatus() {
@@ -386,8 +386,8 @@ public class ExistingCreditFacilityView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("workcasePrescreenId", workcasePrescreenId)
-                .append("getWorkcaseFullAppId", getWorkcaseFullAppId)
+                .append("workCasePrescreenId", workCasePrescreenId)
+                .append("workCaseId", workCaseId)
                 .append("status", status)
                 .append("totalBorrowerComLimit", totalBorrowerComLimit)
                 .append("totalBorrowerRetailLimit", totalBorrowerRetailLimit)

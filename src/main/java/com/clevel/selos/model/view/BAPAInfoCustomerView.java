@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.util.Util;
 
 public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoCustomerView>{
 
@@ -24,7 +25,7 @@ public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoC
 	private boolean applyBA;
 	
 	private int updBAResultHC;
-	
+	private boolean needUpdate;
 	//internal use
 	private int relationPriority;
 	
@@ -112,6 +113,12 @@ public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoC
 	public void setRelationPriority(int relationPriority) {
 		this.relationPriority = relationPriority;
 	}
+	public boolean isNeedUpdate() {
+		return needUpdate;
+	}
+	public void setNeedUpdate(boolean needUpdate) {
+		this.needUpdate = needUpdate;
+	}
 	@Override
 	public int compareTo(BAPAInfoCustomerView obj) {
 		if (obj == null)
@@ -119,18 +126,11 @@ public class BAPAInfoCustomerView implements Serializable , Comparable<BAPAInfoC
 		if (this == obj)
 			return 0;
 		//compare relation
-		int compare = relationPriority - obj.relationPriority;
-		if (compare > 0)
-			return 1;
-		else if (compare < 0)
-			return -1;
+
+		int compare = Util.compareInt(relationPriority, obj.relationPriority);
+		if (compare != 0)
+			return compare;
 		
-		compare = (int) (id - obj.id);
-		if (compare > 0)
-			return 1;
-		else if (compare < 0)
-			return -1;
-		else
-			return 0;
+		return Util.compareLong(id, obj.id);
 	}
 }

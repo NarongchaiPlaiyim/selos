@@ -30,6 +30,9 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "no_flag")
     private int noFlag;
 
+    @Column(name = "use_count")
+    private int useCount;
+
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
 
@@ -119,12 +122,6 @@ public class NewCreditDetail implements Serializable {
 
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
-
-    /*@OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralCredit> newCollateralCreditList;
-
-    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewGuarantorCredit> newGuarantorCreditList;*/
 
     @ManyToOne
     @JoinColumn(name = "workcase_id")
@@ -453,6 +450,14 @@ public class NewCreditDetail implements Serializable {
 
     public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
+    }
+
+    public int getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
 
     @Override

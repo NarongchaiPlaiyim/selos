@@ -9,104 +9,104 @@ import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
 
 public class BAPAInfoView implements Serializable {
-	private static final long serialVersionUID = -8964123899265413304L;
+    private static final long serialVersionUID = -8964123899265413304L;
 
-	private long id;
-	private RadioValue applyBA;
-	private RadioValue payToInsuranceCompany;
-	private User modifyBy;
-	private Date modifyDate;
-	private InsuranceCompany insuranceCompany;
-	
-	private int updInsuranceCompany;
-	
-	private BigDecimal totalLimit;
-	private BigDecimal totalPremium;
+    private long id;
+    private RadioValue applyBA;
+    private RadioValue payToInsuranceCompany;
+    private User modifyBy;
+    private Date modifyDate;
+    private InsuranceCompany insuranceCompany;
+
+    private int updInsuranceCompany;
+
+    private BigDecimal totalLimit;
+    private BigDecimal totalPremium;
     private BigDecimal totalExpense;
-	
-	public BAPAInfoView() {
-		
-	}
 
-	public long getId() {
-		return id;
-	}
+    public BAPAInfoView() {
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    }
 
-	public RadioValue getApplyBA() {
-		return applyBA;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setApplyBA(RadioValue applyBA) {
-		this.applyBA = applyBA;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public RadioValue getPayToInsuranceCompany() {
-		return payToInsuranceCompany;
-	}
+    public RadioValue getApplyBA() {
+        return applyBA;
+    }
 
-	public void setPayToInsuranceCompany(RadioValue payToInsuranceCompany) {
-		this.payToInsuranceCompany = payToInsuranceCompany;
-	}
+    public void setApplyBA(RadioValue applyBA) {
+        this.applyBA = applyBA;
+    }
 
-	public User getModifyBy() {
-		return modifyBy;
-	}
+    public RadioValue getPayToInsuranceCompany() {
+        return payToInsuranceCompany;
+    }
 
-	public void setModifyBy(User modifyBy) {
-		this.modifyBy = modifyBy;
-	}
+    public void setPayToInsuranceCompany(RadioValue payToInsuranceCompany) {
+        this.payToInsuranceCompany = payToInsuranceCompany;
+    }
 
-	public Date getModifyDate() {
-		return modifyDate;
-	}
+    public User getModifyBy() {
+        return modifyBy;
+    }
 
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
 
-	public InsuranceCompany getInsuranceCompany() {
-		return insuranceCompany;
-	}
+    public Date getModifyDate() {
+        return modifyDate;
+    }
 
-	public void setInsuranceCompany(InsuranceCompany insuranceCompany) {
-		this.insuranceCompany = insuranceCompany;
-	}
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
 
-	public int getUpdInsuranceCompany() {
-		return updInsuranceCompany;
-	}
+    public InsuranceCompany getInsuranceCompany() {
+        return insuranceCompany;
+    }
 
-	public void setUpdInsuranceCompany(int updInsuranceCompany) {
-		this.updInsuranceCompany = updInsuranceCompany;
-	}
+    public void setInsuranceCompany(InsuranceCompany insuranceCompany) {
+        this.insuranceCompany = insuranceCompany;
+    }
 
-	public BigDecimal getTotalLimit() {
-		return totalLimit;
-	}
+    public int getUpdInsuranceCompany() {
+        return updInsuranceCompany;
+    }
 
-	public void setTotalLimit(BigDecimal totalLimit) {
-		this.totalLimit = totalLimit;
-	}
+    public void setUpdInsuranceCompany(int updInsuranceCompany) {
+        this.updInsuranceCompany = updInsuranceCompany;
+    }
 
-	public BigDecimal getTotalPremium() {
-		return totalPremium;
-	}
+    public BigDecimal getTotalLimit() {
+        return totalLimit;
+    }
 
-	public void setTotalPremium(BigDecimal totalPremium) {
-		this.totalPremium = totalPremium;
-	}
+    public void setTotalLimit(BigDecimal totalLimit) {
+        this.totalLimit = totalLimit;
+    }
 
-	public BigDecimal getTotalExpense() {
-		return totalExpense;
-	}
+    public BigDecimal getTotalPremium() {
+        return totalPremium;
+    }
 
-	public void setTotalExpense(BigDecimal totalExpense) {
-		this.totalExpense = totalExpense;
-	}
-	
-	
+    public void setTotalPremium(BigDecimal totalPremium) {
+        this.totalPremium = totalPremium;
+    }
+
+    public BigDecimal getTotalExpense() {
+        return totalExpense;
+    }
+
+    public void setTotalExpense(BigDecimal totalExpense) {
+        this.totalExpense = totalExpense;
+    }
+
+
 }

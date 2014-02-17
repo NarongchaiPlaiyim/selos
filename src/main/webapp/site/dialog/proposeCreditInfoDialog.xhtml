@@ -9,10 +9,10 @@
     <h:form id="creditInfoDlgForm">
         <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="width: 20%">
+                <td class="title" style="width: 30%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
                 </td>
-                <td class="left" style="width: 80%" colspan="3">
+                <td class="left" style="width: 70%" colspan="3">
                     <p:selectOneRadio value="#{creditFacPropose.newCreditDetailView.requestType}"
                                       required="#{not empty param[onSaveCreditInfo.clientId]}"
                                       disabled="#{creditFacPropose.modeEdit}">
@@ -105,17 +105,17 @@
             </tr>
 
             <tr>
-                <td class="title" style="width: 20%">
+                <td class="title" style="width: 30%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
                 </td>
-                <td class="left" style="width: 30%">
+                <td class="left" style="width: 20%">
                     <p:inputText id="productCode"
                                  value="#{creditFacPropose.newCreditDetailView.productCode}"/>
                 </td>
-                <td class="title" style="width: 20%">
+                <td class="title" style="width: 30%">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
                 </td>
-                <td class="left" style="width: 30%">
+                <td class="left" style="width: 20%">
                     <p:inputText id="projectCode"
                                  value="#{creditFacPropose.newCreditDetailView.projectCode}"
                                  required="#{not empty param[onSaveCreditInfo.clientId]}"/>
@@ -503,7 +503,7 @@
 
                     </p:selectOneMenu>
                 </td>
-                <td class="title">
+                <td class="title" style="width:200px;">
                     <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}" />
                 </td>
                 <td class="left">

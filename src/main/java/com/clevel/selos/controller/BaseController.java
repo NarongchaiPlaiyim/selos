@@ -210,14 +210,12 @@ public class BaseController implements Serializable {
         log.debug("onRequestAppraisal ( submit to aad admin )");
         long workCasePreScreenId = 0;
         long workCaseId = 0;
-        String queueName = "";
         try{
             HttpSession session = FacesUtil.getSession(true);
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            queueName = session.getAttribute("queueName").toString();
 
-            fullApplicationControl.requestAppraisal(queueName, workCasePreScreenId, workCaseId);
+            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId);
 
             messageHeader = "Information.";
             message = "Request for appraisal success.";

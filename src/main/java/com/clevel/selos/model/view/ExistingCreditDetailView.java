@@ -48,6 +48,8 @@ public class ExistingCreditDetailView implements Serializable {
     private BigDecimal tenor;
     private String accountRef;
 
+    private ProductSegment productSegment;
+
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -312,6 +314,14 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountRef = accountRef;
     }
 
+    public ProductSegment getProductSegment() {
+        return productSegment;
+    }
+
+    public void setProductSegment(ProductSegment productSegment) {
+        this.productSegment = productSegment;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -393,6 +403,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("accountRef", accountRef)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)
                 .append("existingSplitLineDetailViewList", existingSplitLineDetailViewList)
+                .append("productSegment", productSegment)
                 .toString();
     }
 }

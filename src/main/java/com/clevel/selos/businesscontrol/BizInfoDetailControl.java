@@ -143,12 +143,12 @@ public class BizInfoDetailControl extends BusinessControl {
 //            }
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
-            for (int i = 0; i < buyerDetailList.size(); i++) {
-                stakeHolderDetailViewTemp = buyerDetailList.get(i);
-                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp, bizInfoDetail);
+            for(BizStakeHolderDetailView bizStakeHolderDetailView : buyerDetailList){
+                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(bizStakeHolderDetailView, bizInfoDetail);
                 bizStakeHolderDetailTemp.setStakeHolderType("2");
                 bizBuyerList.add(bizStakeHolderDetailTemp);
             }
+
             bizStakeHolderDetailDAO.persist(bizBuyerList);
             log.info("bizBuyerListDetailDAO persist end");
 
@@ -196,7 +196,7 @@ public class BizInfoDetailControl extends BusinessControl {
                 }
             }
 
-            log.info("bankStatementAvg :",bankStatementAvg);
+            log.info("bankStatementAvg : {}",bankStatementAvg);
 
             BigDecimal incomeAmountCal;
             BigDecimal sumIncomeAmountD = BigDecimal.ZERO;
@@ -219,6 +219,10 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal inv;
             BigDecimal invCal;
             BigDecimal sumINV = BigDecimal.ZERO;
+
+            BigDecimal incomeFactor;
+            BigDecimal incomeFactorCal;
+            BigDecimal sumIncomeFactor = BigDecimal.ZERO;
 
             for (BizInfoDetail bizInfoDetail : bizInfoDetailList) {
                 incomePercentD = bizInfoDetail.getPercentBiz();
@@ -246,6 +250,11 @@ public class BizInfoDetailControl extends BusinessControl {
                 invCal = Util.divide(Util.multiply(inv,incomePercentD),oneHundred);
                 sumINV = Util.add(sumINV,invCal);
 
+                incomeFactor = bizInfoDetail.getIncomeFactor();
+                incomeFactorCal = Util.divide(Util.multiply(incomeFactor,incomePercentD),oneHundred);
+                sumIncomeFactor = Util.add(sumIncomeFactor,incomeFactorCal);
+
+
                 bizInfoDetailDAO.persist(bizInfoDetail);
             }
 
@@ -258,6 +267,7 @@ public class BizInfoDetailControl extends BusinessControl {
             BigDecimal SumWeightAP = sumAP.setScale(2,RoundingMode.HALF_UP);
             BigDecimal SumWeightINV = sumINV.setScale(2,RoundingMode.HALF_UP);
             BigDecimal SumWeightIntIncomeFactor = sumAdjust.setScale(2,RoundingMode.HALF_UP);
+            BigDecimal SumWeightIncFactor = sumIncomeFactor.setScale(2,RoundingMode.HALF_UP);
 
 //            bizInfoSummary.setCirculationAmount(sumIncomeAmount); //?????  BankStatementSummary.grandTotal
 //            bizInfoSummary.setCirculationPercentage(oneHundred); //?????
@@ -267,6 +277,9 @@ public class BizInfoDetailControl extends BusinessControl {
             bizInfoSummary.setSumWeightAP(SumWeightAP);
             bizInfoSummary.setSumWeightINV(SumWeightINV);
             bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(SumWeightIntIncomeFactor);
+            bizInfoSummary.setWeightIncomeFactor(SumWeightIncFactor);
+
+            System.out.println("SumWeightIncFactor {},"+SumWeightIncFactor);
 
             log.debug("bizInfoSummary : {}",bizInfoSummary);
 

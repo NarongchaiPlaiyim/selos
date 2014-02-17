@@ -13,6 +13,12 @@ public class ExistingProductFormula {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "tmb_product_group", length = 10)
+    private String productGroup;
+
+    @Column(name = "tmb_product_type_code", length = 3)
+    private String productTypeCode;
+
     @Column(name = "tmb_product_code", length = 50)
     private String productCode;
 
@@ -41,12 +47,6 @@ public class ExistingProductFormula {
     @Column(name = "wc_calculate")
     private int wcCalculate;
 
-    @Column(name = "reduce_pricing")
-    private int reducePricing;
-
-    @Column(name = "reduce_frontend_fee")
-    private int reduceFrontEndFee;
-
     @Column(name = "dbr_calculate")
     private int dbrCalculate;
 
@@ -62,6 +62,22 @@ public class ExistingProductFormula {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(String productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public String getProductTypeCode() {
+        return productTypeCode;
+    }
+
+    public void setProductTypeCode(String productTypeCode) {
+        this.productTypeCode = productTypeCode;
     }
 
     public String getProductCode() {
@@ -128,22 +144,6 @@ public class ExistingProductFormula {
         this.wcCalculate = wcCalculate;
     }
 
-    public int getReducePricing() {
-        return reducePricing;
-    }
-
-    public void setReducePricing(int reducePricing) {
-        this.reducePricing = reducePricing;
-    }
-
-    public int getReduceFrontEndFee() {
-        return reduceFrontEndFee;
-    }
-
-    public void setReduceFrontEndFee(int reduceFrontEndFee) {
-        this.reduceFrontEndFee = reduceFrontEndFee;
-    }
-
     public int getDbrCalculate() {
         return dbrCalculate;
     }
@@ -172,6 +172,8 @@ public class ExistingProductFormula {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("productGroup", productGroup)
+                .append("productTypeCode", productTypeCode)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("productProgram", productProgram)
@@ -180,8 +182,6 @@ public class ExistingProductFormula {
                 .append("dwhProduct", dwhProduct)
                 .append("exposureMethod", exposureMethod)
                 .append("wcCalculate", wcCalculate)
-                .append("reducePricing", reducePricing)
-                .append("reduceFrontEndFee", reduceFrontEndFee)
                 .append("dbrCalculate", dbrCalculate)
                 .append("dbrMethod", dbrMethod)
                 .append("active", active)
