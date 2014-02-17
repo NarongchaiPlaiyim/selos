@@ -25,7 +25,6 @@ import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditFacilityView;
 import com.clevel.selos.transform.business.ObligationBizTransform;
 import com.clevel.selos.util.Util;
-import org.junit.experimental.categories.Categories;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
