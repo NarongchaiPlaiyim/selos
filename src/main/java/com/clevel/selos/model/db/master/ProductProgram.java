@@ -23,6 +23,9 @@ public class ProductProgram implements Serializable {
     private String brmsCode;
     @Column(name = "active")
     private int active;
+    
+    @Column(name="IS_BA",columnDefinition="int default 0")
+    private boolean ba;
 
     public ProductProgram() {
     }
@@ -66,7 +69,12 @@ public class ProductProgram implements Serializable {
     public void setActive(int active) {
         this.active = active;
     }
-
+    public boolean isBa() {
+		return ba;
+	}
+    public void setBa(boolean ba) {
+		this.ba = ba;
+	}
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -75,6 +83,7 @@ public class ProductProgram implements Serializable {
                 .append("description", description)
                 .append("brmsCode", brmsCode)
                 .append("active", active)
+                .append("ba",ba)
                 .toString();
     }
 }

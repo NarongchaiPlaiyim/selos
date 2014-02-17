@@ -82,68 +82,81 @@
                         			<h:outputText value="#{msg.get('app.baInfo.ba.applyBA')}" />			
                         		</td>
                         		<td>
-             			            <p:selectOneRadio disabled="true">
-                                       <f:selectItem
-                                       	itemLabel="#{msg.get('app.button.yes')}" 
-                                       	itemValue="2"/>
-                                       <f:selectItem 
-                                       	itemLabel="#{msg.get('app.button.no')}" 
-                                       	itemValue="1"/>
+             			            <p:selectOneRadio value="#{baInfo.bapaInfoView.applyBA}">
+             			            	<p:ajax update="bainfo_tbl" />
+                                       <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
+	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
+    	                                   	itemValue="#{radio}"/>
                                    </p:selectOneRadio>
                         		</td>                     		
                         	</tr>
                         	<tr>
                         		<td class="title">
-                        			<h:outputText value="#{msg.get('app.baInfo.ba.baPaymentMethod')}" />			
+                        			<h:outputText value="#{msg.get('app.baInfo.ba.payToInsuranceCompany')}" />			
                         		</td>
                         		<td>
-             			            <p:selectOneRadio disabled="true">
-                                       <f:selectItem
-                                       	itemLabel="#{msg.get('app.button.yes')}" 
-                                       	itemValue="2"/>
-                                       <f:selectItem 
-                                       	itemLabel="#{msg.get('app.button.no')}" 
-                                       	itemValue="1"/>
+                        			<p:selectOneRadio value="#{baInfo.bapaInfoView.payToInsuranceCompany}">
+                                       <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
+	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
+    	                                   	itemValue="#{radio}"/>
                                    </p:selectOneRadio>
+             			            
                         		</td>                     		
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
                         			<p:dataTable id='bainfo_tbl' styleClass="full_table"
+                        				value="#{baInfo.bapaInfoCustomers}" var="customer"
 	                           			>
 	                           			<p:column style='width:80px' styleClass="center"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.applyBA')}">
-	                           				<p:selectBooleanCheckbox />
+	                           				<p:selectBooleanCheckbox value="#{customer.applyBA}"
+	                           					disabled="#{not baInfo.canUpdateBAInfoTable()}"
+	                           					styleClass="normal_checkbox"
+	                           					>
+	                           					<p:ajax update="upd_baCustomer"/>
+	                           				</p:selectBooleanCheckbox>
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.cusName')}">
+	                           				#{customer.customerName}
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.contactNumber')}">
+	                           				#{customer.customerContractNo}
 	                           			</p:column>
 	                           			
 	                           			<p:column style="width:250px;"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.relationship')}">
+	                           				#{customer.relationship}
 	                           			</p:column>
 	                           			
 	                           			<p:column 
 	                           				headerText="#{msg.get('app.baInfo.ba.table.resultHealthcheck')}">
+	                           				#{baInfo.getDisplayResultHealthCheck(customer)}
 	                           			</p:column>
 	                           			
 	                           			<p:column styleClass="center" style="width:100px;"
 	                           				headerText="#{msg.get('app.baInfo.ba.table.checkDate')}">
+	                           				<h:outputText value="#{customer.checkDate}">
+	                           					<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+	                           				</h:outputText>
 	                           			</p:column>
 	                           			<p:column styleClass="center" style="width:30px;">
-	                           				<p:commandButton icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
+	                           				<p:commandButton
+	                           					id='upd_baCustomer' 
+	                           					icon="ui-icon-pencil" title="#{msg.get('app.button.edit')}"
                            						process="@this"
                            						onstart="p_blockUI.show()"
                            						oncomplete="p_blockUI.hide();p_baApplyInfoDlg.show();"
-                           						action="#{baInfo.onOpenApplyInformationDialog()}"
+                           						actionListener="#{baInfo.onOpenApplyInformationDialog(customer)}"
                            						style="margin-right:0px !important"
+                           						update=":baApplyInfoDlgForm"
+                           						disabled="#{not (customer.updateable and baInfo.canUpdateBAInfoTable())}"
                            						>
-                           						<p:resetInput target="baApplyInfoDlgForm" />
+                           						<p:resetInput target=":baApplyInfoDlgForm" />
                            					</p:commandButton>
 	                           			</p:column>
 	                           		</p:dataTable>
@@ -164,7 +177,7 @@
 	                            	<p:commandButton id='addBtn' value="#{msg.get('app.button.add')}"
 		                               		styleClass="medium"
 			                                process="@this"
-			                                action="#{baInfo.onOpenAddBAPAInformationDialog()}"
+			                                actionListener="#{baInfo.onOpenAddBAPAInformationDialog()}"
 			                                oncomplete="p_bapaApplyInfoDlg.show()"
 			                                update=":bapaApplyInfoDlg"
 			                                >
@@ -174,51 +187,63 @@
                         	</tr>
                         	<tr>
                         		<td colspan="100%">
-                        			<p:dataTable id='bapainfo_tbl' rowIndexVar="rowIdx" styleClass="full_table"
+                        			<p:dataTable id='bapainfo_tbl' value="#{baInfo.bapaInfoCredits}"
+                        				var="credit"  
+                        				rowIndexVar="rowIdx" styleClass="full_table"
                         				>
 	                           			<p:column style='width:30px' styleClass="center">
 	                           				#{rowIdx+1}
 	                           			</p:column>
 	                           			
-	                           			<p:column style='width:100px'
+	                           			<p:column style='width:50px' styleClass="center"
 	                           				headerText="#{msg.get('app.baInfo.bapa.table.type')}">
+	                           				#{credit.type}
 	                           			</p:column>
 	              
 	                           			<p:column 
-	                           				headerText="#{msg.get('app.baInfo.bapa.table.creditType')}">
-	                           				#{msg.get('app.baInfo.bapa.table.creditType.productProgram')} 
-	                           				<h:outputText value="" />
-	                           				<br/>
-	                           				#{msg.get('app.baInfo.bapa.table.creditType.creditType')} 
-	                           				<h:outputText value="" />
-	                           				<br/>
-	                           				#{msg.get('app.baInfo.bapa.table.creditType.objective')} 
-	                           				<h:outputText value="" />
+	                           				headerText="#{msg.get('app.baInfo.bapa.table.creditType')}"
+	                           				style="line-height: 1.5em;">
+	                           				<div style="padding : 5px 0;">
+		                           				#{msg.get('app.baInfo.bapa.table.creditType.productProgram')} 
+		                           				<h:outputText value="#{credit.productProgram}" />
+		                           				<br/>
+		                           				#{msg.get('app.baInfo.bapa.table.creditType.creditType')} 
+		                           				<h:outputText value="#{credit.creditType}" />
+		                           				<br/>
+		                           				#{msg.get('app.baInfo.bapa.table.creditType.objective')} 
+		                           				<h:outputText value="#{credit.loanPurpose}" />
+		                           			</div>
 	                           			</p:column>
 	                           			
-	                           			<p:column style='width:150px'
+	                           			<p:column style='width:100px' styleClass="center"
 	                           				headerText="#{msg.get('app.baInfo.bapa.table.customerPay')}">
+	                           				<h:outputText value="#{msg.get('app.button.yes')}"
+	                           					rendered="#{credit.payByCustomer}" 
+	                           					/>
+	                           				<h:outputText value="#{msg.get('app.button.no')}"
+	                           					rendered="#{not credit.payByCustomer}" 
+	                           					/>
 	                           			</p:column>
 	                           			<p:column style='width:150px' styleClass="right"
 	                           				headerText="#{msg.get('app.baInfo.bapa.table.amount')}">
-	                           				<h:outputText value="0">
+	                           				<h:outputText value="#{credit.limit}" rendered="#{credit.limit gt 0}">
 	                           					<f:convertNumber pattern="#,##0.00"/>
 	                           				</h:outputText>
-	                           				<h:outputText value="-" rendered="false"/>
+	                           				<h:outputText value="-" rendered="#{credit.limit le 0}"/>
 	                           			</p:column>
 	                           			<p:column style='width:150px' styleClass="right"
 	                           				headerText="#{msg.get('app.baInfo.bapa.table.premium')}">
-	                           				<h:outputText value="0">
+	                           				<h:outputText value="#{credit.premiumAmount}" rendered="#{credit.premiumAmount gt 0}">
 	                           					<f:convertNumber pattern="#,##0.00"/>
 	                           				</h:outputText>
-	                           				<h:outputText value="-" rendered="false"/>
+	                           				<h:outputText value="-" rendered="#{credit.premiumAmount le 0}"/>
 	                           			</p:column>
 	                           			<p:column style='width:150px' styleClass="right"
 	                           				headerText="#{msg.get('app.baInfo.bapa.table.morePay')}">
-	                           				<h:outputText value="0">
+	                           				<h:outputText value="#{credit.expenseAmount}" rendered="#{credit.expenseAmount gt 0}">
 	                           					<f:convertNumber pattern="#,##0.00"/>
 	                           				</h:outputText>
-	                           				<h:outputText value="-" rendered="false"/>
+	                           				<h:outputText value="-" rendered="#{credit.expenseAmount le 0}"/>
 	                           			</p:column>
 	                           			
 	                           			<p:column styleClass="center" style="width:50px;">
@@ -226,7 +251,7 @@
                            						process="@this"
 	                           						onstart="p_blockUI.show()"
 	                           						oncomplete="p_blockUI.hide();p_bapaApplyInfoDlg.show();"
-	                           						action="#{baInfo.onOpenUpdateBAPAInformaionDialog()}"
+	                           						actionListener="#{baInfo.onOpenUpdateBAPAInformaionDialog(credit)}"
 	                           						update=":bapaApplyInfoDlg"
 	                           						style="margin-right:0px !important"
 	                           						>
@@ -236,31 +261,45 @@
                           							process="@this"
                            							oncomplete="p_delBAPADlg.show()"
                            							style="margin-right:0px !important"
+                           							rendered="#{not credit.fromCredit}"
+                           							update=":bapaApplyInfoDlg"
                                             	>
+                                            	<f:setPropertyActionListener target="#{baInfo.deleteCreditRowId}" value="#{rowIdx}" />
                                             </p:commandButton>
 	                           			</p:column>
 	                           			
-	                           			<p:summaryRow>
-	                           				<p:column colspan="4">
-	                           					<h:outputText value="#{msg.get('app.baInfo.bapa.table.total')}" />
-	                           				</p:column>
-	                           				<p:column  styleClass="right">
-		                           				<h:outputText value="0">
-		                           					<f:convertNumber pattern="#,##0.00"/>
-		                           				</h:outputText>
-	                           				</p:column>
-	                           				<p:column  styleClass="right">
-		                           				<h:outputText value="0">
-		                           					<f:convertNumber pattern="#,##0.00"/>
-		                           				</h:outputText>
-	                           				</p:column>
-	                           				<p:column  styleClass="right">
-		                           				<h:outputText value="0">
-		                           					<f:convertNumber pattern="#,##0.00"/>
-		                           				</h:outputText>
-	                           				</p:column>
-	                           				<p:column />
-	                           			</p:summaryRow>
+	                           			<p:columnGroup type="footer">
+	                           				<p:row>
+		                           				<p:column colspan="4" footerText="#{msg.get('app.baInfo.bapa.table.total')}"
+		                           					style="text-align:left;background-color: #f4f8b6;" 
+		                           					/>
+		                           				<p:column style="text-align:right;background-color: #f4f8b6;">
+		                           					<f:facet name="footer">
+				                           				<h:outputText value="#{baInfo.totalLimit}" rendered="#{baInfo.totalLimit gt 0}">
+				                           					<f:convertNumber pattern="#,##0.00"/>
+				                           				</h:outputText>
+				                           				<h:outputText value="-" rendered="#{baInfo.totalLimit le 0}"/>
+			                           				</f:facet>
+		                           				</p:column>
+		                           				<p:column  style="text-align:right;background-color: #f4f8b6;">
+		                           					<f:facet name="footer">
+				                           				<h:outputText value="#{baInfo.totalPremium}" rendered="#{baInfo.totalPremium gt 0}">
+				                           					<f:convertNumber pattern="#,##0.00"/>
+				                           				</h:outputText>
+				                           				<h:outputText value="-" rendered="#{baInfo.totalPremium le 0}"/>
+				                           			</f:facet>
+		                           				</p:column>
+		                           				<p:column  style="text-align:right;background-color: #f4f8b6;">
+		                           					<f:facet name="footer">
+				                           				<h:outputText value="#{baInfo.totalExpense}" rendered="#{baInfo.totalExpense gt 0}">
+				                           					<f:convertNumber pattern="#,##0.00"/>
+				                           				</h:outputText>
+				                           				<h:outputText value="-" rendered="#{baInfo.totalExpense le 0}"/>
+				                           			</f:facet>
+		                           				</p:column>
+	                           					<p:column style="background-color: #f4f8b6;"/>
+	                           				</p:row>
+	                           			</p:columnGroup>
 	                           		</p:dataTable>
                         		</td>
                         	</tr>
@@ -281,8 +320,15 @@
                         			<h:outputText value="#{msg.get('app.baInfo.insurance.company')}" />			
                         		</td>
                         		<td>
-                        			<p:selectOneMenu id='insurance_company' widgetVar="p_insurance_company" style="width:160px">
+                        			<p:selectOneMenu id='insurance_company' widgetVar="p_insurance_company" style="width:160px"
+                        				value="#{baInfo.bapaInfoView.updInsuranceCompany}"
+                        				>
+                        				<p:ajax update="insurance_acc"/>
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        				<f:selectItems value="#{baInfo.insuranceCompanies}" var="company"
+                        					itemLabel="#{company.name}" itemDescription="#{company.description}"
+                        					itemValue="#{company.id}"
+                        					/>
                         			</p:selectOneMenu>
                         		</td>                     		
                         	</tr>
@@ -293,7 +339,7 @@
                         		<td>
              			            <p:inputText id='insurance_acc' widgetVar="p_insurance_acc" 
              			            	styleClass="large" disabled="true"
-	                                     value="" /> 
+	                                     value="#{baInfo.insuranceAccount}" /> 
                         		</td>                     		
                         	</tr>
                         	
@@ -355,8 +401,9 @@
         <ui:param name="formId" value="delBAPADlgFrm"/>
         <ui:param name="controller" value="#{baInfo}"/>
         <ui:param name="action" value="onDeleteBAPAInformation"/>
-        <ui:param name="update" value=":frmMain:bainfo_tbl"/>
+        <ui:param name="update" value=":frmMain:bapainfo_tbl"/>
     </ui:include>
+    
     <ui:include src="dialog/confirmEditDlg.xhtml">
 		<ui:param name="id" value="saveBAInformationDlg"/>
 		<ui:param name="name" value="p_saveBAInformationDlg"/>

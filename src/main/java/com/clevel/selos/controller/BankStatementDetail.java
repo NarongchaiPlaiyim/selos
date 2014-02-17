@@ -9,6 +9,7 @@ import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -153,9 +154,6 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
-        // User is Under Writer?
-        roleUW = bankStmtControl.isUW();
-
         if (FacesUtil.getSessionMapValue("bankStmtSumView") == null
             || FacesUtil.getSessionMapValue("isTmbBank") == null
             || FacesUtil.getSessionMapValue("lastMonthDate") == null
@@ -179,6 +177,12 @@ public class BankStatementDetail implements Serializable {
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
                 return;
             }
+        }
+
+        // Check Role
+        int roleId = bankStmtControl.getUserRoleId();
+        if (RoleValue.UW.id() == roleId) {
+            roleUW = true;
         }
     }
 
@@ -300,14 +304,14 @@ public class BankStatementDetail implements Serializable {
 
         clickSave = true;
 
+        // update Main account and Highest inflow
+        bankStmtControl.updateMainAccAndHighestInflow(summaryView);
+        // re-calculate Total & Grand total summary
+        bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
+
         try {
-            // update Main account and Highest inflow
-            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
-            // re-calculate Total & Grand total summary
-            bankStmtControl.bankStmtSumTotalCalculation(summaryView, false);
-
             summaryView = bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, 0);
-
+            // update related parts
             dbrControl.updateValueOfDBR(workCaseId);
             exSummaryControl.calForBankStmtSummary(workCaseId);
             bizInfoSummaryControl.calGrdTotalIncomeByBankStatement(workCaseId);

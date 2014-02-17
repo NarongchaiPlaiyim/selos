@@ -1,16 +1,23 @@
 package com.clevel.selos.transform;
 
+import java.util.Date;
+
+import javax.inject.Inject;
+
 import com.clevel.selos.dao.working.BAPAInfoDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
-import com.clevel.selos.model.BAPaymentMethodValue;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.db.master.BorrowingType;
+import com.clevel.selos.model.db.master.ProductGroup;
+import com.clevel.selos.model.db.master.RequestType;
+import com.clevel.selos.model.db.master.RiskType;
+import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BAPAInfo;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
-
-import javax.inject.Inject;
-import java.util.Date;
 
 public class BasicInfoTransform extends Transform {
     @Inject
@@ -186,13 +193,12 @@ public class BasicInfoTransform extends Transform {
             basicInfoView.setApplyBA(0);
             basicInfoView.setBaPaymentMethodValue(null);
         } else {
-            basicInfoView.setApplyBA(bapaInfo.getApplyBA());
-            if(bapaInfo.getApplyBA() == 2){
-                if(bapaInfo.getBaPaymentMethod() == BAPaymentMethodValue.TOPUP.value()){
-                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.TOPUP);
-                } else {
-                    basicInfoView.setBaPaymentMethodValue(BAPaymentMethodValue.DIRECT);
-                }
+        	if (bapaInfo.getApplyBA() == null)
+        		basicInfoView.setApplyBA(RadioValue.NA.value());
+        	else
+        		basicInfoView.setApplyBA(bapaInfo.getApplyBA().value());
+            if(RadioValue.YES.equals(bapaInfo.getApplyBA())){
+            	basicInfoView.setBaPaymentMethodValue(bapaInfo.getBaPaymentMethod());
             } else {
                 basicInfoView.setBaPaymentMethodValue(null);
             }

@@ -21,6 +21,7 @@
         }
         .ui-datatable tbody td {
             border-color: #868686 !important;
+            white-space: normal !important;
         }
         tfoot {
             background: none !important;
@@ -1643,22 +1644,22 @@
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##"
                                                                              minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -1666,7 +1667,7 @@
                                                     </td>
                                                     <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                            proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <!-- END: Credit Tier Detail [0] -->
@@ -1710,7 +1711,7 @@
 
                                                 <tr>
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
@@ -1857,11 +1858,11 @@
                             <!-- Existing SME (Limit & Max Limit) -->
                             <tr>
                                 <td class="left" colspan="2">
-                                        <table border="0" style="width: 100%">
+                                        <table border="0">
                                             <tr>
-                                                <td>
+                                                <td class="left">
                                                     <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"
-                                                                  styleClass="title"/>
+                                                                  styleClass="title" style="margin-right: 5px"/>
                                                     <p:inputText value="#{decision.decisionView.existingSMELimit}"
                                                                  onclick="this.select()"
                                                                  onkeydown="return onKeyDownMoney(event);"
@@ -1873,10 +1874,11 @@
                                                                          maxIntegerDigits="14"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
-                                                </td>
-                                                <td style="padding-left: 10px">
+
+                                                    <p:spacer width="10" height="0"/>
+
                                                     <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"
-                                                                  styleClass="title"/>
+                                                                  styleClass="title" style="margin-right: 5px"/>
                                                     <p:inputText value="#{decision.decisionView.maximumSMELimit}"
                                                                  onclick="this.select()"
                                                                  onkeydown="return onKeyDownMoney(event);"
@@ -1987,22 +1989,22 @@
                                                         <!-- BEGIN: Credit Tier Detail [0] -->
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                             </h:outputText>
                                                         </td>
                                                         <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                             <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                    proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                                 <f:convertNumber pattern="#,##0.##"
                                                                                  minFractionDigits="2" maxFractionDigits="2"
                                                                                  maxIntegerDigits="14"/>
@@ -2083,7 +2085,7 @@
 
                                                     <tr>
                                                         <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                            <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                            <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                                 <tr>
                                                                     <td class="title" style="border-style: none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.requestType')}
@@ -2305,22 +2307,22 @@
                                                     <!-- BEGIN: Credit Tier Detail [0] -->
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}">
                                                         </h:outputText>
                                                     </td>
                                                     <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
-                                                                                        proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
+                                                                                proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                             <f:convertNumber pattern="#,##0.##"
                                                                              minFractionDigits="2" maxFractionDigits="2"
                                                                              maxIntegerDigits="14"/>
@@ -2374,7 +2376,7 @@
 
                                                 <tr>
                                                     <td class="left top" colspan="10" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                        <table border="0" style="margin:-1px 0 -1px -10px;">
+                                                        <table border="0" style="margin:-1px 0 -1px -10px; width: 600px !important;">
                                                             <tr>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.requestType')}
@@ -3562,19 +3564,19 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <table border="0" style="width: 100%">
+                                <table border="0">
                                     <tr>
                                         <td class="left" style="border-style: none !important;">
                                             <p:selectOneMenu value="#{decision.followUpConditionView.condition}"
                                                              disabled="#{not decision.roleUW}"
-                                                             style="width: 100%">
+                                                             style="width: 400px">
                                                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                                                 <f:selectItem itemLabel="Example Condition" itemValue="Example Condition"/>
                                                 <!-- todo: getList conditions for FollowUpCondition -->
                                                 <!--<f:selectItems value="" var="" itemLabel="" itemValue=""/>-->
                                             </p:selectOneMenu>
-                                        </td>
-                                        <td class="left" style="border-style: none !important; padding-left: 5px;">
+                                         </td>
+                                         <td class="left" style="border-style: none !important; padding-left: 5px">
                                             <p:commandButton id="btnAddFollowUpCondition"
                                                              binding="#{addFollowUpCondButton}"
                                                              disabled="#{not decision.roleUW}"
@@ -3590,14 +3592,15 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="2">
-                                <table border="0" style="width: 100%">
+                                <table border="0">
                                     <tr>
                                         <td class="left" style="border-style: none !important;">
                                             <p:inputText value="#{decision.followUpConditionView.detailOfFollowUp}"
                                                          readonly="#{not decision.roleUW}"
                                                          style="width: 400px"/>
-                                        </td>
-                                        <td class="left" style="border-style: none !important; padding-left: 5px;">
+
+                                            <p:spacer width="10" height=""/>
+
                                             <clv:BECalendar showOn="both" showButtonPanel="true" navigator="true"
                                                             yearRange="1950:2100"
                                                             disabled="#{not decision.roleUW}"
@@ -3667,89 +3670,86 @@
                         </tr>
 
                         <tr>
+                            <td class="title" colspan="2">
+                                <h:outputText value="#{msg.get('app.decision.tb.th.priceFeeReduction')}"/>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="left" colspan="2">
                                 <!-- Price Fee Reduction Table -->
-                                <div class="ui-datatable ui-widget">
-                                    <div class="ui-datatable-tablewrapper">
-                                        <table border="0" style="width: 100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="ui-state-default" colspan="6">
-                                                        <h:outputText value="#{msg.get('app.decision.tb.th.priceFeeReduction')}"/>
-                                                    </th>
-                                                </tr>
-                                            </thead>
+                                <table class="table_content" style="width:100%; background-color: #ffffff">
+                                    <tr>
+                                        <td class="left" style="width: 280px;">
+                                            #{msg.get('app.decision.tb.td.label.intFeeDOA')}
+                                        </td>
+                                        <td class="left" style="width: 190px;">
+                                            <p:inputText value="#{decision.decisionView.intFeeDOA}"
+                                                         maxlength="6"
+                                                         onclick="this.select()"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         readonly="true"
+                                                         styleClass="right">
+                                                <f:convertNumber pattern="##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
+                                                <p:ajax event="blur" update="@this"/>
+                                            </p:inputText>
+                                            <h:outputText value=" %"/>
+                                        </td>
 
-                                            <tbody class="ui-datatable-data ui-widget-content">
-                                                <tr>
-                                                    <td class="title" style="width: 280px">
-                                                        #{msg.get('app.decision.tb.td.label.intFeeDOA')}
-                                                    </td>
-                                                    <td class="left" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.intFeeDOA}"
-                                                                     onclick="this.select()"
-                                                                     onkeydown="return onKeyDownMoney(event);"
-                                                                     onkeypress="return onKeyPressMoney(event);"
-                                                                     readonly="true"
-                                                                     styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                            <p:ajax event="blur" update="@this"/>
-                                                        </p:inputText>
-                                                        <h:outputText value=" %"/>
-                                                    </td>
+                                        <td class="left" style="width: 300px;">
+                                            #{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}
+                                        </td>
+                                        <td class="left" style="width: 190px;">
+                                            <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
+                                                         maxlength="6"
+                                                         onclick="this.select()"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         readonly="true"
+                                                         styleClass="right">
+                                                <f:convertNumber pattern="##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="3"/>
+                                                <f:validateDoubleRange maximum="100"/>
+                                                <p:ajax event="blur" update="@this"/>
+                                            </p:inputText>
+                                            <h:outputText value=" %"/>
+                                        </td>
 
-                                                    <td class="left" style="width: 300px">
-                                                        #{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}
-                                                    </td>
-                                                    <td class="left" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.frontendFeeDOA}"
-                                                                     onclick="this.select()"
-                                                                     onkeydown="return onKeyDownMoney(event);"
-                                                                     onkeypress="return onKeyPressMoney(event);"
-                                                                     readonly="true"
-                                                                     styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                            <p:ajax event="blur" update="@this"/>
-                                                        </p:inputText>
-                                                        <h:outputText value=" %"/>
-                                                    </td>
+                                        <td class="left" style="width: 130px;">
+                                            #{msg.get('app.decision.tb.td.label.guarantorBA')}
+                                        </td>
+                                        <td class="left" style="width: 190px;">
+                                            <p:inputText value="#{decision.decisionView.guarantorBA}"
+                                                         maxlength="18"
+                                                         onclick="this.select()"
+                                                         onkeydown="return onKeyDownMoney(event);"
+                                                         onkeypress="return onKeyPressMoney(event);"
+                                                         readonly="true"
+                                                         styleClass="right">
+                                                <f:convertNumber pattern="#,##0.##"
+                                                                 minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                                <p:ajax event="blur" update="@this"/>
+                                            </p:inputText>
+                                        </td>
+                                    </tr>
 
-                                                    <td class="left" style="width: 130px">
-                                                        #{msg.get('app.decision.tb.td.label.guarantorBA')}
-                                                    </td>
-                                                    <td class="left" style="width: 190px">
-                                                        <p:inputText value="#{decision.decisionView.guarantorBA}"
-                                                                     onclick="this.select()"
-                                                                     onkeydown="return onKeyDownMoney(event);"
-                                                                     onkeypress="return onKeyPressMoney(event);"
-                                                                     readonly="true"
-                                                                     styleClass="right">
-                                                            <f:convertNumber pattern="#,##0.##"
-                                                                             minFractionDigits="2" maxFractionDigits="2"
-                                                                             maxIntegerDigits="14"/>
-                                                            <p:ajax event="blur" update="@this"/>
-                                                        </p:inputText>
-                                                        <h:outputText value=" %"/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left" style="width: 250px">
-                                                        #{msg.get('app.decision.tb.td.label.reasonForReduction')}
-                                                    </td>
-                                                    <td class="left" colspan="5">
-                                                        <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
-                                                                         rows="3" cols="150"
-                                                                         readonly="true" autoResize="false"/>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <tr>
+                                        <td class="left" style="width: 250px;">
+                                            #{msg.get('app.decision.tb.td.label.reasonForReduction')}
+                                        </td>
+                                        <td class="left middle" colspan="5">
+                                            <p:inputTextarea value="#{decision.decisionView.reasonForReduction}"
+                                                             rows="3" cols="150"
+                                                             readonly="true" autoResize="false"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
                             </td>
                         </tr>
                         <tr>
@@ -3842,7 +3842,7 @@
                                                 <tbody class="ui-datatable-data ui-widget-content">
                                                     <tr>
                                                         <td>
-                                                            <table border="0" style="margin:-1px 0 -1px -10px; width: 100%">
+                                                            <table border="0" style="margin:-1px 0 -1px -10px;">
                                                                 <tr>
                                                                     <td class="title left" style="border-style: none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.comment')}

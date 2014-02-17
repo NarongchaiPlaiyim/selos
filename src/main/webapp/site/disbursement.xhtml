@@ -20,7 +20,7 @@
 <ui:include src="include/header_logo.xhtml"/>
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
+<!-- ui:include src="include/header_detail.xhtml"/-->
 <!-- End Header Detail -->
 <!-- Start Menu -->
 <ui:include src="include/menubar.xhtml"/>
@@ -121,7 +121,7 @@
         </p:dataTable>
     </td>
 </tr>
-<tr>
+<tr style="height: 40px">
     <td colspan="100%">
         <div class="separate"/>
     </td>
@@ -134,12 +134,12 @@
 
 <!--  ==============================================  MC ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.mc')}"/></div></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.mc.numberOfcheque')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.mc.numberOfcheque')}"/></div></td>
     <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfCheque}" readonly="true"/></td>
-    <td style="width: 250px;"><h:outputText value="#{msg.get('app.disbursement.detail.mc.totalMcDisbursement')}"/></td>
+    <td style="width: 250px;"><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.mc.totalMcDisbursement')}"/></div></td>
     <td>
         <p:inputText value="#{disbursementInfo.disbursementInfoView.totalMCDisburse}" readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -223,15 +223,18 @@
         </p:dataTable>
     </td>
 </tr>
-
+<tr style="height: 20px">
+    <td colspan="100%">
+    </td>
+</tr>
 <!--  ==============================================  Deposit ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.deposit')}"/></div></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.numofDeposit')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.deposit.numofDeposit')}"/></div></td>
     <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfDeposit}" readonly="true"/></td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.deposit.totalDepositDisburse')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.deposit.totalDepositDisburse')}"/></div></td>
     <td>
         <p:inputText value="#{disbursementInfo.disbursementInfoView.totalDepositDisburse}" readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -305,14 +308,18 @@
         </p:dataTable>
     </td>
 </tr>
+<tr style="height: 20px">
+    <td colspan="100%">
+    </td>
+</tr>
 <!--  ==============================================  Bahtnet ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet')}"/></div></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.numofBahtnet')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.numofBahtnet')}"/></div></td>
     <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfBahtnet}" readonly="true"/></td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.totalBahtnetDisburse')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.bahtnet.totalBahtnetDisburse')}"/></div></td>
     <td>
         <p:inputText value="#{disbursementInfo.disbursementInfoView.totalBahtnetDisburse}" readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -389,19 +396,19 @@
         </p:dataTable>
     </td>
 </tr>
-<tr>
+<tr style="height: 40px">
     <td colspan="100%">
         <div class="separate"/>
     </td>
 </tr>
 <!--  ==============================================  BA Disbursement ===================================================================-->
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse')}"/></div></td>
 </tr>
 <tr>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.numofBA')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.numofBA')}"/></div></td>
     <td><p:inputText value="#{disbursementInfo.disbursementInfoView.numberOfBA}" readonly="true"/></td>
-    <td><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.totalBADisburse')}"/></td>
+    <td><div class="title"><h:outputText value="#{msg.get('app.disbursement.detail.baDisburse.totalBADisburse')}"/></div></td>
     <td>
         <p:inputText value="#{disbursementInfo.disbursementInfoView.totalBADisburse}" readonly="true">
             <f:convertNumber pattern="#,##0"
@@ -460,7 +467,7 @@
         </p:dataTable>
     </td>
 </tr>
-<tr>
+<tr style="height: 40px">
     <td colspan="100%">
         <div class="separate"/>
     </td>

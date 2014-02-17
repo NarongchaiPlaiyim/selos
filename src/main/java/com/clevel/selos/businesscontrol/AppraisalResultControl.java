@@ -75,7 +75,7 @@ public class AppraisalResultControl extends BusinessControl {
             appraisalView = appraisalTransform.transformToView(appraisal, user);
             newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if(newCreditFacility != null){
-                newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
+                newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeP(newCreditFacility));
                 for(NewCollateral newCollateral : newCollateralList){
                     newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
                 }
@@ -102,17 +102,17 @@ public class AppraisalResultControl extends BusinessControl {
 
         newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
 
-        newCollateralList = safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility));
+        newCollateralList = Util.safetyList(newCollateralDAO.findNewCollateralByTypeA(newCreditFacility));
 
         if(newCollateralList.size() > 0){
             clearDB(newCollateralList);
             newCollateralDAO.delete(newCollateralList);
-            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
+            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             insertToDB(newCollateralViewList, user);
             updateWRKNewColl(newCollateralViewList, user);
         } else {
             newCollateralDAO.delete(newCollateralList);
-            newCollateralViewList = safetyList(appraisalView.getNewCollateralViewList());
+            newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
             insertToDB(newCollateralViewList, user);
             updateWRKNewColl(newCollateralViewList, user);
         }
@@ -121,18 +121,28 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     private void updateWRKNewColl(final List<NewCollateralView> newCollateralViewList, final User user){
-        newCollateralList = safetyList(newCollateralTransform.transformToModel(newCollateralViewList, user, newCreditFacility));
-        newCollateralDAO.updateAppraisalRequest(newCollateralList);
+        log.debug("-- updateWRKNewColl");
+        newCollateralList = Util.safetyList(newCollateralTransform.transformToModel(newCollateralViewList, user, newCreditFacility));
+        for(NewCollateral newCollateral : newCollateralList){
+            if(!Util.isZero(newCollateral.getId())){
+                newCollateral =  newCollateralDAO.findById(newCollateral.getId());
+                newCollateral.setAppraisalRequest(2);
+                newCollateral.setProposeType("P");
+                newCollateralDAO.save(newCollateral);
+            }
+        }
     }
 
     private void insertToDB(final List<NewCollateralView> newCollateralViewList, final User user){
-        newCollateralList = safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
+        newCollateralList = Util.safetyList(newCollateralTransform.transformToNewModel(newCollateralViewList, user, newCreditFacility));
         newCollateralDAO.persistProposeTypeA(newCollateralList);
         for(NewCollateral newCollateral : newCollateralList){
-            newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
+            newCollateralHeadList = Util.safetyList(newCollateral.getNewCollateralHeadList());
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 newCollateralHead.setNewCollateral(newCollateral);
-                newCollateralSubList = safetyList(newCollateralHead.getNewCollateralSubList());
+                newCollateralHead.setProposeType("P");
+                newCollateralHead.setAppraisalRequest(2);
+                newCollateralSubList = Util.safetyList(newCollateralHead.getNewCollateralSubList());
                 for(NewCollateralSub newCollateralSub : newCollateralSubList){
                     newCollateralSub.setNewCollateralHead(newCollateralHead);
                 }
@@ -145,17 +155,13 @@ public class AppraisalResultControl extends BusinessControl {
         long id;
         for(NewCollateral newCollateral : newCollateralList){
             id = newCollateral.getId();
-            newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
+            newCollateralHeadList = Util.safetyList(newCollateralHeadDAO.findByNewCollateralId(id));
             for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                 id = newCollateralHead.getId();
-                newCollateralSubList = safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
+                newCollateralSubList = Util.safetyList(newCollateralSubDAO.findByNewCollateralHeadId(id));
                 newCollateralSubDAO.delete(newCollateralSubList);
             }
             newCollateralHeadDAO.delete(newCollateralHeadList);
         }
-    }
-
-    private <T> List<T> safetyList(List<T> list) {
-        return Util.safetyList(list);
     }
 }

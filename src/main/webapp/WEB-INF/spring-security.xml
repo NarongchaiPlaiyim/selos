@@ -17,10 +17,8 @@
         <logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.jsf"/>
         <access-denied-handler error-page="/error/accessDenied.jsf"/>
         <anonymous enabled="false"/>
-        <custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER"/>
         <session-management>
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false"
-                                 session-registry-alias="sessionRegistry" expired-url="/login.jsf"/>
+            <concurrency-control session-registry-ref="sessionRegistry" expired-url="/login.jsf"/>
         </session-management>
     </http>
 
@@ -37,5 +35,14 @@
 
     <bean:bean id="httpSessionSecurityContextRepository"
                class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
+
+    <bean:bean id="sessionRegistry"
+               class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+    <bean:bean id="concurrentSessionControlStrategy" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+        <bean:constructor-arg ref="sessionRegistry"/>
+        <bean:property name="maximumSessions" value="1" />
+        <bean:property name="exceptionIfMaximumExceeded" value="false" />
+    </bean:bean>
 
 </bean:beans>

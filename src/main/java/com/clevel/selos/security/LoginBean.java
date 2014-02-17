@@ -77,6 +77,8 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
+    @ManagedProperty(value = "#{concurrentSessionControlStrategy}")
+    ConcurrentSessionControlStrategy concurrentSessionControlStrategy;
 
     @PostConstruct
     public void onCreation(){
@@ -164,7 +166,6 @@ public class LoginBean {
             SecurityContextHolder.getContext().setAuthentication(result);
             log.debug("login successful. ({})", userDetail);
 
-            ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
             HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("user", null);
@@ -234,6 +235,14 @@ public class LoginBean {
 
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.sessionRegistry = sessionRegistry;
+    }
+
+    public ConcurrentSessionControlStrategy getConcurrentSessionControlStrategy() {
+        return concurrentSessionControlStrategy;
+    }
+
+    public void setConcurrentSessionControlStrategy(ConcurrentSessionControlStrategy concurrentSessionControlStrategy) {
+        this.concurrentSessionControlStrategy = concurrentSessionControlStrategy;
     }
 
     public String getLoginExceptionMessage() {
