@@ -470,7 +470,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
     // ***************************************************************************************************************//
 
-   //TODO Call Brms to get data Propose Credit Info
+    //TODO Call Brms to get data Propose Credit Info
     public void onRetrievePricingFee() {
         // test create data from retrieving
         BaseRate baseRate = baseRateDAO.findById(1);                            // for test only
@@ -572,7 +572,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     }
 
 
-// **************************************** Start Propose Credit Information   ****************************************//
+    // **************************************** Start Propose Credit Information   ****************************************//
     public void onChangeProductProgram() {
         ProductProgram productProgram = productProgramDAO.findById(newCreditDetailView.getProductProgram().getId());
         log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
@@ -825,11 +825,13 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private void onSetInUsedProposeCreditDetail() {
         int useCount;
         int seq;
-        for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
-            seq = proposeCreditDetailView.getSeq();
-            useCount = Integer.parseInt(hashSeqCredit.get(seq).toString());
-            if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
-                proposeCreditDetailView.setUseCount(useCount);
+        if (!Util.isNull(proposeCreditDetailViewList)) {
+            for (ProposeCreditDetailView proposeCreditDetailView : proposeCreditDetailViewList) {
+                seq = proposeCreditDetailView.getSeq();
+                useCount = Integer.parseInt(hashSeqCredit.get(seq).toString());
+                if (proposeCreditDetailView.getTypeOfStep().equals("N")) {
+                    proposeCreditDetailView.setUseCount(useCount);
+                }
             }
         }
 
@@ -922,7 +924,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
 //  **************************************** END Tier Dialog  ****************************************//
 
- // **************************************** Start Propose Collateral Information  *********************************//
+    // **************************************** Start Propose Collateral Information  *********************************//
     public void onAddProposeCollInfo() {
         log.info("onAddProposeCollInfo ::: {}", newCreditFacilityView.getNewCollateralViewList().size());
         modeForButton = ModeForButton.ADD;
@@ -1490,7 +1492,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
 //***************************************END Condition Information ****************************************************//
 
-    // Database Action
+    //TODO Database Action
     public void onSaveCreditFacPropose() {
         log.info("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
         onSetInUsedProposeCreditDetail();
@@ -1502,8 +1504,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 //                    && (newCreditFacilityView.getNewConditionDetailViewList().size() > 0)
 //                    && (newCreditFacilityView.getNewGuarantorDetailViewList().size() > 0)) {
             //TEST FOR NEW FUNCTION SAVE CREDIT FACILITY
-//            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
-            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
+            creditFacProposeControl.onSaveNewCreditFacility(newCreditFacilityView, workCaseId);
+//            creditFacProposeControl.saveCreditFacility(newCreditFacilityView, workCaseId);
             creditFacProposeControl.calculateTotalProposeAmount(workCaseId);
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.propose.response.save.success");
