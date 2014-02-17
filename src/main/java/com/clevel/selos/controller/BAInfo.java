@@ -182,6 +182,19 @@ public class BAInfo implements Serializable {
 	public void setSelectedCredit(BAPAInfoCreditToSelectView selectedCredit) {
 		this.selectedCredit = selectedCredit;
 	}
+	
+	public boolean isEnableCheckDate() {
+		if (bapaInfoCustomerView == null)
+			return false;
+		int id = bapaInfoCustomerView.getUpdBAResultHC();
+		if (id <= 0)
+			return false;
+		for (BAResultHC data : baResultHCs) {
+			if (data.getId() == id)
+				return data.isRequiredCheckDate();
+		}
+		return false;
+	}
 	/*
 	 * Action
 	 */
@@ -226,7 +239,11 @@ public class BAInfo implements Serializable {
 		}
 	}
 	public void onChangeApplyToBA() {
-		//DO NOTHING
+		if (!RadioValue.YES.equals(bapaInfoView.getApplyBA())) {
+			for (BAPAInfoCustomerView customer : bapaInfoCustomers) {
+				customer.setApplyBA(false);
+			}
+		}
 	}
 	public void onOpenApplyInformationDialog(BAPAInfoCustomerView selected) {
 		bapaInfoCustomerView = selected;

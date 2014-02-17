@@ -83,7 +83,7 @@
                         		</td>
                         		<td>
              			            <p:selectOneRadio value="#{baInfo.bapaInfoView.applyBA}">
-             			            	<p:ajax update="bainfo_tbl" />
+             			            	<p:ajax update="bainfo_tbl" listener="#{baInfo.onChangeApplyToBA()}"/>
                                        <f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 	                                       	itemLabel="#{msg.get(radio.msgKey)}" 
     	                                   	itemValue="#{radio}"/>
@@ -338,7 +338,7 @@
                         		</td>
                         		<td>
              			            <p:inputText id='insurance_acc' widgetVar="p_insurance_acc" 
-             			            	styleClass="large" disabled="true"
+             			            	styleClass="large readonly" readonly="true"
 	                                     value="#{baInfo.insuranceAccount}" /> 
                         		</td>                     		
                         	</tr>
