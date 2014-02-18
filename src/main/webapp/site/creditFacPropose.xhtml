@@ -592,7 +592,6 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
@@ -1287,13 +1286,13 @@
                                         </p:column>
 
                                         <p:column styleClass="top left">
-                                            <h:outputText value="#{not empty creditTypeDetailItem.productProgram ?
-                                                                   creditTypeDetailItem.productProgram.name : ''}"/>
+                                            <h:outputText value="#{not empty creditTypeDetailItem.productProgramView ?
+                                                                   creditTypeDetailItem.productProgramView.name : ''}"/>
                                         </p:column>
 
                                         <p:column styleClass="top left">
-                                            <h:outputText value="#{not empty creditTypeDetailItem.creditFacility ?
-                                                                   creditTypeDetailItem.creditFacility.name : ''}"/>
+                                            <h:outputText value="#{not empty creditTypeDetailItem.creditFacilityView ?
+                                                                   creditTypeDetailItem.creditFacilityView.name : ''}"/>
                                         </p:column>
 
                                         <p:column styleClass="top right">
@@ -1595,10 +1594,10 @@
                                                 <h:outputText value="#{newCreditDetail.accountNumber}  #{newCreditDetail.accountSuf}"/>
                                             </td>
                                             <td class="top center" style="border-style: none !important;">
-                                                <h:outputText value="#{not empty newCreditDetail.productProgram ?
-                                                                       newCreditDetail.productProgram.name : ''}"/><br/>
-                                                <h:outputText value="#{not empty newCreditDetail.creditFacility ?
-                                                                       newCreditDetail.creditFacility.name : ''}"/>
+                                                <h:outputText value="#{not empty newCreditDetail.productProgramView ?
+                                                                       newCreditDetail.productProgramView.name : ''}"/><br/>
+                                                <h:outputText value="#{not empty newCreditDetail.creditFacilityView ?
+                                                                       newCreditDetail.creditFacilityView.name : ''}"/>
                                             </td>
                                             <td class="top center" style="border-style: none !important;">
                                                 <h:outputText value="#{newCreditDetail.limit}">
