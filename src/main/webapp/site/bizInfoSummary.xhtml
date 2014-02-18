@@ -650,11 +650,14 @@
                                             <p:column colspan="7" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumWeight')}"
                                                       style="background-color:#f8d0b6;; text-align:left;"/>
 
-                                            <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:right;">
-
+                                            <p:column
+                                                    style="background-color:#f8d0b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <p:outputLabel value="#{bizInfoSummary.bizInfoSummaryView.weightIncomeFactor}">
+                                                        <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                                    </p:outputLabel>
+                                                </f:facet>
                                             </p:column>
-
                                             <p:column
                                                       style="background-color:#f8d0b6; text-align:right;">
                                                 <f:facet name="footer">

@@ -16,9 +16,6 @@ public class NewFeeDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_FEE_DET_ID")
     private long id;
 
-    @Column(name = "propose_type")
-    private String proposeType;
-
     @Column(name = "product_program")
     private String  productProgram ;
 
@@ -153,19 +150,10 @@ public class NewFeeDetail implements Serializable {
         this.newCreditFacility = newCreditFacility;
     }
 
-    public String getProposeType() {
-        return proposeType;
-    }
-
-    public void setProposeType(String proposeType) {
-        this.proposeType = proposeType;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("proposeType", proposeType)
                 .append("productProgram", productProgram)
                 .append("standardFrontEndFee", standardFrontEndFee)
                 .append("commitmentFee", commitmentFee)

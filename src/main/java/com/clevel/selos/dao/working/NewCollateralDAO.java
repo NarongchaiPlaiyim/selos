@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.working.NewCollateral;
 import com.clevel.selos.model.db.working.NewCreditFacility;
 import org.hibernate.Criteria;
@@ -26,7 +27,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         log.info("-- persistProposeTypeA ::: {}", newCollateralList.size());
         for (NewCollateral newCollateral : newCollateralList) {
             newCollateral.setAppraisalRequest(2);
-            newCollateral.setProposeType("A");
+            newCollateral.setProposeType(ProposeType.A);
         }
         persist(newCollateralList);
     }
@@ -60,7 +61,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
             id = newCollateral.getId();
             if(id != 0){
                 newCollateral = findById(id);
-                newCollateral.setProposeType("P");
+                newCollateral.setProposeType(ProposeType.P);
                 newCollateral.setAppraisalRequest(2);
                 save(newCollateral);
                 log.debug("-- NewCollateral(id : {}) updated", id);

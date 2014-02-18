@@ -50,6 +50,20 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
 
     }
 
+    public List<PrdProgramToCreditType> getListCreditProposeByPrdprogram(int productProgramId) {
+        log.info("getListCreditProposeByPrdprogram. (ProductProgramId: {})", productProgramId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("productProgram.id", productProgramId));
+        criteria.add(Restrictions.eq("addProposeCredit", 1));
+        criteria.addOrder(Order.asc("creditType.id"));
+        List<PrdProgramToCreditType> list = criteria.list();
+
+        log.info("getList. (result size: {})", list.size());
+
+        return list;
+
+    }
+
     @SuppressWarnings("unchecked")
     public PrdProgramToCreditType getPrdProgramToCreditType(CreditType creditType , ProductProgram productProgram) {
         log.info("getPrdProgramToCreditType. (productProgram: {})",productProgram );
@@ -59,6 +73,18 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
         criteria.add(Restrictions.eq("productProgram", productProgram));
         PrdProgramToCreditType  prdProgramToCreditType = (PrdProgramToCreditType)criteria.uniqueResult();
 
+        return prdProgramToCreditType;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public PrdProgramToCreditType getPrdProgramToCreditType(int creditTypeId , int productProgramId) {
+        log.info("getPrdProgramToCreditType. (productProgram.id: {})",productProgramId );
+        log.info("getPrdProgramToCreditType. (creditType.id: {})", creditTypeId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("creditType.id", creditTypeId));
+        criteria.add(Restrictions.eq("productProgram.id", productProgramId));
+        PrdProgramToCreditType  prdProgramToCreditType = (PrdProgramToCreditType)criteria.uniqueResult();
         return prdProgramToCreditType;
 
     }

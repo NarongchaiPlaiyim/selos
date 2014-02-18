@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.BaseRateDAO;
 import com.clevel.selos.dao.working.NewCreditDetailDAO;
 import com.clevel.selos.dao.working.NewCreditTierDetailDAO;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.BaseRate;
 import com.clevel.selos.model.db.master.User;
@@ -30,6 +31,12 @@ public class NewCreditDetailTransform extends Transform {
     @Inject
     NewCreditTierTransform newCreditTierTransform;
     @Inject
+    DisbursementTypeTransform disbursementTypeTransform;
+    @Inject
+    ProductTransform productTransform;
+    @Inject
+    LoanPurposeTransform loanPurposeTransform;
+    @Inject
     NewCreditTierDetailDAO newCreditTierDetailDAO;
     @Inject
     BaseRateDAO baseRateDAO;
@@ -52,7 +59,7 @@ public class NewCreditDetailTransform extends Transform {
                 newCreditDetail.setCreateBy(user);
             }
 
-            newCreditDetail.setProposeType(ProposeType.P.type());
+            newCreditDetail.setProposeType(ProposeType.P);
             newCreditDetail.setWorkCase(workCase);
             newCreditDetail.setSeq(newCreditDetailView.getSeq());
             newCreditDetail.setGuaranteeAmount(newCreditDetailView.getGuaranteeAmount());
@@ -61,17 +68,17 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setAccountName(newCreditDetailView.getAccountName());
             newCreditDetail.setRequestType(newCreditDetailView.getRequestType());
             newCreditDetail.setRefinance(newCreditDetailView.getRefinance());
-            newCreditDetail.setApproved(newCreditDetailView.getApproved());
+            newCreditDetail.setUwDecision(newCreditDetailView.getUwDecision());
             newCreditDetail.setNoFlag(Util.returnNumForFlag(newCreditDetailView.isNoFlag()));
             newCreditDetail.setBorrowerName(newCreditDetailView.getBorrowerName());
-            newCreditDetail.setDisbursementType(newCreditDetailView.getDisbursement());
-            newCreditDetail.setCreditType(newCreditDetailView.getCreditType());
-            newCreditDetail.setProductProgram(newCreditDetailView.getProductProgram());
+            newCreditDetail.setDisbursementType(disbursementTypeTransform.transformToModel(newCreditDetailView.getDisbursementTypeView()));
+            newCreditDetail.setCreditType(productTransform.transformToModel(newCreditDetailView.getCreditTypeView()));
+            newCreditDetail.setProductProgram(productTransform.transformToModel(newCreditDetailView.getProductProgramView()));
             newCreditDetail.setFrontEndFee(newCreditDetailView.getFrontEndFee());
             newCreditDetail.setHoldLimitAmount(newCreditDetailView.getHoldLimitAmount());
             newCreditDetail.setInstallment(newCreditDetailView.getInstallment());
             newCreditDetail.setLimit(newCreditDetailView.getLimit());
-            newCreditDetail.setLoanPurpose(newCreditDetailView.getLoanPurpose());
+            newCreditDetail.setLoanPurpose(loanPurposeTransform.transformToModel(newCreditDetailView.getLoanPurposeView()));
             newCreditDetail.setOutstanding(newCreditDetailView.getOutstanding());
             newCreditDetail.setPceAmount(newCreditDetailView.getPCEAmount());
             newCreditDetail.setPcePercent(newCreditDetailView.getPCEPercent());
@@ -81,6 +88,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetail.setReduceFrontEndFee(Util.returnNumForFlag(newCreditDetailView.isReduceFrontEndFee()));
             newCreditDetail.setReducePriceFlag(Util.returnNumForFlag(newCreditDetailView.isReducePriceFlag()));
             newCreditDetail.setRemark(newCreditDetailView.getRemark());
+            newCreditDetail.setUseCount(newCreditDetailView.getUseCount());
             newCreditDetail.setNewCreditFacility(newCreditFacility);
 
             if(Util.safetyList(newCreditDetailView.getNewCreditTierDetailViewList()).size() > 0){
@@ -117,17 +125,17 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setAccountName(newCreditDetail.getAccountName());
             newCreditDetailView.setRequestType(newCreditDetail.getRequestType());
             newCreditDetailView.setRefinance(newCreditDetail.getRefinance());
-            newCreditDetailView.setApproved(newCreditDetail.getApproved());
+            newCreditDetailView.setUwDecision(newCreditDetail.getUwDecision());
             newCreditDetailView.setNoFlag(Util.isTrue(newCreditDetail.getNoFlag()));
             newCreditDetailView.setBorrowerName(newCreditDetail.getBorrowerName());
-            newCreditDetailView.setDisbursement(newCreditDetail.getDisbursementType());
-            newCreditDetailView.setCreditType(newCreditDetail.getCreditType());
-            newCreditDetailView.setProductProgram(newCreditDetail.getProductProgram());
+            newCreditDetailView.setDisbursementTypeView(disbursementTypeTransform.transformToView(newCreditDetail.getDisbursementType()));
+            newCreditDetailView.setCreditTypeView(productTransform.transformToView(newCreditDetail.getCreditType()));
+            newCreditDetailView.setProductProgramView(productTransform.transformToView(newCreditDetail.getProductProgram()));
             newCreditDetailView.setFrontEndFee(newCreditDetail.getFrontEndFee());
             newCreditDetailView.setHoldLimitAmount(newCreditDetail.getHoldLimitAmount());
             newCreditDetailView.setInstallment(newCreditDetail.getInstallment());
             newCreditDetailView.setLimit(newCreditDetail.getLimit());
-            newCreditDetailView.setLoanPurpose(newCreditDetail.getLoanPurpose());
+            newCreditDetailView.setLoanPurposeView(loanPurposeTransform.transformToView(newCreditDetail.getLoanPurpose()));
             newCreditDetailView.setOutstanding(newCreditDetail.getOutstanding());
             newCreditDetailView.setPCEAmount(newCreditDetail.getPceAmount());
             newCreditDetailView.setPCEPercent(newCreditDetail.getPcePercent());
@@ -137,6 +145,7 @@ public class NewCreditDetailTransform extends Transform {
             newCreditDetailView.setReduceFrontEndFee(Util.isTrue(newCreditDetail.getReduceFrontEndFee()));
             newCreditDetailView.setReducePriceFlag(Util.isTrue(newCreditDetail.getReducePriceFlag()));
             newCreditDetailView.setRemark(newCreditDetail.getRemark());
+            newCreditDetailView.setUseCount(newCreditDetail.getUseCount());
 
             List<NewCreditTierDetail> newCreditTierDetailList = newCreditTierDetailDAO.findByNewCreditDetail(newCreditDetail);
 

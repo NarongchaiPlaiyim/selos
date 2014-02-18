@@ -3,60 +3,90 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.clevel.selos.model.MortgageSignLocationType;
+import com.clevel.selos.model.db.master.User;
+
 public class MortgageSummaryView implements Serializable {
+    private static final long serialVersionUID = 5116739393766192381L;
+	
     private long id;
-    private int approvedType;
-    private Date loanDate;
-    private int signContract;
-//    signDetail // drop down
-    private int comsNo;
-
-
-
+    private long agreementId;
+    private Date loanContractDate;
+    private MortgageSignLocationType signingLocation;
+    private String comsNumber;
+    
+    private int updLocation;
+    
+    private Date modifyDate;
+    private User modifyBy;
+    
     public MortgageSummaryView() {
-        reset();
     }
 
-    public void reset() {
-    }
+	public long getId() {
+		return id;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getAgreementId() {
+		return agreementId;
+	}
 
-    public int getApprovedType() {
-        return approvedType;
-    }
+	public void setAgreementId(long agreementId) {
+		this.agreementId = agreementId;
+	}
 
-    public void setApprovedType(int approvedType) {
-        this.approvedType = approvedType;
-    }
+	public Date getLoanContractDate() {
+		return loanContractDate;
+	}
 
-    public Date getLoanDate() {
-        return loanDate;
-    }
+	public void setLoanContractDate(Date loanContractDate) {
+		this.loanContractDate = loanContractDate;
+	}
 
-    public void setLoanDate(Date loanDate) {
-        this.loanDate = loanDate;
-    }
+	public MortgageSignLocationType getSigningLocation() {
+		if (signingLocation == null)
+			return MortgageSignLocationType.NA;
+		else
+			return signingLocation;
+	}
 
-    public int getSignContract() {
-        return signContract;
-    }
+	public void setSigningLocation(MortgageSignLocationType signingLocation) {
+		this.signingLocation = signingLocation;
+	}
 
-    public void setSignContract(int signContract) {
-        this.signContract = signContract;
-    }
+	public String getComsNumber() {
+		return comsNumber;
+	}
 
-    public int getComsNo() {
-        return comsNo;
-    }
+	public void setComsNumber(String comsNumber) {
+		this.comsNumber = comsNumber;
+	}
 
-    public void setComsNo(int comsNo) {
-        this.comsNo = comsNo;
-    }
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public User getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(User modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+	
+	public int getUpdLocation() {
+		return updLocation;
+	}
+	
+	public void setUpdLocation(int updLocation) {
+		this.updLocation = updLocation;
+	}
 }

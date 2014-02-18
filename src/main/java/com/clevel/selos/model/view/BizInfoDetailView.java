@@ -56,6 +56,7 @@ public class BizInfoDetailView implements Serializable {
     private BigDecimal stockDurationUW;
     private BigDecimal stockValueBDM;
     private BigDecimal stockValueUW;
+    private BigDecimal weightIncomeFactor;
 
     private Date createDate;
     private Date modifyDate;
@@ -505,6 +506,14 @@ public class BizInfoDetailView implements Serializable {
 
     public int getIsMainDetail(){
         return isMainDetail;
+    }
+
+    public BigDecimal getWeightIncomeFactor() {
+        return weightIncomeFactor;
+    }
+
+    public void setWeightIncomeFactor(BigDecimal weightIncomeFactor) {
+        this.weightIncomeFactor = weightIncomeFactor;
     }
 
     @Override

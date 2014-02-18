@@ -21,25 +21,27 @@ public class ExistingSplitLineDetailTransform extends Transform {
         List<ExistingSplitLineDetail> existingSplitLineDetails = new ArrayList<ExistingSplitLineDetail>();
         ExistingSplitLineDetail existingSplitLineDetail;
 
-        for (ExistingSplitLineDetailView existingSplitLineDetailView : existingSplitLineDetailViewList) {
-            existingSplitLineDetail = new ExistingSplitLineDetail();
+        if(existingSplitLineDetailViewList!=null){
+            for (ExistingSplitLineDetailView existingSplitLineDetailView : existingSplitLineDetailViewList) {
+                existingSplitLineDetail = new ExistingSplitLineDetail();
 
-            if (existingSplitLineDetailView.getId() != 0) {
-                existingSplitLineDetail.setId(existingSplitLineDetailView.getId());
-                existingSplitLineDetail.setCreateDate(existingSplitLineDetailView.getCreateDate());
-                existingSplitLineDetail.setCreateBy(existingSplitLineDetailView.getCreateBy());
-            } else { // id = 0 create new
-                existingSplitLineDetail.setCreateDate(new Date());
-                existingSplitLineDetail.setCreateBy(user);
+                if (existingSplitLineDetailView.getId() != 0) {
+                    existingSplitLineDetail.setId(existingSplitLineDetailView.getId());
+                    existingSplitLineDetail.setCreateDate(existingSplitLineDetailView.getCreateDate());
+                    existingSplitLineDetail.setCreateBy(existingSplitLineDetailView.getCreateBy());
+                } else { // id = 0 create new
+                    existingSplitLineDetail.setCreateDate(new Date());
+                    existingSplitLineDetail.setCreateBy(user);
+                }
+
+                existingSplitLineDetail.setNo(existingSplitLineDetailView.getNo());
+                existingSplitLineDetail.setProductProgram(existingSplitLineDetailView.getProductProgram());
+                existingSplitLineDetail.setLimit(existingSplitLineDetailView.getLimit());
+                existingSplitLineDetail.setExistingCreditDetail(existingCreditDetail);
+                existingSplitLineDetail.setModifyDate(new Date());
+                existingSplitLineDetail.setModifyBy(user);
+                existingSplitLineDetails.add(existingSplitLineDetail);
             }
-
-            existingSplitLineDetail.setNo(existingSplitLineDetailView.getNo());
-            existingSplitLineDetail.setProductProgram(existingSplitLineDetailView.getProductProgram());
-            existingSplitLineDetail.setLimit(existingSplitLineDetailView.getLimit());
-            existingSplitLineDetail.setExistingCreditDetail(existingCreditDetail);
-            existingSplitLineDetail.setModifyDate(new Date());
-            existingSplitLineDetail.setModifyBy(user);
-            existingSplitLineDetails.add(existingSplitLineDetail);
         }
 
         return existingSplitLineDetails;

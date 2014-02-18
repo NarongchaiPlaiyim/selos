@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -21,6 +22,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -49,6 +51,8 @@ public class Inbox implements Serializable {
 
     private UserDetail userDetail;
     private List<InboxView> inboxViewList;
+    private List<InboxView> inboxPoolViewList;
+    private boolean renderedPool;
 
     private InboxView inboxViewSelectItem;
 
@@ -63,6 +67,13 @@ public class Inbox implements Serializable {
         log.info("onCreation ::: userDetail : {}", userDetail);
         try {
             inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+            inboxPoolViewList = new ArrayList<InboxView>();
+            if(userDetail.getRole().equals("ROLE_UW") || userDetail.getRole().equals("ROLE_AAD")){
+                inboxPoolViewList = inboxControl.getInboxPoolFromBPM(userDetail);
+                renderedPool = true;
+            } else {
+                renderedPool = false;
+            }
             log.debug("onCreation ::: inboxViewList : {}", inboxViewList);
         } catch (Exception e) {
             log.error("Exception while getInbox : ", e);
@@ -133,6 +144,22 @@ public class Inbox implements Serializable {
 
     public void setInboxViewList(List<InboxView> inboxViewList) {
         this.inboxViewList = inboxViewList;
+    }
+
+    public List<InboxView> getInboxPoolViewList() {
+        return inboxPoolViewList;
+    }
+
+    public void setInboxPoolViewList(List<InboxView> inboxPoolViewList) {
+        this.inboxPoolViewList = inboxPoolViewList;
+    }
+
+    public boolean getRenderedPool() {
+        return renderedPool;
+    }
+
+    public void setRenderedPool(boolean renderedPool) {
+        this.renderedPool = renderedPool;
     }
 
     public InboxView getInboxViewSelectItem() {

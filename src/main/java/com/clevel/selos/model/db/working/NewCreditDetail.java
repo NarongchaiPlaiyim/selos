@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,14 +20,18 @@ public class NewCreditDetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_CREDIT_DET_ID")
     private long id;
 
-    @Column(name = "propose_type")
-    private String proposeType;
+    @Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
 
     @Column(name = "line_no", length = 5)
     private int lineNo;
 
     @Column(name = "no_flag")
     private int noFlag;
+
+    @Column(name = "use_count")
+    private int useCount;
 
     @Column(name = "guarantee_amount")
     private BigDecimal guaranteeAmount;
@@ -90,8 +96,9 @@ public class NewCreditDetail implements Serializable {
     @Column(name = "seq")
     private int seq;
 
-    @Column(name = "is_approved")
-    private int isApproved;
+    @Column(name = "uw_decision", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private DecisionType uwDecision;
 
     @OneToOne
     @JoinColumn(name = "product_program_id")
@@ -115,12 +122,6 @@ public class NewCreditDetail implements Serializable {
 
     @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
     private List<NewCreditTierDetail> proposeCreditTierDetailList;
-
-    /*@OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewCollateralCredit> newCollateralCreditList;
-
-    @OneToMany(mappedBy = "newCreditDetail", cascade = CascadeType.ALL)
-    private List<NewGuarantorCredit> newGuarantorCreditList;*/
 
     @ManyToOne
     @JoinColumn(name = "workcase_id")
@@ -402,14 +403,13 @@ public class NewCreditDetail implements Serializable {
         isRefinance = refinance;
     }
 
-    public int getApproved() {
-        return isApproved;
+    public DecisionType getUwDecision() {
+        return uwDecision;
     }
 
-    public void setApproved(int approved) {
-        isApproved = approved;
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
     }
-
 
     public List<NewCreditTierDetail> getProposeCreditTierDetailList() {
         return proposeCreditTierDetailList;
@@ -444,29 +444,21 @@ public class NewCreditDetail implements Serializable {
         this.workCase = workCase;
     }
 
-    public String getProposeType() {
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
     }
 
-    /*public List<NewCollateralCredit> getNewCollateralCreditList() {
-        return newCollateralCreditList;
+    public int getUseCount() {
+        return useCount;
     }
 
-    public void setNewCollateralCreditList(List<NewCollateralCredit> newCollateralCreditList) {
-        this.newCollateralCreditList = newCollateralCreditList;
+    public void setUseCount(int useCount) {
+        this.useCount = useCount;
     }
-
-    public List<NewGuarantorCredit> getNewGuarantorCreditList() {
-        return newGuarantorCreditList;
-    }
-
-    public void setNewGuarantorCreditList(List<NewGuarantorCredit> newGuarantorCreditList) {
-        this.newGuarantorCreditList = newGuarantorCreditList;
-    }*/
 
     @Override
     public String toString() {
@@ -496,14 +488,13 @@ public class NewCreditDetail implements Serializable {
                 .append("installment", installment)
                 .append("purpose", purpose)
                 .append("seq", seq)
-                .append("isApproved", isApproved)
+                .append("uwDecision", uwDecision)
                 .append("productProgram", productProgram)
                 .append("creditType", creditType)
                 .append("disbursementType", disbursementType)
                 .append("loanPurpose", loanPurpose)
                 .append("newCreditFacility", newCreditFacility)
                 .append("proposeCreditTierDetailList", proposeCreditTierDetailList)
-                .append("workCase", workCase)
                 .append("type", type)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

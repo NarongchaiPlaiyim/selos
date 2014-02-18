@@ -84,7 +84,7 @@
                         				value="#{msg.get('app.mortgageSummary.agreement.loanDate')}" />	
                         		</td>
                         		<td>
-                        			<p:calendar id='loan_contractdate' 
+                        			<p:calendar id='loan_contractdate' value="#{mortgageSummary.mortgageSummaryView.loanContractDate}"
                         					pattern="dd/MM/yyyy" showOn="button"
                                        		mindate="#{mortgageSummary.minDate}"
                                        		autocomplete="false"
@@ -99,17 +99,13 @@
                         		</td>
                         		<td>
              			            <p:selectOneRadio id='signcontract_type' widgetVar="p_signcontract_type"
+             			            	value="#{mortgageSummary.mortgageSummaryView.signingLocation}"
              			            	required="true" requiredMessage="#{msg.get('app.mortgageSummary.signContract.validate')}"
              			            	>
              			            	<p:ajax update="signcontract_loc" 
              			            		listener="#{mortgageSummary.onSelectSignContract()}"
              			            		/>
-                                       <f:selectItem
-                                       	itemLabel="#{msg.get('app.mortgageSummary.agreement.signContract.radio.branch')}" 
-                                       	itemValue="1"/>
-                                       <f:selectItem 
-                                       	itemLabel="#{msg.get('app.mortgageSummary.agreement.signContract.radio.zone')}" 
-                                       	itemValue="2"/>
+                                       <f:selectItems value="#{enumGeneralControl.mortgageSignLocations}"/>
                                    </p:selectOneRadio>
                         		</td>                     		
                         	</tr>
@@ -117,18 +113,22 @@
                         		<td></td>
                         		<td>
                         			<p:selectOneMenu id='signcontract_loc' widgetVar="p_signcontract_loc"
+                        				value="#{mortgageSummary.mortgageSummaryView.updLocation}"
+                        				disabled="#{not mortgageSummary.enableSignContractLocation}"
                         				 style="width:160px">
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        				<f:selectItems value="#{mortgageSummary.locations}"/>
                         			</p:selectOneMenu>
                         		</td>
                         	</tr>
                         	<tr>
                         		<td class="title" >
                         			<p:outputLabel for="coms_no" 
-                        				value="#{msg.get('app.mortgageSummary.agreement.signContract')}" />			
+                        				value="#{msg.get('app.mortgageSummary.agreement.comsNo')}" />			
                         		</td>
                         		<td>
                         			<p:inputText id='coms_no' styleClass="largest"
+                        				value="#{mortgageSummary.mortgageSummaryView.comsNumber}"
                         				required="true" requiredMessage="#{msg.get('app.mortgageSummary.comsNo.validate')}"
                         				/>
                         		</td>

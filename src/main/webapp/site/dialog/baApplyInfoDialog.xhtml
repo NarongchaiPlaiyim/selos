@@ -4,7 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" xmlns:clv="http://clevel.com/ui">
 <h:form id="baApplyInfoDlgForm">
-	<p:panel styleClass="panel-dialog" rendered="true">
+	<p:panel styleClass="panel-dialog" rendered="#{not empty baInfo.bapaInfoCustomerView}">
 		<p:messages />
 		<table class="content_form">
 			<tr>
@@ -15,7 +15,7 @@
 				</td>
 				<td>
 					<p:inputText id="customername" readonly="true"
-						value="Customer Name"
+						value="#{baInfo.bapaInfoCustomerView.customerName}"
 						styleClass="readonly" />
 				</td>
 			</tr>
@@ -26,11 +26,10 @@
 						value="#{msg.get('app.baInfo.ba.dialog.contactNumber')}" />
 				</td>
 				<td>
-					<p:inputMask id="contactnumber" readonly="true"
-						value="0"
-						styleClass="readonly" mask="99-9-999-9999">
-						<f:convertNumber pattern="0000000000"/>
-					</p:inputMask>
+					<p:inputText id="contactnumber" readonly="true"
+						value="#{baInfo.bapaInfoCustomerView.customerContractNo}"
+						styleClass="readonly" />
+						
 				</td>
 			</tr>
 			<tr>
@@ -41,7 +40,7 @@
 				</td>
 				<td>
 					<p:inputText id="relationship" readonly="true"
-						value="Relationship"
+						value="#{baInfo.bapaInfoCustomerView.relationship}"
 						styleClass="readonly"/>
 				</td>
 			</tr>
@@ -53,8 +52,14 @@
 				</td>
 				<td>
 					<p:selectOneMenu id='healthcheck' style="width:160px"
+						value="#{baInfo.bapaInfoCustomerView.updBAResultHC}"
 						>
+						<p:ajax update="checkdate"/>
 						<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+						<f:selectItems value="#{baInfo.baResultHCs}" var="hc"
+							itemLabel="#{hc.name}" itemDescription="#{hc.description}"
+							itemValue="#{hc.id}"
+							/>
 					</p:selectOneMenu>
 				</td>
 			</tr>
@@ -66,8 +71,9 @@
 				</td>
 				<td>
 					<p:calendar id='checkdate'
+						value="#{baInfo.bapaInfoCustomerView.checkDate}"
 						pattern="dd/MM/yyyy" showOn="button"
-						mindate="#{baInfo.minCheckDate}" maxdate="#{baInfo.maxCheckDate}"
+						disabled="#{not baInfo.enableCheckDate}"		
 						autocomplete="false"
 						/>
 				</td>

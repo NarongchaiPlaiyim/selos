@@ -3,13 +3,14 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <p:panel id="existingCollateralBorrowerDlgPanel" styleClass="panel-dialog">
         <h:form id="existingCollateralBorrowerDlgForm">
             <table class="content_form">
                 <tr>
-                    <td class="title" style="width:145px;">ศักยภาพ หลักประกัน :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.potential')}</td>
                     <td>
                         <p:selectOneMenu id="potentialCollateral" value="#{creditFacExisting.existingCollateralDetailView.potentialCollateral.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
@@ -22,7 +23,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">Collateral Type :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.collateralType')}</td>
                     <td>
                         <p:selectOneMenu id="collateralType" value="#{creditFacExisting.existingCollateralDetailView.collateralType.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
@@ -35,13 +36,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">กรรมสิทธิ์ :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.owner')}</td>
                     <td>
                         <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.owner}" />
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">Collateral Type :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.relationship')}</td>
                     <td>
                         <p:selectOneMenu id="relation" value="#{creditFacExisting.existingCollateralDetailView.relation.id}" required="#{not empty param[saveBorrowerCollateral.clientId]}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;" >
@@ -54,26 +55,34 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">วันทีทำการประเมิน :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.appraisalDate')}</td>
                     <td>
-                        <p:calendar  value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}" showOn="true" navigator="true"/>
+                        <clv:BECalendar id="appraisalDate" showOn="button" navigator="true" locale="th_TH"
+                                        value="#{creditFacExisting.existingCollateralDetailView.appraisalDate}"
+                                        yearRange="1950:2100"
+                                        pattern="dd/MM/yyyy"
+                                        showButtonPanel="true"
+                                        defaultdate="#{creditFacExisting.currentDateDDMMYY}"
+                                        mindate="01/01/1950"
+                                        maxdate="#{creditFacExisting.currentDateDDMMYY}">
+                        </clv:BECalendar>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="title" style="width:145px;">เลขที่ :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.number')}</td>
                     <td>
                         <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.collateralNumber}" />
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">ที่อยู่ :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.address')}</td>
                     <td>
                         <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.collateralLocation}" />
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width:145px;">หมายเหตุ :</td>
+                    <td class="title" style="width:145px;">#{msg.get('app.credit.facility.existing.tb.label.collateralType.remark')}</td>
                     <td>
                         <p:inputText  value="#{creditFacExisting.existingCollateralDetailView.remark}" />
                     </td>

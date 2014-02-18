@@ -1,6 +1,7 @@
 package com.clevel.selos.model;
 
 public enum BAPaymentMethodValue {
+	NA(0,"NA"),
     TOPUP(1,"Top Up BA"),
     DIRECT(2,"Directly Pay by Customer");
 

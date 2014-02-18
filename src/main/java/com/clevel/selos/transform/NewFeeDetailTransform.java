@@ -37,7 +37,6 @@ public class NewFeeDetailTransform extends Transform {
                 newFeeDetail.setCreateDate(new Date());
                 newFeeDetail.setCreateBy(user);
             }
-            newFeeDetail.setProposeType(ProposeType.P.type());
             newFeeDetail.setProductProgram(newFeeDetailView.getProductProgram());
             newFeeDetail.setStandardFrontEndFee(newFeeDetailView.getStandardFrontEndFee());
             newFeeDetail.setCommitmentFee(newFeeDetailView.getCommitmentFee());

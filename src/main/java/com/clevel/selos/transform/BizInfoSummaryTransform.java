@@ -225,6 +225,8 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setSumWeightAP(bizInfoSummaryView.getSumWeightAP());
         bizInfoSummary.setSumWeightINV(bizInfoSummaryView.getSumWeightINV());
         bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
+        bizInfoSummary.setWeightIncomeFactor(bizInfoSummaryView.getWeightIncomeFactor());
+
 
 
         bizInfoSummary.setModifyBy(bizInfoSummaryView.getModifyBy());
@@ -341,6 +343,10 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setSumWeightAP(bizInfoSummary.getSumWeightAP());
         bizInfoSummaryView.setSumWeightINV(bizInfoSummary.getSumWeightINV());
         bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummary.getSumWeightInterviewedIncomeFactorPercent());
+        bizInfoSummaryView.setWeightIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
+
+
+        System.out.println("getWeightIncomeFactor"+bizInfoSummary.getWeightIncomeFactor());
 
 
         return bizInfoSummaryView;

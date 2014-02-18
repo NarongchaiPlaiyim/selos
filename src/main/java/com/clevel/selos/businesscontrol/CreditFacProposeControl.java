@@ -117,6 +117,8 @@ public class CreditFacProposeControl extends BusinessControl {
     @Inject
     NewGuarantorCreditTransform newGuarantorCreditTransform;
     @Inject
+    ProductTransform productTransform;
+    @Inject
     DBRControl dbrControl;
     @Inject
     BizInfoSummaryControl bizInfoSummaryControl;
@@ -140,7 +142,7 @@ public class CreditFacProposeControl extends BusinessControl {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if (workCase != null) {
                 NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-                log.debug("find new creditFacility{}", newCreditFacility.getId());
+                log.debug("find new creditFacility: {}", newCreditFacility);
                 if (newCreditFacility != null) {
                     newCreditFacilityView = newCreditFacilityTransform.transformToView(newCreditFacility);
 
@@ -248,10 +250,11 @@ public class CreditFacProposeControl extends BusinessControl {
                 NewCollateral newCollateralDetail = newCollateralList.get(i);
                 NewCollateralView newCollateralView = newCreditFacilityView.getNewCollateralViewList().get(i);
 
-//                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getNewCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
-                List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
-                newCollateralRelationDAO.persist(newCollateralCreditList);
-                log.debug("persist newCollateralCreditList...");
+                if (newCollateralView.getProposeCreditDetailViewList().size() > 0) {
+                    List<NewCollateralCredit> newCollateralCreditList = newCollateralCreditTransform.transformsToModelForCollateral(newCollateralView.getProposeCreditDetailViewList(), newCreditDetailList, newCollateralDetail, user);
+                    newCollateralRelationDAO.persist(newCollateralCreditList);
+                    log.debug("persist newCollateralCreditList...");
+                }
 
                 for (NewCollateralHeadView newCollateralHeadView : newCollateralView.getNewCollateralHeadViewList()) {
                     NewCollateralHead newCollateralHeadDetail = newCollateralTransform.transformCollateralHeadToModel(newCollateralHeadView, newCollateralDetail, user);
@@ -295,19 +298,19 @@ public class CreditFacProposeControl extends BusinessControl {
 
                             }
 
-                            if (newSubCollateralView.getRelatedWithList() != null) {
-                                NewCollateralSubRelated newCollateralSubRelate;
-                                for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
-                                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
-                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
-                                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
-                                    newCollateralSubRelate = new NewCollateralSubRelated();
-                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
-                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
-                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
-                                    log.debug("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
-                                }
-                            }
+//                            if (newSubCollateralView.getRelatedWithList() != null) {
+//                                NewCollateralSubRelated newCollateralSubRelate;
+//                                for (NewCollateralSubView relatedView : newSubCollateralView.getRelatedWithList()) {
+//                                    log.debug("relatedView.getId() ::: {} ", relatedView.getId());
+//                                    NewCollateralSub relatedDetail = newCollateralSubDetailDAO.findById(relatedView.getId());
+//                                    log.debug("relatedDetail.getId() ::: {} ", relatedDetail.getId());
+//                                    newCollateralSubRelate = new NewCollateralSubRelated();
+//                                    newCollateralSubRelate.setNewCollateralSubRelated(relatedDetail);
+//                                    newCollateralSubRelate.setNewCollateralSub(newCollateralSubDetail);
+//                                    newSubCollRelateDAO.persist(newCollateralSubRelate);
+//                                    log.debug("persist newCollateralSubRelate. id...{}", newCollateralSubRelate.getId());
+//                                }
+//                            }
                         }
                     }
                 }
@@ -532,10 +535,11 @@ public class CreditFacProposeControl extends BusinessControl {
                         newCreditFacility.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr); //sumTotalNonLoanDbr
 
                         existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId);
-                        log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit());
-                        log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
                         if (existingCreditFacilityView != null) {
+                            log.info("existingCreditFacilityView.getTotalBorrowerComLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerComLimit() != null ? existingCreditFacilityView.getTotalBorrowerComLimit() : "null");
+                            log.info("existingCreditFacilityView.getTotalBorrowerRetailLimit() ::; {}", existingCreditFacilityView.getTotalBorrowerRetailLimit() != null ? existingCreditFacilityView.getTotalBorrowerRetailLimit() : "null");
+
                             sumTotalCommercial = Util.add(sumTotalCommercial, (Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), sumTotalPropose)));
                             newCreditFacility.setTotalCommercial(sumTotalCommercial); //sumTotalCommercial
 
@@ -609,7 +613,7 @@ public class CreditFacProposeControl extends BusinessControl {
         BigDecimal finalInterest = BigDecimal.ZERO;
         String finalPriceLabel = "";
 
-// Standard Price Rate
+        //  Standard Price Rate
         BaseRate standardBaseRate = baseRateDAO.findById(standardBaseRateId);
         if (standardBaseRate != null && standardInterest != null) {
             standardPrice = standardBaseRate.getValue().add(standardInterest);
@@ -658,11 +662,12 @@ public class CreditFacProposeControl extends BusinessControl {
     public List<ProposeCreditDetailView> findProposeCreditDetail(List<NewCreditDetailView> newCreditDetailViewList, long workCaseId) {
         log.debug("findProposeCreditDetail :: ", workCaseId);
         // todo: find credit existing and propose in this workCase
-        List<ProposeCreditDetailView> proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        List<ProposeCreditDetailView> proposeCreditDetailViewList = null;
         ProposeCreditDetailView proposeCreditDetailView;
         int rowCount = 1;       // seq of Model
 
-        if (newCreditDetailViewList != null && newCreditDetailViewList.size() > 0) {
+        if ((!Util.isNull(newCreditDetailViewList)) && newCreditDetailViewList.size() > 0) {
+            proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
             for (NewCreditDetailView tmp : newCreditDetailViewList) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq(tmp.getSeq());
@@ -672,10 +677,11 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setAccountNumber(tmp.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(tmp.getAccountSuf());
                 proposeCreditDetailView.setRequestType(tmp.getRequestType());
-                proposeCreditDetailView.setProductProgram(tmp.getProductProgram());
-                proposeCreditDetailView.setCreditFacility(tmp.getCreditType());
+                proposeCreditDetailView.setProductProgramView(tmp.getProductProgramView());
+                proposeCreditDetailView.setCreditFacilityView(tmp.getCreditTypeView());
                 proposeCreditDetailView.setLimit(tmp.getLimit());
                 proposeCreditDetailView.setGuaranteeAmount(tmp.getGuaranteeAmount());
+                proposeCreditDetailView.setUseCount(tmp.getUseCount());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
             }
@@ -686,7 +692,7 @@ public class CreditFacProposeControl extends BusinessControl {
         // find existingCreditType >>> Borrower Commercial in this workCase
         existingCreditFacilityView = creditFacExistingControl.onFindExistingCreditFacility(workCaseId); //call business control  to find Existing  and transform to view
 
-        if (existingCreditFacilityView != null && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
+        if ((!Util.isNull(existingCreditFacilityView)) && existingCreditFacilityView.getBorrowerComExistingCredit().size() > 0) {
             for (ExistingCreditDetailView existingCreditDetailView : existingCreditFacilityView.getBorrowerComExistingCredit()) {
                 proposeCreditDetailView = new ProposeCreditDetailView();
                 proposeCreditDetailView.setSeq((int) existingCreditDetailView.getId());  // id form DB
@@ -695,8 +701,8 @@ public class CreditFacProposeControl extends BusinessControl {
                 proposeCreditDetailView.setAccountName(existingCreditDetailView.getAccountName());
                 proposeCreditDetailView.setAccountNumber(existingCreditDetailView.getAccountNumber());
                 proposeCreditDetailView.setAccountSuf(existingCreditDetailView.getAccountSuf());
-                proposeCreditDetailView.setProductProgram(existingCreditDetailView.getExistProductProgram());
-                proposeCreditDetailView.setCreditFacility(existingCreditDetailView.getExistCreditType());
+                proposeCreditDetailView.setProductProgramView(existingCreditDetailView.getExistProductProgramView());
+                proposeCreditDetailView.setCreditFacilityView(existingCreditDetailView.getExistCreditTypeView());
                 proposeCreditDetailView.setLimit(existingCreditDetailView.getLimit());
                 proposeCreditDetailViewList.add(proposeCreditDetailView);
                 rowCount++;
@@ -810,7 +816,7 @@ public class CreditFacProposeControl extends BusinessControl {
             weightAR = bizInfoSummaryView.getSumWeightAR();
             weightAP = bizInfoSummaryView.getSumWeightAP();
             weightINV = bizInfoSummaryView.getSumWeightINV();
-//        Sum(weight cost of goods sold * businessProportion)
+    //      Sum(weight cost of goods sold * businessProportion)
             if (bizInfoSummaryView.getBizInfoDetailViewList() != null && bizInfoSummaryView.getBizInfoDetailViewList().size() > 0) {
                 log.debug("onGetBizInfoSummaryByWorkCase :: bizInfoSummaryView.getBizInfoDetailViewList() : {}", bizInfoSummaryView.getBizInfoDetailViewList());
                 for (BizInfoDetailView bidv : bizInfoSummaryView.getBizInfoDetailViewList()) {

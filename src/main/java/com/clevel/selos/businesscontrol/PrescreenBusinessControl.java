@@ -118,6 +118,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     CustomerAccountNameDAO customerAccountNameDAO;
     @Inject
     RelationCustomerDAO relationCustomerDAO;
+    @Inject
+    ProductGroupDAO productGroupDAO;
 
 
     @Inject
@@ -225,7 +227,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditFacilityView existingCreditFacilityView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        //BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retrieveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
 
         if(bankStmtSummaryView != null){
             if(Util.safetyList(bankStmtSummaryView.getActionStatusViewList()).size() >= 1){
@@ -235,6 +238,30 @@ public class PrescreenBusinessControl extends BusinessControl {
                     throw new Exception(actionStatusView.getStatusDesc());
                 }
             }
+        } else {
+            prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
+            //Calculate for Group Income
+            BigDecimal groupIncome = new BigDecimal(0);
+            for(CustomerInfoView customerInfoView : customerInfoViewList){
+                if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                    if(customerInfoView.getApproxIncome() != null)
+                        groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
+                }
+            }
+            prescreenResultView.setGroupIncome(groupIncome);
+
+            //Calculate for Group Exposure
+            BigDecimal groupExposure = new BigDecimal(0);
+            if(existingCreditFacilityView.getTotalBorrowerComLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerComLimit());
+            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
+            if(existingCreditFacilityView.getTotalRelatedComLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedComLimit());
+            if(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit() != null)
+                groupExposure = groupExposure.add(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
+
+            prescreenResultView.setGroupExposure(groupExposure);
         }
 
         prescreenResultView.setExistingCreditFacilityView(existingCreditFacilityView);
@@ -928,6 +955,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
         }
         workCasePrescreen.setBorrowerType(customerEntity);
+        workCasePrescreen.setProductGroup(productGroupDAO.findById(prescreenView.getProductGroup().getId()));
         workCasePrescreenDAO.persist(workCasePrescreen);
 
         log.debug("savePreScreenInitial ::: saving prescreen data...");

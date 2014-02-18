@@ -30,6 +30,7 @@ public class ProductFormula {
     private String productCode;
     @Column(name = "project_code")
     private String projectCode;
+
     @Column(name = "exposure_method")
     private int exposureMethod;
     @Column(name = "wc_calculate")

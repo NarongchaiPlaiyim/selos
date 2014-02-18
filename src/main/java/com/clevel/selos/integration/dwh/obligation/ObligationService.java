@@ -188,6 +188,7 @@ public class ObligationService implements Serializable {
                 obligation.setTmbExtProductTypeCD(obligation1.getTmbExtProductTypeCD());
                 obligation.setTmbTypeCRD(obligation1.getTmbTypeCRD());
                 obligation.setTmbRMRef(obligation1.getTmbRMRef());
+                obligation.setMaturityDate(obligation1.getMaturityDate());
                 obligationList.add(obligation);
             }
         } else if (obligation2List != null) {
@@ -234,6 +235,7 @@ public class ObligationService implements Serializable {
                 obligation.setTmbExtProductTypeCD(obligation2.getTmbExtProductTypeCD());
                 obligation.setTmbTypeCRD(obligation2.getTmbTypeCRD());
                 obligation.setTmbRMRef(obligation2.getTmbRMRef());
+                obligation.setMaturityDate(obligation2.getMaturityDate());
                 obligationList.add(obligation);
             }
         }
