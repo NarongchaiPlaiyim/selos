@@ -592,19 +592,23 @@
 
                                             <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].suggestPriceLabel : ''}"/>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].finalPriceLabel : ''}"/>
                                             </td>
                                             <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].installment : ''}">
                                                     <f:convertNumber pattern="#,##0.##"
                                                                      minFractionDigits="2"
@@ -613,7 +617,8 @@
                                                 </h:outputText>
                                             </td>
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
+                                                <h:outputText value="#{(not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0) ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].tenor : ''}">
                                                     <f:convertNumber pattern="#,##0"
                                                                      integerOnly="true"
@@ -658,36 +663,39 @@
                                         </tr>
 
                                         <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
-                                        <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
-                                                   var="creditTierDetail" varStatus="j"
-                                                   offset="1">
-                                            <tr>
-                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
-                                                </td>
-                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
-                                                </td>
-                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
-                                                </td>
-                                                <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.installment}">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"
-                                                                         maxIntegerDigits="14"/>
-                                                    </h:outputText>
-                                                </td>
-                                                <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                    <h:outputText value="#{creditTierDetail.tenor}">
-                                                        <f:convertNumber pattern="#,##0.##"
-                                                                         integerOnly="true"
-                                                                         maxIntegerDigits="14"/>
-                                                    </h:outputText>
-                                                </td>
-                                            </tr>
-                                        </ui:repeat>
+                                        <p:panel rendered="#{not empty proposeCredit.newCreditTierDetailViewList
+                                                                    and fn:length(proposeCredit.newCreditTierDetailViewList) gt 1}" styleClass="panel">
+                                            <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
+                                                       var="creditTierDetail" varStatus="j"
+                                                       offset="1">
+                                                <tr>
+                                                    <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.standardPriceLabel}"/>
+                                                    </td>
+                                                    <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.suggestPriceLabel}"/>
+                                                    </td>
+                                                    <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.finalPriceLabel}"/>
+                                                    </td>
+                                                    <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.installment}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             minFractionDigits="2"
+                                                                             maxFractionDigits="2"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                    <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
+                                                        <h:outputText value="#{creditTierDetail.tenor}">
+                                                            <f:convertNumber pattern="#,##0.##"
+                                                                             integerOnly="true"
+                                                                             maxIntegerDigits="14"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </p:panel>
                                         <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                         <tr>

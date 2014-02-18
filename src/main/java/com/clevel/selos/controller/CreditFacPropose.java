@@ -796,8 +796,38 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         }
 
         log.info("  complete >>>>  :  {}", complete);
-        context.addCallbackParam("functionComplete", complete);
 
+        //todo : remove & check on ui repeat only
+        if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
+            for(NewCreditDetailView nc : newCreditFacilityView.getNewCreditDetailViewList()){
+                log.debug("newCreditDetail : {} ",nc);
+                log.debug("before tier : {}",nc.getNewCreditTierDetailViewList());
+                log.debug("tier size : {}",nc.getNewCreditTierDetailViewList().size());
+                if(nc.getNewCreditTierDetailViewList() != null && nc.getNewCreditTierDetailViewList().size() == 0){
+                    log.debug("set null");
+                    nc.setNewCreditTierDetailViewList(null);
+                }
+                log.debug("after tier : {}",nc.getNewCreditTierDetailViewList());
+
+                if(nc.getNewCreditTierDetailViewList() != null && nc.getNewCreditTierDetailViewList().size() > 0){
+                    for(NewCreditTierDetailView nct : nc.getNewCreditTierDetailViewList()){
+                        log.debug("--------------------------------------------------------------");
+                        log.debug("[1] - tier stpl : {}",nct.getStandardPriceLabel());
+                        log.debug("[2] - tier supl : {}",nct.getSuggestPriceLabel());
+                        log.debug("[3] - tier fnpl : {}",nct.getFinalPriceLabel());
+                        log.debug("[4] - tier fnpl : {}",nct.getFinalPriceLabel());
+                        log.debug("[5] - tier inst : {}",nct.getInstallment());
+                        log.debug("[6] - tier tenor : {}",nct.getTenor());
+                        log.debug("####### tier : {}",nct);
+                        log.debug("--------------------------------------------------------------");
+                    }
+                }
+
+                log.debug("after newCreditDetail : {} ",nc);
+            }
+        }
+
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteCreditInfo() {
