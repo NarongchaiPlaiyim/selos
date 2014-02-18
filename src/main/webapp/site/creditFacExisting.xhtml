@@ -123,12 +123,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                        #{borrowerCredit.existProductProgram.name}
+                                                        #{borrowerCredit.existProductProgramView.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(borrowerCredit.existingCreditTierDetailViewList) : '1'}">
-                                                        #{borrowerCredit.existCreditType.name}
+                                                        #{borrowerCredit.existCreditTypeView.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -162,6 +162,9 @@
                                                     <td class="right  top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                         <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             borrowerCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
+                                                        </h:outputText>
+                                                        <h:outputText value="#{borrowerCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ?
+                                                                            '+' : ''}">
                                                         </h:outputText>
                                                         <h:outputText value="#{not empty borrowerCredit.existingCreditTierDetailViewList and fn:length(borrowerCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             borrowerCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
@@ -393,11 +396,11 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.existProductProgram.name}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{borrowerRetailCredit.existCreditType.name}"></p:outputLabel>
+                                                    <p:outputLabel value="#{borrowerRetailCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="" style="text-align: left">
@@ -695,12 +698,12 @@
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                                    #{relatedCredit.existProductProgram.name}
+                                                                    #{relatedCredit.existProductProgramView.name}
                                                                 </td>
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(relatedCredit.existingCreditTierDetailViewList) : '1'}">
-                                                                    #{relatedCredit.existCreditType.name}
+                                                                    #{relatedCredit.existCreditTypeView.name}
                                                                 </td>
                                                                 <td class="top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                                     rowspan="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
@@ -734,6 +737,9 @@
                                                                 <td class="right top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
                                                                     <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             relatedCredit.existingCreditTierDetailViewList[0].finalBasePrice.name : ''}">
+                                                                    </h:outputText>
+                                                                    <h:outputText value="#{relatedCredit.existingCreditTierDetailViewList[0].finalInterest ge 0 ?
+                                                                            '+' : ''}">
                                                                     </h:outputText>
                                                                     <h:outputText value="#{not empty relatedCredit.existingCreditTierDetailViewList and fn:length(relatedCredit.existingCreditTierDetailViewList) gt 0 ?
                                                                             relatedCredit.existingCreditTierDetailViewList[0].finalInterest : ''}">
@@ -894,11 +900,11 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.existProductProgram.name}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedRetailCredit.existProductProgramView.name}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:outputLabel value="#{relatedRetailCredit.existCreditType.name}"></p:outputLabel>
+                                                    <p:outputLabel value="#{relatedRetailCredit.existCreditTypeView.name}"></p:outputLabel>
                                                 </p:column>
 
                                                 <p:column headerText="" style="text-align: left">
