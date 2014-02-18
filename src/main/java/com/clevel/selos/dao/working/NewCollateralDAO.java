@@ -54,6 +54,17 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         return newCollateralDetailList;
     }
 
+    public List<NewCollateral> findNewCollateralByTypeA(NewCreditFacility newCreditFacility) {
+        log.info("-- findNewCollateralByTypeA ::: {}", newCreditFacility.toString());
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
+        criteria.add(Restrictions.eq("proposeType", "A"));
+        criteria.addOrder(Order.asc("id"));
+        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
+        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
+        return newCollateralDetailList;
+    }
+
     public void updateAppraisalRequest(final List<NewCollateral> newCollateralList){
         log.info("-- updateAppraisalRequest ::: size : {}", newCollateralList.size());
         long id;
@@ -69,16 +80,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         }
     }
 
-    public List<NewCollateral> findNewCollateralByTypeA(NewCreditFacility newCreditFacility) {
-        log.info("-- findNewCollateralByTypeA ::: {}", newCreditFacility.toString());
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", "A"));
-        criteria.addOrder(Order.asc("id"));
-        List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
-        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
-        return newCollateralDetailList;
-    }
+
 
     public void updateAppraisalFlag(final NewCollateral newCollateral) {
         log.debug("-- updateAppraisalFlag()");

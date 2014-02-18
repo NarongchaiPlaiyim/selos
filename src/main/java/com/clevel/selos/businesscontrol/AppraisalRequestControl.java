@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 @Stateless
 public class AppraisalRequestControl extends BusinessControl {
@@ -23,6 +24,8 @@ public class AppraisalRequestControl extends BusinessControl {
 
     @Inject
     private WorkCaseDAO workCaseDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
     private AppraisalDAO appraisalDAO;
     @Inject
@@ -52,6 +55,7 @@ public class AppraisalRequestControl extends BusinessControl {
     private AppraisalContactDetailView appraisalContactDetailView;
 
     private WorkCase workCase;
+    private WorkCasePrescreen workCasePrescreen;
     private NewCreditFacility newCreditFacility;
 
     private List<NewCollateral> newCollateralList;
@@ -66,20 +70,33 @@ public class AppraisalRequestControl extends BusinessControl {
 
     }
 	
-	public AppraisalView getAppraisalRequest(final long workCaseId, final User user){
-        log.info("-- getAppraisalRequest WorkCaseId : {}, User.id[{}]", workCaseId, user.getId());
-        appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+	public AppraisalView getAppraisalRequest(final long workCaseId, final long workCasePreScreenId){
+        log.info("-- getAppraisalRequest WorkCaseId : {}, workCasePreScreenId : {}, User.id[{}]", workCaseId, workCasePreScreenId, getCurrentUserID());
+        if(Long.toString(workCaseId) != null && workCaseId != 0){
+            appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
+        } else if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        }
+
         if(!Util.isNull(appraisal)){
             appraisalContactDetailList = Util.safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
             appraisal.setAppraisalContactDetailList(appraisalContactDetailList);
-            appraisalView = appraisalTransform.transformToView(appraisal, user);
-            newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
+            if(Long.toString(workCaseId) != null && workCaseId != 0){
+                newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            } else if(Long.toString(workCasePreScreenId) != null && workCasePreScreenId != 0){
+                newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            }
+            log.debug("getAppraisalRequest ::: newCreditFacility : {}", newCreditFacility);
             if(!Util.isNull(newCreditFacility)){
                 newCollateralList = safetyList(newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility));
+                log.debug("getAppraisalRequest ::: newCollateralList : {}", newCollateralList);
+                List<NewCollateral> newCollateralListForAdd = new ArrayList<NewCollateral>();
                 for(NewCollateral newCollateral : newCollateralList){
                     newCollateral.setNewCollateralHeadList(newCollateralHeadDAO.findByNewCollateralIdAndPurpose(newCollateral.getId()));
+                    newCollateralListForAdd.add(newCollateral);
                 }
-                appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralList);
+                appraisalDetailViewList = appraisalDetailTransform.transformToView(newCollateralListForAdd);
                 appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
                 log.info("-- getAppraisalRequest ::: AppraisalView : {}", appraisalView.toString());
                 return appraisalView;
@@ -93,41 +110,55 @@ public class AppraisalRequestControl extends BusinessControl {
         }
     }
 
-    public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final User user){
-        log.info("-- onSaveAppraisalRequest");
-        workCase = workCaseDAO.findById(workCaseId);
-        appraisal = appraisalTransform.transformToModel(appraisalView, workCase, user);
-
-        if(!Util.isZero(appraisal.getId())){
-            log.debug("-- Appraisal id is {}", appraisal.getId());
-            appraisalDAO.persist(appraisal);
-            appraisalContactDetailList = safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
-            appraisalContactDetailDAO.delete(appraisalContactDetailList);
-            appraisalContactDetailList.clear();
-            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
-            for(AppraisalContactDetail model : appraisalContactDetailList){
-                model.setAppraisal(appraisal);
-            }
-            appraisalContactDetailDAO.persist(appraisalContactDetailList);
-        } else {
-            log.debug("-- Appraisal id is zero");
-            appraisalDAO.persist(appraisal);
-            appraisalContactDetailList = safetyList(appraisal.getAppraisalContactDetailList());
-            for(AppraisalContactDetail model : appraisalContactDetailList){
-                model.setAppraisal(appraisal);
-            }
-            appraisalContactDetailDAO.persist(appraisalContactDetailList);
+    public void onSaveAppraisalRequest(final AppraisalView appraisalView,final long workCaseId, final long workCasePreScreenId){
+        log.info("-- onSaveAppraisalRequest ::: workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+        User currentUser = getCurrentUser();
+        if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            workCasePrescreen = null;
+        }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            workCase = null;
         }
-        log.info("-- appraisalDAO persist end" );
 
+        log.debug("onSaveAppraisalRequest ::: workCase : {}, workCasePrescreen : {}", workCase, workCasePrescreen);
 
-        newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
-        if(!Util.isNull(newCreditFacility)){
+        if(!Util.isNull(workCase) || !Util.isNull(workCasePrescreen)){
+            log.debug("onSaveAppraisalRequest ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+            appraisal = appraisalTransform.transformToModel(appraisalView, workCase, workCasePrescreen, currentUser);
+
+            //remove all appraisalContactDetailList
+            List<AppraisalContactDetail> appraisalContactDetailDeleteList = safetyList(appraisalContactDetailDAO.findByAppraisalId(appraisal.getId()));
+            appraisalContactDetailDAO.delete(appraisalContactDetailDeleteList);
+
+            log.debug("onSaveAppraisalRequest ::: before persist appraisal : {}", appraisal);
+            appraisalDAO.persist(appraisal);
+            log.debug("onSaveAppraisalRequest ::: after persist appraisal : {}", appraisal);
+
+            if(!Util.isNull(Long.toString(workCaseId)) && workCaseId != 0){
+                newCreditFacility = newCreditFacilityDAO.findByWorkCaseId(workCaseId);
+            }else if(!Util.isNull(Long.toString(workCasePreScreenId)) && workCasePreScreenId != 0){
+                newCreditFacility = newCreditFacilityDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            }
+            log.debug("onSaveAppraisalRequest ::: newCreditFacility : {}");
+
+            //check newCreditFacility is exist? else create new one
+            if(Util.isNull(newCreditFacility)){
+                newCreditFacility = new NewCreditFacility();
+                newCreditFacility.setWorkCasePrescreen(workCasePrescreen);
+                newCreditFacility.setWorkCase(workCase);
+            }
             log.debug("-- NewCreditFacility.id[{}]", newCreditFacility.getId());
+
             appraisalDetailViewList = safetyList(appraisalView.getAppraisalDetailViewList());
 
-
-            newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+            //find all collateral in credit facility
+            if(newCreditFacility.getId() != 0){
+                newCollateralList = newCollateralDAO.findNewCollateralByNewCreditFacility(newCreditFacility);
+            }else{
+                newCollateralList = new ArrayList<NewCollateral>();
+            }
+            //set flag 0 for all collateral
             for(NewCollateral newCollateral : newCollateralList){
                 newCollateralHeadList = safetyList(newCollateralHeadDAO.findByNewCollateralId(newCollateral.getId()));
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
@@ -137,21 +168,26 @@ public class AppraisalRequestControl extends BusinessControl {
             }
 
             newCollateralList.clear();
-            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, user));
-            for(NewCollateral newCollateral : newCollateralList){
+            newCollateralList = safetyList(appraisalDetailTransform.transformToModel(appraisalDetailViewList, newCreditFacility, currentUser));
+            log.debug("onSaveAppraisalRequest ::: before persist newCreditfacility : {}", newCreditFacility);
+            newCreditFacilityDAO.persist(newCreditFacility);
+            log.debug("onSaveAppraisalRequest ::: after persist newCreditfacility : {}", newCreditFacility);
+
+            log.debug("onSaveAppraisalRequest ::: before persist newCollateralList : {}", newCollateralList);
+            newCollateralDAO.persist(newCollateralList);
+            log.debug("onSaveAppraisalRequest ::: after persist newCollateralList : {}", newCollateralList);
+
+            /*for(NewCollateral newCollateral : newCollateralList){
                 newCollateralDAO.persist(newCollateral);
                 newCollateralHeadList = safetyList(newCollateral.getNewCollateralHeadList());
                 for(NewCollateralHead newCollateralHead : newCollateralHeadList){
                     newCollateralHead.setNewCollateral(newCollateral);
                     newCollateralHeadDAO.persist(newCollateralHead);
                 }
-            }
+            }*/
 
-
-        } else {
-            log.debug("-- NewCreditFacility is null");
+            log.info("-- onSaveAppraisalRequest end");
         }
-        log.info("-- onSaveAppraisalRequest end");
     }
 
     private <T> List<T> safetyList(List<T> list) {

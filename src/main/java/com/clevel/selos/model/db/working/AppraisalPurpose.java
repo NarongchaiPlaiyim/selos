@@ -14,18 +14,25 @@ public class AppraisalPurpose {
     @SequenceGenerator(name="SEQ_WRK_APPRAISAL_DETAIL_ID", sequenceName="SEQ_WRK_APPRAISAL_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_APPRAISAL_DETAIL_ID")
     private long id;
+
     @Column(name="no")
     private int no;
+
     @Column(name="title_deed")
     private String titleDeed;
+
     @Column(name="purpose_review_Appraisal")
     private int purposeReviewAppraisal;
+
     @Column(name="purpose_new_Appraisal")
     private int purposeNewAppraisal;
+
     @Column(name="purpose_review_building")
     private int purposeReviewBuilding;
+
     @Column(name="characteristic")
     private int characteristic;
+
     @Column(name="number_of_documents")
     private BigDecimal numberOfDocuments;
 

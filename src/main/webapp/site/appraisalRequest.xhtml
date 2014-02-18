@@ -289,12 +289,26 @@
     </ui:include>
     
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{appraisalRequest.messageHeader}" message="#{appraisalRequest.message}" >
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
             <p:commandButton value="OK"
                              process="@this"
                              update=":frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:panel id="msgBoxRedirectPanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
+                         header="#{appraisalRequest.messageHeader}" >
+            <f:facet name="message">
+                <h:outputText value="#{appraisalRequest.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             process="@this"
+                             action="#{baseController.onGoToInbox}"/>
         </p:confirmDialog>
     </p:panel>
     <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
