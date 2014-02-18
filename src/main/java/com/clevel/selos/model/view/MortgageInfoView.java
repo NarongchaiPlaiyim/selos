@@ -24,6 +24,7 @@ public class MortgageInfoView implements Serializable {
 	private User modifyBy;
 	private Date modifyDate;
 	
+	private String landOfficeStr;
 	private long customerAttorneyId;
 	
 	public MortgageInfoView() {
@@ -128,5 +129,11 @@ public class MortgageInfoView implements Serializable {
 	}
 	public void setCustomerAttorneyId(long customerAttorneyId) {
 		this.customerAttorneyId = customerAttorneyId;
+	}
+	public String getLandOfficeStr() {
+		return landOfficeStr;
+	}
+	public void setLandOfficeStr(String landOfficeStr) {
+		this.landOfficeStr = landOfficeStr;
 	}
 }

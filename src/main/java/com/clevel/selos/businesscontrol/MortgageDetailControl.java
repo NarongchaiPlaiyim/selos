@@ -2,7 +2,6 @@ package com.clevel.selos.businesscontrol;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -16,6 +15,8 @@ import com.clevel.selos.dao.master.MortgageOSCompanyDAO;
 import com.clevel.selos.dao.working.CustomerAttorneyDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.MortgageInfoCollOwnerDAO;
+import com.clevel.selos.dao.working.MortgageInfoCollSubDAO;
+import com.clevel.selos.dao.working.MortgageInfoCreditDAO;
 import com.clevel.selos.dao.working.MortgageInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
@@ -29,17 +30,23 @@ import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerAttorney;
 import com.clevel.selos.model.db.working.MortgageInfo;
 import com.clevel.selos.model.db.working.MortgageInfoCollOwner;
+import com.clevel.selos.model.db.working.MortgageInfoCollSub;
+import com.clevel.selos.model.db.working.MortgageInfoCredit;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerAttorneyView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.MortgageInfoAttorneySelectView;
 import com.clevel.selos.model.view.MortgageInfoCollOwnerView;
+import com.clevel.selos.model.view.MortgageInfoCollSubView;
 import com.clevel.selos.model.view.MortgageInfoView;
+import com.clevel.selos.model.view.NewCreditDetailSimpleView;
 import com.clevel.selos.transform.CustomerAttorneyTransform;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.MortgageInfoAttorneySelectTransform;
 import com.clevel.selos.transform.MortgageInfoCollOwnerTransform;
+import com.clevel.selos.transform.MortgageInfoCollSubTransform;
 import com.clevel.selos.transform.MortgageInfoTransform;
+import com.clevel.selos.transform.NewCreditDetailTransform;
 
 @Stateless
 public class MortgageDetailControl extends BusinessControl {
@@ -54,13 +61,18 @@ public class MortgageDetailControl extends BusinessControl {
 	 @Inject private MortgageInfoDAO mortgageInfoDAO;
 	 @Inject private CustomerDAO customerDAO;
 	 @Inject private CustomerAttorneyDAO customerAttorneyDAO;
+	 @Inject private MortgageInfoCollSubDAO mortgageInfoCollSubDAO;
+	 @Inject private MortgageInfoCreditDAO mortgageInfoCreditDAO;
 	 @Inject private MortgageInfoCollOwnerDAO mortgageInfoCollOwnerDAO;
 	 
 	 @Inject private CustomerTransform customerTransform;
 	 @Inject private MortgageInfoTransform mortgageInfoTransform;
+	 @Inject private MortgageInfoCollSubTransform mortgageInfoCollSubTransform;
 	 @Inject private MortgageInfoCollOwnerTransform mortgageInfoCollOwnerTransform;
 	 @Inject private MortgageInfoAttorneySelectTransform mortgageInfoAttorneySelectTransform;
 	 @Inject private CustomerAttorneyTransform customerAttorneyTransform;
+	 @Inject private NewCreditDetailTransform newCreditDetailTransform;
+	 
 	 public MortgageDetailControl() {
 	 }
 	 
@@ -99,7 +111,7 @@ public class MortgageDetailControl extends BusinessControl {
 			 if (mortgageInfoId > 0)
 				 result = mortgageInfoDAO.findById(mortgageInfoId);
 		 } catch (Throwable e) {}
-		 return mortgageInfoTransform.transfromToView(result);
+		 return mortgageInfoTransform.transformToView(result);
 	 }
 	 
 	 public List<CustomerInfoView> getCustomerCanBePOAList(long workCaseId) {
@@ -109,25 +121,35 @@ public class MortgageDetailControl extends BusinessControl {
 		 else
 			 return customerTransform.transformToViewList(customers);
 	 }
-	 
-	 public List<MortgageInfoCollOwnerView> getCollOwners(long workCaseId,long mortgageInfoId) {
-		 if (workCaseId <=0)
+	 public List<MortgageInfoCollSubView> getMortgageInfoCollSubList(long mortgageInfoId) {
+		 if (mortgageInfoId <=0)
 			 return Collections.emptyList();
-		 List<Customer> customers = customerDAO.findByWorkCaseId(workCaseId);
-		 List<MortgageInfoCollOwner> owners = mortgageInfoCollOwnerDAO.findAllByMortgageInfoId(mortgageInfoId);
-		 HashMap<Long,MortgageInfoCollOwner> map = new HashMap<Long,MortgageInfoCollOwner>();
-		 for (MortgageInfoCollOwner owner : owners) {
-			 map.put(owner.getCustomer().getId(), owner);
+		 List<MortgageInfoCollSub> subs = mortgageInfoCollSubDAO.findAllByMortgageInfoId(mortgageInfoId);
+		 ArrayList<MortgageInfoCollSubView> rtnDatas = new ArrayList<MortgageInfoCollSubView>();
+		 for (MortgageInfoCollSub sub : subs) {
+			 rtnDatas.add(mortgageInfoCollSubTransform.transformToView(sub));
 		 }
-		 
+		 return rtnDatas;
+	 }
+	 public List<NewCreditDetailSimpleView> getMortgageInfoCreditList(long mortgageInfoId) {
+		 if (mortgageInfoId <=0)
+			 return Collections.emptyList();
+		 List<MortgageInfoCredit> credits = mortgageInfoCreditDAO.findAllByMortgageInfoId(mortgageInfoId);
+		 ArrayList<NewCreditDetailSimpleView> rtnDatas = new ArrayList<NewCreditDetailSimpleView>();
+		 for (MortgageInfoCredit credit : credits) {
+			 if (credit.getNewCreditDetail() == null)
+				 continue;
+			 rtnDatas.add(newCreditDetailTransform.transformToSimpleView(credit.getNewCreditDetail()));
+		 }
+		 return rtnDatas;
+	 }
+	 public List<MortgageInfoCollOwnerView> getCollOwners(long mortgageInfoId) {
+		 if (mortgageInfoId <=0)
+			 return Collections.emptyList();
+		 List<MortgageInfoCollOwner> owners = mortgageInfoCollOwnerDAO.findAllByMortgageInfoId(mortgageInfoId);
 		 ArrayList<MortgageInfoCollOwnerView> rtnDatas = new ArrayList<MortgageInfoCollOwnerView>();
-		 for (Customer customer : customers) {
-			 long ownerId = 0;
-			 MortgageInfoCollOwner owner = map.get(customer.getId());
-			 if (owner != null)
-				 ownerId = owner.getId();
-			 
-			 rtnDatas.add(mortgageInfoCollOwnerTransform.transformToView(customer, ownerId));
+		 for (MortgageInfoCollOwner owner : owners) {
+			  rtnDatas.add(mortgageInfoCollOwnerTransform.transformToView(owner));
 		 }
 		 return rtnDatas;
 	 }
@@ -198,19 +220,11 @@ public class MortgageDetailControl extends BusinessControl {
 		 
 		 //Process mortgage coll owner
 		 for (MortgageInfoCollOwnerView collOwner : collOwners) {
-			 if (!collOwner.isPOA()) {
-				 if (collOwner.getId() > 0)
-					 mortgageInfoCollOwnerDAO.deleteById(collOwner.getId());
+			 MortgageInfoCollOwner owner = mortgageInfoCollOwnerDAO.findById(collOwner.getId());
+			 if (owner.isPoa() == collOwner.isPOA())
 				 continue;
-			 }
-			 
-			 if (collOwner.getId() <= 0 && collOwner.getCustomerId() > 0) {
-				 MortgageInfoCollOwner owner = new MortgageInfoCollOwner();
-				 owner.setMortgageInfo(infoModel);
-				 owner.setCustomer(customerDAO.findRefById(collOwner.getCustomerId()));
-				 
-				 mortgageInfoCollOwnerDAO.save(owner);
-			 }
+			 owner.setPoa(collOwner.isPOA());
+			 mortgageInfoCollOwnerDAO.persist(owner);
 		 }
 		 return infoModel.getId();
 	 }

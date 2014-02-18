@@ -20,7 +20,7 @@ public class MortgageInfoTransform extends Transform {
 	@Inject private MortgageOSCompanyDAO mortgageOSCompanyDAO;
 	@Inject private MortgageLandOfficeDAO mortgageLandOfficeDAO;
 	
-	public MortgageInfoView transfromToView(MortgageInfo model) {
+	public MortgageInfoView transformToView(MortgageInfo model) {
 		MortgageInfoView view = new MortgageInfoView();
 		if (model == null) {
 			view.setMortgageAmount(new BigDecimal(0));
@@ -31,13 +31,14 @@ public class MortgageInfoTransform extends Transform {
 			view.setSigningDate(model.getMortgageSigningDate());
 			if (model.getMortgageOSCompany() != null)
 				view.setOsCompanyId(model.getMortgageOSCompany().getId());
-			if (model.getMortgageLandOffice() != null)
+			if (model.getMortgageLandOffice() != null) {
 				view.setLandOfficeId(model.getMortgageLandOffice().getId());
+				view.setLandOfficeStr(model.getMortgageLandOffice().getName());
+			}
 			if (model.getMortgageType() != null)
 				view.setMortgageType(model.getMortgageType().getMortgage());
 			view.setMortgageOrder(model.getMortgageOrder());
-			//TODO Check about mortgage amount
-			view.setMortgageAmount(new BigDecimal(0));
+			view.setMortgageAmount(model.getMortgageAmount());
 			view.setPoa(model.getAttorneyRequired());
 			view.setAttorneyRelation(model.getAttorneyRelation());
 			view.setModifyBy(model.getModifyBy());
