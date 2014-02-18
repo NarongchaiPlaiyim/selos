@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
-public class AccountNameView {
+import java.io.Serializable;
+
+public class AccountNameView implements Serializable {
     private String name;
     private long id;
 
