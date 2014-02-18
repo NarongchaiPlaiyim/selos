@@ -506,8 +506,6 @@ public class CustomerInfoJuristic implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             if(customerInfoSearch.getSearchBy() == 1){
                 customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
-            } else if(customerInfoSearch.getSearchBy() == 2 && customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                customerInfoView.setTmbCustomerId(customerInfoSearch.getSearchId());
             }
 
             onChangeProvinceEditForm1();

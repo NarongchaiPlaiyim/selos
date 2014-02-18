@@ -1139,8 +1139,6 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             if(customerInfoSearch.getSearchBy() == 1){
                 customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
-            } else if(customerInfoSearch.getSearchBy() == 2 && customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                customerInfoView.setTmbCustomerId(customerInfoSearch.getSearchId());
             }
 
             onChangeProvinceEditForm1();
@@ -1470,8 +1468,6 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
             if(customerInfoSearchSpouse.getSearchBy() == 1){
                 customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
-            } else if(customerInfoSearchSpouse.getSearchBy() == 2 && customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                customerInfoView.getSpouse().setTmbCustomerId(customerInfoSearchSpouse.getSearchId());
             }
 
             onChangeDOBSpouse();

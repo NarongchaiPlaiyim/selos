@@ -414,15 +414,13 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
 
-        DocumentType masterDocumentType = new DocumentType();
+        DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
 
         RMInterface.SearchBy searchBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
             searchBy = RMInterface.SearchBy.CUSTOMER_ID;
-            masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
             searchBy = RMInterface.SearchBy.TMBCUS_ID;
-            masterDocumentType = documentTypeDAO.findById(1);
         }
 
         User user = getCurrentUser();
