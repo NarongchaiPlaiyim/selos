@@ -15,13 +15,10 @@
                                    value="#{msg.get('app.decision.header')}"/>
                 </td>
                 <td class="left" colspan="3" style="width: 80%">
-                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedAppProposeCredit.uwDecision}"
+                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedApproveCredit.uwDecision}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
-                        <p:ajax event="change"
-                                process="@this"
-                                update=":proposeCreditDlgForm"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="#{decision.decisionType[0]}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="#{decision.decisionType[1]}"/>
                     </p:selectOneRadio>
                 </td>
             </tr>
@@ -30,10 +27,10 @@
                     <p:outputLabel for="dlgRequestType" value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:selectOneRadio id="dlgRequestType" value="#{decision.selectedAppProposeCredit.requestType}"
+                    <p:selectOneRadio id="dlgRequestType" value="#{decision.selectedApproveCredit.requestType}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
-                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="2"/>
-                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.new')}" itemValue="#{decision.requestTypes[0].value}"/>
+                        <f:selectItem itemLabel="#{msg.get('app.button.change')}" itemValue="#{decision.requestTypes[1].value}"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeRequestType()}"
                                 process="@this"
@@ -47,7 +44,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
                 </td>
                 <td class="title" colspan="3">
-                    <p:selectOneRadio id="dlgRadioRefinance" value="#{decision.selectedAppProposeCredit.refinance}"
+                    <p:selectOneRadio id="dlgRadioRefinance" value="#{decision.selectedApproveCredit.refinance}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>
@@ -60,7 +57,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectProdProgram"
-                                     value="#{decision.selectedAppProposeCredit.productProgramView.id}"
+                                     value="#{decision.selectedApproveCredit.productProgramView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -82,7 +79,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectCreditType"
-                                     value="#{decision.selectedAppProposeCredit.creditTypeView.id}"
+                                     value="#{decision.selectedApproveCredit.creditTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -104,7 +101,7 @@
                 </td>
                 <td class="left" style="width: 30%">
                     <p:inputText id="dlgProductCode"
-                                 value="#{decision.selectedAppProposeCredit.productCode}"/>
+                                 value="#{decision.selectedApproveCredit.productCode}"/>
                 </td>
                 <td class="title" style="width: 20%">
                     <p:outputLabel for="dlgProjectCode"
@@ -112,7 +109,7 @@
                 </td>
                 <td class="left" style="width: 30%">
                     <p:inputText id="dlgProjectCode"
-                                 value="#{decision.selectedAppProposeCredit.projectCode}"
+                                 value="#{decision.selectedApproveCredit.projectCode}"
                                  required="#{not empty param[saveAppProposeCreditButton.clientId]}"/>
                 </td>
             </tr>
@@ -122,7 +119,7 @@
                                    value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
                 </td>
                 <td class="left">
-                    <p:inputText id="dlgLimitNotional" value="#{decision.selectedAppProposeCredit.limit}"
+                    <p:inputText id="dlgLimitNotional" value="#{decision.selectedApproveCredit.limit}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -140,7 +137,7 @@
                 </td>
                 <td class="left">
                     <p:inputText id="dlgPCEPercent"
-                                 value="#{decision.selectedAppProposeCredit.PCEPercent}"
+                                 value="#{decision.selectedApproveCredit.PCEPercent}"
                                  maxlength="6"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -165,7 +162,7 @@
                 </td>
                 <td class="left">
                     <p:inputText id="dlgPCEAmount"
-                                 value="#{decision.selectedAppProposeCredit.PCEAmount}"
+                                 value="#{decision.selectedApproveCredit.PCEAmount}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -190,7 +187,7 @@
                         <tr>
                             <td style="border-style: none !important;">
                                 <p:selectBooleanCheckbox id="dlgCheckBoxReducePricing"
-                                                         value="#{decision.selectedAppProposeCredit.reducePriceFlag}"
+                                                         value="#{decision.selectedApproveCredit.reducePriceFlag}"
                                                          disabled="#{decision.modeEditCredit}">
                                 </p:selectBooleanCheckbox>
                             </td>
@@ -206,7 +203,7 @@
                         <tr>
                             <td style="border-style: none !important;">
                                 <p:selectBooleanCheckbox id="dlgCheckBoxReduceFront"
-                                                         value="#{decision.selectedAppProposeCredit.reduceFrontEndFee}"
+                                                         value="#{decision.selectedApproveCredit.reduceFrontEndFee}"
                                                          disabled="#{decision.modeEditCredit}">
                                 </p:selectBooleanCheckbox>
                             </td>
@@ -320,7 +317,7 @@
                 <td class="title"></td>
                 <td class="left" colspan="3">
                     <p:dataTable id="dlgDtCreditTier"
-                                 var="item" value="#{decision.selectedAppProposeCredit.newCreditTierDetailViewList}"
+                                 var="item" value="#{decision.selectedApproveCredit.newCreditTierDetailViewList}"
                                  paginator="false" rowKey="#{item.newCreditTierDetailView}" rowIndexVar="rowIndex"
                                  style="width: 100%;">
 
@@ -347,7 +344,7 @@
                                     <td style="border-style: none !important; padding-right: 2px !important;">
                                         <p:selectOneMenu value="#{item.finalBasePrice.id}"
                                                          style="width: 50px;" disabled="true">
-                                                         <!--disabled="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">-->
+                                                         <!--disabled="#{!((rowIndex + 1) eq fn:length(decision.selectedApproveCredit.newCreditTierDetailViewList))}">-->
                                             <f:selectItems value="#{decision.baseRateList}"
                                                            var="finalBase"
                                                            itemLabel="#{finalBase.name}"
@@ -362,7 +359,7 @@
                                                      onkeypress="return onKeyPressMoney(event);"
                                                      styleClass="right"
                                                      style="width: 50px;" readonly="true">
-                                                     <!--readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">-->
+                                                     <!--readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedApproveCredit.newCreditTierDetailViewList))}">-->
                                             <f:convertNumber pattern="##0.##"
                                                              minFractionDigits="2" maxFractionDigits="2"
                                                              maxIntegerDigits="2"/>
@@ -394,7 +391,7 @@
                                          onkeydown="return onKeyDownMoney(event);"
                                          onkeypress="return onKeyPressMoney(event);"
                                          styleClass="right" readonly="true">
-                                         <!--readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedAppProposeCredit.newCreditTierDetailViewList))}">-->
+                                         <!--readonly="#{!((rowIndex + 1) eq fn:length(decision.selectedApproveCredit.newCreditTierDetailViewList))}">-->
                                 <f:convertNumber pattern="#,##0.##"
                                                  minFractionDigits="2" maxFractionDigits="2"
                                                  maxIntegerDigits="14"/>
@@ -422,7 +419,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:inputText id="dlgFrontEndFee"
-                                 value="#{decision.selectedAppProposeCredit.frontEndFee}"
+                                 value="#{decision.selectedApproveCredit.frontEndFee}"
                                  maxlength="6"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -443,7 +440,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectLoanPurpose"
-                                     value="#{decision.selectedAppProposeCredit.loanPurposeView.id}"
+                                     value="#{decision.selectedApproveCredit.loanPurposeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
@@ -460,7 +457,7 @@
                     <p:outputLabel for="dlgRemark" value="#{msg.get('app.credit.facility.propose.dlg.label.purposeDetail')}"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea id="dlgRemark" value="#{decision.selectedAppProposeCredit.remark}"
+                    <p:inputTextarea id="dlgRemark" value="#{decision.selectedApproveCredit.remark}"
                                      rows="3" cols="100"
                                      disabled="#{decision.modeEditCredit}"/>
                 </td>
@@ -472,7 +469,7 @@
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgSelectDisbursement"
-                                     value="#{decision.selectedAppProposeCredit.disbursementTypeView.id}"
+                                     value="#{decision.selectedApproveCredit.disbursementTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
@@ -489,7 +486,7 @@
                 </td>
                 <td class="left">
                     <p:inputText id="dlgHoldLimitAmt"
-                                 value="#{decision.selectedAppProposeCredit.holdLimitAmount}"
+                                 value="#{decision.selectedApproveCredit.holdLimitAmount}"
                                  maxlength="18"
                                  onclick="this.select()"
                                  onkeydown="return onKeyDownMoney(event);"
@@ -511,7 +508,7 @@
                     <p:commandButton id="dlgAddAppProposeCreditBtn"
                                      value="#{msg.get('app.button.ok')}"
                                      binding="#{saveAppProposeCreditButton}"
-                                     action="#{decision.onSaveAppProposeCredit()}"
+                                     action="#{decision.onSaveApproveCredit()}"
                                      process="@form"
                                      update=":proposeCreditDlgForm,:frmMain"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'proposeCreditDlg')"

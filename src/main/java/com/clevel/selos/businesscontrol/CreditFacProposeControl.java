@@ -442,16 +442,16 @@ public class CreditFacProposeControl extends BusinessControl {
 
     public BigDecimal calTotalGuaranteeAmount(List<NewGuarantorDetailView> guarantorDetailViewList) {
         log.debug("calTotalGuaranteeAmount start :: ");
-        BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
         if (guarantorDetailViewList == null || guarantorDetailViewList.size() == 0) {
-            return sumTotalGuaranteeAmount;
+            log.debug("calTotalGuaranteeAmount end :: (guarantorDetailViewList is null! or size == 0) return 0");
+            return BigDecimal.ZERO;
         }
 
+        BigDecimal sumTotalGuaranteeAmount = BigDecimal.ZERO;
         for (NewGuarantorDetailView guarantorDetailView : guarantorDetailViewList) {
             sumTotalGuaranteeAmount = Util.add(sumTotalGuaranteeAmount, guarantorDetailView.getTotalLimitGuaranteeAmount());
         }
-
-        log.debug("calTotalGuaranteeAmount end :: ");
+        log.debug("calTotalGuaranteeAmount end :: sumTotalGuaranteeAmount: {}", sumTotalGuaranteeAmount);
         return sumTotalGuaranteeAmount;
     }
 
