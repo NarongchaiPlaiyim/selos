@@ -1099,6 +1099,7 @@ public class CustomerInfoIndividual implements Serializable {
                                     enableSpouseDocumentType = true;
                                     enableSpouseCitizenId = true;
                                 }
+
                                 onChangeProvinceEditForm4();
                                 onChangeDistrictEditForm4();
                                 onChangeProvinceEditForm5();
@@ -1134,8 +1135,13 @@ public class CustomerInfoIndividual implements Serializable {
                 message = customerInfoResultView.getReason();
                 severity = "info";
             }
+
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            if(customerInfoSearch.getSearchBy() == 1){
+                customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            } else if(customerInfoSearch.getSearchBy() == 2 && customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                customerInfoView.setTmbCustomerId(customerInfoSearch.getSearchId());
+            }
 
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
@@ -1151,7 +1157,9 @@ public class CustomerInfoIndividual implements Serializable {
             enableDocumentType = true;
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-            customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            if(customerInfoSearch.getSearchBy() == 1){
+                customerInfoView.setCitizenId(customerInfoSearch.getSearchId());
+            }
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
             message = ex.getMessage();
@@ -1460,7 +1468,11 @@ public class CustomerInfoIndividual implements Serializable {
                 customerInfoView.setSpouse(cus);
             }
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
-            customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
+            if(customerInfoSearchSpouse.getSearchBy() == 1){
+                customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
+            } else if(customerInfoSearchSpouse.getSearchBy() == 2 && customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                customerInfoView.getSpouse().setTmbCustomerId(customerInfoSearchSpouse.getSearchId());
+            }
 
             onChangeDOBSpouse();
             onChangeProvinceEditForm4();
