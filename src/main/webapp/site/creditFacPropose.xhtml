@@ -5,7 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        >
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <h:head>
     <title>SE-LOS : Credit Facility - Propose Line</title>
@@ -553,7 +553,6 @@
                                     </thead>
 
                                     <tbody class="ui-datatable-data ui-widget-content">
-                                    <!--
                                     <ui:repeat value="#{creditFacPropose.newCreditFacilityView.newCreditDetailViewList}"
                                                var="proposeCredit" varStatus="i">
                                         <tr>
@@ -591,9 +590,9 @@
                                                 </h:outputText>
                                             </td>
 
-                                            &lt;!&ndash; BEGIN: Credit Tier Detail [0] &ndash;&gt;
+                                            <!-- BEGIN: Credit Tier Detail [0] -->
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                &lt;!&ndash;<h:outputText value="#{proposeCredit.standardPrice}"/>&ndash;&gt;
+                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
@@ -622,7 +621,7 @@
                                                                      maxIntegerDigits="14"/>
                                                 </h:outputText>
                                             </td>
-                                            &lt;!&ndash; END: Credit Tier Detail [0] &ndash;&gt;
+                                            <!-- END: Credit Tier Detail [0] -->
 
                                             <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -659,7 +658,7 @@
                                             </td>
                                         </tr>
 
-                                        &lt;!&ndash; BEGIN: Credit Tier Detail [1]->[N-1] &ndash;&gt;
+                                        <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
                                         <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
                                                    var="creditTierDetail" varStatus="j"
                                                    offset="1">
@@ -690,7 +689,7 @@
                                                 </td>
                                             </tr>
                                         </ui:repeat>
-                                        &lt;!&ndash; END: Credit Tier Detail [1]->[N-1] &ndash;&gt;
+                                        <!-- END: Credit Tier Detail [1]->[N-1] -->
 
                                         <tr>
                                             <td class="left top" colspan="12" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -752,7 +751,7 @@
                                             </td>
                                         </tr>
                                     </ui:repeat>
--->
+
                                     <h:panelGroup rendered="#{empty creditFacPropose.newCreditFacilityView.newCreditDetailViewList}">
                                         <tr>
                                             <td colspan="12">No records found.</td>
@@ -1898,8 +1897,7 @@
 </ui:include>
 
 <!-- Propose Collateral Dialog -->
-<p:dialog id="collateralInfoDialog"
-          widgetVar="collateralInfoDlg"
+<p:dialog id="collateralInfoDialog" widgetVar="collateralInfoDlg"
           header="Propose Collateral Information"
           modal="true"
           width="900" height="500"
