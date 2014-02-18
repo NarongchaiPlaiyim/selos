@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class DisbursementDAO extends GenericDAO<DisbursementType, Integer> {
+public class DisbursementTypeDAO extends GenericDAO<DisbursementType, Integer> {
     @Inject
     @SELOS
     Logger log;
     @Inject
-    public DisbursementDAO() {
+    public DisbursementTypeDAO() {
     }
 
 }

@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.NewCollateralDAO;
 import com.clevel.selos.dao.working.NewCollateralHeadDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -109,7 +110,7 @@ public class AppraisalDetailTransform extends Transform {
 //                    log.debug("-- NewCollateral.newCreditFacility[{}]", newCollateral.getNewCreditFacility());
                     newCollateral.setAppraisalRequest(1);
 //                    log.debug("-- NewCollateral.appraisalRequest[{}]", newCollateral.getAppraisalRequest());
-                    newCollateral.setProposeType("P");
+                    newCollateral.setProposeType(ProposeType.P);
 //                    log.debug("-- NewCollateral.proposeType[{}]", newCollateral.getProposeType());
                     createNewCollateralFlag = false;
                     log.debug("-- Change createNewCollateralFlag = false");

@@ -3,12 +3,11 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class CreditTypeView {
+public class ProductProgramView {
     private int id;
     private String name;
     private String description;
     private String brmsCode;
-    private String comsIntType;
     private int active;
 
     public int getId() {
@@ -43,14 +42,6 @@ public class CreditTypeView {
         this.brmsCode = brmsCode;
     }
 
-    public String getComsIntType() {
-        return comsIntType;
-    }
-
-    public void setComsIntType(String comsIntType) {
-        this.comsIntType = comsIntType;
-    }
-
     public int getActive() {
         return active;
     }
@@ -66,7 +57,6 @@ public class CreditTypeView {
                 .append("name", name)
                 .append("description", description)
                 .append("brmsCode", brmsCode)
-                .append("comsIntType", comsIntType)
                 .append("active", active)
                 .toString();
     }

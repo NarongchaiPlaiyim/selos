@@ -2,20 +2,14 @@ package com.clevel.selos.model;
 
 public enum ProposeType {
 
-    P(1,"P"), A(2,"A");
-    int value;
-    String type;
+    P(1), A(2);
+    private final int value;
 
-    ProposeType(int value, String type) {
+    ProposeType(int value) {
         this.value = value;
-        this.type = type;
     }
 
     public int value(){
         return value;
-    }
-
-    public String type(){
-        return type;
     }
 }

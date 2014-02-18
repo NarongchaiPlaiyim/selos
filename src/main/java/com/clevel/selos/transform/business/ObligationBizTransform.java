@@ -17,6 +17,7 @@ import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.BankAccountStatusTransform;
+import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.transform.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
 import com.clevel.selos.util.DateTimeUtil;
@@ -51,6 +52,9 @@ public class ObligationBizTransform extends BusinessTransform {
 
     @Inject
     ServiceSegmentTransform serviceSegmentTransform;
+
+    @Inject
+    ProductTransform productTransform;
 
     @Inject
     BankAccountTypeDAO bankAccountTypeDAO;
@@ -101,12 +105,12 @@ public class ObligationBizTransform extends BusinessTransform {
         //get ProductProgram
         ExistingProductFormula existingProductFormula = existingProductFormulaDAO.findProductFormula(obligation.getProductCode(), obligation.getProjectCode(), obligation.getTmbExtProductTypeCD());
         if(existingProductFormula!=null){
-            existingCreditDetailView.setExistProductProgram(existingProductFormula.getProductProgram());
-            existingCreditDetailView.setExistCreditType(existingProductFormula.getCreditType());
+            existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(existingProductFormula.getProductProgram()));
+            existingCreditDetailView.setExistCreditTypeView(productTransform.transformToView(existingProductFormula.getCreditType()));
             existingCreditDetailView.setProductSegment(existingProductFormula.getProductSegment());
         } else {
             ProductProgram productProgram = productProgramDAO.getNonProductProgram();
-            existingCreditDetailView.setExistProductProgram(productProgram);
+            existingCreditDetailView.setExistProductProgramView(productTransform.transformToView(productProgram));
         }
 
         //get for existing credit in full app  (Tier List)

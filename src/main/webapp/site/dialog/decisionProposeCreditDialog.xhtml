@@ -15,7 +15,7 @@
                                    value="#{msg.get('app.decision.header')}"/>
                 </td>
                 <td class="left" colspan="3" style="width: 80%">
-                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedAppProposeCredit.approved}"
+                    <p:selectOneRadio id="dlgRadioApprove" value="#{decision.selectedAppProposeCredit.uwDecision}"
                                       required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
@@ -60,7 +60,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectProdProgram"
-                                     value="#{decision.selectedAppProposeCredit.productProgram.id}"
+                                     value="#{decision.selectedAppProposeCredit.productProgramView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -82,14 +82,14 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectCreditType"
-                                     value="#{decision.selectedAppProposeCredit.creditType.id}"
+                                     value="#{decision.selectedAppProposeCredit.creditTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{decision.prdProgramToCreditTypeList}"
+                        <f:selectItems value="#{decision.prdProgramToCreditTypeViewList}"
                                        var="creditTypeItem"
-                                       itemLabel="#{creditTypeItem.creditType.name}"
-                                       itemValue="#{creditTypeItem.creditType.id}"/>
+                                       itemLabel="#{creditTypeItem.creditTypeView.name}"
+                                       itemValue="#{creditTypeItem.creditTypeView.id}"/>
                         <p:ajax event="change"
                                 listener="#{decision.onChangeCreditType()}"
                                 process="@form"
@@ -443,12 +443,12 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:selectOneMenu id="dlgSelectLoanPurpose"
-                                     value="#{decision.selectedAppProposeCredit.loanPurpose.id}"
+                                     value="#{decision.selectedAppProposeCredit.loanPurposeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{decision.loanPurposeList}"
+                        <f:selectItems value="#{decision.loanPurposeViewList}"
                                        var="loanPurpose"
                                        itemLabel="#{loanPurpose.description}"
                                        itemValue="#{loanPurpose.id}"/>
@@ -472,12 +472,12 @@
                 </td>
                 <td class="left">
                     <p:selectOneMenu id="dlgSelectDisbursement"
-                                     value="#{decision.selectedAppProposeCredit.disbursement.id}"
+                                     value="#{decision.selectedAppProposeCredit.disbursementTypeView.id}"
                                      style="min-width: 200px; width: 200px; max-width: 200px;"
                                      required="#{not empty param[saveAppProposeCreditButton.clientId]}"
                                      disabled="#{decision.modeEditCredit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{decision.disbursementList}"
+                        <f:selectItems value="#{decision.disbursementTypeViewList}"
                                        var="disbursementItem"
                                        itemLabel="#{disbursementItem.disbursement}"
                                        itemValue="#{disbursementItem.id}"/>

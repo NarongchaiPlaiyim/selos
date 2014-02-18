@@ -2,6 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -127,7 +128,7 @@ public class AppraisalResultControl extends BusinessControl {
             if(!Util.isZero(newCollateral.getId())){
                 newCollateral =  newCollateralDAO.findById(newCollateral.getId());
                 newCollateral.setAppraisalRequest(2);
-                newCollateral.setProposeType("P");
+                newCollateral.setProposeType(ProposeType.P);
                 newCollateralDAO.save(newCollateral);
             }
         }

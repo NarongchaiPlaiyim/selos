@@ -1,51 +1,26 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "mst_product_formula")
-public class ProductFormula {
-    @Id
-    @Column(name = "id")
+public class ProductFormulaView {
+
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "prdprogram_facility_id")
-    private PrdProgramToCreditType programToCreditType;
-
-    @Column(name = "credit_cus_type")
+    private PrdProgramToCreditTypeView programToCreditTypeView;
     private int creditCusType;
-    @Column(name = "apply_tcg")
     private int applyTCG;
-
-    @ManyToOne
-    @JoinColumn(name = "special_program_id")
-    private SpecialProgram specialProgram;
-    @Column(name = "product_code")
+    private SpecialProgramView specialProgramView;
     private String productCode;
-    @Column(name = "project_code")
     private String projectCode;
-
-    @Column(name = "exposure_method")
     private int exposureMethod;
-    @Column(name = "wc_calculate")
     private int wcCalculate;
-    @Column(name = "reduce_pricing")
     private int reducePricing;
-    @Column(name = "reduce_frontend_fee")
     private int reduceFrontEndFee;
-    @Column(name = "dbr_calculate")
     private int dbrCalculate;
-    @Column(name = "dbr_method")
     private int dbrMethod;
-    @Column(name = "dbr_spread", length = 10)
     private BigDecimal dbrSpread;
-    @Column(name = "active")
     private int active;
 
     public int getId() {
@@ -56,12 +31,12 @@ public class ProductFormula {
         this.id = id;
     }
 
-    public PrdProgramToCreditType getProgramToCreditType() {
-        return programToCreditType;
+    public PrdProgramToCreditTypeView getProgramToCreditTypeView() {
+        return programToCreditTypeView;
     }
 
-    public void setProgramToCreditType(PrdProgramToCreditType programToCreditType) {
-        this.programToCreditType = programToCreditType;
+    public void setProgramToCreditTypeView(PrdProgramToCreditTypeView programToCreditTypeView) {
+        this.programToCreditTypeView = programToCreditTypeView;
     }
 
     public int getCreditCusType() {
@@ -80,12 +55,12 @@ public class ProductFormula {
         this.applyTCG = applyTCG;
     }
 
-    public SpecialProgram getSpecialProgram() {
-        return specialProgram;
+    public SpecialProgramView getSpecialProgramView() {
+        return specialProgramView;
     }
 
-    public void setSpecialProgram(SpecialProgram specialProgram) {
-        this.specialProgram = specialProgram;
+    public void setSpecialProgramView(SpecialProgramView specialProgramView) {
+        this.specialProgramView = specialProgramView;
     }
 
     public String getProductCode() {
@@ -172,10 +147,10 @@ public class ProductFormula {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("programToCreditType", programToCreditType)
+                .append("programToCreditTypeView", programToCreditTypeView)
                 .append("creditCusType", creditCusType)
                 .append("applyTCG", applyTCG)
-                .append("specialProgram", specialProgram)
+                .append("specialProgramView", specialProgramView)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("exposureMethod", exposureMethod)

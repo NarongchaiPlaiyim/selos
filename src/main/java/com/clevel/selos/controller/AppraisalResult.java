@@ -12,6 +12,7 @@ import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
@@ -672,7 +673,7 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
         newCollateralView.setAppraisalDate(new Date());
-        newCollateralView.setApproved(1);
+        newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
@@ -701,7 +702,7 @@ public class AppraisalResult implements Serializable {
         newCollateralView.setAadDecisionReason("AadDecisionReason");
         newCollateralView.setAadDecisionReasonDetail("AadDecisionReasonDetail");
         newCollateralView.setAppraisalDate(new Date());
-        newCollateralView.setApproved(1);
+        newCollateralView.setUwDecision(DecisionType.NO_DECISION);
         newCollateralView.setBdmComments("BdmComments");
 
         newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();

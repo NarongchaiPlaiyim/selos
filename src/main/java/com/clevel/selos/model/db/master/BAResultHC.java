@@ -25,6 +25,9 @@ public class BAResultHC implements Serializable {
 
     @Column(name = "active")
     private int active;
+    
+    @Column(name="required_checkdate",columnDefinition="int default 0")
+    private boolean requiredCheckDate;
 
     public BAResultHC(){}
 
@@ -58,6 +61,13 @@ public class BAResultHC implements Serializable {
 
 	public void setActive(int active) {
 		this.active = active;
+	}
+	
+	public boolean isRequiredCheckDate() {
+		return requiredCheckDate;
+	}
+	public void setRequiredCheckDate(boolean requiredCheckDate) {
+		this.requiredCheckDate = requiredCheckDate;
 	}
     
     

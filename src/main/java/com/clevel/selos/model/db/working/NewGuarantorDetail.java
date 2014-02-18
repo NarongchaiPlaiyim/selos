@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,8 +23,13 @@ public class NewGuarantorDetail implements Serializable {
     @Column(name = "no")
     private int no;
 
-    @Column(name = "propose_type")
-    private String proposeType;
+    @Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
+
+    @Column(name = "uw_decision", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private DecisionType uwDecision;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
@@ -37,7 +44,6 @@ public class NewGuarantorDetail implements Serializable {
     @ManyToOne
     @JoinColumn(name = "new_credit_facility_id")
     private NewCreditFacility newCreditFacility;
-
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -146,12 +152,20 @@ public class NewGuarantorDetail implements Serializable {
         this.newGuarantorCreditList = newGuarantorCreditList;
     }
 
-    public String getProposeType() {
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
+    }
+
+    public DecisionType getUwDecision() {
+        return uwDecision;
+    }
+
+    public void setUwDecision(DecisionType uwDecision) {
+        this.uwDecision = uwDecision;
     }
 
     @Override

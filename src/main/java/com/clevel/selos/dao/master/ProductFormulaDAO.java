@@ -28,6 +28,8 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
         return productFormula;
     }
 
+
+
     @SuppressWarnings("unchecked")
     public ProductFormula findProductFormulaForPropose(PrdProgramToCreditType programToCreditType,int CreditCusType,SpecialProgram specialProgram,int applyTcg) {
         Criteria criteria = createCriteria();
@@ -49,5 +51,14 @@ public class ProductFormulaDAO extends GenericDAO<ProductFormula, Integer> {
 
     }
 
+    public ProductFormula findProductFormulaPropose(PrdProgramToCreditType programToCreditType,int creditCusType, int specialProgramId,int applyTcg) {
+        String query = "SELECT productFormula FROM ProductFormula productFormula WHERE ( creditCusType = " + creditCusType + " OR creditCusType = 0 ) AND ";
+        query = query + "( applyTCG = " + applyTcg + " OR applyTCG = 0 ) AND ( specialProgram = " + specialProgramId + " OR specialProgram = 3 ) AND ";
+        query = query + "programToCreditType.id = " + programToCreditType.getId();
+        ProductFormula productFormula = (ProductFormula)getSession().createQuery(query).uniqueResult();
+
+        return productFormula;
+
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.DecisionType;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,7 +21,7 @@ public class NewCollateralView implements Serializable {
     private String  aadDecisionReasonDetail;
     private String  usage;
     private String  typeOfUsage;
-    private String  uwDecision;
+    private DecisionType uwDecision;
     private String  uwRemark;
     private String  mortgageCondition;
     private String  mortgageConditionDetail;
@@ -29,9 +30,8 @@ public class NewCollateralView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    private int isApproved;
     private BigDecimal premiumAmount;
-    private String proposeType;
+    private ProposeType proposeType;
     private boolean coms;
 
     private List<NewCollateralHeadView> newCollateralHeadViewList;
@@ -51,12 +51,12 @@ public class NewCollateralView implements Serializable {
         this.aadDecisionReasonDetail = "";
         this.usage = "";
         this.typeOfUsage = "";
-        this.uwDecision = "";
+        this.uwDecision = DecisionType.NO_DECISION;
         this.uwRemark = "";
         this.mortgageCondition = "";
         this.mortgageConditionDetail = "";
         this.bdmComments= "";
-        this.proposeType= ProposeType.P.type();
+        this.proposeType= ProposeType.P;
         this.newCollateralHeadViewList = new ArrayList<NewCollateralHeadView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         this.coms = false;
@@ -126,11 +126,11 @@ public class NewCollateralView implements Serializable {
         this.typeOfUsage = typeOfUsage;
     }
 
-    public String getUwDecision() {
+    public DecisionType getUwDecision() {
         return uwDecision;
     }
 
-    public void setUwDecision(String uwDecision) {
+    public void setUwDecision(DecisionType uwDecision) {
         this.uwDecision = uwDecision;
     }
 
@@ -198,14 +198,6 @@ public class NewCollateralView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public int getApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(int approved) {
-        isApproved = approved;
-    }
-
     public List<NewCollateralHeadView> getNewCollateralHeadViewList() {
         return newCollateralHeadViewList;
     }
@@ -237,11 +229,11 @@ public class NewCollateralView implements Serializable {
         this.premiumAmount = premiumAmount;
     }
 
-    public String getProposeType() {
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
     }
 
@@ -273,11 +265,12 @@ public class NewCollateralView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
-                .append("isApproved", isApproved)
+                .append("premiumAmount", premiumAmount)
+                .append("proposeType", proposeType)
+                .append("coms", coms)
                 .append("newCollateralHeadViewList", newCollateralHeadViewList)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("jobIDSearch", jobIDSearch)
-                .append("premiumAmount", premiumAmount)
                 .toString();
     }
 

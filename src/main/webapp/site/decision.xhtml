@@ -1618,12 +1618,12 @@
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.productProgram.name}
+                                                        #{proposeCredit.productProgramView.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                 fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                        #{proposeCredit.creditType.name}
+                                                        #{proposeCredit.creditTypeView.name}
                                                     </td>
                                                     <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                         rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -1733,7 +1733,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.purpose')}
                                                                 </td>
                                                                 <td class="left" colspan="3" style="border-style: none !important;">
-                                                                    #{proposeCredit.loanPurpose.description}
+                                                                    #{proposeCredit.loanPurposeView.description}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1748,7 +1748,7 @@
                                                                     #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                 </td>
                                                                 <td class="left" style="border-style: none !important;">
-                                                                    #{proposeCredit.disbursement.disbursement}
+                                                                    #{proposeCredit.disbursementTypeView.disbursement}
                                                                 </td>
                                                                 <td class="title" style="border-style: none !important;">
                                                                     #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -1958,17 +1958,17 @@
                                                         <td class="center top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) + 1 : '2'}">
-                                                            #{proposeCredit.approved eq 2 ? msg.get('app.label.approved') : proposeCredit.approved eq 1 ? msg.get('app.label.notApproved') : ''}
+                                                            #{proposeCredit.uwDecision.value eq 2 ? msg.get('app.label.approved') : proposeCredit.uwDecision.value eq 1 ? msg.get('app.label.notApproved') : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                            #{not empty proposeCredit.productProgram ? proposeCredit.productProgram.description : ''}
+                                                            #{not empty proposeCredit.productProgramView ? proposeCredit.productProgramView.description : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     fn:length(proposeCredit.newCreditTierDetailViewList) : '1'}">
-                                                            #{not empty proposeCredit.creditType ? proposeCredit.creditType.description : ''}
+                                                            #{not empty proposeCredit.creditTypeView ? proposeCredit.creditTypeView.description : ''}
                                                         </td>
                                                         <td class="left top" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                             rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -2107,8 +2107,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.purpose')}
                                                                     </td>
                                                                     <td class="left" colspan="3" style="border-style: none !important;">
-                                                                        #{not empty proposeCredit.loanPurpose ?
-                                                                          proposeCredit.loanPurpose.description : ''}
+                                                                        #{not empty proposeCredit.loanPurposeView ?
+                                                                          proposeCredit.loanPurposeView.description : ''}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -2124,8 +2124,8 @@
                                                                         #{msg.get('app.decision.tb.td.label.disbursement')}
                                                                     </td>
                                                                     <td class="left" style="border-style:none !important;">
-                                                                        #{not empty proposeCredit.disbursement ?
-                                                                          proposeCredit.disbursement.disbursement : ''}
+                                                                        #{not empty proposeCredit.disbursementTypeView ?
+                                                                          proposeCredit.disbursementTypeView.disbursement : ''}
                                                                     </td>
                                                                     <td class="title" style="border-style:none !important;">
                                                                         #{msg.get('app.decision.tb.td.label.holdAmount')}
@@ -2926,8 +2926,8 @@
                                                         <!--<f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="2"/>-->
                                                         <!--<f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="1"/>-->
                                                     <!--</p:selectOneRadio>-->
-                                                    #{proposeColl.approved eq 2 ? msg.get('app.button.yes')
-                                                    : proposeColl.approved eq 1 ? msg.get('app.button.no')
+                                                    #{proposeColl.uwDecision eq 2 ? msg.get('app.button.yes')
+                                                    : proposeColl.uwDecision eq 1 ? msg.get('app.button.no')
                                                     : ''}
                                                 </td>
                                             </tr>

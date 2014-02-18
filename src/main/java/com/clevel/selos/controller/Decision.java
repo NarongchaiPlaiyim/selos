@@ -20,9 +20,11 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.DecisionTransform;
+import com.clevel.selos.transform.DisbursementTypeTransform;
+import com.clevel.selos.transform.LoanPurposeTransform;
+import com.clevel.selos.transform.ProductTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.clevel.selos.util.ValidationUtil;
 import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -35,7 +37,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -69,7 +71,12 @@ public class Decision implements Serializable {
     CustomerInfoControl customerInfoControl;
     @Inject
     private ExSummaryControl exSummaryControl;
-
+    @Inject
+    private LoanPurposeControl loanPurposeControl;
+    @Inject
+    private DisbursementTypeControl disbursementTypeControl;
+    @Inject
+    private ProductControl productControl;
     //DAO
     @Inject
     DecisionDAO decisionDAO;
@@ -84,7 +91,7 @@ public class Decision implements Serializable {
     @Inject
     BaseRateDAO baseRateDAO;
     @Inject
-    DisbursementDAO disbursementDAO;
+    DisbursementTypeDAO disbursementDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -103,16 +110,22 @@ public class Decision implements Serializable {
     PotentialCollateralDAO potentialCollateralDAO;
     @Inject
     MortgageTypeDAO mortgageTypeDAO;
+
     @Inject
     LoanPurposeDAO loanPurposeDAO;
 
     //Transform
     @Inject
     DecisionTransform decisionTransform;
+    @Inject
+    ProductTransform productTransform;
+    @Inject
+    DisbursementTypeTransform disbursementTypeTransform;
+    @Inject
+    LoanPurposeTransform loanPurposeTransform;
 
     //Session
     private long workCaseId;
-    private long workCasePrescreenId;
 
     //User Role
     private boolean roleBDM;
@@ -155,7 +168,7 @@ public class Decision implements Serializable {
     private int rowSpanNumber;
     private boolean modeEdit;
     private int seq;
-    private Hashtable hashSeqCredit;
+    private HashMap<Integer, Integer> hashSeqCredit;
 //    private BigDecimal suggestPrice;
 //    private BigDecimal standardPrice;
     private boolean modeEditReduceFront;
@@ -188,10 +201,10 @@ public class Decision implements Serializable {
     private boolean cannotEditStandard;
 
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
-    private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
+    private List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList;
     private List<BaseRate> baseRateList;
-    private List<LoanPurpose> loanPurposeList;
-    private List<DisbursementType> disbursementList;
+    private List<LoanPurposeView> loanPurposeViewList;
+    private List<DisbursementTypeView> disbursementTypeViewList;
     private int rowIndexCredit;
 
     // Propose/Approve - Collateral
@@ -342,8 +355,8 @@ public class Decision implements Serializable {
             creditTypeList = new ArrayList<CreditType>();
         }
 
-        if (disbursementList == null) {
-            disbursementList = new ArrayList<DisbursementType>();
+        if (disbursementTypeViewList == null) {
+            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newGuarantorDetailView == null) {
@@ -382,8 +395,8 @@ public class Decision implements Serializable {
             baseRateList = new ArrayList<BaseRate>();
         }
 
-        if (loanPurposeList == null) {
-            loanPurposeList = new ArrayList<LoanPurpose>();
+        if (loanPurposeViewList == null) {
+            loanPurposeViewList = new ArrayList<LoanPurposeView>();
         }
 
         if (mortgageTypeList == null) {
@@ -394,8 +407,8 @@ public class Decision implements Serializable {
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         mortgageTypeList = mortgageTypeDAO.findAll();
-        loanPurposeList = loanPurposeDAO.findAll();
-        disbursementList = disbursementDAO.findAll();
+        loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
+        disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
         collateralTypeList = collateralTypeDAO.findAll();
 //        headCollateralTypeList  = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
@@ -408,7 +421,7 @@ public class Decision implements Serializable {
 
         // Initial sequence number credit
         seq = 1;
-        hashSeqCredit = new Hashtable<Integer, Integer>();
+        hashSeqCredit = new HashMap<Integer, Integer>();
 
         // Retrieve Pricing/Fee
         creditCustomerType = RadioValue.NOT_SELECTED.value();
@@ -502,12 +515,12 @@ public class Decision implements Serializable {
 //                selectedAppProposeCredit.setSuggestBasePrice(baseRateList.get(0)); //todo: change suggest to tier
             }
 
-            if (loanPurposeList != null && !loanPurposeList.isEmpty()) {
-                selectedAppProposeCredit.setLoanPurpose(loanPurposeList.get(0));
+            if (loanPurposeViewList != null && !loanPurposeViewList.isEmpty()) {
+                selectedAppProposeCredit.setLoanPurposeView(loanPurposeViewList.get(0));
             }
 
-            if (disbursementList != null && !disbursementList.isEmpty()) {
-                selectedAppProposeCredit.setDisbursement(disbursementList.get(0));
+            if (disbursementTypeViewList != null && !disbursementTypeViewList.isEmpty()) {
+                selectedAppProposeCredit.setDisbursementTypeView(disbursementTypeViewList.get(0));
             }
 
             onChangeRequestType();
@@ -522,8 +535,10 @@ public class Decision implements Serializable {
 
     public void onEditAppProposeCredit() {
         log.debug("onEditAppProposeCredit() selectedAppProposeCredit: {}", selectedAppProposeCredit);
-        ProductProgram productProgram = selectedAppProposeCredit.getProductProgram();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
+        ProductProgramView productProgramView = selectedAppProposeCredit.getProductProgramView();
+
+        //prdProgramToCreditTypeViewList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgramView);
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(productProgramView);
 
         modeEditCredit = true;
         modeForButton = ModeForButton.EDIT;
@@ -555,20 +570,20 @@ public class Decision implements Serializable {
         log.debug("onSaveAppProposeCredit()");
         boolean success = false;
 
-        if (selectedAppProposeCredit.getProductProgram().getId() != 0
-                && selectedAppProposeCredit.getCreditType().getId() != 0
-                && selectedAppProposeCredit.getLoanPurpose().getId() != 0
-                && selectedAppProposeCredit.getDisbursement().getId() != 0) {
+        if (selectedAppProposeCredit.getProductProgramView().getId() != 0
+                && selectedAppProposeCredit.getCreditTypeView().getId() != 0
+                && selectedAppProposeCredit.getLoanPurposeView().getId() != 0
+                && selectedAppProposeCredit.getDisbursementTypeView().getId() != 0) {
 
-            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
-            LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurpose().getId());
-            DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursement().getId());
+            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgramView().getId());
+            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditTypeView().getId());
+            LoanPurpose loanPurpose = loanPurposeDAO.findById(selectedAppProposeCredit.getLoanPurposeView().getId());
+            DisbursementType disbursement = disbursementDAO.findById(selectedAppProposeCredit.getDisbursementTypeView().getId());
 
             if (modeEditCredit) {
                 NewCreditDetailView creditDetailEdit = decisionView.getApproveCreditList().get(rowIndexCredit);
-                creditDetailEdit.setProductProgram(productProgram);
-                creditDetailEdit.setCreditType(creditType);
+                creditDetailEdit.setProductProgramView(productTransform.transformToView(productProgram));
+                creditDetailEdit.setCreditTypeView(productTransform.transformToView(creditType));
                 creditDetailEdit.setRequestType(selectedAppProposeCredit.getRequestType());
                 creditDetailEdit.setRefinance(selectedAppProposeCredit.getRefinance());
                 creditDetailEdit.setProductCode(selectedAppProposeCredit.getProductCode());
@@ -583,9 +598,9 @@ public class Decision implements Serializable {
 //                creditDetailEdit.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
 //                creditDetailEdit.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailEdit.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailEdit.setLoanPurpose(loanPurpose);
+                creditDetailEdit.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 creditDetailEdit.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailEdit.setDisbursement(disbursement);
+                creditDetailEdit.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 creditDetailEdit.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
                 creditDetailEdit.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
 
@@ -593,8 +608,8 @@ public class Decision implements Serializable {
             } else {
                 // Add New
                 NewCreditDetailView creditDetailAdd = new NewCreditDetailView();
-                creditDetailAdd.setProductProgram(productProgram);
-                creditDetailAdd.setCreditType(creditType);
+                creditDetailAdd.setProductProgramView(productTransform.transformToView(productProgram));
+                creditDetailAdd.setCreditTypeView(productTransform.transformToView(creditType));
                 creditDetailAdd.setRequestType(selectedAppProposeCredit.getRequestType());
                 creditDetailAdd.setRefinance(selectedAppProposeCredit.getRefinance());
                 creditDetailAdd.setProductCode(selectedAppProposeCredit.getProductCode());
@@ -609,9 +624,9 @@ public class Decision implements Serializable {
 //                creditDetailAdd.setSuggestBasePrice(selectedAppProposeCredit.getSuggestBasePrice()); //todo: change suggest to tier
 //                creditDetailAdd.setSuggestInterest(selectedAppProposeCredit.getSuggestInterest()); //todo: change suggest to tier
                 creditDetailAdd.setFrontEndFee(selectedAppProposeCredit.getFrontEndFee());
-                creditDetailAdd.setLoanPurpose(loanPurpose);
+                creditDetailAdd.setLoanPurposeView(loanPurposeTransform.transformToView(loanPurpose));
                 creditDetailAdd.setRemark(selectedAppProposeCredit.getRemark());
-                creditDetailAdd.setDisbursement(disbursement);
+                creditDetailAdd.setDisbursementTypeView(disbursementTypeTransform.transformToView(disbursement));
                 creditDetailAdd.setHoldLimitAmount(selectedAppProposeCredit.getHoldLimitAmount());
                 creditDetailAdd.setNewCreditTierDetailViewList(selectedAppProposeCredit.getNewCreditTierDetailViewList());
                 creditDetailAdd.setSeq(seq);
@@ -644,61 +659,46 @@ public class Decision implements Serializable {
     public void onChangeRequestType() {
         log.debug("onChangeRequestType() requestType = {}", selectedAppProposeCredit.getRequestType());
         prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
-        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        prdProgramToCreditTypeViewList = new ArrayList<PrdProgramToCreditTypeView>();
 
         if (RequestTypes.CHANGE.value() == selectedAppProposeCredit.getRequestType()) {   //change
             prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramProposeAll();
-            selectedAppProposeCredit.getProductProgram().setId(0);
+            selectedAppProposeCredit.setProductProgramView(new ProductProgramView());
             cannotEditStandard = false;
         } else if (RequestTypes.NEW.value() == selectedAppProposeCredit.getRequestType()) {  //new
             if (productGroup != null) {
                 prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdGroupToPrdProgramPropose(productGroup);
-                selectedAppProposeCredit.getCreditType().setId(0);
+                selectedAppProposeCredit.setCreditTypeView(new CreditTypeView());
             }
             cannotEditStandard = true;
         }
     }
 
     public void onChangeProductProgram() {
-        log.debug("onChangeProductProgram() productProgram.id = {}", selectedAppProposeCredit.getProductProgram().getId());
+        log.debug("onChangeProductProgram() productProgram.id = {}", selectedAppProposeCredit.getProductProgramView().getId());
         selectedAppProposeCredit.setProductCode("");
         selectedAppProposeCredit.setProjectCode("");
 
-        ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListCreditProposeByPrdprogram(productProgram);
-        selectedAppProposeCredit.getCreditType().setId(0);
+        //ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
+        prdProgramToCreditTypeViewList = productControl.getPrdProgramToCreditTypeViewList(selectedAppProposeCredit.getProductProgramView());;
+        selectedAppProposeCredit.setCreditTypeView(new CreditTypeView());
     }
 
     public void onChangeCreditType() {
-        log.debug("onChangeCreditType() creditType.id: {}", selectedAppProposeCredit.getCreditType().getId());
-        if ((selectedAppProposeCredit.getProductProgram().getId() != 0) && (selectedAppProposeCredit.getCreditType().getId() != 0)) {
-            ProductProgram productProgram = productProgramDAO.findById(selectedAppProposeCredit.getProductProgram().getId());
-            CreditType creditType = creditTypeDAO.findById(selectedAppProposeCredit.getCreditType().getId());
-            //productFormulaDAO
-            //ProductProgramFacilityId , CreditCusType (prime/normal),applyTCG (TCG),spec_program_id(basicInfo)
-            if (productProgram != null && creditType != null) {
-                PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditType, productProgram);
+        log.debug("onChangeCreditType() creditType.id: {}", selectedAppProposeCredit.getCreditTypeView().getId());
+        if ((selectedAppProposeCredit.getProductProgramView().getId() != 0) && (selectedAppProposeCredit.getCreditTypeView().getId() != 0)) {
+            ProductFormulaView productFormulaView = productControl.getProductFormulaView(newCreditDetailView.getCreditTypeView().getId(),
+                    newCreditDetailView.getProductProgramView().getId(),
+                    newCreditFacilityView.getCreditCustomerType(), specialProgramBasicInfo.getId(), applyTCG);
+            if (productFormulaView != null) {
+                log.debug("onChangeCreditType :::: productFormula : {}", productFormulaView.getId());
+                newCreditDetailView.setProductCode(productFormulaView.getProductCode());
+                newCreditDetailView.setProjectCode(productFormulaView.getProjectCode());
+                log.info("productFormula.getReduceFrontEndFee() ::: {}", productFormulaView.getReduceFrontEndFee());
+                log.info("productFormula.getReducePricing() ::: {}", productFormulaView.getReducePricing());
 
-                if ((prdProgramToCreditType != null && prdProgramToCreditType.getId() != 0)
-                        && (specialProgramBasicInfo != null && specialProgramBasicInfo.getId() != 0)) {
-                    log.info("onChangeCreditType() :: prdProgramToCreditType :: {}", prdProgramToCreditType.getId());
-                    log.info("onChangeCreditType() :: creditCustomerType :: {}", creditCustomerType);
-                    log.info("onChangeCreditType() :: specialProgramBasicInfo :: {}", specialProgramBasicInfo.getId());
-                    log.info("onChangeCreditType() :: applyTCG :: {}", applyTCG);
-                    SpecialProgram specialProgram = specialProgramDAO.findById(specialProgramBasicInfo.getId());
-                    ProductFormula productFormula = productFormulaDAO.findProductFormulaForPropose(prdProgramToCreditType, creditCustomerType, specialProgram, applyTCG);
-
-                    if (productFormula != null) {
-                        log.debug("onChangeCreditType() :::: productFormula : {}", productFormula.getId());
-                        selectedAppProposeCredit.setProductCode(productFormula.getProductCode());
-                        selectedAppProposeCredit.setProjectCode(productFormula.getProjectCode());
-
-                        log.debug("productFormula.", productFormula.getReducePricing());
-                        log.debug("productFormula.", productFormula.getReducePricing());
-                        modeEditReducePricing = productFormula.getReducePricing() == 1 ? true : false;
-                        modeEditReduceFrontEndFee = productFormula.getReduceFrontEndFee() == 1 ? true : false;
-                    }
-                }
+                modeEditReducePricing = productFormulaView.getReducePricing() == 1 ? true : false;
+                modeEditReduceFrontEndFee = productFormulaView.getReduceFrontEndFee() == 1 ? true : false;
             }
         }
     }
@@ -796,9 +796,7 @@ public class Decision implements Serializable {
         collateralInfoEdit.setAadDecisionReasonDetail(selectedAppProposeCollateral.getAadDecisionReasonDetail());
         collateralInfoEdit.setUsage(selectedAppProposeCollateral.getUsage());
         collateralInfoEdit.setTypeOfUsage(selectedAppProposeCollateral.getTypeOfUsage());
-        collateralInfoEdit.setApproved(selectedAppProposeCollateral.getApproved());
-        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getApproved() == 2 ? "Approved"
-                : selectedAppProposeCollateral.getApproved() == 1 ? "Not Approved" : "");
+        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getUwDecision());
         collateralInfoEdit.setUwRemark(selectedAppProposeCollateral.getUwRemark());
         collateralInfoEdit.setMortgageCondition(selectedAppProposeCollateral.getMortgageCondition());
         collateralInfoEdit.setMortgageConditionDetail(selectedAppProposeCollateral.getMortgageConditionDetail());
@@ -1055,7 +1053,7 @@ public class Decision implements Serializable {
             // Add New
             log.debug("===> Add New - Guarantor: {}", selectedAppProposeGuarantor);
             NewGuarantorDetailView guarantorDetailAdd = new NewGuarantorDetailView();
-            guarantorDetailAdd.setApproved(selectedAppProposeGuarantor.getApproved());
+            //guarantorDetailAdd.setApproved(selectedAppProposeGuarantor.getApproved());
             guarantorDetailAdd.setGuarantorName(getByIdFromGuarantorList(selectedAppProposeGuarantor.getGuarantorName().getId()));
             guarantorDetailAdd.setTcgLgNo(selectedAppProposeGuarantor.getTcgLgNo());
 
@@ -1231,12 +1229,12 @@ public class Decision implements Serializable {
         this.prdGroupToPrdProgramList = prdGroupToPrdProgramList;
     }
 
-    public List<PrdProgramToCreditType> getPrdProgramToCreditTypeList() {
-        return prdProgramToCreditTypeList;
+    public List<PrdProgramToCreditTypeView> getPrdProgramToCreditTypeViewList() {
+        return prdProgramToCreditTypeViewList;
     }
 
-    public void setPrdProgramToCreditTypeList(List<PrdProgramToCreditType> prdProgramToCreditTypeList) {
-        this.prdProgramToCreditTypeList = prdProgramToCreditTypeList;
+    public void setPrdProgramToCreditTypeViewList(List<PrdProgramToCreditTypeView> prdProgramToCreditTypeViewList) {
+        this.prdProgramToCreditTypeViewList = prdProgramToCreditTypeViewList;
     }
 
     public List<BaseRate> getBaseRateList() {
@@ -1247,12 +1245,12 @@ public class Decision implements Serializable {
         this.baseRateList = baseRateList;
     }
 
-    public List<DisbursementType> getDisbursementList() {
-        return disbursementList;
+    public List<DisbursementTypeView> getDisbursementTypeViewList() {
+        return disbursementTypeViewList;
     }
 
-    public void setDisbursementList(List<DisbursementType> disbursementList) {
-        this.disbursementList = disbursementList;
+    public void setDisbursementTypeViewList(List<DisbursementTypeView> disbursementTypeViewList) {
+        this.disbursementTypeViewList = disbursementTypeViewList;
     }
 
     public List<CustomerInfoView> getGuarantorList() {
@@ -1423,12 +1421,12 @@ public class Decision implements Serializable {
         this.selectedAppSubCollateral = selectedAppSubCollateral;
     }
 
-    public List<LoanPurpose> getLoanPurposeList() {
-        return loanPurposeList;
+    public List<LoanPurposeView> getLoanPurposeViewList() {
+        return loanPurposeViewList;
     }
 
-    public void setLoanPurposeList(List<LoanPurpose> loanPurposeList) {
-        this.loanPurposeList = loanPurposeList;
+    public void setLoanPurposeViewList(List<LoanPurposeView> loanPurposeViewList) {
+        this.loanPurposeViewList = loanPurposeViewList;
     }
 
     public int getRowIndexCollateral() {

@@ -30,9 +30,9 @@ public class ExistingCreditDetailView implements Serializable {
 
     private BankAccountStatus existAccountStatus;
     private String productProgram;
-    private ProductProgram existProductProgram;
+    private ProductProgramView existProductProgramView;
     private String creditType;
-    private CreditType existCreditType;
+    private CreditTypeView existCreditTypeView;
     private String productCode;
     private String projectCode;
     private CreditCategory creditCategory;
@@ -178,12 +178,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.productProgram = productProgram;
     }
 
-    public ProductProgram getExistProductProgram() {
-        return existProductProgram;
+    public ProductProgramView getExistProductProgramView() {
+        return existProductProgramView;
     }
 
-    public void setExistProductProgram(ProductProgram existProductProgram) {
-        this.existProductProgram = existProductProgram;
+    public void setExistProductProgramView(ProductProgramView existProductProgramView) {
+        this.existProductProgramView = existProductProgramView;
     }
 
     public String getCreditType() {
@@ -194,12 +194,12 @@ public class ExistingCreditDetailView implements Serializable {
         this.creditType = creditType;
     }
 
-    public CreditType getExistCreditType() {
-        return existCreditType;
+    public CreditTypeView getExistCreditTypeView() {
+        return existCreditTypeView;
     }
 
-    public void setExistCreditType(CreditType existCreditType) {
-        this.existCreditType = existCreditType;
+    public void setExistCreditTypeView(CreditTypeView existCreditTypeView) {
+        this.existCreditTypeView = existCreditTypeView;
     }
 
     public String getProductCode() {
@@ -384,9 +384,9 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("existAccountStatus", existAccountStatus)
                 .append("productProgram", productProgram)
-                .append("existProductProgram", existProductProgram)
+                .append("existProductProgramView", existProductProgramView)
                 .append("creditType", creditType)
-                .append("existCreditType", existCreditType)
+                .append("existCreditTypeView", existCreditTypeView)
                 .append("productCode", productCode)
                 .append("projectCode", projectCode)
                 .append("creditCategory", creditCategory)

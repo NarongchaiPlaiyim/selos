@@ -15,7 +15,7 @@
                 </td>
                 <td class="left" style="width: 80%">
                     <p:selectOneRadio id="dlgGuarantorRadioApprove"
-                                      value="#{decision.selectedAppProposeGuarantor.approved}"
+                                      value="#{decision.selectedAppProposeGuarantor.uwDecision}"
                                       required="#{not empty param[saveGuarantorButton.clientId]}">
                         <f:selectItem itemLabel="#{msg.get('app.button.approve')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.button.notApprove')}" itemValue="1"/>
@@ -98,11 +98,11 @@
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.productProgram ? creditTypeItem.productProgram.name : ''}
+                            #{not empty creditTypeItem.productProgramView ? creditTypeItem.productProgramView.name : ''}
                         </p:column>
 
                         <p:column styleClass="left top">
-                            #{not empty creditTypeItem.creditFacility ? creditTypeItem.creditFacility.name : ''}
+                            #{not empty creditTypeItem.creditFacilityView ? creditTypeItem.creditFacilityView.name : ''}
                         </p:column>
 
                         <p:column styleClass="right top">

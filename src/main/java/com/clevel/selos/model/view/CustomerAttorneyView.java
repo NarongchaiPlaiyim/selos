@@ -124,7 +124,10 @@ public class CustomerAttorneyView implements Serializable {
 	}
 
 	public Gender getGender() {
-		return gender;
+		if (gender == null)
+			return Gender.NA;
+		else
+			return gender;
 	}
 
 	public void setGender(Gender gender) {

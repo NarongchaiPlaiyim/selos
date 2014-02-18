@@ -1,5 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,8 +20,9 @@ public class NewCollateral implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NEW_COLL_ID")
     private long id;
 
-    @Column(name = "propose_type")
-    private String proposeType;
+    @Column(name = "propose_type", length = 1, columnDefinition = "int default 0")
+    @Enumerated(EnumType.ORDINAL)
+    private ProposeType proposeType;
 
     @Column(name = "appraisal_request", nullable=false, columnDefinition="int default 0")
     private int appraisalRequest;
@@ -49,8 +52,10 @@ public class NewCollateral implements Serializable {
     @Column(name = "type_of_usage")
     private String typeOfUsage;
 
-    @Column(name = "uw_decision")
-    private String uwDecision;
+
+    @Column(name = "uw_decision", columnDefinition = "int default 0", length = 1)
+    @Enumerated(EnumType.ORDINAL)
+    private DecisionType uwDecision;
 
     @Column(name = "uw_remark")
     private String uwRemark;
@@ -106,11 +111,11 @@ public class NewCollateral implements Serializable {
         this.id = id;
     }
 
-    public String getProposeType() {
+    public ProposeType getProposeType() {
         return proposeType;
     }
 
-    public void setProposeType(String proposeType) {
+    public void setProposeType(ProposeType proposeType) {
         this.proposeType = proposeType;
     }
 
@@ -178,11 +183,11 @@ public class NewCollateral implements Serializable {
         this.typeOfUsage = typeOfUsage;
     }
 
-    public String getUwDecision() {
+    public DecisionType getUwDecision() {
         return uwDecision;
     }
 
-    public void setUwDecision(String uwDecision) {
+    public void setUwDecision(DecisionType uwDecision) {
         this.uwDecision = uwDecision;
     }
 
