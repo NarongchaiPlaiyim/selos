@@ -30,7 +30,7 @@ public class ProductTransform extends Transform{
 
     public ProductProgramView transformToView(ProductProgram productProgram){
         ProductProgramView productProgramView = new ProductProgramView();
-        if(productProgram !=null){
+        if(productProgram != null){
             productProgramView.setId(productProgram.getId());
             productProgramView.setName(productProgram.getName());
             productProgramView.setDescription(productProgram.getDescription());
