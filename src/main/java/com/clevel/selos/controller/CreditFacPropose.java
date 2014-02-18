@@ -756,7 +756,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setSeq(seq);
                 calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
-                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
+//                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
@@ -789,14 +789,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             }
 
             complete = true;
-            hashSeqCredit.put(seq, 0);
-            seq++;
-            log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
+//            hashSeqCredit.put(seq, 0);
+//            seq++;
+//            log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
 
-            if (modeForDB == ModeForDB.ADD_DB) {
-                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-                log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
-            }
+//            if (modeForDB == ModeForDB.ADD_DB) {
+//                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+//                log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
+//            }
 
         } else {
             log.info("onSaveCreditInfo ::: validation failed.");
