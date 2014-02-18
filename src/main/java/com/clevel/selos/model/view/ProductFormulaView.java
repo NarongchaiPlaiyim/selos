@@ -3,9 +3,10 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ProductFormulaView {
+public class ProductFormulaView implements Serializable {
 
     private int id;
     private PrdProgramToCreditTypeView programToCreditTypeView;

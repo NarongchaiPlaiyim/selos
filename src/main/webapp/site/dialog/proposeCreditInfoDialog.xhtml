@@ -466,7 +466,7 @@
                                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                                      disabled="#{creditFacPropose.modeEdit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                         <f:selectItems value="#{creditFacPropose.loanPurposeList}"
+                         <f:selectItems value="#{creditFacPropose.loanPurposeViewList}"
                                           var="loanPurposeItem"
                                           itemLabel="#{loanPurposeItem.description}"
                                           itemValue="#{loanPurposeItem.id}"/>
@@ -496,7 +496,7 @@
                                      required="#{not empty param[onSaveCreditInfo.clientId]}"
                                      disabled="#{creditFacPropose.modeEdit}">
                         <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                        <f:selectItems value="#{creditFacPropose.disbursementList}"
+                        <f:selectItems value="#{creditFacPropose.disbursementTypeViewList}"
                                        var="disbursementItem"
                                        itemLabel="#{disbursementItem.disbursement}"
                                        itemValue="#{disbursementItem.id}"/>

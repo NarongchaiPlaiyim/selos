@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
@@ -108,6 +109,14 @@ public class ExistingCreditDetailTransform extends Transform {
             existingCreditDetailView.setProductCode(existingCreditDetail.getProductCode());
             existingCreditDetailView.setProjectCode(existingCreditDetail.getProjectCode());
             existingCreditDetailView.setTenor(existingCreditDetail.getTenor());
+            if(existingCreditDetail.getCreditCategory()==CreditCategory.COMMERCIAL.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
+            } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RETAIL.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
+            } else if(existingCreditDetail.getCreditCategory()==CreditCategory.RLOS_APP_IN.value()){
+                existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
+            }
+
 
             /*existingCreditDetailView.setPurpose(existingCreditDetail.getPurpose());
             existingCreditDetailView.setReduceFrontEndFee(existingCreditDetail.getReduceFrontEndFee());

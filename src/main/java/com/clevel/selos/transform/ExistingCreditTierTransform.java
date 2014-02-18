@@ -39,7 +39,7 @@ public class ExistingCreditTierTransform extends Transform {
             }else{
                 existingCreditTierDetail.setFinalBasePrice(null);
             }
-            existingCreditTierDetail.setFinalInterest(existingCreditTierDetailView.getStandardInterest());
+            existingCreditTierDetail.setFinalInterest(existingCreditTierDetailView.getFinalInterest());
             existingCreditTierDetail.setFinalPriceRate(existingCreditTierDetailView.getFinalPriceRate());
 
             existingCreditTierDetail.setInstallment(existingCreditTierDetailView.getInstallment());
@@ -89,7 +89,7 @@ public class ExistingCreditTierTransform extends Transform {
             existingCreditTierDetailView.setSuggestBasePrice(existingCreditTierDetail.getSuggestBasePrice());
 //            existingCreditTierDetailView.setEditFlag(existingCreditTierDetail.isCanEdit());
             existingCreditTierDetailView.setFinalBasePrice(existingCreditTierDetail.getFinalBasePrice());
-            existingCreditTierDetailView.setFinalInterest(existingCreditTierDetail.getStandardInterest());
+            existingCreditTierDetailView.setFinalInterest(existingCreditTierDetail.getFinalInterest());
             existingCreditTierDetailView.setFinalPriceRate(existingCreditTierDetail.getFinalPriceRate());
             existingCreditTierDetailView.setInstallment(existingCreditTierDetail.getInstallment());
             existingCreditTierDetailView.setStandardBasePrice(existingCreditTierDetail.getStandardBasePrice());
