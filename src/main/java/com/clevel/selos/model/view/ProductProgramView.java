@@ -3,7 +3,9 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ProductProgramView {
+import java.io.Serializable;
+
+public class ProductProgramView implements Serializable {
     private int id;
     private String name;
     private String description;

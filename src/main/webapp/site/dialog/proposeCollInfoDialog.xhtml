@@ -148,11 +148,11 @@
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.productProgram ? creditTypeDetailItem.productProgram.name : ''}
+                #{not empty creditTypeDetailItem.productProgramView ? creditTypeDetailItem.productProgramView.name : ''}
             </p:column>
 
             <p:column styleClass="left top">
-                #{not empty creditTypeDetailItem.creditFacility ? creditTypeDetailItem.creditFacility.name : ''}
+                #{not empty creditTypeDetailItem.creditFacilityView ? creditTypeDetailItem.creditFacilityView.name : ''}
             </p:column>
 
             <p:column styleClass="right top">
@@ -392,8 +392,7 @@
             <p:column styleClass="left top">
                 <ui:repeat value="#{newCollateralSubView.relatedWithList}"
                            var="relatedWith" varStatus="c">
-                    <h:outputText
-                            value="#{not empty newCollateralSubView.relatedWithList and fn:length(newCollateralSubView.relatedWithList) gt 0 ?  relatedWith.titleDeed : '-'}"/>
+                    <h:outputText value="#{relatedWith.titleDeed}"/>
                     <h:outputText value="," rendered="#{not c.last}"/>
                 </ui:repeat>
             </p:column>
