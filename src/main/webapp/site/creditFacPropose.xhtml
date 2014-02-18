@@ -5,7 +5,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+        >
 
 <h:head>
     <title>SE-LOS : Credit Facility - Propose Line</title>
@@ -553,6 +553,7 @@
                                     </thead>
 
                                     <tbody class="ui-datatable-data ui-widget-content">
+                                    <!--
                                     <ui:repeat value="#{creditFacPropose.newCreditFacilityView.newCreditDetailViewList}"
                                                var="proposeCredit" varStatus="i">
                                         <tr>
@@ -590,9 +591,9 @@
                                                 </h:outputText>
                                             </td>
 
-                                            <!-- BEGIN: Credit Tier Detail [0] -->
+                                            &lt;!&ndash; BEGIN: Credit Tier Detail [0] &ndash;&gt;
                                             <td class="top center" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
-                                                <!--<h:outputText value="#{proposeCredit.standardPrice}"/>-->
+                                                &lt;!&ndash;<h:outputText value="#{proposeCredit.standardPrice}"/>&ndash;&gt;
                                                 <h:outputText value="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
                                                                     proposeCredit.newCreditTierDetailViewList[0].standardPriceLabel : ''}"/>
                                             </td>
@@ -621,7 +622,7 @@
                                                                      maxIntegerDigits="14"/>
                                                 </h:outputText>
                                             </td>
-                                            <!-- END: Credit Tier Detail [0] -->
+                                            &lt;!&ndash; END: Credit Tier Detail [0] &ndash;&gt;
 
                                             <td class="top right" style="#{i.odd ? 'background-color:#e6e6e6' : ''}"
                                                 rowspan="#{not empty proposeCredit.newCreditTierDetailViewList and fn:length(proposeCredit.newCreditTierDetailViewList) gt 0 ?
@@ -658,7 +659,7 @@
                                             </td>
                                         </tr>
 
-                                        <!-- BEGIN: Credit Tier Detail [1]->[N-1] -->
+                                        &lt;!&ndash; BEGIN: Credit Tier Detail [1]->[N-1] &ndash;&gt;
                                         <ui:repeat value="#{proposeCredit.newCreditTierDetailViewList}"
                                                    var="creditTierDetail" varStatus="j"
                                                    offset="1">
@@ -689,7 +690,7 @@
                                                 </td>
                                             </tr>
                                         </ui:repeat>
-                                        <!-- END: Credit Tier Detail [1]->[N-1] -->
+                                        &lt;!&ndash; END: Credit Tier Detail [1]->[N-1] &ndash;&gt;
 
                                         <tr>
                                             <td class="left top" colspan="12" style="#{i.odd ? 'background-color:#e6e6e6' : ''}">
@@ -751,7 +752,7 @@
                                             </td>
                                         </tr>
                                     </ui:repeat>
-
+-->
                                     <h:panelGroup rendered="#{empty creditFacPropose.newCreditFacilityView.newCreditDetailViewList}">
                                         <tr>
                                             <td colspan="12">No records found.</td>

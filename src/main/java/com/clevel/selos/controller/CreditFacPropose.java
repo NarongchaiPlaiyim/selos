@@ -756,7 +756,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setSeq(seq);
                 calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
-//                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
+                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
