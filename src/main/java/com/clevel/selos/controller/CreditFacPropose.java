@@ -805,6 +805,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
 
         log.info("  complete >>>>  :  {}", complete);
 
+        //todo : remove & check on ui repeat only
         if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
             for(NewCreditDetailView nc : newCreditFacilityView.getNewCreditDetailViewList()){
                 log.debug("newCreditDetail : {} ",nc);
