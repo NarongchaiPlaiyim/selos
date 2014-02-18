@@ -756,7 +756,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
                 creditDetailAdd.setSeq(seq);
                 calculateInstallment(creditDetailAdd);
                 log.info("creditDetailAdd :getInstallment: {}", creditDetailAdd.getInstallment());
-//                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
+                newCreditFacilityView.getNewCreditDetailViewList().add(creditDetailAdd);
                 log.info("seq of credit after add proposeCredit :: {}", seq);
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onEditRecord ::: mode : {}", modeForButton);
@@ -789,14 +789,14 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             }
 
             complete = true;
-//            hashSeqCredit.put(seq, 0);
-//            seq++;
-//            log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
+            hashSeqCredit.put(seq, 0);
+            seq++;
+            log.info("seq++ of credit after add complete proposeCredit :: {}", seq);
 
-//            if (modeForDB == ModeForDB.ADD_DB) {
-//                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
-//                log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
-//            }
+            if (modeForDB == ModeForDB.ADD_DB) {
+                proposeCreditDetailViewList = creditFacProposeControl.findProposeCreditDetail(newCreditFacilityView.getNewCreditDetailViewList(), workCaseId);
+                log.info("proposeCreditDetailViewList :: {}", proposeCreditDetailViewList.size());
+            }
 
         } else {
             log.info("onSaveCreditInfo ::: validation failed.");
@@ -804,8 +804,37 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         }
 
         log.info("  complete >>>>  :  {}", complete);
-        context.addCallbackParam("functionComplete", complete);
 
+        if(newCreditFacilityView.getNewCreditDetailViewList() != null && newCreditFacilityView.getNewCreditDetailViewList().size() > 0){
+            for(NewCreditDetailView nc : newCreditFacilityView.getNewCreditDetailViewList()){
+                log.debug("newCreditDetail : {} ",nc);
+                log.debug("before tier : {}",nc.getNewCreditTierDetailViewList());
+                log.debug("tier size : {}",nc.getNewCreditTierDetailViewList().size());
+                if(nc.getNewCreditTierDetailViewList() != null && nc.getNewCreditTierDetailViewList().size() == 0){
+                    log.debug("set null");
+                    nc.setNewCreditTierDetailViewList(null);
+                }
+                log.debug("after tier : {}",nc.getNewCreditTierDetailViewList());
+
+                if(nc.getNewCreditTierDetailViewList() != null && nc.getNewCreditTierDetailViewList().size() > 0){
+                    for(NewCreditTierDetailView nct : nc.getNewCreditTierDetailViewList()){
+                        log.debug("--------------------------------------------------------------");
+                        log.debug("[1] - tier stpl : {}",nct.getStandardPriceLabel());
+                        log.debug("[2] - tier supl : {}",nct.getSuggestPriceLabel());
+                        log.debug("[3] - tier fnpl : {}",nct.getFinalPriceLabel());
+                        log.debug("[4] - tier fnpl : {}",nct.getFinalPriceLabel());
+                        log.debug("[5] - tier inst : {}",nct.getInstallment());
+                        log.debug("[6] - tier tenor : {}",nct.getTenor());
+                        log.debug("####### tier : {}",nct);
+                        log.debug("--------------------------------------------------------------");
+                    }
+                }
+
+                log.debug("after newCreditDetail : {} ",nc);
+            }
+        }
+
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteCreditInfo() {
