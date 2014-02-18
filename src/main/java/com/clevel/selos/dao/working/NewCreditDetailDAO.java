@@ -2,6 +2,8 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.working.NewCreditDetail;
 import com.clevel.selos.model.db.working.NewCreditFacility;
@@ -45,7 +47,8 @@ public class NewCreditDetailDAO extends GenericDAO<NewCreditDetail, Long> {
     public List<NewCreditDetail> findNewCreditDetailByWorkCaseIdForBA(long workCaseId,boolean isTopUpBA) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        criteria.add(Restrictions.eq("isApproved",RadioValue.YES.value()));
+        criteria.add(Restrictions.eq("proposeType",ProposeType.A));
+        criteria.add(Restrictions.eq("uwDecision",DecisionType.APPROVED));
         criteria.createAlias("productProgram", "product_program")
         	.add(Restrictions.eq("product_program.ba",isTopUpBA));
         

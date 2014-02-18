@@ -26,6 +26,7 @@ import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.MortgageSummaryControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ApproveType;
+import com.clevel.selos.model.MortgageSignLocationType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.MortgageSummaryView;
@@ -88,6 +89,9 @@ public class MortgageSummary implements Serializable {
 	}
 	public MortgageSummaryView getMortgageSummaryView() {
 		return mortgageSummaryView;
+	}
+	public boolean isEnableSignContractLocation() {
+		return ! MortgageSignLocationType.NA.equals(mortgageSummaryView.getSigningLocation());
 	}
 	
 	/*

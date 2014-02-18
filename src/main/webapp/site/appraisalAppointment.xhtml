@@ -262,57 +262,53 @@
 
                     <tr>
                         <td colspan="6" style="width:100%">
-                            <table border="0">
+                            <table class="table_content" border="0" style="padding: 0%" >
                                 <tr>
-                                    <td style="width: 30px;"/>
-                                    <td style="width: 30px;"/>
-                                    <td style="width: 30px;"/>
-                                </tr>
-                                <tr>
-                                    <td/>
-                                    <td class="center">
+                                    <th style="width: 50px;" />
+                                    <th style="width: 250px;" >
                                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
-                                    </td>
-                                    <td class="center">
+                                    </th>
+                                    <th style="width: 250px;" >
                                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
-                                    </td>
+                                    </th>
                                 </tr>
+
                                 <tr id="contactId">
-                                    <td>
+                                    <td class="center">
                                         <p:outputLabel value="1"/>
                                     </td>
-                                    <td>
-                                        <p:inputText value="#{appraisalAppointment.appraisalContactDetailView.customerName1}" readonly="true" />
+                                    <td class="center">
+                                        <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName1}" readonly="true" />
                                     </td>
-                                    <td>
-                                        <p:inputMask value="#{appraisalAppointment.appraisalContactDetailView.contactNo1}"
+                                    <td class="center">
+                                        <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo1}"
                                                      mask="099-999-9999"  readonly="true" />
                                     </td>
                                 </tr>
                                 <h:panelGroup rendered="#{appraisalAppointment.contactFlag2}">
                                     <tr>
-                                        <td>
+                                        <td class="center">
                                             <p:outputLabel value="2"/>
                                         </td>
-                                        <td>
-                                            <p:inputText value="#{appraisalAppointment.appraisalContactDetailView.customerName2}" readonly="true"/>
+                                        <td class="center">
+                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName2}" readonly="true"/>
                                         </td>
-                                        <td>
-                                            <p:inputMask value="#{appraisalAppointment.appraisalContactDetailView.contactNo2}"
+                                        <td class="center">
+                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo2}"
                                                          mask="099-999-9999" readonly="true" />
                                         </td>
                                     </tr>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{appraisalAppointment.contactFlag3}">
                                     <tr>
-                                        <td>
+                                        <td class="center">
                                             <p:outputLabel value="3"/>
                                         </td>
-                                        <td>
-                                            <p:inputText value="#{appraisalAppointment.appraisalContactDetailView.customerName3}" readonly="true"/>
+                                        <td class="center">
+                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.customerName3}" readonly="true"/>
                                         </td>
-                                        <td>
-                                            <p:inputMask value="#{appraisalAppointment.appraisalContactDetailView.contactNo3}"
+                                        <td class="center">
+                                            <p:outputLabel value="#{appraisalAppointment.appraisalContactDetailView.contactNo3}"
                                                          mask="099-999-9999" readonly="true" />
                                         </td>
                                     </tr>

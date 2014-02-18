@@ -151,56 +151,51 @@
                             </tr>
 
                             <tr>
-                                <td colspan="6" style="width:100%">
-                                    <table>
+                                <td >
+                                    <table class="table_content" border="0" style="padding: 0%" >
                                         <tr>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                            <td style="width: 30px;"/>
-                                        </tr>
-                                        <tr>
-                                            <td/>
-                                            <td class="center">
+                                            <th style="width: 50px;" />
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}"/>
-                                            </td>
-                                            <td class="center">
+                                            </th>
+                                            <th style="width: 250px;" >
                                                 <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}"/>
-                                            </td>
+                                            </th>
                                         </tr>
                                         <tr id="contactId">
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="1"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
                                                              mask="099-999-9999"
                                                              style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="2"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
                                                              mask="099-999-9999" />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td class="center">
                                                 <p:outputLabel value="3"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"/>
                                             </td>
-                                            <td>
+                                            <td class="center">
                                                 <p:inputMask value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
                                                              mask="099-999-9999" />
                                             </td>

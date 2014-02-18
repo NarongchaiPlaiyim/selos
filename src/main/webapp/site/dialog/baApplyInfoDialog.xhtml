@@ -54,6 +54,7 @@
 					<p:selectOneMenu id='healthcheck' style="width:160px"
 						value="#{baInfo.bapaInfoCustomerView.updBAResultHC}"
 						>
+						<p:ajax update="checkdate"/>
 						<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
 						<f:selectItems value="#{baInfo.baResultHCs}" var="hc"
 							itemLabel="#{hc.name}" itemDescription="#{hc.description}"
@@ -72,7 +73,7 @@
 					<p:calendar id='checkdate'
 						value="#{baInfo.bapaInfoCustomerView.checkDate}"
 						pattern="dd/MM/yyyy" showOn="button"
-						
+						disabled="#{not baInfo.enableCheckDate}"		
 						autocomplete="false"
 						/>
 				</td>

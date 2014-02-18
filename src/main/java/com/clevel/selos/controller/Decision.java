@@ -796,9 +796,7 @@ public class Decision implements Serializable {
         collateralInfoEdit.setAadDecisionReasonDetail(selectedAppProposeCollateral.getAadDecisionReasonDetail());
         collateralInfoEdit.setUsage(selectedAppProposeCollateral.getUsage());
         collateralInfoEdit.setTypeOfUsage(selectedAppProposeCollateral.getTypeOfUsage());
-        collateralInfoEdit.setApproved(selectedAppProposeCollateral.getApproved());
-//        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getA.getApproved() == 2 ? "Approved"
-//                : selectedAppProposeCollateral.getApproved() == 1 ? "Not Approved" : "");
+        collateralInfoEdit.setUwDecision(selectedAppProposeCollateral.getUwDecision());
         collateralInfoEdit.setUwRemark(selectedAppProposeCollateral.getUwRemark());
         collateralInfoEdit.setMortgageCondition(selectedAppProposeCollateral.getMortgageCondition());
         collateralInfoEdit.setMortgageConditionDetail(selectedAppProposeCollateral.getMortgageConditionDetail());

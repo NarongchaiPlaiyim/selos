@@ -114,6 +114,7 @@
                         		<td>
                         			<p:selectOneMenu id='signcontract_loc' widgetVar="p_signcontract_loc"
                         				value="#{mortgageSummary.mortgageSummaryView.updLocation}"
+                        				disabled="#{not mortgageSummary.enableSignContractLocation}"
                         				 style="width:160px">
                         				<f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         				<f:selectItems value="#{mortgageSummary.locations}"/>
