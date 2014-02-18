@@ -5,11 +5,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "mst_product_formula")
-public class ProductFormula {
+public class ProductFormula implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

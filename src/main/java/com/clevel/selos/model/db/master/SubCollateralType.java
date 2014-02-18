@@ -4,10 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_sub_collateral_type")
-public class SubCollateralType {
+public class SubCollateralType implements Serializable {
 
     @Id
     @Column(name = "id")

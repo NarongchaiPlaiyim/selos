@@ -83,6 +83,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private boolean messageErr;
 
     //Master all in Propose
+    private List<DisbursementTypeView> disbursementTypeViewList;
+    private List<LoanPurposeView> loanPurposeViewList;
     private List<CreditRequestType> creditRequestTypeList;
     private List<Country> countryList;
     private List<ProductProgram> productProgramList;
@@ -90,9 +92,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private ProductGroup productGroup;
     private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
     private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
-    private List<DisbursementType> disbursementList;
     private List<BaseRate> baseRateList;
-    private List<LoanPurpose> loanPurposeList;
     private List<SubCollateralType> subCollateralTypeList;
     private List<CollateralType> collateralTypeList;
     private List<CollateralType> headCollateralTypeList;
@@ -175,7 +175,7 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     @Inject
     ProductFormulaDAO productFormulaDAO;
     @Inject
-    DisbursementTypeDAO disbursementDAO;
+    DisbursementTypeControl disbursementTypeControl;
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -224,6 +224,10 @@ public class CreditFacPropose extends MandatoryFieldsControl {
     private DisbursementTypeTransform disbursementTypeTransform;
     @Inject
     private COMSInterface comsInterface;
+    @Inject
+    DisbursementTypeDAO disbursementDAO;
+    @Inject
+    private LoanPurposeControl loanPurposeControl;
 
     public CreditFacPropose() {
     }
@@ -346,8 +350,9 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             creditTypeList = new ArrayList<CreditType>();
         }
 
-        if (disbursementList == null) {
-            disbursementList = new ArrayList<DisbursementType>();
+        // change to view model
+        if (disbursementTypeViewList == null) {
+            disbursementTypeViewList = new ArrayList<DisbursementTypeView>();
         }
 
         if (newConditionDetailView == null) {
@@ -390,8 +395,8 @@ public class CreditFacPropose extends MandatoryFieldsControl {
             baseRateList = new ArrayList<BaseRate>();
         }
 
-        if (loanPurposeList == null) {
-            loanPurposeList = new ArrayList<LoanPurpose>();
+        if (loanPurposeViewList == null) {
+            loanPurposeViewList = new ArrayList<LoanPurposeView>();
         }
 
         if (mortgageTypeList == null) {
@@ -402,11 +407,12 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         flagButtonCollateral = true;
         modeEditReducePricing = false;
         modeEditReduceFront = false;
+
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         mortgageTypeList = mortgageTypeDAO.findAll();
-        loanPurposeList = loanPurposeDAO.findAll();
-        disbursementList = disbursementDAO.findAll();
+        loanPurposeViewList = loanPurposeControl.getLoanPurposeViewList();
+        disbursementTypeViewList = disbursementTypeControl.getDisbursementTypeViewList();
         collateralTypeList = collateralTypeDAO.findAll();
         headCollateralTypeList = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
@@ -668,6 +674,15 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         newCreditDetailView = new NewCreditDetailView();
         modeForButton = ModeForButton.ADD;
+
+//        if (loanPurposeViewList != null && !loanPurposeViewList.isEmpty()) {
+//            newCreditDetailView.setLoanPurposeView(loanPurposeViewList.get(0));
+//        }
+//
+//        if (disbursementTypeViewList != null && !disbursementTypeViewList.isEmpty()) {
+//            newCreditDetailView.setDisbursementTypeView(disbursementTypeViewList.get(0));
+//        }
+
         onChangeRequestType();
 
         BaseRate standardBase = baseRateDAO.findById(1);
@@ -1605,20 +1620,20 @@ public class CreditFacPropose extends MandatoryFieldsControl {
         this.creditTypeList = creditTypeList;
     }
 
-    public List<DisbursementType> getDisbursementList() {
-        return disbursementList;
+    public List<DisbursementTypeView> getDisbursementTypeViewList() {
+        return disbursementTypeViewList;
     }
 
-    public void setDisbursementList(List<DisbursementType> disbursementList) {
-        this.disbursementList = disbursementList;
+    public void setDisbursementTypeViewList(List<DisbursementTypeView> disbursementTypeViewList) {
+        this.disbursementTypeViewList = disbursementTypeViewList;
     }
 
-    public List<LoanPurpose> getLoanPurposeList() {
-        return loanPurposeList;
+    public List<LoanPurposeView> getLoanPurposeViewList() {
+        return loanPurposeViewList;
     }
 
-    public void setLoanPurposeList(List<LoanPurpose> loanPurposeList) {
-        this.loanPurposeList = loanPurposeList;
+    public void setLoanPurposeViewList(List<LoanPurposeView> loanPurposeViewList) {
+        this.loanPurposeViewList = loanPurposeViewList;
     }
 
     public NewConditionDetailView getNewConditionDetailView() {
