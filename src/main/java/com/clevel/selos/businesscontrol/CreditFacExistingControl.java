@@ -403,7 +403,7 @@ public class CreditFacExistingControl extends BusinessControl {
     }
 
     public ExistingCreditFacilityView onFindExistingCreditFacility(Long workCaseId) {
-        log.info("onSaveExistingCreditFacility begin");
+        log.info("onFindExistingCreditFacility begin");
 
         log.info("workCaseId {} ", workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
