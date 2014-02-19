@@ -92,8 +92,6 @@ public class AppraisalDetailTransform extends Transform {
 
                                 newCollateralHeadForAdd.add(newCollateralHead);
 
-                                /*log.debug("------ NewCollateral from credit facility ::: newCollateral : {}", newCollateral);
-                                newCollateralListForReturn.add(newCollateral);*/
                                 continue;
                             }
                         }
@@ -114,7 +112,7 @@ public class AppraisalDetailTransform extends Transform {
                 newCollateral.setCreateDate(DateTime.now().toDate());
                 newCollateral.setCreateBy(user);
                 newCollateral.setNewCreditFacility(newCreditFacility);
-                newCollateral.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
+                newCollateral.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
                 newCollateral.setProposeType(ProposeType.P);
                 log.debug("transformToModel ::: newCollateral : {}", newCollateral);
 

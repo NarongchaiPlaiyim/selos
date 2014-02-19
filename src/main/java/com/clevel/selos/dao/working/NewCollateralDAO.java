@@ -75,7 +75,7 @@ public class NewCollateralDAO extends GenericDAO<NewCollateral, Long> {
         log.info("-- findNewCollateralByTypeA ::: {}", newCreditFacility.toString());
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("newCreditFacility", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", "A"));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.A));
         criteria.addOrder(Order.asc("id"));
         List<NewCollateral> newCollateralDetailList = (List<NewCollateral>) criteria.list();
         log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
