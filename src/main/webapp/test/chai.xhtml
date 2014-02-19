@@ -90,6 +90,32 @@
                 </p:panel>
             </h:form>
 
+            <h:form id="coms">
+                <p:panel header="Com-S">
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value=""/>
+                        <p:commandButton id="submitOnClickCallComS" value="Call" update="@form"
+                                         action="#{TestNCRS.onClickCallComS()}"/>
+
+                        <h:outputText value="Job id"/>
+                        <p:inputText value="#{TestNCRS.jobId}"/>
+
+                        <h:outputText value="User id"/>
+                        <p:inputText value="#{TestNCRS.userIdForComS}"/>
+
+                        <h:outputText value="Result"/>
+                        <p:inputTextarea value="#{TestNCRS.result}" rows="50" cols="100">
+
+                        </p:inputTextarea>
+
+
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+
+
         </p:panel>
 
     </h:body>
