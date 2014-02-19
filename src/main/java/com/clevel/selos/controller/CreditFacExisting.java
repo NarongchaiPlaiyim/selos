@@ -309,7 +309,7 @@ public class CreditFacExisting implements Serializable {
                 }
 
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                    log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
                 }
 
                 log.info("preRender ::: getId " + existingCreditFacilityView.getId());
@@ -580,7 +580,7 @@ public class CreditFacExisting implements Serializable {
             log.info("del 1");
 
             for (int l=0;l<hashRelated.size();l++){
-                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l).toString());
+                log.info("hashRelated.get(j) in use   :  "+ l + " is   " +hashRelated.get(l+1).toString());
             }
 
             used = Integer.parseInt(hashRelated.get(existingCreditDetailViewDel.getNo()).toString());
@@ -1310,7 +1310,7 @@ public class CreditFacExisting implements Serializable {
 
             }else if(typeOfListCollateral.equals("related")){
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 ExistingCollateralDetailView relatedCollateralDetailViewRow = relatedExistingCollateralDetailViewList.get(rowIndex);
 
@@ -1350,7 +1350,7 @@ public class CreditFacExisting implements Serializable {
                     }
                 }
                 for (int l=0;l<hashRelated.size();l++){
-                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                    log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
                 }
                 onSetRowNoCreditTypeDetail(relatedCollateralDetailViewRow.getExistingCreditTypeDetailViewList());
                 existingCreditFacilityView.getRelatedCollateralList().remove(rowIndex);
@@ -1431,7 +1431,7 @@ public class CreditFacExisting implements Serializable {
         }else if(typeOfListCollateral.equals("related")){
             ExistingCollateralDetailView relatedCollateralDetailViewDel = selectCollateralDetail;
             for (int l=0;l<hashRelated.size();l++){
-                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("before hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
             log.info("getCreditFacilityList().size() " + relatedCollateralDetailViewDel.getExistingCreditTypeDetailViewList().size());
 
@@ -1445,7 +1445,7 @@ public class CreditFacExisting implements Serializable {
             relatedExistingCollateralDetailViewList.remove(selectCollateralDetail);
             onSetRowNoCollateralDetail(relatedExistingCollateralDetailViewList);
             for (int l=0;l<hashRelated.size();l++){
-                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l).toString());
+                log.info("after hashRelated seq :  "+ l + " use is   " +hashRelated.get(l+1).toString());
             }
         }
         calTotalCollateral();
@@ -1524,7 +1524,7 @@ public class CreditFacExisting implements Serializable {
             ExistingGuarantorDetailView existingGuarantorDetailViewAdd = new ExistingGuarantorDetailView();
 
             existingGuarantorDetailViewAdd.setNo(borrowerExistingGuarantorDetailViewList.size()+1);
-            existingGuarantorDetailViewAdd.setGuarantorName(existingGuarantorDetailView.getGuarantorName());
+            existingGuarantorDetailViewAdd.setGuarantorName(customerInfoControl.getCustomerById(existingGuarantorDetailView.getGuarantorName()));
             existingGuarantorDetailViewAdd.setTcgLgNo(existingGuarantorDetailView.getTcgLgNo());
 
             existingGuarantorDetailViewAdd.setExistingCreditTypeDetailViewList(new ArrayList<ExistingCreditTypeDetailView>());
