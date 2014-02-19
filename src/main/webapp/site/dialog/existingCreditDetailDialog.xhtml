@@ -103,7 +103,7 @@
                          onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
                          style="text-align:right">
                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                <p:ajax event="blur" update=":existingCreditDlgForm:limit"/>
+                <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:limit, existingCreditDlgForm:saveCreditBtn"/>
             </p:inputText>
         </td>
         <td class="title">
@@ -253,7 +253,7 @@
                     value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
                     styleClass="smaller"
                     actionListener="#{creditFacExisting.onAddExistingSplitLineDetailView()}"
-                    update=":existingCreditDlgForm:spiltResult"
+                    update=":existingCreditDlgForm:spiltResult, :existingCreditDlgForm:saveCreditBtn"
                     >
             </p:commandButton>
         </td>
@@ -296,14 +296,14 @@
                                  onkeydown="return onKeyDownMoney(event)" onkeypress="return onKeyPressMoney(event)"
                                  value="#{existingSplitLine.limit}" style="text-align:right;" >
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update=":existingCreditDlgForm:spiltResult:splitLimit"/>
+                        <p:ajax event="blur" listener="#{creditFacExisting.checkTotalLimit()}" update=":existingCreditDlgForm:spiltResult:splitLimit, :existingCreditDlgForm:saveCreditBtn"/>
                     </p:inputText>
                 </p:column>
                 <p:column styleClass="center">
                     <p:column styleClass="center">
                         <p:commandButton title="Remove" process="@form"
                                          icon="ui-icon-trash"
-                                         update=":existingCreditDlgForm:spiltResult"
+                                         update=":existingCreditDlgForm:spiltResult, :existingCreditDlgForm:saveCreditBtn"
                                          actionListener="#{creditFacExisting.onDeleteExistingSplitLineDetailView(rowIndex)}" >
                         </p:commandButton>
                     </p:column>
@@ -321,6 +321,7 @@
                              binding="#{saveCreditBtn}"
                              value="#{msg.get('app.button.ok')}"
                              action="#{creditFacExisting.onSaveCreditDetail()}"
+                             disabled="#{not creditFacExisting.canSaveCreditDetail}"
                              process="@form"
                              update=":existingCreditDlgForm :frmMain"
                              oncomplete="handleExistingCreditRequest(xhr, status, args)"/>

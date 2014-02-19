@@ -1319,7 +1319,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="" style="vertical-align: top;">
-                                                    <p:panel rendered="#{not empty borrowerCredit.existingCreditTypeDetailViewList and fn:length(borrowerCredit.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
+                                                    <p:panel rendered="#{not empty borrowerCollateral.existingCreditTypeDetailViewList and fn:length(borrowerCollateral.existingCreditTypeDetailViewList) gt 0}" styleClass="panel">
                                                         <ui:repeat value="#{borrowerCollateral.existingCreditTypeDetailViewList}" var="creditFacility">
                                                             <p:outputLabel value="#{creditFacility.accountName}"/><br/>
                                                             <p:outputLabel value="#{creditFacility.accountNumber}"/> Suff <p:outputLabel value="#{creditFacility.accountSuf}"/><br/>
